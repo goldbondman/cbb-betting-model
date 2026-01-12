@@ -1,0 +1,401 @@
+date,game_id,home_team,away_team,home_score,away_score,home_win
+20260111,401825435,Iowa Hawkeyes,Illinois Fighting Illini,69,75,False
+20260111,401827615,UCF Knights,Cincinnati Bearcats,73,72,True
+20260110,401827612,TCU Horned Frogs,Arizona Wildcats,73,86,False
+20260110,401825432,Michigan Wolverines,Wisconsin Badgers,88,91,False
+20260110,401827611,Iowa State Cyclones,Oklahoma State Cowboys,83,71,True
+20260110,401822893,UConn Huskies,DePaul Blue Demons,72,60,True
+20260110,401825433,Purdue Boilermakers,Penn State Nittany Lions,93,85,True
+20260110,401820657,Duke Blue Devils,SMU Mustangs,82,75,True
+20260110,401827609,Baylor Bears,Houston Cougars,55,77,False
+20260110,401827613,Utah Utes,BYU Cougars,84,89,False
+20260110,401825431,Indiana Hoosiers,Nebraska Cornhuskers,77,83,False
+20260110,401808167,Vanderbilt Commodores,LSU Tigers,84,73,True
+20260110,401808168,Alabama Crimson Tide,Texas Longhorns,88,92,False
+20260110,401827610,Colorado Buffaloes,Texas Tech Red Raiders,71,73,False
+20260110,401808161,Auburn Tigers,Arkansas Razorbacks,95,73,True
+20260110,401820661,North Carolina Tar Heels,Wake Forest Demon Deacons,87,84,True
+20260110,401808165,South Carolina Gamecocks,Georgia Bulldogs,70,75,False
+20260110,401820659,Louisville Cardinals,Boston College Eagles,75,62,True
+20260110,401808162,Florida Gators,Tennessee Volunteers,91,67,True
+20260110,401827614,West Virginia Mountaineers,Kansas Jayhawks,86,75,True
+20260110,401820664,Virginia Cavaliers,Stanford Cardinal,70,55,True
+20260109,401823007,Youngstown State Penguins,Bryant & Stratton (Ohio) Bobcats,99,61,True
+20260109,401814515,Toledo Rockets,Miami (OH) RedHawks,73,87,False
+20260109,401823316,Fairfield Stags,Rider Broncs,68,62,True
+20260109,401817615,Oakland Golden Grizzlies,Cleveland State Vikings,97,74,True
+20260109,401817614,Detroit Mercy Titans,Wright State Raiders,82,84,False
+20260109,401817612,Green Bay Phoenix,IU Indianapolis Jaguars,75,59,True
+20260109,401813424,Siena Saints,Merrimack Warriors,59,63,False
+20260109,401813410,Mount St. Mary's Mountaineers,Saint Peter's Peacocks,70,65,True
+20260109,401813386,Iona Gaels,Niagara Purple Eagles,71,53,True
+20260109,401813331,Sacred Heart Pioneers,Marist Red Foxes,72,76,False
+20260109,401813301,Manhattan Jaspers,Canisius Golden Griffins,64,70,False
+20260109,401817613,Milwaukee Panthers,Northern Kentucky Norse,67,85,False
+20260109,401814510,Bowling Green Falcons,Akron Zips,67,77,False
+20260109,401825430,Minnesota Golden Gophers,USC Trojans,69,70,False
+20260109,401830827,Colorado State Rams,UNLV Rebels,70,62,True
+20260108,401829190,Gonzaga Bulldogs,Santa Clara Broncos,89,77,True
+20260108,401825428,Michigan State Spartans,Northwestern Wildcats,76,66,True
+20260108,401825427,Illinois Fighting Illini,Rutgers Scarlet Knights,81,55,True
+20260107,401827604,Arizona Wildcats,Kansas State Wildcats,101,76,True
+20260107,401827605,Baylor Bears,Iowa State Cyclones,60,70,False
+20260107,401822889,Providence Friars,UConn Huskies,98,103,False
+20260107,401825426,Purdue Boilermakers,Washington Huskies,81,73,True
+20260107,401827606,BYU Cougars,Arizona State Sun Devils,104,76,True
+20260107,401808155,Vanderbilt Commodores,Alabama Crimson Tide,96,90,True
+20260107,401808159,Ole Miss Rebels,Arkansas Razorbacks,87,94,False
+20260107,401820654,Virginia Cavaliers,California Golden Bears,84,60,True
+20260107,401820652,Clemson Tigers,SMU Mustangs,74,70,True
+20260106,401825423,Penn State Nittany Lions,Michigan Wolverines,72,74,False
+20260106,401820650,Louisville Cardinals,Duke Blue Devils,73,84,False
+20260106,401827600,Houston Cougars,Texas Tech Red Raiders,69,65,True
+20260106,401808153,Florida Gators,Georgia Bulldogs,92,77,True
+20260106,401825422,Minnesota Golden Gophers,Iowa Hawkeyes,70,67,True
+20260106,401808160,Tennessee Volunteers,Texas Longhorns,85,71,True
+20260106,401827601,Kansas Jayhawks,TCU Horned Frogs,104,100,True
+20260106,401827602,Oklahoma State Cowboys,UCF Knights,87,76,True
+20260105,401825420,Ohio State Buckeyes,Nebraska Cornhuskers,69,72,False
+20260105,401825419,Michigan State Spartans,USC Trojans,80,51,True
+20260104,401822885,UConn Huskies,Marquette Golden Eagles,73,57,True
+20260104,401829181,Gonzaga Bulldogs,Loyola Marymount Lions,82,47,True
+20260103,401827599,Utah Utes,Arizona Wildcats,78,97,False
+20260103,401825417,Wisconsin Badgers,Purdue Boilermakers,73,89,False
+20260103,401820644,Florida State Seminoles,Duke Blue Devils,87,91,False
+20260103,401827595,Cincinnati Bearcats,Houston Cougars,60,67,False
+20260103,401827596,Kansas State Wildcats,BYU Cougars,73,83,False
+20260103,401808148,South Carolina Gamecocks,Vanderbilt Commodores,71,83,False
+20260103,401820648,SMU Mustangs,North Carolina Tar Heels,97,83,True
+20260103,401808152,Alabama Crimson Tide,Kentucky Wildcats,89,74,True
+20260103,401827598,Texas Tech Red Raiders,Oklahoma State Cowboys,102,80,True
+20260103,401827594,UCF Knights,Kansas Jayhawks,81,75,True
+20260103,401808145,Arkansas Razorbacks,Tennessee Volunteers,86,75,True
+20260103,401825416,Penn State Nittany Lions,Illinois Fighting Illini,65,73,False
+20260103,401820646,NC State Wolfpack,Virginia Cavaliers,61,76,False
+20260103,401808147,Missouri Tigers,Florida Gators,76,74,True
+20260103,401808146,Georgia Bulldogs,Auburn Tigers,104,100,True
+20260103,401825414,Iowa Hawkeyes,UCLA Bruins,74,61,True
+20260102,401825411,Michigan Wolverines,USC Trojans,96,66,True
+20260102,401827592,Iowa State Cyclones,West Virginia Mountaineers,80,59,True
+20260102,401829180,Gonzaga Bulldogs,Seattle U Redhawks,80,72,True
+20260102,401825412,Nebraska Cornhuskers,Michigan State Spartans,58,56,True
+20260102,401820643,Stanford Cardinal,Louisville Cardinals,80,76,True
+20260101,401831278,Dartmouth Big Green,Elms College Blazers,107,43,True
+20260101,401817604,Youngstown State Penguins,Oakland Golden Grizzlies,83,85,False
+20260101,401809227,VMI Keydets,Samford Bulldogs,58,78,False
+20260101,401808592,Coastal Carolina Chanticleers,Georgia Southern Eagles,81,82,False
+20260101,401807666,North Alabama Lions,Stetson Hatters,67,70,False
+20260101,401818331,North Dakota Fighting Hawks,Oral Roberts Golden Eagles,72,61,True
+20260101,401817603,Northern Kentucky Norse,IU Indianapolis Jaguars,81,72,True
+20260101,401817602,Wright State Raiders,Milwaukee Panthers,76,70,True
+20260101,401817601,Purdue Fort Wayne Mastodons,Green Bay Phoenix,54,72,False
+20260101,401807664,Lipscomb Bisons,Jacksonville Dolphins,76,57,True
+20260101,401807663,Central Arkansas Bears,Florida Gulf Coast Eagles,85,83,True
+20260101,401830258,Southern Illinois Salukis,Valparaiso Beacons,75,70,True
+20260101,401830255,Illinois State Redbirds,Evansville Purple Aces,73,47,True
+20260101,401805159,UT Arlington Mavericks,California Baptist Lancers,63,51,True
+20260101,401809226,UNC Greensboro Spartans,Chattanooga Mocs,77,72,True
+20260101,401808537,Weber State Wildcats,Portland State Vikings,90,95,False
+20260101,401806419,UT Martin Skyhawks,Western Illinois Leathernecks,67,60,True
+20260101,401806418,SIU Edwardsville Cougars,Southern Indiana Screaming Eagles,59,55,True
+20260101,401806416,Lindenwood Lions,Morehead State Eagles,77,64,True
+20260101,401809124,UC Davis Aggies,Cal State Northridge Matadors,89,80,True
+20260101,401809107,Cal State Bakersfield Roadrunners,UC Irvine Anteaters,77,81,False
+20260101,401808593,UL Monroe Warhawks,Southern Miss Golden Eagles,73,87,False
+20260101,401818332,South Dakota State Jackrabbits,Omaha Mavericks,84,69,True
+20260101,401808501,Montana Grizzlies,Northern Arizona Lumberjacks,78,64,True
+20260101,401806417,Little Rock Trojans,Tennessee Tech Golden Eagles,77,58,True
+20260101,401830201,Belmont Bruins,Bradley Braves,88,78,True
+20260101,401807662,Queens University Royals,Eastern Kentucky Colonels,91,89,True
+20260101,401807661,West Georgia Wolves,Bellarmine Knights,87,85,True
+20260101,401830257,Northern Iowa Panthers,Indiana State Sycamores,75,66,True
+20260101,401809140,UC Riverside Highlanders,Hawai'i Rainbow Warriors,45,88,False
+20260101,401807665,Austin Peay Governors,North Florida Ospreys,102,83,True
+20260101,401805158,Tarleton State Texans,Utah Valley Wolverines,85,91,False
+20260101,401805157,Abilene Christian Wildcats,Utah Tech Trailblazers,64,79,False
+20260101,401806415,Southeast Missouri State Redhawks,Eastern Illinois Panthers,68,59,True
+20260101,401830256,UIC Flames,Murray State Racers,77,81,False
+20260101,401808513,Montana State Bobcats,Northern Colorado Bears,89,75,True
+20260101,401808487,Idaho State Bengals,Sacramento State Hornets,97,84,True
+20260101,401823177,Cal State Fullerton Titans,UC Santa Barbara Gauchos,95,84,True
+20260101,401809086,Cal Poly Mustangs,UC San Diego Tritons,67,65,True
+20251231,401822880,Xavier Musketeers,UConn Huskies,67,90,False
+20251231,401820636,Duke Blue Devils,Georgia Tech Yellow Jackets,85,79,True
+20251231,401820641,Virginia Tech Hokies,Virginia Cavaliers,95,85,True
+20251230,401829169,San Diego Toreros,Gonzaga Bulldogs,93,99,False
+20251230,401820639,North Carolina Tar Heels,Florida State Seminoles,79,66,True
+20251230,401826776,Nebraska Cornhuskers,New Hampshire Wildcats,86,55,True
+20251230,401820634,California Golden Bears,Louisville Cardinals,70,90,False
+20251230,401829283,Tennessee Volunteers,South Carolina State Bulldogs,105,54,True
+20251229,401826888,Arizona Wildcats,South Dakota State Jackrabbits,99,71,True
+20251229,401826084,Michigan Wolverines,McNeese Cowboys,112,71,True
+20251229,401819881,Iowa State Cyclones,Houston Christian Huskies,89,61,True
+20251229,401823019,Purdue Boilermakers,Kent State Golden Flashes,101,60,True
+20251229,401823001,Houston Cougars,Middle Tennessee Blue Raiders,69,60,True
+20251229,401827222,Michigan State Spartans,Cornell Big Red,114,97,True
+20251229,401828686,Vanderbilt Commodores,New Haven Chargers,96,53,True
+20251229,401812269,Alabama Crimson Tide,Yale Bulldogs,102,78,True
+20251229,401826790,Arkansas Razorbacks,James Madison Dukes,103,74,True
+20251229,401827020,Illinois Fighting Illini,Southern Jaguars,90,55,True
+20251229,401829419,Florida Gators,Dartmouth Big Green,94,72,True
+20251229,401812364,Georgia Bulldogs,Long Island University Sharks,89,74,True
+20251229,401823651,Iowa Hawkeyes,UMass Lowell River Hawks,90,62,True
+20251228,401829163,Pepperdine Waves,Gonzaga Bulldogs,56,96,False
+20251228,401819904,Texas Tech Red Raiders,Winthrop Eagles,87,57,True
+20251227,401823596,UNC Wilmington Seahawks,Columbia College (SC) Fighting Koalas,100,56,True
+20251227,401813455,Duquesne Dukes,Cleary University Cougars,99,49,True
+20251227,401817475,Stanford Cardinal,Cal State Northridge Matadors,88,80,True
+20251223,401828299,Campbell Fighting Camels,Green Bay Phoenix,102,79,True
+20251223,401820611,Army Black Knights,Binghamton Bearcats,95,85,True
+20251223,401823223,Kentucky Wildcats,Bellarmine Knights,99,85,True
+20251223,401827093,Ohio State Buckeyes,Grambling Tigers,89,63,True
+20251223,401824830,UCF Knights,Florida Atlantic Owls,85,80,True
+20251223,401822397,Missouri State Bears,Lindenwood Lions,70,65,True
+20251223,401813766,UCLA Bruins,UC Riverside Highlanders,97,65,True
+20251223,401823572,Cal State Bakersfield Roadrunners,Idaho Vandals,64,63,True
+20251223,401813284,Loyola Marymount Lions,Morgan State Bears,83,56,True
+20251223,401812611,St. John's Red Storm,Harvard Crimson,85,59,True
+20251223,401827264,Marshall Thundering Herd,WVU Tech Golden Bears,102,52,True
+20251223,401822876,Seton Hall Pirates,Villanova Wildcats,56,64,False
+20251222,401826887,Arizona Wildcats,Bethune-Cookman Wildcats,107,71,True
+20251222,401819841,BYU Cougars,Eastern Washington Eagles,109,81,True
+20251222,401817271,North Carolina Tar Heels,East Carolina Pirates,99,51,True
+20251222,401819887,Kansas Jayhawks,Davidson Wildcats,90,61,True
+20251222,401811100,Illinois Fighting Illini,Missouri Tigers,91,48,True
+20251222,401817515,Virginia Cavaliers,American University Eagles,95,51,True
+20251222,401825391,Georgia Bulldogs,West Georgia Wolves,103,74,True
+20251221,401822185,Michigan Wolverines,La Salle Explorers,102,50,True
+20251221,401819880,Iowa State Cyclones,Long Beach State Beach,91,60,True
+20251221,401822875,DePaul Blue Demons,UConn Huskies,54,72,False
+20251221,401824036,Oregon Ducks,Gonzaga Bulldogs,82,91,False
+20251221,401817537,Wake Forest Demon Deacons,Vanderbilt Commodores,67,98,False
+20251221,401827239,Nebraska Cornhuskers,North Dakota Fighting Hawks,78,55,True
+20251221,401812268,Alabama Crimson Tide,Kennesaw State Owls,92,81,True
+20251221,401826974,Tennessee Volunteers,Gardner-Webb Runnin' Bulldogs,94,52,True
+20251221,401829406,Florida Gators,Colgate Raiders,90,60,True
+20251220,401823768,Arizona Wildcats,San Diego State Aztecs,68,45,True
+20251220,401817237,Duke Blue Devils,Texas Tech Red Raiders,81,82,False
+20251220,401823482,Purdue Boilermakers,Auburn Tigers,88,60,True
+20251220,401820294,Arkansas Razorbacks,Houston Cougars,85,94,False
+20251220,401826874,Michigan State Spartans,Oakland Golden Grizzlies,79,70,True
+20251220,401817249,Louisville Cardinals,Montana Grizzlies,94,54,True
+20251220,401809307,Ohio State Buckeyes,North Carolina Tar Heels,70,71,False
+20251220,401809306,Kentucky Wildcats,St. John's Red Storm,78,66,True
+20251220,401817514,Virginia Cavaliers,Maryland Terrapins,80,72,True
+20251219,401819840,BYU Cougars,Abilene Christian Wildcats,85,67,True
+20251218,401826775,Georgia Bulldogs,Western Carolina Catamounts,112,82,True
+20251217,401824035,Gonzaga Bulldogs,Campbell Fighting Camels,98,70,True
+20251217,401826799,Memphis Tigers,Vanderbilt Commodores,70,77,False
+20251217,401812267,Alabama Crimson Tide,South Florida Bulls,104,93,True
+20251217,401812387,Florida Gators,Saint Francis Red Flash,102,61,True
+20251216,401823529,Arizona Wildcats,Abilene Christian Wildcats,96,62,True
+20251216,401817236,Duke Blue Devils,Lipscomb Bisons,97,73,True
+20251216,401822868,UConn Huskies,Butler Bulldogs,79,60,True
+20251216,401823472,Michigan State Spartans,Toledo Rockets,92,69,True
+20251216,401819839,BYU Cougars,Pacific Tigers,93,57,True
+20251216,401817248,Tennessee Volunteers,Louisville Cardinals,83,62,True
+20251216,401817270,North Carolina Tar Heels,East Tennessee State Buccaneers,77,58,True
+20251216,401823497,Arkansas Razorbacks,Queens University Royals,108,80,True
+20251216,401819886,Kansas Jayhawks,Towson Tigers,73,49,True
+20251216,401819903,Texas Tech Red Raiders,Northern Colorado Bears,101,90,True
+20251216,401822869,St. John's Red Storm,DePaul Blue Demons,79,66,True
+20251215,401829435,Samford Bulldogs,Bryan (TN) Lions,106,51,True
+20251215,401842404,Florida A&M Rattlers,Albany St (GA) Golden Rams,93,77,True
+20251215,401827134,Arkansas-Pine Bluff Golden Lions,Ecclesia Royals,114,64,True
+20251215,401826972,Gardner-Webb Runnin' Bulldogs,Wofford Terriers,57,83,False
+20251215,401825208,Stetson Hatters,Rhodes Lynx,95,76,True
+20251215,401813382,VCU Rams,Niagara Purple Eagles,84,58,True
+20251215,401808703,SE Louisiana Lions,East Texas A&M Lions,69,70,False
+20251215,401823365,Western Kentucky Hilltoppers,Campbellsville Tigers,102,59,True
+20251215,401829464,North Dakota State Bison,Minnesota Crookston Golden Eagles,101,67,True
+20251215,401823762,South Dakota State Jackrabbits,Wyoming Cowboys,72,87,False
+20251215,401823439,Alabama A&M Bulldogs,North Alabama Lions,68,60,True
+20251215,401820475,Houston Christian Huskies,McNeese Cowboys,68,78,False
+20251215,401812256,TCU Horned Frogs,Incarnate Word Cardinals,69,65,True
+20251214,401819879,Iowa State Cyclones,Eastern Illinois Panthers,78,53,True
+20251213,401812266,Alabama Crimson Tide,Arizona Wildcats,75,96,False
+20251213,401825408,Maryland Terrapins,Michigan Wolverines,83,101,False
+20251213,401823028,Purdue Boilermakers,Marquette Golden Eagles,79,59,True
+20251213,401808901,Houston Cougars,New Orleans Privateers,99,57,True
+20251213,401813763,Gonzaga Bulldogs,UCLA Bruins,82,72,True
+20251213,401825409,Penn State Nittany Lions,Michigan State Spartans,72,76,False
+20251213,401819838,BYU Cougars,UC Riverside Highlanders,100,53,True
+20251213,401817247,Louisville Cardinals,Memphis Tigers,99,73,True
+20251213,401825407,Illinois Fighting Illini,Nebraska Cornhuskers,80,83,False
+20251213,401817269,North Carolina Tar Heels,South Carolina Upstate Spartans,80,62,True
+20251213,401824940,Vanderbilt Commodores,Central Arkansas Bears,83,72,True
+20251213,401826789,Arkansas Razorbacks,Texas Tech Red Raiders,93,86,True
+20251213,401817151,Florida Gators,George Washington Revolutionaries,80,70,True
+20251213,401817259,NC State Wolfpack,Kansas Jayhawks,76,77,False
+20251213,401823481,Auburn Tigers,Chattanooga Mocs,92,78,True
+20251213,401824309,St. John's Red Storm,Iona Gaels,91,64,True
+20251212,401812794,UConn Huskies,Texas Longhorns,71,63,True
+20251211,401819878,Iowa State Cyclones,Iowa Hawkeyes,66,62,True
+20251210,401825406,Purdue Boilermakers,Minnesota Golden Gophers,85,57,True
+20251210,401824814,Houston Cougars,Jackson State Tigers,80,38,True
+20251210,401825405,Nebraska Cornhuskers,Wisconsin Badgers,90,60,True
+20251209,401823566,Michigan Wolverines,Villanova Wildcats,89,61,True
+20251209,401812793,UConn Huskies,Florida Gators,77,73,True
+20251209,401812923,BYU Cougars,Clemson Tigers,67,64,True
+20251209,401825404,Ohio State Buckeyes,Illinois Fighting Illini,80,88,False
+20251209,401817513,Virginia Cavaliers,Maryland Eastern Shore Hawks,84,60,True
+20251208,401828342,Kennesaw State Owls,Southern Wesleyan Warriors,121,66,True
+20251208,401812581,Pennsylvania Quakers,Lafayette Leopards,74,72,True
+20251208,401820846,Charleston Southern Buccaneers,South Carolina State Bulldogs,84,44,True
+20251208,401827090,Southern Miss Golden Eagles,Grambling Tigers,68,60,True
+20251208,401827017,Texas Longhorns,Southern Jaguars,95,69,True
+20251208,401819895,Kansas State Wildcats,Mississippi Valley State Delta Devils,108,49,True
+20251208,401808900,New Orleans Privateers,Incarnate Word Cardinals,84,83,True
+20251207,401823448,Gonzaga Bulldogs,North Florida Ospreys,109,58,True
+20251207,401812265,Alabama Crimson Tide,UTSA Roadrunners,97,55,True
+20251207,401817268,North Carolina Tar Heels,Georgetown Hoyas,81,61,True
+20251207,401819902,Texas Tech Red Raiders,LSU Tigers,82,58,True
+20251207,401819885,Kansas Jayhawks,Missouri Tigers,80,60,True
+20251206,401819877,Purdue Boilermakers,Iowa State Cyclones,58,81,False
+20251206,401823480,Arizona Wildcats,Auburn Tigers,97,68,True
+20251206,401825400,Michigan Wolverines,Rutgers Scarlet Knights,101,60,True
+20251206,401817235,Michigan State Spartans,Duke Blue Devils,60,66,False
+20251206,401817246,Louisville Cardinals,Indiana Hoosiers,87,78,True
+20251206,401824813,Houston Cougars,Florida State Seminoles,82,67,True
+20251206,401811099,Tennessee Volunteers,Illinois Fighting Illini,62,75,False
+20251206,401826916,St. John's Red Storm,Ole Miss Rebels,63,58,True
+20251206,401825402,USC Trojans,Washington Huskies,76,84,False
+20251206,401826791,Arkansas Razorbacks,Fresno State Bulldogs,82,58,True
+20251205,401812792,UConn Huskies,East Texas A&M Lions,83,59,True
+20251205,401824034,Kentucky Wildcats,Gonzaga Bulldogs,59,94,False
+20251204,401812290,Fairleigh Dickinson Knights,Manor College Blue Jays,86,38,True
+20251204,401828643,Davidson Wildcats,The Citadel Bulldogs,79,63,True
+20251204,401826835,South Florida Bulls,Utah State Aggies,74,61,True
+20251204,401823852,Merrimack Warriors,Rider Broncs,68,66,True
+20251204,401820845,Charleston Southern Buccaneers,Warren Wilson Owls,124,63,True
+20251204,401817505,Green Bay Phoenix,Robert Morris Colonials,78,80,False
+20251204,401823311,UC Santa Barbara Gauchos,Long Beach State Beach,84,77,True
+20251204,401823261,Cal State Northridge Matadors,Cal State Bakersfield Roadrunners,87,66,True
+20251204,401809153,Cal State Fullerton Titans,Cal Poly Mustangs,91,94,False
+20251204,401809105,UC Irvine Anteaters,UC Riverside Highlanders,73,60,True
+20251204,401809123,Hawai'i Rainbow Warriors,UC Davis Aggies,75,69,True
+20251203,401806374,Arkansas Razorbacks,Louisville Cardinals,89,80,True
+20251203,401819837,BYU Cougars,California Baptist Lancers,91,60,True
+20251203,401819876,Iowa State Cyclones,Alcorn State Braves,132,68,True
+20251203,401806376,Alabama Crimson Tide,Clemson Tigers,90,84,True
+20251203,401806375,Vanderbilt Commodores,SMU Mustangs,88,69,True
+20251203,401806373,Auburn Tigers,NC State Wolfpack,83,73,True
+20251203,401825395,Minnesota Golden Gophers,Indiana Hoosiers,73,64,True
+20251202,401825393,Rutgers Scarlet Knights,Purdue Boilermakers,65,81,False
+20251202,401806364,Duke Blue Devils,Florida Gators,67,66,True
+20251202,401812791,Kansas Jayhawks,UConn Huskies,56,61,False
+20251202,401825392,Michigan State Spartans,Iowa Hawkeyes,71,52,True
+20251202,401806366,Syracuse Orange,Tennessee Volunteers,62,60,True
+20251202,401806365,Kentucky Wildcats,North Carolina Tar Heels,64,67,False
+20251202,401825394,Oregon Ducks,USC Trojans,77,82,False
+20251201,401837346,Chicago State Cougars,St. Xavier  (IL) Cougars,85,62,True
+20251201,401827016,Southern Jaguars,Louisiana Christian Wildcats,101,48,True
+20251201,401823565,Villanova Wildcats,Temple Owls,74,56,True
+20251201,401823470,Toledo Rockets,Central State (OH) Marauders,102,58,True
+20251201,401827523,Hampton Pirates,Apprentice School Builders,94,58,True
+20251201,401825387,Troy Trojans,West Georgia Wolves,89,93,False
+20251201,401824308,Delaware Blue Hens,Iona Gaels,66,89,False
+20251201,401823437,Jacksonville State Gamecocks,North Alabama Lions,66,73,False
+20251201,401819846,Cincinnati Bearcats,Tarleton State Texans,76,58,True
+20251201,401812384,Xavier Musketeers,Saint Francis Red Flash,96,74,True
+20251201,401822998,Middle Tennessee Blue Raiders,UAB Blazers,76,61,True
+20251201,401808731,Incarnate Word Cardinals,McNeese Cowboys,71,67,True
+20251201,401820546,Northern Iowa Panthers,Coe Kohawks,99,34,True
+20251201,401819893,Kansas State Wildcats,Bowling Green Falcons,66,82,False
+20251201,401823546,Southern Utah Thunderbirds,West Coast Baptist Eagles,124,59,True
+20251201,401830319,New Mexico Lobos,New Mexico Highlands Cowboys,97,47,True
+20251201,401819866,Colorado Buffaloes,California Baptist Lancers,78,70,True
+20251201,401817470,Stanford Cardinal,Portland Pilots,94,72,True
+20251130,401819901,Texas Tech Red Raiders,Wyoming Cowboys,76,72,True
+20251129,401826886,Arizona Wildcats,Norfolk State Spartans,98,61,True
+20251129,401827111,Indiana Hoosiers,Bethune-Cookman Wildcats,100,56,True
+20251128,401822359,Purdue Boilermakers,Eastern Illinois Panthers,109,62,True
+20251128,401811096,UConn Huskies,Illinois Fighting Illini,74,61,True
+20251128,401830886,Dayton Flyers,BYU Cougars,79,83,False
+20251128,401831223,Florida Gators,Providence Friars,90,78,True
+20251128,401830879,Vanderbilt Commodores,Saint Mary's Gaels,96,71,True
+20251127,401817234,Arkansas Razorbacks,Duke Blue Devils,71,80,False
+20251127,401809419,Miami Hurricanes,BYU Cougars,62,72,False
+20251127,401809047,Florida Gators,TCU Horned Frogs,80,84,False
+20251127,401817267,North Carolina Tar Heels,Michigan State Spartans,58,74,False
+20251127,401830752,Vanderbilt Commodores,VCU Rams,89,74,True
+20251126,401831217,Houston Cougars,Notre Dame Fighting Irish,66,56,True
+20251126,401817245,Louisville Cardinals,NJIT Highlanders,104,47,True
+20251126,401831214,Michigan Wolverines,Gonzaga Bulldogs,101,61,True
+20251126,401831220,Alabama Crimson Tide,Maryland Terrapins,105,72,True
+20251126,401831218,Auburn Tigers,St. John's Red Storm,85,74,True
+20251126,401831216,Iowa State Cyclones,Syracuse Orange,95,64,True
+20251126,401831215,Tennessee Volunteers,Kansas Jayhawks,76,81,False
+20251126,401826832,Kentucky Wildcats,Tennessee Tech Golden Eagles,104,54,True
+20251126,401808897,Texas Tech Red Raiders,New Orleans Privateers,82,50,True
+20251126,401831202,Texas Longhorns,NC State Wolfpack,102,97,True
+20251126,401823362,Western Kentucky Hilltoppers,Vanderbilt Commodores,78,83,False
+20251125,401824812,Houston Cougars,Tennessee Volunteers,73,76,False
+20251125,401823479,Michigan Wolverines,Auburn Tigers,102,72,True
+20251125,401812264,Alabama Crimson Tide,UNLV Rebels,115,76,True
+20251125,401820810,East Carolina Pirates,Michigan State Spartans,56,89,False
+20251125,401824033,Gonzaga Bulldogs,Maryland Terrapins,100,61,True
+20251125,401819827,Baylor Bears,St. John's Red Storm,81,96,False
+20251125,401819875,Iowa State Cyclones,Creighton Bluejays,78,60,True
+20251125,401817198,North Carolina Tar Heels,St. Bonaventure Bonnies,85,70,True
+20251125,401813762,California Golden Bears,UCLA Bruins,80,72,True
+20251125,401831198,Boise State Broncos,NC State Wolfpack,70,81,False
+20251125,401819892,Indiana Hoosiers,Kansas State Wildcats,86,69,True
+20251124,401826740,Arizona Wildcats,Denver Pioneers,103,73,True
+20251124,401817481,Houston Cougars,Syracuse Orange,78,74,True
+20251124,401817244,Louisville Cardinals,Eastern Michigan Eagles,87,46,True
+20251124,401823764,Michigan Wolverines,San Diego State Aztecs,94,54,True
+20251124,401812263,Alabama Crimson Tide,Gonzaga Bulldogs,85,95,False
+20251124,401827181,Illinois Fighting Illini,UT Rio Grande Valley Vaqueros,87,73,True
+20251124,401819874,St. John's Red Storm,Iowa State Cyclones,82,83,False
+20251124,401827435,Tennessee Volunteers,Rutgers Scarlet Knights,85,60,True
+20251124,401823478,Oregon Ducks,Auburn Tigers,73,84,False
+20251124,401817256,NC State Wolfpack,Seton Hall Pirates,74,85,False
+20251123,401812790,UConn Huskies,Bryant Bulldogs,72,49,True
+20251123,401817233,Duke Blue Devils,Howard Bison,93,56,True
+20251122,401812356,Illinois Fighting Illini,Long Island University Sharks,98,58,True
+20251121,401823637,Purdue Boilermakers,Texas Tech Red Raiders,86,56,True
+20251121,401813377,Duke Blue Devils,Niagara Purple Eagles,100,42,True
+20251121,401817243,Cincinnati Bearcats,Louisville Cardinals,64,74,False
+20251121,401819836,BYU Cougars,Wisconsin Badgers,98,70,True
+20251121,401827489,Florida Gators,Merrimack Warriors,80,45,True
+20251121,401820187,Kentucky Wildcats,Loyola Maryland Greyhounds,88,46,True
+20251121,401823371,Michigan State Spartans,Detroit Mercy Titans,84,56,True
+20251121,401813761,UCLA Bruins,Presbyterian Blue Hose,86,46,True
+20251121,401826788,Arkansas Razorbacks,Jackson State Tigers,115,61,True
+20251120,401823636,Purdue Boilermakers,Memphis Tigers,80,71,True
+20251120,401812629,Houston Cougars,Rider Broncs,91,45,True
+20251120,401809078,St. John's Red Storm,Bucknell Bison,97,49,True
+20251120,401817531,Texas Tech Red Raiders,Wake Forest Demon Deacons,84,83,True
+20251120,401829386,Tennessee Volunteers,Tennessee State Tigers,89,60,True
+20251119,401812789,UConn Huskies,Arizona Wildcats,67,71,False
+20251119,401822996,Michigan Wolverines,Middle Tennessee Blue Raiders,86,61,True
+20251119,401811098,Illinois Fighting Illini,Alabama Crimson Tide,86,90,False
+20251119,401823477,Auburn Tigers,Jackson State Tigers,112,66,True
+20251118,401817232,Duke Blue Devils,Kansas Jayhawks,78,66,True
+20251118,401827221,Kentucky Wildcats,Michigan State Spartans,66,83,False
+20251118,401817266,North Carolina Tar Heels,Navy Midshipmen,73,61,True
+20251118,401813760,UCLA Bruins,Sacramento State Hornets,79,48,True
+20251118,401826787,Arkansas Razorbacks,Winthrop Eagles,84,83,True
+20251117,401823542,Gonzaga Bulldogs,Southern Utah Thunderbirds,122,50,True
+20251117,401819873,Iowa State Cyclones,Stonehill Skyhawks,96,57,True
+20251117,401826807,Tennessee Volunteers,Rice Owls,91,66,True
+20251117,401826912,Wisconsin Badgers,SIU Edwardsville Cougars,94,69,True
+20251117,401817255,NC State Wolfpack,VCU Rams,85,79,True
+20251116,401809305,Auburn Tigers,Houston Cougars,72,73,False
+20251116,401820598,Purdue Boilermakers,Akron Zips,97,79,True
+20251116,401809416,Florida Gators,Miami Hurricanes,82,68,True
+20251115,401812788,UConn Huskies,BYU Cougars,86,84,True
+20251115,401817242,Louisville Cardinals,Ohio Bobcats,106,81,True
+20251115,401826915,St. John's Red Storm,William & Mary Tribe,93,60,True
+20251115,401819884,Kansas Jayhawks,Princeton Tigers,76,57,True
+20251114,401817231,Duke Blue Devils,Indiana State Sycamores,100,62,True
+20251114,401813759,UCLA Bruins,Arizona Wildcats,65,69,False
+20251114,401812252,TCU Horned Frogs,Michigan Wolverines,63,67,False
+20251114,401822356,Kentucky Wildcats,Eastern Illinois Panthers,99,53,True
+20251114,401819900,Texas Tech Red Raiders,Milwaukee Panthers,80,63,True
+20251114,401827180,Illinois Fighting Illini,Colgate Raiders,84,65,True
+20251114,401817265,North Carolina Tar Heels,North Carolina Central Eagles,97,53,True
+20251114,401819815,Arizona State Sun Devils,Gonzaga Bulldogs,65,77,False
+20251114,401826786,Arkansas Razorbacks,Samford Bulldogs,79,75,True
+20251114,401820832,Creighton Bluejays,Maryland Eastern Shore Hawks,84,45,True
