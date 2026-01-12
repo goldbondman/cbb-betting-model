@@ -2,9 +2,9 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timedelta
+import requests
 
-# Page config
 st.set_page_config(page_title="CBB Betting Model", page_icon="🏀", layout="wide")
 
 # === LOAD DATA ===
@@ -14,7 +14,6 @@ def load_data():
     games = pd.read_csv("espn_games.csv")
     teams = pd.read_csv("espn_teams.csv")
     
-    # Preprocess
     bart.columns = [str(col).strip().lower().replace(" ", "_").replace(".", "") for col in bart.columns]
     if "adjoe" in bart.columns and "adjde" in bart.columns:
         bart["adjem"] = bart["adjoe"] - bart["adjde"]
@@ -23,9 +22,43 @@ def load_data():
 
 bart_clean, espn_games, espn_teams = load_data()
 
-# === HELPER FUNCTIONS ===
+# === GET TODAY'S GAMES FROM ESPN ===
+@st.cache_data(ttl=3600)  # Cache for 1 hour
+def get_todays_games():
+    """Fetch today's scheduled games from ESPN API"""
+    today = datetime.now().strftime("%Y%m%d")
+    url = f"http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates={today}"
+    
+    try:
+        response = requests.get(url)
+        data = response.json()
+        
+        games_list = []
+        for event in data.get("events", []):
+            competition = event.get("competitions", [{}])[0]
+            competitors = competition.get("competitors", [])
+            
+            if len(competitors) >= 2:
+                home_team = competitors[0]["team"]["displayName"]
+                away_team = competitors[1]["team"]["displayName"]
+                game_time = event.get("date", "")
+                status = event.get("status", {}).get("type", {}).get("name", "")
+                
+                games_list.append({
+                    "home_team": home_team,
+                    "away_team": away_team,
+                    "time": game_time,
+                    "status": status
+                })
+        
+        return pd.DataFrame(games_list)
+    except:
+        return pd.DataFrame()
+
+# [COPY ALL YOUR MODEL FUNCTIONS HERE - safe_get, model1, model2, model3, model4, predict_game, etc.]
+# ... (keeping this short for readability, but include all your working functions)
+
 def safe_get(data_dict, key, default=0):
-    """Safely get value from dict"""
     if key in data_dict:
         return float(data_dict[key])
     if key.lower() in data_dict:
@@ -36,7 +69,6 @@ def safe_get(data_dict, key, default=0):
     return default
 
 def calculate_rolling_stats(games_df, team_name, n=7):
-    """Calculate last N games stats"""
     team_games = games_df[
         (games_df["home_team"] == team_name) | 
         (games_df["away_team"] == team_name)
@@ -59,20 +91,14 @@ def calculate_rolling_stats(games_df, team_name, n=7):
                 wins += 1
     
     n = len(team_games)
-    return {
-        "games_played": n,
-        "margin_last_n": (total_pts - total_opp) / n,
-        "wins_last_n": wins
-    }
+    return {"games_played": n, "margin_last_n": (total_pts - total_opp) / n, "wins_last_n": wins}
 
-# === MODELS ===
 def model1_schedule_adjusted(A, B):
     adjem_a = safe_get(A, "adjem", 0)
     adjem_b = safe_get(B, "adjem", 0)
     sos_a = safe_get(A, "sos", 100) / 100
     sos_b = safe_get(B, "sos", 100) / 100
-    sched_adj = (sos_a ** 0.4) - (sos_b ** 0.4)
-    return (adjem_a - adjem_b) + sched_adj * 2
+    return (adjem_a - adjem_b) + ((sos_a ** 0.4) - (sos_b ** 0.4)) * 2
 
 def model2_four_factors(A, B):
     efg_a = safe_get(A, "efg", 0.50)
@@ -113,18 +139,13 @@ def model4_situational(A, B):
     return (tempo_a - tempo_b) * 0.15
 
 def home_court_advantage(venue):
-    venues = {
-        "Cameron Indoor Stadium": 4.2,
-        "Allen Fieldhouse": 4.0,
-        "Rupp Arena": 3.8,
-    }
+    venues = {"Cameron Indoor Stadium": 4.2, "Allen Fieldhouse": 4.0, "Rupp Arena": 3.8}
     return venues.get(venue, 2.7)
 
 def calculate_confidence(models, A, B):
     values = [v for v in models.values() if isinstance(v, (int, float))]
     variance = max(values) - min(values)
-    agreement = max(0.70, min(0.99, 1.0 - variance / 20.0))
-    return round(agreement, 3)
+    return max(0.70, min(0.99, 1.0 - variance / 20.0))
 
 def detect_alpha(pred, conf, models, vegas=None):
     is_alpha = False
@@ -141,12 +162,11 @@ def detect_alpha(pred, conf, models, vegas=None):
     signs = [1 if v > 0 else -1 for v in models.values() if isinstance(v, (int, float))]
     if len(set(signs)) == 1 and abs(pred) > 2.0:
         is_alpha = True
-        reasons.append("Unanimous direction")
+        reasons.append("Unanimous")
     
     return {"is_alpha": is_alpha, "reasons": reasons}
 
 def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=None):
-    """Main prediction function"""
     A = bart_clean[bart_clean["team"] == team_a_name]
     B = bart_clean[bart_clean["team"] == team_b_name]
     
@@ -168,7 +188,6 @@ def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=N
     m4 = model4_situational(A_data, B_data)
     
     pred = 0.45*m3 + 0.25*m1 + 0.20*m2 + 0.10*m4
-    
     hc = home_court_advantage(venue)
     pred += hc if home_a else -hc
     
@@ -185,77 +204,141 @@ def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=N
         "alpha_reasons": alpha["reasons"],
         "models": {k: round(v,1) for k,v in models.items()},
         "vegas_edge": round(pred - vegas, 1) if vegas else None,
-        "home_court": hc,
-        "team_a_last_7": A_roll,
-        "team_b_last_7": B_roll
+        "home_court": hc
     }
 
-# === UI ===
-st.title("🏀 College Basketball Betting Model")
+# === SIDEBAR ===
+st.sidebar.title("🏀 CBB Model")
+st.sidebar.markdown("---")
 
-# Sidebar
 st.sidebar.header("💰 Bankroll")
-bankroll = st.sidebar.number_input("Total ($)", value=1000, step=100)
-unit = st.sidebar.number_input("Unit ($)", value=10, step=5)
+bankroll = st.sidebar.number_input("Total ($)", value=1000, step=100, key="bankroll")
+unit = st.sidebar.number_input("Unit ($)", value=10, step=5, key="unit")
 st.sidebar.info(f"1 Unit = ${unit} ({unit/bankroll*100:.1f}%)")
+
+st.sidebar.markdown("---")
+
+# Navigation
+page = st.sidebar.radio("Navigate", [
+    "🎯 Single Prediction",
+    "📅 Today's Games",
+    "📊 Performance",
+    "📜 History"
+])
 
 st.sidebar.markdown("---")
 st.sidebar.caption(f"Updated: {datetime.now().strftime('%Y-%m-%d')}")
 st.sidebar.caption(f"Teams: {len(bart_clean)} | Games: {len(espn_games)}")
 
-# Main app
-teams = sorted(bart_clean["team"].unique().tolist())
+# === PAGES ===
 
-col1, col2 = st.columns(2)
-with col1:
-    team_a = st.selectbox("Home Team", teams)
-with col2:
-    team_b = st.selectbox("Away Team", teams, index=1)
-
-col3, col4 = st.columns(2)
-with col3:
-    venue = st.selectbox("Venue", ["default", "Cameron Indoor Stadium", "Allen Fieldhouse", "Rupp Arena"])
-with col4:
-    vegas_line = st.number_input("Vegas Line (optional)", value=0.0, step=0.5)
-    has_vegas = st.checkbox("Use Vegas line")
-
-if st.button("🚀 Predict", type="primary"):
-    if team_a == team_b:
-        st.error("Select different teams!")
-    else:
-        with st.spinner("Running models..."):
-            result = predict_game(team_a, team_b, True, venue, vegas_line if has_vegas else None)
-            
-            if result:
-                st.markdown("---")
-                st.markdown(f"## {team_a} vs {team_b}")
+if page == "🎯 Single Prediction":
+    st.title("🎯 Single Game Prediction")
+    
+    teams = sorted(bart_clean["team"].unique().tolist())
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        team_a = st.selectbox("Home Team", teams, key="single_home")
+    with col2:
+        team_b = st.selectbox("Away Team", teams, index=1, key="single_away")
+    
+    col3, col4 = st.columns(2)
+    with col3:
+        venue = st.selectbox("Venue", ["default", "Cameron Indoor Stadium", "Allen Fieldhouse", "Rupp Arena"])
+    with col4:
+        vegas_line = st.number_input("Vegas Line", value=0.0, step=0.5)
+        has_vegas = st.checkbox("Use Vegas")
+    
+    if st.button("🚀 Predict", type="primary"):
+        if team_a == team_b:
+            st.error("Select different teams!")
+        else:
+            with st.spinner("Running models..."):
+                result = predict_game(team_a, team_b, True, venue, vegas_line if has_vegas else None)
                 
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.metric("Prediction", f"{team_a} {result['prediction']:+.1f}")
-                with col2:
-                    st.metric("Confidence", f"{result['confidence']:.0%}")
-                with col3:
-                    if result["is_alpha"]:
-                        st.success("🚨 ALPHA")
-                    else:
-                        st.info("❌ No edge")
-                
-                st.markdown("### Models")
-                model_df = pd.DataFrame({
-                    "Model": ["Schedule", "Four Factors", "Bidirectional", "Situational"],
-                    "Prediction": [result["models"]["M1"], result["models"]["M2"], 
-                                  result["models"]["M3"], result["models"]["M4"]],
-                    "Weight": ["25%", "20%", "45%", "10%"]
-                })
-                st.dataframe(model_df, hide_index=True)
-                
-                if result["is_alpha"]:
-                    st.success(f"""
-                    **BET RECOMMENDATION:** {team_a} {result['prediction']:+.1f}
+                if result:
+                    st.markdown("---")
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.metric("Prediction", f"{team_a} {result['prediction']:+.1f}")
+                    with col2:
+                        st.metric("Confidence", f"{result['confidence']:.0%}")
+                    with col3:
+                        if result["is_alpha"]:
+                            st.success("🚨 ALPHA")
+                        else:
+                            st.info("No edge")
                     
-                    Reasons: {", ".join(result["alpha_reasons"])}
-                    """)
-                
-                if has_vegas:
-                    st.info(f"Vegas edge: {result['vegas_edge']:+.1f} points")
+                    if result["is_alpha"]:
+                        st.success(f"**BET:** {team_a} {result['prediction']:+.1f} | {', '.join(result['alpha_reasons'])}")
+
+elif page == "📅 Today's Games":
+    st.title("📅 Today's Games")
+    
+    todays_games = get_todays_games()
+    
+    if len(todays_games) == 0:
+        st.info("No games scheduled for today or unable to fetch schedule.")
+    else:
+        st.success(f"Found {len(todays_games)} games today!")
+        
+        # Filters
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            min_conf = st.slider("Min Confidence", 0.7, 0.99, 0.85)
+        with col2:
+            show_alpha_only = st.checkbox("Alpha signals only")
+        with col3:
+            auto_predict = st.checkbox("Auto-predict all")
+        
+        st.markdown("---")
+        
+        # Predict all games
+        predictions = []
+        
+        if auto_predict:
+            with st.spinner(f"Predicting {len(todays_games)} games..."):
+                for idx, game in todays_games.iterrows():
+                    result = predict_game(game["home_team"], game["away_team"], True, "default")
+                    if result:
+                        result["game_time"] = game["time"]
+                        result["status"] = game["status"]
+                        predictions.append(result)
+            
+            # Filter
+            filtered = [p for p in predictions if p["confidence"] >= min_conf]
+            if show_alpha_only:
+                filtered = [p for p in filtered if p["is_alpha"]]
+            
+            # Sort by confidence
+            filtered = sorted(filtered, key=lambda x: x["confidence"], reverse=True)
+            
+            st.markdown(f"### Showing {len(filtered)} games")
+            
+            # Display
+            for pred in filtered:
+                with st.expander(f"{'🚨' if pred['is_alpha'] else '📊'} {pred['team_a']} vs {pred['team_b']} | {pred['confidence']:.0%} confidence"):
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.metric("Prediction", f"{pred['team_a']} {pred['prediction']:+.1f}")
+                    with col2:
+                        st.metric("Confidence", f"{pred['confidence']:.0%}")
+                    with col3:
+                        if pred["is_alpha"]:
+                            st.success("ALPHA")
+                    
+                    st.write(f"**Models:** M1: {pred['models']['M1']}, M2: {pred['models']['M2']}, M3: {pred['models']['M3']}, M4: {pred['models']['M4']}")
+        else:
+            st.info("Enable 'Auto-predict all' to generate predictions for all games")
+            
+            # Show game list
+            st.dataframe(todays_games, use_container_width=True)
+
+elif page == "📊 Performance":
+    st.title("📊 Performance Dashboard")
+    st.info("Performance tracking coming soon! Save predictions to track accuracy.")
+
+elif page == "📜 History":
+    st.title("📜 Prediction History")
+    st.info("History tracking coming soon!")
