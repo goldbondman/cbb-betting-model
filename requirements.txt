@@ -2,6 +2,6 @@ streamlit
 pandas
 numpy
 requests
-supabase-py
+supabase
 python-dotenv
 python-dateutil
