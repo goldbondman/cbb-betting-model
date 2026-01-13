@@ -1,0 +1,151 @@
+team,opponent,home_away,event_id,game_date,venue,fgm,fga,tpm,tpa,ftm,fta,tov,orb,drb,reb,efg,3par,ftr,orb_pct,drb_pct,tov_pct,poss
+Michigan State Spartans,Indiana Hoosiers,home,401825438,2026-01-14T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Indiana Hoosiers,Michigan State Spartans,away,401825438,2026-01-14T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Louisville Cardinals,Virginia Cavaliers,home,401820669,2026-01-14T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Virginia Cavaliers,Louisville Cardinals,away,401820669,2026-01-14T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Clemson Tigers,Boston College Eagles,home,401820667,2026-01-14T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Boston College Eagles,Clemson Tigers,away,401820667,2026-01-14T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Tennessee Volunteers,Texas A&M Aggies,home,401808175,2026-01-14T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Texas A&M Aggies,Tennessee Volunteers,away,401808175,2026-01-14T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Seton Hall Pirates,UConn Huskies,home,401822900,2026-01-14T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+UConn Huskies,Seton Hall Pirates,away,401822900,2026-01-14T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Houston Cougars,West Virginia Mountaineers,home,401827616,2026-01-14T01:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+West Virginia Mountaineers,Houston Cougars,away,401827616,2026-01-14T01:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Kansas Jayhawks,Iowa State Cyclones,home,401827617,2026-01-14T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Iowa State Cyclones,Kansas Jayhawks,away,401827617,2026-01-14T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Nebraska Cornhuskers,Oregon Ducks,home,401825440,2026-01-14T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Oregon Ducks,Nebraska Cornhuskers,away,401825440,2026-01-14T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Mississippi State Bulldogs,Alabama Crimson Tide,home,401808170,2026-01-14T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Alabama Crimson Tide,Mississippi State Bulldogs,away,401808170,2026-01-14T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Oklahoma Sooners,Florida Gators,home,401808172,2026-01-14T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Florida Gators,Oklahoma Sooners,away,401808172,2026-01-14T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Morgan State Bears,North Carolina Central Eagles,home,401828689,2026-01-12T23:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+North Carolina Central Eagles,Morgan State Bears,away,401828689,2026-01-12T23:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Howard Bison,Delaware State Hornets,home,401830239,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Delaware State Hornets,Howard Bison,away,401830239,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Alabama State Hornets,Alcorn State Braves,home,401827162,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Alcorn State Braves,Alabama State Hornets,away,401827162,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Florida A&M Rattlers,Grambling Tigers,home,401827097,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Grambling Tigers,Florida A&M Rattlers,away,401827097,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Prairie View A&M Panthers,Arkansas-Pine Bluff Golden Lions,home,401827049,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Arkansas-Pine Bluff Golden Lions,Prairie View A&M Panthers,away,401827049,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Bethune-Cookman Wildcats,Southern Jaguars,home,401827024,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Southern Jaguars,Bethune-Cookman Wildcats,away,401827024,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Norfolk State Spartans,Maryland Eastern Shore Hawks,home,401823047,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Maryland Eastern Shore Hawks,Norfolk State Spartans,away,401823047,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Coppin State Eagles,South Carolina State Bulldogs,home,401822769,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+South Carolina State Bulldogs,Coppin State Eagles,away,401822769,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Lamar Cardinals,Houston Christian Huskies,home,401820478,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Houston Christian Huskies,Lamar Cardinals,away,401820478,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+American University Eagles,Navy Midshipmen,home,401820164,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Navy Midshipmen,American University Eagles,away,401820164,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Stephen F. Austin Lumberjacks,Incarnate Word Cardinals,home,401808969,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Incarnate Word Cardinals,Stephen F. Austin Lumberjacks,away,401808969,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+SE Louisiana Lions,New Orleans Privateers,home,401808906,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+New Orleans Privateers,SE Louisiana Lions,away,401808906,2026-01-13T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Northwestern State Demons,UT Rio Grande Valley Vaqueros,home,401808938,2026-01-13T00:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+UT Rio Grande Valley Vaqueros,Northwestern State Demons,away,401808938,2026-01-13T00:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+McNeese Cowboys,Nicholls Colonels,home,401808876,2026-01-13T00:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Nicholls Colonels,McNeese Cowboys,away,401808876,2026-01-13T00:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+East Texas A&M Lions,Texas A&M-Corpus Christi Islanders,home,401808709,2026-01-13T00:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Texas A&M-Corpus Christi Islanders,East Texas A&M Lions,away,401808709,2026-01-13T00:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Texas Southern Tigers,Mississippi Valley State Delta Devils,home,401829500,2026-01-13T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Mississippi Valley State Delta Devils,Texas Southern Tigers,away,401829500,2026-01-13T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Alabama A&M Bulldogs,Jackson State Tigers,home,401827203,2026-01-13T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Jackson State Tigers,Alabama A&M Bulldogs,away,401827203,2026-01-13T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Iowa Hawkeyes,Illinois Fighting Illini,home,401825435,2026-01-11T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Illinois Fighting Illini,Iowa Hawkeyes,away,401825435,2026-01-11T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+UCF Knights,Cincinnati Bearcats,home,401827615,2026-01-11T22:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Cincinnati Bearcats,UCF Knights,away,401827615,2026-01-11T22:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+TCU Horned Frogs,Arizona Wildcats,home,401827612,2026-01-10T21:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Arizona Wildcats,TCU Horned Frogs,away,401827612,2026-01-10T21:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Michigan Wolverines,Wisconsin Badgers,home,401825432,2026-01-10T18:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Wisconsin Badgers,Michigan Wolverines,away,401825432,2026-01-10T18:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Iowa State Cyclones,Oklahoma State Cowboys,home,401827611,2026-01-10T21:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Oklahoma State Cowboys,Iowa State Cyclones,away,401827611,2026-01-10T21:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+UConn Huskies,DePaul Blue Demons,home,401822893,2026-01-10T17:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+DePaul Blue Demons,UConn Huskies,away,401822893,2026-01-10T17:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Purdue Boilermakers,Penn State Nittany Lions,home,401825433,2026-01-10T19:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Penn State Nittany Lions,Purdue Boilermakers,away,401825433,2026-01-10T19:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Duke Blue Devils,SMU Mustangs,home,401820657,2026-01-10T19:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+SMU Mustangs,Duke Blue Devils,away,401820657,2026-01-10T19:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Baylor Bears,Houston Cougars,home,401827609,2026-01-10T18:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Houston Cougars,Baylor Bears,away,401827609,2026-01-10T18:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Utah Utes,BYU Cougars,home,401827613,2026-01-11T03:10Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+BYU Cougars,Utah Utes,away,401827613,2026-01-11T03:10Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Indiana Hoosiers,Nebraska Cornhuskers,home,401825431,2026-01-10T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Nebraska Cornhuskers,Indiana Hoosiers,away,401825431,2026-01-10T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Vanderbilt Commodores,LSU Tigers,home,401808167,2026-01-10T18:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+LSU Tigers,Vanderbilt Commodores,away,401808167,2026-01-10T18:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Alabama Crimson Tide,Texas Longhorns,home,401808168,2026-01-11T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Texas Longhorns,Alabama Crimson Tide,away,401808168,2026-01-11T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Colorado Buffaloes,Texas Tech Red Raiders,home,401827610,2026-01-11T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Texas Tech Red Raiders,Colorado Buffaloes,away,401827610,2026-01-11T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Auburn Tigers,Arkansas Razorbacks,home,401808161,2026-01-10T23:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Arkansas Razorbacks,Auburn Tigers,away,401808161,2026-01-10T23:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+North Carolina Tar Heels,Wake Forest Demon Deacons,home,401820661,2026-01-10T23:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Wake Forest Demon Deacons,North Carolina Tar Heels,away,401820661,2026-01-10T23:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+South Carolina Gamecocks,Georgia Bulldogs,home,401808165,2026-01-10T19:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Georgia Bulldogs,South Carolina Gamecocks,away,401808165,2026-01-10T19:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Louisville Cardinals,Boston College Eagles,home,401820659,2026-01-10T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Boston College Eagles,Louisville Cardinals,away,401820659,2026-01-10T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Florida Gators,Tennessee Volunteers,home,401808162,2026-01-10T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Tennessee Volunteers,Florida Gators,away,401808162,2026-01-10T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+West Virginia Mountaineers,Kansas Jayhawks,home,401827614,2026-01-10T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Kansas Jayhawks,West Virginia Mountaineers,away,401827614,2026-01-10T17:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Virginia Cavaliers,Stanford Cardinal,home,401820664,2026-01-10T19:15Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Stanford Cardinal,Virginia Cavaliers,away,401820664,2026-01-10T19:15Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Youngstown State Penguins,Bryant & Stratton (Ohio) Bobcats,home,401823007,2026-01-09T16:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Bryant & Stratton (Ohio) Bobcats,Youngstown State Penguins,away,401823007,2026-01-09T16:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Toledo Rockets,Miami (OH) RedHawks,home,401814515,2026-01-09T23:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Miami (OH) RedHawks,Toledo Rockets,away,401814515,2026-01-09T23:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Fairfield Stags,Rider Broncs,home,401823316,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Rider Broncs,Fairfield Stags,away,401823316,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Oakland Golden Grizzlies,Cleveland State Vikings,home,401817615,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Cleveland State Vikings,Oakland Golden Grizzlies,away,401817615,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Detroit Mercy Titans,Wright State Raiders,home,401817614,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Wright State Raiders,Detroit Mercy Titans,away,401817614,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Green Bay Phoenix,IU Indianapolis Jaguars,home,401817612,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+IU Indianapolis Jaguars,Green Bay Phoenix,away,401817612,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Siena Saints,Merrimack Warriors,home,401813424,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Merrimack Warriors,Siena Saints,away,401813424,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Mount St. Mary's Mountaineers,Saint Peter's Peacocks,home,401813410,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Saint Peter's Peacocks,Mount St. Mary's Mountaineers,away,401813410,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Iona Gaels,Niagara Purple Eagles,home,401813386,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Niagara Purple Eagles,Iona Gaels,away,401813386,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Sacred Heart Pioneers,Marist Red Foxes,home,401813331,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Marist Red Foxes,Sacred Heart Pioneers,away,401813331,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Manhattan Jaspers,Canisius Golden Griffins,home,401813301,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Canisius Golden Griffins,Manhattan Jaspers,away,401813301,2026-01-10T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Milwaukee Panthers,Northern Kentucky Norse,home,401817613,2026-01-10T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Northern Kentucky Norse,Milwaukee Panthers,away,401817613,2026-01-10T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Bowling Green Falcons,Akron Zips,home,401814510,2026-01-10T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Akron Zips,Bowling Green Falcons,away,401814510,2026-01-10T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Minnesota Golden Gophers,USC Trojans,home,401825430,2026-01-10T01:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+USC Trojans,Minnesota Golden Gophers,away,401825430,2026-01-10T01:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Colorado State Rams,UNLV Rebels,home,401830827,2026-01-10T03:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+UNLV Rebels,Colorado State Rams,away,401830827,2026-01-10T03:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Gonzaga Bulldogs,Santa Clara Broncos,home,401829190,2026-01-09T04:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Santa Clara Broncos,Gonzaga Bulldogs,away,401829190,2026-01-09T04:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Michigan State Spartans,Northwestern Wildcats,home,401825428,2026-01-08T23:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Northwestern Wildcats,Michigan State Spartans,away,401825428,2026-01-08T23:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Illinois Fighting Illini,Rutgers Scarlet Knights,home,401825427,2026-01-09T01:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Rutgers Scarlet Knights,Illinois Fighting Illini,away,401825427,2026-01-09T01:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Arizona Wildcats,Kansas State Wildcats,home,401827604,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Kansas State Wildcats,Arizona Wildcats,away,401827604,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Baylor Bears,Iowa State Cyclones,home,401827605,2026-01-08T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Iowa State Cyclones,Baylor Bears,away,401827605,2026-01-08T01:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Providence Friars,UConn Huskies,home,401822889,2026-01-08T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+UConn Huskies,Providence Friars,away,401822889,2026-01-08T00:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Purdue Boilermakers,Washington Huskies,home,401825426,2026-01-08T01:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Washington Huskies,Purdue Boilermakers,away,401825426,2026-01-08T01:30Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+BYU Cougars,Arizona State Sun Devils,home,401827606,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Arizona State Sun Devils,BYU Cougars,away,401827606,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Vanderbilt Commodores,Alabama Crimson Tide,home,401808155,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Alabama Crimson Tide,Vanderbilt Commodores,away,401808155,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Ole Miss Rebels,Arkansas Razorbacks,home,401808159,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Arkansas Razorbacks,Ole Miss Rebels,away,401808159,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Virginia Cavaliers,California Golden Bears,home,401820654,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+California Golden Bears,Virginia Cavaliers,away,401820654,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+Clemson Tigers,SMU Mustangs,home,401820652,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
+SMU Mustangs,Clemson Tigers,away,401820652,2026-01-08T02:00Z,,0,0,0,0,0,0,0,0,0,0,,,,,,,0.0
