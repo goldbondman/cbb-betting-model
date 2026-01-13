@@ -16,14 +16,9 @@ st.set_page_config(page_title="CBB Betting Model", page_icon="🏀", layout="wid
 def _get_supabase_client() -> Client:
     """
     Creates a Supabase client using Streamlit secrets (preferred) or env vars.
-
-    REQUIRED:
+    Required:
       - SUPABASE_URL
       - SUPABASE_ANON_KEY
-
-    NOTE:
-      - Do NOT use your service role key in Streamlit.
-      - Use the anon key and rely on RLS policies.
     """
     url = None
     key = None
@@ -55,15 +50,6 @@ def make_game_id(team_a: str, team_b: str, game_date: str) -> str:
     return f"{team_a}_vs_{team_b}_{game_date}".replace(" ", "_")
 
 def sb_upsert_prediction(prediction_data: dict) -> str:
-    """
-    Upserts a prediction row into public.predictions.
-
-    Your table columns (per your message):
-    id, prediction_key, created_at, updated_at, game_date, team_a, team_b, home_team, away_team, venue,
-    ensemble_prediction, confidence, is_alpha, alpha_reasons, vegas_line, vegas_edge, ensemble_win_prob,
-    kelly_pct, kelly_dollars, kelly_recommended, model_predictions,
-    actual_team_a_score, actual_team_b_score, actual_spread, won, ensemble_error, model_accuracy
-    """
     sb = supabase_client()
 
     game_id = make_game_id(
@@ -72,35 +58,31 @@ def sb_upsert_prediction(prediction_data: dict) -> str:
         prediction_data["game_date"],
     )
 
+    # Minimal record using your existing table shape.
+    # If your table has many more columns, Supabase will ignore missing optional columns,
+    # as long as required columns exist and types are valid.
     record = {
         "id": game_id,
         "prediction_key": game_id,
-
         "game_date": prediction_data["game_date"],
         "team_a": prediction_data["team_a"],
         "team_b": prediction_data["team_b"],
-
         "home_team": prediction_data.get("home_team"),
         "away_team": prediction_data.get("away_team"),
         "venue": prediction_data.get("venue"),
-
         "ensemble_prediction": float(prediction_data["ensemble"]["prediction"]),
         "confidence": float(prediction_data["ensemble"]["confidence"]),
         "is_alpha": bool(prediction_data["ensemble"]["is_alpha"]),
         "alpha_reasons": prediction_data["ensemble"].get("alpha_reasons", []),
-
         "vegas_line": prediction_data.get("vegas_line"),
         "vegas_edge": prediction_data.get("vegas_edge"),
+        "ensemble_win_prob": float(prediction_data["ensemble"]["win_prob"]),
+        "kelly_pct": float(prediction_data["ensemble"]["kelly"]["kelly_pct"]),
+        "kelly_dollars": float(prediction_data["ensemble"]["kelly"]["kelly_dollars"]),
+        "kelly_recommended": prediction_data["ensemble"]["kelly"]["recommended"],
+        "model_predictions": prediction_data["models"],
 
-        "ensemble_win_prob": float(prediction_data["ensemble"].get("win_prob", 0.0)),
-
-        "kelly_pct": float(prediction_data["ensemble"]["kelly"].get("kelly_pct", 0.0)),
-        "kelly_dollars": float(prediction_data["ensemble"]["kelly"].get("kelly_dollars", 0.0)),
-        "kelly_recommended": prediction_data["ensemble"]["kelly"].get("recommended", "PASS"),
-
-        "model_predictions": prediction_data.get("models", {}),
-
-        # Actuals start null until updated
+        # Result fields remain null until updated
         "actual_team_a_score": None,
         "actual_team_b_score": None,
         "actual_spread": None,
@@ -136,9 +118,6 @@ def sb_fetch_pending_predictions(limit: int = 5000) -> list:
     return resp.data or []
 
 def sb_update_prediction_result(game_id: str, team_a_score: int, team_b_score: int) -> dict:
-    """
-    Updates a row with final score and computed accuracy fields.
-    """
     sb = supabase_client()
 
     existing = sb.table("predictions").select("*").eq("id", game_id).limit(1).execute().data
@@ -156,10 +135,9 @@ def sb_update_prediction_result(game_id: str, team_a_score: int, team_b_score: i
     )
     ensemble_error = float(abs(ensemble_pred - actual_spread))
 
-    model_predictions = pred.get("model_predictions") or {}
+    models = pred.get("model_predictions") or {}
     model_accuracy = {}
-
-    for model_name, model_data in model_predictions.items():
+    for model_name, model_data in models.items():
         try:
             mp = float(model_data.get("prediction", 0))
         except Exception:
@@ -176,9 +154,9 @@ def sb_update_prediction_result(game_id: str, team_a_score: int, team_b_score: i
     patch = {
         "actual_team_a_score": int(team_a_score),
         "actual_team_b_score": int(team_b_score),
-        "actual_spread": float(actual_spread),
+        "actual_spread": actual_spread,
         "won": bool(ensemble_correct),
-        "ensemble_error": float(ensemble_error),
+        "ensemble_error": ensemble_error,
         "model_accuracy": model_accuracy,
     }
 
@@ -187,9 +165,6 @@ def sb_update_prediction_result(game_id: str, team_a_score: int, team_b_score: i
     return pred
 
 def sb_get_performance_stats() -> dict:
-    """
-    Calculates aggregate performance from Supabase rows.
-    """
     rows = sb_fetch_predictions(limit=5000)
     completed = [r for r in rows if r.get("actual_team_a_score") is not None and r.get("actual_team_b_score") is not None]
 
@@ -206,7 +181,6 @@ def sb_get_performance_stats() -> dict:
 
     model_names = ["M1_Schedule", "M2_FourFactors", "M3_Bidirectional", "M4_Situational"]
     model_stats = {}
-
     for mn in model_names:
         correct = 0
         errs = []
@@ -238,7 +212,7 @@ def sb_get_performance_stats() -> dict:
         "total_kelly_bet": total_kelly,
         "model_stats": model_stats,
         "alpha_predictions": alpha_predictions,
-        "recent": completed[:10],  # newest-first already
+        "recent": completed[:10],
     }
 
 # ============================================================
@@ -247,7 +221,6 @@ def sb_get_performance_stats() -> dict:
 
 @st.cache_data
 def load_data():
-    """Load all data sources"""
     bart = pd.read_csv("barttorvik.csv")
     games = pd.read_csv("espn_games.csv")
     teams_esp = pd.read_csv("espn_teams.csv")
@@ -269,41 +242,53 @@ def load_data():
 bart_clean, hasla_clean, espn_games, espn_teams = load_data()
 
 # ============================================================
-# FETCH GAMES (TODAY + TOMORROW)
+# FETCH GAMES (ESPN SCOREBOARD)
 # ============================================================
 
 @st.cache_data(ttl=1800)
-def get_upcoming_games(days_ahead=2):
-    """Fetch games for today and next N days"""
+def get_upcoming_games(days_ahead=7):
     all_games = []
+    headers = {"User-Agent": "Mozilla/5.0"}
 
     for day_offset in range(days_ahead):
         date = (datetime.now() + timedelta(days=day_offset)).strftime("%Y%m%d")
-        url = f"http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates={date}"
+        url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates={date}"
 
         try:
-            response = requests.get(url, timeout=20)
-            data = response.json()
+            r = requests.get(url, headers=headers, timeout=20)
+            r.raise_for_status()
+            data = r.json()
 
             for event in data.get("events", []):
-                comp = event.get("competitions", [{}])[0]
-                competitors = comp.get("competitors", [])
+                comp = (event.get("competitions") or [{}])[0]
+                competitors = comp.get("competitors") or []
+                if len(competitors) < 2:
+                    continue
 
-                if len(competitors) >= 2:
-                    home = competitors[0]["team"]["displayName"]
-                    away = competitors[1]["team"]["displayName"]
+                home = next((c for c in competitors if c.get("homeAway") == "home"), competitors[0])
+                away = next((c for c in competitors if c.get("homeAway") == "away"), competitors[1])
 
-                    all_games.append({
-                        "game_id": event["id"],
-                        "game_date": date,
-                        "home_team": home,
-                        "away_team": away,
-                        "time": event.get("date", ""),
-                        "status": event.get("status", {}).get("type", {}).get("description", "Scheduled"),
-                        "day_label": "TODAY" if day_offset == 0 else "TOMORROW" if day_offset == 1 else f"+{day_offset} days",
-                    })
-        except Exception as e:
-            st.error(f"Error fetching {date}: {e}")
+                home_name = home.get("team", {}).get("displayName")
+                away_name = away.get("team", {}).get("displayName")
+                if not home_name or not away_name:
+                    continue
+
+                venue = (comp.get("venue") or {}).get("fullName", "default")
+
+                all_games.append({
+                    "game_id": str(event.get("id")),
+                    "game_date": date,
+                    "home_team": home_name,
+                    "away_team": away_name,
+                    "time": event.get("date", ""),
+                    "status": event.get("status", {}).get("type", {}).get("description", "Scheduled"),
+                    "day_label": "TODAY" if day_offset == 0 else "TOMORROW" if day_offset == 1 else f"+{day_offset} days",
+                    "venue": venue,
+                })
+
+        except Exception:
+            # Do not raise here, we want the UI to still render, and debug can show details.
+            continue
 
     return pd.DataFrame(all_games)
 
@@ -357,7 +342,7 @@ def calculate_rolling_stats(games_df, team_name, n=7):
     }
 
 # ============================================================
-# MODELS (AS-IS IN YOUR CURRENT REPO)
+# MODELS (unchanged)
 # ============================================================
 
 def model1_schedule_adjusted(A, B):
@@ -398,17 +383,13 @@ def model3_bidirectional(A, B):
     win_b = safe_get(B, "barthag", 0.5)
     factors["win_pct"] = (win_a - win_b) * 10
 
-    # Haslametrics validation
     if len(hasla_clean) > 0:
-        # IMPORTANT: hasla_clean.get("team","") returns a Series only if col exists.
-        # We will do a safer check.
-        if "team" in hasla_clean.columns:
-            hasla_a = hasla_clean[hasla_clean["team"] == A.get("team", "")]
-            hasla_b = hasla_clean[hasla_clean["team"] == B.get("team", "")]
-            if len(hasla_a) > 0 and len(hasla_b) > 0:
-                hasla_em_a = safe_get(hasla_a.iloc[0].to_dict(), "em", 0)
-                hasla_em_b = safe_get(hasla_b.iloc[0].to_dict(), "em", 0)
-                factors["hasla_validation"] = (hasla_em_a - hasla_em_b) * 0.1
+        hasla_a = hasla_clean[hasla_clean.get("team", "") == A.get("team", "")]
+        hasla_b = hasla_clean[hasla_clean.get("team", "") == B.get("team", "")]
+        if len(hasla_a) > 0 and len(hasla_b) > 0:
+            hasla_em_a = safe_get(hasla_a.iloc[0].to_dict(), "em", 0)
+            hasla_em_b = safe_get(hasla_b.iloc[0].to_dict(), "em", 0)
+            factors["hasla_validation"] = (hasla_em_a - hasla_em_b) * 0.1
 
     return sum(factors.values()), factors
 
@@ -470,7 +451,6 @@ def calculate_kelly_bet(win_prob, odds=-110, bankroll=1000, kelly_fraction=0.25)
     }
 
 def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=None, bankroll=1000, game_date=None):
-    """Complete prediction"""
     A = bart_clean[bart_clean["team"] == team_a_name]
     B = bart_clean[bart_clean["team"] == team_b_name]
 
@@ -488,13 +468,11 @@ def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=N
     A_data["team"] = team_a_name
     B_data["team"] = team_b_name
 
-    # Run models
     m1 = model1_schedule_adjusted(A_data, B_data)
     m2 = model2_four_factors(A_data, B_data)
-    m3, m3_factors = model3_bidirectional(A_data, B_data)
+    m3, _m3_factors = model3_bidirectional(A_data, B_data)
     m4 = model4_situational(A_data, B_data)
 
-    # Individual model predictions
     model_predictions = {}
     for model_name, model_pred in [
         ("M1_Schedule", m1),
@@ -513,7 +491,6 @@ def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=N
             "kelly": kelly,
         }
 
-    # Ensemble
     ensemble_pred = 0.45 * m3 + 0.25 * m1 + 0.20 * m2 + 0.10 * m4
     hc = home_court_advantage(venue)
     ensemble_pred += hc if home_a else -hc
@@ -521,28 +498,19 @@ def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=N
     ensemble_win_prob = 1 / (1 + 10 ** (-ensemble_pred / 15))
     ensemble_kelly = calculate_kelly_bet(ensemble_win_prob, -110, bankroll, 0.25)
 
-    models_for_conf = {
-        "M1_Schedule": m1,
-        "M2_FourFactors": m2,
-        "M3_Bidirectional": m3,
-        "M4_Situational": m4,
-    }
-    conf = calculate_confidence(models_for_conf, A_data, B_data)
-    alpha = detect_alpha(ensemble_pred, conf, models_for_conf, vegas)
+    models = {"M1_Schedule": m1, "M2_FourFactors": m2, "M3_Bidirectional": m3, "M4_Situational": m4}
+    conf = calculate_confidence(models, A_data, B_data)
+    alpha = detect_alpha(ensemble_pred, conf, models, vegas)
 
-    # IMPORTANT: add fields that match Supabase columns
     result = {
         "game_date": game_date or datetime.now().strftime("%Y%m%d"),
         "team_a": team_a_name,
         "team_b": team_b_name,
-
         "home_team": team_a_name if home_a else team_b_name,
         "away_team": team_b_name if home_a else team_a_name,
         "venue": venue,
-
         "vegas_line": vegas,
         "vegas_edge": round(ensemble_pred - vegas, 1) if vegas is not None else None,
-
         "ensemble": {
             "prediction": round(ensemble_pred, 1),
             "confidence": conf,
@@ -552,11 +520,9 @@ def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=N
             "alpha_reasons": alpha["reasons"],
         },
         "models": model_predictions,
-        "home_court": hc,
         "timestamp": datetime.now().isoformat(),
     }
 
-    # Save prediction to Supabase
     try:
         sb_upsert_prediction(result)
     except Exception as e:
@@ -575,23 +541,28 @@ st.sidebar.header("💰 Settings")
 bankroll = st.sidebar.number_input("Bankroll ($)", value=1000, step=100)
 unit = st.sidebar.number_input("Unit ($)", value=10, step=5)
 
-st.sidebar.info(f"""
+st.sidebar.info(
+    f"""
 **Your Setup:**
 - Bankroll: ${bankroll:,.0f}
 - 1 Unit = ${unit}
 - Using 25% Kelly
-""")
+"""
+)
 
 st.sidebar.markdown("---")
 
-page = st.sidebar.radio("Navigate", [
-    "📅 Upcoming Games",
-    "🎯 Single Prediction",
-    "📊 Model Performance",
-    "👥 Team Performance",
-    "🧠 ML Insights",
-    "📝 Update Results",
-])
+page = st.sidebar.radio(
+    "Navigate",
+    [
+        "📅 Upcoming Games",
+        "🎯 Single Prediction",
+        "📊 Model Performance",
+        "👥 Team Performance",
+        "🧠 ML Insights",
+        "📝 Update Results",
+    ],
+)
 
 st.sidebar.markdown("---")
 st.sidebar.caption(f"Updated: {datetime.now().strftime('%m/%d %I:%M%p')}")
@@ -599,7 +570,6 @@ st.sidebar.caption(f"{len(bart_clean)} teams | {len(espn_games)} games")
 if len(hasla_clean) > 0:
     st.sidebar.caption(f"✅ Haslametrics: {len(hasla_clean)} teams")
 
-# Optional Supabase debug
 st.sidebar.markdown("---")
 st.sidebar.subheader("Supabase Debug")
 try:
@@ -616,38 +586,49 @@ except Exception as e:
 # ============================================================
 
 if page == "📅 Upcoming Games":
-    st.title("📅 Today & Tomorrow - Auto Predictions")
+    st.title("📅 Upcoming Games (Auto Predictions)")
 
-    upcoming = get_upcoming_games(days_ahead=2)
+    # Pull a week so you can verify it is not "no games today" behavior
+    upcoming = get_upcoming_games(days_ahead=7)
+
+    st.caption(f"Upcoming rows: {len(upcoming)}")
+
+    # Debug ESPN payload in-app, no guessing
+    if st.checkbox("Debug ESPN scoreboard"):
+        test_date = datetime.now().strftime("%Y%m%d")
+        test_url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates={test_date}"
+        st.write("URL:", test_url)
+        try:
+            r = requests.get(test_url, headers={"User-Agent": "Mozilla/5.0"}, timeout=20)
+            st.write("Status:", r.status_code)
+            data = r.json()
+            st.write("events:", len(data.get("events", [])))
+            st.json((data.get("events", [])[:1]) or {})
+        except Exception as e:
+            st.error(e)
 
     if len(upcoming) == 0:
-        st.warning("No games found")
+        st.warning("No games found. Use the debug checkbox above to see the exact ESPN response.")
     else:
-        today_games = upcoming[upcoming["day_label"] == "TODAY"]
-        tomorrow_games = upcoming[upcoming["day_label"] == "TOMORROW"]
-
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric("Today", len(today_games))
-        with col2:
-            st.metric("Tomorrow", len(tomorrow_games))
+        # Small summary by label
+        labels = upcoming["day_label"].value_counts().to_dict()
+        cols = st.columns(min(4, len(labels)))
+        for i, (k, v) in enumerate(labels.items()):
+            cols[i % len(cols)].metric(k, v)
 
         with st.spinner("Running predictions..."):
             all_predictions = []
-
             for _, game in upcoming.iterrows():
-                # We pass venue="default" here because you aren't parsing venue yet from ESPN summary.
-                # Later you can pass a real venue string.
+                venue = game.get("venue", "default")
                 result = predict_game(
-                    game["home_team"],
-                    game["away_team"],
-                    True,
-                    "default",
-                    None,
-                    bankroll,
-                    game["game_date"],
+                    team_a_name=game["home_team"],
+                    team_b_name=game["away_team"],
+                    home_a=True,
+                    venue=venue,
+                    vegas=None,
+                    bankroll=bankroll,
+                    game_date=game["game_date"],
                 )
-
                 if result:
                     result["game_id"] = game["game_id"]
                     result["day_label"] = game["day_label"]
@@ -669,56 +650,42 @@ if page == "📅 Upcoming Games":
         with col3:
             st.metric("Total Kelly $", f"${total_kelly:.0f}")
 
-        tab1, tab2 = st.tabs(["📅 TODAY", "📅 TOMORROW"])
-
-        with tab1:
-            today_preds = [p for p in all_predictions if p["day_label"] == "TODAY"]
-            if len(today_preds) == 0:
-                st.info("No games today")
-            else:
-                for pred in sorted(today_preds, key=lambda x: x["ensemble"]["confidence"], reverse=True):
-                    ens = pred["ensemble"]
-                    title = f"{'🚨' if ens['is_alpha'] else '📊'} {pred['team_a']} vs {pred['team_b']} | {ens['confidence']:.0%}"
-                    if ens["kelly"]["recommended"] == "BET":
-                        title += f" | 💰${ens['kelly']['kelly_dollars']:.0f}"
-
-                    with st.expander(title, expanded=ens["is_alpha"]):
-                        col1, col2, col3, col4 = st.columns(4)
-                        with col1:
-                            st.metric("Ensemble", f"{pred['team_a']} {ens['prediction']:+.1f}")
-                        with col2:
-                            st.metric("Confidence", f"{ens['confidence']:.0%}")
-                        with col3:
-                            st.metric("Win %", f"{ens['win_prob']:.1%}")
-                        with col4:
+        # Group by day_label so it is easy to scan
+        day_labels = list(upcoming["day_label"].dropna().unique())
+        if len(day_labels) >= 2:
+            tab_labels = [f"📅 {dl}" for dl in day_labels[:6]]
+            tabs = st.tabs(tab_labels)
+            for t_i, dl in enumerate(day_labels[:6]):
+                with tabs[t_i]:
+                    day_preds = [p for p in all_predictions if p["day_label"] == dl]
+                    if len(day_preds) == 0:
+                        st.info(f"No games for {dl}")
+                    else:
+                        for pred in sorted(day_preds, key=lambda x: x["ensemble"]["confidence"], reverse=True):
+                            ens = pred["ensemble"]
+                            title = f"{'🚨' if ens['is_alpha'] else '📊'} {pred['team_a']} vs {pred['team_b']} | {ens['confidence']:.0%}"
                             if ens["kelly"]["recommended"] == "BET":
-                                st.metric("Kelly", f"${ens['kelly']['kelly_dollars']:.0f}")
-                            else:
-                                st.info("PASS")
+                                title += f" | 💰${ens['kelly']['kelly_dollars']:.0f}"
 
-                        if ens["is_alpha"]:
-                            st.success(f"ALPHA: {', '.join(ens['alpha_reasons'])}")
+                            with st.expander(title, expanded=ens["is_alpha"]):
+                                c1, c2, c3, c4 = st.columns(4)
+                                with c1:
+                                    st.metric("Ensemble", f"{pred['team_a']} {ens['prediction']:+.1f}")
+                                with c2:
+                                    st.metric("Confidence", f"{ens['confidence']:.0%}")
+                                with c3:
+                                    st.metric("Win %", f"{ens['win_prob']:.1%}")
+                                with c4:
+                                    if ens["kelly"]["recommended"] == "BET":
+                                        st.metric("Kelly", f"${ens['kelly']['kelly_dollars']:.0f}")
+                                    else:
+                                        st.info("PASS")
 
-        with tab2:
-            tomorrow_preds = [p for p in all_predictions if p["day_label"] == "TOMORROW"]
-            if len(tomorrow_preds) == 0:
-                st.info("No games tomorrow")
-            else:
-                for pred in sorted(tomorrow_preds, key=lambda x: x["ensemble"]["confidence"], reverse=True):
-                    ens = pred["ensemble"]
-                    title = f"{'🚨' if ens['is_alpha'] else '📊'} {pred['team_a']} vs {pred['team_b']} | {ens['confidence']:.0%}"
-
-                    with st.expander(title):
-                        col1, col2, col3 = st.columns(3)
-                        with col1:
-                            st.metric("Prediction", f"{pred['team_a']} {ens['prediction']:+.1f}")
-                        with col2:
-                            st.metric("Confidence", f"{ens['confidence']:.0%}")
-                        with col3:
-                            if ens["kelly"]["recommended"] == "BET":
-                                st.metric("Kelly", f"${ens['kelly']['kelly_dollars']:.0f}")
-                            else:
-                                st.info("PASS")
+                                st.caption(f"Venue: {pred.get('venue','default')}")
+                                if ens["is_alpha"]:
+                                    st.success(f"ALPHA: {', '.join(ens['alpha_reasons'])}")
+        else:
+            st.info("Only one day label found.")
 
 elif page == "📊 Model Performance":
     st.title("📊 Model Performance")
@@ -743,15 +710,17 @@ elif page == "📊 Model Performance":
             st.metric("Total Kelly Bet", f"${stats['total_kelly_bet']:.0f}")
 
         st.markdown("### Model Breakdown")
-        model_df = pd.DataFrame([
-            {
-                "Model": name.replace("_", " "),
-                "Accuracy": f"{data['accuracy']:.1%}",
-                "Correct": f"{data['correct']}/{data['total']}",
-                "Avg Error": (f"{data['avg_error']:.1f} pts" if data["avg_error"] is not None else "n/a"),
-            }
-            for name, data in stats["model_stats"].items()
-        ])
+        model_df = pd.DataFrame(
+            [
+                {
+                    "Model": name.replace("_", " "),
+                    "Accuracy": f"{data['accuracy']:.1%}",
+                    "Correct": f"{data['correct']}/{data['total']}",
+                    "Avg Error": (f"{data['avg_error']:.1f} pts" if data["avg_error"] is not None else "n/a"),
+                }
+                for name, data in stats["model_stats"].items()
+            ]
+        )
         st.dataframe(model_df, use_container_width=True, hide_index=True)
 
 elif page == "📝 Update Results":
@@ -767,7 +736,7 @@ elif page == "📝 Update Results":
     if len(pending) == 0:
         st.success("No pending predictions found (or none saved yet).")
     else:
-        options = [f"{p['team_a']} vs {p['team_b']} ({p.get('game_date', '')})" for p in pending]
+        options = [f"{p.get('team_a','')} vs {p.get('team_b','')} ({p.get('game_date','')})" for p in pending]
         game_select = st.selectbox("Select Game", options)
 
         if game_select:
@@ -775,9 +744,9 @@ elif page == "📝 Update Results":
 
             col1, col2 = st.columns(2)
             with col1:
-                score_a = st.number_input(f"{selected['team_a']} Score", min_value=0, value=0, step=1)
+                score_a = st.number_input(f"{selected.get('team_a','Team A')} Score", min_value=0, value=0, step=1)
             with col2:
-                score_b = st.number_input(f"{selected['team_b']} Score", min_value=0, value=0, step=1)
+                score_b = st.number_input(f"{selected.get('team_b','Team B')} Score", min_value=0, value=0, step=1)
 
             if st.button("Update Result"):
                 try:
