@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 import requests
-import json
 
 from supabase import create_client, Client
 
@@ -17,9 +16,14 @@ st.set_page_config(page_title="CBB Betting Model", page_icon="🏀", layout="wid
 def _get_supabase_client() -> Client:
     """
     Creates a Supabase client using Streamlit secrets (preferred) or env vars.
-    Required:
+
+    REQUIRED:
       - SUPABASE_URL
       - SUPABASE_ANON_KEY
+
+    NOTE:
+      - Do NOT use your service role key in Streamlit.
+      - Use the anon key and rely on RLS policies.
     """
     url = None
     key = None
@@ -53,6 +57,12 @@ def make_game_id(team_a: str, team_b: str, game_date: str) -> str:
 def sb_upsert_prediction(prediction_data: dict) -> str:
     """
     Upserts a prediction row into public.predictions.
+
+    Your table columns (per your message):
+    id, prediction_key, created_at, updated_at, game_date, team_a, team_b, home_team, away_team, venue,
+    ensemble_prediction, confidence, is_alpha, alpha_reasons, vegas_line, vegas_edge, ensemble_win_prob,
+    kelly_pct, kelly_dollars, kelly_recommended, model_predictions,
+    actual_team_a_score, actual_team_b_score, actual_spread, won, ensemble_error, model_accuracy
     """
     sb = supabase_client()
 
@@ -64,17 +74,35 @@ def sb_upsert_prediction(prediction_data: dict) -> str:
 
     record = {
         "id": game_id,
+        "prediction_key": game_id,
+
         "game_date": prediction_data["game_date"],
         "team_a": prediction_data["team_a"],
         "team_b": prediction_data["team_b"],
+
+        "home_team": prediction_data.get("home_team"),
+        "away_team": prediction_data.get("away_team"),
+        "venue": prediction_data.get("venue"),
+
         "ensemble_prediction": float(prediction_data["ensemble"]["prediction"]),
         "confidence": float(prediction_data["ensemble"]["confidence"]),
         "is_alpha": bool(prediction_data["ensemble"]["is_alpha"]),
-        "kelly_bet": float(prediction_data["ensemble"]["kelly"]["kelly_dollars"]),
-        "models": prediction_data["models"],
+        "alpha_reasons": prediction_data["ensemble"].get("alpha_reasons", []),
 
-        # Result fields remain null until updated
-        "actual_result": None,
+        "vegas_line": prediction_data.get("vegas_line"),
+        "vegas_edge": prediction_data.get("vegas_edge"),
+
+        "ensemble_win_prob": float(prediction_data["ensemble"].get("win_prob", 0.0)),
+
+        "kelly_pct": float(prediction_data["ensemble"]["kelly"].get("kelly_pct", 0.0)),
+        "kelly_dollars": float(prediction_data["ensemble"]["kelly"].get("kelly_dollars", 0.0)),
+        "kelly_recommended": prediction_data["ensemble"]["kelly"].get("recommended", "PASS"),
+
+        "model_predictions": prediction_data.get("models", {}),
+
+        # Actuals start null until updated
+        "actual_team_a_score": None,
+        "actual_team_b_score": None,
         "actual_spread": None,
         "won": None,
         "ensemble_error": None,
@@ -100,7 +128,7 @@ def sb_fetch_pending_predictions(limit: int = 5000) -> list:
     resp = (
         sb.table("predictions")
         .select("*")
-        .is_("actual_result", "null")
+        .is_("actual_team_a_score", "null")
         .order("created_at", desc=True)
         .limit(limit)
         .execute()
@@ -128,9 +156,10 @@ def sb_update_prediction_result(game_id: str, team_a_score: int, team_b_score: i
     )
     ensemble_error = float(abs(ensemble_pred - actual_spread))
 
-    models = pred.get("models") or {}
+    model_predictions = pred.get("model_predictions") or {}
     model_accuracy = {}
-    for model_name, model_data in models.items():
+
+    for model_name, model_data in model_predictions.items():
         try:
             mp = float(model_data.get("prediction", 0))
         except Exception:
@@ -145,10 +174,11 @@ def sb_update_prediction_result(game_id: str, team_a_score: int, team_b_score: i
         }
 
     patch = {
-        "actual_result": f"{team_a_score}-{team_b_score}",
-        "actual_spread": actual_spread,
+        "actual_team_a_score": int(team_a_score),
+        "actual_team_b_score": int(team_b_score),
+        "actual_spread": float(actual_spread),
         "won": bool(ensemble_correct),
-        "ensemble_error": ensemble_error,
+        "ensemble_error": float(ensemble_error),
         "model_accuracy": model_accuracy,
     }
 
@@ -161,7 +191,7 @@ def sb_get_performance_stats() -> dict:
     Calculates aggregate performance from Supabase rows.
     """
     rows = sb_fetch_predictions(limit=5000)
-    completed = [r for r in rows if r.get("actual_result") is not None]
+    completed = [r for r in rows if r.get("actual_team_a_score") is not None and r.get("actual_team_b_score") is not None]
 
     if len(completed) == 0:
         return None
@@ -172,10 +202,11 @@ def sb_get_performance_stats() -> dict:
     errors = [float(r.get("ensemble_error") or 0.0) for r in completed if r.get("ensemble_error") is not None]
     avg_error = float(np.mean(errors)) if errors else 0.0
 
-    total_kelly = sum(float(r.get("kelly_bet") or 0.0) for r in completed)
+    total_kelly = sum(float(r.get("kelly_dollars") or 0.0) for r in completed)
 
     model_names = ["M1_Schedule", "M2_FourFactors", "M3_Bidirectional", "M4_Situational"]
     model_stats = {}
+
     for mn in model_names:
         correct = 0
         errs = []
@@ -326,8 +357,7 @@ def calculate_rolling_stats(games_df, team_name, n=7):
     }
 
 # ============================================================
-# MODELS (unchanged in this file)
-# Note: we will update Model 1 and Model 3 in the next pass, per your request.
+# MODELS (AS-IS IN YOUR CURRENT REPO)
 # ============================================================
 
 def model1_schedule_adjusted(A, B):
@@ -370,12 +400,15 @@ def model3_bidirectional(A, B):
 
     # Haslametrics validation
     if len(hasla_clean) > 0:
-        hasla_a = hasla_clean[hasla_clean.get("team", "") == A.get("team", "")]
-        hasla_b = hasla_clean[hasla_clean.get("team", "") == B.get("team", "")]
-        if len(hasla_a) > 0 and len(hasla_b) > 0:
-            hasla_em_a = safe_get(hasla_a.iloc[0].to_dict(), "em", 0)
-            hasla_em_b = safe_get(hasla_b.iloc[0].to_dict(), "em", 0)
-            factors["hasla_validation"] = (hasla_em_a - hasla_em_b) * 0.1
+        # IMPORTANT: hasla_clean.get("team","") returns a Series only if col exists.
+        # We will do a safer check.
+        if "team" in hasla_clean.columns:
+            hasla_a = hasla_clean[hasla_clean["team"] == A.get("team", "")]
+            hasla_b = hasla_clean[hasla_clean["team"] == B.get("team", "")]
+            if len(hasla_a) > 0 and len(hasla_b) > 0:
+                hasla_em_a = safe_get(hasla_a.iloc[0].to_dict(), "em", 0)
+                hasla_em_b = safe_get(hasla_b.iloc[0].to_dict(), "em", 0)
+                factors["hasla_validation"] = (hasla_em_a - hasla_em_b) * 0.1
 
     return sum(factors.values()), factors
 
@@ -488,14 +521,28 @@ def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=N
     ensemble_win_prob = 1 / (1 + 10 ** (-ensemble_pred / 15))
     ensemble_kelly = calculate_kelly_bet(ensemble_win_prob, -110, bankroll, 0.25)
 
-    models = {"M1_Schedule": m1, "M2_FourFactors": m2, "M3_Bidirectional": m3, "M4_Situational": m4}
-    conf = calculate_confidence(models, A_data, B_data)
-    alpha = detect_alpha(ensemble_pred, conf, models, vegas)
+    models_for_conf = {
+        "M1_Schedule": m1,
+        "M2_FourFactors": m2,
+        "M3_Bidirectional": m3,
+        "M4_Situational": m4,
+    }
+    conf = calculate_confidence(models_for_conf, A_data, B_data)
+    alpha = detect_alpha(ensemble_pred, conf, models_for_conf, vegas)
 
+    # IMPORTANT: add fields that match Supabase columns
     result = {
         "game_date": game_date or datetime.now().strftime("%Y%m%d"),
         "team_a": team_a_name,
         "team_b": team_b_name,
+
+        "home_team": team_a_name if home_a else team_b_name,
+        "away_team": team_b_name if home_a else team_a_name,
+        "venue": venue,
+
+        "vegas_line": vegas,
+        "vegas_edge": round(ensemble_pred - vegas, 1) if vegas is not None else None,
+
         "ensemble": {
             "prediction": round(ensemble_pred, 1),
             "confidence": conf,
@@ -505,7 +552,6 @@ def predict_game(team_a_name, team_b_name, home_a=True, venue="default", vegas=N
             "alpha_reasons": alpha["reasons"],
         },
         "models": model_predictions,
-        "vegas_edge": round(ensemble_pred - vegas, 1) if vegas is not None else None,
         "home_court": hc,
         "timestamp": datetime.now().isoformat(),
     }
@@ -586,11 +632,12 @@ if page == "📅 Upcoming Games":
         with col2:
             st.metric("Tomorrow", len(tomorrow_games))
 
-        # Auto-predict all
         with st.spinner("Running predictions..."):
             all_predictions = []
 
             for _, game in upcoming.iterrows():
+                # We pass venue="default" here because you aren't parsing venue yet from ESPN summary.
+                # Later you can pass a real venue string.
                 result = predict_game(
                     game["home_team"],
                     game["away_team"],
@@ -606,7 +653,6 @@ if page == "📅 Upcoming Games":
                     result["day_label"] = game["day_label"]
                     all_predictions.append(result)
 
-        # Summary
         alpha_count = sum(1 for p in all_predictions if p["ensemble"]["is_alpha"])
         bet_count = sum(1 for p in all_predictions if p["ensemble"]["kelly"]["recommended"] == "BET")
         total_kelly = sum(
