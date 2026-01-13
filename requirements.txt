@@ -4,3 +4,4 @@ numpy
 requests
 supabase
 python-dotenv
+python-dateutil
