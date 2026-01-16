@@ -1,13 +1,16 @@
-name: Daily refresh metrics (Torvik + Haslametrics)
+name: Daily Refresh Metrics
 
 on:
   schedule:
-    # 10:00 PM America/Los_Angeles = 06:00 UTC
-    - cron: "0 6 * * *"
-  workflow_dispatch: {}
+    - cron: "0 6 * * *"  # 10:00pm PST (UTC is used by GitHub Actions)
+  workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: daily-refresh-metrics
+  cancel-in-progress: true
 
 jobs:
   refresh:
@@ -23,42 +26,31 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          if [ -f scripts/requirements-refresh.txt ]; then pip install -r scripts/requirements-refresh.txt; fi
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Debug repo structure (quick)
+      - name: Refresh Torvik and Haslametrics sources
+        env:
+          TORVIK_URL: "https://barttorvik.com/2026_team_results.csv"
+          HASLA_URL: "https://www.haslametrics.com/ratings.php?yr=2025"
         run: |
-          echo "PWD: $(pwd)"
-          ls -la
-          echo ""
-          echo "scripts/:"
-          ls -la scripts || true
-          echo ""
-          test -f scripts/refresh_sources.py && echo "Found scripts/refresh_sources.py ✅" || (echo "Missing scripts/refresh_sources.py ❌" && exit 1)
-
-      - name: Refresh Torvik + Haslametrics CSVs
-        run: |
-          set -e
           python scripts/refresh_sources.py
 
-      - name: Commit and push updated files (if changed)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and push if files changed
         run: |
-          set -e
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git status
-          git add -A
-
-          if git diff --staged --quiet; then
+          if [ -z "$(git status --porcelain)" ]; then
             echo "No changes to commit."
             exit 0
           fi
 
-          git commit -m "Daily refresh: Torvik + Haslametrics sources"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+          git commit -m "Daily refresh: Torvik + Haslametrics CSVs"
           git push
