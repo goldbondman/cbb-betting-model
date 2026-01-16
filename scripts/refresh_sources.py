@@ -1,56 +1,64 @@
-name: Daily refresh metrics (Torvik + Hasla)
+import os
+import pandas as pd
 
-on:
-  schedule:
-    # 10:00 PM PST = 06:00 UTC (next day)
-    - cron: "0 6 * * *"
-  workflow_dispatch: {}
+def normalize_cols(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    df.columns = [str(c).strip().lower().replace(" ", "_").replace(".", "") for c in df.columns]
+    return df
 
-permissions:
-  contents: write
+def atomic_write_csv(df: pd.DataFrame, out_path: str) -> None:
+    tmp = out_path + ".tmp"
+    df.to_csv(tmp, index=False)
+    os.replace(tmp, out_path)
 
-jobs:
-  refresh:
-    runs-on: ubuntu-latest
+def fetch_table(url: str, table_index: int = 0) -> pd.DataFrame:
+    # Pull the first (or specified) HTML table on the page
+    tables = pd.read_html(url)
+    if not tables:
+        raise ValueError(f"No HTML tables found at: {url}")
+    if table_index >= len(tables):
+        raise ValueError(f"table_index {table_index} out of range, found {len(tables)} tables at: {url}")
+    return tables[table_index]
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: true
+def refresh_barttorvik(out_path: str, url: str, table_index: int) -> None:
+    df = fetch_table(url, table_index=table_index)
+    df = normalize_cols(df)
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+    # Optional convenience: compute adjem if adjoe/adjde exist
+    if "adjoe" in df.columns and "adjde" in df.columns and "adjem" not in df.columns:
+        df["adjem"] = df["adjoe"] - df["adjde"]
 
-      - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements-refresh.txt
+    if "team" not in df.columns:
+        raise ValueError("BartTorvik table missing required column: team")
 
-      - name: Refresh CSVs
-        env:
-          # Replace these with the exact pages you want to scrape, or direct CSV links if you have them.
-          TORVIK_URL: "PUT_TORVIK_TABLE_URL_HERE"
-          HASLA_URL: "PUT_HASLA_TABLE_URL_HERE"
+    atomic_write_csv(df, out_path)
 
-          # If the relevant table is not the first one on the page, change these.
-          TORVIK_TABLE_INDEX: "0"
-          HASLA_TABLE_INDEX: "0"
-        run: |
-          python scripts/refresh_sources.py
+def refresh_haslametrics(out_path: str, url: str, table_index: int) -> None:
+    df = fetch_table(url, table_index=table_index)
+    df = normalize_cols(df)
 
-      - name: Commit and push if changed
-        run: |
-          set -e
-          if git status --porcelain | grep -E "barttorvik.csv|haslametrics.csv"; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add barttorvik.csv haslametrics.csv
-            git commit -m "Daily refresh: Torvik + Haslametrics CSV"
-            git push
-            echo "Pushed updated CSVs."
-          else
-            echo "No CSV changes to commit."
-          fi
+    if "team" not in df.columns:
+        raise ValueError("Haslametrics table missing required column: team")
+
+    atomic_write_csv(df, out_path)
+
+def main():
+    torvik_url = os.environ.get("TORVIK_URL", "").strip()
+    hasla_url = os.environ.get("HASLA_URL", "").strip()
+
+    # Table indexes default to 0, adjust if the page has multiple tables
+    torvik_table_index = int(os.environ.get("TORVIK_TABLE_INDEX", "0"))
+    hasla_table_index = int(os.environ.get("HASLA_TABLE_INDEX", "0"))
+
+    if not torvik_url:
+        raise ValueError("Missing TORVIK_URL env var")
+    if not hasla_url:
+        raise ValueError("Missing HASLA_URL env var")
+
+    refresh_barttorvik("barttorvik.csv", torvik_url, torvik_table_index)
+    refresh_haslametrics("haslametrics.csv", hasla_url, hasla_table_index)
+
+    print("OK: refreshed barttorvik.csv and haslametrics.csv")
+
+if __name__ == "__main__":
+    main()
