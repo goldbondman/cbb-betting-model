@@ -2,15 +2,12 @@ name: Daily Refresh Metrics
 
 on:
   schedule:
-    - cron: "0 6 * * *"  # 10:00pm PST (UTC is used by GitHub Actions)
+    # 10:00pm PST = 06:00 UTC (during PDT this will run at 11:00pm local)
+    - cron: "0 6 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
-
-concurrency:
-  group: daily-refresh-metrics
-  cancel-in-progress: true
 
 jobs:
   refresh:
@@ -26,31 +23,41 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f scripts/requirements-refresh.txt ]; then pip install -r scripts/requirements-refresh.txt; fi
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Refresh Torvik and Haslametrics sources
+          # Install main deps first (since you said you updated requirements.txt)
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+          # Optional: also install refresh-specific deps if you keep this file
+          if [ -f scripts/requirements-refresh.txt ]; then
+            pip install -r scripts/requirements-refresh.txt
+          fi
+
+          # Safety net in case neither requirements file exists
+          if [ ! -f requirements.txt ] && [ ! -f scripts/requirements-refresh.txt ]; then
+            pip install pandas requests beautifulsoup4 lxml
+          fi
+
+      - name: Refresh Torvik and Haslametrics CSVs
         env:
-          TORVIK_URL: "https://barttorvik.com/2026_team_results.csv"
-          HASLA_URL: "https://www.haslametrics.com/ratings.php?yr=2025"
+          TORVIK_URL: "https://barttorvik.com/getadvstats.php?year=2026&csv=1"
+          HASLA_URL: "https://haslametrics.com/ratings.php?yr=2026"
         run: |
           python scripts/refresh_sources.py
 
-      - name: Commit and push if files changed
+      - name: Commit and push updated CSVs
         run: |
-          if [ -z "$(git status --porcelain)" ]; then
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "Daily refresh: update Torvik and Haslametrics data"
+            git push
+          else
             echo "No changes to commit."
-            exit 0
           fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add -A
-          git commit -m "Daily refresh: Torvik + Haslametrics CSVs"
-          git push
