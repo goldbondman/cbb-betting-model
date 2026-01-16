@@ -1,56 +1,68 @@
-name: Daily refresh metrics (Torvik + Hasla)
+name: Daily refresh metrics (Torvik + Haslametrics)
 
 on:
   schedule:
-    # 10:00 PM PST = 06:00 UTC (next day)
+    # 10:00 PM Pacific. GitHub schedules use UTC.
+    # PST (UTC-8)  -> 06:00 UTC next day
+    # PDT (UTC-7)  -> 05:00 UTC next day
+    # This runs at 06:00 UTC daily (10pm PST during standard time).
     - cron: "0 6 * * *"
   workflow_dispatch: {}
 
 permissions:
   contents: write
 
+concurrency:
+  group: daily-refresh-metrics
+  cancel-in-progress: true
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          fetch-depth: 0
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install deps
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-refresh.txt
+          if [ -f requirements-refresh.txt ]; then
+            python -m pip install -r requirements-refresh.txt
+          elif [ -f requirements.txt ]; then
+            python -m pip install -r requirements.txt
+          else
+            python -m pip install pandas numpy requests beautifulsoup4 lxml html5lib
+          fi
 
-      - name: Refresh CSVs
+      - name: Refresh Torvik + Haslametrics CSVs
         env:
-          # Replace these with the exact pages you want to scrape, or direct CSV links if you have them.
-          TORVIK_URL: "PUT_TORVIK_TABLE_URL_HERE"
-          HASLA_URL: "PUT_HASLA_TABLE_URL_HERE"
-
-          # If the relevant table is not the first one on the page, change these.
-          TORVIK_TABLE_INDEX: "0"
-          HASLA_TABLE_INDEX: "0"
+          TZ: America/Los_Angeles
         run: |
-          python scripts/refresh_sources.py
+          python scripts/refresh_metrics.py
+
+      - name: Show git status
+        run: git status --porcelain
 
       - name: Commit and push if changed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
-          if git status --porcelain | grep -E "barttorvik.csv|haslametrics.csv"; then
+          if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add barttorvik.csv haslametrics.csv
-            git commit -m "Daily refresh: Torvik + Haslametrics CSV"
+
+            git add -A
+            git commit -m "Daily refresh: Torvik + Haslametrics CSVs"
             git push
-            echo "Pushed updated CSVs."
           else
-            echo "No CSV changes to commit."
+            echo "No changes to commit."
           fi
