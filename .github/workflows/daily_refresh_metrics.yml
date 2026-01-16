@@ -2,26 +2,19 @@ name: Daily refresh metrics (Torvik + Haslametrics)
 
 on:
   schedule:
-    # 10:00 PM Pacific. GitHub schedules use UTC.
-    # PST (UTC-8)  -> 06:00 UTC next day
-    # PDT (UTC-7)  -> 05:00 UTC next day
-    # This runs at 06:00 UTC daily (10pm PST during standard time).
+    # 10:00 PM America/Los_Angeles = 06:00 UTC
     - cron: "0 6 * * *"
   workflow_dispatch: {}
 
 permissions:
   contents: write
 
-concurrency:
-  group: daily-refresh-metrics
-  cancel-in-progress: true
-
 jobs:
   refresh:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -34,35 +27,38 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements-refresh.txt ]; then
-            python -m pip install -r requirements-refresh.txt
-          elif [ -f requirements.txt ]; then
-            python -m pip install -r requirements.txt
-          else
-            python -m pip install pandas numpy requests beautifulsoup4 lxml html5lib
-          fi
+          pip install -r requirements.txt
+
+      - name: Debug repo structure (quick)
+        run: |
+          echo "PWD: $(pwd)"
+          ls -la
+          echo ""
+          echo "scripts/:"
+          ls -la scripts || true
+          echo ""
+          test -f scripts/refresh_sources.py && echo "Found scripts/refresh_sources.py ✅" || (echo "Missing scripts/refresh_sources.py ❌" && exit 1)
 
       - name: Refresh Torvik + Haslametrics CSVs
-        env:
-          TZ: America/Los_Angeles
         run: |
-          python scripts/refresh_metrics.py
+          set -e
+          python scripts/refresh_sources.py
 
-      - name: Show git status
-        run: git status --porcelain
-
-      - name: Commit and push if changed
+      - name: Commit and push updated files (if changed)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
-          if [ -n "$(git status --porcelain)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-            git add -A
-            git commit -m "Daily refresh: Torvik + Haslametrics CSVs"
-            git push
-          else
+          git status
+          git add -A
+
+          if git diff --staged --quiet; then
             echo "No changes to commit."
+            exit 0
           fi
+
+          git commit -m "Daily refresh: Torvik + Haslametrics sources"
+          git push
