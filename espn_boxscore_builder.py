@@ -648,54 +648,75 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
 
 def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Adds opponent per-game proxies and opponent pregame rolling fields.
-    Requires team-game rows for both teams per event_id.
+    Adds opponent per-game values and opponent pregame rolling fields.
+    Requires exactly two team-game rows per event_id (home + away).
+
+    Fixes:
+    - Builds a single canonical join key: event_id|home_away
+    - Creates opponent key by swapping home/away
+    - Merges opponent columns with safe prefixes
     """
     out = df.copy()
 
-    out["_key"] = out["event_id"].astype(str) + "|" + out["home_away"].astype(str)
-    opp_side = out["home_away"].map({"home": "away", "away": "home"})
-    out["_opp_key"] = out["event_id"].astype(str) + "|" + opp_side.astype(str)
+    # Ensure required columns exist
+    for c in ["event_id", "home_away"]:
+        if c not in out.columns:
+            raise ValueError(f"_merge_opponent_rows requires column: {c}")
 
-    cols = [
+    out["_key"] = out["event_id"].astype(str) + "|" + out["home_away"].astype(str)
+    out["_opp_key"] = out["event_id"].astype(str) + "|" + out["home_away"].map({"home": "away", "away": "home"}).astype(str)
+
+    # If duplicates exist (shouldn't, but can happen due to bad dedupe upstream), keep last
+    out = out.drop_duplicates(subset=["_key"], keep="last")
+
+    # Choose columns that we want from opponent row
+    candidate_cols = [
         "_key",
         "team", "team_id",
         "points_for", "points_against",
         "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
         "ortg", "drtg", "netrtg", "pace",
-
-        # opponent pregame rolling cols
+        # overall rollups
         "ortg_l7_pre", "drtg_l7_pre", "netrtg_l7_pre", "pace_l7_pre",
         "efg_l7_pre", "tov_pct_l7_pre", "orb_pct_l7_pre", "drb_pct_l7_pre", "ftr_l7_pre", "3par_l7_pre",
         "ortg_season_pre", "drtg_season_pre", "netrtg_season_pre", "pace_season_pre",
         "efg_season_pre", "tov_pct_season_pre", "orb_pct_season_pre", "drb_pct_season_pre", "ftr_season_pre", "3par_season_pre",
-
-        # home/away split rollups
+        # home/away split rollups (these exist because you compute them before merge)
         "ha_ortg_l7_pre", "ha_drtg_l7_pre", "ha_netrtg_l7_pre", "ha_pace_l7_pre",
         "ha_efg_l7_pre", "ha_tov_pct_l7_pre", "ha_orb_pct_l7_pre", "ha_drb_pct_l7_pre", "ha_ftr_l7_pre", "ha_3par_l7_pre",
         "ha_ortg_season_pre", "ha_drtg_season_pre", "ha_netrtg_season_pre", "ha_pace_season_pre",
         "ha_efg_season_pre", "ha_tov_pct_season_pre", "ha_orb_pct_season_pre", "ha_drb_pct_season_pre", "ha_ftr_season_pre", "ha_3par_season_pre",
-
-        # defensive allowed rollups (may not exist on first merge pass, that's fine)
-        "ftr_allowed_l7_pre", "ftr_allowed_season_pre",
-        "efg_allowed_l7_pre", "efg_allowed_season_pre",
     ]
-    cols = [c for c in cols if c in out.columns]
+    cols = [c for c in candidate_cols if c in out.columns]
 
     lookup = out[cols].copy()
 
-    # prefix all lookup columns EXCEPT the join key "_key"
+    # Prefix all opponent columns except the join key
     lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_key"})
 
-    # merge opponent row onto each team row
-    out = out.merge(lookup, left_on="_opp_key", right_on="_key", how="left")
+    # Merge opponent row onto each row by _opp_key -> opp__key
+    # After rename, lookup has column "_key" and opponent fields "opp_*"
+    out = out.merge(lookup, left_on="_opp_key", right_on="_key", how="left", suffixes=("", "_dup"))
 
-    # Defensive "allowed" proxies per game (opponent offense)
-    out["efg_allowed_game"] = out.get("opp_efg")
-    out["ftr_allowed_game"] = out.get("opp_ftr")
-    out["tov_forced_game"] = out.get("opp_tov_pct")  # proxy
+    # Defensive allowed per game proxies:
+    # what team "allowed" equals opponent's offensive values in this same game
+    if "opp_efg" in out.columns:
+        out["efg_allowed_game"] = out["opp_efg"]
+    else:
+        out["efg_allowed_game"] = np.nan
 
-    return out.drop(columns=["_key_x", "_key_y", "_key", "_opp_key"], errors="ignore")
+    if "opp_ftr" in out.columns:
+        out["ftr_allowed_game"] = out["opp_ftr"]
+    else:
+        out["ftr_allowed_game"] = np.nan
+
+    if "opp_tov_pct" in out.columns:
+        out["tov_forced_game"] = out["opp_tov_pct"]
+    else:
+        out["tov_forced_game"] = np.nan
+
+    # cleanup
+    return out.drop(columns=["_key", "_opp_key"], errors="ignore")
 
 def _add_allowed_rollups(df: pd.DataFrame) -> pd.DataFrame:
     """
