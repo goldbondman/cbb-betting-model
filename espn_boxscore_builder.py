@@ -1,22 +1,63 @@
+#!/usr/bin/env python3
+"""
+ESPN CBB Boxscore + Feature Builder (Season-to-date, append forever)
+
+Outputs:
+- espn_games.csv                     (scoreboard snapshot, one row per game, append+dedupe)
+- espn_team_game_logs.csv            (raw-ish team-game rows + per-game metrics + audit, append+dedupe)
+- espn_team_game_features.csv        (pregame rolling features + opponent-adjusted deltas + rest/volatility/style, append+dedupe)
+- espn_matchups_model_ready.csv      (one row per game, home/away pregame features + labels, rebuild each run)
+
+Notes:
+- "pregame" features are computed WITHOUT leakage (shifted so current game is excluded).
+- Default DAYS_BACK is 3 for daily scheduled runs (captures late-posted boxscores).
+- For a big backfill run (like last 80 days), set env DAYS_BACK=80 in GitHub Actions.
+"""
+
 import os
+import time
+import hashlib
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
+from collections import defaultdict, deque
+
 import requests
 import pandas as pd
 import numpy as np
 
-from zoneinfo import ZoneInfo
-from datetime import datetime, timedelta
-
-ESPN_SUMMARY_URL = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event={event_id}"
-# groups=50 is critical: this is the Division I group, not rankings/top-25
-ESPN_SCOREBOARD_URL = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates={date}&groups=50"
+# ---------------- config ----------------
+ESPN_SUMMARY_URL = (
+    "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event={event_id}"
+)
+ESPN_SCOREBOARD_URL = (
+    "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates={date}"
+)
 
 DEFAULT_HEADERS = {
     "User-Agent": "Mozilla/5.0",
     "Accept": "application/json,text/plain,*/*",
 }
 
+PARSE_VERSION = "v1.3.0"
+SOURCE_NAME = "espn"
+
+TZ_PST = ZoneInfo("America/Los_Angeles")
+
+DEFAULT_DAYS_BACK = int(os.getenv("DAYS_BACK", "3"))
+REQUEST_TIMEOUT = int(os.getenv("ESPN_TIMEOUT", "25"))
+
+OUT_GAMES = "espn_games.csv"
+OUT_TEAM_LOGS = "espn_team_game_logs.csv"
+OUT_TEAM_FEATURES = "espn_team_game_features.csv"
+OUT_MATCHUPS = "espn_matchups_model_ready.csv"
+
+
 # ---------------- helpers ----------------
-def _to_int(x, default=0):
+def _utc_now_iso() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def _to_int(x, default=0) -> int:
     try:
         if x is None:
             return default
@@ -29,7 +70,8 @@ def _to_int(x, default=0):
     except Exception:
         return default
 
-def _to_float(x, default=np.nan):
+
+def _to_float(x, default=np.nan) -> float:
     try:
         if x is None:
             return default
@@ -42,11 +84,13 @@ def _to_float(x, default=np.nan):
     except Exception:
         return default
 
+
 def _parse_made_attempt(display: str):
     if not display or not isinstance(display, str) or "-" not in display:
         return (0, 0)
     a, b = display.split("-", 1)
     return (_to_int(a, 0), _to_int(b, 0))
+
 
 def _stat_map(team_stats_list):
     out = {}
@@ -61,42 +105,62 @@ def _stat_map(team_stats_list):
             out[str(name)] = dv
     return out
 
-def _estimate_possessions(fga, fta, tov, orb):
+
+def _estimate_possessions(fga, fta, tov, orb) -> float:
     # poss ≈ FGA + 0.44*FTA - ORB + TOV
-    return fga + 0.44 * fta - orb + tov
+    return float(fga + 0.44 * fta - orb + tov)
+
 
 def _safe_div(num, den, default=np.nan):
-    return default if den in (0, 0.0, None) else num / den
+    return default if den in (0, 0.0, None) else (num / den)
 
-def _as_bool(x):
-    if isinstance(x, bool):
-        return x
-    if x is None:
-        return False
-    if isinstance(x, str):
-        s = x.strip().lower()
-        return s in ("true", "t", "1", "yes", "y")
-    return bool(x)
 
-# ---------------- scoreboard (D1) ----------------
-def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = 25):
-    """
-    Returns one row per GAME from ESPN scoreboard with status fields.
-    Uses groups=50 to include all Division I games (not top-25 filtered).
-    """
+def _stable_row_hash(d: dict, keys) -> str:
+    payload = "|".join([str(d.get(k, "")) for k in keys])
+    return hashlib.sha1(payload.encode("utf-8")).hexdigest()
+
+
+def _read_csv_if_exists(path: str) -> pd.DataFrame:
+    if os.path.exists(path) and os.path.getsize(path) > 0:
+        try:
+            return pd.read_csv(path)
+        except Exception:
+            return pd.DataFrame()
+    return pd.DataFrame()
+
+
+def _append_dedupe_write(existing_path: str, new_df: pd.DataFrame, subset_keys, sort_cols=None) -> pd.DataFrame:
+    old = _read_csv_if_exists(existing_path)
+    if old.empty:
+        combined = new_df.copy()
+    else:
+        combined = pd.concat([old, new_df], ignore_index=True)
+
+    if subset_keys:
+        combined = combined.drop_duplicates(subset=subset_keys, keep="last")
+
+    if sort_cols:
+        sort_cols_present = [c for c in sort_cols if c in combined.columns]
+        if sort_cols_present:
+            combined = combined.sort_values(sort_cols_present)
+
+    combined.to_csv(existing_path, index=False)
+    return combined
+
+
+# ---------------- ESPN fetch: scoreboard ----------------
+def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
     url = ESPN_SCOREBOARD_URL.format(date=date_yyyymmdd)
     r = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
     r.raise_for_status()
     data = r.json()
 
     rows = []
-    for e in data.get("events", []) or []:
+    for e in (data.get("events") or []):
         game_id = e.get("id")
         competitions = e.get("competitions") or []
         comp = competitions[0] if competitions else {}
         competitors = comp.get("competitors") or []
-        status = comp.get("status") or {}
-        stype = status.get("type") or {}
 
         if not game_id or len(competitors) < 2:
             continue
@@ -106,65 +170,158 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = 25):
         if not home or not away:
             continue
 
+        status = comp.get("status") or {}
+        stype = (status.get("type") or {})
+        completed = bool(stype.get("completed"))
+        state = stype.get("state") or ""
+        detail = stype.get("detail") or ""
+        short_detail = stype.get("shortDetail") or ""
+        status_desc = stype.get("description") or ""
+
+        game_dt = comp.get("date") or e.get("date")
+        venue = (comp.get("venue") or {}).get("fullName") if isinstance(comp.get("venue"), dict) else None
+
         home_team = (home.get("team") or {}).get("displayName")
         away_team = (away.get("team") or {}).get("displayName")
 
         home_score = _to_int(home.get("score"), 0)
         away_score = _to_int(away.get("score"), 0)
-        home_win = home.get("winner")
 
-        rows.append({
-            "date": date_yyyymmdd,
-            "game_id": str(game_id),
-            "home_team": home_team,
-            "away_team": away_team,
-            "home_score": home_score,
-            "away_score": away_score,
-            "home_win": home_win,
-            "status_name": stype.get("name"),
-            "status_detail": stype.get("detail"),
-            "status_completed": _as_bool(stype.get("completed")),
-        })
+        rows.append(
+            {
+                "date": date_yyyymmdd,
+                "game_id": str(game_id),
+                "game_datetime_utc": game_dt,
+                "venue": venue,
+                "home_team": home_team,
+                "away_team": away_team,
+                "home_score": home_score,
+                "away_score": away_score,
+                "completed": completed,
+                "state": state,
+                "status_desc": status_desc,
+                "status_detail": detail or short_detail,
+                "pulled_at_utc": _utc_now_iso(),
+                "source": SOURCE_NAME,
+            }
+        )
 
     return rows
 
-def build_espn_games_csv(days_back=7, out_csv="espn_games.csv", verbose=True):
-    """
-    Append-forever season-to-date games file.
-    Dedup by game_id.
-    """
-    now_pst = datetime.now(ZoneInfo("America/Los_Angeles"))
-    all_rows = []
 
+def build_espn_games_csv(days_back=DEFAULT_DAYS_BACK, out_csv=OUT_GAMES, verbose=True) -> pd.DataFrame:
+    now_pst = datetime.now(TZ_PST)
+    all_rows = []
     for i in range(days_back):
         d = (now_pst - timedelta(days=i)).strftime("%Y%m%d")
         rows = fetch_scoreboard_games(d)
         all_rows.extend(rows)
         if verbose:
-            print(f"{d}: {len(rows)} games")
+            total = len(rows)
+            finals = sum(1 for r in rows if r.get("completed"))
+            print(f"{d}: {total} games, {finals} final")
 
     df_new = pd.DataFrame(all_rows)
+    if df_new.empty:
+        if verbose:
+            print("No games returned from scoreboard.")
+        return df_new
 
-    if os.path.exists(out_csv):
-        df_old = pd.read_csv(out_csv, dtype={"date": str, "game_id": str})
-        df = pd.concat([df_old, df_new], ignore_index=True)
-    else:
-        df = df_new
+    # append + dedupe by game_id (latest pull wins)
+    df_all = _append_dedupe_write(
+        out_csv,
+        df_new,
+        subset_keys=["game_id"],
+        sort_cols=["date", "game_id"],
+    )
 
-    if not df.empty:
-        df["date"] = df["date"].astype(str)
-        df["game_id"] = df["game_id"].astype(str)
-        df = df.drop_duplicates(subset=["game_id"]).sort_values(["date", "game_id"])
+    if verbose:
+        print(f"{out_csv} total rows: {len(df_all)}")
 
-    df.to_csv(out_csv, index=False)
-    print(f"{out_csv} written: {len(df)} rows")
-    return df
+    return df_all
 
-# ---------------- summary parse ----------------
-def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
+
+# ---------------- ESPN fetch: summary / boxscore ----------------
+def _extract_players(summary_json, team_id: str):
+    """Lightweight player minutes + usage proxy."""
+    players = []
+    box = summary_json.get("boxscore", {}) if isinstance(summary_json, dict) else {}
+    team_groups = box.get("players", [])
+    if not isinstance(team_groups, list):
+        return players
+
+    for tg in team_groups:
+        t = tg.get("team", {})
+        if not isinstance(t, dict):
+            continue
+        if str(t.get("id", "")) != str(team_id):
+            continue
+
+        stat_tables = tg.get("statistics", [])
+        if not isinstance(stat_tables, list):
+            continue
+
+        for table in stat_tables:
+            athletes = table.get("athletes", [])
+            if not isinstance(athletes, list):
+                continue
+
+            labels = table.get("labels", [])
+            if not isinstance(labels, list):
+                labels = []
+
+            for a in athletes:
+                athlete = a.get("athlete", {}) or {}
+                name = (
+                    athlete.get("displayName")
+                    or athlete.get("shortName")
+                    or athlete.get("fullName")
+                    or "Unknown"
+                )
+
+                stats = a.get("stats", [])
+                if not isinstance(stats, list) or (labels and len(labels) != len(stats)):
+                    continue
+
+                lmap = {str(labels[i]).lower(): stats[i] for i in range(len(labels))} if labels else {}
+
+                def pick(*keys):
+                    for k in keys:
+                        if k in lmap:
+                            return lmap[k]
+                    return None
+
+                row = {"player": name}
+                row["minutes"] = _to_float(pick("min", "minutes"), np.nan)
+                row["points"] = _to_int(pick("pts", "points"), 0)
+
+                fg = pick("fg", "field goals")
+                ft = pick("ft", "free throws")
+                to = pick("to", "tov", "turnovers")
+                reb = pick("reb", "rebs", "rebounds")
+                ast = pick("ast", "assists")
+
+                fgm, fga = _parse_made_attempt(fg) if isinstance(fg, str) else (0, 0)
+                ftm, fta = _parse_made_attempt(ft) if isinstance(ft, str) else (0, 0)
+
+                row["fgm"] = fgm
+                row["fga"] = fga
+                row["ftm"] = ftm
+                row["fta"] = fta
+                row["tov"] = _to_int(to, 0)
+                row["reb"] = _to_int(reb, 0)
+                row["ast"] = _to_int(ast, 0)
+                row["usage_proxy"] = row["fga"] + 0.44 * row["fta"] + row["tov"]
+
+                players.append(row)
+
+    return players
+
+
+def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
     """
     Fetch ESPN summary JSON for a game, parse team box score metrics for both teams.
-    Returns dict with home/away rows.
+    Returns dict with home/away rows + game metadata.
     """
     url = ESPN_SUMMARY_URL.format(event_id=event_id)
     r = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
@@ -175,19 +332,20 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
     competitions = header.get("competitions", []) if isinstance(header, dict) else []
     comp0 = competitions[0] if isinstance(competitions, list) and competitions else {}
 
-    game_date = comp0.get("date")  # ISO datetime string
-    venue = None
-    try:
-        venue = comp0.get("venue", {}).get("fullName")
-    except Exception:
-        venue = None
+    game_datetime_utc = comp0.get("date")
+    venue = (comp0.get("venue") or {}).get("fullName") if isinstance(comp0.get("venue"), dict) else None
 
-    # Determine home/away team ids and points via header competitors (reliable)
+    status = comp0.get("status") or {}
+    stype = (status.get("type") or {})
+    completed = bool(stype.get("completed"))
+    state = stype.get("state") or ""
+    status_desc = stype.get("description") or ""
+    status_detail = stype.get("detail") or stype.get("shortDetail") or ""
+
     home_team_id = None
     away_team_id = None
     home_points = None
     away_points = None
-
     competitors = comp0.get("competitors", []) if isinstance(comp0, dict) else []
     if isinstance(competitors, list) and len(competitors) >= 2:
         for c in competitors:
@@ -218,6 +376,7 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
         fgm, fga = _parse_made_attempt(smap.get("fieldGoals", ""))
         if fga == 0:
             fga = _to_int(smap.get("fieldGoalsAttempted"), 0)
+        if fgm == 0:
             fgm = _to_int(smap.get("fieldGoalsMade"), 0)
 
         tpm, tpa = _parse_made_attempt(smap.get("threePointFieldGoals", ""))
@@ -230,13 +389,11 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
             fta = _to_int(smap.get("freeThrowsAttempted"), 0)
             ftm = _to_int(smap.get("freeThrowsMade"), 0)
 
-        # Other stats
         tov = _to_int(smap.get("turnovers"), 0)
         orb = _to_int(smap.get("reboundsOffensive"), 0)
         drb = _to_int(smap.get("reboundsDefensive"), 0)
         reb = _to_int(smap.get("rebounds"), orb + drb)
 
-        # Derived metrics
         efg = _safe_div((fgm + 0.5 * tpm), fga, np.nan)
         ftr = _safe_div(fta, fga, np.nan)
         threepar = _safe_div(tpa, fga, np.nan)
@@ -245,12 +402,16 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
         return {
             "team_id": tid,
             "team": name,
-            "points": np.nan,  # filled later from header competitors
-            "fgm": fgm, "fga": fga,
-            "tpm": tpm, "tpa": tpa,
-            "ftm": ftm, "fta": fta,
+            "fgm": fgm,
+            "fga": fga,
+            "tpm": tpm,
+            "tpa": tpa,
+            "ftm": ftm,
+            "fta": fta,
             "tov": tov,
-            "orb": orb, "drb": drb, "reb": reb,
+            "orb": orb,
+            "drb": drb,
+            "reb": reb,
             "efg": float(efg) if pd.notna(efg) else np.nan,
             "ftr": float(ftr) if pd.notna(ftr) else np.nan,
             "3par": float(threepar) if pd.notna(threepar) else np.nan,
@@ -259,7 +420,7 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
 
     parsed = [parse_team(te) for te in teams]
 
-    # Map to home/away using ids
+    # Map to home/away
     if home_team_id and away_team_id:
         home_row = next((x for x in parsed if x["team_id"] == home_team_id), None)
         away_row = next((x for x in parsed if x["team_id"] == away_team_id), None)
@@ -268,16 +429,7 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
     else:
         home_row, away_row = parsed[0], parsed[1]
 
-    # Fill points
-    if home_points is None:
-        home_points = np.nan
-    if away_points is None:
-        away_points = np.nan
-
-    home_row["points"] = home_points
-    away_row["points"] = away_points
-
-    # Opponent-dependent metrics
+    # opponent-dependent metrics
     home_row["orb_pct"] = _safe_div(home_row["orb"], (home_row["orb"] + away_row["drb"]), np.nan)
     away_row["orb_pct"] = _safe_div(away_row["orb"], (away_row["orb"] + home_row["drb"]), np.nan)
 
@@ -287,258 +439,721 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
     home_row["tov_pct"] = _safe_div(home_row["tov"], home_row["poss"], np.nan)
     away_row["tov_pct"] = _safe_div(away_row["tov"], away_row["poss"], np.nan)
 
-    # Pace and efficiency (use shared game possessions estimate)
-    game_poss = np.nan
-    if pd.notna(home_row["poss"]) and pd.notna(away_row["poss"]):
-        game_poss = (float(home_row["poss"]) + float(away_row["poss"])) / 2.0
-
-    home_row["pace"] = game_poss
-    away_row["pace"] = game_poss
-
-    home_row["ortg"] = _safe_div(home_row["points"] * 100.0, game_poss, np.nan)
-    away_row["ortg"] = _safe_div(away_row["points"] * 100.0, game_poss, np.nan)
-
-    home_row["drtg"] = _safe_div(away_row["points"] * 100.0, game_poss, np.nan)
-    away_row["drtg"] = _safe_div(home_row["points"] * 100.0, game_poss, np.nan)
-
-    home_row["netrtg"] = home_row["ortg"] - home_row["drtg"] if pd.notna(home_row["ortg"]) and pd.notna(home_row["drtg"]) else np.nan
-    away_row["netrtg"] = away_row["ortg"] - away_row["drtg"] if pd.notna(away_row["ortg"]) and pd.notna(away_row["drtg"]) else np.nan
+    # attach points
+    home_row["points_for"] = _to_int(home_points, 0)
+    away_row["points_for"] = _to_int(away_points, 0)
+    home_row["points_against"] = away_row["points_for"]
+    away_row["points_against"] = home_row["points_for"]
+    home_row["margin"] = home_row["points_for"] - home_row["points_against"]
+    away_row["margin"] = away_row["points_for"] - away_row["points_against"]
 
     return {
         "event_id": str(event_id),
-        "game_date": game_date,
+        "game_datetime_utc": game_datetime_utc,
         "venue": venue,
+        "completed": completed,
+        "state": state,
+        "status_desc": status_desc,
+        "status_detail": status_detail,
         "home": home_row,
         "away": away_row,
+        "players_home": _extract_players(data, home_row["team_id"]),
+        "players_away": _extract_players(data, away_row["team_id"]),
     }
 
-def summary_to_team_rows(parsed_summary: dict, status_name=None, status_completed=None):
-    """
-    Flatten parsed_summary into 2 per-team rows for CSV storage.
-    """
+
+def summary_to_team_rows(parsed_summary: dict):
+    """Flatten parsed_summary into 2 team-game rows."""
     event_id = parsed_summary.get("event_id")
-    game_date = parsed_summary.get("game_date")
+    game_dt = parsed_summary.get("game_datetime_utc")
     venue = parsed_summary.get("venue")
+
+    meta = {
+        "event_id": event_id,
+        "game_datetime_utc": game_dt,
+        "venue": venue,
+        "completed": parsed_summary.get("completed"),
+        "state": parsed_summary.get("state"),
+        "status_desc": parsed_summary.get("status_desc"),
+        "status_detail": parsed_summary.get("status_detail"),
+        "pulled_at_utc": _utc_now_iso(),
+        "source": SOURCE_NAME,
+        "parse_version": PARSE_VERSION,
+    }
 
     home = parsed_summary["home"].copy()
     away = parsed_summary["away"].copy()
 
     for row in (home, away):
-        row["event_id"] = event_id
-        row["game_date"] = game_date
-        row["venue"] = venue
-        row["status_name"] = status_name
-        row["status_completed"] = status_completed
+        row.update(meta)
 
     home["opponent"] = away["team"]
     away["opponent"] = home["team"]
 
-    home["opponent_points"] = away.get("points", np.nan)
-    away["opponent_points"] = home.get("points", np.nan)
-
     home["home_away"] = "home"
     away["home_away"] = "away"
 
+    home["home_team"] = home["team"]
+    home["away_team"] = away["team"]
+    away["home_team"] = home["team"]
+    away["away_team"] = away["team"]
+
     return home, away
 
-# ---------------- team logs (append forever) ----------------
-def build_team_game_logs_csv(days_back=7, out_csv="espn_team_game_logs.csv", verbose=True):
+
+# ---------------- rolling feature engineering ----------------
+def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Append-forever team game logs.
-    Only processes FINAL games (status_completed == True).
-    Dedup by (event_id, team_id).
+    Adds ORtg/DRtg/Net/Pace, blowout, and integrity checks.
+    Assumes team-game rows include points_for, points_against, poss.
     """
-    now_pst = datetime.now(ZoneInfo("America/Los_Angeles"))
+    out = df.copy()
 
-    total_games = 0
-    final_games = 0
-    processed_games = 0
-    failures = 0
-    skipped_empty_box = 0
+    for c in ["points_for", "points_against", "poss", "fga", "fta", "tov", "orb", "drb", "reb", "margin"]:
+        if c in out.columns:
+            out[c] = pd.to_numeric(out[c], errors="coerce")
 
-    rows = []
-    for i in range(days_back):
-        d = (now_pst - timedelta(days=i)).strftime("%Y%m%d")
-        games = fetch_scoreboard_games(d)
-        total_games += len(games)
+    out["pace"] = out["poss"]
+    out["ortg"] = out.apply(lambda r: _safe_div(r.get("points_for", np.nan) * 100.0, r.get("poss", np.nan), np.nan), axis=1)
+    out["drtg"] = out.apply(lambda r: _safe_div(r.get("points_against", np.nan) * 100.0, r.get("poss", np.nan), np.nan), axis=1)
+    out["netrtg"] = out["ortg"] - out["drtg"]
 
-        finals = [g for g in games if _as_bool(g.get("status_completed"))]
-        final_games += len(finals)
+    out["blowout"] = (out["margin"].abs() >= 18).astype(int)
 
-        if verbose:
-            print(f"📅 {d}: {len(games)} games, {len(finals)} final")
+    out["data_ok"] = True
+    out.loc[out["poss"].fillna(0) <= 30, "data_ok"] = False
+    out.loc[(out["completed"] == True) & (out["fga"].fillna(0) == 0), "data_ok"] = False
 
-        for g in finals:
-            try:
-                parsed = fetch_and_parse_espn_summary(g["game_id"])
-                home_row, away_row = summary_to_team_rows(
-                    parsed,
-                    status_name=g.get("status_name"),
-                    status_completed=g.get("status_completed"),
-                )
+    out["row_hash"] = out.apply(
+        lambda r: _stable_row_hash(
+            r.to_dict(),
+            keys=[
+                "event_id",
+                "team_id",
+                "team",
+                "home_away",
+                "game_datetime_utc",
+                "points_for",
+                "points_against",
+                "fga",
+                "tov",
+                "orb",
+                "poss",
+                "parse_version",
+            ],
+        ),
+        axis=1,
+    )
 
-                # Guardrail: if ESPN returns an empty boxscore payload for a "final", skip
-                if _to_int(home_row.get("fga"), 0) == 0 and _to_int(away_row.get("fga"), 0) == 0:
-                    skipped_empty_box += 1
-                    continue
+    return out
 
-                rows.append(home_row)
-                rows.append(away_row)
-                processed_games += 1
-            except Exception as e:
-                failures += 1
-                if verbose:
-                    print("FAILED", g.get("game_id"), str(e)[:180])
 
-    df_new = pd.DataFrame(rows)
+def _group_shift_rolling(s: pd.Series, window: int, fn: str):
+    s2 = s.shift(1)
+    if fn == "mean":
+        return s2.rolling(window=window, min_periods=1).mean()
+    if fn == "std":
+        return s2.rolling(window=window, min_periods=2).std(ddof=0)
+    raise ValueError("Unsupported fn")
 
-    keep = [
-        "team_id","team","opponent","home_away","event_id","game_date","venue",
-        "status_name","status_completed",
-        "points","opponent_points",
-        "fgm","fga","tpm","tpa","ftm","fta","tov","orb","drb","reb",
-        "efg","3par","ftr","orb_pct","drb_pct","tov_pct","poss",
-        "pace","ortg","drtg","netrtg",
+
+def _group_shift_expanding_mean(s: pd.Series):
+    return s.shift(1).expanding(min_periods=1).mean()
+
+
+def _add_rolling_pack(df: pd.DataFrame, group_cols, prefix: str) -> pd.DataFrame:
+    """
+    Adds L3/L7 means + L7 std + season (expanding) means for core metrics.
+    """
+    out = df.copy()
+
+    core = {
+        "ortg": "ortg",
+        "drtg": "drtg",
+        "netrtg": "netrtg",
+        "pace": "pace",
+        "efg": "efg",
+        "tov_pct": "tov_pct",
+        "orb_pct": "orb_pct",
+        "drb_pct": "drb_pct",
+        "ftr": "ftr",
+        "3par": "3par",
+    }
+
+    g = out.groupby(group_cols, sort=False)
+
+    for metric, col in core.items():
+        if col not in out.columns:
+            continue
+
+        out[f"{prefix}{metric}_l3_pre"] = (
+            g[col].apply(lambda s: _group_shift_rolling(s, 3, "mean")).reset_index(level=group_cols, drop=True)
+        )
+        out[f"{prefix}{metric}_l7_pre"] = (
+            g[col].apply(lambda s: _group_shift_rolling(s, 7, "mean")).reset_index(level=group_cols, drop=True)
+        )
+        out[f"{prefix}{metric}_std_l7_pre"] = (
+            g[col].apply(lambda s: _group_shift_rolling(s, 7, "std")).reset_index(level=group_cols, drop=True)
+        )
+        out[f"{prefix}{metric}_season_pre"] = (
+            g[col].apply(lambda s: _group_shift_expanding_mean(s)).reset_index(level=group_cols, drop=True)
+        )
+
+    return out
+
+
+def _add_noblow_rollups(df: pd.DataFrame, group_cols, prefix: str) -> pd.DataFrame:
+    """
+    Adds L7 no-blowout rollups for ortg/drtg/netrtg.
+    """
+    out = df.copy()
+
+    for metric in ["ortg", "drtg", "netrtg"]:
+        if metric not in out.columns or "blowout" not in out.columns:
+            continue
+        masked = out[metric].where(out["blowout"] == 0, np.nan)
+        out[f"{prefix}{metric}_l7_noblow_pre"] = (
+            out.groupby(group_cols, sort=False)[masked.name]
+            .apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean())
+            .reset_index(level=group_cols, drop=True)
+        )
+
+    return out
+
+def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds rest and schedule density features:
+    - days_since_last_game
+    - days_rest (max(days_since_last_game - 1, 0))
+    - games_last_7_days (prior games only)
+    - back_to_back (days_since_last_game <= 1.5)
+    - three_in_six (prior games in last 6 days >= 2, meaning current would make 3-in-6 incl current)
+    """
+    out = df.copy()
+    out["game_dt"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce")
+    out = out.sort_values(["team", "game_dt", "event_id"])
+
+    out["prev_game_dt"] = out.groupby("team")["game_dt"].shift(1)
+    out["days_since_last_game"] = (out["game_dt"] - out["prev_game_dt"]).dt.total_seconds() / 86400.0
+    out["days_rest"] = (out["days_since_last_game"] - 1.0).clip(lower=0)
+    out["back_to_back"] = (out["days_since_last_game"].fillna(999) <= 1.5).astype(int)
+
+    games_last_7 = []
+    three_in_six = []
+
+    by_team = defaultdict(deque)
+    for _, r in out.iterrows():
+        team = r["team"]
+        dt = r["game_dt"]
+        dq = by_team[team]
+
+        cutoff7 = dt - pd.Timedelta(days=7)
+        while dq and dq[0] < cutoff7:
+            dq.popleft()
+        games_last_7.append(len(dq))
+
+        cutoff6 = dt - pd.Timedelta(days=6)
+        cnt6 = sum(1 for x in dq if x >= cutoff6)
+        three_in_six.append(1 if cnt6 >= 2 else 0)
+
+        dq.append(dt)
+
+    out["games_last_7_days"] = games_last_7
+    out["three_in_six"] = three_in_six
+
+    return out.drop(columns=["prev_game_dt"], errors="ignore")
+
+
+def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds opponent per-game proxies and opponent pregame rolling fields.
+    Requires team-game rows for both teams per event_id.
+    """
+    out = df.copy()
+
+    if "event_id" not in out.columns or "home_away" not in out.columns:
+        raise ValueError("Opponent merge requires event_id and home_away columns")
+
+    out["_key"] = out["event_id"].astype(str) + "|" + out["home_away"].astype(str)
+    opp_side = out["home_away"].map({"home": "away", "away": "home"})
+    out["_opp_key"] = out["event_id"].astype(str) + "|" + opp_side.astype(str)
+
+    # columns to bring from opponent row
+    cols = [
+        "_key",
+        "team",
+        "team_id",
+        "points_for",
+        "points_against",
+        "efg",
+        "tov_pct",
+        "orb_pct",
+        "drb_pct",
+        "ftr",
+        "3par",
+        "ortg",
+        "drtg",
+        "netrtg",
+        "pace",
+        # overall rollups
+        "ortg_l7_pre",
+        "drtg_l7_pre",
+        "netrtg_l7_pre",
+        "pace_l7_pre",
+        "efg_l7_pre",
+        "tov_pct_l7_pre",
+        "orb_pct_l7_pre",
+        "drb_pct_l7_pre",
+        "ftr_l7_pre",
+        "3par_l7_pre",
+        "ortg_season_pre",
+        "drtg_season_pre",
+        "netrtg_season_pre",
+        "pace_season_pre",
+        "efg_season_pre",
+        "tov_pct_season_pre",
+        "orb_pct_season_pre",
+        "drb_pct_season_pre",
+        "ftr_season_pre",
+        "3par_season_pre",
+        # home/away rollups
+        "ha_ortg_l7_pre",
+        "ha_drtg_l7_pre",
+        "ha_netrtg_l7_pre",
+        "ha_pace_l7_pre",
+        "ha_efg_l7_pre",
+        "ha_tov_pct_l7_pre",
+        "ha_orb_pct_l7_pre",
+        "ha_drb_pct_l7_pre",
+        "ha_ftr_l7_pre",
+        "ha_3par_l7_pre",
+        "ha_ortg_season_pre",
+        "ha_drtg_season_pre",
+        "ha_netrtg_season_pre",
+        "ha_pace_season_pre",
+        "ha_efg_season_pre",
+        "ha_tov_pct_season_pre",
+        "ha_orb_pct_season_pre",
+        "ha_drb_pct_season_pre",
+        "ha_ftr_season_pre",
+        "ha_3par_season_pre",
     ]
-    if not df_new.empty:
-        df_new = df_new[[c for c in keep if c in df_new.columns]]
+    cols = [c for c in cols if c in out.columns]
 
-    if os.path.exists(out_csv):
-        df_old = pd.read_csv(out_csv, dtype={"event_id": str, "team_id": str})
-        df = pd.concat([df_old, df_new], ignore_index=True)
+    lookup = out[cols].copy()
+    lookup = lookup.rename(columns={"_key": "opp__key"})
+    # prefix everything except opp__key
+    lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "opp__key"})
+
+    out = out.merge(lookup, left_on="_opp_key", right_on="opp__key", how="left")
+
+    # Defensive allowed per game proxies: what team "allowed" equals opponent's offense in this game
+    out["efg_allowed_game"] = out.get("opp_efg", np.nan)
+    out["ftr_allowed_game"] = out.get("opp_ftr", np.nan)
+
+    return out.drop(columns=["_key", "_opp_key", "opp__key"], errors="ignore")
+
+
+def _add_allowed_rollups(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Builds rolling defensive "allowed" metrics from per-game opponent offense.
+    Uses shift so it's pregame.
+    """
+    out = df.copy()
+
+    if "game_dt" not in out.columns:
+        out["game_dt"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce")
+
+    out = out.sort_values(["team", "game_dt", "event_id"])
+    g = out.groupby("team", sort=False)
+
+    out["ftr_allowed_l7_pre"] = (
+        g["ftr_allowed_game"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
+    )
+    out["ftr_allowed_season_pre"] = (
+        g["ftr_allowed_game"].apply(lambda s: s.shift(1).expanding(min_periods=1).mean()).reset_index(level=0, drop=True)
+    )
+
+    out["efg_allowed_l7_pre"] = (
+        g["efg_allowed_game"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
+    )
+    out["efg_allowed_season_pre"] = (
+        g["efg_allowed_game"].apply(lambda s: s.shift(1).expanding(min_periods=1).mean()).reset_index(level=0, drop=True)
+    )
+
+    return out
+
+
+def _add_sos_proxies(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds schedule quality proxies based on opponent pregame ratings.
+    """
+    out = df.copy()
+    out = out.sort_values(["team", "game_dt", "event_id"])
+    g = out.groupby("team", sort=False)
+
+    out["opp_netrtg_pre_base"] = out.get("opp_netrtg_season_pre", np.nan)
+    out["opp_ortg_pre_base"] = out.get("opp_ortg_season_pre", np.nan)
+    out["opp_drtg_pre_base"] = out.get("opp_drtg_season_pre", np.nan)
+
+    out["avg_opp_netrtg_l7_pre"] = (
+        g["opp_netrtg_pre_base"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
+    )
+    out["avg_opp_ortg_l7_pre"] = (
+        g["opp_ortg_pre_base"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
+    )
+    out["avg_opp_drtg_l7_pre"] = (
+        g["opp_drtg_pre_base"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
+    )
+
+    out["sos_season_pre"] = (
+        g["opp_netrtg_pre_base"].apply(lambda s: s.shift(1).expanding(min_periods=1).mean()).reset_index(level=0, drop=True)
+    )
+
+    return out
+
+
+def _add_opponent_adjusted_deltas(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds opponent-adjusted deltas for Four Factors + netrtg.
+    Includes L7, season, and home/away (ha_) split versions.
+    """
+    out = df.copy()
+
+    def delta(a, b):
+        return a - b
+
+    # L7
+    out["netrtg_adj_l7"] = delta(out.get("netrtg_l7_pre", np.nan), out.get("opp_netrtg_l7_pre", np.nan))
+    out["efg_adj_l7"] = delta(out.get("efg_l7_pre", np.nan), out.get("opp_efg_l7_pre", np.nan))
+    out["tov_adj_l7"] = delta(out.get("opp_tov_pct_l7_pre", np.nan), out.get("tov_pct_l7_pre", np.nan))
+    out["orb_adj_l7"] = delta(out.get("orb_pct_l7_pre", np.nan), out.get("opp_drb_pct_l7_pre", np.nan))
+    out["ftr_adj_l7"] = delta(out.get("ftr_l7_pre", np.nan), out.get("opp_ftr_l7_pre", np.nan))
+
+    # season
+    out["netrtg_adj_season"] = delta(out.get("netrtg_season_pre", np.nan), out.get("opp_netrtg_season_pre", np.nan))
+    out["efg_adj_season"] = delta(out.get("efg_season_pre", np.nan), out.get("opp_efg_season_pre", np.nan))
+    out["tov_adj_season"] = delta(out.get("opp_tov_pct_season_pre", np.nan), out.get("tov_pct_season_pre", np.nan))
+    out["orb_adj_season"] = delta(out.get("orb_pct_season_pre", np.nan), out.get("opp_drb_pct_season_pre", np.nan))
+    out["ftr_adj_season"] = delta(out.get("ftr_season_pre", np.nan), out.get("opp_ftr_season_pre", np.nan))
+
+    # home/away split rollups (ha_)
+    out["netrtg_adj_ha_l7"] = delta(out.get("ha_netrtg_l7_pre", np.nan), out.get("opp_ha_netrtg_l7_pre", np.nan))
+    out["efg_adj_ha_l7"] = delta(out.get("ha_efg_l7_pre", np.nan), out.get("opp_ha_efg_l7_pre", np.nan))
+    out["tov_adj_ha_l7"] = delta(out.get("opp_ha_tov_pct_l7_pre", np.nan), out.get("ha_tov_pct_l7_pre", np.nan))
+    out["orb_adj_ha_l7"] = delta(out.get("ha_orb_pct_l7_pre", np.nan), out.get("opp_ha_drb_pct_l7_pre", np.nan))
+    out["ftr_adj_ha_l7"] = delta(out.get("ha_ftr_l7_pre", np.nan), out.get("opp_ha_ftr_l7_pre", np.nan))
+
+    out["netrtg_adj_ha_season"] = delta(out.get("ha_netrtg_season_pre", np.nan), out.get("opp_ha_netrtg_season_pre", np.nan))
+    out["efg_adj_ha_season"] = delta(out.get("ha_efg_season_pre", np.nan), out.get("opp_ha_efg_season_pre", np.nan))
+    out["tov_adj_ha_season"] = delta(out.get("opp_ha_tov_pct_season_pre", np.nan), out.get("ha_tov_pct_season_pre", np.nan))
+    out["orb_adj_ha_season"] = delta(out.get("ha_orb_pct_season_pre", np.nan), out.get("opp_ha_drb_pct_season_pre", np.nan))
+    out["ftr_adj_ha_season"] = delta(out.get("ha_ftr_season_pre", np.nan), out.get("opp_ha_ftr_season_pre", np.nan))
+
+    return out
+
+
+def _add_style_features(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds style fingerprints + matchup distance proxies:
+    - style_distance_l7 (sum abs diffs across style vector)
+    - pace_mismatch_l7
+    - rim_vs_foul_l7 (team ftr vs opponent ftr_allowed)
+    """
+    out = df.copy()
+
+    style_pairs = [
+        ("3par_l7_pre", "opp_3par_l7_pre"),
+        ("ftr_l7_pre", "opp_ftr_l7_pre"),
+        ("tov_pct_l7_pre", "opp_tov_pct_l7_pre"),
+        ("orb_pct_l7_pre", "opp_orb_pct_l7_pre"),
+        ("pace_l7_pre", "opp_pace_l7_pre"),
+    ]
+
+    diffs = []
+    for a, b in style_pairs:
+        if a in out.columns and b in out.columns:
+            diffs.append((out[a] - out[b]).abs())
+
+    out["style_distance_l7"] = np.nan
+    if diffs:
+        out["style_distance_l7"] = sum(diffs)
+
+    if "pace_l7_pre" in out.columns and "opp_pace_l7_pre" in out.columns:
+        out["pace_mismatch_l7"] = out["pace_l7_pre"] - out["opp_pace_l7_pre"]
     else:
-        df = df_new
+        out["pace_mismatch_l7"] = np.nan
 
-    if not df.empty:
-        df["event_id"] = df["event_id"].astype(str)
-        df["team_id"] = df["team_id"].astype(str)
-        df = df.drop_duplicates(subset=["event_id", "team_id"]).sort_values(["game_date", "event_id", "home_away"])
+    if "ftr_l7_pre" in out.columns and "ftr_allowed_l7_pre" in out.columns:
+        # opponent foul/ft allowed rolling is on opponent row, which after merge becomes opp_ftr_allowed_l7_pre
+        # use that when present, otherwise fallback to NaN
+        pass
 
-    df.to_csv(out_csv, index=False)
+    if "ftr_l7_pre" in out.columns and "opp_ftr_allowed_l7_pre" in out.columns:
+        out["rim_vs_foul_l7"] = out["ftr_l7_pre"] - out["opp_ftr_allowed_l7_pre"]
+    else:
+        out["rim_vs_foul_l7"] = np.nan
 
-    if verbose:
-        print("\n✅ DONE")
-        print("Games checked:", total_games)
-        print("Final games:", final_games)
-        print("Games processed:", processed_games)
-        print("Skipped empty boxscores:", skipped_empty_box)
-        print("Rows written:", len(df))
-        print("Failures:", failures)
-        print("Output:", out_csv)
+    return out
 
-    return df
 
-# ---------------- model-ready snapshot ----------------
-def build_model_ready_snapshot(
-    in_team_logs_csv="espn_team_game_logs.csv",
-    out_csv="espn_team_model_ready.csv",
-    verbose=True,
-):
+# ---------------- matchup table builder ----------------
+def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
     """
-    Creates a model-ready snapshot that is separate from raw logs.
-
-    Output rows are still "team-game" rows, but they contain:
-    - Rolling averages for the team (overall, home-only, away-only): L3, L7, season-to-date
-    - Opponent rolling features merged in (opp_*)
-
-    Rolling features are shifted by 1 game so they represent "pregame form".
+    One row per game, with home/away pregame features prefixed h_/a_, plus targets:
+    home_points, away_points, home_win
     """
-    if not os.path.exists(in_team_logs_csv):
-        raise FileNotFoundError(f"Missing input file: {in_team_logs_csv}")
+    df = df_features.copy()
+    df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
 
-    df = pd.read_csv(in_team_logs_csv, dtype={"event_id": str, "team_id": str})
-    if df.empty:
-        pd.DataFrame().to_csv(out_csv, index=False)
-        if verbose:
-            print(f"{out_csv} written: 0 rows (empty input)")
-        return df
+    home = df[df["home_away"] == "home"].copy()
+    away = df[df["home_away"] == "away"].copy()
 
-    # Normalize and sort
-    df["game_date"] = pd.to_datetime(df["game_date"], errors="coerce", utc=True)
-    df = df.sort_values(["team", "game_date", "event_id"]).reset_index(drop=True)
-
-    # Metrics to roll (keep this tight and stable)
-    roll_metrics = [
-        "ortg","drtg","netrtg","pace",
-        "efg","tov_pct","orb_pct","ftr","3par",
-        "points","opponent_points",
+    keep_base = [
+        "event_id",
+        "game_datetime_utc",
+        "venue",
+        "home_team",
+        "away_team",
+        "points_for",
+        "points_against",
+        "margin",
+        "completed",
+        "data_ok",
     ]
-    roll_metrics = [c for c in roll_metrics if c in df.columns]
+    keep_base = [c for c in keep_base if c in home.columns]
 
-    def _add_rolls(group_df, prefix):
-        # L3, L7 rolling means, shifted by 1 (pregame)
-        g = group_df.copy()
-        for m in roll_metrics:
-            g[f"{prefix}{m}_l3"] = g[m].rolling(3, min_periods=1).mean().shift(1)
-            g[f"{prefix}{m}_l7"] = g[m].rolling(7, min_periods=1).mean().shift(1)
-            g[f"{prefix}{m}_season"] = g[m].expanding(min_periods=1).mean().shift(1)
-        return g
-
-    # Overall rolls by team
-    df = df.groupby("team", group_keys=False).apply(lambda g: _add_rolls(g, prefix="team_"))
-
-    # Home-only and away-only splits
-    df_home = df[df["home_away"] == "home"].copy()
-    df_away = df[df["home_away"] == "away"].copy()
-
-    if not df_home.empty:
-        df_home = df_home.groupby("team", group_keys=False).apply(lambda g: _add_rolls(g, prefix="home_"))
-        home_cols = [c for c in df_home.columns if c.startswith("home_")]
-        df = df.merge(df_home[["event_id", "team_id"] + home_cols], on=["event_id", "team_id"], how="left")
-
-    if not df_away.empty:
-        df_away = df_away.groupby("team", group_keys=False).apply(lambda g: _add_rolls(g, prefix="away_"))
-        away_cols = [c for c in df_away.columns if c.startswith("away_")]
-        df = df.merge(df_away[["event_id", "team_id"] + away_cols], on=["event_id", "team_id"], how="left")
-
-    # Opponent rolling features: build a join table keyed by (event_id, opponent team name)
-    # Then merge onto each team row as opp_*
-    feature_cols = [c for c in df.columns if c.startswith("team_") or c.startswith("home_") or c.startswith("away_")]
-
-    opp_src = df[["event_id", "team", "team_id"] + feature_cols].copy()
-    opp_src = opp_src.rename(columns={"team": "opponent"})
-    opp_src = opp_src.rename(columns={c: f"opp_{c}" for c in feature_cols})
-
-    df = df.merge(opp_src, on=["event_id", "opponent"], how="left")
-
-    # Final column order (keep core ids first)
-    core = [
-        "event_id","game_date","team_id","team","opponent","home_away",
-        "status_name","status_completed",
-        "points","opponent_points",
-        "pace","ortg","drtg","netrtg",
-        "efg","tov_pct","orb_pct","ftr","3par",
+    feat_cols = [
+        c
+        for c in df.columns
+        if c.endswith("_pre")
+        or c.endswith("_noblow_pre")
+        or c
+        in [
+            "days_rest",
+            "days_since_last_game",
+            "games_last_7_days",
+            "back_to_back",
+            "three_in_six",
+            "avg_opp_netrtg_l7_pre",
+            "avg_opp_ortg_l7_pre",
+            "avg_opp_drtg_l7_pre",
+            "sos_season_pre",
+            "netrtg_adj_l7",
+            "efg_adj_l7",
+            "tov_adj_l7",
+            "orb_adj_l7",
+            "ftr_adj_l7",
+            "netrtg_adj_season",
+            "efg_adj_season",
+            "tov_adj_season",
+            "orb_adj_season",
+            "ftr_adj_season",
+            "netrtg_adj_ha_l7",
+            "efg_adj_ha_l7",
+            "tov_adj_ha_l7",
+            "orb_adj_ha_l7",
+            "ftr_adj_ha_l7",
+            "netrtg_adj_ha_season",
+            "efg_adj_ha_season",
+            "tov_adj_ha_season",
+            "orb_adj_ha_season",
+            "ftr_adj_ha_season",
+            "style_distance_l7",
+            "pace_mismatch_l7",
+            "rim_vs_foul_l7",
+            "blowout",
+            "pulled_at_utc",
+            "parse_version",
+            "source",
+        ]
     ]
-    core = [c for c in core if c in df.columns]
-    rest = [c for c in df.columns if c not in core]
-    df_out = df[core + rest].copy()
 
-    # Write snapshot
-    df_out.to_csv(out_csv, index=False)
-    if verbose:
-        print(f"{out_csv} written: {len(df_out)} rows")
+    feat_cols = [c for c in dict.fromkeys(feat_cols) if c in df.columns]
 
-    return df_out
+    home_keep = ["event_id"] + keep_base + ["team", "team_id"] + feat_cols
+    away_keep = ["event_id"] + ["team", "team_id"] + feat_cols
+    home_keep = [c for c in home_keep if c in home.columns]
+    away_keep = [c for c in away_keep if c in away.columns]
 
-# ---------------- main ----------------
-def _env_int(name, default):
-    v = os.environ.get(name)
-    if v is None or str(v).strip() == "":
-        return default
-    try:
-        return int(str(v).strip())
-    except Exception:
-        return default
+    h = home[home_keep].copy()
+    a = away[away_keep].copy()
+
+    h = h.rename(columns={c: f"h_{c}" for c in h.columns if c != "event_id"})
+    a = a.rename(columns={c: f"a_{c}" for c in a.columns if c != "event_id"})
+
+    m = h.merge(a, on="event_id", how="inner")
+
+    # targets
+    if "h_points_for" in m.columns:
+        m["home_points"] = m["h_points_for"]
+    if "h_points_against" in m.columns:
+        m["away_points"] = m["h_points_against"]
+
+    # home win label (only valid if completed + data_ok)
+    if all(c in m.columns for c in ["home_points", "away_points", "h_completed", "h_data_ok"]):
+        m["home_win"] = np.where(
+            (m["h_completed"] == True) & (m["h_data_ok"] == True),
+            (m["home_points"] > m["away_points"]).astype(int),
+            np.nan,
+        )
+    else:
+        m["home_win"] = np.nan
+
+    # status column
+    if "h_completed" in m.columns:
+        m["status"] = np.where(m["h_completed"] == True, "final", "not_final")
+    elif "h_state" in m.columns:
+        m["status"] = np.where(
+            m["h_state"].astype(str).str.lower().eq("post"),
+            "final",
+            "not_final",
+        )
+    else:
+        m["status"] = "unknown"
+
+    # canonical game datetime/venue
+    if "h_game_datetime_utc" in m.columns:
+        m["game_datetime_utc"] = m["h_game_datetime_utc"]
+    if "h_venue" in m.columns:
+        m["venue"] = m["h_venue"]
+
+    if "game_datetime_utc" in m.columns:
+        m["game_dt"] = pd.to_datetime(m["game_datetime_utc"], utc=True, errors="coerce")
+        m = m.sort_values(["game_dt", "event_id"]).drop(columns=["game_dt"], errors="ignore")
+    else:
+        m = m.sort_values(["event_id"])
+
+    return m
+
+
+# ---------------- end-to-end pipeline ----------------
+def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
+    """
+    1) Pull scoreboard for last N days
+    2) For each game_id, pull summary boxscore and build team-game rows
+    3) Append+dedupe logs forever (espn_team_game_logs.csv)
+    4) Build rolling pregame features + opponent joins + matchup features
+       Append+dedupe features forever (espn_team_game_features.csv)
+    5) Rebuild matchup model table (espn_matchups_model_ready.csv)
+    """
+    pulled_at = _utc_now_iso()
+    print(f"Run started: {pulled_at} | DAYS_BACK={days_back} | PARSE_VERSION={PARSE_VERSION}")
+
+    # 1) scoreboard snapshot (append forever)
+    games_df = build_espn_games_csv(days_back=days_back, out_csv=OUT_GAMES, verbose=True)
+    if games_df.empty:
+        print("No games from scoreboard. Exiting.")
+        return
+
+    # Limit to just the days in this run for summary pulls
+    now_pst = datetime.now(TZ_PST)
+    run_dates = {(now_pst - timedelta(days=i)).strftime("%Y%m%d") for i in range(days_back)}
+    games_run = games_df[games_df["date"].astype(str).isin(run_dates)].copy()
+
+    game_ids = games_run["game_id"].astype(str).unique().tolist()
+    print(f"Scoreboard game_ids in run window: {len(game_ids)}")
+
+    # 2) pull summaries and build team-game rows
+    team_rows = []
+    errors = 0
+    for i, gid in enumerate(game_ids, 1):
+        try:
+            s = fetch_and_parse_espn_summary(gid)
+            hrow, arow = summary_to_team_rows(s)
+            team_rows.append(hrow)
+            team_rows.append(arow)
+        except Exception as e:
+            errors += 1
+            if errors <= 10:
+                print(f"[WARN] summary parse failed for event {gid}: {e}")
+            continue
+
+        if i % 50 == 0:
+            print(f"Parsed {i}/{len(game_ids)} summaries...")
+
+        if days_back >= 30:
+            time.sleep(0.15)
+
+    if not team_rows:
+        print("No team rows parsed. Exiting.")
+        return
+
+    df_logs_new = pd.DataFrame(team_rows)
+    df_logs_new["game_dt"] = pd.to_datetime(df_logs_new["game_datetime_utc"], utc=True, errors="coerce")
+
+    # 2b) per-game metrics + audit
+    df_logs_new = _compute_per_game_advanced_metrics(df_logs_new)
+
+    # 3) append+dedupe logs forever
+    df_logs_all = _append_dedupe_write(
+        OUT_TEAM_LOGS,
+        df_logs_new.drop(columns=["game_dt"], errors="ignore"),
+        subset_keys=["event_id", "team_id"],
+        sort_cols=["game_datetime_utc", "event_id", "team", "home_away"],
+    )
+    print(f"{OUT_TEAM_LOGS} total rows: {len(df_logs_all)}")
+
+    # 4) features build from FULL logs
+    df = df_logs_all.copy()
+    df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
+    df = df.sort_values(["team", "game_dt", "event_id"])
+
+    # 4a) rolling packs overall + no-blow
+    df = _add_rolling_pack(df, group_cols=["team"], prefix="")
+    df = _add_noblow_rollups(df, group_cols=["team"], prefix="")
+
+    # home/away split rollups
+    df = _add_rolling_pack(df, group_cols=["team", "home_away"], prefix="ha_")
+    df = _add_noblow_rollups(df, group_cols=["team", "home_away"], prefix="ha_")
+
+    # 4b) rest/schedule density
+    df = _time_window_counts_per_team(df)
+
+    # 4c) merge opponent rows (needs rolling cols present)
+    df = _merge_opponent_rows(df)
+
+    # 4d) allowed rollups (defense proxies)
+    df = _add_allowed_rollups(df)
+
+    # IMPORTANT: after allowed rollups exist on each team row, merge opponent again to get opp_ftr_allowed_*
+    df = _merge_opponent_rows(df)
+
+    # 4e) SOS proxies
+    df = _add_sos_proxies(df)
+
+    # 4f) opponent-adjusted deltas
+    df = _add_opponent_adjusted_deltas(df)
+
+    # 4g) style fingerprints + matchup features
+    df = _add_style_features(df)
+
+    # 4h) append+dedupe features forever (only rows from newly pulled events)
+    new_event_ids = set(df_logs_new["event_id"].astype(str).unique().tolist())
+    df_features_new = df[df["event_id"].astype(str).isin(new_event_ids)].copy()
+
+    df_features_all = _append_dedupe_write(
+        OUT_TEAM_FEATURES,
+        df_features_new.drop(columns=["game_dt"], errors="ignore"),
+        subset_keys=["event_id", "team_id"],
+        sort_cols=["game_datetime_utc", "event_id", "team", "home_away"],
+    )
+    print(f"{OUT_TEAM_FEATURES} total rows: {len(df_features_all)}")
+
+    # 5) rebuild matchups model-ready
+    df_feat_all = df_features_all.copy()
+    m = build_matchups_model_ready(df_feat_all)
+
+    m = m.drop_duplicates(subset=["event_id"], keep="last")
+    m.to_csv(OUT_MATCHUPS, index=False)
+    print(f"{OUT_MATCHUPS} written: {len(m)} rows")
+
+    print(f"Run finished. Summary parse errors: {errors}")
+
+
+def main():
+    run_pipeline(days_back=DEFAULT_DAYS_BACK)
+
 
 if __name__ == "__main__":
-    days_back = _env_int("DAYS_BACK", 3)
-
-    build_espn_games_csv(days_back=days_back, out_csv="espn_games.csv", verbose=True)
-    build_team_game_logs_csv(days_back=days_back, out_csv="espn_team_game_logs.csv", verbose=True)
-
-    # Always refresh model-ready snapshot from the full raw file
-    build_model_ready_snapshot(
-        in_team_logs_csv="espn_team_game_logs.csv",
-        out_csv="espn_team_model_ready.csv",
-        verbose=True,
-    )
+    main()
