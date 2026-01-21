@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 213,
+    "team": "Notre Dame",
+    "conference": "ACC",
+    "trackedShots": 1019,
+    "freeThrowRate": 33.7,
+    "assistedPct": 20.6,
+    "dunks": {
+      "attempted": 23,
+      "made": 22,
+      "pct": 95.7,
+      "assisted": 19,
+      "assistedPct": 86.4
+    },
+    "layups": {
+      "attempted": 292,
+      "made": 169,
+      "pct": 57.9,
+      "assisted": 49,
+      "assistedPct": 29
+    },
+    "tipIns": {
+      "attempted": 25,
+      "made": 16,
+      "pct": 64
+    },
+    "twoPointJumpers": {
+      "attempted": 253,
+      "made": 103,
+      "pct": 40.7,
+      "assisted": 21,
+      "assistedPct": 20.4
+    },
+    "threePointJumpers": {
+      "attempted": 426,
+      "made": 154,
+      "pct": 36.2,
+      "assisted": 121,
+      "assistedPct": 78.6
+    },
+    "freeThrows": {
+      "attempted": 343,
+      "made": 239,
+      "pct": 69.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.3,
+      "layups": 28.7,
+      "tipIns": 2.5,
+      "twoPointJumpers": 24.8,
+      "threePointJumpers": 41.8
+    }
+  }
+]

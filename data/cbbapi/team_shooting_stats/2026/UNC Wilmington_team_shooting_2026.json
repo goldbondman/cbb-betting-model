@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 321,
+    "team": "UNC Wilmington",
+    "conference": "CAA",
+    "trackedShots": 1113,
+    "freeThrowRate": 43.8,
+    "assistedPct": 22.2,
+    "dunks": {
+      "attempted": 17,
+      "made": 14,
+      "pct": 82.4,
+      "assisted": 12,
+      "assistedPct": 85.7
+    },
+    "layups": {
+      "attempted": 407,
+      "made": 236,
+      "pct": 58,
+      "assisted": 87,
+      "assistedPct": 36.9
+    },
+    "tipIns": {
+      "attempted": 18,
+      "made": 14,
+      "pct": 77.8
+    },
+    "twoPointJumpers": {
+      "attempted": 273,
+      "made": 99,
+      "pct": 36.3,
+      "assisted": 29,
+      "assistedPct": 29.3
+    },
+    "threePointJumpers": {
+      "attempted": 398,
+      "made": 140,
+      "pct": 35.2,
+      "assisted": 119,
+      "assistedPct": 85
+    },
+    "freeThrows": {
+      "attempted": 488,
+      "made": 341,
+      "pct": 69.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.5,
+      "layups": 36.6,
+      "tipIns": 1.6,
+      "twoPointJumpers": 24.5,
+      "threePointJumpers": 35.8
+    }
+  }
+]

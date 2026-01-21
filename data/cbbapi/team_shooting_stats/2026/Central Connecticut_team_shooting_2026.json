@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 44,
+    "team": "Central Connecticut",
+    "conference": "NEC",
+    "trackedShots": 1008,
+    "freeThrowRate": 29.7,
+    "assistedPct": 25.6,
+    "dunks": {
+      "attempted": 68,
+      "made": 60,
+      "pct": 88.2,
+      "assisted": 50,
+      "assistedPct": 83.3
+    },
+    "layups": {
+      "attempted": 284,
+      "made": 165,
+      "pct": 58.1,
+      "assisted": 66,
+      "assistedPct": 40
+    },
+    "tipIns": {
+      "attempted": 35,
+      "made": 17,
+      "pct": 48.6
+    },
+    "twoPointJumpers": {
+      "attempted": 266,
+      "made": 103,
+      "pct": 38.7,
+      "assisted": 27,
+      "assistedPct": 26.2
+    },
+    "threePointJumpers": {
+      "attempted": 355,
+      "made": 137,
+      "pct": 38.6,
+      "assisted": 115,
+      "assistedPct": 83.9
+    },
+    "freeThrows": {
+      "attempted": 299,
+      "made": 224,
+      "pct": 74.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.7,
+      "layups": 28.2,
+      "tipIns": 3.5,
+      "twoPointJumpers": 26.4,
+      "threePointJumpers": 35.2
+    }
+  }
+]

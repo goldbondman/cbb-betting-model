@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 40,
+    "team": "California",
+    "conference": "ACC",
+    "trackedShots": 1103,
+    "freeThrowRate": 37.8,
+    "assistedPct": 21.1,
+    "dunks": {
+      "attempted": 60,
+      "made": 52,
+      "pct": 86.7,
+      "assisted": 17,
+      "assistedPct": 32.7
+    },
+    "layups": {
+      "attempted": 318,
+      "made": 168,
+      "pct": 52.8,
+      "assisted": 67,
+      "assistedPct": 39.9
+    },
+    "tipIns": {
+      "attempted": 10,
+      "made": 7,
+      "pct": 70
+    },
+    "twoPointJumpers": {
+      "attempted": 250,
+      "made": 103,
+      "pct": 41.2,
+      "assisted": 18,
+      "assistedPct": 17.5
+    },
+    "threePointJumpers": {
+      "attempted": 465,
+      "made": 169,
+      "pct": 36.3,
+      "assisted": 131,
+      "assistedPct": 77.5
+    },
+    "freeThrows": {
+      "attempted": 417,
+      "made": 330,
+      "pct": 79.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.4,
+      "layups": 28.8,
+      "tipIns": 0.9,
+      "twoPointJumpers": 22.7,
+      "threePointJumpers": 42.2
+    }
+  }
+]

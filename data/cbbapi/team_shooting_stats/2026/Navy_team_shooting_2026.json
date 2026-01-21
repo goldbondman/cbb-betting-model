@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 187,
+    "team": "Navy",
+    "conference": "Patriot",
+    "trackedShots": 982,
+    "freeThrowRate": 42.9,
+    "assistedPct": 26.2,
+    "dunks": {
+      "attempted": 15,
+      "made": 15,
+      "pct": 100,
+      "assisted": 11,
+      "assistedPct": 73.3
+    },
+    "layups": {
+      "attempted": 401,
+      "made": 226,
+      "pct": 56.4,
+      "assisted": 115,
+      "assistedPct": 50.9
+    },
+    "tipIns": {
+      "attempted": 12,
+      "made": 10,
+      "pct": 83.3
+    },
+    "twoPointJumpers": {
+      "attempted": 221,
+      "made": 77,
+      "pct": 34.8,
+      "assisted": 34,
+      "assistedPct": 44.2
+    },
+    "threePointJumpers": {
+      "attempted": 333,
+      "made": 111,
+      "pct": 33.3,
+      "assisted": 97,
+      "assistedPct": 87.4
+    },
+    "freeThrows": {
+      "attempted": 421,
+      "made": 309,
+      "pct": 73.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.5,
+      "layups": 40.8,
+      "tipIns": 1.2,
+      "twoPointJumpers": 22.5,
+      "threePointJumpers": 33.9
+    }
+  }
+]

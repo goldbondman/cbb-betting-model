@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 254,
+    "team": "Saint Peter's",
+    "conference": "MAAC",
+    "trackedShots": 1005,
+    "freeThrowRate": 36.1,
+    "assistedPct": 21.3,
+    "dunks": {
+      "attempted": 43,
+      "made": 39,
+      "pct": 90.7,
+      "assisted": 32,
+      "assistedPct": 82.1
+    },
+    "layups": {
+      "attempted": 333,
+      "made": 158,
+      "pct": 47.4,
+      "assisted": 50,
+      "assistedPct": 31.6
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 16,
+      "pct": 57.1
+    },
+    "twoPointJumpers": {
+      "attempted": 192,
+      "made": 73,
+      "pct": 38,
+      "assisted": 23,
+      "assistedPct": 31.5
+    },
+    "threePointJumpers": {
+      "attempted": 409,
+      "made": 127,
+      "pct": 31.1,
+      "assisted": 109,
+      "assistedPct": 85.8
+    },
+    "freeThrows": {
+      "attempted": 363,
+      "made": 274,
+      "pct": 75.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.3,
+      "layups": 33.1,
+      "tipIns": 2.8,
+      "twoPointJumpers": 19.1,
+      "threePointJumpers": 40.7
+    }
+  }
+]

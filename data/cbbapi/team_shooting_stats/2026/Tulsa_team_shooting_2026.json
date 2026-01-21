@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 304,
+    "team": "Tulsa",
+    "conference": "American",
+    "trackedShots": 1025,
+    "freeThrowRate": 40.3,
+    "assistedPct": 26.6,
+    "dunks": {
+      "attempted": 56,
+      "made": 47,
+      "pct": 83.9,
+      "assisted": 31,
+      "assistedPct": 66
+    },
+    "layups": {
+      "attempted": 406,
+      "made": 226,
+      "pct": 55.7,
+      "assisted": 76,
+      "assistedPct": 33.6
+    },
+    "tipIns": {
+      "attempted": 20,
+      "made": 14,
+      "pct": 70
+    },
+    "twoPointJumpers": {
+      "attempted": 97,
+      "made": 45,
+      "pct": 46.4,
+      "assisted": 10,
+      "assistedPct": 22.2
+    },
+    "threePointJumpers": {
+      "attempted": 446,
+      "made": 176,
+      "pct": 39.5,
+      "assisted": 156,
+      "assistedPct": 88.6
+    },
+    "freeThrows": {
+      "attempted": 413,
+      "made": 325,
+      "pct": 78.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.5,
+      "layups": 39.6,
+      "tipIns": 2,
+      "twoPointJumpers": 9.5,
+      "threePointJumpers": 43.5
+    }
+  }
+]

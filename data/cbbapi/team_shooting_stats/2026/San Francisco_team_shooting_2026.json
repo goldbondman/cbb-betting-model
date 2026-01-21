@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 259,
+    "team": "San Francisco",
+    "conference": "WCC",
+    "trackedShots": 1160,
+    "freeThrowRate": 37.2,
+    "assistedPct": 24.4,
+    "dunks": {
+      "attempted": 65,
+      "made": 56,
+      "pct": 86.2,
+      "assisted": 43,
+      "assistedPct": 76.8
+    },
+    "layups": {
+      "attempted": 313,
+      "made": 163,
+      "pct": 52.1,
+      "assisted": 63,
+      "assistedPct": 38.7
+    },
+    "tipIns": {
+      "attempted": 39,
+      "made": 28,
+      "pct": 71.8
+    },
+    "twoPointJumpers": {
+      "attempted": 206,
+      "made": 82,
+      "pct": 39.8,
+      "assisted": 22,
+      "assistedPct": 26.8
+    },
+    "threePointJumpers": {
+      "attempted": 537,
+      "made": 190,
+      "pct": 35.4,
+      "assisted": 155,
+      "assistedPct": 81.6
+    },
+    "freeThrows": {
+      "attempted": 431,
+      "made": 300,
+      "pct": 69.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.6,
+      "layups": 27,
+      "tipIns": 3.4,
+      "twoPointJumpers": 17.8,
+      "threePointJumpers": 46.3
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 52,
+    "team": "Clemson",
+    "conference": "ACC",
+    "trackedShots": 1147,
+    "freeThrowRate": 38.3,
+    "assistedPct": 23.1,
+    "dunks": {
+      "attempted": 66,
+      "made": 60,
+      "pct": 90.9,
+      "assisted": 47,
+      "assistedPct": 78.3
+    },
+    "layups": {
+      "attempted": 362,
+      "made": 201,
+      "pct": 55.5,
+      "assisted": 70,
+      "assistedPct": 34.8
+    },
+    "tipIns": {
+      "attempted": 27,
+      "made": 13,
+      "pct": 48.1
+    },
+    "twoPointJumpers": {
+      "attempted": 207,
+      "made": 95,
+      "pct": 45.9,
+      "assisted": 13,
+      "assistedPct": 13.7
+    },
+    "threePointJumpers": {
+      "attempted": 485,
+      "made": 162,
+      "pct": 33.4,
+      "assisted": 135,
+      "assistedPct": 83.3
+    },
+    "freeThrows": {
+      "attempted": 439,
+      "made": 318,
+      "pct": 72.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.8,
+      "layups": 31.6,
+      "tipIns": 2.4,
+      "twoPointJumpers": 18,
+      "threePointJumpers": 42.3
+    }
+  }
+]

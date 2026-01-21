@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 207,
+    "team": "Northern Colorado",
+    "conference": "Big Sky",
+    "trackedShots": 1248,
+    "freeThrowRate": 26.5,
+    "assistedPct": 27.2,
+    "dunks": {
+      "attempted": 36,
+      "made": 35,
+      "pct": 97.2,
+      "assisted": 30,
+      "assistedPct": 85.7
+    },
+    "layups": {
+      "attempted": 404,
+      "made": 247,
+      "pct": 61.1,
+      "assisted": 108,
+      "assistedPct": 43.7
+    },
+    "tipIns": {
+      "attempted": 40,
+      "made": 25,
+      "pct": 62.5
+    },
+    "twoPointJumpers": {
+      "attempted": 213,
+      "made": 98,
+      "pct": 46,
+      "assisted": 16,
+      "assistedPct": 16.3
+    },
+    "threePointJumpers": {
+      "attempted": 555,
+      "made": 203,
+      "pct": 36.6,
+      "assisted": 186,
+      "assistedPct": 91.6
+    },
+    "freeThrows": {
+      "attempted": 331,
+      "made": 250,
+      "pct": 75.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.9,
+      "layups": 32.4,
+      "tipIns": 3.2,
+      "twoPointJumpers": 17.1,
+      "threePointJumpers": 44.5
+    }
+  }
+]

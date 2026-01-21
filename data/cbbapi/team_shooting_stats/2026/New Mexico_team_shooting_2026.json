@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 191,
+    "team": "New Mexico",
+    "conference": "Mountain West",
+    "trackedShots": 1079,
+    "freeThrowRate": 36.2,
+    "assistedPct": 24,
+    "dunks": {
+      "attempted": 61,
+      "made": 55,
+      "pct": 90.2,
+      "assisted": 40,
+      "assistedPct": 72.7
+    },
+    "layups": {
+      "attempted": 329,
+      "made": 182,
+      "pct": 55.3,
+      "assisted": 54,
+      "assistedPct": 29.7
+    },
+    "tipIns": {
+      "attempted": 31,
+      "made": 19,
+      "pct": 61.3
+    },
+    "twoPointJumpers": {
+      "attempted": 160,
+      "made": 65,
+      "pct": 40.6,
+      "assisted": 14,
+      "assistedPct": 21.5
+    },
+    "threePointJumpers": {
+      "attempted": 498,
+      "made": 172,
+      "pct": 34.5,
+      "assisted": 151,
+      "assistedPct": 87.8
+    },
+    "freeThrows": {
+      "attempted": 391,
+      "made": 294,
+      "pct": 75.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.7,
+      "layups": 30.5,
+      "tipIns": 2.9,
+      "twoPointJumpers": 14.8,
+      "threePointJumpers": 46.2
+    }
+  }
+]

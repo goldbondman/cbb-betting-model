@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 287,
+    "team": "TCU",
+    "conference": "Big 12",
+    "trackedShots": 1100,
+    "freeThrowRate": 35.4,
+    "assistedPct": 26.4,
+    "dunks": {
+      "attempted": 53,
+      "made": 44,
+      "pct": 83,
+      "assisted": 33,
+      "assistedPct": 75
+    },
+    "layups": {
+      "attempted": 341,
+      "made": 203,
+      "pct": 59.5,
+      "assisted": 104,
+      "assistedPct": 51.2
+    },
+    "tipIns": {
+      "attempted": 34,
+      "made": 22,
+      "pct": 64.7
+    },
+    "twoPointJumpers": {
+      "attempted": 246,
+      "made": 95,
+      "pct": 38.6,
+      "assisted": 29,
+      "assistedPct": 30.5
+    },
+    "threePointJumpers": {
+      "attempted": 426,
+      "made": 141,
+      "pct": 33.1,
+      "assisted": 124,
+      "assistedPct": 87.9
+    },
+    "freeThrows": {
+      "attempted": 389,
+      "made": 278,
+      "pct": 71.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.8,
+      "layups": 31,
+      "tipIns": 3.1,
+      "twoPointJumpers": 22.4,
+      "threePointJumpers": 38.7
+    }
+  }
+]

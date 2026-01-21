@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 26,
+    "team": "Boston College",
+    "conference": "ACC",
+    "trackedShots": 994,
+    "freeThrowRate": 36.4,
+    "assistedPct": 19,
+    "dunks": {
+      "attempted": 46,
+      "made": 41,
+      "pct": 89.1,
+      "assisted": 35,
+      "assistedPct": 85.4
+    },
+    "layups": {
+      "attempted": 253,
+      "made": 118,
+      "pct": 46.6,
+      "assisted": 39,
+      "assistedPct": 33.1
+    },
+    "tipIns": {
+      "attempted": 37,
+      "made": 24,
+      "pct": 64.9
+    },
+    "twoPointJumpers": {
+      "attempted": 225,
+      "made": 89,
+      "pct": 39.6,
+      "assisted": 20,
+      "assistedPct": 22.5
+    },
+    "threePointJumpers": {
+      "attempted": 433,
+      "made": 127,
+      "pct": 29.3,
+      "assisted": 95,
+      "assistedPct": 74.8
+    },
+    "freeThrows": {
+      "attempted": 362,
+      "made": 241,
+      "pct": 66.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.6,
+      "layups": 25.5,
+      "tipIns": 3.7,
+      "twoPointJumpers": 22.6,
+      "threePointJumpers": 43.6
+    }
+  }
+]

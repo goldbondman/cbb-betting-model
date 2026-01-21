@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 226,
+    "team": "Penn State",
+    "conference": "Big Ten",
+    "trackedShots": 1052,
+    "freeThrowRate": 32.6,
+    "assistedPct": 22.6,
+    "dunks": {
+      "attempted": 16,
+      "made": 14,
+      "pct": 87.5,
+      "assisted": 12,
+      "assistedPct": 85.7
+    },
+    "layups": {
+      "attempted": 379,
+      "made": 225,
+      "pct": 59.4,
+      "assisted": 96,
+      "assistedPct": 42.7
+    },
+    "tipIns": {
+      "attempted": 43,
+      "made": 35,
+      "pct": 81.4
+    },
+    "twoPointJumpers": {
+      "attempted": 200,
+      "made": 87,
+      "pct": 43.5,
+      "assisted": 16,
+      "assistedPct": 18.4
+    },
+    "threePointJumpers": {
+      "attempted": 414,
+      "made": 137,
+      "pct": 33.1,
+      "assisted": 114,
+      "assistedPct": 83.2
+    },
+    "freeThrows": {
+      "attempted": 343,
+      "made": 252,
+      "pct": 73.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.5,
+      "layups": 36,
+      "tipIns": 4.1,
+      "twoPointJumpers": 19,
+      "threePointJumpers": 39.4
+    }
+  }
+]

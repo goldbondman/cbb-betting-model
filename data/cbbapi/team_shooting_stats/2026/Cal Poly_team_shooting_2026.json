@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 35,
+    "team": "Cal Poly",
+    "conference": "Big West",
+    "trackedShots": 1169,
+    "freeThrowRate": 39,
+    "assistedPct": 19.8,
+    "dunks": {
+      "attempted": 28,
+      "made": 26,
+      "pct": 92.9,
+      "assisted": 19,
+      "assistedPct": 73.1
+    },
+    "layups": {
+      "attempted": 418,
+      "made": 218,
+      "pct": 52.2,
+      "assisted": 54,
+      "assistedPct": 24.8
+    },
+    "tipIns": {
+      "attempted": 13,
+      "made": 8,
+      "pct": 61.5
+    },
+    "twoPointJumpers": {
+      "attempted": 95,
+      "made": 32,
+      "pct": 33.7,
+      "assisted": 1,
+      "assistedPct": 3.1
+    },
+    "threePointJumpers": {
+      "attempted": 615,
+      "made": 206,
+      "pct": 33.5,
+      "assisted": 157,
+      "assistedPct": 76.2
+    },
+    "freeThrows": {
+      "attempted": 456,
+      "made": 345,
+      "pct": 75.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.4,
+      "layups": 35.8,
+      "tipIns": 1.1,
+      "twoPointJumpers": 8.1,
+      "threePointJumpers": 52.6
+    }
+  }
+]

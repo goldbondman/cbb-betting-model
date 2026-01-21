@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 12,
+    "team": "Arkansas",
+    "conference": "SEC",
+    "trackedShots": 1202,
+    "freeThrowRate": 38.7,
+    "assistedPct": 27.3,
+    "dunks": {
+      "attempted": 126,
+      "made": 114,
+      "pct": 90.5,
+      "assisted": 81,
+      "assistedPct": 71.1
+    },
+    "layups": {
+      "attempted": 317,
+      "made": 184,
+      "pct": 58,
+      "assisted": 77,
+      "assistedPct": 41.8
+    },
+    "tipIns": {
+      "attempted": 41,
+      "made": 25,
+      "pct": 61
+    },
+    "twoPointJumpers": {
+      "attempted": 271,
+      "made": 96,
+      "pct": 35.4,
+      "assisted": 31,
+      "assistedPct": 32.3
+    },
+    "threePointJumpers": {
+      "attempted": 447,
+      "made": 172,
+      "pct": 38.5,
+      "assisted": 139,
+      "assistedPct": 80.8
+    },
+    "freeThrows": {
+      "attempted": 465,
+      "made": 353,
+      "pct": 75.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 10.5,
+      "layups": 26.4,
+      "tipIns": 3.4,
+      "twoPointJumpers": 22.5,
+      "threePointJumpers": 37.2
+    }
+  }
+]

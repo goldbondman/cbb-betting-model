@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 272,
+    "team": "Southeast Missouri State",
+    "conference": "OVC",
+    "trackedShots": 1203,
+    "freeThrowRate": 35.6,
+    "assistedPct": 21.9,
+    "dunks": {
+      "attempted": 69,
+      "made": 64,
+      "pct": 92.8,
+      "assisted": 41,
+      "assistedPct": 64.1
+    },
+    "layups": {
+      "attempted": 455,
+      "made": 242,
+      "pct": 53.2,
+      "assisted": 78,
+      "assistedPct": 32.2
+    },
+    "tipIns": {
+      "attempted": 29,
+      "made": 24,
+      "pct": 82.8
+    },
+    "twoPointJumpers": {
+      "attempted": 212,
+      "made": 89,
+      "pct": 42,
+      "assisted": 29,
+      "assistedPct": 32.6
+    },
+    "threePointJumpers": {
+      "attempted": 438,
+      "made": 131,
+      "pct": 29.9,
+      "assisted": 115,
+      "assistedPct": 87.8
+    },
+    "freeThrows": {
+      "attempted": 428,
+      "made": 288,
+      "pct": 67.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.7,
+      "layups": 37.8,
+      "tipIns": 2.4,
+      "twoPointJumpers": 17.6,
+      "threePointJumpers": 36.4
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 297,
+    "team": "Texas State",
+    "conference": "Sun Belt",
+    "trackedShots": 1160,
+    "freeThrowRate": 34.8,
+    "assistedPct": 22.8,
+    "dunks": {
+      "attempted": 30,
+      "made": 25,
+      "pct": 83.3,
+      "assisted": 19,
+      "assistedPct": 76
+    },
+    "layups": {
+      "attempted": 480,
+      "made": 275,
+      "pct": 57.3,
+      "assisted": 125,
+      "assistedPct": 45.5
+    },
+    "tipIns": {
+      "attempted": 37,
+      "made": 23,
+      "pct": 62.2
+    },
+    "twoPointJumpers": {
+      "attempted": 319,
+      "made": 122,
+      "pct": 38.2,
+      "assisted": 36,
+      "assistedPct": 29.5
+    },
+    "threePointJumpers": {
+      "attempted": 294,
+      "made": 97,
+      "pct": 33,
+      "assisted": 85,
+      "assistedPct": 87.6
+    },
+    "freeThrows": {
+      "attempted": 404,
+      "made": 300,
+      "pct": 74.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.6,
+      "layups": 41.4,
+      "tipIns": 3.2,
+      "twoPointJumpers": 27.5,
+      "threePointJumpers": 25.3
+    }
+  }
+]

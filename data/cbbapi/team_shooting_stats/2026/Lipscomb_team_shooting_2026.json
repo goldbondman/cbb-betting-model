@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 143,
+    "team": "Lipscomb",
+    "conference": "ASUN",
+    "trackedShots": 1195,
+    "freeThrowRate": 27.4,
+    "assistedPct": 29.2,
+    "dunks": {
+      "attempted": 33,
+      "made": 29,
+      "pct": 87.9,
+      "assisted": 23,
+      "assistedPct": 79.3
+    },
+    "layups": {
+      "attempted": 423,
+      "made": 246,
+      "pct": 58.2,
+      "assisted": 119,
+      "assistedPct": 48.4
+    },
+    "tipIns": {
+      "attempted": 31,
+      "made": 18,
+      "pct": 58.1
+    },
+    "twoPointJumpers": {
+      "attempted": 140,
+      "made": 47,
+      "pct": 33.6,
+      "assisted": 13,
+      "assistedPct": 27.7
+    },
+    "threePointJumpers": {
+      "attempted": 568,
+      "made": 207,
+      "pct": 36.4,
+      "assisted": 194,
+      "assistedPct": 93.7
+    },
+    "freeThrows": {
+      "attempted": 327,
+      "made": 249,
+      "pct": 76.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.8,
+      "layups": 35.4,
+      "tipIns": 2.6,
+      "twoPointJumpers": 11.7,
+      "threePointJumpers": 47.5
+    }
+  }
+]

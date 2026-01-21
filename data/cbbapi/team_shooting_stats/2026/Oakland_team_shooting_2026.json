@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 214,
+    "team": "Oakland",
+    "conference": "Horizon",
+    "trackedShots": 1230,
+    "freeThrowRate": 39.8,
+    "assistedPct": 23.8,
+    "dunks": {
+      "attempted": 58,
+      "made": 52,
+      "pct": 89.7,
+      "assisted": 36,
+      "assistedPct": 69.2
+    },
+    "layups": {
+      "attempted": 467,
+      "made": 263,
+      "pct": 56.3,
+      "assisted": 110,
+      "assistedPct": 41.8
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 22,
+      "pct": 73.3
+    },
+    "twoPointJumpers": {
+      "attempted": 269,
+      "made": 108,
+      "pct": 40.1,
+      "assisted": 30,
+      "assistedPct": 27.8
+    },
+    "threePointJumpers": {
+      "attempted": 406,
+      "made": 139,
+      "pct": 34.2,
+      "assisted": 117,
+      "assistedPct": 84.2
+    },
+    "freeThrows": {
+      "attempted": 490,
+      "made": 368,
+      "pct": 75.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.7,
+      "layups": 38,
+      "tipIns": 2.4,
+      "twoPointJumpers": 21.9,
+      "threePointJumpers": 33
+    }
+  }
+]

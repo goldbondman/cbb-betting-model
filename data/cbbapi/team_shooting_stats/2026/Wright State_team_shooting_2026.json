@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 357,
+    "team": "Wright State",
+    "conference": "Horizon",
+    "trackedShots": 1113,
+    "freeThrowRate": 35,
+    "assistedPct": 24.1,
+    "dunks": {
+      "attempted": 59,
+      "made": 54,
+      "pct": 91.5,
+      "assisted": 43,
+      "assistedPct": 79.6
+    },
+    "layups": {
+      "attempted": 406,
+      "made": 237,
+      "pct": 58.4,
+      "assisted": 90,
+      "assistedPct": 38
+    },
+    "tipIns": {
+      "attempted": 31,
+      "made": 19,
+      "pct": 61.3
+    },
+    "twoPointJumpers": {
+      "attempted": 239,
+      "made": 100,
+      "pct": 41.8,
+      "assisted": 22,
+      "assistedPct": 22
+    },
+    "threePointJumpers": {
+      "attempted": 378,
+      "made": 141,
+      "pct": 37.3,
+      "assisted": 113,
+      "assistedPct": 80.1
+    },
+    "freeThrows": {
+      "attempted": 390,
+      "made": 283,
+      "pct": 72.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.3,
+      "layups": 36.5,
+      "tipIns": 2.8,
+      "twoPointJumpers": 21.5,
+      "threePointJumpers": 34
+    }
+  }
+]

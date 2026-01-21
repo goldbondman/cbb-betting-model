@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 4,
+    "team": "Alabama A&M",
+    "conference": "SWAC",
+    "trackedShots": 999,
+    "freeThrowRate": 43.5,
+    "assistedPct": 20,
+    "dunks": {
+      "attempted": 37,
+      "made": 34,
+      "pct": 91.9,
+      "assisted": 30,
+      "assistedPct": 88.2
+    },
+    "layups": {
+      "attempted": 317,
+      "made": 162,
+      "pct": 51.1,
+      "assisted": 62,
+      "assistedPct": 38.3
+    },
+    "tipIns": {
+      "attempted": 39,
+      "made": 27,
+      "pct": 69.2
+    },
+    "twoPointJumpers": {
+      "attempted": 252,
+      "made": 89,
+      "pct": 35.3,
+      "assisted": 21,
+      "assistedPct": 23.6
+    },
+    "threePointJumpers": {
+      "attempted": 354,
+      "made": 110,
+      "pct": 31.1,
+      "assisted": 87,
+      "assistedPct": 79.1
+    },
+    "freeThrows": {
+      "attempted": 435,
+      "made": 319,
+      "pct": 73.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.7,
+      "layups": 31.7,
+      "tipIns": 3.9,
+      "twoPointJumpers": 25.2,
+      "threePointJumpers": 35.4
+    }
+  }
+]

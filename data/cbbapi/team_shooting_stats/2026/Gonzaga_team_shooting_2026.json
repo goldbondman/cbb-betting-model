@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 102,
+    "team": "Gonzaga",
+    "conference": "WCC",
+    "trackedShots": 1318,
+    "freeThrowRate": 30.6,
+    "assistedPct": 28.8,
+    "dunks": {
+      "attempted": 70,
+      "made": 61,
+      "pct": 87.1,
+      "assisted": 44,
+      "assistedPct": 72.1
+    },
+    "layups": {
+      "attempted": 411,
+      "made": 256,
+      "pct": 62.3,
+      "assisted": 136,
+      "assistedPct": 53.1
+    },
+    "tipIns": {
+      "attempted": 55,
+      "made": 42,
+      "pct": 76.4
+    },
+    "twoPointJumpers": {
+      "attempted": 388,
+      "made": 185,
+      "pct": 47.7,
+      "assisted": 71,
+      "assistedPct": 38.4
+    },
+    "threePointJumpers": {
+      "attempted": 394,
+      "made": 145,
+      "pct": 36.8,
+      "assisted": 129,
+      "assistedPct": 89
+    },
+    "freeThrows": {
+      "attempted": 403,
+      "made": 282,
+      "pct": 70
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.3,
+      "layups": 31.2,
+      "tipIns": 4.2,
+      "twoPointJumpers": 29.4,
+      "threePointJumpers": 29.9
+    }
+  }
+]

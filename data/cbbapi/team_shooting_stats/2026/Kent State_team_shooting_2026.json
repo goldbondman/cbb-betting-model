@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 134,
+    "team": "Kent State",
+    "conference": "MAC",
+    "trackedShots": 1198,
+    "freeThrowRate": 42,
+    "assistedPct": 28.8,
+    "dunks": {
+      "attempted": 43,
+      "made": 40,
+      "pct": 93,
+      "assisted": 34,
+      "assistedPct": 85
+    },
+    "layups": {
+      "attempted": 384,
+      "made": 241,
+      "pct": 62.8,
+      "assisted": 127,
+      "assistedPct": 52.7
+    },
+    "tipIns": {
+      "attempted": 40,
+      "made": 29,
+      "pct": 72.5
+    },
+    "twoPointJumpers": {
+      "attempted": 192,
+      "made": 68,
+      "pct": 35.4,
+      "assisted": 13,
+      "assistedPct": 19.1
+    },
+    "threePointJumpers": {
+      "attempted": 539,
+      "made": 197,
+      "pct": 36.5,
+      "assisted": 171,
+      "assistedPct": 86.8
+    },
+    "freeThrows": {
+      "attempted": 503,
+      "made": 378,
+      "pct": 75.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.6,
+      "layups": 32.1,
+      "tipIns": 3.3,
+      "twoPointJumpers": 16,
+      "threePointJumpers": 45
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 279,
+    "team": "St. John's",
+    "conference": "Big East",
+    "trackedShots": 1176,
+    "freeThrowRate": 43.9,
+    "assistedPct": 25.9,
+    "dunks": {
+      "attempted": 64,
+      "made": 57,
+      "pct": 89.1,
+      "assisted": 40,
+      "assistedPct": 70.2
+    },
+    "layups": {
+      "attempted": 433,
+      "made": 228,
+      "pct": 52.7,
+      "assisted": 99,
+      "assistedPct": 43.4
+    },
+    "tipIns": {
+      "attempted": 36,
+      "made": 26,
+      "pct": 72.2
+    },
+    "twoPointJumpers": {
+      "attempted": 228,
+      "made": 87,
+      "pct": 38.2,
+      "assisted": 41,
+      "assistedPct": 47.1
+    },
+    "threePointJumpers": {
+      "attempted": 415,
+      "made": 146,
+      "pct": 35.2,
+      "assisted": 124,
+      "assistedPct": 84.9
+    },
+    "freeThrows": {
+      "attempted": 516,
+      "made": 379,
+      "pct": 73.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.4,
+      "layups": 36.8,
+      "tipIns": 3.1,
+      "twoPointJumpers": 19.4,
+      "threePointJumpers": 35.3
+    }
+  }
+]

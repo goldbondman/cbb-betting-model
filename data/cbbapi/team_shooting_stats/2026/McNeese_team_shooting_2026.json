@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 162,
+    "team": "McNeese",
+    "conference": "Southland",
+    "trackedShots": 1075,
+    "freeThrowRate": 37.6,
+    "assistedPct": 23.3,
+    "dunks": {
+      "attempted": 52,
+      "made": 49,
+      "pct": 94.2,
+      "assisted": 37,
+      "assistedPct": 75.5
+    },
+    "layups": {
+      "attempted": 425,
+      "made": 240,
+      "pct": 56.5,
+      "assisted": 95,
+      "assistedPct": 39.6
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 22,
+      "pct": 73.3
+    },
+    "twoPointJumpers": {
+      "attempted": 196,
+      "made": 83,
+      "pct": 42.3,
+      "assisted": 21,
+      "assistedPct": 25.3
+    },
+    "threePointJumpers": {
+      "attempted": 372,
+      "made": 121,
+      "pct": 32.5,
+      "assisted": 97,
+      "assistedPct": 80.2
+    },
+    "freeThrows": {
+      "attempted": 404,
+      "made": 311,
+      "pct": 77
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.8,
+      "layups": 39.5,
+      "tipIns": 2.8,
+      "twoPointJumpers": 18.2,
+      "threePointJumpers": 34.6
+    }
+  }
+]

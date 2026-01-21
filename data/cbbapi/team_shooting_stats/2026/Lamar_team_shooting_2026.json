@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 139,
+    "team": "Lamar",
+    "conference": "Southland",
+    "trackedShots": 1139,
+    "freeThrowRate": 29.1,
+    "assistedPct": 24.3,
+    "dunks": {
+      "attempted": 45,
+      "made": 43,
+      "pct": 95.6,
+      "assisted": 33,
+      "assistedPct": 76.7
+    },
+    "layups": {
+      "attempted": 302,
+      "made": 146,
+      "pct": 48.3,
+      "assisted": 62,
+      "assistedPct": 42.5
+    },
+    "tipIns": {
+      "attempted": 33,
+      "made": 27,
+      "pct": 81.8
+    },
+    "twoPointJumpers": {
+      "attempted": 359,
+      "made": 146,
+      "pct": 40.7,
+      "assisted": 68,
+      "assistedPct": 46.6
+    },
+    "threePointJumpers": {
+      "attempted": 400,
+      "made": 134,
+      "pct": 33.5,
+      "assisted": 114,
+      "assistedPct": 85.1
+    },
+    "freeThrows": {
+      "attempted": 331,
+      "made": 236,
+      "pct": 71.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 4,
+      "layups": 26.5,
+      "tipIns": 2.9,
+      "twoPointJumpers": 31.5,
+      "threePointJumpers": 35.1
+    }
+  }
+]

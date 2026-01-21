@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 56,
+    "team": "Colorado",
+    "conference": "Big 12",
+    "trackedShots": 1147,
+    "freeThrowRate": 38.6,
+    "assistedPct": 25.5,
+    "dunks": {
+      "attempted": 40,
+      "made": 38,
+      "pct": 95,
+      "assisted": 34,
+      "assistedPct": 89.5
+    },
+    "layups": {
+      "attempted": 437,
+      "made": 246,
+      "pct": 56.3,
+      "assisted": 111,
+      "assistedPct": 45.1
+    },
+    "tipIns": {
+      "attempted": 49,
+      "made": 26,
+      "pct": 53.1
+    },
+    "twoPointJumpers": {
+      "attempted": 244,
+      "made": 104,
+      "pct": 42.6,
+      "assisted": 27,
+      "assistedPct": 26
+    },
+    "threePointJumpers": {
+      "attempted": 377,
+      "made": 132,
+      "pct": 35,
+      "assisted": 120,
+      "assistedPct": 90.9
+    },
+    "freeThrows": {
+      "attempted": 443,
+      "made": 342,
+      "pct": 77.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.5,
+      "layups": 38.1,
+      "tipIns": 4.3,
+      "twoPointJumpers": 21.3,
+      "threePointJumpers": 32.9
+    }
+  }
+]

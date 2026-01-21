@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 91,
+    "team": "Fordham",
+    "conference": "A-10",
+    "trackedShots": 1188,
+    "freeThrowRate": 22.4,
+    "assistedPct": 23.5,
+    "dunks": {
+      "attempted": 39,
+      "made": 35,
+      "pct": 89.7,
+      "assisted": 31,
+      "assistedPct": 88.6
+    },
+    "layups": {
+      "attempted": 416,
+      "made": 238,
+      "pct": 57.2,
+      "assisted": 113,
+      "assistedPct": 47.5
+    },
+    "tipIns": {
+      "attempted": 31,
+      "made": 18,
+      "pct": 58.1
+    },
+    "twoPointJumpers": {
+      "attempted": 253,
+      "made": 108,
+      "pct": 42.7,
+      "assisted": 33,
+      "assistedPct": 30.6
+    },
+    "threePointJumpers": {
+      "attempted": 449,
+      "made": 130,
+      "pct": 29,
+      "assisted": 102,
+      "assistedPct": 78.5
+    },
+    "freeThrows": {
+      "attempted": 266,
+      "made": 182,
+      "pct": 68.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.3,
+      "layups": 35,
+      "tipIns": 2.6,
+      "twoPointJumpers": 21.3,
+      "threePointJumpers": 37.8
+    }
+  }
+]

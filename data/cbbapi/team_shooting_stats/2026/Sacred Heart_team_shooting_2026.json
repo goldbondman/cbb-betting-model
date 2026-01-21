@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 250,
+    "team": "Sacred Heart",
+    "conference": "MAAC",
+    "trackedShots": 1198,
+    "freeThrowRate": 28,
+    "assistedPct": 24.7,
+    "dunks": {
+      "attempted": 33,
+      "made": 27,
+      "pct": 81.8,
+      "assisted": 20,
+      "assistedPct": 74.1
+    },
+    "layups": {
+      "attempted": 341,
+      "made": 188,
+      "pct": 55.1,
+      "assisted": 72,
+      "assistedPct": 38.3
+    },
+    "tipIns": {
+      "attempted": 35,
+      "made": 20,
+      "pct": 57.1
+    },
+    "twoPointJumpers": {
+      "attempted": 191,
+      "made": 70,
+      "pct": 36.6,
+      "assisted": 23,
+      "assistedPct": 32.9
+    },
+    "threePointJumpers": {
+      "attempted": 598,
+      "made": 216,
+      "pct": 36.1,
+      "assisted": 181,
+      "assistedPct": 83.8
+    },
+    "freeThrows": {
+      "attempted": 336,
+      "made": 262,
+      "pct": 78
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.8,
+      "layups": 28.5,
+      "tipIns": 2.9,
+      "twoPointJumpers": 15.9,
+      "threePointJumpers": 49.9
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 166,
+    "team": "Merrimack",
+    "conference": "MAAC",
+    "trackedShots": 1061,
+    "freeThrowRate": 39.4,
+    "assistedPct": 22.4,
+    "dunks": {
+      "attempted": 17,
+      "made": 14,
+      "pct": 82.4,
+      "assisted": 10,
+      "assistedPct": 71.4
+    },
+    "layups": {
+      "attempted": 395,
+      "made": 208,
+      "pct": 52.7,
+      "assisted": 78,
+      "assistedPct": 37.5
+    },
+    "tipIns": {
+      "attempted": 17,
+      "made": 9,
+      "pct": 52.9
+    },
+    "twoPointJumpers": {
+      "attempted": 130,
+      "made": 45,
+      "pct": 34.6,
+      "assisted": 11,
+      "assistedPct": 24.4
+    },
+    "threePointJumpers": {
+      "attempted": 502,
+      "made": 158,
+      "pct": 31.5,
+      "assisted": 139,
+      "assistedPct": 88
+    },
+    "freeThrows": {
+      "attempted": 418,
+      "made": 321,
+      "pct": 76.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.6,
+      "layups": 37.2,
+      "tipIns": 1.6,
+      "twoPointJumpers": 12.3,
+      "threePointJumpers": 47.3
+    }
+  }
+]

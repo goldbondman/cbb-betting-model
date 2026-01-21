@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 288,
+    "team": "Tarleton State",
+    "conference": "WAC",
+    "trackedShots": 1140,
+    "freeThrowRate": 42.5,
+    "assistedPct": 19.4,
+    "dunks": {
+      "attempted": 46,
+      "made": 36,
+      "pct": 78.3,
+      "assisted": 27,
+      "assistedPct": 75
+    },
+    "layups": {
+      "attempted": 454,
+      "made": 250,
+      "pct": 55.1,
+      "assisted": 77,
+      "assistedPct": 30.8
+    },
+    "tipIns": {
+      "attempted": 20,
+      "made": 15,
+      "pct": 75
+    },
+    "twoPointJumpers": {
+      "attempted": 329,
+      "made": 136,
+      "pct": 41.3,
+      "assisted": 36,
+      "assistedPct": 26.5
+    },
+    "threePointJumpers": {
+      "attempted": 291,
+      "made": 99,
+      "pct": 34,
+      "assisted": 81,
+      "assistedPct": 81.8
+    },
+    "freeThrows": {
+      "attempted": 485,
+      "made": 368,
+      "pct": 75.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 4,
+      "layups": 39.8,
+      "tipIns": 1.8,
+      "twoPointJumpers": 28.9,
+      "threePointJumpers": 25.5
+    }
+  }
+]

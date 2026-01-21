@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 345,
+    "team": "Weber State",
+    "conference": "Big Sky",
+    "trackedShots": 1191,
+    "freeThrowRate": 38.5,
+    "assistedPct": 23.2,
+    "dunks": {
+      "attempted": 39,
+      "made": 36,
+      "pct": 92.3,
+      "assisted": 29,
+      "assistedPct": 80.6
+    },
+    "layups": {
+      "attempted": 516,
+      "made": 285,
+      "pct": 55.2,
+      "assisted": 115,
+      "assistedPct": 40.4
+    },
+    "tipIns": {
+      "attempted": 60,
+      "made": 39,
+      "pct": 65
+    },
+    "twoPointJumpers": {
+      "attempted": 170,
+      "made": 53,
+      "pct": 31.2,
+      "assisted": 10,
+      "assistedPct": 18.9
+    },
+    "threePointJumpers": {
+      "attempted": 406,
+      "made": 144,
+      "pct": 35.5,
+      "assisted": 122,
+      "assistedPct": 84.7
+    },
+    "freeThrows": {
+      "attempted": 458,
+      "made": 325,
+      "pct": 71
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.3,
+      "layups": 43.3,
+      "tipIns": 5,
+      "twoPointJumpers": 14.3,
+      "threePointJumpers": 34.1
+    }
+  }
+]

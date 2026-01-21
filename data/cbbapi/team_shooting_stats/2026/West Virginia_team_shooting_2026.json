@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 347,
+    "team": "West Virginia",
+    "conference": "Big 12",
+    "trackedShots": 963,
+    "freeThrowRate": 39.7,
+    "assistedPct": 23.9,
+    "dunks": {
+      "attempted": 44,
+      "made": 36,
+      "pct": 81.8,
+      "assisted": 28,
+      "assistedPct": 77.8
+    },
+    "layups": {
+      "attempted": 324,
+      "made": 183,
+      "pct": 56.5,
+      "assisted": 73,
+      "assistedPct": 39.9
+    },
+    "tipIns": {
+      "attempted": 13,
+      "made": 10,
+      "pct": 76.9
+    },
+    "twoPointJumpers": {
+      "attempted": 156,
+      "made": 62,
+      "pct": 39.7,
+      "assisted": 10,
+      "assistedPct": 16.1
+    },
+    "threePointJumpers": {
+      "attempted": 426,
+      "made": 149,
+      "pct": 35,
+      "assisted": 119,
+      "assistedPct": 79.9
+    },
+    "freeThrows": {
+      "attempted": 382,
+      "made": 260,
+      "pct": 68.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.6,
+      "layups": 33.6,
+      "tipIns": 1.3,
+      "twoPointJumpers": 16.2,
+      "threePointJumpers": 44.2
+    }
+  }
+]

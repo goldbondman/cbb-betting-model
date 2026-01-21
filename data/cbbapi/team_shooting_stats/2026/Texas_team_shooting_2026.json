@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 295,
+    "team": "Texas",
+    "conference": "SEC",
+    "trackedShots": 1066,
+    "freeThrowRate": 48.3,
+    "assistedPct": 21.9,
+    "dunks": {
+      "attempted": 70,
+      "made": 61,
+      "pct": 87.1,
+      "assisted": 39,
+      "assistedPct": 63.9
+    },
+    "layups": {
+      "attempted": 338,
+      "made": 208,
+      "pct": 61.5,
+      "assisted": 72,
+      "assistedPct": 34.6
+    },
+    "tipIns": {
+      "attempted": 23,
+      "made": 12,
+      "pct": 52.2
+    },
+    "twoPointJumpers": {
+      "attempted": 226,
+      "made": 95,
+      "pct": 42,
+      "assisted": 16,
+      "assistedPct": 16.8
+    },
+    "threePointJumpers": {
+      "attempted": 409,
+      "made": 142,
+      "pct": 34.7,
+      "assisted": 106,
+      "assistedPct": 74.6
+    },
+    "freeThrows": {
+      "attempted": 515,
+      "made": 376,
+      "pct": 73
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.6,
+      "layups": 31.7,
+      "tipIns": 2.2,
+      "twoPointJumpers": 21.2,
+      "threePointJumpers": 38.4
+    }
+  }
+]

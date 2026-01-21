@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 195,
+    "team": "Nicholls",
+    "conference": "Southland",
+    "trackedShots": 1126,
+    "freeThrowRate": 35.1,
+    "assistedPct": 23.3,
+    "dunks": {
+      "attempted": 64,
+      "made": 56,
+      "pct": 87.5,
+      "assisted": 39,
+      "assistedPct": 69.6
+    },
+    "layups": {
+      "attempted": 356,
+      "made": 188,
+      "pct": 52.8,
+      "assisted": 64,
+      "assistedPct": 34
+    },
+    "tipIns": {
+      "attempted": 19,
+      "made": 14,
+      "pct": 73.7
+    },
+    "twoPointJumpers": {
+      "attempted": 174,
+      "made": 55,
+      "pct": 31.6,
+      "assisted": 9,
+      "assistedPct": 16.4
+    },
+    "threePointJumpers": {
+      "attempted": 513,
+      "made": 182,
+      "pct": 35.5,
+      "assisted": 150,
+      "assistedPct": 82.4
+    },
+    "freeThrows": {
+      "attempted": 395,
+      "made": 261,
+      "pct": 66.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.7,
+      "layups": 31.6,
+      "tipIns": 1.7,
+      "twoPointJumpers": 15.5,
+      "threePointJumpers": 45.6
+    }
+  }
+]

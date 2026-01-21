@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 253,
+    "team": "Saint Mary's",
+    "conference": "WCC",
+    "trackedShots": 1018,
+    "freeThrowRate": 40.2,
+    "assistedPct": 27.4,
+    "dunks": {
+      "attempted": 36,
+      "made": 30,
+      "pct": 83.3,
+      "assisted": 24,
+      "assistedPct": 80
+    },
+    "layups": {
+      "attempted": 352,
+      "made": 207,
+      "pct": 58.8,
+      "assisted": 91,
+      "assistedPct": 44
+    },
+    "tipIns": {
+      "attempted": 27,
+      "made": 12,
+      "pct": 44.4
+    },
+    "twoPointJumpers": {
+      "attempted": 240,
+      "made": 91,
+      "pct": 37.9,
+      "assisted": 34,
+      "assistedPct": 37.4
+    },
+    "threePointJumpers": {
+      "attempted": 363,
+      "made": 141,
+      "pct": 38.8,
+      "assisted": 130,
+      "assistedPct": 92.2
+    },
+    "freeThrows": {
+      "attempted": 409,
+      "made": 329,
+      "pct": 80.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.5,
+      "layups": 34.6,
+      "tipIns": 2.7,
+      "twoPointJumpers": 23.6,
+      "threePointJumpers": 35.7
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 260,
+    "team": "San José State",
+    "conference": "Mountain West",
+    "trackedShots": 1073,
+    "freeThrowRate": 34.4,
+    "assistedPct": 18.2,
+    "dunks": {
+      "attempted": 20,
+      "made": 17,
+      "pct": 85,
+      "assisted": 13,
+      "assistedPct": 76.5
+    },
+    "layups": {
+      "attempted": 310,
+      "made": 174,
+      "pct": 56.1,
+      "assisted": 59,
+      "assistedPct": 33.9
+    },
+    "tipIns": {
+      "attempted": 34,
+      "made": 19,
+      "pct": 55.9
+    },
+    "twoPointJumpers": {
+      "attempted": 317,
+      "made": 116,
+      "pct": 36.6,
+      "assisted": 19,
+      "assistedPct": 16.4
+    },
+    "threePointJumpers": {
+      "attempted": 392,
+      "made": 138,
+      "pct": 35.2,
+      "assisted": 104,
+      "assistedPct": 75.4
+    },
+    "freeThrows": {
+      "attempted": 369,
+      "made": 273,
+      "pct": 74
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.9,
+      "layups": 28.9,
+      "tipIns": 3.2,
+      "twoPointJumpers": 29.5,
+      "threePointJumpers": 36.5
+    }
+  }
+]

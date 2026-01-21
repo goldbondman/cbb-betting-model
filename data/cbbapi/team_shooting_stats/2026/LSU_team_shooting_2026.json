@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 136,
+    "team": "LSU",
+    "conference": "SEC",
+    "trackedShots": 984,
+    "freeThrowRate": 43.2,
+    "assistedPct": 25.1,
+    "dunks": {
+      "attempted": 51,
+      "made": 47,
+      "pct": 92.2,
+      "assisted": 40,
+      "assistedPct": 85.1
+    },
+    "layups": {
+      "attempted": 315,
+      "made": 183,
+      "pct": 58.1,
+      "assisted": 66,
+      "assistedPct": 36.1
+    },
+    "tipIns": {
+      "attempted": 41,
+      "made": 34,
+      "pct": 82.9
+    },
+    "twoPointJumpers": {
+      "attempted": 216,
+      "made": 89,
+      "pct": 41.2,
+      "assisted": 27,
+      "assistedPct": 30.3
+    },
+    "threePointJumpers": {
+      "attempted": 361,
+      "made": 126,
+      "pct": 34.9,
+      "assisted": 114,
+      "assistedPct": 90.5
+    },
+    "freeThrows": {
+      "attempted": 425,
+      "made": 325,
+      "pct": 76.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.2,
+      "layups": 32,
+      "tipIns": 4.2,
+      "twoPointJumpers": 22,
+      "threePointJumpers": 36.7
+    }
+  }
+]

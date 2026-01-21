@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 314,
+    "team": "UConn",
+    "conference": "Big East",
+    "trackedShots": 1057,
+    "freeThrowRate": 32.2,
+    "assistedPct": 29.9,
+    "dunks": {
+      "attempted": 63,
+      "made": 59,
+      "pct": 93.7,
+      "assisted": 50,
+      "assistedPct": 84.7
+    },
+    "layups": {
+      "attempted": 333,
+      "made": 202,
+      "pct": 60.7,
+      "assisted": 105,
+      "assistedPct": 52
+    },
+    "tipIns": {
+      "attempted": 38,
+      "made": 26,
+      "pct": 68.4
+    },
+    "twoPointJumpers": {
+      "attempted": 230,
+      "made": 97,
+      "pct": 42.2,
+      "assisted": 45,
+      "assistedPct": 46.4
+    },
+    "threePointJumpers": {
+      "attempted": 393,
+      "made": 136,
+      "pct": 34.6,
+      "assisted": 116,
+      "assistedPct": 85.3
+    },
+    "freeThrows": {
+      "attempted": 340,
+      "made": 241,
+      "pct": 70.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 6,
+      "layups": 31.5,
+      "tipIns": 3.6,
+      "twoPointJumpers": 21.8,
+      "threePointJumpers": 37.2
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 186,
+    "team": "NJIT",
+    "conference": "Am. East",
+    "trackedShots": 1164,
+    "freeThrowRate": 33.8,
+    "assistedPct": 17.6,
+    "dunks": {
+      "attempted": 42,
+      "made": 34,
+      "pct": 81,
+      "assisted": 25,
+      "assistedPct": 73.5
+    },
+    "layups": {
+      "attempted": 320,
+      "made": 152,
+      "pct": 47.5,
+      "assisted": 46,
+      "assistedPct": 30.3
+    },
+    "tipIns": {
+      "attempted": 12,
+      "made": 5,
+      "pct": 41.7
+    },
+    "twoPointJumpers": {
+      "attempted": 277,
+      "made": 100,
+      "pct": 36.1,
+      "assisted": 14,
+      "assistedPct": 14
+    },
+    "threePointJumpers": {
+      "attempted": 513,
+      "made": 161,
+      "pct": 31.4,
+      "assisted": 120,
+      "assistedPct": 74.5
+    },
+    "freeThrows": {
+      "attempted": 394,
+      "made": 288,
+      "pct": 73.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.6,
+      "layups": 27.5,
+      "tipIns": 1,
+      "twoPointJumpers": 23.8,
+      "threePointJumpers": 44.1
+    }
+  }
+]

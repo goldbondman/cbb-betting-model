@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 75,
+    "team": "East Tennessee State",
+    "conference": "SoCon",
+    "trackedShots": 1096,
+    "freeThrowRate": 31.7,
+    "assistedPct": 24.5,
+    "dunks": {
+      "attempted": 58,
+      "made": 53,
+      "pct": 91.4,
+      "assisted": 41,
+      "assistedPct": 77.4
+    },
+    "layups": {
+      "attempted": 386,
+      "made": 231,
+      "pct": 59.8,
+      "assisted": 89,
+      "assistedPct": 38.5
+    },
+    "tipIns": {
+      "attempted": 21,
+      "made": 18,
+      "pct": 85.7
+    },
+    "twoPointJumpers": {
+      "attempted": 208,
+      "made": 93,
+      "pct": 44.7,
+      "assisted": 15,
+      "assistedPct": 16.1
+    },
+    "threePointJumpers": {
+      "attempted": 423,
+      "made": 144,
+      "pct": 34,
+      "assisted": 124,
+      "assistedPct": 86.1
+    },
+    "freeThrows": {
+      "attempted": 347,
+      "made": 261,
+      "pct": 75.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.3,
+      "layups": 35.2,
+      "tipIns": 1.9,
+      "twoPointJumpers": 19,
+      "threePointJumpers": 38.6
+    }
+  }
+]

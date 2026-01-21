@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 203,
+    "team": "North Florida",
+    "conference": "ASUN",
+    "trackedShots": 1197,
+    "freeThrowRate": 25.1,
+    "assistedPct": 23,
+    "dunks": {
+      "attempted": 24,
+      "made": 20,
+      "pct": 83.3,
+      "assisted": 15,
+      "assistedPct": 75
+    },
+    "layups": {
+      "attempted": 371,
+      "made": 211,
+      "pct": 56.9,
+      "assisted": 82,
+      "assistedPct": 38.9
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 17,
+      "pct": 60.7
+    },
+    "twoPointJumpers": {
+      "attempted": 150,
+      "made": 63,
+      "pct": 42,
+      "assisted": 16,
+      "assistedPct": 25.4
+    },
+    "threePointJumpers": {
+      "attempted": 624,
+      "made": 219,
+      "pct": 35.1,
+      "assisted": 162,
+      "assistedPct": 74
+    },
+    "freeThrows": {
+      "attempted": 301,
+      "made": 234,
+      "pct": 77.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 2,
+      "layups": 31,
+      "tipIns": 2.3,
+      "twoPointJumpers": 12.5,
+      "threePointJumpers": 52.1
+    }
+  }
+]

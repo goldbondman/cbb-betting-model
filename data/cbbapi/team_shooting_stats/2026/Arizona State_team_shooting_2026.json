@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 10,
+    "team": "Arizona State",
+    "conference": "Big 12",
+    "trackedShots": 1068,
+    "freeThrowRate": 41.5,
+    "assistedPct": 23.9,
+    "dunks": {
+      "attempted": 61,
+      "made": 51,
+      "pct": 83.6,
+      "assisted": 36,
+      "assistedPct": 70.6
+    },
+    "layups": {
+      "attempted": 299,
+      "made": 179,
+      "pct": 59.9,
+      "assisted": 86,
+      "assistedPct": 48
+    },
+    "tipIns": {
+      "attempted": 32,
+      "made": 24,
+      "pct": 75
+    },
+    "twoPointJumpers": {
+      "attempted": 261,
+      "made": 93,
+      "pct": 35.6,
+      "assisted": 32,
+      "assistedPct": 34.4
+    },
+    "threePointJumpers": {
+      "attempted": 415,
+      "made": 140,
+      "pct": 33.7,
+      "assisted": 101,
+      "assistedPct": 72.1
+    },
+    "freeThrows": {
+      "attempted": 443,
+      "made": 333,
+      "pct": 75.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.7,
+      "layups": 28,
+      "tipIns": 3,
+      "twoPointJumpers": 24.4,
+      "threePointJumpers": 38.9
+    }
+  }
+]

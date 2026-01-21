@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 264,
+    "team": "Siena",
+    "conference": "MAAC",
+    "trackedShots": 1086,
+    "freeThrowRate": 31.2,
+    "assistedPct": 23.3,
+    "dunks": {
+      "attempted": 30,
+      "made": 28,
+      "pct": 93.3,
+      "assisted": 26,
+      "assistedPct": 92.9
+    },
+    "layups": {
+      "attempted": 400,
+      "made": 220,
+      "pct": 55,
+      "assisted": 101,
+      "assistedPct": 45.9
+    },
+    "tipIns": {
+      "attempted": 23,
+      "made": 13,
+      "pct": 56.5
+    },
+    "twoPointJumpers": {
+      "attempted": 287,
+      "made": 126,
+      "pct": 43.9,
+      "assisted": 25,
+      "assistedPct": 19.8
+    },
+    "threePointJumpers": {
+      "attempted": 346,
+      "made": 107,
+      "pct": 30.9,
+      "assisted": 101,
+      "assistedPct": 94.4
+    },
+    "freeThrows": {
+      "attempted": 339,
+      "made": 250,
+      "pct": 73.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.8,
+      "layups": 36.8,
+      "tipIns": 2.1,
+      "twoPointJumpers": 26.4,
+      "threePointJumpers": 31.9
+    }
+  }
+]

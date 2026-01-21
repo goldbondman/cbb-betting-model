@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 299,
+    "team": "The Citadel",
+    "conference": "SoCon",
+    "trackedShots": 1104,
+    "freeThrowRate": 28.4,
+    "assistedPct": 21.1,
+    "dunks": {
+      "attempted": 31,
+      "made": 27,
+      "pct": 87.1,
+      "assisted": 15,
+      "assistedPct": 55.6
+    },
+    "layups": {
+      "attempted": 308,
+      "made": 163,
+      "pct": 52.9,
+      "assisted": 46,
+      "assistedPct": 28.2
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 26,
+      "pct": 86.7
+    },
+    "twoPointJumpers": {
+      "attempted": 191,
+      "made": 73,
+      "pct": 38.2,
+      "assisted": 7,
+      "assistedPct": 9.6
+    },
+    "threePointJumpers": {
+      "attempted": 544,
+      "made": 180,
+      "pct": 33.1,
+      "assisted": 165,
+      "assistedPct": 91.7
+    },
+    "freeThrows": {
+      "attempted": 313,
+      "made": 221,
+      "pct": 70.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.8,
+      "layups": 27.9,
+      "tipIns": 2.7,
+      "twoPointJumpers": 17.3,
+      "threePointJumpers": 49.3
+    }
+  }
+]

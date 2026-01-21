@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 21,
+    "team": "Bellarmine",
+    "conference": "ASUN",
+    "trackedShots": 967,
+    "freeThrowRate": 38.9,
+    "assistedPct": 26.5,
+    "dunks": {
+      "attempted": 27,
+      "made": 25,
+      "pct": 92.6,
+      "assisted": 14,
+      "assistedPct": 56
+    },
+    "layups": {
+      "attempted": 416,
+      "made": 268,
+      "pct": 64.4,
+      "assisted": 110,
+      "assistedPct": 41
+    },
+    "tipIns": {
+      "attempted": 23,
+      "made": 16,
+      "pct": 69.6
+    },
+    "twoPointJumpers": {
+      "attempted": 107,
+      "made": 42,
+      "pct": 39.3,
+      "assisted": 5,
+      "assistedPct": 11.9
+    },
+    "threePointJumpers": {
+      "attempted": 394,
+      "made": 136,
+      "pct": 34.5,
+      "assisted": 127,
+      "assistedPct": 93.4
+    },
+    "freeThrows": {
+      "attempted": 376,
+      "made": 290,
+      "pct": 77.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.8,
+      "layups": 43,
+      "tipIns": 2.4,
+      "twoPointJumpers": 11.1,
+      "threePointJumpers": 40.7
+    }
+  }
+]

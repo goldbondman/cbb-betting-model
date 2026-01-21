@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 189,
+    "team": "Nevada",
+    "conference": "Mountain West",
+    "trackedShots": 1015,
+    "freeThrowRate": 46.4,
+    "assistedPct": 24.9,
+    "dunks": {
+      "attempted": 25,
+      "made": 23,
+      "pct": 92,
+      "assisted": 13,
+      "assistedPct": 56.5
+    },
+    "layups": {
+      "attempted": 339,
+      "made": 169,
+      "pct": 49.9,
+      "assisted": 71,
+      "assistedPct": 42
+    },
+    "tipIns": {
+      "attempted": 31,
+      "made": 13,
+      "pct": 41.9
+    },
+    "twoPointJumpers": {
+      "attempted": 293,
+      "made": 113,
+      "pct": 38.6,
+      "assisted": 51,
+      "assistedPct": 45.1
+    },
+    "threePointJumpers": {
+      "attempted": 327,
+      "made": 127,
+      "pct": 38.8,
+      "assisted": 118,
+      "assistedPct": 92.9
+    },
+    "freeThrows": {
+      "attempted": 471,
+      "made": 360,
+      "pct": 76.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.5,
+      "layups": 33.4,
+      "tipIns": 3.1,
+      "twoPointJumpers": 28.9,
+      "threePointJumpers": 32.2
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 120,
+    "team": "Incarnate Word",
+    "conference": "Southland",
+    "trackedShots": 1150,
+    "freeThrowRate": 32.3,
+    "assistedPct": 19.7,
+    "dunks": {
+      "attempted": 28,
+      "made": 24,
+      "pct": 85.7,
+      "assisted": 16,
+      "assistedPct": 66.7
+    },
+    "layups": {
+      "attempted": 387,
+      "made": 203,
+      "pct": 52.5,
+      "assisted": 73,
+      "assistedPct": 36
+    },
+    "tipIns": {
+      "attempted": 29,
+      "made": 22,
+      "pct": 75.9
+    },
+    "twoPointJumpers": {
+      "attempted": 270,
+      "made": 100,
+      "pct": 37,
+      "assisted": 15,
+      "assistedPct": 15
+    },
+    "threePointJumpers": {
+      "attempted": 436,
+      "made": 162,
+      "pct": 37.2,
+      "assisted": 122,
+      "assistedPct": 75.3
+    },
+    "freeThrows": {
+      "attempted": 372,
+      "made": 264,
+      "pct": 71
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.4,
+      "layups": 33.7,
+      "tipIns": 2.5,
+      "twoPointJumpers": 23.5,
+      "threePointJumpers": 37.9
+    }
+  }
+]

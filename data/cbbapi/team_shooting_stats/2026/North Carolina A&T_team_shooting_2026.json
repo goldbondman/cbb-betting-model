@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 198,
+    "team": "North Carolina A&T",
+    "conference": "CAA",
+    "trackedShots": 954,
+    "freeThrowRate": 48.3,
+    "assistedPct": 22.2,
+    "dunks": {
+      "attempted": 35,
+      "made": 34,
+      "pct": 97.1,
+      "assisted": 24,
+      "assistedPct": 70.6
+    },
+    "layups": {
+      "attempted": 313,
+      "made": 177,
+      "pct": 56.5,
+      "assisted": 73,
+      "assistedPct": 41.2
+    },
+    "tipIns": {
+      "attempted": 16,
+      "made": 13,
+      "pct": 81.3
+    },
+    "twoPointJumpers": {
+      "attempted": 272,
+      "made": 106,
+      "pct": 39,
+      "assisted": 32,
+      "assistedPct": 30.2
+    },
+    "threePointJumpers": {
+      "attempted": 318,
+      "made": 101,
+      "pct": 31.8,
+      "assisted": 83,
+      "assistedPct": 82.2
+    },
+    "freeThrows": {
+      "attempted": 461,
+      "made": 325,
+      "pct": 70.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.7,
+      "layups": 32.8,
+      "tipIns": 1.7,
+      "twoPointJumpers": 28.5,
+      "threePointJumpers": 33.3
+    }
+  }
+]

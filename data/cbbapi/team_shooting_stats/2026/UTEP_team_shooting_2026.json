@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 327,
+    "team": "UTEP",
+    "conference": "CUSA",
+    "trackedShots": 1036,
+    "freeThrowRate": 33.5,
+    "assistedPct": 21,
+    "dunks": {
+      "attempted": 40,
+      "made": 35,
+      "pct": 87.5,
+      "assisted": 30,
+      "assistedPct": 85.7
+    },
+    "layups": {
+      "attempted": 275,
+      "made": 167,
+      "pct": 60.7,
+      "assisted": 50,
+      "assistedPct": 29.9
+    },
+    "tipIns": {
+      "attempted": 20,
+      "made": 15,
+      "pct": 75
+    },
+    "twoPointJumpers": {
+      "attempted": 321,
+      "made": 110,
+      "pct": 34.3,
+      "assisted": 34,
+      "assistedPct": 30.9
+    },
+    "threePointJumpers": {
+      "attempted": 380,
+      "made": 123,
+      "pct": 32.4,
+      "assisted": 104,
+      "assistedPct": 84.6
+    },
+    "freeThrows": {
+      "attempted": 347,
+      "made": 233,
+      "pct": 67.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.9,
+      "layups": 26.5,
+      "tipIns": 1.9,
+      "twoPointJumpers": 31,
+      "threePointJumpers": 36.7
+    }
+  }
+]

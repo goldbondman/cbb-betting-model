@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 42,
+    "team": "Canisius",
+    "conference": "MAAC",
+    "trackedShots": 1010,
+    "freeThrowRate": 34.6,
+    "assistedPct": 22.2,
+    "dunks": {
+      "attempted": 27,
+      "made": 21,
+      "pct": 77.8,
+      "assisted": 18,
+      "assistedPct": 85.7
+    },
+    "layups": {
+      "attempted": 331,
+      "made": 146,
+      "pct": 44.1,
+      "assisted": 60,
+      "assistedPct": 41.1
+    },
+    "tipIns": {
+      "attempted": 24,
+      "made": 10,
+      "pct": 41.7
+    },
+    "twoPointJumpers": {
+      "attempted": 238,
+      "made": 95,
+      "pct": 39.9,
+      "assisted": 39,
+      "assistedPct": 41.1
+    },
+    "threePointJumpers": {
+      "attempted": 390,
+      "made": 132,
+      "pct": 33.8,
+      "assisted": 107,
+      "assistedPct": 81.1
+    },
+    "freeThrows": {
+      "attempted": 349,
+      "made": 248,
+      "pct": 71.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.7,
+      "layups": 32.8,
+      "tipIns": 2.4,
+      "twoPointJumpers": 23.6,
+      "threePointJumpers": 38.6
+    }
+  }
+]

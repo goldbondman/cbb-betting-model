@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 20,
+    "team": "Baylor",
+    "conference": "Big 12",
+    "trackedShots": 1119,
+    "freeThrowRate": 37.9,
+    "assistedPct": 25.8,
+    "dunks": {
+      "attempted": 77,
+      "made": 65,
+      "pct": 84.4,
+      "assisted": 49,
+      "assistedPct": 75.4
+    },
+    "layups": {
+      "attempted": 226,
+      "made": 135,
+      "pct": 59.7,
+      "assisted": 59,
+      "assistedPct": 43.7
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 17,
+      "pct": 56.7
+    },
+    "twoPointJumpers": {
+      "attempted": 362,
+      "made": 175,
+      "pct": 48.3,
+      "assisted": 53,
+      "assistedPct": 30.3
+    },
+    "threePointJumpers": {
+      "attempted": 424,
+      "made": 155,
+      "pct": 36.6,
+      "assisted": 128,
+      "assistedPct": 82.6
+    },
+    "freeThrows": {
+      "attempted": 424,
+      "made": 305,
+      "pct": 71.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.9,
+      "layups": 20.2,
+      "tipIns": 2.7,
+      "twoPointJumpers": 32.4,
+      "threePointJumpers": 37.9
+    }
+  }
+]

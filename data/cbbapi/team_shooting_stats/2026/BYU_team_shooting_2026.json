@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 18,
+    "team": "BYU",
+    "conference": "Big 12",
+    "trackedShots": 1118,
+    "freeThrowRate": 36.3,
+    "assistedPct": 23.6,
+    "dunks": {
+      "attempted": 65,
+      "made": 53,
+      "pct": 81.5,
+      "assisted": 36,
+      "assistedPct": 67.9
+    },
+    "layups": {
+      "attempted": 291,
+      "made": 188,
+      "pct": 64.6,
+      "assisted": 55,
+      "assistedPct": 29.3
+    },
+    "tipIns": {
+      "attempted": 43,
+      "made": 30,
+      "pct": 69.8
+    },
+    "twoPointJumpers": {
+      "attempted": 266,
+      "made": 116,
+      "pct": 43.6,
+      "assisted": 33,
+      "assistedPct": 28.4
+    },
+    "threePointJumpers": {
+      "attempted": 453,
+      "made": 160,
+      "pct": 35.3,
+      "assisted": 140,
+      "assistedPct": 87.5
+    },
+    "freeThrows": {
+      "attempted": 406,
+      "made": 305,
+      "pct": 75.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.8,
+      "layups": 26,
+      "tipIns": 3.8,
+      "twoPointJumpers": 23.8,
+      "threePointJumpers": 40.5
+    }
+  }
+]

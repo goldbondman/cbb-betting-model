@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 137,
+    "team": "La Salle",
+    "conference": "A-10",
+    "trackedShots": 1056,
+    "freeThrowRate": 36.7,
+    "assistedPct": 23.9,
+    "dunks": {
+      "attempted": 26,
+      "made": 24,
+      "pct": 92.3,
+      "assisted": 21,
+      "assistedPct": 87.5
+    },
+    "layups": {
+      "attempted": 338,
+      "made": 178,
+      "pct": 52.7,
+      "assisted": 94,
+      "assistedPct": 52.8
+    },
+    "tipIns": {
+      "attempted": 47,
+      "made": 28,
+      "pct": 59.6
+    },
+    "twoPointJumpers": {
+      "attempted": 328,
+      "made": 120,
+      "pct": 36.6,
+      "assisted": 50,
+      "assistedPct": 41.7
+    },
+    "threePointJumpers": {
+      "attempted": 317,
+      "made": 98,
+      "pct": 30.9,
+      "assisted": 87,
+      "assistedPct": 88.8
+    },
+    "freeThrows": {
+      "attempted": 388,
+      "made": 280,
+      "pct": 72.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.5,
+      "layups": 32,
+      "tipIns": 4.5,
+      "twoPointJumpers": 31.1,
+      "threePointJumpers": 30
+    }
+  }
+]

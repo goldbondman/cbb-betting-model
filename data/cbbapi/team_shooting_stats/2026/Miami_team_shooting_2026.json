@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 168,
+    "team": "Miami",
+    "conference": "ACC",
+    "trackedShots": 1164,
+    "freeThrowRate": 37.9,
+    "assistedPct": 27.8,
+    "dunks": {
+      "attempted": 100,
+      "made": 84,
+      "pct": 84,
+      "assisted": 71,
+      "assistedPct": 84.5
+    },
+    "layups": {
+      "attempted": 420,
+      "made": 253,
+      "pct": 60.2,
+      "assisted": 109,
+      "assistedPct": 43.1
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 21,
+      "pct": 70
+    },
+    "twoPointJumpers": {
+      "attempted": 218,
+      "made": 99,
+      "pct": 45.4,
+      "assisted": 27,
+      "assistedPct": 27.3
+    },
+    "threePointJumpers": {
+      "attempted": 396,
+      "made": 132,
+      "pct": 33.3,
+      "assisted": 117,
+      "assistedPct": 88.6
+    },
+    "freeThrows": {
+      "attempted": 441,
+      "made": 304,
+      "pct": 68.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 8.6,
+      "layups": 36.1,
+      "tipIns": 2.6,
+      "twoPointJumpers": 18.7,
+      "threePointJumpers": 34
+    }
+  }
+]

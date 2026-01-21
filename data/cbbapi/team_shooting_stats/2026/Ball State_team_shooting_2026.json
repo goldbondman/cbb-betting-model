@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 19,
+    "team": "Ball State",
+    "conference": "MAC",
+    "trackedShots": 1021,
+    "freeThrowRate": 34.1,
+    "assistedPct": 20.8,
+    "dunks": {
+      "attempted": 16,
+      "made": 13,
+      "pct": 81.3,
+      "assisted": 10,
+      "assistedPct": 76.9
+    },
+    "layups": {
+      "attempted": 375,
+      "made": 198,
+      "pct": 52.8,
+      "assisted": 75,
+      "assistedPct": 37.9
+    },
+    "tipIns": {
+      "attempted": 21,
+      "made": 17,
+      "pct": 81
+    },
+    "twoPointJumpers": {
+      "attempted": 209,
+      "made": 77,
+      "pct": 36.8,
+      "assisted": 23,
+      "assistedPct": 29.9
+    },
+    "threePointJumpers": {
+      "attempted": 400,
+      "made": 124,
+      "pct": 31,
+      "assisted": 104,
+      "assistedPct": 83.9
+    },
+    "freeThrows": {
+      "attempted": 348,
+      "made": 245,
+      "pct": 70.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.6,
+      "layups": 36.7,
+      "tipIns": 2.1,
+      "twoPointJumpers": 20.5,
+      "threePointJumpers": 39.2
+    }
+  }
+]

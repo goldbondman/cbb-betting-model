@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 225,
+    "team": "Pacific",
+    "conference": "WCC",
+    "trackedShots": 1187,
+    "freeThrowRate": 32.9,
+    "assistedPct": 25.4,
+    "dunks": {
+      "attempted": 46,
+      "made": 39,
+      "pct": 84.8,
+      "assisted": 29,
+      "assistedPct": 74.4
+    },
+    "layups": {
+      "attempted": 411,
+      "made": 229,
+      "pct": 55.7,
+      "assisted": 101,
+      "assistedPct": 44.1
+    },
+    "tipIns": {
+      "attempted": 37,
+      "made": 25,
+      "pct": 67.6
+    },
+    "twoPointJumpers": {
+      "attempted": 246,
+      "made": 112,
+      "pct": 45.5,
+      "assisted": 33,
+      "assistedPct": 29.5
+    },
+    "threePointJumpers": {
+      "attempted": 447,
+      "made": 160,
+      "pct": 35.8,
+      "assisted": 138,
+      "assistedPct": 86.3
+    },
+    "freeThrows": {
+      "attempted": 390,
+      "made": 301,
+      "pct": 77.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.9,
+      "layups": 34.6,
+      "tipIns": 3.1,
+      "twoPointJumpers": 20.7,
+      "threePointJumpers": 37.7
+    }
+  }
+]

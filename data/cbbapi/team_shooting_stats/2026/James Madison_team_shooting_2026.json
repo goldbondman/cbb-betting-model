@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 129,
+    "team": "James Madison",
+    "conference": "Sun Belt",
+    "trackedShots": 1098,
+    "freeThrowRate": 35.3,
+    "assistedPct": 22.4,
+    "dunks": {
+      "attempted": 34,
+      "made": 32,
+      "pct": 94.1,
+      "assisted": 27,
+      "assistedPct": 84.4
+    },
+    "layups": {
+      "attempted": 365,
+      "made": 200,
+      "pct": 54.8,
+      "assisted": 69,
+      "assistedPct": 34.5
+    },
+    "tipIns": {
+      "attempted": 32,
+      "made": 22,
+      "pct": 68.8
+    },
+    "twoPointJumpers": {
+      "attempted": 179,
+      "made": 56,
+      "pct": 31.3,
+      "assisted": 9,
+      "assistedPct": 16.1
+    },
+    "threePointJumpers": {
+      "attempted": 488,
+      "made": 171,
+      "pct": 35,
+      "assisted": 141,
+      "assistedPct": 82.5
+    },
+    "freeThrows": {
+      "attempted": 388,
+      "made": 276,
+      "pct": 71.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.1,
+      "layups": 33.2,
+      "tipIns": 2.9,
+      "twoPointJumpers": 16.3,
+      "threePointJumpers": 44.4
+    }
+  }
+]

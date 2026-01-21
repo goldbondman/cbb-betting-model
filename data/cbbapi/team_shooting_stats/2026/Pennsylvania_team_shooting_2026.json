@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 227,
+    "team": "Pennsylvania",
+    "conference": "Ivy",
+    "trackedShots": 1014,
+    "freeThrowRate": 39.7,
+    "assistedPct": 23.9,
+    "dunks": {
+      "attempted": 17,
+      "made": 14,
+      "pct": 82.4,
+      "assisted": 10,
+      "assistedPct": 71.4
+    },
+    "layups": {
+      "attempted": 330,
+      "made": 172,
+      "pct": 52.1,
+      "assisted": 66,
+      "assistedPct": 38.4
+    },
+    "tipIns": {
+      "attempted": 24,
+      "made": 18,
+      "pct": 75
+    },
+    "twoPointJumpers": {
+      "attempted": 297,
+      "made": 113,
+      "pct": 38,
+      "assisted": 54,
+      "assistedPct": 47.8
+    },
+    "threePointJumpers": {
+      "attempted": 346,
+      "made": 137,
+      "pct": 39.6,
+      "assisted": 112,
+      "assistedPct": 81.8
+    },
+    "freeThrows": {
+      "attempted": 403,
+      "made": 283,
+      "pct": 70.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.7,
+      "layups": 32.5,
+      "tipIns": 2.4,
+      "twoPointJumpers": 29.3,
+      "threePointJumpers": 34.1
+    }
+  }
+]

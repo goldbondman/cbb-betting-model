@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 342,
+    "team": "Wake Forest",
+    "conference": "ACC",
+    "trackedShots": 1233,
+    "freeThrowRate": 32.2,
+    "assistedPct": 24,
+    "dunks": {
+      "attempted": 101,
+      "made": 88,
+      "pct": 87.1,
+      "assisted": 65,
+      "assistedPct": 73.9
+    },
+    "layups": {
+      "attempted": 290,
+      "made": 150,
+      "pct": 51.7,
+      "assisted": 54,
+      "assistedPct": 36
+    },
+    "tipIns": {
+      "attempted": 36,
+      "made": 25,
+      "pct": 69.4
+    },
+    "twoPointJumpers": {
+      "attempted": 259,
+      "made": 112,
+      "pct": 43.2,
+      "assisted": 27,
+      "assistedPct": 24.1
+    },
+    "threePointJumpers": {
+      "attempted": 547,
+      "made": 184,
+      "pct": 33.6,
+      "assisted": 150,
+      "assistedPct": 81.5
+    },
+    "freeThrows": {
+      "attempted": 397,
+      "made": 299,
+      "pct": 75.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 8.2,
+      "layups": 23.5,
+      "tipIns": 2.9,
+      "twoPointJumpers": 21,
+      "threePointJumpers": 44.4
+    }
+  }
+]

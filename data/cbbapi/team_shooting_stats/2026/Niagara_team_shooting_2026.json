@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 194,
+    "team": "Niagara",
+    "conference": "MAAC",
+    "trackedShots": 974,
+    "freeThrowRate": 26.3,
+    "assistedPct": 24.3,
+    "dunks": {
+      "attempted": 30,
+      "made": 23,
+      "pct": 76.7,
+      "assisted": 19,
+      "assistedPct": 82.6
+    },
+    "layups": {
+      "attempted": 394,
+      "made": 204,
+      "pct": 51.8,
+      "assisted": 95,
+      "assistedPct": 46.6
+    },
+    "tipIns": {
+      "attempted": 14,
+      "made": 10,
+      "pct": 71.4
+    },
+    "twoPointJumpers": {
+      "attempted": 147,
+      "made": 54,
+      "pct": 36.7,
+      "assisted": 19,
+      "assistedPct": 35.2
+    },
+    "threePointJumpers": {
+      "attempted": 389,
+      "made": 121,
+      "pct": 31.1,
+      "assisted": 104,
+      "assistedPct": 86
+    },
+    "freeThrows": {
+      "attempted": 256,
+      "made": 187,
+      "pct": 73
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.1,
+      "layups": 40.5,
+      "tipIns": 1.4,
+      "twoPointJumpers": 15.1,
+      "threePointJumpers": 39.9
+    }
+  }
+]

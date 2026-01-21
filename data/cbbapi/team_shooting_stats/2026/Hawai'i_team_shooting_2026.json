@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 108,
+    "team": "Hawai'i",
+    "conference": "Big West",
+    "trackedShots": 980,
+    "freeThrowRate": 42.2,
+    "assistedPct": 24.9,
+    "dunks": {
+      "attempted": 35,
+      "made": 28,
+      "pct": 80,
+      "assisted": 18,
+      "assistedPct": 64.3
+    },
+    "layups": {
+      "attempted": 395,
+      "made": 239,
+      "pct": 60.5,
+      "assisted": 106,
+      "assistedPct": 44.4
+    },
+    "tipIns": {
+      "attempted": 21,
+      "made": 14,
+      "pct": 66.7
+    },
+    "twoPointJumpers": {
+      "attempted": 141,
+      "made": 55,
+      "pct": 39,
+      "assisted": 19,
+      "assistedPct": 34.5
+    },
+    "threePointJumpers": {
+      "attempted": 388,
+      "made": 123,
+      "pct": 31.7,
+      "assisted": 101,
+      "assistedPct": 82.1
+    },
+    "freeThrows": {
+      "attempted": 414,
+      "made": 300,
+      "pct": 72.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.6,
+      "layups": 40.3,
+      "tipIns": 2.1,
+      "twoPointJumpers": 14.4,
+      "threePointJumpers": 39.6
+    }
+  }
+]

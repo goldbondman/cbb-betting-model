@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 73,
+    "team": "Duquesne",
+    "conference": "A-10",
+    "trackedShots": 1150,
+    "freeThrowRate": 38.2,
+    "assistedPct": 27.7,
+    "dunks": {
+      "attempted": 56,
+      "made": 44,
+      "pct": 78.6,
+      "assisted": 36,
+      "assistedPct": 81.8
+    },
+    "layups": {
+      "attempted": 416,
+      "made": 254,
+      "pct": 61.1,
+      "assisted": 101,
+      "assistedPct": 39.8
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 18,
+      "pct": 64.3
+    },
+    "twoPointJumpers": {
+      "attempted": 141,
+      "made": 61,
+      "pct": 43.3,
+      "assisted": 21,
+      "assistedPct": 34.4
+    },
+    "threePointJumpers": {
+      "attempted": 509,
+      "made": 177,
+      "pct": 34.8,
+      "assisted": 161,
+      "assistedPct": 91
+    },
+    "freeThrows": {
+      "attempted": 439,
+      "made": 312,
+      "pct": 71.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.9,
+      "layups": 36.2,
+      "tipIns": 2.4,
+      "twoPointJumpers": 12.3,
+      "threePointJumpers": 44.3
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 81,
+    "team": "Elon",
+    "conference": "CAA",
+    "trackedShots": 1186,
+    "freeThrowRate": 34.2,
+    "assistedPct": 26.5,
+    "dunks": {
+      "attempted": 31,
+      "made": 28,
+      "pct": 90.3,
+      "assisted": 19,
+      "assistedPct": 67.9
+    },
+    "layups": {
+      "attempted": 487,
+      "made": 295,
+      "pct": 60.6,
+      "assisted": 116,
+      "assistedPct": 39.3
+    },
+    "tipIns": {
+      "attempted": 29,
+      "made": 17,
+      "pct": 58.6
+    },
+    "twoPointJumpers": {
+      "attempted": 129,
+      "made": 46,
+      "pct": 35.7,
+      "assisted": 11,
+      "assistedPct": 23.9
+    },
+    "threePointJumpers": {
+      "attempted": 510,
+      "made": 186,
+      "pct": 36.5,
+      "assisted": 168,
+      "assistedPct": 90.3
+    },
+    "freeThrows": {
+      "attempted": 406,
+      "made": 291,
+      "pct": 71.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.6,
+      "layups": 41.1,
+      "tipIns": 2.4,
+      "twoPointJumpers": 10.9,
+      "threePointJumpers": 43
+    }
+  }
+]

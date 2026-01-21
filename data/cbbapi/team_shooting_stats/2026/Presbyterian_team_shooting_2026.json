@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 233,
+    "team": "Presbyterian",
+    "conference": "Big South",
+    "trackedShots": 1095,
+    "freeThrowRate": 38.7,
+    "assistedPct": 24,
+    "dunks": {
+      "attempted": 75,
+      "made": 69,
+      "pct": 92,
+      "assisted": 51,
+      "assistedPct": 73.9
+    },
+    "layups": {
+      "attempted": 358,
+      "made": 195,
+      "pct": 54.5,
+      "assisted": 85,
+      "assistedPct": 43.6
+    },
+    "tipIns": {
+      "attempted": 42,
+      "made": 33,
+      "pct": 78.6
+    },
+    "twoPointJumpers": {
+      "attempted": 277,
+      "made": 109,
+      "pct": 39.4,
+      "assisted": 34,
+      "assistedPct": 31.2
+    },
+    "threePointJumpers": {
+      "attempted": 343,
+      "made": 109,
+      "pct": 31.8,
+      "assisted": 93,
+      "assistedPct": 85.3
+    },
+    "freeThrows": {
+      "attempted": 424,
+      "made": 281,
+      "pct": 66.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.8,
+      "layups": 32.7,
+      "tipIns": 3.8,
+      "twoPointJumpers": 25.3,
+      "threePointJumpers": 31.3
+    }
+  }
+]

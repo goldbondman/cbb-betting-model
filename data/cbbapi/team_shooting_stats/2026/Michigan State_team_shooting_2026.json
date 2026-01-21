@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 169,
+    "team": "Michigan State",
+    "conference": "Big Ten",
+    "trackedShots": 1054,
+    "freeThrowRate": 37.9,
+    "assistedPct": 31.2,
+    "dunks": {
+      "attempted": 81,
+      "made": 73,
+      "pct": 90.1,
+      "assisted": 66,
+      "assistedPct": 90.4
+    },
+    "layups": {
+      "attempted": 257,
+      "made": 154,
+      "pct": 59.9,
+      "assisted": 79,
+      "assistedPct": 51.3
+    },
+    "tipIns": {
+      "attempted": 18,
+      "made": 13,
+      "pct": 72.2
+    },
+    "twoPointJumpers": {
+      "attempted": 303,
+      "made": 117,
+      "pct": 38.6,
+      "assisted": 54,
+      "assistedPct": 46.2
+    },
+    "threePointJumpers": {
+      "attempted": 395,
+      "made": 138,
+      "pct": 34.9,
+      "assisted": 130,
+      "assistedPct": 94.2
+    },
+    "freeThrows": {
+      "attempted": 399,
+      "made": 289,
+      "pct": 72.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 7.7,
+      "layups": 24.4,
+      "tipIns": 1.7,
+      "twoPointJumpers": 28.7,
+      "threePointJumpers": 37.5
+    }
+  }
+]

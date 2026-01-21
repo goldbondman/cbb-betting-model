@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 163,
+    "team": "Memphis",
+    "conference": "American",
+    "trackedShots": 1035,
+    "freeThrowRate": 34,
+    "assistedPct": 23.6,
+    "dunks": {
+      "attempted": 41,
+      "made": 29,
+      "pct": 70.7,
+      "assisted": 21,
+      "assistedPct": 72.4
+    },
+    "layups": {
+      "attempted": 322,
+      "made": 183,
+      "pct": 56.8,
+      "assisted": 90,
+      "assistedPct": 49.2
+    },
+    "tipIns": {
+      "attempted": 45,
+      "made": 26,
+      "pct": 57.8
+    },
+    "twoPointJumpers": {
+      "attempted": 254,
+      "made": 88,
+      "pct": 34.6,
+      "assisted": 25,
+      "assistedPct": 28.4
+    },
+    "threePointJumpers": {
+      "attempted": 373,
+      "made": 124,
+      "pct": 33.2,
+      "assisted": 108,
+      "assistedPct": 87.1
+    },
+    "freeThrows": {
+      "attempted": 352,
+      "made": 242,
+      "pct": 68.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 4,
+      "layups": 31.1,
+      "tipIns": 4.3,
+      "twoPointJumpers": 24.5,
+      "threePointJumpers": 36
+    }
+  }
+]

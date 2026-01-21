@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 145,
+    "team": "Long Beach State",
+    "conference": "Big West",
+    "trackedShots": 1160,
+    "freeThrowRate": 28.7,
+    "assistedPct": 22.4,
+    "dunks": {
+      "attempted": 43,
+      "made": 37,
+      "pct": 86,
+      "assisted": 25,
+      "assistedPct": 67.6
+    },
+    "layups": {
+      "attempted": 345,
+      "made": 220,
+      "pct": 63.8,
+      "assisted": 88,
+      "assistedPct": 40
+    },
+    "tipIns": {
+      "attempted": 19,
+      "made": 17,
+      "pct": 89.5
+    },
+    "twoPointJumpers": {
+      "attempted": 355,
+      "made": 132,
+      "pct": 37.2,
+      "assisted": 37,
+      "assistedPct": 28
+    },
+    "threePointJumpers": {
+      "attempted": 398,
+      "made": 130,
+      "pct": 32.7,
+      "assisted": 110,
+      "assistedPct": 84.6
+    },
+    "freeThrows": {
+      "attempted": 333,
+      "made": 241,
+      "pct": 72.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.7,
+      "layups": 29.7,
+      "tipIns": 1.6,
+      "twoPointJumpers": 30.6,
+      "threePointJumpers": 34.3
+    }
+  }
+]

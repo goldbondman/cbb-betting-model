@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 156,
+    "team": "Marist",
+    "conference": "MAAC",
+    "trackedShots": 1068,
+    "freeThrowRate": 25.4,
+    "assistedPct": 26.6,
+    "dunks": {
+      "attempted": 19,
+      "made": 17,
+      "pct": 89.5,
+      "assisted": 13,
+      "assistedPct": 76.5
+    },
+    "layups": {
+      "attempted": 331,
+      "made": 195,
+      "pct": 58.9,
+      "assisted": 112,
+      "assistedPct": 57.4
+    },
+    "tipIns": {
+      "attempted": 19,
+      "made": 13,
+      "pct": 68.4
+    },
+    "twoPointJumpers": {
+      "attempted": 310,
+      "made": 130,
+      "pct": 41.9,
+      "assisted": 48,
+      "assistedPct": 36.9
+    },
+    "threePointJumpers": {
+      "attempted": 389,
+      "made": 124,
+      "pct": 31.9,
+      "assisted": 111,
+      "assistedPct": 89.5
+    },
+    "freeThrows": {
+      "attempted": 271,
+      "made": 214,
+      "pct": 79
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.8,
+      "layups": 31,
+      "tipIns": 1.8,
+      "twoPointJumpers": 29,
+      "threePointJumpers": 36.4
+    }
+  }
+]

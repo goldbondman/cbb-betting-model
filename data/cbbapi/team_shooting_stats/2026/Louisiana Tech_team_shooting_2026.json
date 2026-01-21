@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 149,
+    "team": "Louisiana Tech",
+    "conference": "CUSA",
+    "trackedShots": 1041,
+    "freeThrowRate": 32.7,
+    "assistedPct": 20.6,
+    "dunks": {
+      "attempted": 82,
+      "made": 65,
+      "pct": 79.3,
+      "assisted": 54,
+      "assistedPct": 83.1
+    },
+    "layups": {
+      "attempted": 382,
+      "made": 186,
+      "pct": 48.7,
+      "assisted": 62,
+      "assistedPct": 33.3
+    },
+    "tipIns": {
+      "attempted": 36,
+      "made": 26,
+      "pct": 72.2
+    },
+    "twoPointJumpers": {
+      "attempted": 201,
+      "made": 75,
+      "pct": 37.3,
+      "assisted": 16,
+      "assistedPct": 21.3
+    },
+    "threePointJumpers": {
+      "attempted": 340,
+      "made": 99,
+      "pct": 29.1,
+      "assisted": 82,
+      "assistedPct": 82.8
+    },
+    "freeThrows": {
+      "attempted": 340,
+      "made": 217,
+      "pct": 63.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 7.9,
+      "layups": 36.7,
+      "tipIns": 3.5,
+      "twoPointJumpers": 19.3,
+      "threePointJumpers": 32.7
+    }
+  }
+]

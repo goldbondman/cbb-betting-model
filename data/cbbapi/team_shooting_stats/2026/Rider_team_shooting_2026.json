@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 243,
+    "team": "Rider",
+    "conference": "MAAC",
+    "trackedShots": 1044,
+    "freeThrowRate": 31.3,
+    "assistedPct": 17.9,
+    "dunks": {
+      "attempted": 26,
+      "made": 24,
+      "pct": 92.3,
+      "assisted": 23,
+      "assistedPct": 95.8
+    },
+    "layups": {
+      "attempted": 356,
+      "made": 168,
+      "pct": 47.2,
+      "assisted": 68,
+      "assistedPct": 40.5
+    },
+    "tipIns": {
+      "attempted": 24,
+      "made": 16,
+      "pct": 66.7
+    },
+    "twoPointJumpers": {
+      "attempted": 349,
+      "made": 130,
+      "pct": 37.2,
+      "assisted": 34,
+      "assistedPct": 26.2
+    },
+    "threePointJumpers": {
+      "attempted": 289,
+      "made": 75,
+      "pct": 26,
+      "assisted": 62,
+      "assistedPct": 82.7
+    },
+    "freeThrows": {
+      "attempted": 327,
+      "made": 226,
+      "pct": 69.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.5,
+      "layups": 34.1,
+      "tipIns": 2.3,
+      "twoPointJumpers": 33.4,
+      "threePointJumpers": 27.7
+    }
+  }
+]

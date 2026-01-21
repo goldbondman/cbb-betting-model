@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 281,
+    "team": "Stanford",
+    "conference": "ACC",
+    "trackedShots": 1107,
+    "freeThrowRate": 41.8,
+    "assistedPct": 20.5,
+    "dunks": {
+      "attempted": 26,
+      "made": 23,
+      "pct": 88.5,
+      "assisted": 18,
+      "assistedPct": 78.3
+    },
+    "layups": {
+      "attempted": 396,
+      "made": 198,
+      "pct": 50,
+      "assisted": 54,
+      "assistedPct": 27.3
+    },
+    "tipIns": {
+      "attempted": 36,
+      "made": 22,
+      "pct": 61.1
+    },
+    "twoPointJumpers": {
+      "attempted": 169,
+      "made": 69,
+      "pct": 40.8,
+      "assisted": 23,
+      "assistedPct": 33.3
+    },
+    "threePointJumpers": {
+      "attempted": 480,
+      "made": 165,
+      "pct": 34.4,
+      "assisted": 132,
+      "assistedPct": 80
+    },
+    "freeThrows": {
+      "attempted": 463,
+      "made": 334,
+      "pct": 72.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.3,
+      "layups": 35.8,
+      "tipIns": 3.3,
+      "twoPointJumpers": 15.3,
+      "threePointJumpers": 43.4
+    }
+  }
+]

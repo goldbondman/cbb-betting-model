@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 275,
+    "team": "Southern Miss",
+    "conference": "Sun Belt",
+    "trackedShots": 1077,
+    "freeThrowRate": 41.2,
+    "assistedPct": 20.8,
+    "dunks": {
+      "attempted": 37,
+      "made": 32,
+      "pct": 86.5,
+      "assisted": 20,
+      "assistedPct": 62.5
+    },
+    "layups": {
+      "attempted": 370,
+      "made": 219,
+      "pct": 59.2,
+      "assisted": 103,
+      "assistedPct": 47
+    },
+    "tipIns": {
+      "attempted": 37,
+      "made": 27,
+      "pct": 73
+    },
+    "twoPointJumpers": {
+      "attempted": 311,
+      "made": 124,
+      "pct": 39.9,
+      "assisted": 26,
+      "assistedPct": 21
+    },
+    "threePointJumpers": {
+      "attempted": 322,
+      "made": 91,
+      "pct": 28.3,
+      "assisted": 75,
+      "assistedPct": 82.4
+    },
+    "freeThrows": {
+      "attempted": 444,
+      "made": 329,
+      "pct": 74.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.4,
+      "layups": 34.4,
+      "tipIns": 3.4,
+      "twoPointJumpers": 28.9,
+      "threePointJumpers": 29.9
+    }
+  }
+]

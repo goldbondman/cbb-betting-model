@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 284,
+    "team": "Stonehill",
+    "conference": "NEC",
+    "trackedShots": 1041,
+    "freeThrowRate": 26.9,
+    "assistedPct": 23.2,
+    "dunks": {
+      "attempted": 19,
+      "made": 19,
+      "pct": 100,
+      "assisted": 15,
+      "assistedPct": 78.9
+    },
+    "layups": {
+      "attempted": 405,
+      "made": 203,
+      "pct": 50.1,
+      "assisted": 76,
+      "assistedPct": 37.4
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 18,
+      "pct": 60
+    },
+    "twoPointJumpers": {
+      "attempted": 168,
+      "made": 52,
+      "pct": 31,
+      "assisted": 14,
+      "assistedPct": 26.9
+    },
+    "threePointJumpers": {
+      "attempted": 419,
+      "made": 145,
+      "pct": 34.6,
+      "assisted": 136,
+      "assistedPct": 93.8
+    },
+    "freeThrows": {
+      "attempted": 280,
+      "made": 192,
+      "pct": 68.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.8,
+      "layups": 38.9,
+      "tipIns": 2.9,
+      "twoPointJumpers": 16.1,
+      "threePointJumpers": 40.2
+    }
+  }
+]

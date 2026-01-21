@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 105,
+    "team": "Green Bay",
+    "conference": "Horizon",
+    "trackedShots": 1040,
+    "freeThrowRate": 44.6,
+    "assistedPct": 25.1,
+    "dunks": {
+      "attempted": 34,
+      "made": 33,
+      "pct": 97.1,
+      "assisted": 23,
+      "assistedPct": 69.7
+    },
+    "layups": {
+      "attempted": 411,
+      "made": 245,
+      "pct": 59.6,
+      "assisted": 108,
+      "assistedPct": 44.1
+    },
+    "tipIns": {
+      "attempted": 19,
+      "made": 12,
+      "pct": 63.2
+    },
+    "twoPointJumpers": {
+      "attempted": 164,
+      "made": 67,
+      "pct": 40.9,
+      "assisted": 11,
+      "assistedPct": 16.4
+    },
+    "threePointJumpers": {
+      "attempted": 412,
+      "made": 143,
+      "pct": 34.7,
+      "assisted": 119,
+      "assistedPct": 83.2
+    },
+    "freeThrows": {
+      "attempted": 464,
+      "made": 338,
+      "pct": 72.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.3,
+      "layups": 39.5,
+      "tipIns": 1.8,
+      "twoPointJumpers": 15.8,
+      "threePointJumpers": 39.6
+    }
+  }
+]

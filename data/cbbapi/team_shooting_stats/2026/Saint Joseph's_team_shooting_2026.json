@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 251,
+    "team": "Saint Joseph's",
+    "conference": "A-10",
+    "trackedShots": 1155,
+    "freeThrowRate": 33.4,
+    "assistedPct": 24.6,
+    "dunks": {
+      "attempted": 60,
+      "made": 52,
+      "pct": 86.7,
+      "assisted": 45,
+      "assistedPct": 86.5
+    },
+    "layups": {
+      "attempted": 354,
+      "made": 197,
+      "pct": 55.6,
+      "assisted": 104,
+      "assistedPct": 52.8
+    },
+    "tipIns": {
+      "attempted": 50,
+      "made": 31,
+      "pct": 62
+    },
+    "twoPointJumpers": {
+      "attempted": 191,
+      "made": 66,
+      "pct": 34.6,
+      "assisted": 16,
+      "assistedPct": 24.2
+    },
+    "threePointJumpers": {
+      "attempted": 500,
+      "made": 143,
+      "pct": 28.6,
+      "assisted": 119,
+      "assistedPct": 83.2
+    },
+    "freeThrows": {
+      "attempted": 386,
+      "made": 293,
+      "pct": 75.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.2,
+      "layups": 30.6,
+      "tipIns": 4.3,
+      "twoPointJumpers": 16.5,
+      "threePointJumpers": 43.3
+    }
+  }
+]

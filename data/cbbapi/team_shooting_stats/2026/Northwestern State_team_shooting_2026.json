@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 211,
+    "team": "Northwestern State",
+    "conference": "Southland",
+    "trackedShots": 950,
+    "freeThrowRate": 45.1,
+    "assistedPct": 23.1,
+    "dunks": {
+      "attempted": 31,
+      "made": 25,
+      "pct": 80.6,
+      "assisted": 19,
+      "assistedPct": 76
+    },
+    "layups": {
+      "attempted": 304,
+      "made": 165,
+      "pct": 54.3,
+      "assisted": 73,
+      "assistedPct": 44.2
+    },
+    "tipIns": {
+      "attempted": 21,
+      "made": 15,
+      "pct": 71.4
+    },
+    "twoPointJumpers": {
+      "attempted": 250,
+      "made": 115,
+      "pct": 46,
+      "assisted": 29,
+      "assistedPct": 25.2
+    },
+    "threePointJumpers": {
+      "attempted": 344,
+      "made": 119,
+      "pct": 34.6,
+      "assisted": 98,
+      "assistedPct": 82.4
+    },
+    "freeThrows": {
+      "attempted": 428,
+      "made": 319,
+      "pct": 74.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.3,
+      "layups": 32,
+      "tipIns": 2.2,
+      "twoPointJumpers": 26.3,
+      "threePointJumpers": 36.2
+    }
+  }
+]

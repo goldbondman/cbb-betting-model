@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 333,
+    "team": "VCU",
+    "conference": "A-10",
+    "trackedShots": 1134,
+    "freeThrowRate": 44.1,
+    "assistedPct": 25,
+    "dunks": {
+      "attempted": 65,
+      "made": 54,
+      "pct": 83.1,
+      "assisted": 44,
+      "assistedPct": 81.5
+    },
+    "layups": {
+      "attempted": 366,
+      "made": 201,
+      "pct": 54.9,
+      "assisted": 61,
+      "assistedPct": 30.3
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 16,
+      "pct": 57.1
+    },
+    "twoPointJumpers": {
+      "attempted": 159,
+      "made": 67,
+      "pct": 42.1,
+      "assisted": 16,
+      "assistedPct": 23.9
+    },
+    "threePointJumpers": {
+      "attempted": 516,
+      "made": 189,
+      "pct": 36.6,
+      "assisted": 163,
+      "assistedPct": 86.2
+    },
+    "freeThrows": {
+      "attempted": 500,
+      "made": 370,
+      "pct": 74
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.7,
+      "layups": 32.3,
+      "tipIns": 2.5,
+      "twoPointJumpers": 14,
+      "threePointJumpers": 45.5
+    }
+  }
+]

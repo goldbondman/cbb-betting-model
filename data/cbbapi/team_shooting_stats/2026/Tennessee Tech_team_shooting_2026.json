@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 291,
+    "team": "Tennessee Tech",
+    "conference": "OVC",
+    "trackedShots": 1120,
+    "freeThrowRate": 34.2,
+    "assistedPct": 22.4,
+    "dunks": {
+      "attempted": 52,
+      "made": 48,
+      "pct": 92.3,
+      "assisted": 36,
+      "assistedPct": 75
+    },
+    "layups": {
+      "attempted": 390,
+      "made": 225,
+      "pct": 57.7,
+      "assisted": 90,
+      "assistedPct": 40
+    },
+    "tipIns": {
+      "attempted": 38,
+      "made": 24,
+      "pct": 63.2
+    },
+    "twoPointJumpers": {
+      "attempted": 212,
+      "made": 75,
+      "pct": 35.4,
+      "assisted": 12,
+      "assistedPct": 16
+    },
+    "threePointJumpers": {
+      "attempted": 428,
+      "made": 130,
+      "pct": 30.4,
+      "assisted": 113,
+      "assistedPct": 86.9
+    },
+    "freeThrows": {
+      "attempted": 383,
+      "made": 280,
+      "pct": 73.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.6,
+      "layups": 34.8,
+      "tipIns": 3.4,
+      "twoPointJumpers": 18.9,
+      "threePointJumpers": 38.2
+    }
+  }
+]

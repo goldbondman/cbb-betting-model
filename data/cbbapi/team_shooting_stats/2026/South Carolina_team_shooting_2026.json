@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 266,
+    "team": "South Carolina",
+    "conference": "SEC",
+    "trackedShots": 1100,
+    "freeThrowRate": 37.4,
+    "assistedPct": 25.1,
+    "dunks": {
+      "attempted": 36,
+      "made": 32,
+      "pct": 88.9,
+      "assisted": 24,
+      "assistedPct": 75
+    },
+    "layups": {
+      "attempted": 314,
+      "made": 192,
+      "pct": 61.1,
+      "assisted": 72,
+      "assistedPct": 37.5
+    },
+    "tipIns": {
+      "attempted": 22,
+      "made": 13,
+      "pct": 59.1
+    },
+    "twoPointJumpers": {
+      "attempted": 214,
+      "made": 106,
+      "pct": 49.5,
+      "assisted": 29,
+      "assistedPct": 27.4
+    },
+    "threePointJumpers": {
+      "attempted": 514,
+      "made": 164,
+      "pct": 31.9,
+      "assisted": 151,
+      "assistedPct": 92.1
+    },
+    "freeThrows": {
+      "attempted": 411,
+      "made": 320,
+      "pct": 77.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.3,
+      "layups": 28.5,
+      "tipIns": 2,
+      "twoPointJumpers": 19.5,
+      "threePointJumpers": 46.7
+    }
+  }
+]

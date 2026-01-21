@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 32,
+    "team": "Bucknell",
+    "conference": "Patriot",
+    "trackedShots": 1058,
+    "freeThrowRate": 29.4,
+    "assistedPct": 22.5,
+    "dunks": {
+      "attempted": 26,
+      "made": 24,
+      "pct": 92.3,
+      "assisted": 17,
+      "assistedPct": 70.8
+    },
+    "layups": {
+      "attempted": 366,
+      "made": 200,
+      "pct": 54.6,
+      "assisted": 84,
+      "assistedPct": 42
+    },
+    "tipIns": {
+      "attempted": 21,
+      "made": 9,
+      "pct": 42.9
+    },
+    "twoPointJumpers": {
+      "attempted": 179,
+      "made": 49,
+      "pct": 27.4,
+      "assisted": 12,
+      "assistedPct": 24.5
+    },
+    "threePointJumpers": {
+      "attempted": 466,
+      "made": 146,
+      "pct": 31.3,
+      "assisted": 125,
+      "assistedPct": 85.6
+    },
+    "freeThrows": {
+      "attempted": 311,
+      "made": 237,
+      "pct": 76.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.5,
+      "layups": 34.6,
+      "tipIns": 2,
+      "twoPointJumpers": 16.9,
+      "threePointJumpers": 44
+    }
+  }
+]

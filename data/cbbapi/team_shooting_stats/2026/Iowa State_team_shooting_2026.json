@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 125,
+    "team": "Iowa State",
+    "conference": "Big 12",
+    "trackedShots": 1165,
+    "freeThrowRate": 35.5,
+    "assistedPct": 28.9,
+    "dunks": {
+      "attempted": 75,
+      "made": 68,
+      "pct": 90.7,
+      "assisted": 46,
+      "assistedPct": 67.6
+    },
+    "layups": {
+      "attempted": 358,
+      "made": 221,
+      "pct": 61.7,
+      "assisted": 115,
+      "assistedPct": 52
+    },
+    "tipIns": {
+      "attempted": 32,
+      "made": 24,
+      "pct": 75
+    },
+    "twoPointJumpers": {
+      "attempted": 279,
+      "made": 108,
+      "pct": 38.7,
+      "assisted": 27,
+      "assistedPct": 25
+    },
+    "threePointJumpers": {
+      "attempted": 421,
+      "made": 169,
+      "pct": 40.1,
+      "assisted": 149,
+      "assistedPct": 88.2
+    },
+    "freeThrows": {
+      "attempted": 413,
+      "made": 279,
+      "pct": 67.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.4,
+      "layups": 30.7,
+      "tipIns": 2.7,
+      "twoPointJumpers": 23.9,
+      "threePointJumpers": 36.1
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 338,
+    "team": "Villanova",
+    "conference": "Big East",
+    "trackedShots": 1072,
+    "freeThrowRate": 30.5,
+    "assistedPct": 25.2,
+    "dunks": {
+      "attempted": 36,
+      "made": 26,
+      "pct": 72.2,
+      "assisted": 22,
+      "assistedPct": 84.6
+    },
+    "layups": {
+      "attempted": 317,
+      "made": 197,
+      "pct": 62.1,
+      "assisted": 88,
+      "assistedPct": 44.7
+    },
+    "tipIns": {
+      "attempted": 37,
+      "made": 24,
+      "pct": 64.9
+    },
+    "twoPointJumpers": {
+      "attempted": 193,
+      "made": 78,
+      "pct": 40.4,
+      "assisted": 19,
+      "assistedPct": 24.4
+    },
+    "threePointJumpers": {
+      "attempted": 489,
+      "made": 178,
+      "pct": 36.4,
+      "assisted": 141,
+      "assistedPct": 79.2
+    },
+    "freeThrows": {
+      "attempted": 327,
+      "made": 231,
+      "pct": 70.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.4,
+      "layups": 29.6,
+      "tipIns": 3.5,
+      "twoPointJumpers": 18,
+      "threePointJumpers": 45.6
+    }
+  }
+]

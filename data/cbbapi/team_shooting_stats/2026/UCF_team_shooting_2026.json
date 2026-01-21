@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 312,
+    "team": "UCF",
+    "conference": "Big 12",
+    "trackedShots": 1150,
+    "freeThrowRate": 30.1,
+    "assistedPct": 25.6,
+    "dunks": {
+      "attempted": 50,
+      "made": 47,
+      "pct": 94,
+      "assisted": 41,
+      "assistedPct": 87.2
+    },
+    "layups": {
+      "attempted": 393,
+      "made": 218,
+      "pct": 55.5,
+      "assisted": 85,
+      "assistedPct": 39
+    },
+    "tipIns": {
+      "attempted": 20,
+      "made": 19,
+      "pct": 95
+    },
+    "twoPointJumpers": {
+      "attempted": 275,
+      "made": 114,
+      "pct": 41.5,
+      "assisted": 46,
+      "assistedPct": 40.4
+    },
+    "threePointJumpers": {
+      "attempted": 412,
+      "made": 152,
+      "pct": 36.9,
+      "assisted": 122,
+      "assistedPct": 80.3
+    },
+    "freeThrows": {
+      "attempted": 346,
+      "made": 254,
+      "pct": 73.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.3,
+      "layups": 34.2,
+      "tipIns": 1.7,
+      "twoPointJumpers": 23.9,
+      "threePointJumpers": 35.8
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 263,
+    "team": "Seton Hall",
+    "conference": "Big East",
+    "trackedShots": 1058,
+    "freeThrowRate": 37.7,
+    "assistedPct": 22.1,
+    "dunks": {
+      "attempted": 44,
+      "made": 41,
+      "pct": 93.2,
+      "assisted": 32,
+      "assistedPct": 78
+    },
+    "layups": {
+      "attempted": 416,
+      "made": 208,
+      "pct": 50,
+      "assisted": 105,
+      "assistedPct": 50.5
+    },
+    "tipIns": {
+      "attempted": 50,
+      "made": 27,
+      "pct": 54
+    },
+    "twoPointJumpers": {
+      "attempted": 255,
+      "made": 91,
+      "pct": 35.7,
+      "assisted": 15,
+      "assistedPct": 16.5
+    },
+    "threePointJumpers": {
+      "attempted": 293,
+      "made": 91,
+      "pct": 31.1,
+      "assisted": 82,
+      "assistedPct": 90.1
+    },
+    "freeThrows": {
+      "attempted": 399,
+      "made": 296,
+      "pct": 74.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.2,
+      "layups": 39.3,
+      "tipIns": 4.7,
+      "twoPointJumpers": 24.1,
+      "threePointJumpers": 27.7
+    }
+  }
+]

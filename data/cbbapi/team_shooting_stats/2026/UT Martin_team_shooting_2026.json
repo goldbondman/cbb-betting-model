@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 325,
+    "team": "UT Martin",
+    "conference": "OVC",
+    "trackedShots": 1080,
+    "freeThrowRate": 41.7,
+    "assistedPct": 22.8,
+    "dunks": {
+      "attempted": 36,
+      "made": 32,
+      "pct": 88.9,
+      "assisted": 19,
+      "assistedPct": 59.4
+    },
+    "layups": {
+      "attempted": 331,
+      "made": 184,
+      "pct": 55.6,
+      "assisted": 78,
+      "assistedPct": 42.4
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 17,
+      "pct": 56.7
+    },
+    "twoPointJumpers": {
+      "attempted": 194,
+      "made": 81,
+      "pct": 41.8,
+      "assisted": 18,
+      "assistedPct": 22.2
+    },
+    "threePointJumpers": {
+      "attempted": 489,
+      "made": 151,
+      "pct": 30.9,
+      "assisted": 131,
+      "assistedPct": 86.8
+    },
+    "freeThrows": {
+      "attempted": 450,
+      "made": 303,
+      "pct": 67.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.3,
+      "layups": 30.6,
+      "tipIns": 2.8,
+      "twoPointJumpers": 18,
+      "threePointJumpers": 45.3
+    }
+  }
+]

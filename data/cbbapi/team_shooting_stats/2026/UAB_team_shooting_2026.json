@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 305,
+    "team": "UAB",
+    "conference": "American",
+    "trackedShots": 1190,
+    "freeThrowRate": 37.9,
+    "assistedPct": 22.3,
+    "dunks": {
+      "attempted": 60,
+      "made": 55,
+      "pct": 91.7,
+      "assisted": 48,
+      "assistedPct": 87.3
+    },
+    "layups": {
+      "attempted": 459,
+      "made": 262,
+      "pct": 57.1,
+      "assisted": 95,
+      "assistedPct": 36.3
+    },
+    "tipIns": {
+      "attempted": 40,
+      "made": 23,
+      "pct": 57.5
+    },
+    "twoPointJumpers": {
+      "attempted": 299,
+      "made": 100,
+      "pct": 33.4,
+      "assisted": 39,
+      "assistedPct": 39
+    },
+    "threePointJumpers": {
+      "attempted": 332,
+      "made": 102,
+      "pct": 30.7,
+      "assisted": 83,
+      "assistedPct": 81.4
+    },
+    "freeThrows": {
+      "attempted": 451,
+      "made": 322,
+      "pct": 71.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 5,
+      "layups": 38.6,
+      "tipIns": 3.4,
+      "twoPointJumpers": 25.1,
+      "threePointJumpers": 27.9
+    }
+  }
+]

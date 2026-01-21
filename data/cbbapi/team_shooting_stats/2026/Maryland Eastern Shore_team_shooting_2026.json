@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 159,
+    "team": "Maryland Eastern Shore",
+    "conference": "MEAC",
+    "trackedShots": 1142,
+    "freeThrowRate": 27.9,
+    "assistedPct": 25.7,
+    "dunks": {
+      "attempted": 30,
+      "made": 24,
+      "pct": 80,
+      "assisted": 18,
+      "assistedPct": 75
+    },
+    "layups": {
+      "attempted": 347,
+      "made": 203,
+      "pct": 58.5,
+      "assisted": 106,
+      "assistedPct": 52.2
+    },
+    "tipIns": {
+      "attempted": 42,
+      "made": 24,
+      "pct": 57.1
+    },
+    "twoPointJumpers": {
+      "attempted": 328,
+      "made": 140,
+      "pct": 42.7,
+      "assisted": 59,
+      "assistedPct": 42.1
+    },
+    "threePointJumpers": {
+      "attempted": 395,
+      "made": 117,
+      "pct": 29.6,
+      "assisted": 110,
+      "assistedPct": 94
+    },
+    "freeThrows": {
+      "attempted": 319,
+      "made": 224,
+      "pct": 70.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.6,
+      "layups": 30.4,
+      "tipIns": 3.7,
+      "twoPointJumpers": 28.7,
+      "threePointJumpers": 34.6
+    }
+  }
+]

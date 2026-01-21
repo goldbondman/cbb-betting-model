@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 33,
+    "team": "Buffalo",
+    "conference": "MAC",
+    "trackedShots": 1052,
+    "freeThrowRate": 43.3,
+    "assistedPct": 25.3,
+    "dunks": {
+      "attempted": 38,
+      "made": 34,
+      "pct": 89.5,
+      "assisted": 22,
+      "assistedPct": 64.7
+    },
+    "layups": {
+      "attempted": 368,
+      "made": 206,
+      "pct": 56,
+      "assisted": 81,
+      "assistedPct": 39.3
+    },
+    "tipIns": {
+      "attempted": 16,
+      "made": 11,
+      "pct": 68.8
+    },
+    "twoPointJumpers": {
+      "attempted": 161,
+      "made": 69,
+      "pct": 42.9,
+      "assisted": 12,
+      "assistedPct": 17.4
+    },
+    "threePointJumpers": {
+      "attempted": 469,
+      "made": 182,
+      "pct": 38.8,
+      "assisted": 151,
+      "assistedPct": 83
+    },
+    "freeThrows": {
+      "attempted": 455,
+      "made": 338,
+      "pct": 74.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.6,
+      "layups": 35,
+      "tipIns": 1.5,
+      "twoPointJumpers": 15.3,
+      "threePointJumpers": 44.6
+    }
+  }
+]

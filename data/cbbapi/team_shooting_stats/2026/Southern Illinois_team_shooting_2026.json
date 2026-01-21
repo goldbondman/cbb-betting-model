@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 273,
+    "team": "Southern Illinois",
+    "conference": "MVC",
+    "trackedShots": 1163,
+    "freeThrowRate": 34.7,
+    "assistedPct": 23.3,
+    "dunks": {
+      "attempted": 54,
+      "made": 46,
+      "pct": 85.2,
+      "assisted": 35,
+      "assistedPct": 76.1
+    },
+    "layups": {
+      "attempted": 396,
+      "made": 229,
+      "pct": 57.8,
+      "assisted": 108,
+      "assistedPct": 47.2
+    },
+    "tipIns": {
+      "attempted": 23,
+      "made": 11,
+      "pct": 47.8
+    },
+    "twoPointJumpers": {
+      "attempted": 355,
+      "made": 161,
+      "pct": 45.4,
+      "assisted": 47,
+      "assistedPct": 29.2
+    },
+    "threePointJumpers": {
+      "attempted": 335,
+      "made": 94,
+      "pct": 28.1,
+      "assisted": 81,
+      "assistedPct": 86.2
+    },
+    "freeThrows": {
+      "attempted": 403,
+      "made": 270,
+      "pct": 67
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.6,
+      "layups": 34,
+      "tipIns": 2,
+      "twoPointJumpers": 30.5,
+      "threePointJumpers": 28.8
+    }
+  }
+]

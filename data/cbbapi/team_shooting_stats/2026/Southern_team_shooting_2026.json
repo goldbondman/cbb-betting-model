@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 274,
+    "team": "Southern",
+    "conference": "SWAC",
+    "trackedShots": 1144,
+    "freeThrowRate": 37.2,
+    "assistedPct": 21.8,
+    "dunks": {
+      "attempted": 50,
+      "made": 47,
+      "pct": 94,
+      "assisted": 33,
+      "assistedPct": 70.2
+    },
+    "layups": {
+      "attempted": 379,
+      "made": 212,
+      "pct": 55.9,
+      "assisted": 88,
+      "assistedPct": 41.5
+    },
+    "tipIns": {
+      "attempted": 33,
+      "made": 23,
+      "pct": 69.7
+    },
+    "twoPointJumpers": {
+      "attempted": 309,
+      "made": 106,
+      "pct": 34.3,
+      "assisted": 32,
+      "assistedPct": 30.2
+    },
+    "threePointJumpers": {
+      "attempted": 373,
+      "made": 130,
+      "pct": 34.9,
+      "assisted": 96,
+      "assistedPct": 73.8
+    },
+    "freeThrows": {
+      "attempted": 426,
+      "made": 289,
+      "pct": 67.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.4,
+      "layups": 33.1,
+      "tipIns": 2.9,
+      "twoPointJumpers": 27,
+      "threePointJumpers": 32.6
+    }
+  }
+]

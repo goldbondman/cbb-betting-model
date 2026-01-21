@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 158,
+    "team": "Marshall",
+    "conference": "Sun Belt",
+    "trackedShots": 1160,
+    "freeThrowRate": 30.8,
+    "assistedPct": 27.2,
+    "dunks": {
+      "attempted": 84,
+      "made": 79,
+      "pct": 94,
+      "assisted": 71,
+      "assistedPct": 89.9
+    },
+    "layups": {
+      "attempted": 248,
+      "made": 140,
+      "pct": 56.5,
+      "assisted": 69,
+      "assistedPct": 49.3
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 22,
+      "pct": 78.6
+    },
+    "twoPointJumpers": {
+      "attempted": 285,
+      "made": 105,
+      "pct": 36.8,
+      "assisted": 29,
+      "assistedPct": 27.6
+    },
+    "threePointJumpers": {
+      "attempted": 515,
+      "made": 185,
+      "pct": 35.9,
+      "assisted": 146,
+      "assistedPct": 78.9
+    },
+    "freeThrows": {
+      "attempted": 357,
+      "made": 263,
+      "pct": 73.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 7.2,
+      "layups": 21.4,
+      "tipIns": 2.4,
+      "twoPointJumpers": 24.6,
+      "threePointJumpers": 44.4
+    }
+  }
+]

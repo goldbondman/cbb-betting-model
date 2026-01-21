@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 348,
+    "team": "Western Carolina",
+    "conference": "SoCon",
+    "trackedShots": 1092,
+    "freeThrowRate": 28.8,
+    "assistedPct": 20.6,
+    "dunks": {
+      "attempted": 33,
+      "made": 26,
+      "pct": 78.8,
+      "assisted": 23,
+      "assistedPct": 88.5
+    },
+    "layups": {
+      "attempted": 372,
+      "made": 197,
+      "pct": 53,
+      "assisted": 80,
+      "assistedPct": 40.6
+    },
+    "tipIns": {
+      "attempted": 43,
+      "made": 32,
+      "pct": 74.4
+    },
+    "twoPointJumpers": {
+      "attempted": 222,
+      "made": 91,
+      "pct": 41,
+      "assisted": 11,
+      "assistedPct": 12.1
+    },
+    "threePointJumpers": {
+      "attempted": 422,
+      "made": 134,
+      "pct": 31.8,
+      "assisted": 111,
+      "assistedPct": 82.8
+    },
+    "freeThrows": {
+      "attempted": 315,
+      "made": 218,
+      "pct": 69.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 3,
+      "layups": 34.1,
+      "tipIns": 3.9,
+      "twoPointJumpers": 20.3,
+      "threePointJumpers": 38.6
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 31,
+    "team": "Bryant",
+    "conference": "Am. East",
+    "trackedShots": 1065,
+    "freeThrowRate": 27.1,
+    "assistedPct": 22,
+    "dunks": {
+      "attempted": 50,
+      "made": 43,
+      "pct": 86,
+      "assisted": 31,
+      "assistedPct": 72.1
+    },
+    "layups": {
+      "attempted": 315,
+      "made": 161,
+      "pct": 51.1,
+      "assisted": 76,
+      "assistedPct": 47.2
+    },
+    "tipIns": {
+      "attempted": 31,
+      "made": 21,
+      "pct": 67.7
+    },
+    "twoPointJumpers": {
+      "attempted": 146,
+      "made": 45,
+      "pct": 30.8,
+      "assisted": 9,
+      "assistedPct": 20
+    },
+    "threePointJumpers": {
+      "attempted": 523,
+      "made": 152,
+      "pct": 29.1,
+      "assisted": 118,
+      "assistedPct": 77.6
+    },
+    "freeThrows": {
+      "attempted": 289,
+      "made": 208,
+      "pct": 72
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.7,
+      "layups": 29.6,
+      "tipIns": 2.9,
+      "twoPointJumpers": 13.7,
+      "threePointJumpers": 49.1
+    }
+  }
+]

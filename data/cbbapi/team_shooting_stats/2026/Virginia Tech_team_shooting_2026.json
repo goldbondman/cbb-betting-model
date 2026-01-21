@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 340,
+    "team": "Virginia Tech",
+    "conference": "ACC",
+    "trackedShots": 1178,
+    "freeThrowRate": 38.3,
+    "assistedPct": 23,
+    "dunks": {
+      "attempted": 55,
+      "made": 52,
+      "pct": 94.5,
+      "assisted": 39,
+      "assistedPct": 75
+    },
+    "layups": {
+      "attempted": 329,
+      "made": 202,
+      "pct": 61.4,
+      "assisted": 83,
+      "assistedPct": 41.1
+    },
+    "tipIns": {
+      "attempted": 41,
+      "made": 22,
+      "pct": 53.7
+    },
+    "twoPointJumpers": {
+      "attempted": 298,
+      "made": 107,
+      "pct": 35.9,
+      "assisted": 19,
+      "assistedPct": 17.8
+    },
+    "threePointJumpers": {
+      "attempted": 455,
+      "made": 157,
+      "pct": 34.5,
+      "assisted": 130,
+      "assistedPct": 82.8
+    },
+    "freeThrows": {
+      "attempted": 451,
+      "made": 327,
+      "pct": 72.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.7,
+      "layups": 27.9,
+      "tipIns": 3.5,
+      "twoPointJumpers": 25.3,
+      "threePointJumpers": 38.6
+    }
+  }
+]

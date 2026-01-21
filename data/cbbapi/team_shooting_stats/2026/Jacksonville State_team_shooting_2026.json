@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 128,
+    "team": "Jacksonville State",
+    "conference": "CUSA",
+    "trackedShots": 1005,
+    "freeThrowRate": 41.5,
+    "assistedPct": 22.8,
+    "dunks": {
+      "attempted": 15,
+      "made": 13,
+      "pct": 86.7,
+      "assisted": 7,
+      "assistedPct": 53.8
+    },
+    "layups": {
+      "attempted": 417,
+      "made": 214,
+      "pct": 51.3,
+      "assisted": 77,
+      "assistedPct": 36
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 20,
+      "pct": 66.7
+    },
+    "twoPointJumpers": {
+      "attempted": 114,
+      "made": 44,
+      "pct": 38.6,
+      "assisted": 14,
+      "assistedPct": 31.8
+    },
+    "threePointJumpers": {
+      "attempted": 429,
+      "made": 151,
+      "pct": 35.2,
+      "assisted": 131,
+      "assistedPct": 86.8
+    },
+    "freeThrows": {
+      "attempted": 417,
+      "made": 279,
+      "pct": 66.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.5,
+      "layups": 41.5,
+      "tipIns": 3,
+      "twoPointJumpers": 11.3,
+      "threePointJumpers": 42.7
+    }
+  }
+]

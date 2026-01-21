@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 171,
+    "team": "Middle Tennessee",
+    "conference": "CUSA",
+    "trackedShots": 1091,
+    "freeThrowRate": 28,
+    "assistedPct": 23.3,
+    "dunks": {
+      "attempted": 45,
+      "made": 37,
+      "pct": 82.2,
+      "assisted": 26,
+      "assistedPct": 70.3
+    },
+    "layups": {
+      "attempted": 275,
+      "made": 164,
+      "pct": 59.6,
+      "assisted": 63,
+      "assistedPct": 38.4
+    },
+    "tipIns": {
+      "attempted": 13,
+      "made": 9,
+      "pct": 69.2
+    },
+    "twoPointJumpers": {
+      "attempted": 258,
+      "made": 98,
+      "pct": 38,
+      "assisted": 21,
+      "assistedPct": 21.4
+    },
+    "threePointJumpers": {
+      "attempted": 500,
+      "made": 178,
+      "pct": 35.6,
+      "assisted": 144,
+      "assistedPct": 80.9
+    },
+    "freeThrows": {
+      "attempted": 305,
+      "made": 211,
+      "pct": 69.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.1,
+      "layups": 25.2,
+      "tipIns": 1.2,
+      "twoPointJumpers": 23.6,
+      "threePointJumpers": 45.8
+    }
+  }
+]

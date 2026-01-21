@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 2,
+    "team": "Air Force",
+    "conference": "Mountain West",
+    "trackedShots": 954,
+    "freeThrowRate": 38.4,
+    "assistedPct": 23.3,
+    "dunks": {
+      "attempted": 25,
+      "made": 22,
+      "pct": 88,
+      "assisted": 19,
+      "assistedPct": 86.4
+    },
+    "layups": {
+      "attempted": 331,
+      "made": 196,
+      "pct": 59.2,
+      "assisted": 84,
+      "assistedPct": 42.9
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 22,
+      "pct": 78.6
+    },
+    "twoPointJumpers": {
+      "attempted": 171,
+      "made": 51,
+      "pct": 29.8,
+      "assisted": 11,
+      "assistedPct": 21.6
+    },
+    "threePointJumpers": {
+      "attempted": 399,
+      "made": 118,
+      "pct": 29.6,
+      "assisted": 108,
+      "assistedPct": 91.5
+    },
+    "freeThrows": {
+      "attempted": 366,
+      "made": 236,
+      "pct": 64.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.6,
+      "layups": 34.7,
+      "tipIns": 2.9,
+      "twoPointJumpers": 17.9,
+      "threePointJumpers": 41.8
+    }
+  }
+]

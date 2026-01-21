@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 97,
+    "team": "Georgetown",
+    "conference": "Big East",
+    "trackedShots": 1074,
+    "freeThrowRate": 41.5,
+    "assistedPct": 24.3,
+    "dunks": {
+      "attempted": 62,
+      "made": 51,
+      "pct": 82.3,
+      "assisted": 37,
+      "assistedPct": 72.5
+    },
+    "layups": {
+      "attempted": 365,
+      "made": 188,
+      "pct": 51.5,
+      "assisted": 91,
+      "assistedPct": 48.4
+    },
+    "tipIns": {
+      "attempted": 21,
+      "made": 11,
+      "pct": 52.4
+    },
+    "twoPointJumpers": {
+      "attempted": 266,
+      "made": 105,
+      "pct": 39.5,
+      "assisted": 40,
+      "assistedPct": 38.1
+    },
+    "threePointJumpers": {
+      "attempted": 360,
+      "made": 113,
+      "pct": 31.4,
+      "assisted": 93,
+      "assistedPct": 82.3
+    },
+    "freeThrows": {
+      "attempted": 446,
+      "made": 330,
+      "pct": 74
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.8,
+      "layups": 34,
+      "tipIns": 2,
+      "twoPointJumpers": 24.8,
+      "threePointJumpers": 33.5
+    }
+  }
+]

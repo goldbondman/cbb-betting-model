@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 298,
+    "team": "Texas Tech",
+    "conference": "Big 12",
+    "trackedShots": 1201,
+    "freeThrowRate": 28.6,
+    "assistedPct": 24.9,
+    "dunks": {
+      "attempted": 32,
+      "made": 26,
+      "pct": 81.3,
+      "assisted": 21,
+      "assistedPct": 80.8
+    },
+    "layups": {
+      "attempted": 249,
+      "made": 151,
+      "pct": 60.6,
+      "assisted": 69,
+      "assistedPct": 45.7
+    },
+    "tipIns": {
+      "attempted": 42,
+      "made": 26,
+      "pct": 61.9
+    },
+    "twoPointJumpers": {
+      "attempted": 325,
+      "made": 149,
+      "pct": 45.8,
+      "assisted": 50,
+      "assistedPct": 33.6
+    },
+    "threePointJumpers": {
+      "attempted": 553,
+      "made": 216,
+      "pct": 39.1,
+      "assisted": 159,
+      "assistedPct": 73.6
+    },
+    "freeThrows": {
+      "attempted": 343,
+      "made": 241,
+      "pct": 70.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.7,
+      "layups": 20.7,
+      "tipIns": 3.5,
+      "twoPointJumpers": 27.1,
+      "threePointJumpers": 46
+    }
+  }
+]

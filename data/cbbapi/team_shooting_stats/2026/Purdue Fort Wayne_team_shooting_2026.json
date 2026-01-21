@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 237,
+    "team": "Purdue Fort Wayne",
+    "conference": "Horizon",
+    "trackedShots": 1234,
+    "freeThrowRate": 27.8,
+    "assistedPct": 23.7,
+    "dunks": {
+      "attempted": 67,
+      "made": 61,
+      "pct": 91,
+      "assisted": 47,
+      "assistedPct": 77
+    },
+    "layups": {
+      "attempted": 393,
+      "made": 231,
+      "pct": 58.8,
+      "assisted": 66,
+      "assistedPct": 28.6
+    },
+    "tipIns": {
+      "attempted": 33,
+      "made": 23,
+      "pct": 69.7
+    },
+    "twoPointJumpers": {
+      "attempted": 175,
+      "made": 72,
+      "pct": 41.1,
+      "assisted": 7,
+      "assistedPct": 9.7
+    },
+    "threePointJumpers": {
+      "attempted": 566,
+      "made": 200,
+      "pct": 35.3,
+      "assisted": 172,
+      "assistedPct": 86
+    },
+    "freeThrows": {
+      "attempted": 343,
+      "made": 247,
+      "pct": 72
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.4,
+      "layups": 31.8,
+      "tipIns": 2.7,
+      "twoPointJumpers": 14.2,
+      "threePointJumpers": 45.9
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 3,
+    "team": "Akron",
+    "conference": "MAC",
+    "trackedShots": 1253,
+    "freeThrowRate": 25.9,
+    "assistedPct": 30,
+    "dunks": {
+      "attempted": 57,
+      "made": 56,
+      "pct": 98.2,
+      "assisted": 40,
+      "assistedPct": 71.4
+    },
+    "layups": {
+      "attempted": 440,
+      "made": 284,
+      "pct": 64.5,
+      "assisted": 155,
+      "assistedPct": 54.6
+    },
+    "tipIns": {
+      "attempted": 29,
+      "made": 22,
+      "pct": 75.9
+    },
+    "twoPointJumpers": {
+      "attempted": 168,
+      "made": 73,
+      "pct": 43.5,
+      "assisted": 9,
+      "assistedPct": 12.3
+    },
+    "threePointJumpers": {
+      "attempted": 559,
+      "made": 216,
+      "pct": 38.6,
+      "assisted": 172,
+      "assistedPct": 79.6
+    },
+    "freeThrows": {
+      "attempted": 325,
+      "made": 249,
+      "pct": 76.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.5,
+      "layups": 35.1,
+      "tipIns": 2.3,
+      "twoPointJumpers": 13.4,
+      "threePointJumpers": 44.6
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 93,
+    "team": "Furman",
+    "conference": "SoCon",
+    "trackedShots": 1130,
+    "freeThrowRate": 31.1,
+    "assistedPct": 26.6,
+    "dunks": {
+      "attempted": 77,
+      "made": 70,
+      "pct": 90.9,
+      "assisted": 58,
+      "assistedPct": 82.9
+    },
+    "layups": {
+      "attempted": 314,
+      "made": 190,
+      "pct": 60.5,
+      "assisted": 97,
+      "assistedPct": 51.1
+    },
+    "tipIns": {
+      "attempted": 45,
+      "made": 28,
+      "pct": 62.2
+    },
+    "twoPointJumpers": {
+      "attempted": 140,
+      "made": 70,
+      "pct": 50,
+      "assisted": 5,
+      "assistedPct": 7.1
+    },
+    "threePointJumpers": {
+      "attempted": 554,
+      "made": 175,
+      "pct": 31.6,
+      "assisted": 141,
+      "assistedPct": 80.6
+    },
+    "freeThrows": {
+      "attempted": 351,
+      "made": 226,
+      "pct": 64.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.8,
+      "layups": 27.8,
+      "tipIns": 4,
+      "twoPointJumpers": 12.4,
+      "threePointJumpers": 49
+    }
+  }
+]

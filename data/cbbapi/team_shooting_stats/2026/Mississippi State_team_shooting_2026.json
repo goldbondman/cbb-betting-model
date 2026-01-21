@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 174,
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "trackedShots": 1090,
+    "freeThrowRate": 34,
+    "assistedPct": 19.5,
+    "dunks": {
+      "attempted": 58,
+      "made": 52,
+      "pct": 89.7,
+      "assisted": 50,
+      "assistedPct": 96.2
+    },
+    "layups": {
+      "attempted": 260,
+      "made": 145,
+      "pct": 55.8,
+      "assisted": 46,
+      "assistedPct": 31.7
+    },
+    "tipIns": {
+      "attempted": 51,
+      "made": 37,
+      "pct": 72.5
+    },
+    "twoPointJumpers": {
+      "attempted": 291,
+      "made": 118,
+      "pct": 40.5,
+      "assisted": 25,
+      "assistedPct": 21.2
+    },
+    "threePointJumpers": {
+      "attempted": 430,
+      "made": 129,
+      "pct": 30,
+      "assisted": 92,
+      "assistedPct": 71.3
+    },
+    "freeThrows": {
+      "attempted": 371,
+      "made": 256,
+      "pct": 69
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.3,
+      "layups": 23.9,
+      "tipIns": 4.7,
+      "twoPointJumpers": 26.7,
+      "threePointJumpers": 39.4
+    }
+  }
+]

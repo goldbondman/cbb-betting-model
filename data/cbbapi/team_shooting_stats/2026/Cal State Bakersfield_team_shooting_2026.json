@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 36,
+    "team": "Cal State Bakersfield",
+    "conference": "Big West",
+    "trackedShots": 1167,
+    "freeThrowRate": 43.1,
+    "assistedPct": 17.7,
+    "dunks": {
+      "attempted": 48,
+      "made": 43,
+      "pct": 89.6,
+      "assisted": 28,
+      "assistedPct": 65.1
+    },
+    "layups": {
+      "attempted": 406,
+      "made": 211,
+      "pct": 52,
+      "assisted": 61,
+      "assistedPct": 28.9
+    },
+    "tipIns": {
+      "attempted": 24,
+      "made": 14,
+      "pct": 58.3
+    },
+    "twoPointJumpers": {
+      "attempted": 351,
+      "made": 120,
+      "pct": 34.2,
+      "assisted": 34,
+      "assistedPct": 28.3
+    },
+    "threePointJumpers": {
+      "attempted": 338,
+      "made": 100,
+      "pct": 29.6,
+      "assisted": 84,
+      "assistedPct": 84
+    },
+    "freeThrows": {
+      "attempted": 503,
+      "made": 375,
+      "pct": 74.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.1,
+      "layups": 34.8,
+      "tipIns": 2.1,
+      "twoPointJumpers": 30.1,
+      "threePointJumpers": 29
+    }
+  }
+]

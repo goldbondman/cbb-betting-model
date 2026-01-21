@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 344,
+    "team": "Washington State",
+    "conference": "WCC",
+    "trackedShots": 1128,
+    "freeThrowRate": 33.2,
+    "assistedPct": 21.6,
+    "dunks": {
+      "attempted": 37,
+      "made": 28,
+      "pct": 75.7,
+      "assisted": 16,
+      "assistedPct": 57.1
+    },
+    "layups": {
+      "attempted": 329,
+      "made": 208,
+      "pct": 63.2,
+      "assisted": 77,
+      "assistedPct": 37
+    },
+    "tipIns": {
+      "attempted": 12,
+      "made": 5,
+      "pct": 41.7
+    },
+    "twoPointJumpers": {
+      "attempted": 252,
+      "made": 107,
+      "pct": 42.5,
+      "assisted": 23,
+      "assistedPct": 21.5
+    },
+    "threePointJumpers": {
+      "attempted": 498,
+      "made": 177,
+      "pct": 35.5,
+      "assisted": 128,
+      "assistedPct": 72.3
+    },
+    "freeThrows": {
+      "attempted": 375,
+      "made": 271,
+      "pct": 72.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.3,
+      "layups": 29.2,
+      "tipIns": 1.1,
+      "twoPointJumpers": 22.3,
+      "threePointJumpers": 44.1
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 22,
+    "team": "Belmont",
+    "conference": "MVC",
+    "trackedShots": 1174,
+    "freeThrowRate": 32.5,
+    "assistedPct": 29.8,
+    "dunks": {
+      "attempted": 71,
+      "made": 63,
+      "pct": 88.7,
+      "assisted": 51,
+      "assistedPct": 81
+    },
+    "layups": {
+      "attempted": 415,
+      "made": 254,
+      "pct": 61.2,
+      "assisted": 109,
+      "assistedPct": 42.9
+    },
+    "tipIns": {
+      "attempted": 34,
+      "made": 28,
+      "pct": 82.4
+    },
+    "twoPointJumpers": {
+      "attempted": 136,
+      "made": 53,
+      "pct": 39,
+      "assisted": 13,
+      "assistedPct": 24.5
+    },
+    "threePointJumpers": {
+      "attempted": 518,
+      "made": 199,
+      "pct": 38.4,
+      "assisted": 177,
+      "assistedPct": 88.9
+    },
+    "freeThrows": {
+      "attempted": 382,
+      "made": 259,
+      "pct": 67.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 6,
+      "layups": 35.3,
+      "tipIns": 2.9,
+      "twoPointJumpers": 11.6,
+      "threePointJumpers": 44.1
+    }
+  }
+]

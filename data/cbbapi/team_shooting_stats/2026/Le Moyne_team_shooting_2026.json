@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 140,
+    "team": "Le Moyne",
+    "conference": "NEC",
+    "trackedShots": 1061,
+    "freeThrowRate": 36.7,
+    "assistedPct": 25.2,
+    "dunks": {
+      "attempted": 62,
+      "made": 58,
+      "pct": 93.5,
+      "assisted": 35,
+      "assistedPct": 60.3
+    },
+    "layups": {
+      "attempted": 383,
+      "made": 211,
+      "pct": 55.1,
+      "assisted": 80,
+      "assistedPct": 37.9
+    },
+    "tipIns": {
+      "attempted": 18,
+      "made": 14,
+      "pct": 77.8
+    },
+    "twoPointJumpers": {
+      "attempted": 168,
+      "made": 58,
+      "pct": 34.5,
+      "assisted": 21,
+      "assistedPct": 36.2
+    },
+    "threePointJumpers": {
+      "attempted": 430,
+      "made": 149,
+      "pct": 34.7,
+      "assisted": 131,
+      "assistedPct": 87.9
+    },
+    "freeThrows": {
+      "attempted": 389,
+      "made": 282,
+      "pct": 72.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.8,
+      "layups": 36.1,
+      "tipIns": 1.7,
+      "twoPointJumpers": 15.8,
+      "threePointJumpers": 40.5
+    }
+  }
+]

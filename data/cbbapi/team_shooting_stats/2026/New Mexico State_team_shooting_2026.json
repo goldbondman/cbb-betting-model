@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 192,
+    "team": "New Mexico State",
+    "conference": "CUSA",
+    "trackedShots": 967,
+    "freeThrowRate": 33.5,
+    "assistedPct": 22.5,
+    "dunks": {
+      "attempted": 50,
+      "made": 47,
+      "pct": 94,
+      "assisted": 38,
+      "assistedPct": 80.9
+    },
+    "layups": {
+      "attempted": 256,
+      "made": 144,
+      "pct": 56.3,
+      "assisted": 54,
+      "assistedPct": 37.5
+    },
+    "tipIns": {
+      "attempted": 18,
+      "made": 9,
+      "pct": 50
+    },
+    "twoPointJumpers": {
+      "attempted": 265,
+      "made": 105,
+      "pct": 39.6,
+      "assisted": 21,
+      "assistedPct": 20
+    },
+    "threePointJumpers": {
+      "attempted": 378,
+      "made": 132,
+      "pct": 34.9,
+      "assisted": 105,
+      "assistedPct": 79.5
+    },
+    "freeThrows": {
+      "attempted": 324,
+      "made": 236,
+      "pct": 72.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.2,
+      "layups": 26.5,
+      "tipIns": 1.9,
+      "twoPointJumpers": 27.4,
+      "threePointJumpers": 39.1
+    }
+  }
+]

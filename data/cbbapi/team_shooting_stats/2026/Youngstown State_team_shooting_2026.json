@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 361,
+    "team": "Youngstown State",
+    "conference": "Horizon",
+    "trackedShots": 1218,
+    "freeThrowRate": 31,
+    "assistedPct": 23.5,
+    "dunks": {
+      "attempted": 56,
+      "made": 50,
+      "pct": 89.3,
+      "assisted": 33,
+      "assistedPct": 66
+    },
+    "layups": {
+      "attempted": 380,
+      "made": 230,
+      "pct": 60.5,
+      "assisted": 68,
+      "assistedPct": 29.6
+    },
+    "tipIns": {
+      "attempted": 47,
+      "made": 25,
+      "pct": 53.2
+    },
+    "twoPointJumpers": {
+      "attempted": 133,
+      "made": 46,
+      "pct": 34.6,
+      "assisted": 10,
+      "assistedPct": 21.7
+    },
+    "threePointJumpers": {
+      "attempted": 602,
+      "made": 207,
+      "pct": 34.4,
+      "assisted": 175,
+      "assistedPct": 84.5
+    },
+    "freeThrows": {
+      "attempted": 377,
+      "made": 272,
+      "pct": 72.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.6,
+      "layups": 31.2,
+      "tipIns": 3.9,
+      "twoPointJumpers": 10.9,
+      "threePointJumpers": 49.4
+    }
+  }
+]

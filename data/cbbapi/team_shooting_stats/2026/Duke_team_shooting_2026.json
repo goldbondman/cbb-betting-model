@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 72,
+    "team": "Duke",
+    "conference": "ACC",
+    "trackedShots": 1052,
+    "freeThrowRate": 43.3,
+    "assistedPct": 29.1,
+    "dunks": {
+      "attempted": 91,
+      "made": 81,
+      "pct": 89,
+      "assisted": 60,
+      "assistedPct": 74.1
+    },
+    "layups": {
+      "attempted": 345,
+      "made": 204,
+      "pct": 59.1,
+      "assisted": 86,
+      "assistedPct": 42.2
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 21,
+      "pct": 75
+    },
+    "twoPointJumpers": {
+      "attempted": 104,
+      "made": 50,
+      "pct": 48.1,
+      "assisted": 10,
+      "assistedPct": 20
+    },
+    "threePointJumpers": {
+      "attempted": 484,
+      "made": 168,
+      "pct": 34.7,
+      "assisted": 150,
+      "assistedPct": 89.3
+    },
+    "freeThrows": {
+      "attempted": 456,
+      "made": 323,
+      "pct": 70.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 8.7,
+      "layups": 32.8,
+      "tipIns": 2.7,
+      "twoPointJumpers": 9.9,
+      "threePointJumpers": 46
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 319,
+    "team": "UNC Asheville",
+    "conference": "Big South",
+    "trackedShots": 1124,
+    "freeThrowRate": 39.9,
+    "assistedPct": 19.8,
+    "dunks": {
+      "attempted": 41,
+      "made": 40,
+      "pct": 97.6,
+      "assisted": 33,
+      "assistedPct": 82.5
+    },
+    "layups": {
+      "attempted": 266,
+      "made": 146,
+      "pct": 54.9,
+      "assisted": 39,
+      "assistedPct": 26.7
+    },
+    "tipIns": {
+      "attempted": 43,
+      "made": 27,
+      "pct": 62.8
+    },
+    "twoPointJumpers": {
+      "attempted": 376,
+      "made": 160,
+      "pct": 42.6,
+      "assisted": 26,
+      "assistedPct": 16.3
+    },
+    "threePointJumpers": {
+      "attempted": 398,
+      "made": 142,
+      "pct": 35.7,
+      "assisted": 125,
+      "assistedPct": 88
+    },
+    "freeThrows": {
+      "attempted": 448,
+      "made": 312,
+      "pct": 69.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.6,
+      "layups": 23.7,
+      "tipIns": 3.8,
+      "twoPointJumpers": 33.5,
+      "threePointJumpers": 35.4
+    }
+  }
+]

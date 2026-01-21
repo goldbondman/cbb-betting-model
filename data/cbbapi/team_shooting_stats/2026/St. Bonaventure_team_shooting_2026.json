@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 277,
+    "team": "St. Bonaventure",
+    "conference": "A-10",
+    "trackedShots": 1174,
+    "freeThrowRate": 26.8,
+    "assistedPct": 25.1,
+    "dunks": {
+      "attempted": 40,
+      "made": 37,
+      "pct": 92.5,
+      "assisted": 30,
+      "assistedPct": 81.1
+    },
+    "layups": {
+      "attempted": 384,
+      "made": 211,
+      "pct": 54.9,
+      "assisted": 99,
+      "assistedPct": 46.9
+    },
+    "tipIns": {
+      "attempted": 51,
+      "made": 24,
+      "pct": 47.1
+    },
+    "twoPointJumpers": {
+      "attempted": 327,
+      "made": 135,
+      "pct": 41.3,
+      "assisted": 49,
+      "assistedPct": 36.3
+    },
+    "threePointJumpers": {
+      "attempted": 372,
+      "made": 141,
+      "pct": 37.9,
+      "assisted": 117,
+      "assistedPct": 83
+    },
+    "freeThrows": {
+      "attempted": 315,
+      "made": 243,
+      "pct": 77.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.4,
+      "layups": 32.7,
+      "tipIns": 4.3,
+      "twoPointJumpers": 27.9,
+      "threePointJumpers": 31.7
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 147,
+    "team": "Longwood",
+    "conference": "Big South",
+    "trackedShots": 1086,
+    "freeThrowRate": 42.4,
+    "assistedPct": 23.4,
+    "dunks": {
+      "attempted": 62,
+      "made": 56,
+      "pct": 90.3,
+      "assisted": 43,
+      "assistedPct": 76.8
+    },
+    "layups": {
+      "attempted": 412,
+      "made": 228,
+      "pct": 55.3,
+      "assisted": 95,
+      "assistedPct": 41.7
+    },
+    "tipIns": {
+      "attempted": 43,
+      "made": 26,
+      "pct": 60.5
+    },
+    "twoPointJumpers": {
+      "attempted": 202,
+      "made": 84,
+      "pct": 41.6,
+      "assisted": 14,
+      "assistedPct": 16.7
+    },
+    "threePointJumpers": {
+      "attempted": 367,
+      "made": 113,
+      "pct": 30.8,
+      "assisted": 102,
+      "assistedPct": 90.3
+    },
+    "freeThrows": {
+      "attempted": 460,
+      "made": 345,
+      "pct": 75
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.7,
+      "layups": 37.9,
+      "tipIns": 4,
+      "twoPointJumpers": 18.6,
+      "threePointJumpers": 33.8
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 85,
+    "team": "Florida A&M",
+    "conference": "SWAC",
+    "trackedShots": 787,
+    "freeThrowRate": 36.6,
+    "assistedPct": 21.3,
+    "dunks": {
+      "attempted": 31,
+      "made": 27,
+      "pct": 87.1,
+      "assisted": 22,
+      "assistedPct": 81.5
+    },
+    "layups": {
+      "attempted": 269,
+      "made": 146,
+      "pct": 54.3,
+      "assisted": 50,
+      "assistedPct": 34.2
+    },
+    "tipIns": {
+      "attempted": 13,
+      "made": 9,
+      "pct": 69.2
+    },
+    "twoPointJumpers": {
+      "attempted": 180,
+      "made": 57,
+      "pct": 31.7,
+      "assisted": 18,
+      "assistedPct": 31.6
+    },
+    "threePointJumpers": {
+      "attempted": 294,
+      "made": 89,
+      "pct": 30.3,
+      "assisted": 78,
+      "assistedPct": 87.6
+    },
+    "freeThrows": {
+      "attempted": 288,
+      "made": 185,
+      "pct": 64.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.9,
+      "layups": 34.2,
+      "tipIns": 1.7,
+      "twoPointJumpers": 22.9,
+      "threePointJumpers": 37.4
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 232,
+    "team": "Prairie View A&M",
+    "conference": "SWAC",
+    "trackedShots": 1155,
+    "freeThrowRate": 44.3,
+    "assistedPct": 20.3,
+    "dunks": {
+      "attempted": 32,
+      "made": 30,
+      "pct": 93.8,
+      "assisted": 22,
+      "assistedPct": 73.3
+    },
+    "layups": {
+      "attempted": 397,
+      "made": 221,
+      "pct": 55.7,
+      "assisted": 73,
+      "assistedPct": 33
+    },
+    "tipIns": {
+      "attempted": 25,
+      "made": 20,
+      "pct": 80
+    },
+    "twoPointJumpers": {
+      "attempted": 343,
+      "made": 129,
+      "pct": 37.6,
+      "assisted": 35,
+      "assistedPct": 27.1
+    },
+    "threePointJumpers": {
+      "attempted": 358,
+      "made": 122,
+      "pct": 34.1,
+      "assisted": 104,
+      "assistedPct": 85.2
+    },
+    "freeThrows": {
+      "attempted": 512,
+      "made": 385,
+      "pct": 75.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.8,
+      "layups": 34.4,
+      "tipIns": 2.2,
+      "twoPointJumpers": 29.7,
+      "threePointJumpers": 31
+    }
+  }
+]

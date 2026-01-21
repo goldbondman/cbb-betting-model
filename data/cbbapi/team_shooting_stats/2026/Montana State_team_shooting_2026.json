@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 180,
+    "team": "Montana State",
+    "conference": "Big Sky",
+    "trackedShots": 1122,
+    "freeThrowRate": 29.9,
+    "assistedPct": 19.2,
+    "dunks": {
+      "attempted": 29,
+      "made": 29,
+      "pct": 100,
+      "assisted": 23,
+      "assistedPct": 79.3
+    },
+    "layups": {
+      "attempted": 329,
+      "made": 195,
+      "pct": 59.3,
+      "assisted": 44,
+      "assistedPct": 22.6
+    },
+    "tipIns": {
+      "attempted": 6,
+      "made": 6,
+      "pct": 100
+    },
+    "twoPointJumpers": {
+      "attempted": 243,
+      "made": 112,
+      "pct": 46.1,
+      "assisted": 11,
+      "assistedPct": 9.8
+    },
+    "threePointJumpers": {
+      "attempted": 515,
+      "made": 187,
+      "pct": 36.3,
+      "assisted": 137,
+      "assistedPct": 73.3
+    },
+    "freeThrows": {
+      "attempted": 336,
+      "made": 252,
+      "pct": 75
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.6,
+      "layups": 29.3,
+      "tipIns": 0.5,
+      "twoPointJumpers": 21.7,
+      "threePointJumpers": 45.9
+    }
+  }
+]

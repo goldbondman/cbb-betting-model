@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 296,
+    "team": "Texas Southern",
+    "conference": "SWAC",
+    "trackedShots": 982,
+    "freeThrowRate": 40.4,
+    "assistedPct": 17.8,
+    "dunks": {
+      "attempted": 28,
+      "made": 25,
+      "pct": 89.3,
+      "assisted": 15,
+      "assistedPct": 60
+    },
+    "layups": {
+      "attempted": 365,
+      "made": 207,
+      "pct": 56.7,
+      "assisted": 71,
+      "assistedPct": 34.3
+    },
+    "tipIns": {
+      "attempted": 35,
+      "made": 23,
+      "pct": 65.7
+    },
+    "twoPointJumpers": {
+      "attempted": 241,
+      "made": 83,
+      "pct": 34.4,
+      "assisted": 23,
+      "assistedPct": 27.7
+    },
+    "threePointJumpers": {
+      "attempted": 313,
+      "made": 96,
+      "pct": 30.7,
+      "assisted": 66,
+      "assistedPct": 68.8
+    },
+    "freeThrows": {
+      "attempted": 397,
+      "made": 278,
+      "pct": 70
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.9,
+      "layups": 37.2,
+      "tipIns": 3.6,
+      "twoPointJumpers": 24.5,
+      "threePointJumpers": 31.9
+    }
+  }
+]

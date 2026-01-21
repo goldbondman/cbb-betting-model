@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 324,
+    "team": "UT Arlington",
+    "conference": "WAC",
+    "trackedShots": 1041,
+    "freeThrowRate": 40.2,
+    "assistedPct": 22.1,
+    "dunks": {
+      "attempted": 50,
+      "made": 41,
+      "pct": 82,
+      "assisted": 28,
+      "assistedPct": 68.3
+    },
+    "layups": {
+      "attempted": 401,
+      "made": 215,
+      "pct": 53.6,
+      "assisted": 90,
+      "assistedPct": 41.9
+    },
+    "tipIns": {
+      "attempted": 48,
+      "made": 31,
+      "pct": 64.6
+    },
+    "twoPointJumpers": {
+      "attempted": 210,
+      "made": 78,
+      "pct": 37.1,
+      "assisted": 21,
+      "assistedPct": 26.9
+    },
+    "threePointJumpers": {
+      "attempted": 332,
+      "made": 102,
+      "pct": 30.7,
+      "assisted": 91,
+      "assistedPct": 89.2
+    },
+    "freeThrows": {
+      "attempted": 419,
+      "made": 304,
+      "pct": 72.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.8,
+      "layups": 38.5,
+      "tipIns": 4.6,
+      "twoPointJumpers": 20.2,
+      "threePointJumpers": 31.9
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 316,
+    "team": "UL Monroe",
+    "conference": "Sun Belt",
+    "trackedShots": 1102,
+    "freeThrowRate": 36.6,
+    "assistedPct": 22.3,
+    "dunks": {
+      "attempted": 47,
+      "made": 38,
+      "pct": 80.9,
+      "assisted": 26,
+      "assistedPct": 68.4
+    },
+    "layups": {
+      "attempted": 342,
+      "made": 173,
+      "pct": 50.6,
+      "assisted": 76,
+      "assistedPct": 43.9
+    },
+    "tipIns": {
+      "attempted": 47,
+      "made": 35,
+      "pct": 74.5
+    },
+    "twoPointJumpers": {
+      "attempted": 210,
+      "made": 63,
+      "pct": 30,
+      "assisted": 16,
+      "assistedPct": 25.4
+    },
+    "threePointJumpers": {
+      "attempted": 456,
+      "made": 159,
+      "pct": 34.9,
+      "assisted": 128,
+      "assistedPct": 80.5
+    },
+    "freeThrows": {
+      "attempted": 403,
+      "made": 289,
+      "pct": 71.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.3,
+      "layups": 31,
+      "tipIns": 4.3,
+      "twoPointJumpers": 19.1,
+      "threePointJumpers": 41.4
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 131,
+    "team": "Kansas",
+    "conference": "Big 12",
+    "trackedShots": 1110,
+    "freeThrowRate": 33.5,
+    "assistedPct": 25.3,
+    "dunks": {
+      "attempted": 100,
+      "made": 92,
+      "pct": 92,
+      "assisted": 79,
+      "assistedPct": 85.9
+    },
+    "layups": {
+      "attempted": 281,
+      "made": 157,
+      "pct": 55.9,
+      "assisted": 52,
+      "assistedPct": 33.1
+    },
+    "tipIns": {
+      "attempted": 35,
+      "made": 21,
+      "pct": 60
+    },
+    "twoPointJumpers": {
+      "attempted": 280,
+      "made": 103,
+      "pct": 36.8,
+      "assisted": 26,
+      "assistedPct": 25.2
+    },
+    "threePointJumpers": {
+      "attempted": 414,
+      "made": 150,
+      "pct": 36.2,
+      "assisted": 124,
+      "assistedPct": 82.7
+    },
+    "freeThrows": {
+      "attempted": 372,
+      "made": 283,
+      "pct": 76.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 9,
+      "layups": 25.3,
+      "tipIns": 3.2,
+      "twoPointJumpers": 25.2,
+      "threePointJumpers": 37.3
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 278,
+    "team": "St. Francis (PA)",
+    "conference": "NEC",
+    "trackedShots": 1158,
+    "freeThrowRate": 26.3,
+    "assistedPct": 21.7,
+    "dunks": {
+      "attempted": 24,
+      "made": 17,
+      "pct": 70.8,
+      "assisted": 11,
+      "assistedPct": 64.7
+    },
+    "layups": {
+      "attempted": 377,
+      "made": 201,
+      "pct": 53.3,
+      "assisted": 80,
+      "assistedPct": 39.8
+    },
+    "tipIns": {
+      "attempted": 10,
+      "made": 7,
+      "pct": 70
+    },
+    "twoPointJumpers": {
+      "attempted": 297,
+      "made": 104,
+      "pct": 35,
+      "assisted": 26,
+      "assistedPct": 25
+    },
+    "threePointJumpers": {
+      "attempted": 450,
+      "made": 150,
+      "pct": 33.3,
+      "assisted": 134,
+      "assistedPct": 89.3
+    },
+    "freeThrows": {
+      "attempted": 305,
+      "made": 213,
+      "pct": 69.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.1,
+      "layups": 32.6,
+      "tipIns": 0.9,
+      "twoPointJumpers": 25.6,
+      "threePointJumpers": 38.9
+    }
+  }
+]

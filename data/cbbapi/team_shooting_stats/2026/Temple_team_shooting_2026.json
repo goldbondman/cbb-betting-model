@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 289,
+    "team": "Temple",
+    "conference": "American",
+    "trackedShots": 994,
+    "freeThrowRate": 45.3,
+    "assistedPct": 23.1,
+    "dunks": {
+      "attempted": 51,
+      "made": 43,
+      "pct": 84.3,
+      "assisted": 35,
+      "assistedPct": 81.4
+    },
+    "layups": {
+      "attempted": 351,
+      "made": 184,
+      "pct": 52.4,
+      "assisted": 67,
+      "assistedPct": 36.4
+    },
+    "tipIns": {
+      "attempted": 32,
+      "made": 20,
+      "pct": 62.5
+    },
+    "twoPointJumpers": {
+      "attempted": 195,
+      "made": 73,
+      "pct": 37.4,
+      "assisted": 15,
+      "assistedPct": 20.5
+    },
+    "threePointJumpers": {
+      "attempted": 365,
+      "made": 131,
+      "pct": 35.9,
+      "assisted": 113,
+      "assistedPct": 86.3
+    },
+    "freeThrows": {
+      "attempted": 450,
+      "made": 331,
+      "pct": 73.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.1,
+      "layups": 35.3,
+      "tipIns": 3.2,
+      "twoPointJumpers": 19.6,
+      "threePointJumpers": 36.7
+    }
+  }
+]

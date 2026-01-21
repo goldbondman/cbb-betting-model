@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 100,
+    "team": "Georgia State",
+    "conference": "Sun Belt",
+    "trackedShots": 1132,
+    "freeThrowRate": 34.2,
+    "assistedPct": 19.7,
+    "dunks": {
+      "attempted": 25,
+      "made": 18,
+      "pct": 72,
+      "assisted": 7,
+      "assistedPct": 38.9
+    },
+    "layups": {
+      "attempted": 255,
+      "made": 128,
+      "pct": 50.2,
+      "assisted": 34,
+      "assistedPct": 26.6
+    },
+    "tipIns": {
+      "attempted": 27,
+      "made": 19,
+      "pct": 70.4
+    },
+    "twoPointJumpers": {
+      "attempted": 298,
+      "made": 101,
+      "pct": 33.9,
+      "assisted": 40,
+      "assistedPct": 39.6
+    },
+    "threePointJumpers": {
+      "attempted": 527,
+      "made": 169,
+      "pct": 32.1,
+      "assisted": 142,
+      "assistedPct": 84
+    },
+    "freeThrows": {
+      "attempted": 387,
+      "made": 303,
+      "pct": 78.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.2,
+      "layups": 22.5,
+      "tipIns": 2.4,
+      "twoPointJumpers": 26.3,
+      "threePointJumpers": 46.6
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 53,
+    "team": "Cleveland State",
+    "conference": "Horizon",
+    "trackedShots": 1157,
+    "freeThrowRate": 39.5,
+    "assistedPct": 25.8,
+    "dunks": {
+      "attempted": 20,
+      "made": 17,
+      "pct": 85,
+      "assisted": 14,
+      "assistedPct": 82.4
+    },
+    "layups": {
+      "attempted": 379,
+      "made": 223,
+      "pct": 58.8,
+      "assisted": 96,
+      "assistedPct": 43
+    },
+    "tipIns": {
+      "attempted": 23,
+      "made": 14,
+      "pct": 60.9
+    },
+    "twoPointJumpers": {
+      "attempted": 183,
+      "made": 60,
+      "pct": 32.8,
+      "assisted": 19,
+      "assistedPct": 31.7
+    },
+    "threePointJumpers": {
+      "attempted": 552,
+      "made": 206,
+      "pct": 37.3,
+      "assisted": 170,
+      "assistedPct": 82.5
+    },
+    "freeThrows": {
+      "attempted": 457,
+      "made": 338,
+      "pct": 74
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.7,
+      "layups": 32.8,
+      "tipIns": 2,
+      "twoPointJumpers": 15.8,
+      "threePointJumpers": 47.7
+    }
+  }
+]

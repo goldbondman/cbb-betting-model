@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 39,
+    "team": "California Baptist",
+    "conference": "WAC",
+    "trackedShots": 1126,
+    "freeThrowRate": 36.2,
+    "assistedPct": 18.6,
+    "dunks": {
+      "attempted": 69,
+      "made": 55,
+      "pct": 79.7,
+      "assisted": 43,
+      "assistedPct": 78.2
+    },
+    "layups": {
+      "attempted": 424,
+      "made": 201,
+      "pct": 47.4,
+      "assisted": 58,
+      "assistedPct": 28.9
+    },
+    "tipIns": {
+      "attempted": 61,
+      "made": 38,
+      "pct": 62.3
+    },
+    "twoPointJumpers": {
+      "attempted": 217,
+      "made": 85,
+      "pct": 39.2,
+      "assisted": 19,
+      "assistedPct": 22.4
+    },
+    "threePointJumpers": {
+      "attempted": 355,
+      "made": 111,
+      "pct": 31.3,
+      "assisted": 89,
+      "assistedPct": 80.2
+    },
+    "freeThrows": {
+      "attempted": 408,
+      "made": 298,
+      "pct": 73
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.1,
+      "layups": 37.7,
+      "tipIns": 5.4,
+      "twoPointJumpers": 19.3,
+      "threePointJumpers": 31.5
+    }
+  }
+]

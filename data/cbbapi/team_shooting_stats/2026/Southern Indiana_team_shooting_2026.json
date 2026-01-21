@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 365,
+    "team": "Southern Indiana",
+    "conference": "OVC",
+    "trackedShots": 990,
+    "freeThrowRate": 33.4,
+    "assistedPct": 17.7,
+    "dunks": {
+      "attempted": 33,
+      "made": 26,
+      "pct": 78.8,
+      "assisted": 23,
+      "assistedPct": 88.5
+    },
+    "layups": {
+      "attempted": 317,
+      "made": 153,
+      "pct": 48.3,
+      "assisted": 48,
+      "assistedPct": 31.4
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 18,
+      "pct": 64.3
+    },
+    "twoPointJumpers": {
+      "attempted": 179,
+      "made": 57,
+      "pct": 31.8,
+      "assisted": 16,
+      "assistedPct": 28.1
+    },
+    "threePointJumpers": {
+      "attempted": 433,
+      "made": 131,
+      "pct": 30.3,
+      "assisted": 88,
+      "assistedPct": 67.2
+    },
+    "freeThrows": {
+      "attempted": 331,
+      "made": 216,
+      "pct": 65.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.3,
+      "layups": 32,
+      "tipIns": 2.8,
+      "twoPointJumpers": 18.1,
+      "threePointJumpers": 43.7
+    }
+  }
+]

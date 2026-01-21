@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 155,
+    "team": "Manhattan",
+    "conference": "MAAC",
+    "trackedShots": 1270,
+    "freeThrowRate": 34.7,
+    "assistedPct": 21.1,
+    "dunks": {
+      "attempted": 23,
+      "made": 21,
+      "pct": 91.3,
+      "assisted": 15,
+      "assistedPct": 71.4
+    },
+    "layups": {
+      "attempted": 446,
+      "made": 223,
+      "pct": 50,
+      "assisted": 102,
+      "assistedPct": 45.7
+    },
+    "tipIns": {
+      "attempted": 44,
+      "made": 23,
+      "pct": 52.3
+    },
+    "twoPointJumpers": {
+      "attempted": 308,
+      "made": 129,
+      "pct": 41.9,
+      "assisted": 38,
+      "assistedPct": 29.5
+    },
+    "threePointJumpers": {
+      "attempted": 449,
+      "made": 151,
+      "pct": 33.6,
+      "assisted": 113,
+      "assistedPct": 74.8
+    },
+    "freeThrows": {
+      "attempted": 441,
+      "made": 347,
+      "pct": 78.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.8,
+      "layups": 35.1,
+      "tipIns": 3.5,
+      "twoPointJumpers": 24.3,
+      "threePointJumpers": 35.4
+    }
+  }
+]

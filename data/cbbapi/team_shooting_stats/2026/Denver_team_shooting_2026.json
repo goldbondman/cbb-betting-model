@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 68,
+    "team": "Denver",
+    "conference": "Summit",
+    "trackedShots": 1208,
+    "freeThrowRate": 36.1,
+    "assistedPct": 18.6,
+    "dunks": {
+      "attempted": 51,
+      "made": 44,
+      "pct": 86.3,
+      "assisted": 30,
+      "assistedPct": 68.2
+    },
+    "layups": {
+      "attempted": 365,
+      "made": 208,
+      "pct": 57,
+      "assisted": 62,
+      "assistedPct": 29.8
+    },
+    "tipIns": {
+      "attempted": 35,
+      "made": 30,
+      "pct": 85.7
+    },
+    "twoPointJumpers": {
+      "attempted": 303,
+      "made": 132,
+      "pct": 43.6,
+      "assisted": 11,
+      "assistedPct": 8.3
+    },
+    "threePointJumpers": {
+      "attempted": 454,
+      "made": 173,
+      "pct": 38.1,
+      "assisted": 122,
+      "assistedPct": 70.5
+    },
+    "freeThrows": {
+      "attempted": 436,
+      "made": 339,
+      "pct": 77.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.2,
+      "layups": 30.2,
+      "tipIns": 2.9,
+      "twoPointJumpers": 25.1,
+      "threePointJumpers": 37.6
+    }
+  }
+]

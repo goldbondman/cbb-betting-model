@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 17,
+    "team": "Austin Peay",
+    "conference": "ASUN",
+    "trackedShots": 1069,
+    "freeThrowRate": 33.5,
+    "assistedPct": 25.4,
+    "dunks": {
+      "attempted": 24,
+      "made": 23,
+      "pct": 95.8,
+      "assisted": 18,
+      "assistedPct": 78.3
+    },
+    "layups": {
+      "attempted": 378,
+      "made": 201,
+      "pct": 53.2,
+      "assisted": 87,
+      "assistedPct": 43.3
+    },
+    "tipIns": {
+      "attempted": 37,
+      "made": 21,
+      "pct": 56.8
+    },
+    "twoPointJumpers": {
+      "attempted": 185,
+      "made": 75,
+      "pct": 40.5,
+      "assisted": 20,
+      "assistedPct": 26.7
+    },
+    "threePointJumpers": {
+      "attempted": 445,
+      "made": 155,
+      "pct": 34.8,
+      "assisted": 147,
+      "assistedPct": 94.8
+    },
+    "freeThrows": {
+      "attempted": 358,
+      "made": 256,
+      "pct": 71.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.2,
+      "layups": 35.4,
+      "tipIns": 3.5,
+      "twoPointJumpers": 17.3,
+      "threePointJumpers": 41.6
+    }
+  }
+]

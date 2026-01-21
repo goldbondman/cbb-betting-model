@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 261,
+    "team": "Santa Clara",
+    "conference": "WCC",
+    "trackedShots": 1371,
+    "freeThrowRate": 25.5,
+    "assistedPct": 25.8,
+    "dunks": {
+      "attempted": 64,
+      "made": 55,
+      "pct": 85.9,
+      "assisted": 46,
+      "assistedPct": 83.6
+    },
+    "layups": {
+      "attempted": 410,
+      "made": 237,
+      "pct": 57.8,
+      "assisted": 107,
+      "assistedPct": 45.1
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 22,
+      "pct": 78.6
+    },
+    "twoPointJumpers": {
+      "attempted": 254,
+      "made": 120,
+      "pct": 47.2,
+      "assisted": 29,
+      "assistedPct": 24.2
+    },
+    "threePointJumpers": {
+      "attempted": 615,
+      "made": 202,
+      "pct": 32.8,
+      "assisted": 172,
+      "assistedPct": 85.1
+    },
+    "freeThrows": {
+      "attempted": 349,
+      "made": 255,
+      "pct": 73.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.7,
+      "layups": 29.9,
+      "tipIns": 2,
+      "twoPointJumpers": 18.5,
+      "threePointJumpers": 44.9
+    }
+  }
+]

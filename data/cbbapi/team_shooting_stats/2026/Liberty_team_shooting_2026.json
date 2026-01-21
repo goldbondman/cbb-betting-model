@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 142,
+    "team": "Liberty",
+    "conference": "CUSA",
+    "trackedShots": 1005,
+    "freeThrowRate": 28.7,
+    "assistedPct": 31.4,
+    "dunks": {
+      "attempted": 48,
+      "made": 42,
+      "pct": 87.5,
+      "assisted": 35,
+      "assistedPct": 83.3
+    },
+    "layups": {
+      "attempted": 394,
+      "made": 256,
+      "pct": 65,
+      "assisted": 119,
+      "assistedPct": 46.5
+    },
+    "tipIns": {
+      "attempted": 17,
+      "made": 9,
+      "pct": 52.9
+    },
+    "twoPointJumpers": {
+      "attempted": 80,
+      "made": 36,
+      "pct": 45,
+      "assisted": 4,
+      "assistedPct": 11.1
+    },
+    "threePointJumpers": {
+      "attempted": 466,
+      "made": 186,
+      "pct": 39.9,
+      "assisted": 158,
+      "assistedPct": 84.9
+    },
+    "freeThrows": {
+      "attempted": 288,
+      "made": 201,
+      "pct": 69.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.8,
+      "layups": 39.2,
+      "tipIns": 1.7,
+      "twoPointJumpers": 8,
+      "threePointJumpers": 46.4
+    }
+  }
+]

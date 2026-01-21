@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 330,
+    "team": "Utah Tech",
+    "conference": "WAC",
+    "trackedShots": 1189,
+    "freeThrowRate": 31.6,
+    "assistedPct": 24.1,
+    "dunks": {
+      "attempted": 73,
+      "made": 63,
+      "pct": 86.3,
+      "assisted": 41,
+      "assistedPct": 65.1
+    },
+    "layups": {
+      "attempted": 375,
+      "made": 229,
+      "pct": 61.1,
+      "assisted": 105,
+      "assistedPct": 45.9
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 16,
+      "pct": 53.3
+    },
+    "twoPointJumpers": {
+      "attempted": 243,
+      "made": 102,
+      "pct": 42,
+      "assisted": 23,
+      "assistedPct": 22.5
+    },
+    "threePointJumpers": {
+      "attempted": 468,
+      "made": 147,
+      "pct": 31.4,
+      "assisted": 118,
+      "assistedPct": 80.3
+    },
+    "freeThrows": {
+      "attempted": 376,
+      "made": 271,
+      "pct": 72.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.1,
+      "layups": 31.5,
+      "tipIns": 2.5,
+      "twoPointJumpers": 20.4,
+      "threePointJumpers": 39.4
+    }
+  }
+]

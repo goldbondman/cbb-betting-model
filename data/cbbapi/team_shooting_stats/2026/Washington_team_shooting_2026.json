@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 343,
+    "team": "Washington",
+    "conference": "Big Ten",
+    "trackedShots": 1122,
+    "freeThrowRate": 35.7,
+    "assistedPct": 21.5,
+    "dunks": {
+      "attempted": 42,
+      "made": 39,
+      "pct": 92.9,
+      "assisted": 29,
+      "assistedPct": 74.4
+    },
+    "layups": {
+      "attempted": 310,
+      "made": 178,
+      "pct": 57.4,
+      "assisted": 73,
+      "assistedPct": 41
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 14,
+      "pct": 50
+    },
+    "twoPointJumpers": {
+      "attempted": 361,
+      "made": 158,
+      "pct": 43.8,
+      "assisted": 38,
+      "assistedPct": 24.1
+    },
+    "threePointJumpers": {
+      "attempted": 381,
+      "made": 117,
+      "pct": 30.7,
+      "assisted": 101,
+      "assistedPct": 86.3
+    },
+    "freeThrows": {
+      "attempted": 401,
+      "made": 313,
+      "pct": 78.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.7,
+      "layups": 27.6,
+      "tipIns": 2.5,
+      "twoPointJumpers": 32.2,
+      "threePointJumpers": 34
+    }
+  }
+]

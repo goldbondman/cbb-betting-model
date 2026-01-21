@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 84,
+    "team": "Fairleigh Dickinson",
+    "conference": "NEC",
+    "trackedShots": 1090,
+    "freeThrowRate": 33,
+    "assistedPct": 20.7,
+    "dunks": {
+      "attempted": 16,
+      "made": 16,
+      "pct": 100,
+      "assisted": 10,
+      "assistedPct": 62.5
+    },
+    "layups": {
+      "attempted": 362,
+      "made": 196,
+      "pct": 54.1,
+      "assisted": 73,
+      "assistedPct": 37.2
+    },
+    "tipIns": {
+      "attempted": 9,
+      "made": 5,
+      "pct": 55.6
+    },
+    "twoPointJumpers": {
+      "attempted": 165,
+      "made": 57,
+      "pct": 34.5,
+      "assisted": 10,
+      "assistedPct": 17.5
+    },
+    "threePointJumpers": {
+      "attempted": 538,
+      "made": 168,
+      "pct": 31.2,
+      "assisted": 133,
+      "assistedPct": 79.2
+    },
+    "freeThrows": {
+      "attempted": 360,
+      "made": 250,
+      "pct": 69.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.5,
+      "layups": 33.2,
+      "tipIns": 0.8,
+      "twoPointJumpers": 15.1,
+      "threePointJumpers": 49.4
+    }
+  }
+]

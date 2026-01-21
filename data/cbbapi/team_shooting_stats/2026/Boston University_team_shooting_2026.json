@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 27,
+    "team": "Boston University",
+    "conference": "Patriot",
+    "trackedShots": 1051,
+    "freeThrowRate": 31.3,
+    "assistedPct": 26.5,
+    "dunks": {
+      "attempted": 36,
+      "made": 33,
+      "pct": 91.7,
+      "assisted": 28,
+      "assistedPct": 84.8
+    },
+    "layups": {
+      "attempted": 329,
+      "made": 186,
+      "pct": 56.5,
+      "assisted": 76,
+      "assistedPct": 40.9
+    },
+    "tipIns": {
+      "attempted": 32,
+      "made": 25,
+      "pct": 78.1
+    },
+    "twoPointJumpers": {
+      "attempted": 186,
+      "made": 85,
+      "pct": 45.7,
+      "assisted": 31,
+      "assistedPct": 36.5
+    },
+    "threePointJumpers": {
+      "attempted": 468,
+      "made": 183,
+      "pct": 39.1,
+      "assisted": 143,
+      "assistedPct": 78.1
+    },
+    "freeThrows": {
+      "attempted": 329,
+      "made": 233,
+      "pct": 70.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.4,
+      "layups": 31.3,
+      "tipIns": 3,
+      "twoPointJumpers": 17.7,
+      "threePointJumpers": 44.5
+    }
+  }
+]

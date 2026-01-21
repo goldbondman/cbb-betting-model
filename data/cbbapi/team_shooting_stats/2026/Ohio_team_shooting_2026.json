@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 215,
+    "team": "Ohio",
+    "conference": "MAC",
+    "trackedShots": 1178,
+    "freeThrowRate": 37,
+    "assistedPct": 22.7,
+    "dunks": {
+      "attempted": 62,
+      "made": 49,
+      "pct": 79,
+      "assisted": 40,
+      "assistedPct": 81.6
+    },
+    "layups": {
+      "attempted": 364,
+      "made": 212,
+      "pct": 58.2,
+      "assisted": 93,
+      "assistedPct": 43.9
+    },
+    "tipIns": {
+      "attempted": 30,
+      "made": 23,
+      "pct": 76.7
+    },
+    "twoPointJumpers": {
+      "attempted": 284,
+      "made": 142,
+      "pct": 50,
+      "assisted": 27,
+      "assistedPct": 19
+    },
+    "threePointJumpers": {
+      "attempted": 438,
+      "made": 137,
+      "pct": 31.3,
+      "assisted": 107,
+      "assistedPct": 78.1
+    },
+    "freeThrows": {
+      "attempted": 436,
+      "made": 300,
+      "pct": 68.8
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.3,
+      "layups": 30.9,
+      "tipIns": 2.5,
+      "twoPointJumpers": 24.1,
+      "threePointJumpers": 37.2
+    }
+  }
+]

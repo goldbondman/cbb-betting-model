@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 360,
+    "team": "Yale",
+    "conference": "Ivy",
+    "trackedShots": 1007,
+    "freeThrowRate": 36,
+    "assistedPct": 28.1,
+    "dunks": {
+      "attempted": 40,
+      "made": 39,
+      "pct": 97.5,
+      "assisted": 34,
+      "assistedPct": 87.2
+    },
+    "layups": {
+      "attempted": 361,
+      "made": 206,
+      "pct": 57.1,
+      "assisted": 90,
+      "assistedPct": 43.7
+    },
+    "tipIns": {
+      "attempted": 34,
+      "made": 21,
+      "pct": 61.8
+    },
+    "twoPointJumpers": {
+      "attempted": 210,
+      "made": 93,
+      "pct": 44.3,
+      "assisted": 21,
+      "assistedPct": 22.6
+    },
+    "threePointJumpers": {
+      "attempted": 362,
+      "made": 150,
+      "pct": 41.4,
+      "assisted": 138,
+      "assistedPct": 92
+    },
+    "freeThrows": {
+      "attempted": 363,
+      "made": 280,
+      "pct": 77.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 4,
+      "layups": 35.8,
+      "tipIns": 3.4,
+      "twoPointJumpers": 20.9,
+      "threePointJumpers": 35.9
+    }
+  }
+]

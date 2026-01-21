@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 241,
+    "team": "Rice",
+    "conference": "American",
+    "trackedShots": 1067,
+    "freeThrowRate": 38.5,
+    "assistedPct": 20.7,
+    "dunks": {
+      "attempted": 35,
+      "made": 29,
+      "pct": 82.9,
+      "assisted": 18,
+      "assistedPct": 62.1
+    },
+    "layups": {
+      "attempted": 289,
+      "made": 145,
+      "pct": 50.2,
+      "assisted": 57,
+      "assistedPct": 39.3
+    },
+    "tipIns": {
+      "attempted": 29,
+      "made": 15,
+      "pct": 51.7
+    },
+    "twoPointJumpers": {
+      "attempted": 271,
+      "made": 99,
+      "pct": 36.5,
+      "assisted": 15,
+      "assistedPct": 15.2
+    },
+    "threePointJumpers": {
+      "attempted": 443,
+      "made": 158,
+      "pct": 35.7,
+      "assisted": 131,
+      "assistedPct": 82.9
+    },
+    "freeThrows": {
+      "attempted": 411,
+      "made": 286,
+      "pct": 69.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.3,
+      "layups": 27.1,
+      "tipIns": 2.7,
+      "twoPointJumpers": 25.4,
+      "threePointJumpers": 41.5
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 238,
+    "team": "Quinnipiac",
+    "conference": "MAAC",
+    "trackedShots": 1266,
+    "freeThrowRate": 31.3,
+    "assistedPct": 22.7,
+    "dunks": {
+      "attempted": 76,
+      "made": 68,
+      "pct": 89.5,
+      "assisted": 55,
+      "assistedPct": 80.9
+    },
+    "layups": {
+      "attempted": 433,
+      "made": 218,
+      "pct": 50.3,
+      "assisted": 82,
+      "assistedPct": 37.6
+    },
+    "tipIns": {
+      "attempted": 55,
+      "made": 34,
+      "pct": 61.8
+    },
+    "twoPointJumpers": {
+      "attempted": 284,
+      "made": 90,
+      "pct": 31.7,
+      "assisted": 24,
+      "assistedPct": 26.7
+    },
+    "threePointJumpers": {
+      "attempted": 418,
+      "made": 153,
+      "pct": 36.6,
+      "assisted": 126,
+      "assistedPct": 82.4
+    },
+    "freeThrows": {
+      "attempted": 396,
+      "made": 277,
+      "pct": 69.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 6,
+      "layups": 34.2,
+      "tipIns": 4.3,
+      "twoPointJumpers": 22.4,
+      "threePointJumpers": 33
+    }
+  }
+]

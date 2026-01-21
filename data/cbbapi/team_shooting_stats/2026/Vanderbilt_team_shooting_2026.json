@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 336,
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "trackedShots": 1074,
+    "freeThrowRate": 36.6,
+    "assistedPct": 27.8,
+    "dunks": {
+      "attempted": 67,
+      "made": 62,
+      "pct": 92.5,
+      "assisted": 48,
+      "assistedPct": 77.4
+    },
+    "layups": {
+      "attempted": 293,
+      "made": 182,
+      "pct": 62.1,
+      "assisted": 81,
+      "assistedPct": 44.5
+    },
+    "tipIns": {
+      "attempted": 26,
+      "made": 19,
+      "pct": 73.1
+    },
+    "twoPointJumpers": {
+      "attempted": 197,
+      "made": 86,
+      "pct": 43.7,
+      "assisted": 15,
+      "assistedPct": 17.4
+    },
+    "threePointJumpers": {
+      "attempted": 491,
+      "made": 178,
+      "pct": 36.3,
+      "assisted": 155,
+      "assistedPct": 87.1
+    },
+    "freeThrows": {
+      "attempted": 393,
+      "made": 303,
+      "pct": 77.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.2,
+      "layups": 27.3,
+      "tipIns": 2.4,
+      "twoPointJumpers": 18.3,
+      "threePointJumpers": 45.7
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 248,
+    "team": "SMU",
+    "conference": "ACC",
+    "trackedShots": 1199,
+    "freeThrowRate": 34.9,
+    "assistedPct": 27.3,
+    "dunks": {
+      "attempted": 81,
+      "made": 65,
+      "pct": 80.2,
+      "assisted": 49,
+      "assistedPct": 75.4
+    },
+    "layups": {
+      "attempted": 298,
+      "made": 189,
+      "pct": 63.4,
+      "assisted": 91,
+      "assistedPct": 48.1
+    },
+    "tipIns": {
+      "attempted": 46,
+      "made": 28,
+      "pct": 60.9
+    },
+    "twoPointJumpers": {
+      "attempted": 372,
+      "made": 166,
+      "pct": 44.6,
+      "assisted": 64,
+      "assistedPct": 38.6
+    },
+    "threePointJumpers": {
+      "attempted": 402,
+      "made": 148,
+      "pct": 36.8,
+      "assisted": 123,
+      "assistedPct": 83.1
+    },
+    "freeThrows": {
+      "attempted": 418,
+      "made": 322,
+      "pct": 77
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.8,
+      "layups": 24.9,
+      "tipIns": 3.8,
+      "twoPointJumpers": 31,
+      "threePointJumpers": 33.5
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 49,
+    "team": "Chattanooga",
+    "conference": "SoCon",
+    "trackedShots": 1040,
+    "freeThrowRate": 31,
+    "assistedPct": 26.2,
+    "dunks": {
+      "attempted": 9,
+      "made": 9,
+      "pct": 100,
+      "assisted": 6,
+      "assistedPct": 66.7
+    },
+    "layups": {
+      "attempted": 283,
+      "made": 167,
+      "pct": 59,
+      "assisted": 82,
+      "assistedPct": 49.1
+    },
+    "tipIns": {
+      "attempted": 15,
+      "made": 9,
+      "pct": 60
+    },
+    "twoPointJumpers": {
+      "attempted": 200,
+      "made": 93,
+      "pct": 46.5,
+      "assisted": 18,
+      "assistedPct": 19.4
+    },
+    "threePointJumpers": {
+      "attempted": 533,
+      "made": 192,
+      "pct": 36,
+      "assisted": 166,
+      "assistedPct": 86.5
+    },
+    "freeThrows": {
+      "attempted": 322,
+      "made": 250,
+      "pct": 77.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 0.9,
+      "layups": 27.2,
+      "tipIns": 1.4,
+      "twoPointJumpers": 19.2,
+      "threePointJumpers": 51.3
+    }
+  }
+]

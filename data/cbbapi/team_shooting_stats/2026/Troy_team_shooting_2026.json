@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 302,
+    "team": "Troy",
+    "conference": "Sun Belt",
+    "trackedShots": 1225,
+    "freeThrowRate": 35.1,
+    "assistedPct": 26.5,
+    "dunks": {
+      "attempted": 48,
+      "made": 42,
+      "pct": 87.5,
+      "assisted": 39,
+      "assistedPct": 92.9
+    },
+    "layups": {
+      "attempted": 465,
+      "made": 251,
+      "pct": 54,
+      "assisted": 122,
+      "assistedPct": 48.6
+    },
+    "tipIns": {
+      "attempted": 42,
+      "made": 30,
+      "pct": 71.4
+    },
+    "twoPointJumpers": {
+      "attempted": 117,
+      "made": 46,
+      "pct": 39.3,
+      "assisted": 9,
+      "assistedPct": 19.6
+    },
+    "threePointJumpers": {
+      "attempted": 553,
+      "made": 201,
+      "pct": 36.3,
+      "assisted": 155,
+      "assistedPct": 77.1
+    },
+    "freeThrows": {
+      "attempted": 430,
+      "made": 310,
+      "pct": 72.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.9,
+      "layups": 38,
+      "tipIns": 3.4,
+      "twoPointJumpers": 9.6,
+      "threePointJumpers": 45.1
+    }
+  }
+]

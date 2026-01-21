@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 50,
+    "team": "Chicago State",
+    "conference": "NEC",
+    "trackedShots": 1045,
+    "freeThrowRate": 30.6,
+    "assistedPct": 18,
+    "dunks": {
+      "attempted": 5,
+      "made": 4,
+      "pct": 80,
+      "assisted": 3,
+      "assistedPct": 75
+    },
+    "layups": {
+      "attempted": 328,
+      "made": 154,
+      "pct": 47,
+      "assisted": 68,
+      "assistedPct": 44.2
+    },
+    "tipIns": {
+      "attempted": 22,
+      "made": 13,
+      "pct": 59.1
+    },
+    "twoPointJumpers": {
+      "attempted": 395,
+      "made": 148,
+      "pct": 37.5,
+      "assisted": 44,
+      "assistedPct": 29.7
+    },
+    "threePointJumpers": {
+      "attempted": 295,
+      "made": 92,
+      "pct": 31.2,
+      "assisted": 73,
+      "assistedPct": 79.3
+    },
+    "freeThrows": {
+      "attempted": 320,
+      "made": 247,
+      "pct": 77.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 0.5,
+      "layups": 31.4,
+      "tipIns": 2.1,
+      "twoPointJumpers": 37.8,
+      "threePointJumpers": 28.2
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 60,
+    "team": "Cornell",
+    "conference": "Ivy",
+    "trackedShots": 1109,
+    "freeThrowRate": 29.4,
+    "assistedPct": 34,
+    "dunks": {
+      "attempted": 18,
+      "made": 17,
+      "pct": 94.4,
+      "assisted": 11,
+      "assistedPct": 64.7
+    },
+    "layups": {
+      "attempted": 373,
+      "made": 233,
+      "pct": 62.5,
+      "assisted": 123,
+      "assistedPct": 52.8
+    },
+    "tipIns": {
+      "attempted": 16,
+      "made": 12,
+      "pct": 75
+    },
+    "twoPointJumpers": {
+      "attempted": 106,
+      "made": 42,
+      "pct": 39.6,
+      "assisted": 12,
+      "assistedPct": 28.6
+    },
+    "threePointJumpers": {
+      "attempted": 596,
+      "made": 240,
+      "pct": 40.3,
+      "assisted": 231,
+      "assistedPct": 96.3
+    },
+    "freeThrows": {
+      "attempted": 326,
+      "made": 243,
+      "pct": 74.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.6,
+      "layups": 33.6,
+      "tipIns": 1.4,
+      "twoPointJumpers": 9.6,
+      "threePointJumpers": 53.7
+    }
+  }
+]

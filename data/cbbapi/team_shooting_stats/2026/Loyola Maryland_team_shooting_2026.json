@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 152,
+    "team": "Loyola Maryland",
+    "conference": "Patriot",
+    "trackedShots": 1204,
+    "freeThrowRate": 32.1,
+    "assistedPct": 23.2,
+    "dunks": {
+      "attempted": 27,
+      "made": 25,
+      "pct": 92.6,
+      "assisted": 21,
+      "assistedPct": 84
+    },
+    "layups": {
+      "attempted": 414,
+      "made": 228,
+      "pct": 55.1,
+      "assisted": 71,
+      "assistedPct": 31.1
+    },
+    "tipIns": {
+      "attempted": 19,
+      "made": 12,
+      "pct": 63.2
+    },
+    "twoPointJumpers": {
+      "attempted": 178,
+      "made": 73,
+      "pct": 41,
+      "assisted": 23,
+      "assistedPct": 31.5
+    },
+    "threePointJumpers": {
+      "attempted": 566,
+      "made": 191,
+      "pct": 33.7,
+      "assisted": 164,
+      "assistedPct": 85.9
+    },
+    "freeThrows": {
+      "attempted": 386,
+      "made": 255,
+      "pct": 66.1
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.2,
+      "layups": 34.4,
+      "tipIns": 1.6,
+      "twoPointJumpers": 14.8,
+      "threePointJumpers": 47
+    }
+  }
+]

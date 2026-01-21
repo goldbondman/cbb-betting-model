@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 242,
+    "team": "Richmond",
+    "conference": "A-10",
+    "trackedShots": 1124,
+    "freeThrowRate": 39.1,
+    "assistedPct": 24.9,
+    "dunks": {
+      "attempted": 30,
+      "made": 29,
+      "pct": 96.7,
+      "assisted": 21,
+      "assistedPct": 72.4
+    },
+    "layups": {
+      "attempted": 299,
+      "made": 179,
+      "pct": 59.9,
+      "assisted": 79,
+      "assistedPct": 44.1
+    },
+    "tipIns": {
+      "attempted": 12,
+      "made": 4,
+      "pct": 33.3
+    },
+    "twoPointJumpers": {
+      "attempted": 320,
+      "made": 128,
+      "pct": 40,
+      "assisted": 31,
+      "assistedPct": 24.2
+    },
+    "threePointJumpers": {
+      "attempted": 463,
+      "made": 175,
+      "pct": 37.8,
+      "assisted": 149,
+      "assistedPct": 85.1
+    },
+    "freeThrows": {
+      "attempted": 440,
+      "made": 332,
+      "pct": 75.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.7,
+      "layups": 26.6,
+      "tipIns": 1.1,
+      "twoPointJumpers": 28.5,
+      "threePointJumpers": 41.2
+    }
+  }
+]

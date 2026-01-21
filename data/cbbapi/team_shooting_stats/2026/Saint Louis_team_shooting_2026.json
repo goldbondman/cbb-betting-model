@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 252,
+    "team": "Saint Louis",
+    "conference": "A-10",
+    "trackedShots": 1179,
+    "freeThrowRate": 34.7,
+    "assistedPct": 30.2,
+    "dunks": {
+      "attempted": 51,
+      "made": 47,
+      "pct": 92.2,
+      "assisted": 34,
+      "assistedPct": 72.3
+    },
+    "layups": {
+      "attempted": 484,
+      "made": 308,
+      "pct": 63.6,
+      "assisted": 132,
+      "assistedPct": 42.9
+    },
+    "tipIns": {
+      "attempted": 36,
+      "made": 24,
+      "pct": 66.7
+    },
+    "twoPointJumpers": {
+      "attempted": 85,
+      "made": 30,
+      "pct": 35.3,
+      "assisted": 9,
+      "assistedPct": 30
+    },
+    "threePointJumpers": {
+      "attempted": 523,
+      "made": 201,
+      "pct": 38.4,
+      "assisted": 181,
+      "assistedPct": 90
+    },
+    "freeThrows": {
+      "attempted": 409,
+      "made": 311,
+      "pct": 76
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.3,
+      "layups": 41.1,
+      "tipIns": 3.1,
+      "twoPointJumpers": 7.2,
+      "threePointJumpers": 44.4
+    }
+  }
+]

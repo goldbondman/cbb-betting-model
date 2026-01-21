@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 118,
+    "team": "Illinois",
+    "conference": "Big Ten",
+    "trackedShots": 1044,
+    "freeThrowRate": 34,
+    "assistedPct": 23.5,
+    "dunks": {
+      "attempted": 35,
+      "made": 31,
+      "pct": 88.6,
+      "assisted": 24,
+      "assistedPct": 77.4
+    },
+    "layups": {
+      "attempted": 289,
+      "made": 199,
+      "pct": 68.9,
+      "assisted": 60,
+      "assistedPct": 30.2
+    },
+    "tipIns": {
+      "attempted": 32,
+      "made": 20,
+      "pct": 62.5
+    },
+    "twoPointJumpers": {
+      "attempted": 181,
+      "made": 71,
+      "pct": 39.2,
+      "assisted": 15,
+      "assistedPct": 21.1
+    },
+    "threePointJumpers": {
+      "attempted": 507,
+      "made": 182,
+      "pct": 35.9,
+      "assisted": 146,
+      "assistedPct": 80.2
+    },
+    "freeThrows": {
+      "attempted": 355,
+      "made": 283,
+      "pct": 79.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.4,
+      "layups": 27.7,
+      "tipIns": 3.1,
+      "twoPointJumpers": 17.3,
+      "threePointJumpers": 48.6
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 48,
+    "team": "Charlotte",
+    "conference": "American",
+    "trackedShots": 1045,
+    "freeThrowRate": 39.2,
+    "assistedPct": 23.1,
+    "dunks": {
+      "attempted": 68,
+      "made": 62,
+      "pct": 91.2,
+      "assisted": 49,
+      "assistedPct": 79
+    },
+    "layups": {
+      "attempted": 294,
+      "made": 155,
+      "pct": 52.7,
+      "assisted": 41,
+      "assistedPct": 26.5
+    },
+    "tipIns": {
+      "attempted": 55,
+      "made": 32,
+      "pct": 58.2
+    },
+    "twoPointJumpers": {
+      "attempted": 171,
+      "made": 66,
+      "pct": 38.6,
+      "assisted": 13,
+      "assistedPct": 19.7
+    },
+    "threePointJumpers": {
+      "attempted": 457,
+      "made": 162,
+      "pct": 35.4,
+      "assisted": 138,
+      "assistedPct": 85.2
+    },
+    "freeThrows": {
+      "attempted": 410,
+      "made": 293,
+      "pct": 71.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.5,
+      "layups": 28.1,
+      "tipIns": 5.3,
+      "twoPointJumpers": 16.4,
+      "threePointJumpers": 43.7
+    }
+  }
+]

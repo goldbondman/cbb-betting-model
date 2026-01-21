@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 258,
+    "team": "San Diego",
+    "conference": "WCC",
+    "trackedShots": 1198,
+    "freeThrowRate": 27.8,
+    "assistedPct": 26,
+    "dunks": {
+      "attempted": 28,
+      "made": 22,
+      "pct": 78.6,
+      "assisted": 19,
+      "assistedPct": 86.4
+    },
+    "layups": {
+      "attempted": 368,
+      "made": 226,
+      "pct": 61.4,
+      "assisted": 106,
+      "assistedPct": 46.9
+    },
+    "tipIns": {
+      "attempted": 17,
+      "made": 10,
+      "pct": 58.8
+    },
+    "twoPointJumpers": {
+      "attempted": 261,
+      "made": 96,
+      "pct": 36.8,
+      "assisted": 31,
+      "assistedPct": 32.3
+    },
+    "threePointJumpers": {
+      "attempted": 524,
+      "made": 181,
+      "pct": 34.5,
+      "assisted": 155,
+      "assistedPct": 85.6
+    },
+    "freeThrows": {
+      "attempted": 333,
+      "made": 258,
+      "pct": 77.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.3,
+      "layups": 30.7,
+      "tipIns": 1.4,
+      "twoPointJumpers": 21.8,
+      "threePointJumpers": 43.7
+    }
+  }
+]

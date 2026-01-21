@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 235,
+    "team": "Providence",
+    "conference": "Big East",
+    "trackedShots": 1231,
+    "freeThrowRate": 36.4,
+    "assistedPct": 24.2,
+    "dunks": {
+      "attempted": 98,
+      "made": 87,
+      "pct": 88.8,
+      "assisted": 66,
+      "assistedPct": 75.9
+    },
+    "layups": {
+      "attempted": 387,
+      "made": 222,
+      "pct": 57.4,
+      "assisted": 77,
+      "assistedPct": 34.7
+    },
+    "tipIns": {
+      "attempted": 32,
+      "made": 23,
+      "pct": 71.9
+    },
+    "twoPointJumpers": {
+      "attempted": 204,
+      "made": 78,
+      "pct": 38.2,
+      "assisted": 11,
+      "assistedPct": 14.1
+    },
+    "threePointJumpers": {
+      "attempted": 510,
+      "made": 179,
+      "pct": 35.1,
+      "assisted": 144,
+      "assistedPct": 80.4
+    },
+    "freeThrows": {
+      "attempted": 448,
+      "made": 348,
+      "pct": 77.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 8,
+      "layups": 31.4,
+      "tipIns": 2.6,
+      "twoPointJumpers": 16.6,
+      "threePointJumpers": 41.4
+    }
+  }
+]

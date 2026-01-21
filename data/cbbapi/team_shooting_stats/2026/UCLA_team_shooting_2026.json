@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 313,
+    "team": "UCLA",
+    "conference": "Big Ten",
+    "trackedShots": 1087,
+    "freeThrowRate": 35.6,
+    "assistedPct": 27.4,
+    "dunks": {
+      "attempted": 45,
+      "made": 41,
+      "pct": 91.1,
+      "assisted": 33,
+      "assistedPct": 80.5
+    },
+    "layups": {
+      "attempted": 272,
+      "made": 168,
+      "pct": 61.8,
+      "assisted": 79,
+      "assistedPct": 47
+    },
+    "tipIns": {
+      "attempted": 23,
+      "made": 16,
+      "pct": 69.6
+    },
+    "twoPointJumpers": {
+      "attempted": 366,
+      "made": 153,
+      "pct": 41.8,
+      "assisted": 64,
+      "assistedPct": 41.8
+    },
+    "threePointJumpers": {
+      "attempted": 381,
+      "made": 142,
+      "pct": 37.3,
+      "assisted": 122,
+      "assistedPct": 85.9
+    },
+    "freeThrows": {
+      "attempted": 387,
+      "made": 294,
+      "pct": 76
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.1,
+      "layups": 25,
+      "tipIns": 2.1,
+      "twoPointJumpers": 33.7,
+      "threePointJumpers": 35.1
+    }
+  }
+]

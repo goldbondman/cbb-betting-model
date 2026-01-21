@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 141,
+    "team": "Lehigh",
+    "conference": "Patriot",
+    "trackedShots": 1147,
+    "freeThrowRate": 32.7,
+    "assistedPct": 23.4,
+    "dunks": {
+      "attempted": 35,
+      "made": 31,
+      "pct": 88.6,
+      "assisted": 25,
+      "assistedPct": 80.6
+    },
+    "layups": {
+      "attempted": 331,
+      "made": 192,
+      "pct": 58,
+      "assisted": 76,
+      "assistedPct": 39.6
+    },
+    "tipIns": {
+      "attempted": 20,
+      "made": 13,
+      "pct": 65
+    },
+    "twoPointJumpers": {
+      "attempted": 293,
+      "made": 123,
+      "pct": 42,
+      "assisted": 32,
+      "assistedPct": 26
+    },
+    "threePointJumpers": {
+      "attempted": 468,
+      "made": 156,
+      "pct": 33.3,
+      "assisted": 135,
+      "assistedPct": 86.5
+    },
+    "freeThrows": {
+      "attempted": 375,
+      "made": 275,
+      "pct": 73.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.1,
+      "layups": 28.9,
+      "tipIns": 1.7,
+      "twoPointJumpers": 25.5,
+      "threePointJumpers": 40.8
+    }
+  }
+]

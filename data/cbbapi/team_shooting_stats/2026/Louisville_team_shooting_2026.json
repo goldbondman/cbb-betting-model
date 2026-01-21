@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 150,
+    "team": "Louisville",
+    "conference": "ACC",
+    "trackedShots": 1073,
+    "freeThrowRate": 34.9,
+    "assistedPct": 27.3,
+    "dunks": {
+      "attempted": 73,
+      "made": 64,
+      "pct": 87.7,
+      "assisted": 46,
+      "assistedPct": 71.9
+    },
+    "layups": {
+      "attempted": 302,
+      "made": 183,
+      "pct": 60.6,
+      "assisted": 77,
+      "assistedPct": 42.1
+    },
+    "tipIns": {
+      "attempted": 24,
+      "made": 17,
+      "pct": 70.8
+    },
+    "twoPointJumpers": {
+      "attempted": 95,
+      "made": 39,
+      "pct": 41.1,
+      "assisted": 5,
+      "assistedPct": 12.8
+    },
+    "threePointJumpers": {
+      "attempted": 579,
+      "made": 201,
+      "pct": 34.7,
+      "assisted": 165,
+      "assistedPct": 82.1
+    },
+    "freeThrows": {
+      "attempted": 375,
+      "made": 287,
+      "pct": 76.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.8,
+      "layups": 28.1,
+      "tipIns": 2.2,
+      "twoPointJumpers": 8.9,
+      "threePointJumpers": 54
+    }
+  }
+]

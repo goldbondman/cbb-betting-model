@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 193,
+    "team": "New Orleans",
+    "conference": "Southland",
+    "trackedShots": 1150,
+    "freeThrowRate": 41.7,
+    "assistedPct": 22.9,
+    "dunks": {
+      "attempted": 66,
+      "made": 56,
+      "pct": 84.8,
+      "assisted": 45,
+      "assistedPct": 80.4
+    },
+    "layups": {
+      "attempted": 358,
+      "made": 180,
+      "pct": 50.3,
+      "assisted": 74,
+      "assistedPct": 41.1
+    },
+    "tipIns": {
+      "attempted": 38,
+      "made": 30,
+      "pct": 78.9
+    },
+    "twoPointJumpers": {
+      "attempted": 264,
+      "made": 103,
+      "pct": 39,
+      "assisted": 27,
+      "assistedPct": 26.2
+    },
+    "threePointJumpers": {
+      "attempted": 424,
+      "made": 147,
+      "pct": 34.7,
+      "assisted": 117,
+      "assistedPct": 79.6
+    },
+    "freeThrows": {
+      "attempted": 480,
+      "made": 356,
+      "pct": 74.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.7,
+      "layups": 31.1,
+      "tipIns": 3.3,
+      "twoPointJumpers": 23,
+      "threePointJumpers": 36.9
+    }
+  }
+]

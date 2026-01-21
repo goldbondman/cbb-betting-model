@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 366,
+    "team": "Lindenwood",
+    "conference": "OVC",
+    "trackedShots": 1192,
+    "freeThrowRate": 37.3,
+    "assistedPct": 24.6,
+    "dunks": {
+      "attempted": 45,
+      "made": 44,
+      "pct": 97.8,
+      "assisted": 34,
+      "assistedPct": 77.3
+    },
+    "layups": {
+      "attempted": 477,
+      "made": 274,
+      "pct": 57.4,
+      "assisted": 129,
+      "assistedPct": 47.1
+    },
+    "tipIns": {
+      "attempted": 34,
+      "made": 30,
+      "pct": 88.2
+    },
+    "twoPointJumpers": {
+      "attempted": 262,
+      "made": 95,
+      "pct": 36.3,
+      "assisted": 31,
+      "assistedPct": 32.6
+    },
+    "threePointJumpers": {
+      "attempted": 374,
+      "made": 112,
+      "pct": 29.9,
+      "assisted": 99,
+      "assistedPct": 88.4
+    },
+    "freeThrows": {
+      "attempted": 445,
+      "made": 297,
+      "pct": 66.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.8,
+      "layups": 40,
+      "tipIns": 2.9,
+      "twoPointJumpers": 22,
+      "threePointJumpers": 31.4
+    }
+  }
+]

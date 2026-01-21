@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 146,
+    "team": "Long Island University",
+    "conference": "NEC",
+    "trackedShots": 1133,
+    "freeThrowRate": 32.7,
+    "assistedPct": 22.8,
+    "dunks": {
+      "attempted": 103,
+      "made": 88,
+      "pct": 85.4,
+      "assisted": 62,
+      "assistedPct": 70.5
+    },
+    "layups": {
+      "attempted": 373,
+      "made": 182,
+      "pct": 48.8,
+      "assisted": 79,
+      "assistedPct": 43.4
+    },
+    "tipIns": {
+      "attempted": 52,
+      "made": 36,
+      "pct": 69.2
+    },
+    "twoPointJumpers": {
+      "attempted": 281,
+      "made": 113,
+      "pct": 40.2,
+      "assisted": 21,
+      "assistedPct": 18.6
+    },
+    "threePointJumpers": {
+      "attempted": 324,
+      "made": 117,
+      "pct": 36.1,
+      "assisted": 96,
+      "assistedPct": 82.1
+    },
+    "freeThrows": {
+      "attempted": 371,
+      "made": 235,
+      "pct": 63.3
+    },
+    "attemptsBreakdown": {
+      "dunks": 9.1,
+      "layups": 32.9,
+      "tipIns": 4.6,
+      "twoPointJumpers": 24.8,
+      "threePointJumpers": 28.6
+    }
+  }
+]

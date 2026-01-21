@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 83,
+    "team": "Fairfield",
+    "conference": "MAAC",
+    "trackedShots": 1287,
+    "freeThrowRate": 28.6,
+    "assistedPct": 17.9,
+    "dunks": {
+      "attempted": 22,
+      "made": 19,
+      "pct": 86.4,
+      "assisted": 13,
+      "assistedPct": 68.4
+    },
+    "layups": {
+      "attempted": 469,
+      "made": 235,
+      "pct": 50.1,
+      "assisted": 77,
+      "assistedPct": 32.8
+    },
+    "tipIns": {
+      "attempted": 36,
+      "made": 27,
+      "pct": 75
+    },
+    "twoPointJumpers": {
+      "attempted": 280,
+      "made": 114,
+      "pct": 40.7,
+      "assisted": 22,
+      "assistedPct": 19.3
+    },
+    "threePointJumpers": {
+      "attempted": 480,
+      "made": 164,
+      "pct": 34.2,
+      "assisted": 119,
+      "assistedPct": 72.6
+    },
+    "freeThrows": {
+      "attempted": 368,
+      "made": 270,
+      "pct": 73.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 1.7,
+      "layups": 36.4,
+      "tipIns": 2.8,
+      "twoPointJumpers": 21.8,
+      "threePointJumpers": 37.3
+    }
+  }
+]

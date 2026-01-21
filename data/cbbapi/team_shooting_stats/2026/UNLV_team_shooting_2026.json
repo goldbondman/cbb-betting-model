@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 322,
+    "team": "UNLV",
+    "conference": "Mountain West",
+    "trackedShots": 1069,
+    "freeThrowRate": 44.8,
+    "assistedPct": 24,
+    "dunks": {
+      "attempted": 81,
+      "made": 74,
+      "pct": 91.4,
+      "assisted": 60,
+      "assistedPct": 81.1
+    },
+    "layups": {
+      "attempted": 365,
+      "made": 189,
+      "pct": 51.8,
+      "assisted": 71,
+      "assistedPct": 37.6
+    },
+    "tipIns": {
+      "attempted": 39,
+      "made": 24,
+      "pct": 61.5
+    },
+    "twoPointJumpers": {
+      "attempted": 215,
+      "made": 89,
+      "pct": 41.4,
+      "assisted": 25,
+      "assistedPct": 28.1
+    },
+    "threePointJumpers": {
+      "attempted": 369,
+      "made": 116,
+      "pct": 31.4,
+      "assisted": 101,
+      "assistedPct": 87.1
+    },
+    "freeThrows": {
+      "attempted": 479,
+      "made": 328,
+      "pct": 68.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 7.6,
+      "layups": 34.1,
+      "tipIns": 3.6,
+      "twoPointJumpers": 20.1,
+      "threePointJumpers": 34.5
+    }
+  }
+]

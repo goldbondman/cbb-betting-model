@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 104,
+    "team": "Grand Canyon",
+    "conference": "Mountain West",
+    "trackedShots": 947,
+    "freeThrowRate": 38.6,
+    "assistedPct": 22.3,
+    "dunks": {
+      "attempted": 58,
+      "made": 46,
+      "pct": 79.3,
+      "assisted": 33,
+      "assistedPct": 71.7
+    },
+    "layups": {
+      "attempted": 318,
+      "made": 193,
+      "pct": 60.7,
+      "assisted": 72,
+      "assistedPct": 37.3
+    },
+    "tipIns": {
+      "attempted": 26,
+      "made": 17,
+      "pct": 65.4
+    },
+    "twoPointJumpers": {
+      "attempted": 179,
+      "made": 57,
+      "pct": 31.8,
+      "assisted": 16,
+      "assistedPct": 28.1
+    },
+    "threePointJumpers": {
+      "attempted": 366,
+      "made": 110,
+      "pct": 30.1,
+      "assisted": 90,
+      "assistedPct": 81.8
+    },
+    "freeThrows": {
+      "attempted": 366,
+      "made": 279,
+      "pct": 76.2
+    },
+    "attemptsBreakdown": {
+      "dunks": 6.1,
+      "layups": 33.6,
+      "tipIns": 2.7,
+      "twoPointJumpers": 18.9,
+      "threePointJumpers": 38.6
+    }
+  }
+]

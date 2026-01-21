@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 188,
+    "team": "Nebraska",
+    "conference": "Big Ten",
+    "trackedShots": 1084,
+    "freeThrowRate": 29.4,
+    "assistedPct": 30.1,
+    "dunks": {
+      "attempted": 22,
+      "made": 21,
+      "pct": 95.5,
+      "assisted": 16,
+      "assistedPct": 76.2
+    },
+    "layups": {
+      "attempted": 318,
+      "made": 225,
+      "pct": 70.8,
+      "assisted": 116,
+      "assistedPct": 51.6
+    },
+    "tipIns": {
+      "attempted": 16,
+      "made": 12,
+      "pct": 75
+    },
+    "twoPointJumpers": {
+      "attempted": 173,
+      "made": 59,
+      "pct": 34.1,
+      "assisted": 21,
+      "assistedPct": 35.6
+    },
+    "threePointJumpers": {
+      "attempted": 555,
+      "made": 197,
+      "pct": 35.5,
+      "assisted": 173,
+      "assistedPct": 87.8
+    },
+    "freeThrows": {
+      "attempted": 319,
+      "made": 241,
+      "pct": 75.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 2,
+      "layups": 29.3,
+      "tipIns": 1.5,
+      "twoPointJumpers": 16,
+      "threePointJumpers": 51.2
+    }
+  }
+]

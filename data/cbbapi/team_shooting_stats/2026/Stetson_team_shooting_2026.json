@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 283,
+    "team": "Stetson",
+    "conference": "ASUN",
+    "trackedShots": 1081,
+    "freeThrowRate": 34.7,
+    "assistedPct": 24.7,
+    "dunks": {
+      "attempted": 35,
+      "made": 32,
+      "pct": 91.4,
+      "assisted": 28,
+      "assistedPct": 87.5
+    },
+    "layups": {
+      "attempted": 298,
+      "made": 174,
+      "pct": 58.4,
+      "assisted": 83,
+      "assistedPct": 47.7
+    },
+    "tipIns": {
+      "attempted": 25,
+      "made": 17,
+      "pct": 68
+    },
+    "twoPointJumpers": {
+      "attempted": 227,
+      "made": 91,
+      "pct": 40.1,
+      "assisted": 16,
+      "assistedPct": 17.6
+    },
+    "threePointJumpers": {
+      "attempted": 496,
+      "made": 166,
+      "pct": 33.5,
+      "assisted": 140,
+      "assistedPct": 84.3
+    },
+    "freeThrows": {
+      "attempted": 375,
+      "made": 247,
+      "pct": 65.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.2,
+      "layups": 27.6,
+      "tipIns": 2.3,
+      "twoPointJumpers": 21,
+      "threePointJumpers": 45.9
+    }
+  }
+]

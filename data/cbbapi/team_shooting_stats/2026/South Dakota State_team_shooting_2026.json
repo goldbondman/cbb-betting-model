@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 270,
+    "team": "South Dakota State",
+    "conference": "Summit",
+    "trackedShots": 1179,
+    "freeThrowRate": 33.1,
+    "assistedPct": 25.1,
+    "dunks": {
+      "attempted": 32,
+      "made": 30,
+      "pct": 93.8,
+      "assisted": 25,
+      "assistedPct": 83.3
+    },
+    "layups": {
+      "attempted": 413,
+      "made": 243,
+      "pct": 58.8,
+      "assisted": 115,
+      "assistedPct": 47.3
+    },
+    "tipIns": {
+      "attempted": 26,
+      "made": 15,
+      "pct": 57.7
+    },
+    "twoPointJumpers": {
+      "attempted": 231,
+      "made": 96,
+      "pct": 41.6,
+      "assisted": 22,
+      "assistedPct": 22.9
+    },
+    "threePointJumpers": {
+      "attempted": 477,
+      "made": 165,
+      "pct": 34.6,
+      "assisted": 134,
+      "assistedPct": 81.2
+    },
+    "freeThrows": {
+      "attempted": 390,
+      "made": 271,
+      "pct": 69.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 2.7,
+      "layups": 35,
+      "tipIns": 2.2,
+      "twoPointJumpers": 19.6,
+      "threePointJumpers": 40.5
+    }
+  }
+]

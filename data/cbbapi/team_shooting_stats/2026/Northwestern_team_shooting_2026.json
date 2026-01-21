@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 212,
+    "team": "Northwestern",
+    "conference": "Big Ten",
+    "trackedShots": 1043,
+    "freeThrowRate": 38.9,
+    "assistedPct": 30,
+    "dunks": {
+      "attempted": 48,
+      "made": 45,
+      "pct": 93.8,
+      "assisted": 31,
+      "assistedPct": 68.9
+    },
+    "layups": {
+      "attempted": 306,
+      "made": 185,
+      "pct": 60.5,
+      "assisted": 118,
+      "assistedPct": 63.8
+    },
+    "tipIns": {
+      "attempted": 39,
+      "made": 25,
+      "pct": 64.1
+    },
+    "twoPointJumpers": {
+      "attempted": 290,
+      "made": 122,
+      "pct": 42.1,
+      "assisted": 71,
+      "assistedPct": 58.2
+    },
+    "threePointJumpers": {
+      "attempted": 360,
+      "made": 113,
+      "pct": 31.4,
+      "assisted": 93,
+      "assistedPct": 82.3
+    },
+    "freeThrows": {
+      "attempted": 406,
+      "made": 299,
+      "pct": 73.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.6,
+      "layups": 29.3,
+      "tipIns": 3.7,
+      "twoPointJumpers": 27.8,
+      "threePointJumpers": 34.5
+    }
+  }
+]

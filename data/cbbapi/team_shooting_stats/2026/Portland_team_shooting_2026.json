@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 230,
+    "team": "Portland",
+    "conference": "WCC",
+    "trackedShots": 1254,
+    "freeThrowRate": 35.3,
+    "assistedPct": 29.4,
+    "dunks": {
+      "attempted": 74,
+      "made": 69,
+      "pct": 93.2,
+      "assisted": 64,
+      "assistedPct": 92.8
+    },
+    "layups": {
+      "attempted": 446,
+      "made": 261,
+      "pct": 58.5,
+      "assisted": 152,
+      "assistedPct": 58.2
+    },
+    "tipIns": {
+      "attempted": 44,
+      "made": 32,
+      "pct": 72.7
+    },
+    "twoPointJumpers": {
+      "attempted": 251,
+      "made": 93,
+      "pct": 37.1,
+      "assisted": 35,
+      "assistedPct": 37.6
+    },
+    "threePointJumpers": {
+      "attempted": 439,
+      "made": 135,
+      "pct": 30.8,
+      "assisted": 118,
+      "assistedPct": 87.4
+    },
+    "freeThrows": {
+      "attempted": 443,
+      "made": 325,
+      "pct": 73.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.9,
+      "layups": 35.6,
+      "tipIns": 3.5,
+      "twoPointJumpers": 20,
+      "threePointJumpers": 35
+    }
+  }
+]

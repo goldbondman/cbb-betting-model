@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 66,
+    "team": "Delaware",
+    "conference": "CUSA",
+    "trackedShots": 970,
+    "freeThrowRate": 26.5,
+    "assistedPct": 24.4,
+    "dunks": {
+      "attempted": 30,
+      "made": 25,
+      "pct": 83.3,
+      "assisted": 20,
+      "assistedPct": 80
+    },
+    "layups": {
+      "attempted": 303,
+      "made": 154,
+      "pct": 50.8,
+      "assisted": 75,
+      "assistedPct": 48.7
+    },
+    "tipIns": {
+      "attempted": 21,
+      "made": 15,
+      "pct": 71.4
+    },
+    "twoPointJumpers": {
+      "attempted": 185,
+      "made": 76,
+      "pct": 41.1,
+      "assisted": 23,
+      "assistedPct": 30.3
+    },
+    "threePointJumpers": {
+      "attempted": 431,
+      "made": 155,
+      "pct": 36,
+      "assisted": 119,
+      "assistedPct": 76.8
+    },
+    "freeThrows": {
+      "attempted": 257,
+      "made": 186,
+      "pct": 72.4
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.1,
+      "layups": 31.2,
+      "tipIns": 2.2,
+      "twoPointJumpers": 19.1,
+      "threePointJumpers": 44.4
+    }
+  }
+]

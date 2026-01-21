@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 355,
+    "team": "Wisconsin",
+    "conference": "Big Ten",
+    "trackedShots": 1037,
+    "freeThrowRate": 37.6,
+    "assistedPct": 25.9,
+    "dunks": {
+      "attempted": 32,
+      "made": 30,
+      "pct": 93.8,
+      "assisted": 29,
+      "assistedPct": 96.7
+    },
+    "layups": {
+      "attempted": 289,
+      "made": 181,
+      "pct": 62.6,
+      "assisted": 74,
+      "assistedPct": 40.9
+    },
+    "tipIns": {
+      "attempted": 36,
+      "made": 23,
+      "pct": 63.9
+    },
+    "twoPointJumpers": {
+      "attempted": 151,
+      "made": 60,
+      "pct": 39.7,
+      "assisted": 11,
+      "assistedPct": 18.3
+    },
+    "threePointJumpers": {
+      "attempted": 529,
+      "made": 184,
+      "pct": 34.8,
+      "assisted": 155,
+      "assistedPct": 84.2
+    },
+    "freeThrows": {
+      "attempted": 390,
+      "made": 300,
+      "pct": 76.9
+    },
+    "attemptsBreakdown": {
+      "dunks": 3.1,
+      "layups": 27.9,
+      "tipIns": 3.5,
+      "twoPointJumpers": 14.6,
+      "threePointJumpers": 51
+    }
+  }
+]

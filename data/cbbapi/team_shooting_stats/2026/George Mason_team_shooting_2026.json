@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 95,
+    "team": "George Mason",
+    "conference": "A-10",
+    "trackedShots": 1013,
+    "freeThrowRate": 50.6,
+    "assistedPct": 25.8,
+    "dunks": {
+      "attempted": 44,
+      "made": 37,
+      "pct": 84.1,
+      "assisted": 32,
+      "assistedPct": 86.5
+    },
+    "layups": {
+      "attempted": 363,
+      "made": 223,
+      "pct": 61.4,
+      "assisted": 109,
+      "assistedPct": 48.9
+    },
+    "tipIns": {
+      "attempted": 28,
+      "made": 17,
+      "pct": 60.7
+    },
+    "twoPointJumpers": {
+      "attempted": 240,
+      "made": 95,
+      "pct": 39.6,
+      "assisted": 23,
+      "assistedPct": 24.2
+    },
+    "threePointJumpers": {
+      "attempted": 338,
+      "made": 122,
+      "pct": 36.1,
+      "assisted": 97,
+      "assistedPct": 79.5
+    },
+    "freeThrows": {
+      "attempted": 513,
+      "made": 378,
+      "pct": 73.7
+    },
+    "attemptsBreakdown": {
+      "dunks": 4.3,
+      "layups": 35.8,
+      "tipIns": 2.8,
+      "twoPointJumpers": 23.7,
+      "threePointJumpers": 33.4
+    }
+  }
+]

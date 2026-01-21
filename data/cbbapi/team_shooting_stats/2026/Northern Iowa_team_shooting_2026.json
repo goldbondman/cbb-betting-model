@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 209,
+    "team": "Northern Iowa",
+    "conference": "MVC",
+    "trackedShots": 1056,
+    "freeThrowRate": 26.3,
+    "assistedPct": 26.7,
+    "dunks": {
+      "attempted": 54,
+      "made": 49,
+      "pct": 90.7,
+      "assisted": 44,
+      "assistedPct": 89.8
+    },
+    "layups": {
+      "attempted": 369,
+      "made": 204,
+      "pct": 55.3,
+      "assisted": 84,
+      "assistedPct": 41.2
+    },
+    "tipIns": {
+      "attempted": 9,
+      "made": 5,
+      "pct": 55.6
+    },
+    "twoPointJumpers": {
+      "attempted": 185,
+      "made": 70,
+      "pct": 37.8,
+      "assisted": 25,
+      "assistedPct": 35.7
+    },
+    "threePointJumpers": {
+      "attempted": 439,
+      "made": 148,
+      "pct": 33.7,
+      "assisted": 129,
+      "assistedPct": 87.2
+    },
+    "freeThrows": {
+      "attempted": 278,
+      "made": 188,
+      "pct": 67.6
+    },
+    "attemptsBreakdown": {
+      "dunks": 5.1,
+      "layups": 34.9,
+      "tipIns": 0.9,
+      "twoPointJumpers": 17.5,
+      "threePointJumpers": 41.6
+    }
+  }
+]

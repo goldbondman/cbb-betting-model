@@ -1,0 +1,56 @@
+[
+  {
+    "season": 2026,
+    "teamId": 55,
+    "team": "Colgate",
+    "conference": "Patriot",
+    "trackedShots": 1119,
+    "freeThrowRate": 27.3,
+    "assistedPct": 26,
+    "dunks": {
+      "attempted": 22,
+      "made": 22,
+      "pct": 100,
+      "assisted": 19,
+      "assistedPct": 86.4
+    },
+    "layups": {
+      "attempted": 381,
+      "made": 236,
+      "pct": 61.9,
+      "assisted": 107,
+      "assistedPct": 45.3
+    },
+    "tipIns": {
+      "attempted": 17,
+      "made": 11,
+      "pct": 64.7
+    },
+    "twoPointJumpers": {
+      "attempted": 310,
+      "made": 139,
+      "pct": 44.8,
+      "assisted": 38,
+      "assistedPct": 27.3
+    },
+    "threePointJumpers": {
+      "attempted": 389,
+      "made": 141,
+      "pct": 36.2,
+      "assisted": 127,
+      "assistedPct": 90.1
+    },
+    "freeThrows": {
+      "attempted": 306,
+      "made": 225,
+      "pct": 73.5
+    },
+    "attemptsBreakdown": {
+      "dunks": 2,
+      "layups": 34,
+      "tipIns": 1.5,
+      "twoPointJumpers": 27.7,
+      "threePointJumpers": 34.8
+    }
+  }
+]
