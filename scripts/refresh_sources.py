@@ -144,8 +144,8 @@ def refresh_barttorvik_team_results(out_path: str, year: int, session: requests.
 
 
 # -------------------------
-# BartTorvik: Team Stats (Four Factors) via YEAR_fffinal.csv
-# then merge with team_results to produce your desired columns
+# BartTorvik: Four Factors (YEAR_fffinal.csv)
+# then merge with team_results -> barttorvik_teams.csv
 # -------------------------
 def fetch_barttorvik_fffinal_df(year: int, session: requests.Session) -> pd.DataFrame:
     url = f"https://barttorvik.com/{year}_fffinal.csv"
@@ -154,17 +154,21 @@ def fetch_barttorvik_fffinal_df(year: int, session: requests.Session) -> pd.Data
     df = _read_csv_bytes(content)
     df = _clean_columns(df)
 
+    # fffinal uses teamname, not team
+    if "team" not in df.columns and "teamname" in df.columns:
+        df = df.rename(columns={"teamname": "team"})
+
     if "team" not in df.columns:
         _debug(f"Torvik fffinal columns (cleaned): {list(df.columns)}")
-        raise ValueError("Torvik fffinal missing 'team' column.")
+        raise ValueError("Torvik fffinal missing team column (team/teamname).")
 
-    # fffinal uses a bunch of rank columns like rk, rk1, rk2... ignore those for now.
+    # fffinal contains rank columns rk, rk1, rk2... ignore those.
     df["team_key"] = df["team"].map(_team_key)
 
-    # Normalize column names to your preferred schema
-    # Off/def four factors + shooting splits
+    # Normalize to your preferred schema
     rename_map = {
         "efgpct_def": "efgdpct",
+        "topct": "tor",            # key fix
         "topct_def": "tord",
         "ftr_def": "ftrd",
         "orpct": "orb",
@@ -175,7 +179,6 @@ def fetch_barttorvik_fffinal_df(year: int, session: requests.Session) -> pd.Data
     }
     df = df.rename(columns=rename_map)
 
-    # Keep only what we actually want from fffinal
     keep = [
         "team_key",
         "efgpct",
@@ -212,17 +215,13 @@ def refresh_barttorvik_teams_merged(out_path: str, year: int, session: requests.
 
     merged = results.merge(fffinal, on="team_key", how="left", validate="one_to_one")
 
-    # If any teams did not match, show a small diagnostic and fail.
     missing_ff = merged["efgpct"].isna().sum()
     if missing_ff > 0:
-        # Print a few unmatched teams to help you debug naming issues
         sample = merged.loc[merged["efgpct"].isna(), ["team"]].head(10)["team"].tolist()
         raise ValueError(
             f"Torvik teams merge: {missing_ff} teams missing fffinal match. Examples: {sample}"
         )
 
-    # Make sure required output columns exist
-    # results already uses: rk, team, conf, g, rec, adjoe, adjde, barthag, adjt, wab
     required = [
         "rk",
         "team",
@@ -254,11 +253,9 @@ def refresh_barttorvik_teams_merged(out_path: str, year: int, session: requests.
         _debug(f"Merged columns: {list(merged.columns)}")
         raise ValueError(f"Torvik merged team file missing columns: {missing_cols}")
 
-    # Add adjem convenience
     if "adjem" not in merged.columns:
         merged["adjem"] = merged["adjoe"] - merged["adjde"]
 
-    # Output only the columns we care about (stable)
     out_df = merged[required + ["adjem"]].copy()
 
     n = len(out_df)
@@ -283,13 +280,11 @@ def refresh_haslametrics(out_path: str, session: requests.Session, table_index: 
 
     df = None
 
-    # Prefer explicit table_index if it yields ~365 teams
     if 0 <= table_index < len(tables):
         t = _clean_columns(tables[table_index])
         if len(t) >= 300:
             df = t
 
-    # Else auto-pick first big table
     if df is None:
         for t in tables:
             t2 = _clean_columns(t)
@@ -325,7 +320,6 @@ def main() -> int:
         f"[refresh_sources] Output: {torvik_players_out}, {torvik_teams_out}, {torvik_team_results_out}, {hasla_out}"
     )
 
-    # 1) Torvik players
     try:
         n = refresh_barttorvik_players(torvik_players_out, torvik_year, session)
         print(f"[refresh_sources] BartTorvik Players OK: wrote {n} rows -> {torvik_players_out}")
@@ -333,9 +327,8 @@ def main() -> int:
     except Exception as e:
         print(f"[refresh_sources] BartTorvik Players FAILED: {e}", file=sys.stderr)
 
-    time.sleep(1.25)
+    time.sleep(1.0)
 
-    # 2) Torvik team results (standalone file, useful on its own)
     try:
         n = refresh_barttorvik_team_results(torvik_team_results_out, torvik_year, session)
         print(f"[refresh_sources] BartTorvik Team Results OK: wrote {n} rows -> {torvik_team_results_out}")
@@ -343,9 +336,8 @@ def main() -> int:
     except Exception as e:
         print(f"[refresh_sources] BartTorvik Team Results FAILED: {e}", file=sys.stderr)
 
-    time.sleep(1.25)
+    time.sleep(1.0)
 
-    # 3) Torvik merged teams (your desired final team-level stats file)
     try:
         n = refresh_barttorvik_teams_merged(torvik_teams_out, torvik_year, session)
         print(f"[refresh_sources] BartTorvik Teams (Merged) OK: wrote {n} rows -> {torvik_teams_out}")
@@ -353,9 +345,8 @@ def main() -> int:
     except Exception as e:
         print(f"[refresh_sources] BartTorvik Teams (Merged) FAILED: {e}", file=sys.stderr)
 
-    time.sleep(1.25)
+    time.sleep(1.0)
 
-    # 4) Haslametrics
     try:
         n = refresh_haslametrics(hasla_out, session, table_index=hasla_table_index)
         print(f"[refresh_sources] Haslametrics OK: wrote {n} rows -> {hasla_out}")
