@@ -19,6 +19,28 @@ jobs:
         with:
           fetch-depth: 0
 
+      # ----------------------------
+      # 1) Node + cbb-api (Team stats + shooting)
+      # ----------------------------
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install cbb-api
+        run: npm install -g cbb-api
+
+      - name: Fetch CBB API team stats (team efficiency + 4-factor style data)
+        env:
+          CBB_DATA_API_KEY: ${{ secrets.CBB_DATA_API_KEY }}
+        run: |
+          mkdir -p data/cbbapi
+          cbb --team-season-stats --season 2026 --output-dir data/cbbapi
+          cbb --team-shooting-stats --season 2026 --output-dir data/cbbapi
+
+      # ----------------------------
+      # 2) Python refresh (Torvik players, Torvik team results, Hasla)
+      # ----------------------------
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -59,13 +81,16 @@ jobs:
         run: |
           python scripts/refresh_sources.py
 
-      - name: Commit and push updated CSVs
+      # ----------------------------
+      # 3) Commit results
+      # ----------------------------
+      - name: Commit and push updated files
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add -A
-            git commit -m "Daily refresh: update Torvik and Haslametrics data"
+            git commit -m "Daily refresh: update metrics datasets"
             git push
           else
             echo "No changes to commit."
