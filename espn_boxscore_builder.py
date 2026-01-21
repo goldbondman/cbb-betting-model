@@ -676,24 +676,26 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
         "ha_ortg_season_pre", "ha_drtg_season_pre", "ha_netrtg_season_pre", "ha_pace_season_pre",
         "ha_efg_season_pre", "ha_tov_pct_season_pre", "ha_orb_pct_season_pre", "ha_drb_pct_season_pre", "ha_ftr_season_pre", "ha_3par_season_pre",
 
-        # defensive allowed rollups (computed later but present by time we use style features)
+        # defensive allowed rollups (may not exist on first merge pass, that's fine)
         "ftr_allowed_l7_pre", "ftr_allowed_season_pre",
         "efg_allowed_l7_pre", "efg_allowed_season_pre",
     ]
     cols = [c for c in cols if c in out.columns]
 
     lookup = out[cols].copy()
+
+    # prefix all lookup columns EXCEPT the join key "_key"
     lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_key"})
 
-    out = out.merge(lookup, left_on="_opp_key", right_on="opp__key", how="left")
+    # merge opponent row onto each team row
+    out = out.merge(lookup, left_on="_opp_key", right_on="_key", how="left")
 
-    # Defensive "allowed" proxies per game
-    out["efg_allowed_game"] = out["opp_efg"]
-    out["ftr_allowed_game"] = out["opp_ftr"]
-    out["tov_forced_game"] = out["opp_tov_pct"]  # proxy
+    # Defensive "allowed" proxies per game (opponent offense)
+    out["efg_allowed_game"] = out.get("opp_efg")
+    out["ftr_allowed_game"] = out.get("opp_ftr")
+    out["tov_forced_game"] = out.get("opp_tov_pct")  # proxy
 
-    return out.drop(columns=["_key", "_opp_key", "opp__key"], errors="ignore")
-
+    return out.drop(columns=["_key_x", "_key_y", "_key", "_opp_key"], errors="ignore")
 
 def _add_allowed_rollups(df: pd.DataFrame) -> pd.DataFrame:
     """
