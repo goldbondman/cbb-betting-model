@@ -2,30 +2,18 @@ import os
 import requests
 import pandas as pd
 import numpy as np
+
 from zoneinfo import ZoneInfo
 from datetime import datetime, timedelta
 
-# -------------------------------------------------------------------
-# ESPN endpoints
-# NOTE: groups=50 is the key to "all Division I" scoreboard results.
-# -------------------------------------------------------------------
-ESPN_SUMMARY_URL = (
-    "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary"
-    "?event={event_id}"
-)
-
-ESPN_SCOREBOARD_URL = (
-    "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
-    "?groups=50&limit=300&dates={date}"
-)
+ESPN_SUMMARY_URL = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event={event_id}"
+# groups=50 is critical: this is the Division I group, not rankings/top-25
+ESPN_SCOREBOARD_URL = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates={date}&groups=50"
 
 DEFAULT_HEADERS = {
     "User-Agent": "Mozilla/5.0",
     "Accept": "application/json,text/plain,*/*",
 }
-
-PST_TZ = ZoneInfo("America/Los_Angeles")
-
 
 # ---------------- helpers ----------------
 def _to_int(x, default=0):
@@ -41,7 +29,6 @@ def _to_int(x, default=0):
     except Exception:
         return default
 
-
 def _to_float(x, default=np.nan):
     try:
         if x is None:
@@ -55,13 +42,11 @@ def _to_float(x, default=np.nan):
     except Exception:
         return default
 
-
 def _parse_made_attempt(display: str):
     if not display or not isinstance(display, str) or "-" not in display:
         return (0, 0)
     a, b = display.split("-", 1)
     return (_to_int(a, 0), _to_int(b, 0))
-
 
 def _stat_map(team_stats_list):
     out = {}
@@ -76,164 +61,110 @@ def _stat_map(team_stats_list):
             out[str(name)] = dv
     return out
 
-
 def _estimate_possessions(fga, fta, tov, orb):
     # poss ≈ FGA + 0.44*FTA - ORB + TOV
     return fga + 0.44 * fta - orb + tov
 
-
 def _safe_div(num, den, default=np.nan):
     return default if den in (0, 0.0, None) else num / den
 
-
-def _extract_status_from_comp(comp: dict) -> dict:
-    """
-    Normalized status fields from the scoreboard/competition object.
-    """
-    status = (comp or {}).get("status") or {}
-    stype = status.get("type") or {}
-
-    # ESPN commonly provides these:
-    # - type.name: "STATUS_FINAL", "STATUS_IN_PROGRESS", "STATUS_SCHEDULED", etc.
-    # - type.state: "pre", "in", "post"
-    # - type.completed: boolean
-    # - displayClock, period
-    return {
-        "status_name": stype.get("name"),
-        "status_state": stype.get("state"),
-        "status_completed": bool(stype.get("completed", False)),
-        "status_detail": stype.get("detail"),
-        "status_short": stype.get("shortDetail"),
-        "period": _to_int(status.get("period"), 0),
-        "clock": status.get("displayClock"),
-    }
-
-
-def _is_final_status(status_row: dict) -> bool:
-    # Most reliable: completed==True OR state == "post" OR name == STATUS_FINAL
-    if not isinstance(status_row, dict):
+def _as_bool(x):
+    if isinstance(x, bool):
+        return x
+    if x is None:
         return False
-    if status_row.get("status_completed") is True:
-        return True
-    if str(status_row.get("status_state") or "").lower() == "post":
-        return True
-    if str(status_row.get("status_name") or "").upper() == "STATUS_FINAL":
-        return True
-    return False
+    if isinstance(x, str):
+        s = x.strip().lower()
+        return s in ("true", "t", "1", "yes", "y")
+    return bool(x)
 
+# ---------------- scoreboard (D1) ----------------
+def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = 25):
+    """
+    Returns one row per GAME from ESPN scoreboard with status fields.
+    Uses groups=50 to include all Division I games (not top-25 filtered).
+    """
+    url = ESPN_SCOREBOARD_URL.format(date=date_yyyymmdd)
+    r = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
+    r.raise_for_status()
+    data = r.json()
 
-def _append_forever(df_new: pd.DataFrame, out_csv: str, dedupe_keys: list[str], sort_cols: list[str] | None = None):
+    rows = []
+    for e in data.get("events", []) or []:
+        game_id = e.get("id")
+        competitions = e.get("competitions") or []
+        comp = competitions[0] if competitions else {}
+        competitors = comp.get("competitors") or []
+        status = comp.get("status") or {}
+        stype = status.get("type") or {}
+
+        if not game_id or len(competitors) < 2:
+            continue
+
+        home = next((c for c in competitors if c.get("homeAway") == "home"), None)
+        away = next((c for c in competitors if c.get("homeAway") == "away"), None)
+        if not home or not away:
+            continue
+
+        home_team = (home.get("team") or {}).get("displayName")
+        away_team = (away.get("team") or {}).get("displayName")
+
+        home_score = _to_int(home.get("score"), 0)
+        away_score = _to_int(away.get("score"), 0)
+        home_win = home.get("winner")
+
+        rows.append({
+            "date": date_yyyymmdd,
+            "game_id": str(game_id),
+            "home_team": home_team,
+            "away_team": away_team,
+            "home_score": home_score,
+            "away_score": away_score,
+            "home_win": home_win,
+            "status_name": stype.get("name"),
+            "status_detail": stype.get("detail"),
+            "status_completed": _as_bool(stype.get("completed")),
+        })
+
+    return rows
+
+def build_espn_games_csv(days_back=7, out_csv="espn_games.csv", verbose=True):
     """
-    Append new rows into an ever-growing season-to-date CSV.
-    Dedupe on dedupe_keys, keep the latest occurrence.
+    Append-forever season-to-date games file.
+    Dedup by game_id.
     """
-    if df_new is None or df_new.empty:
-        # still ensure file exists if it doesn't
-        if not os.path.exists(out_csv):
-            pd.DataFrame().to_csv(out_csv, index=False)
-        return pd.DataFrame()
+    now_pst = datetime.now(ZoneInfo("America/Los_Angeles"))
+    all_rows = []
+
+    for i in range(days_back):
+        d = (now_pst - timedelta(days=i)).strftime("%Y%m%d")
+        rows = fetch_scoreboard_games(d)
+        all_rows.extend(rows)
+        if verbose:
+            print(f"{d}: {len(rows)} games")
+
+    df_new = pd.DataFrame(all_rows)
 
     if os.path.exists(out_csv):
-        try:
-            df_old = pd.read_csv(out_csv)
-        except Exception:
-            df_old = pd.DataFrame()
+        df_old = pd.read_csv(out_csv, dtype={"date": str, "game_id": str})
+        df = pd.concat([df_old, df_new], ignore_index=True)
     else:
-        df_old = pd.DataFrame()
+        df = df_new
 
-    df_all = pd.concat([df_old, df_new], ignore_index=True)
+    if not df.empty:
+        df["date"] = df["date"].astype(str)
+        df["game_id"] = df["game_id"].astype(str)
+        df = df.drop_duplicates(subset=["game_id"]).sort_values(["date", "game_id"])
 
-    # Drop exact dupes first
-    df_all = df_all.drop_duplicates()
+    df.to_csv(out_csv, index=False)
+    print(f"{out_csv} written: {len(df)} rows")
+    return df
 
-    # Dedupe by keys
-    if dedupe_keys and all(k in df_all.columns for k in dedupe_keys):
-        df_all = df_all.drop_duplicates(subset=dedupe_keys, keep="last")
-
-    if sort_cols and all(c in df_all.columns for c in sort_cols):
-        df_all = df_all.sort_values(sort_cols)
-
-    df_all.to_csv(out_csv, index=False)
-    return df_all
-
-
-# ---------------- summary parsing ----------------
-def _extract_players(summary_json, team_id: str):
-    """
-    Lightweight player minutes + usage proxy (optional for later).
-    """
-    players = []
-    box = summary_json.get("boxscore", {}) if isinstance(summary_json, dict) else {}
-    team_groups = box.get("players", [])
-    if not isinstance(team_groups, list):
-        return players
-
-    for tg in team_groups:
-        t = tg.get("team", {})
-        if not isinstance(t, dict):
-            continue
-        if str(t.get("id", "")) != str(team_id):
-            continue
-
-        stat_tables = tg.get("statistics", [])
-        if not isinstance(stat_tables, list):
-            continue
-
-        for table in stat_tables:
-            athletes = table.get("athletes", [])
-            if not isinstance(athletes, list):
-                continue
-
-            labels = table.get("labels", [])
-            if not isinstance(labels, list):
-                labels = []
-
-            for a in athletes:
-                athlete = a.get("athlete", {}) or {}
-                name = athlete.get("displayName") or athlete.get("shortName") or athlete.get("fullName") or "Unknown"
-
-                stats = a.get("stats", [])
-                if not isinstance(stats, list) or (labels and len(labels) != len(stats)):
-                    continue
-
-                lmap = {str(labels[i]).lower(): stats[i] for i in range(len(labels))} if labels else {}
-
-                def pick(*keys):
-                    for k in keys:
-                        if k in lmap:
-                            return lmap[k]
-                    return None
-
-                row = {"player": name}
-                row["minutes"] = _to_float(pick("min", "minutes"), np.nan)
-                row["points"] = _to_int(pick("pts", "points"), 0)
-
-                fg = pick("fg", "field goals")
-                ft = pick("ft", "free throws")
-                to = pick("to", "tov", "turnovers")
-                reb = pick("reb", "rebs", "rebounds")
-                ast = pick("ast", "assists")
-
-                fgm, fga = _parse_made_attempt(fg) if isinstance(fg, str) else (0, 0)
-                ftm, fta = _parse_made_attempt(ft) if isinstance(ft, str) else (0, 0)
-
-                row["fgm"] = fgm
-                row["fga"] = fga
-                row["ftm"] = ftm
-                row["fta"] = fta
-                row["tov"] = _to_int(to, 0)
-                row["reb"] = _to_int(reb, 0)
-                row["ast"] = _to_int(ast, 0)
-                row["usage_proxy"] = row["fga"] + 0.44 * row["fta"] + row["tov"]
-
-                players.append(row)
-
-    return players
-
-
+# ---------------- summary parse ----------------
 def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
     """
     Fetch ESPN summary JSON for a game, parse team box score metrics for both teams.
+    Returns dict with home/away rows.
     """
     url = ESPN_SUMMARY_URL.format(event_id=event_id)
     r = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
@@ -247,25 +178,33 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
     game_date = comp0.get("date")  # ISO datetime string
     venue = None
     try:
-        venue = (comp0.get("venue", {}) or {}).get("fullName")
+        venue = comp0.get("venue", {}).get("fullName")
     except Exception:
         venue = None
+
+    # Determine home/away team ids and points via header competitors (reliable)
+    home_team_id = None
+    away_team_id = None
+    home_points = None
+    away_points = None
+
+    competitors = comp0.get("competitors", []) if isinstance(comp0, dict) else []
+    if isinstance(competitors, list) and len(competitors) >= 2:
+        for c in competitors:
+            ha = c.get("homeAway")
+            tid = str((c.get("team") or {}).get("id", ""))
+            pts = _to_int(c.get("score"), 0)
+            if ha == "home":
+                home_team_id = tid
+                home_points = pts
+            elif ha == "away":
+                away_team_id = tid
+                away_points = pts
 
     box = data.get("boxscore", {}) if isinstance(data, dict) else {}
     teams = box.get("teams", [])
     if not isinstance(teams, list) or len(teams) < 2:
         raise ValueError("Unexpected ESPN summary format: boxscore.teams missing or too short")
-
-    # Determine home/away by team id via header competitors (most reliable)
-    home_team_id = None
-    away_team_id = None
-    competitors = comp0.get("competitors", []) if isinstance(comp0, dict) else []
-    if isinstance(competitors, list) and len(competitors) >= 2:
-        for c in competitors:
-            if c.get("homeAway") == "home":
-                home_team_id = str((c.get("team") or {}).get("id", ""))
-            elif c.get("homeAway") == "away":
-                away_team_id = str((c.get("team") or {}).get("id", ""))
 
     def parse_team(team_entry):
         t = team_entry.get("team", {}) or {}
@@ -306,6 +245,7 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
         return {
             "team_id": tid,
             "team": name,
+            "points": np.nan,  # filled later from header competitors
             "fgm": fgm, "fga": fga,
             "tpm": tpm, "tpa": tpa,
             "ftm": ftm, "fta": fta,
@@ -319,7 +259,7 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
 
     parsed = [parse_team(te) for te in teams]
 
-    # Map to home/away
+    # Map to home/away using ids
     if home_team_id and away_team_id:
         home_row = next((x for x in parsed if x["team_id"] == home_team_id), None)
         away_row = next((x for x in parsed if x["team_id"] == away_team_id), None)
@@ -327,6 +267,15 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
             home_row, away_row = parsed[0], parsed[1]
     else:
         home_row, away_row = parsed[0], parsed[1]
+
+    # Fill points
+    if home_points is None:
+        home_points = np.nan
+    if away_points is None:
+        away_points = np.nan
+
+    home_row["points"] = home_points
+    away_row["points"] = away_points
 
     # Opponent-dependent metrics
     home_row["orb_pct"] = _safe_div(home_row["orb"], (home_row["orb"] + away_row["drb"]), np.nan)
@@ -338,9 +287,22 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
     home_row["tov_pct"] = _safe_div(home_row["tov"], home_row["poss"], np.nan)
     away_row["tov_pct"] = _safe_div(away_row["tov"], away_row["poss"], np.nan)
 
-    # Optional players
-    players_home = _extract_players(data, home_row["team_id"])
-    players_away = _extract_players(data, away_row["team_id"])
+    # Pace and efficiency (use shared game possessions estimate)
+    game_poss = np.nan
+    if pd.notna(home_row["poss"]) and pd.notna(away_row["poss"]):
+        game_poss = (float(home_row["poss"]) + float(away_row["poss"])) / 2.0
+
+    home_row["pace"] = game_poss
+    away_row["pace"] = game_poss
+
+    home_row["ortg"] = _safe_div(home_row["points"] * 100.0, game_poss, np.nan)
+    away_row["ortg"] = _safe_div(away_row["points"] * 100.0, game_poss, np.nan)
+
+    home_row["drtg"] = _safe_div(away_row["points"] * 100.0, game_poss, np.nan)
+    away_row["drtg"] = _safe_div(home_row["points"] * 100.0, game_poss, np.nan)
+
+    home_row["netrtg"] = home_row["ortg"] - home_row["drtg"] if pd.notna(home_row["ortg"]) and pd.notna(home_row["drtg"]) else np.nan
+    away_row["netrtg"] = away_row["ortg"] - away_row["drtg"] if pd.notna(away_row["ortg"]) and pd.notna(away_row["drtg"]) else np.nan
 
     return {
         "event_id": str(event_id),
@@ -348,12 +310,9 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
         "venue": venue,
         "home": home_row,
         "away": away_row,
-        "players_home": players_home,
-        "players_away": players_away,
     }
 
-
-def summary_to_team_rows(parsed_summary: dict):
+def summary_to_team_rows(parsed_summary: dict, status_name=None, status_completed=None):
     """
     Flatten parsed_summary into 2 per-team rows for CSV storage.
     """
@@ -368,230 +327,218 @@ def summary_to_team_rows(parsed_summary: dict):
         row["event_id"] = event_id
         row["game_date"] = game_date
         row["venue"] = venue
+        row["status_name"] = status_name
+        row["status_completed"] = status_completed
 
     home["opponent"] = away["team"]
     away["opponent"] = home["team"]
+
+    home["opponent_points"] = away.get("points", np.nan)
+    away["opponent_points"] = home.get("points", np.nan)
 
     home["home_away"] = "home"
     away["home_away"] = "away"
 
     return home, away
 
-
-# ---------------- scoreboard ----------------
-def fetch_scoreboard_json(date_yyyymmdd: str, timeout: int = 25):
-    url = ESPN_SCOREBOARD_URL.format(date=date_yyyymmdd)
-    r = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
-    r.raise_for_status()
-    return r.json()
-
-
-def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = 25):
-    data = fetch_scoreboard_json(date_yyyymmdd, timeout=timeout)
-
-    rows = []
-    for e in data.get("events", []) or []:
-        game_id = e.get("id")
-        competitions = e.get("competitions") or []
-        comp = competitions[0] if competitions else {}
-        competitors = comp.get("competitors") or []
-
-        if not game_id or len(competitors) < 2:
-            continue
-
-        home = next((c for c in competitors if c.get("homeAway") == "home"), None)
-        away = next((c for c in competitors if c.get("homeAway") == "away"), None)
-        if not home or not away:
-            continue
-
-        status_row = _extract_status_from_comp(comp)
-
-        home_team = ((home.get("team") or {}).get("displayName")) or None
-        away_team = ((away.get("team") or {}).get("displayName")) or None
-
-        home_score = _to_int(home.get("score"), 0)
-        away_score = _to_int(away.get("score"), 0)
-        home_win = home.get("winner")
-
-        rows.append({
-            "date": date_yyyymmdd,
-            "game_id": str(game_id),
-            "home_team": home_team,
-            "away_team": away_team,
-            "home_score": home_score,
-            "away_score": away_score,
-            "home_win": home_win,
-            **status_row,
-        })
-
-    return rows
-
-
-def fetch_scoreboard_event_rows(date_yyyymmdd: str, timeout: int = 25):
+# ---------------- team logs (append forever) ----------------
+def build_team_game_logs_csv(days_back=7, out_csv="espn_team_game_logs.csv", verbose=True):
     """
-    Return event rows with status info (used to decide which games to summary-fetch).
+    Append-forever team game logs.
+    Only processes FINAL games (status_completed == True).
+    Dedup by (event_id, team_id).
     """
-    data = fetch_scoreboard_json(date_yyyymmdd, timeout=timeout)
-    out = []
+    now_pst = datetime.now(ZoneInfo("America/Los_Angeles"))
 
-    for e in data.get("events", []) or []:
-        eid = e.get("id")
-        comp = (e.get("competitions") or [{}])[0]
-        competitors = comp.get("competitors") or []
-        if len(competitors) < 2 or not eid:
-            continue
-
-        home = next((c for c in competitors if c.get("homeAway") == "home"), None)
-        away = next((c for c in competitors if c.get("homeAway") == "away"), None)
-        if not home or not away:
-            continue
-
-        status_row = _extract_status_from_comp(comp)
-
-        out.append({
-            "event_id": str(eid),
-            "scoreboard_date": date_yyyymmdd,
-            "home_team": (home.get("team") or {}).get("displayName"),
-            "away_team": (away.get("team") or {}).get("displayName"),
-            **status_row,
-        })
-
-    return out
-
-
-# ---------------- builders ----------------
-def build_espn_games_csv(days_back=7, out_csv="espn_games.csv", append_forever=True, verbose=True):
-    now_pst = datetime.now(PST_TZ)
-    all_rows = []
-
-    for i in range(days_back):
-        d = (now_pst - timedelta(days=i)).strftime("%Y%m%d")
-        rows = fetch_scoreboard_games(d)
-        all_rows.extend(rows)
-        if verbose:
-            print(f"{d}: {len(rows)} games")
-
-    df_new = pd.DataFrame(all_rows)
-    if not df_new.empty:
-        df_new = df_new.drop_duplicates(subset=["game_id"]).sort_values(["date", "game_id"])
-
-    if append_forever:
-        df_all = _append_forever(
-            df_new=df_new,
-            out_csv=out_csv,
-            dedupe_keys=["game_id"],
-            sort_cols=["date", "game_id"],
-        )
-        if verbose:
-            print(f"{out_csv} written (append): {len(df_all)} rows")
-        return df_all
-
-    df_new.to_csv(out_csv, index=False)
-    if verbose:
-        print(f"{out_csv} written: {len(df_new)} rows")
-    return df_new
-
-
-def build_team_game_logs_csv(days_back=7, out_csv="espn_team_game_logs.csv", append_forever=True, verbose=True):
-    """
-    Builds espn_team_game_logs.csv as a season-to-date append-only file.
-    One row per TEAM per GAME, for FINAL games only.
-    Includes status columns so you can debug schedule/in-progress.
-    """
-    now_pst = datetime.now(PST_TZ)
-
-    rows = []
-    games_checked = 0
+    total_games = 0
     final_games = 0
-    games_processed = 0
-    skipped_empty_box = 0
+    processed_games = 0
     failures = 0
+    skipped_empty_box = 0
 
+    rows = []
     for i in range(days_back):
         d = (now_pst - timedelta(days=i)).strftime("%Y%m%d")
-        events = fetch_scoreboard_event_rows(d)
-        games_checked += len(events)
+        games = fetch_scoreboard_games(d)
+        total_games += len(games)
 
-        finals = [ev for ev in events if _is_final_status(ev)]
+        finals = [g for g in games if _as_bool(g.get("status_completed"))]
         final_games += len(finals)
 
         if verbose:
-            print(f"📅 {d}: {len(events)} games, {len(finals)} final")
+            print(f"📅 {d}: {len(games)} games, {len(finals)} final")
 
-        for ev in finals:
+        for g in finals:
             try:
-                parsed = fetch_and_parse_espn_summary(ev["event_id"])
+                parsed = fetch_and_parse_espn_summary(g["game_id"])
+                home_row, away_row = summary_to_team_rows(
+                    parsed,
+                    status_name=g.get("status_name"),
+                    status_completed=g.get("status_completed"),
+                )
 
-                # Extra guard: sometimes summary exists but boxscore stats still empty.
-                # If we detect that, skip.
-                home_row, away_row = summary_to_team_rows(parsed)
-
-                # If both teams have 0 FGA and 0 FTA and 0 TOV, this is almost certainly empty.
-                def looks_empty(r):
-                    return (_to_int(r.get("fga"), 0) == 0 and _to_int(r.get("fta"), 0) == 0 and _to_int(r.get("tov"), 0) == 0)
-
-                if looks_empty(home_row) and looks_empty(away_row):
+                # Guardrail: if ESPN returns an empty boxscore payload for a "final", skip
+                if _to_int(home_row.get("fga"), 0) == 0 and _to_int(away_row.get("fga"), 0) == 0:
                     skipped_empty_box += 1
                     continue
 
-                # Attach status columns to each team row
-                for r in (home_row, away_row):
-                    r["status_name"] = ev.get("status_name")
-                    r["status_state"] = ev.get("status_state")
-                    r["status_completed"] = ev.get("status_completed")
-                    r["status_detail"] = ev.get("status_detail")
-                    r["status_short"] = ev.get("status_short")
-
                 rows.append(home_row)
                 rows.append(away_row)
-                games_processed += 1
-
+                processed_games += 1
             except Exception as e:
                 failures += 1
                 if verbose:
-                    print("FAILED", ev["event_id"], str(e)[:180])
+                    print("FAILED", g.get("game_id"), str(e)[:180])
 
     df_new = pd.DataFrame(rows)
 
     keep = [
         "team_id","team","opponent","home_away","event_id","game_date","venue",
-        "status_name","status_state","status_completed","status_detail","status_short",
+        "status_name","status_completed",
+        "points","opponent_points",
         "fgm","fga","tpm","tpa","ftm","fta","tov","orb","drb","reb",
-        "efg","3par","ftr","orb_pct","drb_pct","tov_pct","poss"
+        "efg","3par","ftr","orb_pct","drb_pct","tov_pct","poss",
+        "pace","ortg","drtg","netrtg",
     ]
     if not df_new.empty:
         df_new = df_new[[c for c in keep if c in df_new.columns]]
 
-    if append_forever:
-        # Unique team-game row key: (event_id, team_id) is stable.
-        df_all = _append_forever(
-            df_new=df_new,
-            out_csv=out_csv,
-            dedupe_keys=["event_id", "team_id"],
-            sort_cols=["game_date", "event_id", "home_away"],
-        )
+    if os.path.exists(out_csv):
+        df_old = pd.read_csv(out_csv, dtype={"event_id": str, "team_id": str})
+        df = pd.concat([df_old, df_new], ignore_index=True)
     else:
-        df_new.to_csv(out_csv, index=False)
-        df_all = df_new
+        df = df_new
+
+    if not df.empty:
+        df["event_id"] = df["event_id"].astype(str)
+        df["team_id"] = df["team_id"].astype(str)
+        df = df.drop_duplicates(subset=["event_id", "team_id"]).sort_values(["game_date", "event_id", "home_away"])
+
+    df.to_csv(out_csv, index=False)
 
     if verbose:
         print("\n✅ DONE")
-        print("Games checked:", games_checked)
+        print("Games checked:", total_games)
         print("Final games:", final_games)
-        print("Games processed:", games_processed)
+        print("Games processed:", processed_games)
         print("Skipped empty boxscores:", skipped_empty_box)
-        print("Rows written:", len(df_all))
+        print("Rows written:", len(df))
         print("Failures:", failures)
         print("Output:", out_csv)
 
-    return df_all
+    return df
 
+# ---------------- model-ready snapshot ----------------
+def build_model_ready_snapshot(
+    in_team_logs_csv="espn_team_game_logs.csv",
+    out_csv="espn_team_model_ready.csv",
+    verbose=True,
+):
+    """
+    Creates a model-ready snapshot that is separate from raw logs.
+
+    Output rows are still "team-game" rows, but they contain:
+    - Rolling averages for the team (overall, home-only, away-only): L3, L7, season-to-date
+    - Opponent rolling features merged in (opp_*)
+
+    Rolling features are shifted by 1 game so they represent "pregame form".
+    """
+    if not os.path.exists(in_team_logs_csv):
+        raise FileNotFoundError(f"Missing input file: {in_team_logs_csv}")
+
+    df = pd.read_csv(in_team_logs_csv, dtype={"event_id": str, "team_id": str})
+    if df.empty:
+        pd.DataFrame().to_csv(out_csv, index=False)
+        if verbose:
+            print(f"{out_csv} written: 0 rows (empty input)")
+        return df
+
+    # Normalize and sort
+    df["game_date"] = pd.to_datetime(df["game_date"], errors="coerce", utc=True)
+    df = df.sort_values(["team", "game_date", "event_id"]).reset_index(drop=True)
+
+    # Metrics to roll (keep this tight and stable)
+    roll_metrics = [
+        "ortg","drtg","netrtg","pace",
+        "efg","tov_pct","orb_pct","ftr","3par",
+        "points","opponent_points",
+    ]
+    roll_metrics = [c for c in roll_metrics if c in df.columns]
+
+    def _add_rolls(group_df, prefix):
+        # L3, L7 rolling means, shifted by 1 (pregame)
+        g = group_df.copy()
+        for m in roll_metrics:
+            g[f"{prefix}{m}_l3"] = g[m].rolling(3, min_periods=1).mean().shift(1)
+            g[f"{prefix}{m}_l7"] = g[m].rolling(7, min_periods=1).mean().shift(1)
+            g[f"{prefix}{m}_season"] = g[m].expanding(min_periods=1).mean().shift(1)
+        return g
+
+    # Overall rolls by team
+    df = df.groupby("team", group_keys=False).apply(lambda g: _add_rolls(g, prefix="team_"))
+
+    # Home-only and away-only splits
+    df_home = df[df["home_away"] == "home"].copy()
+    df_away = df[df["home_away"] == "away"].copy()
+
+    if not df_home.empty:
+        df_home = df_home.groupby("team", group_keys=False).apply(lambda g: _add_rolls(g, prefix="home_"))
+        home_cols = [c for c in df_home.columns if c.startswith("home_")]
+        df = df.merge(df_home[["event_id", "team_id"] + home_cols], on=["event_id", "team_id"], how="left")
+
+    if not df_away.empty:
+        df_away = df_away.groupby("team", group_keys=False).apply(lambda g: _add_rolls(g, prefix="away_"))
+        away_cols = [c for c in df_away.columns if c.startswith("away_")]
+        df = df.merge(df_away[["event_id", "team_id"] + away_cols], on=["event_id", "team_id"], how="left")
+
+    # Opponent rolling features: build a join table keyed by (event_id, opponent team name)
+    # Then merge onto each team row as opp_*
+    feature_cols = [c for c in df.columns if c.startswith("team_") or c.startswith("home_") or c.startswith("away_")]
+
+    opp_src = df[["event_id", "team", "team_id"] + feature_cols].copy()
+    opp_src = opp_src.rename(columns={"team": "opponent"})
+    opp_src = opp_src.rename(columns={c: f"opp_{c}" for c in feature_cols})
+
+    df = df.merge(opp_src, on=["event_id", "opponent"], how="left")
+
+    # Final column order (keep core ids first)
+    core = [
+        "event_id","game_date","team_id","team","opponent","home_away",
+        "status_name","status_completed",
+        "points","opponent_points",
+        "pace","ortg","drtg","netrtg",
+        "efg","tov_pct","orb_pct","ftr","3par",
+    ]
+    core = [c for c in core if c in df.columns]
+    rest = [c for c in df.columns if c not in core]
+    df_out = df[core + rest].copy()
+
+    # Write snapshot
+    df_out.to_csv(out_csv, index=False)
+    if verbose:
+        print(f"{out_csv} written: {len(df_out)} rows")
+
+    return df_out
 
 # ---------------- main ----------------
-if __name__ == "__main__":
-    # One-time backfill: set DAYS_BACK=80 in your GitHub Action env (recommended),
-    # or just edit this number to 80 for a single run.
-    DAYS_BACK = int(os.getenv("DAYS_BACK", "7"))
+def _env_int(name, default):
+    v = os.environ.get(name)
+    if v is None or str(v).strip() == "":
+        return default
+    try:
+        return int(str(v).strip())
+    except Exception:
+        return default
 
-    build_espn_games_csv(days_back=DAYS_BACK, append_forever=True, verbose=True)
-    build_team_game_logs_csv(days_back=DAYS_BACK, append_forever=True, verbose=True)
+if __name__ == "__main__":
+    days_back = _env_int("DAYS_BACK", 3)
+
+    build_espn_games_csv(days_back=days_back, out_csv="espn_games.csv", verbose=True)
+    build_team_game_logs_csv(days_back=days_back, out_csv="espn_team_game_logs.csv", verbose=True)
+
+    # Always refresh model-ready snapshot from the full raw file
+    build_model_ready_snapshot(
+        in_team_logs_csv="espn_team_game_logs.csv",
+        out_csv="espn_team_model_ready.csv",
+        verbose=True,
+    )
