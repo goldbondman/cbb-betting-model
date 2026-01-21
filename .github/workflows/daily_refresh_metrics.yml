@@ -28,12 +28,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
 
-          # Install main deps first (since you said you updated requirements.txt)
+          # Install main deps first (preferred)
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           fi
 
-          # Optional: also install refresh-specific deps if you keep this file
+          # Optional: refresh-specific deps
           if [ -f scripts/requirements-refresh.txt ]; then
             pip install -r scripts/requirements-refresh.txt
           fi
@@ -45,8 +45,17 @@ jobs:
 
       - name: Refresh Torvik and Haslametrics CSVs
         env:
-          TORVIK_URL: "https://barttorvik.com/getadvstats.php?year=2026&csv=1"
-          HASLA_URL: "https://haslametrics.com/ratings.php?yr=2026"
+          # Keep player-level Torvik output as barttorvik.csv
+          TORVIK_PLAYERS_OUT: "barttorvik.csv"
+          # Team-level Torvik output
+          TORVIK_TEAMS_OUT: "barttorvik_teams.csv"
+          # Pin season-ending year (optional but removes ambiguity)
+          TORVIK_YEAR: "2026"
+
+          # Haslametrics output
+          HASLA_OUT: "haslametrics.csv"
+          # Only change if Hasla page table order changes
+          HASLA_TABLE_INDEX: "0"
         run: |
           python scripts/refresh_sources.py
 
