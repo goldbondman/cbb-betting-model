@@ -20,31 +20,119 @@ TIMEOUT = 30
 
 
 def cbb_season_year(now=None) -> int:
+    """
+    BartTorvik 'year' is the season-ending year.
+    Rule of thumb: if month >= July, use next year.
+    """
     now = now or datetime.now(ZoneInfo("America/Los_Angeles"))
     return now.year + 1 if now.month >= 7 else now.year
 
 
+def _clean_col_name(c: str) -> str:
+    """
+    Make column names consistent:
+      - lowercase
+      - % -> pct
+      - remove dots
+      - collapse whitespace -> underscore
+      - remove non-alphanum/underscore
+    """
+    s = str(c).strip().lower()
+    s = s.replace("%", "pct")
+    s = s.replace(".", "")
+    s = re.sub(r"\s+", "_", s)
+    s = re.sub(r"[^\w]", "", s)
+    return s
+
+
 def _clean_columns(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
-    cleaned = []
-    for c in df.columns:
-        s = str(c).strip().lower().replace("%", "pct")
-        s = re.sub(r"\s+", "_", s)
-        s = re.sub(r"[^\w]", "", s)
-        cleaned.append(s)
-    df.columns = cleaned
+    df.columns = [_clean_col_name(c) for c in df.columns]
     return df
 
 
 def fetch_bytes(url: str, session: requests.Session) -> bytes:
-    r = session.get(url, headers=UA_HEADERS, timeout=TIMEOUT)
+    r = session.get(url, headers=UA_HEADERS, timeout=TIMEOUT, allow_redirects=True)
     r.raise_for_status()
     return r.content
 
 
+def _looks_like_html(text_lower: str) -> bool:
+    if "<html" in text_lower or "<!doctype html" in text_lower:
+        return True
+    # basic bot-check heuristics
+    bot_phrases = [
+        "verifying your browser",
+        "attention required",
+        "cloudflare",
+        "captcha",
+        "enable javascript",
+        "please wait",
+    ]
+    return any(p in text_lower for p in bot_phrases)
+
+
+def _debug_preview(content: bytes, label: str) -> None:
+    try:
+        txt = content.decode("utf-8", errors="ignore")
+    except Exception:
+        txt = repr(content[:500])
+    preview = txt[:900].replace("\n", "\\n")
+    print(f"[refresh_sources][debug] {label} preview: {preview}", file=sys.stderr)
+
+
+def _read_csv_loose(content: bytes) -> pd.DataFrame:
+    """
+    Robust CSV reader for odd formatting.
+    """
+    text = content.decode("utf-8", errors="ignore")
+
+    # If we accidentally got HTML, bail with helpful debug
+    if _looks_like_html(text.lower()):
+        _debug_preview(content, "CSV read got HTML (likely bot-check)")
+        raise ValueError("Expected CSV but got HTML/bot-check response.")
+
+    # Try normal read first
+    try:
+        return pd.read_csv(io.StringIO(text))
+    except Exception:
+        pass
+
+    # Try autodetect delimiter
+    try:
+        return pd.read_csv(io.StringIO(text), sep=None, engine="python")
+    except Exception:
+        pass
+
+    # Try common delimiters
+    last_err = None
+    for sep in [",", "\t", ";", "|"]:
+        try:
+            df = pd.read_csv(io.StringIO(text), sep=sep, engine="python")
+            if df.shape[1] >= 5:
+                return df
+        except Exception as e:
+            last_err = e
+    raise last_err or ValueError("Unable to parse CSV content")
+
+
+def _rename_if_present(df: pd.DataFrame, candidates: list[str], target: str) -> pd.DataFrame:
+    if target in df.columns:
+        return df
+    for c in candidates:
+        if c in df.columns:
+            return df.rename(columns={c: target})
+    return df
+
+
+# -------------------------
+# BartTorvik: Players
+# -------------------------
 def refresh_barttorvik_players(out_path: str, year: int, session: requests.Session) -> int:
     url = f"https://barttorvik.com/getadvstats.php?year={year}&csv=1"
     content = fetch_bytes(url, session)
+
+    # This endpoint is stable CSV
     df = pd.read_csv(io.BytesIO(content))
     df = _clean_columns(df)
 
@@ -55,47 +143,75 @@ def refresh_barttorvik_players(out_path: str, year: int, session: requests.Sessi
     return len(df)
 
 
-def refresh_barttorvik_teams(out_path: str, year: int, session: requests.Session) -> int:
-    """
-    Team-level data from barttorvik.com/{year}_team_results.csv
-    """
+# ----------------------------------------
+# BartTorvik: Team Results (your link)
+# NOT Four Factors. This is ranks/SOS/proj.
+# ----------------------------------------
+def refresh_barttorvik_team_results(out_path: str, year: int, session: requests.Session) -> int:
     url = f"https://barttorvik.com/{year}_team_results.csv"
     content = fetch_bytes(url, session)
 
     df = pd.read_csv(io.BytesIO(content))
     df = _clean_columns(df)
 
-    # Enforce that we got data for ~365 teams
     n = len(df)
     if n < 330 or n > 390:
-        raise ValueError(f"Unexpected Torvik team row count from {url}: {n}")
+        _debug_preview(content, f"Torvik team_results unexpected row count={n}")
+        raise ValueError(f"Unexpected Torvik team_results row count from {url}: {n}")
 
-    # Map Torvik cleaned columns to your canonical names where needed:
-    # (site columns likely already mostly match, but unify variants)
-    rename_map = {
-        "adjoteff": "adjoe",
-        "adjdeeff": "adjde",
-        "efgpcto": "efgpct",
-        "efgpctd": "efgdpct",
-        "torpcto": "tor",
-        "torpctd": "tord",
-        "orbpcto": "orb",
-        "drbpctd": "drb",
-        "ftrto": "ftr",
-        "ftrtd": "ftrd",
-        "2ppcto": "2ppct",
-        "2ppctd": "2ppctd",
-        "3ppcto": "3ppct",
-        "3ppctd": "3ppctd",
-        "3prto": "3pr",
-        "3prtd": "3prd",
-        "adjtempo": "adjt",
-    }
-    for src, dst in rename_map.items():
-        if src in df.columns and dst not in df.columns:
-            df = df.rename(columns={src: dst})
+    df.to_csv(out_path, index=False)
+    return n
 
-    # Required set (based on the fields you listed)
+
+# ----------------------------------------
+# BartTorvik: Team Stats (Four Factors)
+# This is the table you want for:
+# EFG%, EFGD%, TOR, TORD, ORB, DRB, FTR, FTRD,
+# 2P%, 2P%D, 3P%, 3P%D, 3PR, 3PRD, AdjT, WAB
+# ----------------------------------------
+def _normalize_torvik_teamstats_schema(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+
+    # identity fields
+    df = _rename_if_present(df, ["rank", "rk"], "rk")
+    df = _rename_if_present(df, ["school", "teamname", "team"], "team")
+    df = _rename_if_present(df, ["conference", "conf"], "conf")
+    df = _rename_if_present(df, ["games", "gp", "g"], "g")
+    df = _rename_if_present(df, ["record", "rec"], "rec")
+
+    # efficiencies + tempo + power
+    df = _rename_if_present(df, ["adj_oe", "adj_o", "adjoe", "adjo"], "adjoe")
+    df = _rename_if_present(df, ["adj_de", "adj_d", "adjde", "adjd"], "adjde")
+    df = _rename_if_present(df, ["barthag"], "barthag")
+    df = _rename_if_present(df, ["adj_t", "adjtempo", "adj_tempo", "adjt"], "adjt")
+    df = _rename_if_present(df, ["wab"], "wab")
+
+    # Four Factors / profiles (off + def)
+    df = _rename_if_present(df, ["efg", "efgo", "efgpct"], "efgpct")
+    df = _rename_if_present(df, ["efgd", "efgdef", "efgdpct"], "efgdpct")
+
+    df = _rename_if_present(df, ["to", "tor", "topct"], "tor")
+    df = _rename_if_present(df, ["tod", "tord", "topctd"], "tord")
+
+    df = _rename_if_present(df, ["orb", "orbpct"], "orb")
+    df = _rename_if_present(df, ["drb", "drbpct"], "drb")
+
+    df = _rename_if_present(df, ["ftr", "ftrate"], "ftr")
+    df = _rename_if_present(df, ["ftrd", "ftrated"], "ftrd")
+
+    df = _rename_if_present(df, ["2p", "2ppct"], "2ppct")
+    df = _rename_if_present(df, ["2pd", "2ppctd"], "2ppctd")
+
+    df = _rename_if_present(df, ["3pt", "3p", "3ppct"], "3ppct")
+    df = _rename_if_present(df, ["3ptd", "3pd", "3ppctd"], "3ppctd")
+
+    df = _rename_if_present(df, ["3pr", "3prate"], "3pr")
+    df = _rename_if_present(df, ["3prd", "3prated"], "3prd")
+
+    return df
+
+
+def _validate_torvik_teamstats_required(df: pd.DataFrame) -> None:
     required = {
         "rk", "team", "conf", "g", "rec",
         "adjoe", "adjde", "barthag",
@@ -110,36 +226,66 @@ def refresh_barttorvik_teams(out_path: str, year: int, session: requests.Session
     }
     missing = sorted(required - set(df.columns))
     if missing:
-        print(f"[refresh_sources][debug] Torvik team columns (cleaned): {list(df.columns)}", file=sys.stderr)
-        raise ValueError(f"Torvik team file missing required columns: {missing}")
+        print(f"[refresh_sources][debug] Torvik teamstats columns (cleaned): {list(df.columns)}", file=sys.stderr)
+        raise ValueError(f"Torvik teamstats missing required columns: {missing}")
 
-    if "adjem" not in df.columns:
+
+def refresh_barttorvik_teamstats(out_path: str, year: int, session: requests.Session) -> int:
+    # conlimit=Sum ensures all teams, no conf filter
+    url = f"https://barttorvik.com/teamstats.php?year={year}&conlimit=Sum&csv=1"
+    content = fetch_bytes(url, session)
+
+    df = _read_csv_loose(content)
+    df = _clean_columns(df)
+    df = _normalize_torvik_teamstats_schema(df)
+
+    n = len(df)
+    if n < 330 or n > 390:
+        _debug_preview(content, f"Torvik teamstats unexpected row count={n}")
+        raise ValueError(f"Unexpected Torvik teamstats row count from {url}: {n}")
+
+    _validate_torvik_teamstats_required(df)
+
+    # convenience
+    if "adjem" not in df.columns and "adjoe" in df.columns and "adjde" in df.columns:
         df["adjem"] = df["adjoe"] - df["adjde"]
 
     df.to_csv(out_path, index=False)
     return n
 
 
+# -------------------------
+# Haslametrics
+# -------------------------
 def refresh_haslametrics(out_path: str, session: requests.Session, table_index: int = 0) -> int:
     url = "https://haslametrics.com/ratings.php"
     html_bytes = fetch_bytes(url, session)
     html_text = html_bytes.decode("utf-8", errors="ignore")
 
-    tables = pd.read_html(html_text)
+    # Use StringIO to avoid the pandas FutureWarning
+    tables = pd.read_html(io.StringIO(html_text))
     if not tables:
         raise ValueError("No tables found on Haslametrics ratings page.")
 
-    # Pick the first table that looks like ~365 rows
     df = None
-    for t in tables:
-        t2 = _clean_columns(t)
-        if len(t2) >= 300:
-            df = t2
-            break
+
+    # Prefer explicit table_index if it yields ~365
+    if 0 <= table_index < len(tables):
+        t = _clean_columns(tables[table_index])
+        if len(t) >= 300:
+            df = t
+
+    # Else auto-pick the first big table
+    if df is None:
+        for t in tables:
+            t2 = _clean_columns(t)
+            if len(t2) >= 300:
+                df = t2
+                break
 
     if df is None:
         sizes = [len(t) for t in tables]
-        raise ValueError(f"Could not find Haslametrics team table in ratings page. Table sizes: {sizes}")
+        raise ValueError(f"Could not find a Haslametrics team table with ~365 rows. Table sizes: {sizes}")
 
     df.to_csv(out_path, index=False)
     return len(df)
@@ -148,6 +294,7 @@ def refresh_haslametrics(out_path: str, session: requests.Session, table_index: 
 def main() -> int:
     torvik_players_out = os.environ.get("TORVIK_PLAYERS_OUT", "barttorvik.csv")
     torvik_teams_out = os.environ.get("TORVIK_TEAMS_OUT", "barttorvik_teams.csv")
+    torvik_team_results_out = os.environ.get("TORVIK_TEAM_RESULTS_OUT", "barttorvik_team_results.csv")
     hasla_out = os.environ.get("HASLA_OUT", "haslametrics.csv")
 
     torvik_year_env = os.environ.get("TORVIK_YEAR", "").strip()
@@ -157,10 +304,13 @@ def main() -> int:
     hasla_table_index = int(hasla_table_index_env) if hasla_table_index_env else 0
 
     session = requests.Session()
+
     ok_any = False
 
     print(f"[refresh_sources] Using TORVIK_YEAR={torvik_year}")
-    print(f"[refresh_sources] Output: {torvik_players_out}, {torvik_teams_out}, {hasla_out}")
+    print(
+        f"[refresh_sources] Output: {torvik_players_out}, {torvik_teams_out}, {torvik_team_results_out}, {hasla_out}"
+    )
 
     # 1) Torvik players
     try:
@@ -172,17 +322,27 @@ def main() -> int:
 
     time.sleep(1.5)
 
-    # 2) Torvik teams (YEAR_team_results.csv)
+    # 2) Torvik teamstats (Four Factors)
     try:
-        n = refresh_barttorvik_teams(torvik_teams_out, torvik_year, session)
-        print(f"[refresh_sources] BartTorvik Teams OK: wrote {n} rows -> {torvik_teams_out}")
+        n = refresh_barttorvik_teamstats(torvik_teams_out, torvik_year, session)
+        print(f"[refresh_sources] BartTorvik TeamStats OK: wrote {n} rows -> {torvik_teams_out}")
         ok_any = True
     except Exception as e:
-        print(f"[refresh_sources] BartTorvik Teams FAILED: {e}", file=sys.stderr)
+        print(f"[refresh_sources] BartTorvik TeamStats FAILED: {e}", file=sys.stderr)
 
     time.sleep(1.5)
 
-    # 3) Haslametrics
+    # 3) Torvik team results (your static CSV link)
+    try:
+        n = refresh_barttorvik_team_results(torvik_team_results_out, torvik_year, session)
+        print(f"[refresh_sources] BartTorvik Team Results OK: wrote {n} rows -> {torvik_team_results_out}")
+        ok_any = True
+    except Exception as e:
+        print(f"[refresh_sources] BartTorvik Team Results FAILED: {e}", file=sys.stderr)
+
+    time.sleep(1.5)
+
+    # 4) Haslametrics
     try:
         n = refresh_haslametrics(hasla_out, session, table_index=hasla_table_index)
         print(f"[refresh_sources] Haslametrics OK: wrote {n} rows -> {hasla_out}")
