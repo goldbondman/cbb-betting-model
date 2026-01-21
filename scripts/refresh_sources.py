@@ -31,9 +31,22 @@ def cbb_season_year(now=None) -> int:
 
 
 def _clean_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Normalize column names:
+    - lowercase
+    - trim
+    - spaces -> underscores
+    - drop periods
+    - % -> pct
+    """
     df = df.copy()
     df.columns = [
-        str(c).strip().lower().replace(" ", "_").replace(".", "").replace("%", "pct")
+        str(c)
+        .strip()
+        .lower()
+        .replace(" ", "_")
+        .replace(".", "")
+        .replace("%", "pct")
         for c in df.columns
     ]
     return df
@@ -45,13 +58,17 @@ def fetch_bytes(url: str, session: requests.Session) -> bytes:
     return r.content
 
 
-def refresh_barttorvik(out_path: str, year: int, session: requests.Session) -> int:
+def refresh_barttorvik_players(out_path: str, year: int, session: requests.Session) -> int:
+    """
+    Player-level advanced stats from BartTorvik.
+    Output: barttorvik.csv (one row per player)
+    """
     url = f"https://barttorvik.com/getadvstats.php?year={year}&csv=1"
     content = fetch_bytes(url, session)
     df = pd.read_csv(io.BytesIO(content))
     df = _clean_columns(df)
 
-    # Common convenience fields (only if present)
+    # Convenience metric
     if "adjoe" in df.columns and "adjde" in df.columns and "adjem" not in df.columns:
         df["adjem"] = df["adjoe"] - df["adjde"]
 
@@ -59,19 +76,60 @@ def refresh_barttorvik(out_path: str, year: int, session: requests.Session) -> i
     return len(df)
 
 
+def refresh_barttorvik_teams(out_path: str, year: int, session: requests.Session) -> int:
+    """
+    Team-level results from BartTorvik.
+    Output: barttorvik_teams.csv (~365 rows, one per D1 team)
+    """
+    url = f"https://barttorvik.com/{year}_team_results.csv"
+    content = fetch_bytes(url, session)
+    df = pd.read_csv(io.BytesIO(content))
+    df = _clean_columns(df)
+
+    # Guardrail 1: sanity check team count
+    n = len(df)
+    if n < 330 or n > 390:
+        raise ValueError(f"Unexpected Torvik team row count: {n}")
+
+    # Guardrail 2: required columns (fail fast if schema changes)
+    required = {
+        "rk",
+        "team",
+        "conf",
+        "adjoe",
+        "adjde",
+        "barthag",
+        "adjt",
+        "wab",
+    }
+    missing = sorted(required - set(df.columns))
+    if missing:
+        raise ValueError(f"Torvik team file missing required columns: {missing}")
+
+    # Convenience metric
+    if "adjoe" in df.columns and "adjde" in df.columns and "adjem" not in df.columns:
+        df["adjem"] = df["adjoe"] - df["adjde"]
+
+    df.to_csv(out_path, index=False)
+    return n
+
+
 def refresh_haslametrics(out_path: str, session: requests.Session, table_index: int = 0) -> int:
+    """
+    Team-level ratings from Haslametrics.
+    """
     url = "https://haslametrics.com/ratings.php"
     html_bytes = fetch_bytes(url, session)
 
-    # pd.read_html wants text, not bytes
     html_text = html_bytes.decode("utf-8", errors="ignore")
-
     tables = pd.read_html(html_text)
     if not tables:
         raise ValueError("No tables found on Haslametrics ratings page.")
 
     if table_index < 0 or table_index >= len(tables):
-        raise ValueError(f"Invalid HASLA_TABLE_INDEX={table_index}. Found {len(tables)} tables.")
+        raise ValueError(
+            f"Invalid HASLA_TABLE_INDEX={table_index}. Found {len(tables)} tables."
+        )
 
     df = tables[table_index]
     df = _clean_columns(df)
@@ -80,7 +138,9 @@ def refresh_haslametrics(out_path: str, session: requests.Session, table_index: 
 
 
 def main() -> int:
-    torvik_out = os.environ.get("TORVIK_OUT", "barttorvik.csv")
+    # Outputs (player-level Torvik stays as barttorvik.csv)
+    torvik_players_out = os.environ.get("TORVIK_PLAYERS_OUT", "barttorvik.csv")
+    torvik_teams_out = os.environ.get("TORVIK_TEAMS_OUT", "barttorvik_teams.csv")
     hasla_out = os.environ.get("HASLA_OUT", "haslametrics.csv")
 
     # Optional overrides
@@ -91,33 +151,53 @@ def main() -> int:
     hasla_table_index = int(hasla_table_index_env) if hasla_table_index_env else 0
 
     session = requests.Session()
-
-    ok_torvik = False
-    ok_hasla = False
+    ok_any = False
 
     print(f"[refresh_sources] Using TORVIK_YEAR={torvik_year}")
-    print(f"[refresh_sources] Output: {torvik_out}, {hasla_out}")
+    print(
+        f"[refresh_sources] Output: "
+        f"{torvik_players_out}, {torvik_teams_out}, {hasla_out}"
+    )
 
-    # 1) BartTorvik
+    # 1) BartTorvik players
     try:
-        n = refresh_barttorvik(torvik_out, torvik_year, session)
-        print(f"[refresh_sources] BartTorvik OK: wrote {n} rows -> {torvik_out}")
-        ok_torvik = True
+        n = refresh_barttorvik_players(torvik_players_out, torvik_year, session)
+        print(
+            f"[refresh_sources] BartTorvik Players OK: "
+            f"wrote {n} rows -> {torvik_players_out}"
+        )
+        ok_any = True
     except Exception as e:
-        print(f"[refresh_sources] BartTorvik FAILED: {e}", file=sys.stderr)
+        print(f"[refresh_sources] BartTorvik Players FAILED: {e}", file=sys.stderr)
 
     time.sleep(1.5)
 
-    # 2) Haslametrics
+    # 2) BartTorvik teams
+    try:
+        n = refresh_barttorvik_teams(torvik_teams_out, torvik_year, session)
+        print(
+            f"[refresh_sources] BartTorvik Teams OK: "
+            f"wrote {n} rows -> {torvik_teams_out}"
+        )
+        ok_any = True
+    except Exception as e:
+        print(f"[refresh_sources] BartTorvik Teams FAILED: {e}", file=sys.stderr)
+
+    time.sleep(1.5)
+
+    # 3) Haslametrics
     try:
         n = refresh_haslametrics(hasla_out, session, table_index=hasla_table_index)
-        print(f"[refresh_sources] Haslametrics OK: wrote {n} rows -> {hasla_out}")
-        ok_hasla = True
+        print(
+            f"[refresh_sources] Haslametrics OK: "
+            f"wrote {n} rows -> {hasla_out}"
+        )
+        ok_any = True
     except Exception as e:
         print(f"[refresh_sources] Haslametrics FAILED: {e}", file=sys.stderr)
 
-    if not ok_torvik and not ok_hasla:
-        print("[refresh_sources] Both sources failed. Failing job.", file=sys.stderr)
+    if not ok_any:
+        print("[refresh_sources] All sources failed. Failing job.", file=sys.stderr)
         return 1
 
     print("[refresh_sources] Done.")
