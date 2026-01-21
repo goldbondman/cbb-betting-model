@@ -2,7 +2,7 @@ name: Daily Refresh Metrics
 
 on:
   schedule:
-    # 10:00pm PST = 06:00 UTC (during PDT this will run at 11:00pm local)
+    # 10:00pm PST = 06:00 UTC
     - cron: "0 6 * * *"
   workflow_dispatch:
 
@@ -19,78 +19,53 @@ jobs:
         with:
           fetch-depth: 0
 
-      # ----------------------------
-      # 1) Node + cbb-api (Team stats + shooting)
-      # ----------------------------
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install cbb-api
-        run: npm install -g cbb-api
-
-      - name: Fetch CBB API team stats (team efficiency + 4-factor style data)
-        env:
-          CBB_DATA_API_KEY: ${{ secrets.CBB_DATA_API_KEY }}
-        run: |
-          mkdir -p data/cbbapi
-          cbb --team-season-stats --season 2026 --output-dir data/cbbapi
-          cbb --team-shooting-stats --season 2026 --output-dir data/cbbapi
-
-      # ----------------------------
-      # 2) Python refresh (Torvik players, Torvik team results, Hasla)
-      # ----------------------------
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install pandas requests beautifulsoup4 lxml
 
-          # Install main deps first (preferred)
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          fi
+      - name: Install Node.js (for cbb-api)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
 
-          # Optional: refresh-specific deps
-          if [ -f scripts/requirements-refresh.txt ]; then
-            pip install -r scripts/requirements-refresh.txt
-          fi
+      - name: Install cbb-api CLI
+        run: |
+          npm install -g cbb-api
 
-          # Safety net in case neither requirements file exists
-          if [ ! -f requirements.txt ] && [ ! -f scripts/requirements-refresh.txt ]; then
-            pip install pandas requests beautifulsoup4 lxml
-          fi
-
-      - name: Refresh Torvik and Haslametrics CSVs
+      - name: Fetch CBB API team data (required order)
         env:
-          # Keep player-level Torvik output as barttorvik.csv
-          TORVIK_PLAYERS_OUT: "barttorvik.csv"
-          # Team-level Torvik output
-          TORVIK_TEAMS_OUT: "barttorvik_teams.csv"
-          # Pin season-ending year (optional but removes ambiguity)
-          TORVIK_YEAR: "2026"
+          CBB_DATA_API_KEY: ${{ secrets.CBB_DATA_API_KEY }}
+        run: |
+          mkdir -p data/cbbapi
 
-          # Haslametrics output
-          HASLA_OUT: "haslametrics.csv"
-          # Only change if Hasla page table order changes
-          HASLA_TABLE_INDEX: "0"
+          # REQUIRED FIRST: teams list
+          cbb --teams --season 2026 --output-dir data/cbbapi
+
+          # Team efficiency / season metrics
+          cbb --team-season-stats --season 2026 --output-dir data/cbbapi
+
+          # Team shooting / four-factor style stats
+          cbb --team-shooting-stats --season 2026 --output-dir data/cbbapi
+
+      - name: Refresh Torvik player + team results (optional but useful)
+        env:
+          TORVIK_YEAR: "2026"
         run: |
           python scripts/refresh_sources.py
 
-      # ----------------------------
-      # 3) Commit results
-      # ----------------------------
-      - name: Commit and push updated files
+      - name: Commit and push updated data
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add -A
-            git commit -m "Daily refresh: update metrics datasets"
+            git commit -m "Daily refresh: CBB API + Torvik data"
             git push
           else
             echo "No changes to commit."
