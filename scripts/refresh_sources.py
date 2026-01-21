@@ -22,9 +22,6 @@ TIMEOUT = 30
 def cbb_season_year(now=None) -> int:
     """
     BartTorvik 'year' is the season-ending year.
-    Examples:
-      - Nov/Dec 2025 season is year=2026
-      - Jan/Feb/Mar 2026 season is year=2026
     Rule of thumb: if month >= July, use next year.
     """
     now = now or datetime.now(ZoneInfo("America/Los_Angeles"))
@@ -33,20 +30,18 @@ def cbb_season_year(now=None) -> int:
 
 def _clean_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Normalize column names for consistency across sources.
-
-    Rules:
+    Normalize column names.
     - lowercase, trim
     - % -> pct
     - whitespace -> underscore
-    - remove most punctuation (keep underscores and alphanumerics)
+    - remove punctuation (keep underscores/alphanumerics)
     """
     df = df.copy()
     cleaned = []
     for c in df.columns:
         s = str(c).strip().lower().replace("%", "pct")
-        s = re.sub(r"\s+", "_", s)          # spaces -> underscores
-        s = re.sub(r"[^\w]", "", s)         # drop punctuation (keeps letters, nums, underscore)
+        s = re.sub(r"\s+", "_", s)
+        s = re.sub(r"[^\w]", "", s)
         cleaned.append(s)
     df.columns = cleaned
     return df
@@ -60,7 +55,7 @@ def fetch_bytes(url: str, session: requests.Session) -> bytes:
 
 def refresh_barttorvik_players(out_path: str, year: int, session: requests.Session) -> int:
     """
-    Player-level advanced stats from BartTorvik.
+    Player-level advanced stats.
     Output: barttorvik.csv (one row per player)
     """
     url = f"https://barttorvik.com/getadvstats.php?year={year}&csv=1"
@@ -68,7 +63,6 @@ def refresh_barttorvik_players(out_path: str, year: int, session: requests.Sessi
     df = pd.read_csv(io.BytesIO(content))
     df = _clean_columns(df)
 
-    # Convenience metric
     if "adjoe" in df.columns and "adjde" in df.columns and "adjem" not in df.columns:
         df["adjem"] = df["adjoe"] - df["adjde"]
 
@@ -76,77 +70,102 @@ def refresh_barttorvik_players(out_path: str, year: int, session: requests.Sessi
     return len(df)
 
 
-def _normalize_torvik_team_columns(df: pd.DataFrame) -> pd.DataFrame:
+def _rename_if_present(df: pd.DataFrame, candidates: list[str], target: str) -> pd.DataFrame:
     """
-    Normalize Torvik team-results columns to a stable schema:
-    rk, team, conf, g, rec, adjoe, adjde, barthag,
-    efgpct, efgdpct, tor, tord, orb, drb, ftr, ftrd,
-    2ppct, 2ppctd, 3ppct, 3ppctd, 3pr, 3prd, adjt, wab
+    If any candidate column exists and target does not, rename the first match to target.
+    """
+    if target in df.columns:
+        return df
+    for c in candidates:
+        if c in df.columns:
+            return df.rename(columns={c: target})
+    return df
+
+
+def _normalize_torvik_team_schema(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Torvik team_results CSV headers vary vs the site display headers.
+    This function maps whatever we got into the canonical schema:
+
+    rk, team, conf, g, rec,
+    adjoe, adjde, barthag, wab, adjt,
+    efgpct, efgdpct,
+    tor, tord,
+    orb, drb,
+    ftr, ftrd,
+    2ppct, 2ppctd,
+    3ppct, 3ppctd,
+    3pr, 3prd
     """
     df = df.copy()
 
-    # 1) Ensure rank column is named 'rk'
+    # Rank column: sometimes becomes "unnamed0" or similar
     if "rk" not in df.columns:
         first = df.columns[0]
-
-        # common variants after cleaning
-        if first in {"rank", "r"} or str(first).startswith("unnamed"):
+        s = df.iloc[:, 0].astype(str).str.strip()
+        if s.str.fullmatch(r"\d+").mean() >= 0.90:
             df = df.rename(columns={first: "rk"})
-        else:
-            # heuristic: first col is mostly integers -> treat as rank
-            s = df.iloc[:, 0].astype(str).str.strip()
-            is_int = s.str.fullmatch(r"\d+").mean() >= 0.90
-            if is_int:
-                df = df.rename(columns={first: "rk"})
 
-    # 2) Normalize a few known header variants (defensive efg sometimes shows up as efgd or efgdpct)
-    rename_map = {}
+    # Core columns
+    df = _rename_if_present(df, ["team_name"], "team")
+    df = _rename_if_present(df, ["conference"], "conf")
+    df = _rename_if_present(df, ["games", "gp"], "g")
+    df = _rename_if_present(df, ["record"], "rec")
+    df = _rename_if_present(df, ["adj_oe", "adj_o"], "adjoe")
+    df = _rename_if_present(df, ["adj_de", "adj_d"], "adjde")
+    df = _rename_if_present(df, ["adj_t", "adjtempo", "adj_tempo"], "adjt")
 
-    # e.g. "adj_t" vs "adjt"
-    if "adj_t" in df.columns and "adjt" not in df.columns:
-        rename_map["adj_t"] = "adjt"
+    # EFG (off/def). Torvik display: EFG%, EFGD% (you typed EDGD% but it’s defensive EFG)
+    df = _rename_if_present(df, ["efg", "efgo", "efgpct"], "efgpct")
+    df = _rename_if_present(df, ["efgd", "efg_d", "efgdef", "efgdpct"], "efgdpct")
 
-    # defensive efg can appear as "efgd" or "efgdpct"
-    if "efgd" in df.columns and "efgdpct" not in df.columns:
-        rename_map["efgd"] = "efgdpct"
-    if "efgd_pct" in df.columns and "efgdpct" not in df.columns:
-        rename_map["efgd_pct"] = "efgdpct"
+    # Turnovers
+    df = _rename_if_present(df, ["to"], "tor")
+    df = _rename_if_present(df, ["tod"], "tord")
 
-    # 2pt/3pt defensive sometimes appears with "d" suffix patterns
-    if "2ppctd" not in df.columns and "2ppctd_" in df.columns:
-        rename_map["2ppctd_"] = "2ppctd"
-    if "3ppctd" not in df.columns and "3ppctd_" in df.columns:
-        rename_map["3ppctd_"] = "3ppctd"
+    # Rebounding
+    df = _rename_if_present(df, ["orbpct", "orb_pct"], "orb")
+    df = _rename_if_present(df, ["drbpct", "drb_pct"], "drb")
 
-    if rename_map:
-        df = df.rename(columns=rename_map)
+    # Free throw rate (off/def)
+    df = _rename_if_present(df, ["ftrate", "ftr_rate"], "ftr")
+    df = _rename_if_present(df, ["ftrated", "ftr_rated", "ftrdef"], "ftrd")
+
+    # 2P / 3P. Torvik display: 2p%, 2p%D, 3pt%, 3pt%D
+    # CSV variants commonly show up as 2p/2pd and 3p/3pd OR 3pt/3ptd.
+    df = _rename_if_present(df, ["2p", "2po", "2ppct"], "2ppct")
+    df = _rename_if_present(df, ["2pd", "2pdef", "2ppctd"], "2ppctd")
+
+    df = _rename_if_present(df, ["3pt", "3p", "3po", "3ppct"], "3ppct")
+    df = _rename_if_present(df, ["3ptd", "3pd", "3pdef", "3ppctd"], "3ppctd")
+
+    # 3P Rate (off/def)
+    df = _rename_if_present(df, ["3prate", "3pr"], "3pr")
+    df = _rename_if_present(df, ["3prated", "3prd", "3prdef"], "3prd")
 
     return df
 
 
 def refresh_barttorvik_teams(out_path: str, year: int, session: requests.Session) -> int:
     """
-    Team-level results from BartTorvik (one row per D1 team).
+    Team-level Torvik.
     Output: barttorvik_teams.csv (~365 rows)
     """
     url = f"https://barttorvik.com/{year}_team_results.csv"
     content = fetch_bytes(url, session)
 
-    # Read and normalize
     df = pd.read_csv(io.BytesIO(content))
     df = _clean_columns(df)
-    df = _normalize_torvik_team_columns(df)
+    df = _normalize_torvik_team_schema(df)
 
-    # Guardrail 1: must not be empty
     if df.empty:
         raise ValueError("Torvik team CSV parsed but contains zero rows")
 
-    # Guardrail 2: row count sanity check
     n = len(df)
     if n < 330 or n > 390:
         raise ValueError(f"Unexpected Torvik team row count: {n}")
 
-    # Guardrail 3: required columns (based on your schema)
+    # Strict required set based on your Torvik header list
     required = {
         "rk", "team", "conf", "g", "rec",
         "adjoe", "adjde", "barthag",
@@ -161,10 +180,10 @@ def refresh_barttorvik_teams(out_path: str, year: int, session: requests.Session
     }
     missing = sorted(required - set(df.columns))
     if missing:
+        print(f"[refresh_sources][debug] Torvik team columns (cleaned): {list(df.columns)}", file=sys.stderr)
         raise ValueError(f"Torvik team file missing required columns: {missing}")
 
-    # Convenience metric
-    if "adjem" not in df.columns and "adjoe" in df.columns and "adjde" in df.columns:
+    if "adjem" not in df.columns:
         df["adjem"] = df["adjoe"] - df["adjde"]
 
     df.to_csv(out_path, index=False)
@@ -174,29 +193,50 @@ def refresh_barttorvik_teams(out_path: str, year: int, session: requests.Session
 def refresh_haslametrics(out_path: str, session: requests.Session, table_index: int = 0) -> int:
     """
     Team-level ratings from Haslametrics.
-    Uses pd.read_html to scrape tables from the ratings page.
+    Auto-picks the ~365-row table if the provided index is wrong.
     """
     url = "https://haslametrics.com/ratings.php"
     html_bytes = fetch_bytes(url, session)
     html_text = html_bytes.decode("utf-8", errors="ignore")
 
-    # Future-proof: wrap literal HTML for read_html
     tables = pd.read_html(io.StringIO(html_text))
     if not tables:
         raise ValueError("No tables found on Haslametrics ratings page.")
 
-    if table_index < 0 or table_index >= len(tables):
-        raise ValueError(f"Invalid HASLA_TABLE_INDEX={table_index}. Found {len(tables)} tables.")
+    # Try requested table first
+    chosen_idx = table_index if 0 <= table_index < len(tables) else None
 
-    df = tables[table_index]
-    df = _clean_columns(df)
+    def _clean_table(i: int) -> pd.DataFrame:
+        t = tables[i]
+        t = _clean_columns(t)
+        return t
 
-    # Guardrail: wrong table often returns tiny row counts (like 6)
+    df = None
+    if chosen_idx is not None:
+        df_try = _clean_table(chosen_idx)
+        if len(df_try) >= 300:
+            df = df_try
+
+    # If wrong (like 6 rows), auto-select the first ~365-row table
+    if df is None:
+        sizes = [len(t) for t in tables]
+        # Prefer the first table that looks like team ratings
+        for i, sz in enumerate(sizes):
+            if sz >= 300:
+                df = _clean_table(i)
+                chosen_idx = i
+                break
+
+    if df is None:
+        sizes = [len(t) for t in tables]
+        raise ValueError(f"Could not find a Haslametrics table with ~365 teams. Table sizes: {sizes}")
+
     n = len(df)
     if n < 300:
+        sizes = [len(t) for t in tables]
         raise ValueError(
             f"Haslametrics table_index={table_index} returned only {n} rows (wrong table). "
-            f"Set HASLA_TABLE_INDEX to the table that returns ~365 teams."
+            f"Available table sizes: {sizes}"
         )
 
     df.to_csv(out_path, index=False)
@@ -204,12 +244,10 @@ def refresh_haslametrics(out_path: str, session: requests.Session, table_index: 
 
 
 def main() -> int:
-    # Outputs (player-level Torvik stays as barttorvik.csv)
     torvik_players_out = os.environ.get("TORVIK_PLAYERS_OUT", "barttorvik.csv")
     torvik_teams_out = os.environ.get("TORVIK_TEAMS_OUT", "barttorvik_teams.csv")
     hasla_out = os.environ.get("HASLA_OUT", "haslametrics.csv")
 
-    # Optional overrides
     torvik_year_env = os.environ.get("TORVIK_YEAR", "").strip()
     torvik_year = int(torvik_year_env) if torvik_year_env else cbb_season_year()
 
@@ -217,13 +255,12 @@ def main() -> int:
     hasla_table_index = int(hasla_table_index_env) if hasla_table_index_env else 0
 
     session = requests.Session()
-
     ok_any = False
 
     print(f"[refresh_sources] Using TORVIK_YEAR={torvik_year}")
     print(f"[refresh_sources] Output: {torvik_players_out}, {torvik_teams_out}, {hasla_out}")
 
-    # 1) BartTorvik players
+    # 1) Torvik players
     try:
         n = refresh_barttorvik_players(torvik_players_out, torvik_year, session)
         print(f"[refresh_sources] BartTorvik Players OK: wrote {n} rows -> {torvik_players_out}")
@@ -233,7 +270,7 @@ def main() -> int:
 
     time.sleep(1.5)
 
-    # 2) BartTorvik teams
+    # 2) Torvik teams
     try:
         n = refresh_barttorvik_teams(torvik_teams_out, torvik_year, session)
         print(f"[refresh_sources] BartTorvik Teams OK: wrote {n} rows -> {torvik_teams_out}")
