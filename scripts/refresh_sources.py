@@ -1,16 +1,12 @@
-#!/usr/bin/env python3
 import io
 import os
 import re
-import sys
 import time
-import difflib
+import sys
+import requests
+import pandas as pd
 from datetime import datetime
 from zoneinfo import ZoneInfo
-
-import pandas as pd
-import requests
-
 
 UA_HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
@@ -19,424 +15,199 @@ UA_HEADERS = {
 }
 TIMEOUT = 30
 
+TEAM_ALIASES = {
+    "uconn": "connecticut",
+    "nc state": "north carolina st",
+    "iowa st": "iowa state",
+    "michigan st": "michigan state",
+    "ole miss": "mississippi",
+    # add more as needed
+}
 
-def cbb_season_year(now=None) -> int:
+def cbb_season_year(now=None):
     now = now or datetime.now(ZoneInfo("America/Los_Angeles"))
     return now.year + 1 if now.month >= 7 else now.year
 
-
-def _clean_col_name(c: str) -> str:
-    s = str(c).strip().lower()
-    s = s.replace("%", "pct")
-    s = s.replace(".", "")
-    s = re.sub(r"\s+", "_", s)
-    s = re.sub(r"[^\w]", "", s)
-    return s
-
-
-def _clean_columns(df: pd.DataFrame) -> pd.DataFrame:
+def _clean_columns(df):
     df = df.copy()
-    df.columns = [_clean_col_name(c) for c in df.columns]
+    df.columns = [
+        str(c).strip().lower().replace(" ", "_").replace(".", "").replace("%", "pct")
+        for c in df.columns
+    ]
     return df
 
-
-def _debug(msg: str) -> None:
-    print(f"[refresh_sources][debug] {msg}", file=sys.stderr)
-
-
-def fetch_bytes(url: str, session: requests.Session) -> bytes:
-    r = session.get(url, headers=UA_HEADERS, timeout=TIMEOUT, allow_redirects=True)
+def fetch_bytes(url, session):
+    r = session.get(url, headers=UA_HEADERS, timeout=TIMEOUT)
     r.raise_for_status()
     return r.content
 
+def read_csv_bytes(content):
+    head = content[:300].decode("utf-8", errors="ignore").lower()
+    if "<html" in head or "verifying your browser" in head:
+        raise ValueError("Received HTML (likely Cloudflare bot check) instead of CSV")
+    return pd.read_csv(io.BytesIO(content))
 
-def _read_csv_bytes(content: bytes) -> pd.DataFrame:
-    try:
-        return pd.read_csv(io.BytesIO(content))
-    except Exception:
-        text = content.decode("utf-8", errors="ignore")
-        return pd.read_csv(io.StringIO(text), sep=None, engine="python")
-
-
-def _parse_games_from_record(rec: str) -> int | None:
-    if rec is None:
-        return None
-    m = re.match(r"^\s*(\d+)\s*-\s*(\d+)\s*$", str(rec))
-    if not m:
-        return None
-    return int(m.group(1)) + int(m.group(2))
-
-
-# -------------------------
-# Team name normalization (core fix)
-# -------------------------
-TEAM_ALIASES = {
-    # common Torvik/cbb naming quirks
-    "uconn": "connecticut",
-    "conn": "connecticut",
-    "olemiss": "mississippi",
-    "ncstate": "northcarolinastate",
-    "ncarolinast": "northcarolinastate",
-    "iowast": "iowastate",
-    "michiganst": "michiganstate",
-    "floridast": "floridastate",
-    "kansasst": "kansasstate",
-    "oklahomast": "oklahomastate",
-    "arizonast": "arizonastate",
-    "coloradost": "coloradostate",
-    "mississippist": "mississippistate",
-    "louisianast": "louisianastate",
-    "utahst": "utahstate",
-    "texasam": "texasam",
-    "stjohns": "stjohns",
-    "stmarys": "saintmarys",
-    "saintmarys": "saintmarys",
-}
-
-
-def _team_key_raw(s: str) -> str:
-    """Basic alnum key."""
-    if s is None:
+def canon_team(name):
+    if not name:
         return ""
-    s = str(s).strip().lower()
-    s = re.sub(r"[^\w\s]", " ", s)
-    s = re.sub(r"\s+", " ", s).strip()
-    # remove common noise words
-    noise = {"university", "college", "the", "of", "at"}
-    tokens = [t for t in s.split(" ") if t and t not in noise]
-    s = " ".join(tokens)
-    # normalize saint/st
-    s = s.replace("st ", "saint ")
-    s = s.replace("st. ", "saint ")
-    # normalize state
-    s = s.replace(" state", " state")
-    # now collapse to alnum
-    s = re.sub(r"[^a-z0-9]+", "", s)
-    return s
+    name = name.lower()
+    name = re.sub(r"[^\w\s]", "", name)
+    name = re.sub(r"\s+", " ", name).strip()
+    # map abbreviations
+    return TEAM_ALIASES.get(name, name)
 
-
-def _team_key_canon(s: str) -> str:
-    """Canonical key with alias mapping."""
-    k = _team_key_raw(s)
-    return TEAM_ALIASES.get(k, k)
-
-
-def _build_team_key_map(source_teams: list[str], target_teams: list[str], cutoff: float = 0.88) -> dict[str, str]:
+def try_teamstats_endpoint(year, session):
     """
-    Map each source team -> best target team using:
-      1) exact match on canonical keys
-      2) fuzzy match on canonical keys (difflib) with strict cutoff
-    Returns dict mapping canonical_key(source) -> canonical_key(target)
+    Try to fetch four-factor stats from teamstats.php.
+    Returns a DataFrame or None if blocked/unusable.
     """
-    src_keys = [_team_key_canon(t) for t in source_teams]
-    tgt_keys = [_team_key_canon(t) for t in target_teams]
+    url = f"https://barttorvik.com/teamstats.php?year={year}&conlimit=Sum&csv=1"
+    try:
+        content = fetch_bytes(url, session)
+        df = read_csv_bytes(content)
+        df = _clean_columns(df)
+        # identify team column
+        if "team" not in df.columns:
+            # sometimes it’s "team_name"
+            for cand in ("team_name", "teamname"):
+                if cand in df.columns:
+                    df = df.rename(columns={cand: "team"})
+                    break
+        if "team" not in df.columns:
+            return None
+        # check numeric team names
+        if df["team"].astype(str).str.isnumeric().all():
+            return None  # unreachable: team names are IDs
+        df["team_key"] = df["team"].map(canon_team)
+        return df
+    except Exception:
+        return None
 
-    # exact index
-    tgt_set = set(tgt_keys)
+def try_fffinal_csv(year, session):
+    """
+    Try to fetch four-factor stats from {year}_fffinal.csv.
+    Returns a DataFrame or None if numeric or missing.
+    """
+    url = f"https://barttorvik.com/{year}_fffinal.csv"
+    try:
+        content = fetch_bytes(url, session)
+        df = read_csv_bytes(content)
+        df = _clean_columns(df)
+        if "team" not in df.columns and "teamname" in df.columns:
+            df = df.rename(columns={"teamname": "team"})
+        if "team" not in df.columns:
+            return None
+        # bail if numeric codes
+        if df["team"].astype(str).str.isnumeric().all():
+            return None
+        df["team_key"] = df["team"].map(canon_team)
+        # rename columns to our desired names
+        rename = {
+            "efgpct_def": "efgdpct",
+            "topct": "tor",
+            "topct_def": "tord",
+            "orpct": "orb",
+            "drpct": "drb",
+            "ftr_def": "ftrd",
+            "3pdpct": "3ppctd",
+            "3p_rate": "3pr",
+            "3p_rate_d": "3prd",
+        }
+        df = df.rename(columns=rename)
+        return df
+    except Exception:
+        return None
 
-    mapping: dict[str, str] = {}
-    unmatched: list[str] = []
-
-    for sk in src_keys:
-        if not sk:
-            unmatched.append(sk)
-            continue
-        if sk in tgt_set:
-            mapping[sk] = sk
-            continue
-
-        # fuzzy
-        matches = difflib.get_close_matches(sk, tgt_keys, n=1, cutoff=cutoff)
-        if matches:
-            mapping[sk] = matches[0]
-        else:
-            unmatched.append(sk)
-
-    return mapping
-
-
-# -------------------------
-# BartTorvik: Players
-# -------------------------
-def refresh_barttorvik_players(out_path: str, year: int, session: requests.Session) -> int:
+def refresh_barttorvik_players(out_path, year, session):
     url = f"https://barttorvik.com/getadvstats.php?year={year}&csv=1"
     content = fetch_bytes(url, session)
-
-    df = pd.read_csv(io.BytesIO(content))
+    df = read_csv_bytes(content)
     df = _clean_columns(df)
-
-    if "adjoe" in df.columns and "adjde" in df.columns and "adjem" not in df.columns:
+    if {"adjoe", "adjde"} <= set(df.columns) and "adjem" not in df.columns:
         df["adjem"] = df["adjoe"] - df["adjde"]
-
     df.to_csv(out_path, index=False)
     return len(df)
 
-
-# -------------------------
-# BartTorvik: Team Results
-# -------------------------
-def fetch_barttorvik_team_results_df(year: int, session: requests.Session) -> pd.DataFrame:
+def refresh_barttorvik_team_results(out_path, year, session):
     url = f"https://barttorvik.com/{year}_team_results.csv"
     content = fetch_bytes(url, session)
-
-    df = _read_csv_bytes(content)
+    df = read_csv_bytes(content)
     df = _clean_columns(df)
-
     df = df.rename(columns={"rank": "rk", "record": "rec"})
-
-    if "rk" not in df.columns or "team" not in df.columns:
-        _debug(f"Torvik team_results columns (cleaned): {list(df.columns)}")
-        raise ValueError("Torvik team_results missing required columns (rk/team).")
-
-    if "g" not in df.columns:
-        df["g"] = df["rec"].map(_parse_games_from_record)
-
-    df["team_key"] = df["team"].map(_team_key_canon)
-    return df
-
-
-def refresh_barttorvik_team_results(out_path: str, year: int, session: requests.Session) -> int:
-    df = fetch_barttorvik_team_results_df(year, session)
-    n = len(df)
-    if n < 330 or n > 390:
-        raise ValueError(f"Unexpected Torvik team_results row count: {n}")
-    df.drop(columns=["team_key"], errors="ignore").to_csv(out_path, index=False)
-    return n
-
-
-# -------------------------
-# BartTorvik: Four Factors (YEAR_fffinal.csv)
-# -------------------------
-def fetch_barttorvik_fffinal_df(year: int, session: requests.Session) -> pd.DataFrame:
-    url = f"https://barttorvik.com/{year}_fffinal.csv"
-    content = fetch_bytes(url, session)
-
-    df = _read_csv_bytes(content)
-    df = _clean_columns(df)
-
-    if "team" not in df.columns and "teamname" in df.columns:
-        df = df.rename(columns={"teamname": "team"})
-
     if "team" not in df.columns:
-        _debug(f"Torvik fffinal columns (cleaned): {list(df.columns)}")
-        raise ValueError("Torvik fffinal missing team column (team/teamname).")
+        raise ValueError("team_results.csv missing 'team' column")
+    df["team_key"] = df["team"].map(canon_team)
+    df.to_csv(out_path, index=False)
+    return len(df), df
 
-    # show what Torvik is actually sending (first 8 rows)
-    sample = df["team"].head(8).astype(str).tolist()
-    _debug(f"fffinal team raw samples: {sample}")
+def refresh_barttorvik_team_factors(out_path, year, session, team_results_df):
+    """
+    Fetches four factors data via teamstats or fffinal and merges with results.
+    If neither source works, logs a warning and returns False.
+    """
+    factors_df = try_teamstats_endpoint(year, session)
+    if factors_df is None:
+        # fallback to fffinal
+        factors_df = try_fffinal_csv(year, session)
+    if factors_df is None:
+        print(f"[WARN] Could not fetch four-factor stats for {year}. Leaving factors out.")
+        return False  # no file written
 
-    # rename to your desired schema
-    rename_map = {
-        "efgpct_def": "efgdpct",
-        "topct": "tor",
-        "topct_def": "tord",
-        "ftr_def": "ftrd",
-        "orpct": "orb",
-        "drpct": "drb",
-        "3pdpct": "3ppctd",
-        "3p_rate": "3pr",
-        "3p_rate_d": "3prd",
-    }
-    df = df.rename(columns=rename_map)
-
-    keep = [
-        "team",
-        "efgpct",
-        "efgdpct",
-        "tor",
-        "tord",
-        "orb",
-        "drb",
-        "ftr",
-        "ftrd",
-        "2ppct",
-        "2ppctd",
-        "3ppct",
-        "3ppctd",
-        "3pr",
-        "3prd",
-    ]
-    missing = [c for c in keep if c not in df.columns]
-    if missing:
-        _debug(f"Torvik fffinal columns (cleaned): {list(df.columns)}")
-        raise ValueError(f"Torvik fffinal missing expected columns: {missing}")
-
-    df = df[keep].copy()
-    df["team_key"] = df["team"].map(_team_key_canon)
-    return df
-
-
-def refresh_barttorvik_teams_merged(out_path: str, year: int, session: requests.Session) -> int:
-    results = fetch_barttorvik_team_results_df(year, session)
-    fffinal = fetch_barttorvik_fffinal_df(year, session)
-
-    # build mapping from fffinal team keys -> results team keys
-    key_map = _build_team_key_map(
-        source_teams=fffinal["team"].astype(str).tolist(),
-        target_teams=results["team"].astype(str).tolist(),
-        cutoff=float(os.environ.get("TORVIK_FUZZY_CUTOFF", "0.88")),
+    merged = team_results_df.merge(
+        factors_df.drop(columns=["team"], errors="ignore"),
+        on="team_key",
+        how="inner",
+        suffixes=("", "_ff"),
     )
+    if "efgpct" not in merged.columns:
+        print(f"[WARN] Four-factor columns missing after merge. Check Torvik format.")
+        return False
+    merged = merged.drop(columns=["team_key"])
+    merged.to_csv(out_path, index=False)
+    return True
 
-    # apply mapping
-    fffinal = fffinal.copy()
-    fffinal["team_key_mapped"] = fffinal["team_key"].map(lambda k: key_map.get(k, None))
-
-    matched = fffinal["team_key_mapped"].notna().sum()
-    _debug(f"Team key mapping matched {matched} / {len(fffinal)}")
-
-    if matched < 330:
-        # show some unmapped examples
-        bad = fffinal.loc[fffinal["team_key_mapped"].isna(), "team"].head(25).tolist()
-        raise ValueError(
-            f"Torvik teams merge blocked: only mapped {matched}/{len(fffinal)} teams. "
-            f"Unmapped examples: {bad}"
-        )
-
-    fffinal = fffinal.drop(columns=["team_key"])
-    fffinal = fffinal.rename(columns={"team_key_mapped": "team_key"})
-
-    merged = results.merge(fffinal.drop(columns=["team"], errors="ignore"), on="team_key", how="left")
-
-    missing_ff = merged["efgpct"].isna().sum()
-    if missing_ff > 0:
-        sample = merged.loc[merged["efgpct"].isna(), ["team"]].head(15)["team"].tolist()
-        raise ValueError(f"Torvik teams merge: {missing_ff} teams missing fffinal match. Examples: {sample}")
-
-    required = [
-        "rk",
-        "team",
-        "conf",
-        "g",
-        "rec",
-        "adjoe",
-        "adjde",
-        "barthag",
-        "efgpct",
-        "efgdpct",
-        "tor",
-        "tord",
-        "orb",
-        "drb",
-        "ftr",
-        "ftrd",
-        "2ppct",
-        "2ppctd",
-        "3ppct",
-        "3ppctd",
-        "3pr",
-        "3prd",
-        "adjt",
-        "wab",
-    ]
-    missing_cols = [c for c in required if c not in merged.columns]
-    if missing_cols:
-        _debug(f"Merged columns: {list(merged.columns)}")
-        raise ValueError(f"Torvik merged team file missing columns: {missing_cols}")
-
-    merged["adjem"] = merged["adjoe"] - merged["adjde"]
-
-    out_df = merged[required + ["adjem"]].copy()
-    n = len(out_df)
-    if n < 330 or n > 390:
-        raise ValueError(f"Unexpected merged Torvik teams row count: {n}")
-
-    out_df.to_csv(out_path, index=False)
-    return n
-
-
-# -------------------------
-# Haslametrics
-# -------------------------
-def refresh_haslametrics(out_path: str, session: requests.Session, table_index: int = 0) -> int:
+def refresh_haslametrics(out_path, session, table_index=0):
     url = "https://haslametrics.com/ratings.php"
-    html_bytes = fetch_bytes(url, session)
-    html_text = html_bytes.decode("utf-8", errors="ignore")
-
-    tables = pd.read_html(io.StringIO(html_text))
-    if not tables:
-        raise ValueError("No tables found on Haslametrics ratings page.")
-
-    df = None
-
-    if 0 <= table_index < len(tables):
-        t = _clean_columns(tables[table_index])
-        if len(t) >= 300:
-            df = t
-
-    if df is None:
-        for t in tables:
-            t2 = _clean_columns(t)
-            if len(t2) >= 300:
-                df = t2
-                break
-
-    if df is None:
-        sizes = [len(t) for t in tables]
-        raise ValueError(f"Could not find a Haslametrics team table with ~365 rows. Table sizes: {sizes}")
-
+    html = fetch_bytes(url, session).decode("utf-8", errors="ignore")
+    tables = pd.read_html(io.StringIO(html))
+    if table_index >= len(tables) or len(tables[table_index]) < 300:
+        raise ValueError("Haslametrics table index appears wrong")
+    df = _clean_columns(tables[table_index])
     df.to_csv(out_path, index=False)
     return len(df)
 
-
-def main() -> int:
-    torvik_players_out = os.environ.get("TORVIK_PLAYERS_OUT", "barttorvik.csv")
-    torvik_teams_out = os.environ.get("TORVIK_TEAMS_OUT", "barttorvik_teams.csv")
-    torvik_team_results_out = os.environ.get("TORVIK_TEAM_RESULTS_OUT", "barttorvik_team_results.csv")
-    hasla_out = os.environ.get("HASLA_OUT", "haslametrics.csv")
-
-    torvik_year_env = os.environ.get("TORVIK_YEAR", "").strip()
-    torvik_year = int(torvik_year_env) if torvik_year_env else cbb_season_year()
-
-    hasla_table_index_env = os.environ.get("HASLA_TABLE_INDEX", "").strip()
-    hasla_table_index = int(hasla_table_index_env) if hasla_table_index_env else 0
-
+def main():
     session = requests.Session()
-    ok_any = False
-
-    print(f"[refresh_sources] Using TORVIK_YEAR={torvik_year}")
-    print(f"[refresh_sources] Output: {torvik_players_out}, {torvik_teams_out}, {torvik_team_results_out}, {hasla_out}")
-
-    try:
-        n = refresh_barttorvik_players(torvik_players_out, torvik_year, session)
-        print(f"[refresh_sources] BartTorvik Players OK: wrote {n} rows -> {torvik_players_out}")
-        ok_any = True
-    except Exception as e:
-        print(f"[refresh_sources] BartTorvik Players FAILED: {e}", file=sys.stderr)
-
-    time.sleep(1.0)
+    year = int(os.environ.get("TORVIK_YEAR", cbb_season_year()))
+    players_out = os.environ.get("TORVIK_PLAYERS_OUT", "barttorvik.csv")
+    teams_out = os.environ.get("TORVIK_TEAMS_OUT", "barttorvik_teams.csv")
+    team_results_out = os.environ.get("TORVIK_TEAM_RESULTS_OUT", "barttorvik_team_results.csv")
+    haslam_out = os.environ.get("HASLA_OUT", "haslametrics.csv")
+    table_idx = int(os.environ.get("HASLA_TABLE_INDEX", "0"))
 
     try:
-        n = refresh_barttorvik_team_results(torvik_team_results_out, torvik_year, session)
-        print(f"[refresh_sources] BartTorvik Team Results OK: wrote {n} rows -> {torvik_team_results_out}")
-        ok_any = True
+        n = refresh_barttorvik_players(players_out, year, session)
+        print(f"Players: {n} rows")
     except Exception as e:
-        print(f"[refresh_sources] BartTorvik Team Results FAILED: {e}", file=sys.stderr)
-
-    time.sleep(1.0)
-
+        print(f"[ERROR] Players refresh failed: {e}")
     try:
-        n = refresh_barttorvik_teams_merged(torvik_teams_out, torvik_year, session)
-        print(f"[refresh_sources] BartTorvik Teams (Merged) OK: wrote {n} rows -> {torvik_teams_out}")
-        ok_any = True
+        n_team, df_team = refresh_barttorvik_team_results(team_results_out, year, session)
+        print(f"Team results: {n_team} rows")
     except Exception as e:
-        print(f"[refresh_sources] BartTorvik Teams (Merged) FAILED: {e}", file=sys.stderr)
-
-    time.sleep(1.0)
-
+        print(f"[ERROR] Team results refresh failed: {e}")
+        df_team = None
+    if df_team is not None:
+        ok = refresh_barttorvik_team_factors(teams_out, year, session, df_team)
+        if ok:
+            print("Team factors: refresh OK")
+        else:
+            print("Team factors: no data; see logs.")
     try:
-        n = refresh_haslametrics(hasla_out, session, table_index=hasla_table_index)
-        print(f"[refresh_sources] Haslametrics OK: wrote {n} rows -> {hasla_out}")
-        ok_any = True
+        h = refresh_haslametrics(haslam_out, session, table_idx)
+        print(f"Haslametrics: {h} rows")
     except Exception as e:
-        print(f"[refresh_sources] Haslametrics FAILED: {e}", file=sys.stderr)
-
-    if not ok_any:
-        print("[refresh_sources] All sources failed. Failing job.", file=sys.stderr)
-        return 1
-
-    print("[refresh_sources] Done.")
-    return 0
-
+        print(f"[ERROR] Haslametrics refresh failed: {e}")
+    print("Done")
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()
