@@ -50,7 +50,6 @@ def fetch_bytes(url: str, session: requests.Session) -> bytes:
 
 
 def _read_csv_bytes(content: bytes) -> pd.DataFrame:
-    # Most of Torvik's static CSVs are clean. Use the looser path only if needed.
     try:
         return pd.read_csv(io.BytesIO(content))
     except Exception:
@@ -59,10 +58,6 @@ def _read_csv_bytes(content: bytes) -> pd.DataFrame:
 
 
 def _team_key(s: str) -> str:
-    """
-    Normalize team names for joins across Torvik files.
-    Lowercase, remove non-alphanumerics.
-    """
     if s is None:
         return ""
     s = str(s).strip().lower()
@@ -71,10 +66,6 @@ def _team_key(s: str) -> str:
 
 
 def _parse_games_from_record(rec: str) -> int | None:
-    """
-    "24-7" -> 31
-    If record isn't parseable, return None.
-    """
     if rec is None:
         return None
     m = re.match(r"^\s*(\d+)\s*-\s*(\d+)\s*$", str(rec))
@@ -93,7 +84,6 @@ def refresh_barttorvik_players(out_path: str, year: int, session: requests.Sessi
     df = pd.read_csv(io.BytesIO(content))
     df = _clean_columns(df)
 
-    # convenience
     if "adjoe" in df.columns and "adjde" in df.columns and "adjem" not in df.columns:
         df["adjem"] = df["adjoe"] - df["adjde"]
 
@@ -111,7 +101,6 @@ def fetch_barttorvik_team_results_df(year: int, session: requests.Session) -> pd
     df = _read_csv_bytes(content)
     df = _clean_columns(df)
 
-    # Standardize core names
     df = df.rename(
         columns={
             "rank": "rk",
@@ -125,7 +114,6 @@ def fetch_barttorvik_team_results_df(year: int, session: requests.Session) -> pd
 
     df["team_key"] = df["team"].map(_team_key)
 
-    # derive g if possible
     if "g" not in df.columns:
         df["g"] = df["rec"].map(_parse_games_from_record)
 
@@ -145,7 +133,6 @@ def refresh_barttorvik_team_results(out_path: str, year: int, session: requests.
 
 # -------------------------
 # BartTorvik: Four Factors (YEAR_fffinal.csv)
-# then merge with team_results -> barttorvik_teams.csv
 # -------------------------
 def fetch_barttorvik_fffinal_df(year: int, session: requests.Session) -> pd.DataFrame:
     url = f"https://barttorvik.com/{year}_fffinal.csv"
@@ -154,7 +141,7 @@ def fetch_barttorvik_fffinal_df(year: int, session: requests.Session) -> pd.Data
     df = _read_csv_bytes(content)
     df = _clean_columns(df)
 
-    # fffinal uses teamname, not team
+    # fffinal uses teamname
     if "team" not in df.columns and "teamname" in df.columns:
         df = df.rename(columns={"teamname": "team"})
 
@@ -162,13 +149,11 @@ def fetch_barttorvik_fffinal_df(year: int, session: requests.Session) -> pd.Data
         _debug(f"Torvik fffinal columns (cleaned): {list(df.columns)}")
         raise ValueError("Torvik fffinal missing team column (team/teamname).")
 
-    # fffinal contains rank columns rk, rk1, rk2... ignore those.
     df["team_key"] = df["team"].map(_team_key)
 
-    # Normalize to your preferred schema
     rename_map = {
         "efgpct_def": "efgdpct",
-        "topct": "tor",            # key fix
+        "topct": "tor",           # key fix
         "topct_def": "tord",
         "ftr_def": "ftrd",
         "orpct": "orb",
@@ -180,6 +165,7 @@ def fetch_barttorvik_fffinal_df(year: int, session: requests.Session) -> pd.Data
     df = df.rename(columns=rename_map)
 
     keep = [
+        "team",
         "team_key",
         "efgpct",
         "efgdpct",
@@ -204,20 +190,56 @@ def fetch_barttorvik_fffinal_df(year: int, session: requests.Session) -> pd.Data
     return df[keep].copy()
 
 
+def _build_fffinal_teamkey_fallback(fffinal: pd.DataFrame, results: pd.DataFrame) -> pd.DataFrame:
+    """
+    If fffinal team_key values don't overlap results team_key at all,
+    fall back to a deterministic best prefix match.
+
+    Strategy:
+    - Sort results team keys by length DESC (prefer longer, more specific)
+    - For each fffinal key, find first results key where:
+        fffinal_key.startswith(results_key) OR results_key.startswith(fffinal_key)
+    - This maps "michiganwolverines" -> "michigan"
+      and "northcarolinastatewolfpack" -> "northcarolinastate"
+      and avoids "utah" stealing "utahstate" (because utahstate is longer)
+    """
+    results_keys = results["team_key"].dropna().astype(str).unique().tolist()
+    results_keys.sort(key=len, reverse=True)
+
+    def guess(ffk: str) -> str | None:
+        if not ffk:
+            return None
+        for rk in results_keys:
+            if ffk.startswith(rk) or rk.startswith(ffk):
+                return rk
+        return None
+
+    fffinal = fffinal.copy()
+    fffinal["team_key_guess"] = fffinal["team_key"].map(guess)
+    matched = fffinal["team_key_guess"].notna().sum()
+    _debug(f"Fallback team_key matching: matched {matched} / {len(fffinal)}")
+
+    # overwrite with guess where present
+    fffinal["team_key"] = fffinal["team_key_guess"].fillna(fffinal["team_key"])
+    fffinal = fffinal.drop(columns=["team_key_guess"], errors="ignore")
+    return fffinal
+
+
 def refresh_barttorvik_teams_merged(out_path: str, year: int, session: requests.Session) -> int:
-    """
-    Creates barttorvik_teams.csv with the complete set you listed by merging:
-      - {year}_team_results.csv (rk, conf, rec, g, adjoe, adjde, barthag, adjt, wab...)
-      - {year}_fffinal.csv      (efg%, tor%, orb%, ftr, 2p/3p, 3pr + defensive counterparts)
-    """
     results = fetch_barttorvik_team_results_df(year, session)
     fffinal = fetch_barttorvik_fffinal_df(year, session)
 
-    merged = results.merge(fffinal, on="team_key", how="left", validate="one_to_one")
+    # If there is zero overlap, apply fallback mapping
+    overlap = len(set(results["team_key"]) & set(fffinal["team_key"]))
+    if overlap == 0:
+        _debug("No overlap between team_results team_key and fffinal team_key. Applying fallback resolver.")
+        fffinal = _build_fffinal_teamkey_fallback(fffinal, results)
+
+    merged = results.merge(fffinal.drop(columns=["team"], errors="ignore"), on="team_key", how="left")
 
     missing_ff = merged["efgpct"].isna().sum()
     if missing_ff > 0:
-        sample = merged.loc[merged["efgpct"].isna(), ["team"]].head(10)["team"].tolist()
+        sample = merged.loc[merged["efgpct"].isna(), ["team"]].head(15)["team"].tolist()
         raise ValueError(
             f"Torvik teams merge: {missing_ff} teams missing fffinal match. Examples: {sample}"
         )
@@ -253,8 +275,7 @@ def refresh_barttorvik_teams_merged(out_path: str, year: int, session: requests.
         _debug(f"Merged columns: {list(merged.columns)}")
         raise ValueError(f"Torvik merged team file missing columns: {missing_cols}")
 
-    if "adjem" not in merged.columns:
-        merged["adjem"] = merged["adjoe"] - merged["adjde"]
+    merged["adjem"] = merged["adjoe"] - merged["adjde"]
 
     out_df = merged[required + ["adjem"]].copy()
 
