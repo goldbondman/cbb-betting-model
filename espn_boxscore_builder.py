@@ -717,26 +717,56 @@ def _add_allowed_rollups(df: pd.DataFrame) -> pd.DataFrame:
 
     return out
 
-
 def _add_sos_proxies(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds schedule quality proxies based on opponent pregame ratings.
+    Robust to missing opponent rolling columns.
+
+    Outputs:
+    - avg_opp_netrtg_l7_pre / avg_opp_ortg_l7_pre / avg_opp_drtg_l7_pre
+    - sos_season_pre (expanding mean of opponent pregame netrtg)
     """
     out = df.copy()
+
+    if "game_dt" not in out.columns:
+        out["game_dt"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce")
+
     out = out.sort_values(["team", "game_dt", "event_id"])
     g = out.groupby("team", sort=False)
 
-    out["opp_netrtg_pre_base"] = out["opp_netrtg_season_pre"]
-    out["opp_ortg_pre_base"] = out["opp_ortg_season_pre"]
-    out["opp_drtg_pre_base"] = out["opp_opp_drtg_season_pre"] if "opp_opp_drtg_season_pre" in out.columns else out["opp_drtg_season_pre"]
+    def pick_col(*candidates):
+        for c in candidates:
+            if c in out.columns:
+                return c
+        return None
 
-    out["avg_opp_netrtg_l7_pre"] = g["opp_netrtg_pre_base"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
-    out["avg_opp_ortg_l7_pre"] = g["opp_ortg_pre_base"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
-    out["avg_opp_drtg_l7_pre"] = g["opp_drtg_pre_base"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
+    # Prefer opponent "entering game" season_pre (most stable), else l7_pre, else per-game
+    net_base_col = pick_col("opp_netrtg_season_pre", "opp_netrtg_l7_pre", "opp_netrtg", "opp_netrtg_game")
+    ort_base_col = pick_col("opp_ortg_season_pre",  "opp_ortg_l7_pre",  "opp_ortg",  "opp_ortg_game")
+    drt_base_col = pick_col("opp_drtg_season_pre",  "opp_drtg_l7_pre",  "opp_drtg",  "opp_drtg_game")
 
-    out["sos_season_pre"] = g["opp_netrtg_pre_base"].apply(lambda s: s.shift(1).expanding(min_periods=1).mean()).reset_index(level=0, drop=True)
+    # Create base columns (even if missing, so downstream code never KeyErrors)
+    out["opp_netrtg_pre_base"] = out[net_base_col] if net_base_col else np.nan
+    out["opp_ortg_pre_base"] = out[ort_base_col] if ort_base_col else np.nan
+    out["opp_drtg_pre_base"] = out[drt_base_col] if drt_base_col else np.nan
+
+    out["avg_opp_netrtg_l7_pre"] = g["opp_netrtg_pre_base"].apply(
+        lambda s: s.shift(1).rolling(7, min_periods=1).mean()
+    ).reset_index(level=0, drop=True)
+
+    out["avg_opp_ortg_l7_pre"] = g["opp_ortg_pre_base"].apply(
+        lambda s: s.shift(1).rolling(7, min_periods=1).mean()
+    ).reset_index(level=0, drop=True)
+
+    out["avg_opp_drtg_l7_pre"] = g["opp_drtg_pre_base"].apply(
+        lambda s: s.shift(1).rolling(7, min_periods=1).mean()
+    ).reset_index(level=0, drop=True)
+
+    out["sos_season_pre"] = g["opp_netrtg_pre_base"].apply(
+        lambda s: s.shift(1).expanding(min_periods=1).mean()
+    ).reset_index(level=0, drop=True)
+
     return out
-
 
 def _add_opponent_adjusted_deltas(df: pd.DataFrame) -> pd.DataFrame:
     """
