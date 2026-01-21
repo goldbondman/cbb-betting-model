@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   update:
@@ -32,12 +32,12 @@ jobs:
 
       - name: Show file sizes
         run: |
-          ls -lh espn_games.csv espn_team_game_logs.csv
+          ls -lh espn_games.csv espn_team_game_logs.csv espn_team_game_features.csv espn_matchups_model_ready.csv
 
-      - name: Commit and push if changed
+      - name: Upload CSVs to Supabase Storage (public bucket)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add espn_games.csv espn_team_game_logs.csv
-          git diff --cached --quiet || git commit -m "Update ESPN CSVs"
-          git push
+          python upload_to_supabase_storage.py
