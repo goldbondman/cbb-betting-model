@@ -14,6 +14,7 @@ DEFAULT_HEADERS = {
 
 PST_TZ = ZoneInfo("America/Los_Angeles")
 
+
 # ---------- helpers ----------
 def _to_int(x, default=0):
     try:
@@ -28,6 +29,7 @@ def _to_int(x, default=0):
     except Exception:
         return default
 
+
 def _to_float(x, default=np.nan):
     try:
         if x is None:
@@ -41,11 +43,13 @@ def _to_float(x, default=np.nan):
     except Exception:
         return default
 
+
 def _parse_made_attempt(display: str):
     if not display or "-" not in str(display):
         return (0, 0)
     a, b = str(display).split("-", 1)
     return (_to_int(a, 0), _to_int(b, 0))
+
 
 def _stat_map(stats_list):
     """
@@ -62,25 +66,29 @@ def _stat_map(stats_list):
     for item in stats_list:
         if not isinstance(item, dict):
             continue
+
         name = item.get("name")
         label = item.get("label")
         dv = item.get("displayValue")
         val = item.get("value")
 
-        # Prefer displayValue when present; else value
         stored = dv if dv not in (None, "") else val
 
         if name:
             out[str(name)] = stored
         if label:
             out[str(label).strip().lower()] = stored
+
     return out
+
 
 def _estimate_possessions(fga, fta, tov, orb):
     return fga + 0.44 * fta - orb + tov
 
+
 def _safe_div(num, den, default=np.nan):
     return default if den in (0, 0.0, None) else num / den
+
 
 # ---------- ESPN SUMMARY (TEAM STATS) ----------
 def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
@@ -96,8 +104,14 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
     venue = (comp.get("venue") or {}).get("fullName")
 
     competitors = comp.get("competitors") or []
-    home_id = next((str(c.get("team", {}).get("id")) for c in competitors if c.get("homeAway") == "home"), None)
-    away_id = next((str(c.get("team", {}).get("id")) for c in competitors if c.get("homeAway") == "away"), None)
+    home_id = next(
+        (str(c.get("team", {}).get("id")) for c in competitors if c.get("homeAway") == "home"),
+        None
+    )
+    away_id = next(
+        (str(c.get("team", {}).get("id")) for c in competitors if c.get("homeAway") == "away"),
+        None
+    )
 
     teams = data.get("boxscore", {}).get("teams", [])
     if not isinstance(teams, list) or len(teams) < 2:
@@ -114,18 +128,18 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
 
         def pick_stat(*names):
             for n in names:
-                # Try direct key
                 if n in smap and smap[n] not in (None, "", "0-0"):
                     return smap[n]
-                # Try lowercased label key
                 nl = str(n).strip().lower()
                 if nl in smap and smap[nl] not in (None, "", "0-0"):
                     return smap[nl]
             return ""
 
-        # Shooting (displayValue typically "made-attempted")
+        # Shooting lines
         fgm, fga = _parse_made_attempt(pick_stat("fieldGoals", "fg", "Field Goals"))
-        tpm, tpa = _parse_made_attempt(pick_stat("threePointFieldGoals", "3ptFieldGoals", "3pt fg", "3pt", "Three Point Field Goals"))
+        tpm, tpa = _parse_made_attempt(
+            pick_stat("threePointFieldGoals", "3ptFieldGoals", "3pt fg", "3pt", "Three Point Field Goals")
+        )
         ftm, fta = _parse_made_attempt(pick_stat("freeThrows", "ft", "Free Throws"))
 
         # Other stats
@@ -156,11 +170,9 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
 
     parsed = [parse_team(t) for t in teams]
 
-    # Map to home/away
     home = next((t for t in parsed if t["team_id"] and t["team_id"] == (home_id or "")), parsed[0])
     away = next((t for t in parsed if t["team_id"] and t["team_id"] == (away_id or "")), parsed[1])
 
-    # Opponent-dependent metrics
     home["orb_pct"] = _safe_div(home["orb"], (home["orb"] + away["drb"]), np.nan)
     away["orb_pct"] = _safe_div(away["orb"], (away["orb"] + home["drb"]), np.nan)
 
@@ -178,6 +190,7 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = 25):
         "away": away,
     }
 
+
 def summary_to_team_rows(parsed):
     home = parsed["home"].copy()
     away = parsed["away"].copy()
@@ -194,6 +207,7 @@ def summary_to_team_rows(parsed):
     away["home_away"] = "away"
 
     return home, away
+
 
 # ---------- ESPN SCOREBOARD (GAMES CSV) ----------
 def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = 25):
@@ -245,6 +259,7 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = 25):
 
     return rows
 
+
 def build_espn_games_csv(days_back=7, out_csv="espn_games.csv", verbose=True):
     now_pst = datetime.now(PST_TZ)
     all_rows = []
@@ -267,6 +282,7 @@ def build_espn_games_csv(days_back=7, out_csv="espn_games.csv", verbose=True):
     df.to_csv(out_csv, index=False)
     print(f"espn_games.csv written: {len(df)} rows")
     return df
+
 
 # ---------- TEAM GAME LOGS CSV ----------
 def build_team_game_logs_csv(days_back=7, out_csv="espn_team_game_logs.csv", verbose=True):
@@ -300,7 +316,6 @@ def build_team_game_logs_csv(days_back=7, out_csv="espn_team_game_logs.csv", ver
                 parsed = fetch_and_parse_espn_summary(g["game_id"])
                 home_row, away_row = summary_to_team_rows(parsed)
 
-                # Safety gate: skip if ESPN returned no real attempts (common when payload missing)
                 def has_real_boxscore(r):
                     return (r.get("fga", 0) or 0) > 0 or (r.get("fta", 0) or 0) > 0
 
@@ -320,4 +335,50 @@ def build_team_game_logs_csv(days_back=7, out_csv="espn_team_game_logs.csv", ver
     df = pd.DataFrame(rows)
 
     keep = [
-        "team
+        "team",
+        "opponent",
+        "home_away",
+        "event_id",
+        "game_date",
+        "venue",
+        "fgm",
+        "fga",
+        "tpm",
+        "tpa",
+        "ftm",
+        "fta",
+        "tov",
+        "orb",
+        "drb",
+        "reb",
+        "efg",
+        "3par",
+        "ftr",
+        "orb_pct",
+        "drb_pct",
+        "tov_pct",
+        "poss",
+    ]
+
+    if not df.empty:
+        df = df[[c for c in keep if c in df.columns]]
+
+    df.to_csv(out_csv, index=False)
+
+    if verbose:
+        print("\n✅ DONE")
+        print("Games checked:", total_candidates)
+        print("Final games:", total_final)
+        print("Games processed:", total_processed)
+        print("Skipped empty boxscores:", total_skipped_empty)
+        print("Rows written:", len(df))
+        print("Failures:", failures)
+        print("Output:", out_csv)
+
+    return df
+
+
+# ---------- ENTRY POINT ----------
+if __name__ == "__main__":
+    build_espn_games_csv(days_back=7, verbose=True)
+    build_team_game_logs_csv(days_back=7, verbose=True)
