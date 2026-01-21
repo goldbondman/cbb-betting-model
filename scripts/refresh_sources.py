@@ -48,7 +48,7 @@ def _clean_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def fetch_bytes(url: str, session: requests.Session) -> bytes:
-    r = session.get(url, headers=UA_HEADERS, timeout=TIMEOUT)
+    r = session.get(url, headers=UA_HEADERS, timeout=TIMEOUT, allow_redirects=True)
     r.raise_for_status()
     return r.content
 
@@ -71,9 +71,6 @@ def refresh_barttorvik_players(out_path: str, year: int, session: requests.Sessi
 
 
 def _rename_if_present(df: pd.DataFrame, candidates: list[str], target: str) -> pd.DataFrame:
-    """
-    If any candidate column exists and target does not, rename the first match to target.
-    """
     if target in df.columns:
         return df
     for c in candidates:
@@ -84,12 +81,7 @@ def _rename_if_present(df: pd.DataFrame, candidates: list[str], target: str) -> 
 
 def _normalize_torvik_trank_schema(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Normalize BartTorvik TRank (team analytics) CSV headers into a stable schema.
-
-    Expected site headers (display):
-      RK, Team, Conf, G, Rec, AdjOE, AdjDE, Barthag,
-      EFG%, EFGD%, TOR, TORD, ORB, DRB, FTR, FTRD,
-      2P%, 2P%D, 3P%, 3P%D, 3PR, 3PRD, Adj T., WAB
+    Normalize BartTorvik TRank team analytics table headers into canonical names.
 
     Canonical cleaned names we want:
       rk, team, conf, g, rec, adjoe, adjde, barthag,
@@ -98,14 +90,14 @@ def _normalize_torvik_trank_schema(df: pd.DataFrame) -> pd.DataFrame:
     """
     df = df.copy()
 
-    # Rank column: sometimes becomes "unnamed0" or similar
+    # Rank column sometimes becomes unnamed
     if "rk" not in df.columns:
         first = df.columns[0]
         s = df.iloc[:, 0].astype(str).str.strip()
         if s.str.fullmatch(r"\d+").mean() >= 0.90:
             df = df.rename(columns={first: "rk"})
 
-    # Normalize obvious alternates (defensive, if any variants appear)
+    # Obvious alternates
     df = _rename_if_present(df, ["conference"], "conf")
     df = _rename_if_present(df, ["games", "gp"], "g")
     df = _rename_if_present(df, ["record"], "rec")
@@ -143,27 +135,70 @@ def _normalize_torvik_trank_schema(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def _parse_torvik_trank_response(content: bytes) -> pd.DataFrame:
+    """
+    Torvik TRank export sometimes returns:
+    - real CSV
+    - HTML page (table) instead of CSV (bot/redirect/change)
+    This parser handles both.
+    """
+    text = content.decode("utf-8", errors="ignore")
+    lower = text.lower()
+
+    # If it looks like HTML, parse tables
+    if "<html" in lower or "<table" in lower:
+        tables = pd.read_html(io.StringIO(text))
+        if not tables:
+            raise ValueError("Torvik TRank returned HTML but no tables were found.")
+        # pick the most likely team table: ~365 rows
+        candidates = [(i, len(t)) for i, t in enumerate(tables)]
+        candidates.sort(key=lambda x: abs(x[1] - 365))
+        best_i, best_n = candidates[0]
+        df = tables[best_i]
+        return df
+
+    # Otherwise parse as delimited text robustly
+    # Try autodetect separator with python engine
+    try:
+        df = pd.read_csv(io.StringIO(text), sep=None, engine="python")
+        return df
+    except Exception:
+        # Fallback: try common delimiters explicitly
+        last_err = None
+        for sep in [",", "\t", ";", "|"]:
+            try:
+                df = pd.read_csv(io.StringIO(text), sep=sep, engine="python")
+                # require at least a few columns to be plausible
+                if df.shape[1] >= 5:
+                    return df
+            except Exception as e:
+                last_err = e
+
+        # If we get here, print a short preview to help diagnose
+        preview = text[:300].replace("\n", "\\n")
+        raise ValueError(f"Unable to parse Torvik TRank response as CSV/HTML. Preview: {preview}") from last_err
+
+
 def refresh_barttorvik_teams(out_path: str, year: int, session: requests.Session) -> int:
     """
     Team-level analytics table from BartTorvik (TRank export).
     Output: barttorvik_teams.csv (~365 rows)
     """
-    # IMPORTANT: This is the TRank table (contains EFG%, TOR, ORB, FTR, 2P%, 3P%, 3PR, etc.)
     url = f"https://barttorvik.com/trank.php?year={year}&csv=1"
     content = fetch_bytes(url, session)
 
-    df = pd.read_csv(io.BytesIO(content))
+    df = _parse_torvik_trank_response(content)
     df = _clean_columns(df)
     df = _normalize_torvik_trank_schema(df)
 
     if df.empty:
-        raise ValueError("Torvik TRank team CSV parsed but contains zero rows")
+        raise ValueError("Torvik TRank team data parsed but contains zero rows")
 
     n = len(df)
     if n < 330 or n > 390:
+        # Helpful debug if Torvik served the wrong table
         raise ValueError(f"Unexpected Torvik TRank team row count: {n}")
 
-    # Strict required set based on your header list
     required = {
         "rk", "team", "conf", "g", "rec",
         "adjoe", "adjde", "barthag",
@@ -181,7 +216,6 @@ def refresh_barttorvik_teams(out_path: str, year: int, session: requests.Session
         print(f"[refresh_sources][debug] Torvik TRank columns (cleaned): {list(df.columns)}", file=sys.stderr)
         raise ValueError(f"Torvik TRank team file missing required columns: {missing}")
 
-    # Convenience metric
     if "adjem" not in df.columns:
         df["adjem"] = df["adjoe"] - df["adjde"]
 
@@ -205,8 +239,7 @@ def refresh_haslametrics(out_path: str, session: requests.Session, table_index: 
     chosen_idx = table_index if 0 <= table_index < len(tables) else None
 
     def _clean_table(i: int) -> pd.DataFrame:
-        t = tables[i]
-        return _clean_columns(t)
+        return _clean_columns(tables[i])
 
     df = None
     if chosen_idx is not None:
