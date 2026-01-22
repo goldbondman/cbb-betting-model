@@ -38,7 +38,7 @@ DEFAULT_HEADERS = {
     "Accept": "application/json,text/plain,*/*",
 }
 
-PARSE_VERSION = "v1.3.2"
+PARSE_VERSION = "v1.3.3"
 SOURCE_NAME = "espn"
 
 TZ_PST = ZoneInfo("America/Los_Angeles")
@@ -86,13 +86,25 @@ def _to_float(x, default=np.nan):
 
 
 def _parse_made_attempt(display: str):
-    if not display or not isinstance(display, str) or "-" not in display:
+    if not display or not isinstance(display, str):
         return (0, 0)
-    a, b = display.split("-", 1)
-    return (_to_int(a, 0), _to_int(b, 0))
+    # ESPN can be "12-31" or occasionally "12/31"
+    if "-" in display:
+        a, b = display.split("-", 1)
+        return (_to_int(a, 0), _to_int(b, 0))
+    if "/" in display:
+        a, b = display.split("/", 1)
+        return (_to_int(a, 0), _to_int(b, 0))
+    return (0, 0)
 
 
 def _stat_map(team_stats_list):
+    """
+    ESPN sometimes returns team stat rows under:
+      - team_entry["teamStats"]
+      - team_entry["statistics"]
+    Both typically contain dicts like {"name": "...", "displayValue": "..."}.
+    """
     out = {}
     if not isinstance(team_stats_list, list):
         return out
@@ -130,6 +142,14 @@ def _read_csv_if_exists(path: str) -> pd.DataFrame:
     return pd.DataFrame()
 
 
+def _normalize_id_series(s: pd.Series) -> pd.Series:
+    # Make IDs stable across runs: "2514.0" -> "2514"
+    s2 = s.astype(str)
+    s2 = s2.str.replace(r"\.0$", "", regex=True)
+    s2 = s2.replace({"nan": np.nan, "None": np.nan})
+    return s2
+
+
 def _append_dedupe_write(existing_path: str, new_df: pd.DataFrame, subset_keys, sort_cols=None):
     old = _read_csv_if_exists(existing_path)
     if old.empty:
@@ -137,7 +157,12 @@ def _append_dedupe_write(existing_path: str, new_df: pd.DataFrame, subset_keys, 
     else:
         combined = pd.concat([old, new_df], ignore_index=True)
 
+    # Critical: normalize subset keys so dedupe actually works even if old CSV parsed IDs as floats
     if subset_keys:
+        for k in subset_keys:
+            if k in combined.columns:
+                combined[k] = _normalize_id_series(combined[k])
+
         combined = combined.drop_duplicates(subset=subset_keys, keep="last")
 
     if sort_cols:
@@ -191,26 +216,24 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
         home_win = home.get("winner")
         away_win = away.get("winner")
 
-        rows.append(
-            {
-                "date": date_yyyymmdd,
-                "game_id": str(game_id),
-                "game_datetime_utc": game_dt,
-                "venue": venue,
-                "home_team": home_team,
-                "away_team": away_team,
-                "home_score": home_score,
-                "away_score": away_score,
-                "home_win": home_win,
-                "away_win": away_win,
-                "completed": completed,
-                "state": state,
-                "status_desc": status_desc,
-                "status_detail": detail or short_detail,
-                "pulled_at_utc": _utc_now_iso(),
-                "source": SOURCE_NAME,
-            }
-        )
+        rows.append({
+            "date": date_yyyymmdd,
+            "game_id": str(game_id),
+            "game_datetime_utc": game_dt,
+            "venue": venue,
+            "home_team": home_team,
+            "away_team": away_team,
+            "home_score": home_score,
+            "away_score": away_score,
+            "home_win": home_win,
+            "away_win": away_win,
+            "completed": completed,
+            "state": state,
+            "status_desc": status_desc,
+            "status_detail": detail or short_detail,
+            "pulled_at_utc": _utc_now_iso(),
+            "source": SOURCE_NAME,
+        })
 
     return rows
 
@@ -233,7 +256,6 @@ def build_espn_games_csv(days_back=DEFAULT_DAYS_BACK, out_csv=OUT_GAMES, verbose
             print("No games returned from scoreboard.")
         return df_new
 
-    # append+dedupe forever
     df_all = _append_dedupe_write(
         out_csv,
         df_new,
@@ -374,7 +396,13 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
         tid = str(t.get("id", ""))
         name = t.get("displayName") or t.get("shortDisplayName") or t.get("name") or "Unknown"
 
-        stats_list = team_entry.get("teamStats", [])
+        # IMPORTANT FIX: ESPN varies. Use teamStats OR statistics.
+        stats_list = team_entry.get("teamStats")
+        if not stats_list:
+            stats_list = team_entry.get("statistics")
+        if not stats_list:
+            stats_list = []
+
         smap = _stat_map(stats_list)
 
         # Shooting lines
@@ -409,16 +437,11 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
         return {
             "team_id": tid,
             "team": name,
-            "fgm": fgm,
-            "fga": fga,
-            "tpm": tpm,
-            "tpa": tpa,
-            "ftm": ftm,
-            "fta": fta,
+            "fgm": fgm, "fga": fga,
+            "tpm": tpm, "tpa": tpa,
+            "ftm": ftm, "fta": fta,
             "tov": tov,
-            "orb": orb,
-            "drb": drb,
-            "reb": reb,
+            "orb": orb, "drb": drb, "reb": reb,
             "efg": float(efg) if pd.notna(efg) else np.nan,
             "ftr": float(ftr) if pd.notna(ftr) else np.nan,
             "3par": float(threepar) if pd.notna(threepar) else np.nan,
@@ -476,7 +499,7 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
 
 def summary_to_team_rows(parsed_summary: dict):
     """Flatten parsed_summary into 2 team-game rows."""
-    event_id = parsed_summary.get("event_id")
+    event_id = str(parsed_summary.get("event_id"))
     game_dt = parsed_summary.get("game_datetime_utc")
     venue = parsed_summary.get("venue")
 
@@ -498,6 +521,8 @@ def summary_to_team_rows(parsed_summary: dict):
 
     for row in (home, away):
         row.update(meta)
+        row["event_id"] = str(row.get("event_id", event_id))
+        row["team_id"] = str(row.get("team_id", ""))
 
     home["opponent"] = away["team"]
     away["opponent"] = home["team"]
@@ -512,7 +537,6 @@ def summary_to_team_rows(parsed_summary: dict):
 
     return home, away
 
-
 # ---------------- rolling feature engineering ----------------
 def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -521,17 +545,21 @@ def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
     """
     out = df.copy()
 
+    # normalize IDs early
+    if "event_id" in out.columns:
+        out["event_id"] = _normalize_id_series(out["event_id"])
+    if "team_id" in out.columns:
+        out["team_id"] = _normalize_id_series(out["team_id"])
+
     for c in ["points_for", "points_against", "poss", "fga", "fta", "tov", "orb", "drb", "reb", "margin"]:
         if c in out.columns:
             out[c] = pd.to_numeric(out[c], errors="coerce")
 
     out["pace"] = out["poss"]
 
-    out["ortg"] = (out["points_for"] * 100.0) / out["poss"]
-    out["drtg"] = (out["points_against"] * 100.0) / out["poss"]
+    out["ortg"] = out.apply(lambda r: _safe_div(r.get("points_for", np.nan) * 100.0, r.get("poss", np.nan), np.nan), axis=1)
+    out["drtg"] = out.apply(lambda r: _safe_div(r.get("points_against", np.nan) * 100.0, r.get("poss", np.nan), np.nan), axis=1)
     out["netrtg"] = out["ortg"] - out["drtg"]
-
-    out.loc[out["poss"].isin([0, 0.0]), ["ortg", "drtg", "netrtg"]] = np.nan
 
     out["blowout"] = (out["margin"].abs() >= 18).astype(int)
 
@@ -544,18 +572,9 @@ def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
         lambda r: _stable_row_hash(
             r.to_dict(),
             keys=[
-                "event_id",
-                "team_id",
-                "team",
-                "home_away",
-                "game_datetime_utc",
-                "points_for",
-                "points_against",
-                "fga",
-                "tov",
-                "orb",
-                "poss",
-                "parse_version",
+                "event_id", "team_id", "team", "home_away",
+                "game_datetime_utc", "points_for", "points_against",
+                "fga", "tov", "orb", "poss", "parse_version",
             ],
         ),
         axis=1,
@@ -563,36 +582,47 @@ def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def _group_shift_rolling(s: pd.Series, window: int, fn: str):
+    s2 = s.shift(1)
+    if fn == "mean":
+        return s2.rolling(window=window, min_periods=1).mean()
+    if fn == "std":
+        return s2.rolling(window=window, min_periods=2).std(ddof=0)
+    raise ValueError("Unsupported fn")
+
+
+def _group_shift_expanding_mean(s: pd.Series):
+    return s.shift(1).expanding(min_periods=1).mean()
+
+
 def _add_rolling_pack(df: pd.DataFrame, group_cols, prefix: str):
     """
     Adds L3/L7 means + L7 std + season (expanding) means for core metrics.
-    Uses transform (more stable than apply+reset_index for multi-group).
     """
     out = df.copy()
 
-    core = [
-        "ortg",
-        "drtg",
-        "netrtg",
-        "pace",
-        "efg",
-        "tov_pct",
-        "orb_pct",
-        "drb_pct",
-        "ftr",
-        "3par",
-    ]
+    core = {
+        "ortg": "ortg",
+        "drtg": "drtg",
+        "netrtg": "netrtg",
+        "pace": "pace",
+        "efg": "efg",
+        "tov_pct": "tov_pct",
+        "orb_pct": "orb_pct",
+        "drb_pct": "drb_pct",
+        "ftr": "ftr",
+        "3par": "3par",
+    }
 
     g = out.groupby(group_cols, sort=False)
 
-    for col in core:
+    for metric, col in core.items():
         if col not in out.columns:
             continue
-
-        out[f"{prefix}{col}_l3_pre"] = g[col].transform(lambda s: s.shift(1).rolling(window=3, min_periods=1).mean())
-        out[f"{prefix}{col}_l7_pre"] = g[col].transform(lambda s: s.shift(1).rolling(window=7, min_periods=1).mean())
-        out[f"{prefix}{col}_std_l7_pre"] = g[col].transform(lambda s: s.shift(1).rolling(window=7, min_periods=2).std(ddof=0))
-        out[f"{prefix}{col}_season_pre"] = g[col].transform(lambda s: s.shift(1).expanding(min_periods=1).mean())
+        out[f"{prefix}{metric}_l3_pre"] = g[col].apply(lambda s: _group_shift_rolling(s, 3, "mean")).reset_index(level=group_cols, drop=True)
+        out[f"{prefix}{metric}_l7_pre"] = g[col].apply(lambda s: _group_shift_rolling(s, 7, "mean")).reset_index(level=group_cols, drop=True)
+        out[f"{prefix}{metric}_std_l7_pre"] = g[col].apply(lambda s: _group_shift_rolling(s, 7, "std")).reset_index(level=group_cols, drop=True)
+        out[f"{prefix}{metric}_season_pre"] = g[col].apply(lambda s: _group_shift_expanding_mean(s)).reset_index(level=group_cols, drop=True)
 
     return out
 
@@ -600,18 +630,15 @@ def _add_rolling_pack(df: pd.DataFrame, group_cols, prefix: str):
 def _add_noblow_rollups(df: pd.DataFrame, group_cols, prefix: str):
     """
     Adds L7 no-blowout rollups for ortg/drtg/netrtg.
-    (Fixed: previously referenced the wrong series during groupby)
     """
     out = df.copy()
     for metric in ["ortg", "drtg", "netrtg"]:
         if metric not in out.columns:
             continue
-        tmp_col = f"__{metric}_noblow"
-        out[tmp_col] = out[metric].where(out["blowout"] == 0, np.nan)
-        out[f"{prefix}{metric}_l7_noblow_pre"] = out.groupby(group_cols, sort=False)[tmp_col].transform(
+        tmp = out[metric].where(out["blowout"] == 0, np.nan)
+        out[f"{prefix}{metric}_l7_noblow_pre"] = out.groupby(group_cols, sort=False)[tmp.name].apply(
             lambda s: s.shift(1).rolling(7, min_periods=1).mean()
-        )
-        out = out.drop(columns=[tmp_col], errors="ignore")
+        ).reset_index(level=group_cols, drop=True)
     return out
 
 
@@ -655,7 +682,7 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
 
     out["games_last_7_days"] = games_last_7
     out["three_in_six"] = three_in_six
-    return out.drop(columns=["prev_game_dt"], errors="ignore")
+    return out.drop(columns=["prev_game_dt"])
 
 
 def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
@@ -664,19 +691,18 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     Requires exactly two team-game rows per event_id (home + away).
 
     Fixes:
-    - Idempotent: safe to call multiple times (we drop prior opp_* and merge artifacts)
-    - No suffix collisions: we rename right join key to opp_key
+    - Builds a single canonical join key: event_id|home_away
+    - Creates opponent key by swapping home/away
+    - Merges opponent columns with safe prefixes
     """
     out = df.copy()
 
+    # Ensure required columns exist
     for c in ["event_id", "home_away"]:
         if c not in out.columns:
             raise ValueError(f"_merge_opponent_rows requires column: {c}")
 
-    # Drop prior opponent fields + merge artifacts so repeated calls never collide
-    drop_cols = [c for c in out.columns if c.startswith("opp_")]
-    drop_cols += [c for c in out.columns if c in {"_key", "_opp_key", "_key_dup", "opp_key"}]
-    out = out.drop(columns=drop_cols, errors="ignore")
+    out["event_id"] = _normalize_id_series(out["event_id"])
 
     out["_key"] = out["event_id"].astype(str) + "|" + out["home_away"].astype(str)
     out["_opp_key"] = out["event_id"].astype(str) + "|" + out["home_away"].map({"home": "away", "away": "home"}).astype(str)
@@ -686,79 +712,35 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
 
     candidate_cols = [
         "_key",
-        "team",
-        "team_id",
-        "points_for",
-        "points_against",
-        "efg",
-        "tov_pct",
-        "orb_pct",
-        "drb_pct",
-        "ftr",
-        "3par",
-        "ortg",
-        "drtg",
-        "netrtg",
-        "pace",
+        "team", "team_id",
+        "points_for", "points_against",
+        "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
+        "ortg", "drtg", "netrtg", "pace",
         # overall rollups
-        "ortg_l7_pre",
-        "drtg_l7_pre",
-        "netrtg_l7_pre",
-        "pace_l7_pre",
-        "efg_l7_pre",
-        "tov_pct_l7_pre",
-        "orb_pct_l7_pre",
-        "drb_pct_l7_pre",
-        "ftr_l7_pre",
-        "3par_l7_pre",
-        "ortg_season_pre",
-        "drtg_season_pre",
-        "netrtg_season_pre",
-        "pace_season_pre",
-        "efg_season_pre",
-        "tov_pct_season_pre",
-        "orb_pct_season_pre",
-        "drb_pct_season_pre",
-        "ftr_season_pre",
-        "3par_season_pre",
+        "ortg_l7_pre", "drtg_l7_pre", "netrtg_l7_pre", "pace_l7_pre",
+        "efg_l7_pre", "tov_pct_l7_pre", "orb_pct_l7_pre", "drb_pct_l7_pre", "ftr_l7_pre", "3par_l7_pre",
+        "ortg_season_pre", "drtg_season_pre", "netrtg_season_pre", "pace_season_pre",
+        "efg_season_pre", "tov_pct_season_pre", "orb_pct_season_pre", "drb_pct_season_pre", "ftr_season_pre", "3par_season_pre",
         # home/away split rollups
-        "ha_ortg_l7_pre",
-        "ha_drtg_l7_pre",
-        "ha_netrtg_l7_pre",
-        "ha_pace_l7_pre",
-        "ha_efg_l7_pre",
-        "ha_tov_pct_l7_pre",
-        "ha_orb_pct_l7_pre",
-        "ha_drb_pct_l7_pre",
-        "ha_ftr_l7_pre",
-        "ha_3par_l7_pre",
-        "ha_ortg_season_pre",
-        "ha_drtg_season_pre",
-        "ha_netrtg_season_pre",
-        "ha_pace_season_pre",
-        "ha_efg_season_pre",
-        "ha_tov_pct_season_pre",
-        "ha_orb_pct_season_pre",
-        "ha_drb_pct_season_pre",
-        "ha_ftr_season_pre",
-        "ha_3par_season_pre",
-        # allowed rollups (if present at time of call)
-        "ftr_allowed_l7_pre",
-        "ftr_allowed_season_pre",
-        "efg_allowed_l7_pre",
-        "efg_allowed_season_pre",
+        "ha_ortg_l7_pre", "ha_drtg_l7_pre", "ha_netrtg_l7_pre", "ha_pace_l7_pre",
+        "ha_efg_l7_pre", "ha_tov_pct_l7_pre", "ha_orb_pct_l7_pre", "ha_drb_pct_l7_pre", "ha_ftr_l7_pre", "ha_3par_l7_pre",
+        "ha_ortg_season_pre", "ha_drtg_season_pre", "ha_netrtg_season_pre", "ha_pace_season_pre",
+        "ha_efg_season_pre", "ha_tov_pct_season_pre", "ha_orb_pct_season_pre", "ha_drb_pct_season_pre", "ha_ftr_season_pre", "ha_3par_season_pre",
+        # allowed rollups (if already computed in a prior pass)
+        "ftr_allowed_l7_pre", "ftr_allowed_season_pre",
+        "efg_allowed_l7_pre", "efg_allowed_season_pre",
     ]
     cols = [c for c in candidate_cols if c in out.columns]
 
     lookup = out[cols].copy()
 
-    # rename join key so we never create _key_dup
-    lookup = lookup.rename(columns={"_key": "opp_key"})
+    # Prefix all opponent columns except the join key
+    lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_key"})
 
-    # Prefix opponent columns (except join key)
-    lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "opp_key"})
+    # Avoid suffix collisions by ensuring lookup only has "_key" once and no existing "_key_dup"
+    out = out.drop(columns=[c for c in out.columns if c.endswith("_dup")], errors="ignore")
 
-    out = out.merge(lookup, left_on="_opp_key", right_on="opp_key", how="left")
+    out = out.merge(lookup, left_on="_opp_key", right_on="_key", how="left")
 
     # Defensive allowed per game proxies:
     if "opp_efg" in out.columns:
@@ -776,79 +758,7 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     else:
         out["tov_forced_game"] = np.nan
 
-    return out.drop(columns=["_key", "_opp_key", "opp_key"], errors="ignore")
-
-def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Adds opponent per-game values and opponent pregame rolling fields.
-    Requires exactly two team-game rows per event_id (home + away).
-
-    Fixes:
-    - Never reuses or collides with legacy helper columns from prior runs/CSV history
-    - Uses a dedicated right-side join key name (no suffix collisions)
-    - Never passes suffixes that can create duplicate columns
-    """
-    out = df.copy()
-
-    for c in ["event_id", "home_away"]:
-        if c not in out.columns:
-            raise ValueError(f"_merge_opponent_rows requires column: {c}")
-
-    # Drop any legacy helper columns that might exist from older versions (including in persisted CSVs)
-    legacy_cols = [c for c in out.columns if c in {"_key", "_opp_key", "_key_dup", "_opp_key_dup", "opp__key"} or c.startswith("_key_")]
-    if legacy_cols:
-        out = out.drop(columns=legacy_cols, errors="ignore")
-
-    out["_key"] = out["event_id"].astype(str) + "|" + out["home_away"].astype(str)
-    out["_opp_key"] = out["event_id"].astype(str) + "|" + out["home_away"].map({"home": "away", "away": "home"}).astype(str)
-
-    # If duplicates exist (shouldn't, but can happen due to bad dedupe upstream), keep last
-    out = out.drop_duplicates(subset=["_key"], keep="last")
-
-    candidate_cols = [
-        "_key",
-        "team", "team_id",
-        "points_for", "points_against",
-        "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
-        "ortg", "drtg", "netrtg", "pace",
-
-        # overall rollups
-        "ortg_l7_pre", "drtg_l7_pre", "netrtg_l7_pre", "pace_l7_pre",
-        "efg_l7_pre", "tov_pct_l7_pre", "orb_pct_l7_pre", "drb_pct_l7_pre", "ftr_l7_pre", "3par_l7_pre",
-        "ortg_season_pre", "drtg_season_pre", "netrtg_season_pre", "pace_season_pre",
-        "efg_season_pre", "tov_pct_season_pre", "orb_pct_season_pre", "drb_pct_season_pre", "ftr_season_pre", "3par_season_pre",
-
-        # home/away split rollups
-        "ha_ortg_l7_pre", "ha_drtg_l7_pre", "ha_netrtg_l7_pre", "ha_pace_l7_pre",
-        "ha_efg_l7_pre", "ha_tov_pct_l7_pre", "ha_orb_pct_l7_pre", "ha_drb_pct_l7_pre", "ha_ftr_l7_pre", "ha_3par_l7_pre",
-        "ha_ortg_season_pre", "ha_drtg_season_pre", "ha_netrtg_season_pre", "ha_pace_season_pre",
-        "ha_efg_season_pre", "ha_tov_pct_season_pre", "ha_orb_pct_season_pre", "ha_drb_pct_season_pre", "ha_ftr_season_pre", "ha_3par_season_pre",
-
-        # allowed rollups (so we can build opp_ftr_allowed_* etc after the second merge)
-        "ftr_allowed_l7_pre", "ftr_allowed_season_pre",
-        "efg_allowed_l7_pre", "efg_allowed_season_pre",
-    ]
-    cols = [c for c in candidate_cols if c in out.columns]
-
-    lookup = out[cols].copy()
-
-    # Rename join key to a unique name on the RHS to avoid collisions
-    lookup = lookup.rename(columns={"_key": "opp__key"})
-
-    # Prefix all opponent columns except the RHS join key
-    rename_map = {c: f"opp_{c}" for c in lookup.columns if c != "opp__key"}
-    lookup = lookup.rename(columns=rename_map)
-
-    # Merge opponent row onto each row by _opp_key -> opp__key
-    out = out.merge(lookup, left_on="_opp_key", right_on="opp__key", how="left")
-
-    # Defensive allowed per-game proxies:
-    out["efg_allowed_game"] = out["opp_efg"] if "opp_efg" in out.columns else np.nan
-    out["ftr_allowed_game"] = out["opp_ftr"] if "opp_ftr" in out.columns else np.nan
-    out["tov_forced_game"] = out["opp_tov_pct"] if "opp_tov_pct" in out.columns else np.nan
-
-    # cleanup
-    return out.drop(columns=["_key", "_opp_key", "opp__key"], errors="ignore")
+    return out.drop(columns=["_key", "_opp_key"], errors="ignore")
 
 
 def _add_allowed_rollups(df: pd.DataFrame) -> pd.DataFrame:
@@ -902,6 +812,7 @@ def _add_sos_proxies(df: pd.DataFrame) -> pd.DataFrame:
     out["avg_opp_netrtg_l7_pre"] = g["opp_netrtg_pre_base"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
     out["avg_opp_ortg_l7_pre"] = g["opp_ortg_pre_base"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
     out["avg_opp_drtg_l7_pre"] = g["opp_drtg_pre_base"].apply(lambda s: s.shift(1).rolling(7, min_periods=1).mean()).reset_index(level=0, drop=True)
+
     out["sos_season_pre"] = g["opp_netrtg_pre_base"].apply(lambda s: s.shift(1).expanding(min_periods=1).mean()).reset_index(level=0, drop=True)
 
     return out
@@ -910,39 +821,66 @@ def _add_sos_proxies(df: pd.DataFrame) -> pd.DataFrame:
 def _add_opponent_adjusted_deltas(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds opponent-adjusted deltas for Four Factors + netrtg.
-    Robust to missing columns (returns NaN if any input missing).
+    Includes L7, season, and home/away (ha_) split versions.
+    Robust to missing columns by creating NaNs when needed.
     """
     out = df.copy()
 
-    def _s(col):
-        return out[col] if col in out.columns else np.nan
+    def delta(a, b):
+        return a - b
 
-    # L7
-    out["netrtg_adj_l7"] = _s("netrtg_l7_pre") - _s("opp_netrtg_l7_pre")
-    out["efg_adj_l7"] = _s("efg_l7_pre") - _s("opp_efg_l7_pre")
-    out["tov_adj_l7"] = _s("opp_tov_pct_l7_pre") - _s("tov_pct_l7_pre")
-    out["orb_adj_l7"] = _s("orb_pct_l7_pre") - _s("opp_drb_pct_l7_pre")
-    out["ftr_adj_l7"] = _s("ftr_l7_pre") - _s("opp_ftr_l7_pre")
+    def need(col):
+        if col not in out.columns:
+            out[col] = np.nan
 
-    # season
-    out["netrtg_adj_season"] = _s("netrtg_season_pre") - _s("opp_netrtg_season_pre")
-    out["efg_adj_season"] = _s("efg_season_pre") - _s("opp_efg_season_pre")
-    out["tov_adj_season"] = _s("opp_tov_pct_season_pre") - _s("tov_pct_season_pre")
-    out["orb_adj_season"] = _s("orb_pct_season_pre") - _s("opp_drb_pct_season_pre")
-    out["ftr_adj_season"] = _s("ftr_season_pre") - _s("opp_ftr_season_pre")
+    required = [
+        "netrtg_l7_pre", "opp_netrtg_l7_pre",
+        "efg_l7_pre", "opp_efg_l7_pre",
+        "tov_pct_l7_pre", "opp_tov_pct_l7_pre",
+        "orb_pct_l7_pre", "opp_drb_pct_l7_pre",
+        "ftr_l7_pre", "opp_ftr_l7_pre",
+        "netrtg_season_pre", "opp_netrtg_season_pre",
+        "efg_season_pre", "opp_efg_season_pre",
+        "tov_pct_season_pre", "opp_tov_pct_season_pre",
+        "orb_pct_season_pre", "opp_drb_pct_season_pre",
+        "ftr_season_pre", "opp_ftr_season_pre",
+        "ha_netrtg_l7_pre", "opp_ha_netrtg_l7_pre",
+        "ha_efg_l7_pre", "opp_ha_efg_l7_pre",
+        "ha_tov_pct_l7_pre", "opp_ha_tov_pct_l7_pre",
+        "ha_orb_pct_l7_pre", "opp_ha_drb_pct_l7_pre",
+        "ha_ftr_l7_pre", "opp_ha_ftr_l7_pre",
+        "ha_netrtg_season_pre", "opp_ha_netrtg_season_pre",
+        "ha_efg_season_pre", "opp_ha_efg_season_pre",
+        "ha_tov_pct_season_pre", "opp_ha_tov_pct_season_pre",
+        "ha_orb_pct_season_pre", "opp_ha_drb_pct_season_pre",
+        "ha_ftr_season_pre", "opp_ha_ftr_season_pre",
+    ]
+    for c in required:
+        need(c)
 
-    # home/away split rollups
-    out["netrtg_adj_ha_l7"] = _s("ha_netrtg_l7_pre") - _s("opp_ha_netrtg_l7_pre")
-    out["efg_adj_ha_l7"] = _s("ha_efg_l7_pre") - _s("opp_ha_efg_l7_pre")
-    out["tov_adj_ha_l7"] = _s("opp_ha_tov_pct_l7_pre") - _s("ha_tov_pct_l7_pre")
-    out["orb_adj_ha_l7"] = _s("ha_orb_pct_l7_pre") - _s("opp_ha_drb_pct_l7_pre")
-    out["ftr_adj_ha_l7"] = _s("ha_ftr_l7_pre") - _s("opp_ha_ftr_l7_pre")
+    out["netrtg_adj_l7"] = delta(out["netrtg_l7_pre"], out["opp_netrtg_l7_pre"])
+    out["efg_adj_l7"] = delta(out["efg_l7_pre"], out["opp_efg_l7_pre"])
+    out["tov_adj_l7"] = delta(out["opp_tov_pct_l7_pre"], out["tov_pct_l7_pre"])
+    out["orb_adj_l7"] = delta(out["orb_pct_l7_pre"], out["opp_drb_pct_l7_pre"])
+    out["ftr_adj_l7"] = delta(out["ftr_l7_pre"], out["opp_ftr_l7_pre"])
 
-    out["netrtg_adj_ha_season"] = _s("ha_netrtg_season_pre") - _s("opp_ha_netrtg_season_pre")
-    out["efg_adj_ha_season"] = _s("ha_efg_season_pre") - _s("opp_ha_efg_season_pre")
-    out["tov_adj_ha_season"] = _s("opp_ha_tov_pct_season_pre") - _s("ha_tov_pct_season_pre")
-    out["orb_adj_ha_season"] = _s("ha_orb_pct_season_pre") - _s("opp_ha_drb_pct_season_pre")
-    out["ftr_adj_ha_season"] = _s("ha_ftr_season_pre") - _s("opp_ha_ftr_season_pre")
+    out["netrtg_adj_season"] = delta(out["netrtg_season_pre"], out["opp_netrtg_season_pre"])
+    out["efg_adj_season"] = delta(out["efg_season_pre"], out["opp_efg_season_pre"])
+    out["tov_adj_season"] = delta(out["opp_tov_pct_season_pre"], out["tov_pct_season_pre"])
+    out["orb_adj_season"] = delta(out["orb_pct_season_pre"], out["opp_drb_pct_season_pre"])
+    out["ftr_adj_season"] = delta(out["ftr_season_pre"], out["opp_ftr_season_pre"])
+
+    out["netrtg_adj_ha_l7"] = delta(out["ha_netrtg_l7_pre"], out["opp_ha_netrtg_l7_pre"])
+    out["efg_adj_ha_l7"] = delta(out["ha_efg_l7_pre"], out["opp_ha_efg_l7_pre"])
+    out["tov_adj_ha_l7"] = delta(out["opp_ha_tov_pct_l7_pre"], out["ha_tov_pct_l7_pre"])
+    out["orb_adj_ha_l7"] = delta(out["ha_orb_pct_l7_pre"], out["opp_ha_drb_pct_l7_pre"])
+    out["ftr_adj_ha_l7"] = delta(out["ha_ftr_l7_pre"], out["opp_ha_ftr_l7_pre"])
+
+    out["netrtg_adj_ha_season"] = delta(out["ha_netrtg_season_pre"], out["opp_ha_netrtg_season_pre"])
+    out["efg_adj_ha_season"] = delta(out["ha_efg_season_pre"], out["opp_ha_efg_season_pre"])
+    out["tov_adj_ha_season"] = delta(out["opp_ha_tov_pct_season_pre"], out["ha_tov_pct_season_pre"])
+    out["orb_adj_ha_season"] = delta(out["ha_orb_pct_season_pre"], out["opp_ha_drb_pct_season_pre"])
+    out["ftr_adj_ha_season"] = delta(out["ha_ftr_season_pre"], out["opp_ha_ftr_season_pre"])
 
     return out
 
@@ -969,7 +907,9 @@ def _add_style_features(df: pd.DataFrame) -> pd.DataFrame:
         if a in out.columns and b in out.columns:
             diffs.append((out[a] - out[b]).abs())
 
-    out["style_distance_l7"] = sum(diffs) if diffs else np.nan
+    out["style_distance_l7"] = np.nan
+    if diffs:
+        out["style_distance_l7"] = sum(diffs)
 
     if "pace_l7_pre" in out.columns and "opp_pace_l7_pre" in out.columns:
         out["pace_mismatch_l7"] = out["pace_l7_pre"] - out["opp_pace_l7_pre"]
@@ -991,6 +931,7 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
     home_points, away_points, home_win
     """
     df = df_features.copy()
+    df["event_id"] = _normalize_id_series(df["event_id"])
     df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
 
     home = df[df["home_away"] == "home"].copy()
@@ -1026,6 +967,9 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
 
     h = home[home_keep].copy()
     a = away[away_keep].copy()
+
+    h["team_id"] = _normalize_id_series(h["team_id"])
+    a["team_id"] = _normalize_id_series(a["team_id"])
 
     h = h.rename(columns={c: f"h_{c}" for c in h.columns if c != "event_id"})
     a = a.rename(columns={c: f"a_{c}" for c in a.columns if c != "event_id"})
@@ -1117,6 +1061,8 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         return
 
     df_logs_new = pd.DataFrame(team_rows)
+    df_logs_new["event_id"] = _normalize_id_series(df_logs_new["event_id"])
+    df_logs_new["team_id"] = _normalize_id_series(df_logs_new["team_id"])
     df_logs_new["game_dt"] = pd.to_datetime(df_logs_new["game_datetime_utc"], utc=True, errors="coerce")
 
     df_logs_new = _compute_per_game_advanced_metrics(df_logs_new)
@@ -1129,8 +1075,10 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     )
     print(f"{OUT_TEAM_LOGS} total rows: {len(df_logs_all)}")
 
-    # 4) features build from FULL season-to-date logs
+    # ---- features build from FULL season-to-date logs
     df = df_logs_all.copy()
+    df["event_id"] = _normalize_id_series(df["event_id"])
+    df["team_id"] = _normalize_id_series(df["team_id"])
     df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
     df = df.sort_values(["team", "game_dt", "event_id"])
 
@@ -1142,26 +1090,18 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
 
     df = _time_window_counts_per_team(df)
 
-    # opponent join first (gives per-game allowed proxies)
+    # opponent join, allowed proxies
     df = _merge_opponent_rows(df)
-
-    # allowed rollups (defense proxies)
     df = _add_allowed_rollups(df)
 
-    # re-merge opponent rows to bring opponent allowed rollups into opp_* fields
+    # re-merge so opp_* includes opponent allowed rollups too
     df = _merge_opponent_rows(df)
 
-    # SOS proxies
     df = _add_sos_proxies(df)
-
-    # opponent-adjusted deltas
     df = _add_opponent_adjusted_deltas(df)
-
-    # style fingerprints + matchup features
     df = _add_style_features(df)
 
-    # 4h) append+dedupe features forever (only rows from this run's events)
-    new_event_ids = set(df_logs_new["event_id"].astype(str).unique().tolist())
+    new_event_ids = set(_normalize_id_series(df_logs_new["event_id"]).unique().tolist())
     df_features_new = df[df["event_id"].astype(str).isin(new_event_ids)].copy()
 
     df_features_all = _append_dedupe_write(
@@ -1172,8 +1112,11 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     )
     print(f"{OUT_TEAM_FEATURES} total rows: {len(df_features_all)}")
 
-    # 5) rebuild matchups model-ready from ALL features
     df_feat_all = df_features_all.copy()
+    df_feat_all["event_id"] = _normalize_id_series(df_feat_all["event_id"])
+    if "team_id" in df_feat_all.columns:
+        df_feat_all["team_id"] = _normalize_id_series(df_feat_all["team_id"])
+
     m = build_matchups_model_ready(df_feat_all)
     m = m.drop_duplicates(subset=["event_id"], keep="last")
     m.to_csv(OUT_MATCHUPS, index=False)
@@ -1188,4 +1131,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
