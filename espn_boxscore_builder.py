@@ -38,7 +38,7 @@ DEFAULT_HEADERS = {
     "Accept": "application/json,text/plain,*/*",
 }
 
-PARSE_VERSION = "v1.3.3"
+PARSE_VERSION = "v1.3.4"  # bumped for stat-key compatibility + noblow rollup fix
 SOURCE_NAME = "espn"
 
 TZ_PST = ZoneInfo("America/Los_Angeles")
@@ -100,10 +100,8 @@ def _parse_made_attempt(display: str):
 
 def _stat_map(team_stats_list):
     """
-    ESPN sometimes returns team stat rows under:
-      - team_entry["teamStats"]
-      - team_entry["statistics"]
-    Both typically contain dicts like {"name": "...", "displayValue": "..."}.
+    ESPN team stats come as a list of dicts:
+      {"name": "...", "displayValue": "..."}
     """
     out = {}
     if not isinstance(team_stats_list, list):
@@ -113,8 +111,9 @@ def _stat_map(team_stats_list):
             continue
         name = item.get("name")
         dv = item.get("displayValue")
-        if name:
-            out[str(name)] = dv
+        if name is None:
+            continue
+        out[str(name)] = dv
     return out
 
 
@@ -157,12 +156,11 @@ def _append_dedupe_write(existing_path: str, new_df: pd.DataFrame, subset_keys, 
     else:
         combined = pd.concat([old, new_df], ignore_index=True)
 
-    # Critical: normalize subset keys so dedupe actually works even if old CSV parsed IDs as floats
+    # normalize subset keys so dedupe actually works even if old CSV parsed IDs as floats
     if subset_keys:
         for k in subset_keys:
             if k in combined.columns:
                 combined[k] = _normalize_id_series(combined[k])
-
         combined = combined.drop_duplicates(subset=subset_keys, keep="last")
 
     if sort_cols:
@@ -396,38 +394,48 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
         tid = str(t.get("id", ""))
         name = t.get("displayName") or t.get("shortDisplayName") or t.get("name") or "Unknown"
 
-        # IMPORTANT FIX: ESPN varies. Use teamStats OR statistics.
-        stats_list = team_entry.get("teamStats")
-        if not stats_list:
-            stats_list = team_entry.get("statistics")
-        if not stats_list:
-            stats_list = []
-
+        # ESPN varies: statistics OR teamStats
+        stats_list = team_entry.get("statistics") or team_entry.get("teamStats") or []
         smap = _stat_map(stats_list)
 
-        # Shooting lines
-        fgm, fga = _parse_made_attempt(smap.get("fieldGoals", ""))
+        def pick(*names):
+            for n in names:
+                v = smap.get(n)
+                if v is not None and str(v).strip() != "":
+                    return v
+            return None
+
+        # New ESPN format keys show up a lot in CBB
+        fg_line = pick("fieldGoalsMade-fieldGoalsAttempted", "fieldGoals")
+        tp_line = pick("threePointFieldGoalsMade-threePointFieldGoalsAttempted", "threePointFieldGoals")
+        ft_line = pick("freeThrowsMade-freeThrowsAttempted", "freeThrows")
+
+        fgm, fga = _parse_made_attempt(fg_line or "")
+        tpm, tpa = _parse_made_attempt(tp_line or "")
+        ftm, fta = _parse_made_attempt(ft_line or "")
+
+        # Fallback if split keys present
         if fga == 0:
-            fga = _to_int(smap.get("fieldGoalsAttempted"), 0)
+            fga = _to_int(pick("fieldGoalsAttempted"), 0)
         if fgm == 0:
-            fgm = _to_int(smap.get("fieldGoalsMade"), 0)
+            fgm = _to_int(pick("fieldGoalsMade"), 0)
 
-        tpm, tpa = _parse_made_attempt(smap.get("threePointFieldGoals", ""))
         if tpa == 0:
-            tpa = _to_int(smap.get("threePointFieldGoalsAttempted"), 0)
+            tpa = _to_int(pick("threePointFieldGoalsAttempted"), 0)
         if tpm == 0:
-            tpm = _to_int(smap.get("threePointFieldGoalsMade"), 0)
+            tpm = _to_int(pick("threePointFieldGoalsMade"), 0)
 
-        ftm, fta = _parse_made_attempt(smap.get("freeThrows", ""))
         if fta == 0:
-            fta = _to_int(smap.get("freeThrowsAttempted"), 0)
+            fta = _to_int(pick("freeThrowsAttempted"), 0)
         if ftm == 0:
-            ftm = _to_int(smap.get("freeThrowsMade"), 0)
+            ftm = _to_int(pick("freeThrowsMade"), 0)
 
-        tov = _to_int(smap.get("turnovers"), 0)
-        orb = _to_int(smap.get("reboundsOffensive"), 0)
-        drb = _to_int(smap.get("reboundsDefensive"), 0)
-        reb = _to_int(smap.get("rebounds"), orb + drb)
+        tov = _to_int(pick("turnovers"), 0)
+
+        # Rebounds: ESPN CBB often uses offensiveRebounds/defensiveRebounds/totalRebounds
+        orb = _to_int(pick("offensiveRebounds", "reboundsOffensive"), 0)
+        drb = _to_int(pick("defensiveRebounds", "reboundsDefensive"), 0)
+        reb = _to_int(pick("totalRebounds", "rebounds"), orb + drb)
 
         efg = _safe_div((fgm + 0.5 * tpm), fga, np.nan)
         ftr = _safe_div(fta, fga, np.nan)
@@ -503,9 +511,18 @@ def summary_to_team_rows(parsed_summary: dict):
     game_dt = parsed_summary.get("game_datetime_utc")
     venue = parsed_summary.get("venue")
 
+    game_date_utc = None
+    try:
+        dt = pd.to_datetime(game_dt, utc=True, errors="coerce")
+        if pd.notna(dt):
+            game_date_utc = dt.date().isoformat()
+    except Exception:
+        game_date_utc = None
+
     meta = {
         "event_id": event_id,
         "game_datetime_utc": game_dt,
+        "game_date_utc": game_date_utc,
         "venue": venue,
         "completed": parsed_summary.get("completed"),
         "state": parsed_summary.get("state"),
@@ -536,6 +553,7 @@ def summary_to_team_rows(parsed_summary: dict):
     away["away_team"] = away["team"]
 
     return home, away
+
 
 # ---------------- rolling feature engineering ----------------
 def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
@@ -630,17 +648,25 @@ def _add_rolling_pack(df: pd.DataFrame, group_cols, prefix: str):
 def _add_noblow_rollups(df: pd.DataFrame, group_cols, prefix: str):
     """
     Adds L7 no-blowout rollups for ortg/drtg/netrtg.
+    Pregame (shifted) and excludes blowout games from the rolling window.
     """
     out = df.copy()
+    g = out.groupby(group_cols, sort=False)
+
     for metric in ["ortg", "drtg", "netrtg"]:
         if metric not in out.columns:
             continue
-        tmp = out[metric].where(out["blowout"] == 0, np.nan)
-        out[f"{prefix}{metric}_l7_noblow_pre"] = out.groupby(group_cols, sort=False)[tmp.name].apply(
-            lambda s: s.shift(1).rolling(7, min_periods=1).mean()
-        ).reset_index(level=group_cols, drop=True)
-    return out
 
+        def noblow(s):
+            # s is the metric series for the group; mask uses the group's blowout values
+            # We align by index within the group using out.loc[s.index, "blowout"]
+            blow = out.loc[s.index, "blowout"]
+            masked = s.where(blow == 0, np.nan)
+            return masked.shift(1).rolling(7, min_periods=1).mean()
+
+        out[f"{prefix}{metric}_l7_noblow_pre"] = g[metric].apply(noblow).reset_index(level=group_cols, drop=True)
+
+    return out
 
 def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -684,6 +710,7 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
     out["three_in_six"] = three_in_six
     return out.drop(columns=["prev_game_dt"])
 
+
 def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds opponent per-game values and opponent pregame rolling fields.
@@ -694,7 +721,6 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     """
     out = df.copy()
 
-    # Ensure required columns exist
     for c in ["event_id", "home_away"]:
         if c not in out.columns:
             raise ValueError(f"_merge_opponent_rows requires column: {c}")
@@ -730,22 +756,18 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     cols = [c for c in candidate_cols if c in out.columns]
 
     lookup = out[cols].copy()
-
-    # Rename join key so it doesn't collide with out["_key"]
     lookup = lookup.rename(columns={"_key": "_lookup_key"})
-
-    # Prefix all other lookup columns (true opponent fields)
     lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_lookup_key"})
 
     out = out.merge(lookup, left_on="_opp_key", right_on="_lookup_key", how="left")
     out = out.drop(columns=["_lookup_key"], errors="ignore")
 
-    # Defensive allowed per game proxies:
     out["efg_allowed_game"] = out["opp_efg"] if "opp_efg" in out.columns else np.nan
     out["ftr_allowed_game"] = out["opp_ftr"] if "opp_ftr" in out.columns else np.nan
     out["tov_forced_game"] = out["opp_tov_pct"] if "opp_tov_pct" in out.columns else np.nan
 
     return out.drop(columns=["_key", "_opp_key"], errors="ignore")
+
 
 def _add_allowed_rollups(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -924,7 +946,7 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
     away = df[df["home_away"] == "away"].copy()
 
     keep_base = [
-        "event_id", "game_datetime_utc", "venue",
+        "event_id", "game_datetime_utc", "game_date_utc", "venue",
         "home_team", "away_team",
         "points_for", "points_against", "margin",
         "completed", "data_ok",
@@ -1117,3 +1139,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
