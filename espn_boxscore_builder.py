@@ -684,16 +684,13 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
     out["three_in_six"] = three_in_six
     return out.drop(columns=["prev_game_dt"])
 
-
 def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds opponent per-game values and opponent pregame rolling fields.
     Requires exactly two team-game rows per event_id (home + away).
 
-    Fixes:
-    - Builds a single canonical join key: event_id|home_away
-    - Creates opponent key by swapping home/away
-    - Merges opponent columns with safe prefixes
+    Fix:
+    - Avoids Pandas MergeError from duplicate _key columns by renaming lookup join key.
     """
     out = df.copy()
 
@@ -707,7 +704,7 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     out["_key"] = out["event_id"].astype(str) + "|" + out["home_away"].astype(str)
     out["_opp_key"] = out["event_id"].astype(str) + "|" + out["home_away"].map({"home": "away", "away": "home"}).astype(str)
 
-    # If duplicates exist (shouldn't, but can happen due to bad dedupe upstream), keep last
+    # If duplicates exist, keep last
     out = out.drop_duplicates(subset=["_key"], keep="last")
 
     candidate_cols = [
@@ -726,7 +723,7 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
         "ha_efg_l7_pre", "ha_tov_pct_l7_pre", "ha_orb_pct_l7_pre", "ha_drb_pct_l7_pre", "ha_ftr_l7_pre", "ha_3par_l7_pre",
         "ha_ortg_season_pre", "ha_drtg_season_pre", "ha_netrtg_season_pre", "ha_pace_season_pre",
         "ha_efg_season_pre", "ha_tov_pct_season_pre", "ha_orb_pct_season_pre", "ha_drb_pct_season_pre", "ha_ftr_season_pre", "ha_3par_season_pre",
-        # allowed rollups (if already computed in a prior pass)
+        # allowed rollups
         "ftr_allowed_l7_pre", "ftr_allowed_season_pre",
         "efg_allowed_l7_pre", "efg_allowed_season_pre",
     ]
@@ -734,32 +731,21 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
 
     lookup = out[cols].copy()
 
-    # Prefix all opponent columns except the join key
-    lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_key"})
+    # Rename join key so it doesn't collide with out["_key"]
+    lookup = lookup.rename(columns={"_key": "_lookup_key"})
 
-    # Avoid suffix collisions by ensuring lookup only has "_key" once and no existing "_key_dup"
-    out = out.drop(columns=[c for c in out.columns if c.endswith("_dup")], errors="ignore")
+    # Prefix all other lookup columns (true opponent fields)
+    lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_lookup_key"})
 
-    out = out.merge(lookup, left_on="_opp_key", right_on="_key", how="left")
+    out = out.merge(lookup, left_on="_opp_key", right_on="_lookup_key", how="left")
+    out = out.drop(columns=["_lookup_key"], errors="ignore")
 
     # Defensive allowed per game proxies:
-    if "opp_efg" in out.columns:
-        out["efg_allowed_game"] = out["opp_efg"]
-    else:
-        out["efg_allowed_game"] = np.nan
-
-    if "opp_ftr" in out.columns:
-        out["ftr_allowed_game"] = out["opp_ftr"]
-    else:
-        out["ftr_allowed_game"] = np.nan
-
-    if "opp_tov_pct" in out.columns:
-        out["tov_forced_game"] = out["opp_tov_pct"]
-    else:
-        out["tov_forced_game"] = np.nan
+    out["efg_allowed_game"] = out["opp_efg"] if "opp_efg" in out.columns else np.nan
+    out["ftr_allowed_game"] = out["opp_ftr"] if "opp_ftr" in out.columns else np.nan
+    out["tov_forced_game"] = out["opp_tov_pct"] if "opp_tov_pct" in out.columns else np.nan
 
     return out.drop(columns=["_key", "_opp_key"], errors="ignore")
-
 
 def _add_allowed_rollups(df: pd.DataFrame) -> pd.DataFrame:
     """
