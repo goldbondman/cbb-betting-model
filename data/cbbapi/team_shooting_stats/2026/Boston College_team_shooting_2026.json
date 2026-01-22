@@ -4,9 +4,9 @@
     "teamId": 26,
     "team": "Boston College",
     "conference": "ACC",
-    "trackedShots": 994,
-    "freeThrowRate": 36.4,
-    "assistedPct": 19,
+    "trackedShots": 1049,
+    "freeThrowRate": 35.7,
+    "assistedPct": 19.3,
     "dunks": {
       "attempted": 46,
       "made": 41,
@@ -15,42 +15,42 @@
       "assistedPct": 85.4
     },
     "layups": {
-      "attempted": 253,
-      "made": 118,
-      "pct": 46.6,
-      "assisted": 39,
-      "assistedPct": 33.1
+      "attempted": 263,
+      "made": 123,
+      "pct": 46.8,
+      "assisted": 42,
+      "assistedPct": 34.1
     },
     "tipIns": {
-      "attempted": 37,
-      "made": 24,
-      "pct": 64.9
+      "attempted": 41,
+      "made": 26,
+      "pct": 63.4
     },
     "twoPointJumpers": {
-      "attempted": 225,
-      "made": 89,
-      "pct": 39.6,
-      "assisted": 20,
-      "assistedPct": 22.5
+      "attempted": 244,
+      "made": 100,
+      "pct": 41,
+      "assisted": 24,
+      "assistedPct": 24
     },
     "threePointJumpers": {
-      "attempted": 433,
-      "made": 127,
-      "pct": 29.3,
-      "assisted": 95,
-      "assistedPct": 74.8
+      "attempted": 455,
+      "made": 134,
+      "pct": 29.5,
+      "assisted": 101,
+      "assistedPct": 75.4
     },
     "freeThrows": {
-      "attempted": 362,
-      "made": 241,
-      "pct": 66.6
+      "attempted": 375,
+      "made": 249,
+      "pct": 66.4
     },
     "attemptsBreakdown": {
-      "dunks": 4.6,
-      "layups": 25.5,
-      "tipIns": 3.7,
-      "twoPointJumpers": 22.6,
-      "threePointJumpers": 43.6
+      "dunks": 4.4,
+      "layups": 25.1,
+      "tipIns": 3.9,
+      "twoPointJumpers": 23.3,
+      "threePointJumpers": 43.4
     }
   }
 ]

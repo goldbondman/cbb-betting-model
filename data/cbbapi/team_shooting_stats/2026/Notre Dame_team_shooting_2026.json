@@ -4,53 +4,53 @@
     "teamId": 213,
     "team": "Notre Dame",
     "conference": "ACC",
-    "trackedShots": 1019,
-    "freeThrowRate": 33.7,
-    "assistedPct": 20.6,
+    "trackedShots": 1094,
+    "freeThrowRate": 32.5,
+    "assistedPct": 20.4,
     "dunks": {
-      "attempted": 23,
-      "made": 22,
-      "pct": 95.7,
-      "assisted": 19,
-      "assistedPct": 86.4
+      "attempted": 24,
+      "made": 23,
+      "pct": 95.8,
+      "assisted": 20,
+      "assistedPct": 87
     },
     "layups": {
-      "attempted": 292,
-      "made": 169,
-      "pct": 57.9,
-      "assisted": 49,
-      "assistedPct": 29
+      "attempted": 310,
+      "made": 177,
+      "pct": 57.1,
+      "assisted": 53,
+      "assistedPct": 29.9
     },
     "tipIns": {
-      "attempted": 25,
-      "made": 16,
-      "pct": 64
+      "attempted": 28,
+      "made": 17,
+      "pct": 60.7
     },
     "twoPointJumpers": {
-      "attempted": 253,
-      "made": 103,
-      "pct": 40.7,
-      "assisted": 21,
-      "assistedPct": 20.4
+      "attempted": 281,
+      "made": 112,
+      "pct": 39.9,
+      "assisted": 23,
+      "assistedPct": 20.5
     },
     "threePointJumpers": {
-      "attempted": 426,
-      "made": 154,
-      "pct": 36.2,
-      "assisted": 121,
-      "assistedPct": 78.6
+      "attempted": 451,
+      "made": 162,
+      "pct": 35.9,
+      "assisted": 127,
+      "assistedPct": 78.4
     },
     "freeThrows": {
-      "attempted": 343,
-      "made": 239,
-      "pct": 69.7
+      "attempted": 356,
+      "made": 246,
+      "pct": 69.1
     },
     "attemptsBreakdown": {
-      "dunks": 2.3,
-      "layups": 28.7,
-      "tipIns": 2.5,
-      "twoPointJumpers": 24.8,
-      "threePointJumpers": 41.8
+      "dunks": 2.2,
+      "layups": 28.3,
+      "tipIns": 2.6,
+      "twoPointJumpers": 25.7,
+      "threePointJumpers": 41.2
     }
   }
 ]

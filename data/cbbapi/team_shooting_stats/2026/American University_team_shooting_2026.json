@@ -4,8 +4,8 @@
     "teamId": 8,
     "team": "American University",
     "conference": "Patriot",
-    "trackedShots": 1131,
-    "freeThrowRate": 29.9,
+    "trackedShots": 1184,
+    "freeThrowRate": 29.7,
     "assistedPct": 23.3,
     "dunks": {
       "attempted": 6,
@@ -15,42 +15,42 @@
       "assistedPct": 50
     },
     "layups": {
-      "attempted": 397,
-      "made": 241,
-      "pct": 60.7,
-      "assisted": 102,
-      "assistedPct": 42.3
+      "attempted": 416,
+      "made": 252,
+      "pct": 60.6,
+      "assisted": 107,
+      "assistedPct": 42.5
     },
     "tipIns": {
-      "attempted": 21,
-      "made": 13,
-      "pct": 61.9
+      "attempted": 22,
+      "made": 14,
+      "pct": 63.6
     },
     "twoPointJumpers": {
-      "attempted": 193,
-      "made": 82,
-      "pct": 42.5,
+      "attempted": 205,
+      "made": 87,
+      "pct": 42.4,
       "assisted": 14,
-      "assistedPct": 17.1
+      "assistedPct": 16.1
     },
     "threePointJumpers": {
-      "attempted": 514,
-      "made": 173,
-      "pct": 33.7,
-      "assisted": 145,
-      "assistedPct": 83.8
+      "attempted": 535,
+      "made": 181,
+      "pct": 33.8,
+      "assisted": 152,
+      "assistedPct": 84
     },
     "freeThrows": {
-      "attempted": 338,
-      "made": 255,
-      "pct": 75.4
+      "attempted": 352,
+      "made": 267,
+      "pct": 75.9
     },
     "attemptsBreakdown": {
       "dunks": 0.5,
       "layups": 35.1,
       "tipIns": 1.9,
-      "twoPointJumpers": 17.1,
-      "threePointJumpers": 45.4
+      "twoPointJumpers": 17.3,
+      "threePointJumpers": 45.2
     }
   }
 ]

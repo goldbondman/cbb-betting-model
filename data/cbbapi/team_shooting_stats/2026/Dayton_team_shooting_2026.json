@@ -4,51 +4,51 @@
     "teamId": 64,
     "team": "Dayton",
     "conference": "A-10",
-    "trackedShots": 993,
-    "freeThrowRate": 48.3,
-    "assistedPct": 25.6,
+    "trackedShots": 1047,
+    "freeThrowRate": 47.6,
+    "assistedPct": 25.4,
     "dunks": {
-      "attempted": 71,
-      "made": 64,
-      "pct": 90.1,
-      "assisted": 41,
-      "assistedPct": 64.1
+      "attempted": 76,
+      "made": 69,
+      "pct": 90.8,
+      "assisted": 45,
+      "assistedPct": 65.2
     },
     "layups": {
-      "attempted": 322,
-      "made": 179,
-      "pct": 55.6,
-      "assisted": 91,
-      "assistedPct": 50.8
+      "attempted": 337,
+      "made": 189,
+      "pct": 56.1,
+      "assisted": 98,
+      "assistedPct": 51.9
     },
     "tipIns": {
-      "attempted": 22,
-      "made": 18,
-      "pct": 81.8
+      "attempted": 25,
+      "made": 21,
+      "pct": 84
     },
     "twoPointJumpers": {
-      "attempted": 156,
-      "made": 47,
-      "pct": 30.1,
+      "attempted": 164,
+      "made": 50,
+      "pct": 30.5,
       "assisted": 9,
-      "assistedPct": 19.1
+      "assistedPct": 18
     },
     "threePointJumpers": {
-      "attempted": 422,
-      "made": 139,
-      "pct": 32.9,
-      "assisted": 113,
-      "assistedPct": 81.3
+      "attempted": 445,
+      "made": 142,
+      "pct": 31.9,
+      "assisted": 114,
+      "assistedPct": 80.3
     },
     "freeThrows": {
-      "attempted": 480,
-      "made": 363,
-      "pct": 75.6
+      "attempted": 498,
+      "made": 376,
+      "pct": 75.5
     },
     "attemptsBreakdown": {
-      "dunks": 7.2,
-      "layups": 32.4,
-      "tipIns": 2.2,
+      "dunks": 7.3,
+      "layups": 32.2,
+      "tipIns": 2.4,
       "twoPointJumpers": 15.7,
       "threePointJumpers": 42.5
     }

@@ -4,9 +4,9 @@
     "teamId": 344,
     "team": "Washington State",
     "conference": "WCC",
-    "trackedShots": 1128,
-    "freeThrowRate": 33.2,
-    "assistedPct": 21.6,
+    "trackedShots": 1192,
+    "freeThrowRate": 33.6,
+    "assistedPct": 21.7,
     "dunks": {
       "attempted": 37,
       "made": 28,
@@ -15,42 +15,42 @@
       "assistedPct": 57.1
     },
     "layups": {
-      "attempted": 329,
-      "made": 208,
-      "pct": 63.2,
-      "assisted": 77,
-      "assistedPct": 37
+      "attempted": 356,
+      "made": 224,
+      "pct": 62.9,
+      "assisted": 84,
+      "assistedPct": 37.5
     },
     "tipIns": {
-      "attempted": 12,
-      "made": 5,
-      "pct": 41.7
+      "attempted": 13,
+      "made": 6,
+      "pct": 46.2
     },
     "twoPointJumpers": {
-      "attempted": 252,
-      "made": 107,
-      "pct": 42.5,
-      "assisted": 23,
-      "assistedPct": 21.5
+      "attempted": 262,
+      "made": 112,
+      "pct": 42.7,
+      "assisted": 25,
+      "assistedPct": 22.3
     },
     "threePointJumpers": {
-      "attempted": 498,
-      "made": 177,
+      "attempted": 524,
+      "made": 186,
       "pct": 35.5,
-      "assisted": 128,
-      "assistedPct": 72.3
+      "assisted": 134,
+      "assistedPct": 72
     },
     "freeThrows": {
-      "attempted": 375,
-      "made": 271,
-      "pct": 72.3
+      "attempted": 400,
+      "made": 292,
+      "pct": 73
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
-      "layups": 29.2,
+      "dunks": 3.1,
+      "layups": 29.9,
       "tipIns": 1.1,
-      "twoPointJumpers": 22.3,
-      "threePointJumpers": 44.1
+      "twoPointJumpers": 22,
+      "threePointJumpers": 44
     }
   }
 ]

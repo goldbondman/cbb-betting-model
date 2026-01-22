@@ -4,22 +4,22 @@
     "teamId": 257,
     "team": "San Diego State",
     "conference": "Mountain West",
-    "trackedShots": 1035,
-    "freeThrowRate": 35.2,
-    "assistedPct": 26.3,
+    "trackedShots": 1075,
+    "freeThrowRate": 35.7,
+    "assistedPct": 25.8,
     "dunks": {
-      "attempted": 90,
-      "made": 79,
-      "pct": 87.8,
-      "assisted": 62,
-      "assistedPct": 78.5
+      "attempted": 95,
+      "made": 83,
+      "pct": 87.4,
+      "assisted": 63,
+      "assistedPct": 75.9
     },
     "layups": {
-      "attempted": 274,
-      "made": 165,
-      "pct": 60.2,
-      "assisted": 74,
-      "assistedPct": 44.8
+      "attempted": 286,
+      "made": 173,
+      "pct": 60.5,
+      "assisted": 76,
+      "assistedPct": 43.9
     },
     "tipIns": {
       "attempted": 23,
@@ -27,30 +27,30 @@
       "pct": 52.2
     },
     "twoPointJumpers": {
-      "attempted": 312,
-      "made": 116,
-      "pct": 37.2,
-      "assisted": 39,
-      "assistedPct": 33.6
+      "attempted": 326,
+      "made": 125,
+      "pct": 38.3,
+      "assisted": 41,
+      "assistedPct": 32.8
     },
     "threePointJumpers": {
-      "attempted": 336,
-      "made": 127,
-      "pct": 37.8,
+      "attempted": 345,
+      "made": 130,
+      "pct": 37.7,
       "assisted": 97,
-      "assistedPct": 76.4
+      "assistedPct": 74.6
     },
     "freeThrows": {
-      "attempted": 364,
-      "made": 269,
-      "pct": 73.9
+      "attempted": 384,
+      "made": 287,
+      "pct": 74.7
     },
     "attemptsBreakdown": {
-      "dunks": 8.7,
-      "layups": 26.5,
-      "tipIns": 2.2,
-      "twoPointJumpers": 30.1,
-      "threePointJumpers": 32.5
+      "dunks": 8.8,
+      "layups": 26.6,
+      "tipIns": 2.1,
+      "twoPointJumpers": 30.3,
+      "threePointJumpers": 32.1
     }
   }
 ]

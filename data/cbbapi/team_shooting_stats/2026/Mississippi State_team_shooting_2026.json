@@ -4,52 +4,52 @@
     "teamId": 174,
     "team": "Mississippi State",
     "conference": "SEC",
-    "trackedShots": 1090,
-    "freeThrowRate": 34,
+    "trackedShots": 1150,
+    "freeThrowRate": 33.6,
     "assistedPct": 19.5,
     "dunks": {
-      "attempted": 58,
-      "made": 52,
-      "pct": 89.7,
-      "assisted": 50,
-      "assistedPct": 96.2
+      "attempted": 61,
+      "made": 54,
+      "pct": 88.5,
+      "assisted": 52,
+      "assistedPct": 96.3
     },
     "layups": {
-      "attempted": 260,
-      "made": 145,
-      "pct": 55.8,
-      "assisted": 46,
-      "assistedPct": 31.7
+      "attempted": 276,
+      "made": 153,
+      "pct": 55.4,
+      "assisted": 49,
+      "assistedPct": 32
     },
     "tipIns": {
-      "attempted": 51,
-      "made": 37,
-      "pct": 72.5
+      "attempted": 55,
+      "made": 39,
+      "pct": 70.9
     },
     "twoPointJumpers": {
-      "attempted": 291,
-      "made": 118,
-      "pct": 40.5,
-      "assisted": 25,
-      "assistedPct": 21.2
+      "attempted": 305,
+      "made": 126,
+      "pct": 41.3,
+      "assisted": 28,
+      "assistedPct": 22.2
     },
     "threePointJumpers": {
-      "attempted": 430,
-      "made": 129,
-      "pct": 30,
-      "assisted": 92,
-      "assistedPct": 71.3
+      "attempted": 453,
+      "made": 135,
+      "pct": 29.8,
+      "assisted": 95,
+      "assistedPct": 70.4
     },
     "freeThrows": {
-      "attempted": 371,
-      "made": 256,
-      "pct": 69
+      "attempted": 386,
+      "made": 266,
+      "pct": 68.9
     },
     "attemptsBreakdown": {
       "dunks": 5.3,
-      "layups": 23.9,
-      "tipIns": 4.7,
-      "twoPointJumpers": 26.7,
+      "layups": 24,
+      "tipIns": 4.8,
+      "twoPointJumpers": 26.5,
       "threePointJumpers": 39.4
     }
   }

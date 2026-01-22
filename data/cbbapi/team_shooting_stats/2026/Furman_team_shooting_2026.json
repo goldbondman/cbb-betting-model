@@ -4,53 +4,53 @@
     "teamId": 93,
     "team": "Furman",
     "conference": "SoCon",
-    "trackedShots": 1130,
-    "freeThrowRate": 31.1,
-    "assistedPct": 26.6,
+    "trackedShots": 1195,
+    "freeThrowRate": 30.7,
+    "assistedPct": 26.5,
     "dunks": {
-      "attempted": 77,
-      "made": 70,
-      "pct": 90.9,
-      "assisted": 58,
-      "assistedPct": 82.9
+      "attempted": 81,
+      "made": 74,
+      "pct": 91.4,
+      "assisted": 61,
+      "assistedPct": 82.4
     },
     "layups": {
-      "attempted": 314,
-      "made": 190,
-      "pct": 60.5,
-      "assisted": 97,
-      "assistedPct": 51.1
+      "attempted": 336,
+      "made": 204,
+      "pct": 60.7,
+      "assisted": 104,
+      "assistedPct": 51
     },
     "tipIns": {
-      "attempted": 45,
-      "made": 28,
-      "pct": 62.2
+      "attempted": 48,
+      "made": 29,
+      "pct": 60.4
     },
     "twoPointJumpers": {
-      "attempted": 140,
-      "made": 70,
-      "pct": 50,
-      "assisted": 5,
-      "assistedPct": 7.1
+      "attempted": 147,
+      "made": 73,
+      "pct": 49.7,
+      "assisted": 6,
+      "assistedPct": 8.2
     },
     "threePointJumpers": {
-      "attempted": 554,
-      "made": 175,
-      "pct": 31.6,
-      "assisted": 141,
-      "assistedPct": 80.6
+      "attempted": 583,
+      "made": 181,
+      "pct": 31,
+      "assisted": 146,
+      "assistedPct": 80.7
     },
     "freeThrows": {
-      "attempted": 351,
-      "made": 226,
-      "pct": 64.4
+      "attempted": 367,
+      "made": 239,
+      "pct": 65.1
     },
     "attemptsBreakdown": {
       "dunks": 6.8,
-      "layups": 27.8,
+      "layups": 28.1,
       "tipIns": 4,
-      "twoPointJumpers": 12.4,
-      "threePointJumpers": 49
+      "twoPointJumpers": 12.3,
+      "threePointJumpers": 48.8
     }
   }
 ]

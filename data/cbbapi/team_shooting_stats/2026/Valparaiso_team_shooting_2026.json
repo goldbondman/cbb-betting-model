@@ -4,50 +4,50 @@
     "teamId": 335,
     "team": "Valparaiso",
     "conference": "MVC",
-    "trackedShots": 1121,
-    "freeThrowRate": 37.4,
-    "assistedPct": 19,
+    "trackedShots": 1164,
+    "freeThrowRate": 38.6,
+    "assistedPct": 19.4,
     "dunks": {
-      "attempted": 50,
-      "made": 46,
-      "pct": 92,
-      "assisted": 38,
-      "assistedPct": 82.6
+      "attempted": 54,
+      "made": 50,
+      "pct": 92.6,
+      "assisted": 41,
+      "assistedPct": 82
     },
     "layups": {
-      "attempted": 281,
-      "made": 139,
+      "attempted": 289,
+      "made": 143,
       "pct": 49.5,
-      "assisted": 38,
+      "assisted": 39,
       "assistedPct": 27.3
     },
     "tipIns": {
-      "attempted": 26,
-      "made": 14,
-      "pct": 53.8
+      "attempted": 27,
+      "made": 15,
+      "pct": 55.6
     },
     "twoPointJumpers": {
-      "attempted": 346,
-      "made": 124,
+      "attempted": 360,
+      "made": 129,
       "pct": 35.8,
-      "assisted": 31,
-      "assistedPct": 25
+      "assisted": 33,
+      "assistedPct": 25.6
     },
     "threePointJumpers": {
-      "attempted": 418,
-      "made": 133,
-      "pct": 31.8,
-      "assisted": 106,
-      "assistedPct": 79.7
+      "attempted": 434,
+      "made": 140,
+      "pct": 32.3,
+      "assisted": 113,
+      "assistedPct": 80.7
     },
     "freeThrows": {
-      "attempted": 419,
-      "made": 303,
-      "pct": 72.3
+      "attempted": 449,
+      "made": 323,
+      "pct": 71.9
     },
     "attemptsBreakdown": {
-      "dunks": 4.5,
-      "layups": 25.1,
+      "dunks": 4.6,
+      "layups": 24.8,
       "tipIns": 2.3,
       "twoPointJumpers": 30.9,
       "threePointJumpers": 37.3

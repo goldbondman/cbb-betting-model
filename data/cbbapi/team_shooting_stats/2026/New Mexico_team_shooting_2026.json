@@ -4,52 +4,52 @@
     "teamId": 191,
     "team": "New Mexico",
     "conference": "Mountain West",
-    "trackedShots": 1079,
-    "freeThrowRate": 36.2,
-    "assistedPct": 24,
+    "trackedShots": 1154,
+    "freeThrowRate": 35.2,
+    "assistedPct": 23.9,
     "dunks": {
-      "attempted": 61,
-      "made": 55,
-      "pct": 90.2,
-      "assisted": 40,
-      "assistedPct": 72.7
+      "attempted": 65,
+      "made": 59,
+      "pct": 90.8,
+      "assisted": 41,
+      "assistedPct": 69.5
     },
     "layups": {
-      "attempted": 329,
-      "made": 182,
-      "pct": 55.3,
-      "assisted": 54,
-      "assistedPct": 29.7
+      "attempted": 357,
+      "made": 197,
+      "pct": 55.2,
+      "assisted": 61,
+      "assistedPct": 31
     },
     "tipIns": {
-      "attempted": 31,
-      "made": 19,
-      "pct": 61.3
+      "attempted": 32,
+      "made": 20,
+      "pct": 62.5
     },
     "twoPointJumpers": {
-      "attempted": 160,
-      "made": 65,
-      "pct": 40.6,
+      "attempted": 167,
+      "made": 67,
+      "pct": 40.1,
       "assisted": 14,
-      "assistedPct": 21.5
+      "assistedPct": 20.9
     },
     "threePointJumpers": {
-      "attempted": 498,
-      "made": 172,
-      "pct": 34.5,
-      "assisted": 151,
-      "assistedPct": 87.8
+      "attempted": 533,
+      "made": 182,
+      "pct": 34.1,
+      "assisted": 160,
+      "assistedPct": 87.9
     },
     "freeThrows": {
-      "attempted": 391,
-      "made": 294,
-      "pct": 75.2
+      "attempted": 406,
+      "made": 303,
+      "pct": 74.6
     },
     "attemptsBreakdown": {
-      "dunks": 5.7,
-      "layups": 30.5,
-      "tipIns": 2.9,
-      "twoPointJumpers": 14.8,
+      "dunks": 5.6,
+      "layups": 30.9,
+      "tipIns": 2.8,
+      "twoPointJumpers": 14.5,
       "threePointJumpers": 46.2
     }
   }

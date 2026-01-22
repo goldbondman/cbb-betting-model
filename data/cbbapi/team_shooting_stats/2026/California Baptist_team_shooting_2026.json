@@ -4,53 +4,53 @@
     "teamId": 39,
     "team": "California Baptist",
     "conference": "WAC",
-    "trackedShots": 1126,
+    "trackedShots": 1185,
     "freeThrowRate": 36.2,
-    "assistedPct": 18.6,
+    "assistedPct": 18.3,
     "dunks": {
-      "attempted": 69,
-      "made": 55,
-      "pct": 79.7,
-      "assisted": 43,
-      "assistedPct": 78.2
+      "attempted": 70,
+      "made": 56,
+      "pct": 80,
+      "assisted": 44,
+      "assistedPct": 78.6
     },
     "layups": {
-      "attempted": 424,
-      "made": 201,
-      "pct": 47.4,
-      "assisted": 58,
-      "assistedPct": 28.9
+      "attempted": 449,
+      "made": 214,
+      "pct": 47.7,
+      "assisted": 61,
+      "assistedPct": 28.5
     },
     "tipIns": {
-      "attempted": 61,
-      "made": 38,
-      "pct": 62.3
+      "attempted": 66,
+      "made": 43,
+      "pct": 65.2
     },
     "twoPointJumpers": {
-      "attempted": 217,
-      "made": 85,
-      "pct": 39.2,
+      "attempted": 228,
+      "made": 89,
+      "pct": 39,
       "assisted": 19,
-      "assistedPct": 22.4
+      "assistedPct": 21.3
     },
     "threePointJumpers": {
-      "attempted": 355,
-      "made": 111,
-      "pct": 31.3,
-      "assisted": 89,
+      "attempted": 372,
+      "made": 116,
+      "pct": 31.2,
+      "assisted": 93,
       "assistedPct": 80.2
     },
     "freeThrows": {
-      "attempted": 408,
-      "made": 298,
-      "pct": 73
+      "attempted": 429,
+      "made": 310,
+      "pct": 72.3
     },
     "attemptsBreakdown": {
-      "dunks": 6.1,
-      "layups": 37.7,
-      "tipIns": 5.4,
-      "twoPointJumpers": 19.3,
-      "threePointJumpers": 31.5
+      "dunks": 5.9,
+      "layups": 37.9,
+      "tipIns": 5.6,
+      "twoPointJumpers": 19.2,
+      "threePointJumpers": 31.4
     }
   }
 ]

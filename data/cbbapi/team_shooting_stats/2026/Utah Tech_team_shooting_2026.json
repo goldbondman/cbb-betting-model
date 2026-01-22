@@ -4,53 +4,53 @@
     "teamId": 330,
     "team": "Utah Tech",
     "conference": "WAC",
-    "trackedShots": 1189,
-    "freeThrowRate": 31.6,
-    "assistedPct": 24.1,
+    "trackedShots": 1251,
+    "freeThrowRate": 30.9,
+    "assistedPct": 23.8,
     "dunks": {
-      "attempted": 73,
+      "attempted": 74,
       "made": 63,
-      "pct": 86.3,
+      "pct": 85.1,
       "assisted": 41,
       "assistedPct": 65.1
     },
     "layups": {
-      "attempted": 375,
-      "made": 229,
-      "pct": 61.1,
-      "assisted": 105,
-      "assistedPct": 45.9
+      "attempted": 393,
+      "made": 235,
+      "pct": 59.8,
+      "assisted": 107,
+      "assistedPct": 45.5
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 16,
-      "pct": 53.3
+      "attempted": 34,
+      "made": 19,
+      "pct": 55.9
     },
     "twoPointJumpers": {
-      "attempted": 243,
-      "made": 102,
-      "pct": 42,
-      "assisted": 23,
-      "assistedPct": 22.5
+      "attempted": 261,
+      "made": 108,
+      "pct": 41.4,
+      "assisted": 24,
+      "assistedPct": 22.2
     },
     "threePointJumpers": {
-      "attempted": 468,
-      "made": 147,
-      "pct": 31.4,
-      "assisted": 118,
-      "assistedPct": 80.3
+      "attempted": 489,
+      "made": 155,
+      "pct": 31.7,
+      "assisted": 126,
+      "assistedPct": 81.3
     },
     "freeThrows": {
-      "attempted": 376,
-      "made": 271,
-      "pct": 72.1
+      "attempted": 386,
+      "made": 281,
+      "pct": 72.8
     },
     "attemptsBreakdown": {
-      "dunks": 6.1,
-      "layups": 31.5,
-      "tipIns": 2.5,
-      "twoPointJumpers": 20.4,
-      "threePointJumpers": 39.4
+      "dunks": 5.9,
+      "layups": 31.4,
+      "tipIns": 2.7,
+      "twoPointJumpers": 20.9,
+      "threePointJumpers": 39.1
     }
   }
 ]

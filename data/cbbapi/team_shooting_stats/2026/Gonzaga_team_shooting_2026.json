@@ -4,22 +4,22 @@
     "teamId": 102,
     "team": "Gonzaga",
     "conference": "WCC",
-    "trackedShots": 1318,
-    "freeThrowRate": 30.6,
-    "assistedPct": 28.8,
+    "trackedShots": 1384,
+    "freeThrowRate": 30.9,
+    "assistedPct": 28.1,
     "dunks": {
-      "attempted": 70,
-      "made": 61,
-      "pct": 87.1,
-      "assisted": 44,
-      "assistedPct": 72.1
+      "attempted": 74,
+      "made": 65,
+      "pct": 87.8,
+      "assisted": 46,
+      "assistedPct": 70.8
     },
     "layups": {
-      "attempted": 411,
-      "made": 256,
-      "pct": 62.3,
-      "assisted": 136,
-      "assistedPct": 53.1
+      "attempted": 439,
+      "made": 273,
+      "pct": 62.2,
+      "assisted": 138,
+      "assistedPct": 50.5
     },
     "tipIns": {
       "attempted": 55,
@@ -27,29 +27,29 @@
       "pct": 76.4
     },
     "twoPointJumpers": {
-      "attempted": 388,
-      "made": 185,
-      "pct": 47.7,
-      "assisted": 71,
-      "assistedPct": 38.4
+      "attempted": 402,
+      "made": 190,
+      "pct": 47.3,
+      "assisted": 72,
+      "assistedPct": 37.9
     },
     "threePointJumpers": {
-      "attempted": 394,
-      "made": 145,
-      "pct": 36.8,
-      "assisted": 129,
-      "assistedPct": 89
+      "attempted": 414,
+      "made": 150,
+      "pct": 36.2,
+      "assisted": 133,
+      "assistedPct": 88.7
     },
     "freeThrows": {
-      "attempted": 403,
-      "made": 282,
+      "attempted": 427,
+      "made": 299,
       "pct": 70
     },
     "attemptsBreakdown": {
       "dunks": 5.3,
-      "layups": 31.2,
-      "tipIns": 4.2,
-      "twoPointJumpers": 29.4,
+      "layups": 31.7,
+      "tipIns": 4,
+      "twoPointJumpers": 29,
       "threePointJumpers": 29.9
     }
   }

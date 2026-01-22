@@ -4,53 +4,53 @@
     "teamId": 29,
     "team": "Bradley",
     "conference": "MVC",
-    "trackedShots": 1218,
-    "freeThrowRate": 37.4,
-    "assistedPct": 20.8,
+    "trackedShots": 1281,
+    "freeThrowRate": 37.9,
+    "assistedPct": 20.5,
     "dunks": {
-      "attempted": 40,
+      "attempted": 42,
       "made": 31,
-      "pct": 77.5,
+      "pct": 73.8,
       "assisted": 22,
       "assistedPct": 71
     },
     "layups": {
-      "attempted": 337,
-      "made": 196,
-      "pct": 58.2,
-      "assisted": 67,
-      "assistedPct": 34.2
+      "attempted": 354,
+      "made": 207,
+      "pct": 58.5,
+      "assisted": 72,
+      "assistedPct": 34.8
     },
     "tipIns": {
-      "attempted": 42,
-      "made": 28,
-      "pct": 66.7
+      "attempted": 47,
+      "made": 30,
+      "pct": 63.8
     },
     "twoPointJumpers": {
-      "attempted": 302,
-      "made": 104,
-      "pct": 34.4,
-      "assisted": 25,
-      "assistedPct": 24
+      "attempted": 319,
+      "made": 108,
+      "pct": 33.9,
+      "assisted": 26,
+      "assistedPct": 24.1
     },
     "threePointJumpers": {
-      "attempted": 497,
-      "made": 172,
-      "pct": 34.6,
-      "assisted": 139,
-      "assistedPct": 80.8
+      "attempted": 519,
+      "made": 177,
+      "pct": 34.1,
+      "assisted": 142,
+      "assistedPct": 80.2
     },
     "freeThrows": {
-      "attempted": 455,
-      "made": 330,
-      "pct": 72.5
+      "attempted": 486,
+      "made": 356,
+      "pct": 73.3
     },
     "attemptsBreakdown": {
       "dunks": 3.3,
-      "layups": 27.7,
-      "tipIns": 3.4,
-      "twoPointJumpers": 24.8,
-      "threePointJumpers": 40.8
+      "layups": 27.6,
+      "tipIns": 3.7,
+      "twoPointJumpers": 24.9,
+      "threePointJumpers": 40.5
     }
   }
 ]

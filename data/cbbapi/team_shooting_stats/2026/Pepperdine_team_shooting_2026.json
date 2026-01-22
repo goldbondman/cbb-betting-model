@@ -4,22 +4,22 @@
     "teamId": 228,
     "team": "Pepperdine",
     "conference": "WCC",
-    "trackedShots": 1124,
-    "freeThrowRate": 34,
-    "assistedPct": 23.3,
+    "trackedShots": 1182,
+    "freeThrowRate": 33.5,
+    "assistedPct": 23.1,
     "dunks": {
-      "attempted": 18,
+      "attempted": 19,
       "made": 15,
-      "pct": 83.3,
+      "pct": 78.9,
       "assisted": 14,
       "assistedPct": 93.3
     },
     "layups": {
-      "attempted": 360,
-      "made": 199,
+      "attempted": 376,
+      "made": 208,
       "pct": 55.3,
-      "assisted": 98,
-      "assistedPct": 49.2
+      "assisted": 101,
+      "assistedPct": 48.6
     },
     "tipIns": {
       "attempted": 28,
@@ -27,30 +27,30 @@
       "pct": 82.1
     },
     "twoPointJumpers": {
-      "attempted": 275,
-      "made": 109,
-      "pct": 39.6,
-      "assisted": 45,
-      "assistedPct": 41.3
+      "attempted": 294,
+      "made": 119,
+      "pct": 40.5,
+      "assisted": 50,
+      "assistedPct": 42
     },
     "threePointJumpers": {
-      "attempted": 443,
-      "made": 128,
-      "pct": 28.9,
-      "assisted": 105,
-      "assistedPct": 82
+      "attempted": 465,
+      "made": 131,
+      "pct": 28.2,
+      "assisted": 108,
+      "assistedPct": 82.4
     },
     "freeThrows": {
-      "attempted": 382,
-      "made": 289,
-      "pct": 75.7
+      "attempted": 396,
+      "made": 302,
+      "pct": 76.3
     },
     "attemptsBreakdown": {
       "dunks": 1.6,
-      "layups": 32,
-      "tipIns": 2.5,
-      "twoPointJumpers": 24.5,
-      "threePointJumpers": 39.4
+      "layups": 31.8,
+      "tipIns": 2.4,
+      "twoPointJumpers": 24.9,
+      "threePointJumpers": 39.3
     }
   }
 ]

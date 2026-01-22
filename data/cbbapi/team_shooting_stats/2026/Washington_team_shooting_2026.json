@@ -4,21 +4,21 @@
     "teamId": 343,
     "team": "Washington",
     "conference": "Big Ten",
-    "trackedShots": 1122,
-    "freeThrowRate": 35.7,
-    "assistedPct": 21.5,
+    "trackedShots": 1183,
+    "freeThrowRate": 34.7,
+    "assistedPct": 21.6,
     "dunks": {
-      "attempted": 42,
-      "made": 39,
-      "pct": 92.9,
-      "assisted": 29,
-      "assistedPct": 74.4
+      "attempted": 45,
+      "made": 42,
+      "pct": 93.3,
+      "assisted": 32,
+      "assistedPct": 76.2
     },
     "layups": {
-      "attempted": 310,
-      "made": 178,
-      "pct": 57.4,
-      "assisted": 73,
+      "attempted": 324,
+      "made": 188,
+      "pct": 58,
+      "assisted": 77,
       "assistedPct": 41
     },
     "tipIns": {
@@ -27,29 +27,29 @@
       "pct": 50
     },
     "twoPointJumpers": {
-      "attempted": 361,
-      "made": 158,
-      "pct": 43.8,
-      "assisted": 38,
-      "assistedPct": 24.1
+      "attempted": 384,
+      "made": 166,
+      "pct": 43.2,
+      "assisted": 39,
+      "assistedPct": 23.5
     },
     "threePointJumpers": {
-      "attempted": 381,
-      "made": 117,
-      "pct": 30.7,
-      "assisted": 101,
-      "assistedPct": 86.3
+      "attempted": 402,
+      "made": 123,
+      "pct": 30.6,
+      "assisted": 107,
+      "assistedPct": 87
     },
     "freeThrows": {
-      "attempted": 401,
-      "made": 313,
-      "pct": 78.1
+      "attempted": 411,
+      "made": 319,
+      "pct": 77.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.7,
-      "layups": 27.6,
-      "tipIns": 2.5,
-      "twoPointJumpers": 32.2,
+      "dunks": 3.8,
+      "layups": 27.4,
+      "tipIns": 2.4,
+      "twoPointJumpers": 32.5,
       "threePointJumpers": 34
     }
   }

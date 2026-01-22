@@ -4,53 +4,53 @@
     "teamId": 11,
     "team": "Arizona",
     "conference": "Big 12",
-    "trackedShots": 1120,
-    "freeThrowRate": 43,
-    "assistedPct": 29.1,
+    "trackedShots": 1183,
+    "freeThrowRate": 43.1,
+    "assistedPct": 28.8,
     "dunks": {
-      "attempted": 84,
-      "made": 80,
-      "pct": 95.2,
-      "assisted": 62,
-      "assistedPct": 77.5
+      "attempted": 87,
+      "made": 83,
+      "pct": 95.4,
+      "assisted": 65,
+      "assistedPct": 78.3
     },
     "layups": {
-      "attempted": 386,
-      "made": 228,
-      "pct": 59.1,
-      "assisted": 124,
-      "assistedPct": 54.4
+      "attempted": 406,
+      "made": 239,
+      "pct": 58.9,
+      "assisted": 129,
+      "assistedPct": 54
     },
     "tipIns": {
-      "attempted": 44,
-      "made": 28,
-      "pct": 63.6
+      "attempted": 50,
+      "made": 33,
+      "pct": 66
     },
     "twoPointJumpers": {
-      "attempted": 298,
-      "made": 134,
-      "pct": 45,
-      "assisted": 45,
-      "assistedPct": 33.6
+      "attempted": 319,
+      "made": 139,
+      "pct": 43.6,
+      "assisted": 49,
+      "assistedPct": 35.3
     },
     "threePointJumpers": {
-      "attempted": 308,
-      "made": 112,
-      "pct": 36.4,
-      "assisted": 95,
-      "assistedPct": 84.8
+      "attempted": 321,
+      "made": 115,
+      "pct": 35.8,
+      "assisted": 98,
+      "assistedPct": 85.2
     },
     "freeThrows": {
-      "attempted": 482,
-      "made": 355,
-      "pct": 73.7
+      "attempted": 510,
+      "made": 375,
+      "pct": 73.5
     },
     "attemptsBreakdown": {
-      "dunks": 7.5,
-      "layups": 34.5,
-      "tipIns": 3.9,
-      "twoPointJumpers": 26.6,
-      "threePointJumpers": 27.5
+      "dunks": 7.4,
+      "layups": 34.3,
+      "tipIns": 4.2,
+      "twoPointJumpers": 27,
+      "threePointJumpers": 27.1
     }
   }
 ]

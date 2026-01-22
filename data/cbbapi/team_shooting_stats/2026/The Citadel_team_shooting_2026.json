@@ -4,52 +4,52 @@
     "teamId": 299,
     "team": "The Citadel",
     "conference": "SoCon",
-    "trackedShots": 1104,
-    "freeThrowRate": 28.4,
-    "assistedPct": 21.1,
+    "trackedShots": 1161,
+    "freeThrowRate": 29.5,
+    "assistedPct": 21.4,
     "dunks": {
-      "attempted": 31,
-      "made": 27,
-      "pct": 87.1,
-      "assisted": 15,
-      "assistedPct": 55.6
+      "attempted": 34,
+      "made": 30,
+      "pct": 88.2,
+      "assisted": 18,
+      "assistedPct": 60
     },
     "layups": {
-      "attempted": 308,
-      "made": 163,
-      "pct": 52.9,
-      "assisted": 46,
-      "assistedPct": 28.2
+      "attempted": 326,
+      "made": 175,
+      "pct": 53.7,
+      "assisted": 52,
+      "assistedPct": 29.7
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 26,
-      "pct": 86.7
+      "attempted": 31,
+      "made": 27,
+      "pct": 87.1
     },
     "twoPointJumpers": {
-      "attempted": 191,
-      "made": 73,
-      "pct": 38.2,
+      "attempted": 198,
+      "made": 75,
+      "pct": 37.9,
       "assisted": 7,
-      "assistedPct": 9.6
+      "assistedPct": 9.3
     },
     "threePointJumpers": {
-      "attempted": 544,
-      "made": 180,
-      "pct": 33.1,
-      "assisted": 165,
-      "assistedPct": 91.7
+      "attempted": 572,
+      "made": 186,
+      "pct": 32.5,
+      "assisted": 171,
+      "assistedPct": 91.9
     },
     "freeThrows": {
-      "attempted": 313,
-      "made": 221,
-      "pct": 70.6
+      "attempted": 343,
+      "made": 244,
+      "pct": 71.1
     },
     "attemptsBreakdown": {
-      "dunks": 2.8,
-      "layups": 27.9,
+      "dunks": 2.9,
+      "layups": 28.1,
       "tipIns": 2.7,
-      "twoPointJumpers": 17.3,
+      "twoPointJumpers": 17.1,
       "threePointJumpers": 49.3
     }
   }

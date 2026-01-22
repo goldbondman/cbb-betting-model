@@ -4,53 +4,53 @@
     "teamId": 229,
     "team": "Pittsburgh",
     "conference": "ACC",
-    "trackedShots": 1040,
-    "freeThrowRate": 31.3,
-    "assistedPct": 22.7,
+    "trackedShots": 1103,
+    "freeThrowRate": 31.1,
+    "assistedPct": 22.6,
     "dunks": {
-      "attempted": 73,
-      "made": 64,
-      "pct": 87.7,
-      "assisted": 54,
-      "assistedPct": 84.4
+      "attempted": 74,
+      "made": 65,
+      "pct": 87.8,
+      "assisted": 55,
+      "assistedPct": 84.6
     },
     "layups": {
-      "attempted": 294,
-      "made": 151,
-      "pct": 51.4,
-      "assisted": 45,
-      "assistedPct": 29.8
+      "attempted": 319,
+      "made": 160,
+      "pct": 50.2,
+      "assisted": 50,
+      "assistedPct": 31.3
     },
     "tipIns": {
-      "attempted": 28,
-      "made": 17,
-      "pct": 60.7
+      "attempted": 33,
+      "made": 21,
+      "pct": 63.6
     },
     "twoPointJumpers": {
-      "attempted": 218,
-      "made": 92,
-      "pct": 42.2,
-      "assisted": 20,
-      "assistedPct": 21.7
+      "attempted": 228,
+      "made": 95,
+      "pct": 41.7,
+      "assisted": 21,
+      "assistedPct": 22.1
     },
     "threePointJumpers": {
-      "attempted": 427,
-      "made": 149,
-      "pct": 34.9,
-      "assisted": 117,
-      "assistedPct": 78.5
+      "attempted": 449,
+      "made": 156,
+      "pct": 34.7,
+      "assisted": 123,
+      "assistedPct": 78.8
     },
     "freeThrows": {
-      "attempted": 326,
-      "made": 226,
-      "pct": 69.3
+      "attempted": 343,
+      "made": 233,
+      "pct": 67.9
     },
     "attemptsBreakdown": {
-      "dunks": 7,
-      "layups": 28.3,
-      "tipIns": 2.7,
-      "twoPointJumpers": 21,
-      "threePointJumpers": 41.1
+      "dunks": 6.7,
+      "layups": 28.9,
+      "tipIns": 3,
+      "twoPointJumpers": 20.7,
+      "threePointJumpers": 40.7
     }
   }
 ]

@@ -4,22 +4,22 @@
     "teamId": 111,
     "team": "Holy Cross",
     "conference": "Patriot",
-    "trackedShots": 1044,
-    "freeThrowRate": 32.4,
-    "assistedPct": 19.4,
+    "trackedShots": 1098,
+    "freeThrowRate": 31.9,
+    "assistedPct": 19.2,
     "dunks": {
-      "attempted": 16,
-      "made": 15,
-      "pct": 93.8,
-      "assisted": 6,
-      "assistedPct": 40
+      "attempted": 17,
+      "made": 16,
+      "pct": 94.1,
+      "assisted": 7,
+      "assistedPct": 43.8
     },
     "layups": {
-      "attempted": 308,
-      "made": 164,
-      "pct": 53.2,
-      "assisted": 61,
-      "assistedPct": 37.2
+      "attempted": 321,
+      "made": 174,
+      "pct": 54.2,
+      "assisted": 63,
+      "assistedPct": 36.2
     },
     "tipIns": {
       "attempted": 14,
@@ -27,30 +27,30 @@
       "pct": 71.4
     },
     "twoPointJumpers": {
-      "attempted": 291,
-      "made": 132,
-      "pct": 45.4,
+      "attempted": 312,
+      "made": 141,
+      "pct": 45.2,
       "assisted": 25,
-      "assistedPct": 18.9
+      "assistedPct": 17.7
     },
     "threePointJumpers": {
-      "attempted": 415,
-      "made": 127,
+      "attempted": 434,
+      "made": 133,
       "pct": 30.6,
-      "assisted": 111,
-      "assistedPct": 87.4
+      "assisted": 116,
+      "assistedPct": 87.2
     },
     "freeThrows": {
-      "attempted": 338,
-      "made": 240,
-      "pct": 71
+      "attempted": 350,
+      "made": 250,
+      "pct": 71.4
     },
     "attemptsBreakdown": {
       "dunks": 1.5,
-      "layups": 29.5,
+      "layups": 29.2,
       "tipIns": 1.3,
-      "twoPointJumpers": 27.9,
-      "threePointJumpers": 39.8
+      "twoPointJumpers": 28.4,
+      "threePointJumpers": 39.5
     }
   }
 ]

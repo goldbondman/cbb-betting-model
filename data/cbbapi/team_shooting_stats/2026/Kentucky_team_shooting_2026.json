@@ -4,53 +4,53 @@
     "teamId": 135,
     "team": "Kentucky",
     "conference": "SEC",
-    "trackedShots": 1105,
-    "freeThrowRate": 34.4,
-    "assistedPct": 27.9,
+    "trackedShots": 1163,
+    "freeThrowRate": 35.7,
+    "assistedPct": 27.5,
     "dunks": {
-      "attempted": 97,
-      "made": 91,
-      "pct": 93.8,
-      "assisted": 70,
-      "assistedPct": 76.9
+      "attempted": 103,
+      "made": 96,
+      "pct": 93.2,
+      "assisted": 73,
+      "assistedPct": 76
     },
     "layups": {
-      "attempted": 324,
-      "made": 192,
-      "pct": 59.3,
-      "assisted": 83,
-      "assistedPct": 43.2
+      "attempted": 336,
+      "made": 196,
+      "pct": 58.3,
+      "assisted": 85,
+      "assistedPct": 43.4
     },
     "tipIns": {
-      "attempted": 34,
-      "made": 20,
-      "pct": 58.8
+      "attempted": 35,
+      "made": 21,
+      "pct": 60
     },
     "twoPointJumpers": {
-      "attempted": 206,
-      "made": 73,
-      "pct": 35.4,
-      "assisted": 23,
-      "assistedPct": 31.5
+      "attempted": 227,
+      "made": 83,
+      "pct": 36.6,
+      "assisted": 26,
+      "assistedPct": 31.3
     },
     "threePointJumpers": {
-      "attempted": 444,
-      "made": 155,
-      "pct": 34.9,
-      "assisted": 132,
-      "assistedPct": 85.2
+      "attempted": 462,
+      "made": 160,
+      "pct": 34.6,
+      "assisted": 136,
+      "assistedPct": 85
     },
     "freeThrows": {
-      "attempted": 380,
-      "made": 276,
-      "pct": 72.6
+      "attempted": 415,
+      "made": 306,
+      "pct": 73.7
     },
     "attemptsBreakdown": {
-      "dunks": 8.8,
-      "layups": 29.3,
-      "tipIns": 3.1,
-      "twoPointJumpers": 18.6,
-      "threePointJumpers": 40.2
+      "dunks": 8.9,
+      "layups": 28.9,
+      "tipIns": 3,
+      "twoPointJumpers": 19.5,
+      "threePointJumpers": 39.7
     }
   }
 ]

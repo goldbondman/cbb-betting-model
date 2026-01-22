@@ -4,22 +4,22 @@
     "teamId": 273,
     "team": "Southern Illinois",
     "conference": "MVC",
-    "trackedShots": 1163,
-    "freeThrowRate": 34.7,
-    "assistedPct": 23.3,
+    "trackedShots": 1214,
+    "freeThrowRate": 35.7,
+    "assistedPct": 23.2,
     "dunks": {
-      "attempted": 54,
-      "made": 46,
-      "pct": 85.2,
-      "assisted": 35,
-      "assistedPct": 76.1
+      "attempted": 57,
+      "made": 48,
+      "pct": 84.2,
+      "assisted": 37,
+      "assistedPct": 77.1
     },
     "layups": {
-      "attempted": 396,
-      "made": 229,
-      "pct": 57.8,
-      "assisted": 108,
-      "assistedPct": 47.2
+      "attempted": 416,
+      "made": 242,
+      "pct": 58.2,
+      "assisted": 114,
+      "assistedPct": 47.1
     },
     "tipIns": {
       "attempted": 23,
@@ -27,30 +27,30 @@
       "pct": 47.8
     },
     "twoPointJumpers": {
-      "attempted": 355,
-      "made": 161,
-      "pct": 45.4,
+      "attempted": 369,
+      "made": 164,
+      "pct": 44.4,
       "assisted": 47,
-      "assistedPct": 29.2
+      "assistedPct": 28.7
     },
     "threePointJumpers": {
-      "attempted": 335,
-      "made": 94,
-      "pct": 28.1,
-      "assisted": 81,
-      "assistedPct": 86.2
+      "attempted": 349,
+      "made": 97,
+      "pct": 27.8,
+      "assisted": 84,
+      "assistedPct": 86.6
     },
     "freeThrows": {
-      "attempted": 403,
-      "made": 270,
-      "pct": 67
+      "attempted": 433,
+      "made": 288,
+      "pct": 66.5
     },
     "attemptsBreakdown": {
-      "dunks": 4.6,
-      "layups": 34,
-      "tipIns": 2,
-      "twoPointJumpers": 30.5,
-      "threePointJumpers": 28.8
+      "dunks": 4.7,
+      "layups": 34.3,
+      "tipIns": 1.9,
+      "twoPointJumpers": 30.4,
+      "threePointJumpers": 28.7
     }
   }
 ]

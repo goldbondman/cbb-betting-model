@@ -4,53 +4,53 @@
     "teamId": 94,
     "team": "Gardner-Webb",
     "conference": "Big South",
-    "trackedShots": 1109,
-    "freeThrowRate": 33.7,
-    "assistedPct": 17.9,
+    "trackedShots": 1166,
+    "freeThrowRate": 33.1,
+    "assistedPct": 17.8,
     "dunks": {
-      "attempted": 24,
-      "made": 17,
-      "pct": 70.8,
+      "attempted": 26,
+      "made": 18,
+      "pct": 69.2,
       "assisted": 13,
-      "assistedPct": 76.5
+      "assistedPct": 72.2
     },
     "layups": {
-      "attempted": 430,
-      "made": 237,
-      "pct": 55.1,
-      "assisted": 58,
-      "assistedPct": 24.5
+      "attempted": 455,
+      "made": 247,
+      "pct": 54.3,
+      "assisted": 60,
+      "assistedPct": 24.3
     },
     "tipIns": {
-      "attempted": 11,
-      "made": 7,
-      "pct": 63.6
+      "attempted": 12,
+      "made": 8,
+      "pct": 66.7
     },
     "twoPointJumpers": {
-      "attempted": 206,
-      "made": 66,
-      "pct": 32,
-      "assisted": 16,
-      "assistedPct": 24.2
+      "attempted": 216,
+      "made": 71,
+      "pct": 32.9,
+      "assisted": 18,
+      "assistedPct": 25.4
     },
     "threePointJumpers": {
-      "attempted": 438,
-      "made": 138,
-      "pct": 31.5,
-      "assisted": 111,
-      "assistedPct": 80.4
+      "attempted": 457,
+      "made": 143,
+      "pct": 31.3,
+      "assisted": 116,
+      "assistedPct": 81.1
     },
     "freeThrows": {
-      "attempted": 374,
-      "made": 264,
-      "pct": 70.6
+      "attempted": 386,
+      "made": 271,
+      "pct": 70.2
     },
     "attemptsBreakdown": {
       "dunks": 2.2,
-      "layups": 38.8,
+      "layups": 39,
       "tipIns": 1,
-      "twoPointJumpers": 18.6,
-      "threePointJumpers": 39.5
+      "twoPointJumpers": 18.5,
+      "threePointJumpers": 39.2
     }
   }
 ]
