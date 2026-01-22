@@ -38,7 +38,8 @@ DEFAULT_HEADERS = {
     "Accept": "application/json,text/plain,*/*",
 }
 
-PARSE_VERSION = "v1.3.4"
+# Bump parse version whenever schema/feature logic changes
+PARSE_VERSION = "v1.3.5"
 SOURCE_NAME = "espn"
 
 TZ_PST = ZoneInfo("America/Los_Angeles")
@@ -99,21 +100,34 @@ def _parse_made_attempt(display: str):
 
 def _stat_map(team_stats_list):
     """
-    ESPN sometimes returns team stat rows under:
-      - team_entry["teamStats"]
-      - team_entry["statistics"]
-    Both typically contain dicts like {"name": "...", "displayValue": "..."}.
+    ESPN team stats rows typically look like:
+      {"name":"fieldGoalsMade-fieldGoalsAttempted","displayValue":"21-70","label":"FG","abbreviation":"FG"}
+    Historically, ESPN sometimes used different keys.
+    We index multiple aliases so parsing is stable.
     """
     out = {}
     if not isinstance(team_stats_list, list):
         return out
+
     for item in team_stats_list:
         if not isinstance(item, dict):
             continue
-        name = item.get("name")
+
         dv = item.get("displayValue")
+        name = item.get("name")
+        label = item.get("label")
+        abbr = item.get("abbreviation")
+
+        # primary key: name
         if name:
             out[str(name)] = dv
+
+        # useful aliases
+        if label:
+            out[str(label)] = dv
+        if abbr:
+            out[str(abbr)] = dv
+
     return out
 
 
@@ -307,6 +321,7 @@ def _extract_players(summary_json, team_id: str):
             if not isinstance(athletes, list):
                 continue
 
+            # ESPN gives labels and/or keys; labels match the visible boxscore headers (MIN, PTS, FG, 3PT, FT, ...)
             labels = table.get("labels", [])
             if not isinstance(labels, list):
                 labels = []
@@ -410,7 +425,6 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
         tid = str(t.get("id", ""))
         name = t.get("displayName") or t.get("shortDisplayName") or t.get("name") or "Unknown"
 
-        # ESPN varies. Use teamStats OR statistics.
         stats_list = team_entry.get("teamStats")
         if not stats_list:
             stats_list = team_entry.get("statistics")
@@ -419,35 +433,51 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
 
         smap = _stat_map(stats_list)
 
-        # Shooting lines
-        fgm, fga = _parse_made_attempt(smap.get("fieldGoals", ""))
-        if fga == 0:
-            fga = _to_int(smap.get("fieldGoalsAttempted"), 0)
-        if fgm == 0:
-            fgm = _to_int(smap.get("fieldGoalsMade"), 0)
+        # ---- ESPN CURRENT KEYS (verified):
+        # fieldGoalsMade-fieldGoalsAttempted, threePointFieldGoalsMade-threePointFieldGoalsAttempted, freeThrowsMade-freeThrowsAttempted
+        fg_disp = (
+            smap.get("fieldGoalsMade-fieldGoalsAttempted")
+            or smap.get("FG")
+            or smap.get("fieldGoals")
+            or ""
+        )
+        tpt_disp = (
+            smap.get("threePointFieldGoalsMade-threePointFieldGoalsAttempted")
+            or smap.get("3PT")
+            or smap.get("threePointFieldGoals")
+            or ""
+        )
+        ft_disp = (
+            smap.get("freeThrowsMade-freeThrowsAttempted")
+            or smap.get("FT")
+            or smap.get("freeThrows")
+            or ""
+        )
 
-        tpm, tpa = _parse_made_attempt(smap.get("threePointFieldGoals", ""))
-        if tpa == 0:
-            tpa = _to_int(smap.get("threePointFieldGoalsAttempted"), 0)
-        if tpm == 0:
-            tpm = _to_int(smap.get("threePointFieldGoalsMade"), 0)
-
-        ftm, fta = _parse_made_attempt(smap.get("freeThrows", ""))
-        if fta == 0:
-            fta = _to_int(smap.get("freeThrowsAttempted"), 0)
-        if ftm == 0:
-            ftm = _to_int(smap.get("freeThrowsMade"), 0)
+        fgm, fga = _parse_made_attempt(fg_disp)
+        tpm, tpa = _parse_made_attempt(tpt_disp)
+        ftm, fta = _parse_made_attempt(ft_disp)
 
         tov = _to_int(smap.get("turnovers"), 0)
-        orb = _to_int(smap.get("reboundsOffensive"), 0)
-        drb = _to_int(smap.get("reboundsDefensive"), 0)
-        reb = _to_int(smap.get("rebounds"), orb + drb)
+
+        # rebounds
+        reb = _to_int(smap.get("totalRebounds") or smap.get("REB") or smap.get("rebounds"), 0)
+        orb = _to_int(smap.get("offensiveRebounds") or smap.get("OR") or smap.get("reboundsOffensive"), 0)
+        drb = _to_int(smap.get("defensiveRebounds") or smap.get("DR") or smap.get("reboundsDefensive"), 0)
+
+        # if totals missing, reconstruct
+        if reb == 0 and (orb or drb):
+            reb = orb + drb
+        if drb == 0 and reb and orb:
+            drb = max(reb - orb, 0)
 
         efg = _safe_div((fgm + 0.5 * tpm), fga, np.nan)
         ftr = _safe_div(fta, fga, np.nan)
         threepar = _safe_div(tpa, fga, np.nan)
         poss = _estimate_possessions(fga, fta, tov, orb)
 
+        # guardrail: if completed game but we got no FGA, that's almost certainly a parsing issue
+        # (do NOT crash the run, but mark the row "data_ok" false later)
         return {
             "team_id": tid,
             "team": name,
@@ -600,7 +630,6 @@ def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
     )
     return out
 
-
 def _group_shift_rolling(s: pd.Series, window: int, fn: str):
     s2 = s.shift(1)
     if fn == "mean":
@@ -714,6 +743,7 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
     out["three_in_six"] = three_in_six
     return out.drop(columns=["prev_game_dt"], errors="ignore")
 
+
 def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds opponent per-game values and opponent pregame rolling fields.
@@ -725,21 +755,19 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     """
     out = df.copy()
 
-    # Ensure required columns exist
     for c in ["event_id", "home_away"]:
         if c not in out.columns:
             raise ValueError(f"_merge_opponent_rows requires column: {c}")
 
     out["event_id"] = _normalize_id_series(out["event_id"])
 
-    # ---- CLEANUP: prevent opp_* duplication across repeated merges
+    # prevent opp_* duplication across repeated merges
     drop_cols = [c for c in out.columns if c.startswith("opp_")]
     out = out.drop(columns=drop_cols, errors="ignore")
 
     out["_key"] = out["event_id"].astype(str) + "|" + out["home_away"].astype(str)
     out["_opp_key"] = out["event_id"].astype(str) + "|" + out["home_away"].map({"home": "away", "away": "home"}).astype(str)
 
-    # If duplicates exist, keep last
     out = out.drop_duplicates(subset=["_key"], keep="last")
 
     candidate_cols = [
@@ -749,7 +777,6 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
         "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
         "ortg", "drtg", "netrtg", "pace",
 
-        # overall rollups (these are the ones you listed as “intended”)
         "ortg_l3_pre", "ortg_l7_pre", "ortg_std_l7_pre", "ortg_season_pre",
         "drtg_l3_pre", "drtg_l7_pre", "drtg_std_l7_pre", "drtg_season_pre",
         "netrtg_l3_pre", "netrtg_l7_pre", "netrtg_std_l7_pre", "netrtg_season_pre",
@@ -763,7 +790,6 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
 
         "ortg_l7_noblow_pre", "drtg_l7_noblow_pre", "netrtg_l7_noblow_pre",
 
-        # home/away split rollups
         "ha_ortg_l3_pre", "ha_ortg_l7_pre", "ha_ortg_std_l7_pre", "ha_ortg_season_pre",
         "ha_drtg_l3_pre", "ha_drtg_l7_pre", "ha_drtg_std_l7_pre", "ha_drtg_season_pre",
         "ha_netrtg_l3_pre", "ha_netrtg_l7_pre", "ha_netrtg_std_l7_pre", "ha_netrtg_season_pre",
@@ -777,18 +803,14 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
 
         "ha_ortg_l7_noblow_pre", "ha_drtg_l7_noblow_pre", "ha_netrtg_l7_noblow_pre",
 
-        # allowed rollups (these get created AFTER the first merge, but before the second)
+        # allowed rollups (created after first merge)
         "ftr_allowed_l7_pre", "ftr_allowed_season_pre",
         "efg_allowed_l7_pre", "efg_allowed_season_pre",
     ]
     cols = [c for c in candidate_cols if c in out.columns]
-
     lookup = out[cols].copy()
 
-    # Rename join key so it doesn't collide with out["_key"]
     lookup = lookup.rename(columns={"_key": "_lookup_key"})
-
-    # Prefix all other lookup columns (true opponent fields)
     lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_lookup_key"})
 
     out = out.merge(
@@ -800,7 +822,6 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     )
     out = out.drop(columns=["_lookup_key"], errors="ignore")
 
-    # Defensive allowed per game proxies:
     out["efg_allowed_game"] = out["opp_efg"] if "opp_efg" in out.columns else np.nan
     out["ftr_allowed_game"] = out["opp_ftr"] if "opp_ftr" in out.columns else np.nan
     out["tov_forced_game"] = out["opp_tov_pct"] if "opp_tov_pct" in out.columns else np.nan
@@ -809,10 +830,6 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _add_allowed_rollups(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Builds rolling defensive "allowed" metrics from per-game opponent offense.
-    Uses shift so it's pregame.
-    """
     out = df.copy()
     out["game_dt"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce")
 
@@ -830,10 +847,6 @@ def _add_allowed_rollups(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _add_sos_proxies(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Adds schedule quality proxies based on opponent pregame ratings.
-    Robust to missing opponent rolling columns.
-    """
     out = df.copy()
     out["game_dt"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce")
 
@@ -865,11 +878,6 @@ def _add_sos_proxies(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _add_opponent_adjusted_deltas(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Adds opponent-adjusted deltas for Four Factors + netrtg.
-    Includes L7, season, and home/away (ha_) split versions.
-    Robust to missing columns by creating NaNs when needed.
-    """
     out = df.copy()
 
     def delta(a, b):
@@ -935,12 +943,6 @@ def _add_opponent_adjusted_deltas(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _add_style_features(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Adds style fingerprints + matchup distance proxies:
-    - style_distance_l7
-    - pace_mismatch_l7
-    - rim_vs_foul_l7 (team ftr vs opponent ftr_allowed)
-    """
     out = df.copy()
 
     style_cols_team = {
@@ -973,12 +975,7 @@ def _add_style_features(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-# ---------------- matchup table builder ----------------
 def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
-    """
-    One row per game, with home/away pregame features prefixed h_/a_, plus targets:
-    home_points, away_points, home_win
-    """
     df = df_features.copy()
     df["event_id"] = _normalize_id_series(df["event_id"])
     df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
@@ -1060,16 +1057,7 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
     return m
 
 
-# ---------------- end-to-end pipeline ----------------
 def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
-    """
-    1) Pull scoreboard for last N days
-    2) For each game_id, pull summary boxscore and build team-game rows
-    3) Append+dedupe raw-ish logs forever
-    4) Build rolling pregame features + opponent joins + matchup features
-       Append+dedupe features forever
-    5) Rebuild matchup model table
-    """
     pulled_at = _utc_now_iso()
     print(f"Run started: {pulled_at} | DAYS_BACK={days_back} | PARSE_VERSION={PARSE_VERSION}")
 
@@ -1134,7 +1122,6 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     df = df.sort_values(["team_id", "game_dt", "event_id"])
     df = df.drop_duplicates(subset=["event_id", "home_away"], keep="last")
 
-    # all rollups should group on stable team_id (not display name)
     df = _add_rolling_pack(df, group_cols=["team_id"], prefix="")
     df = _add_noblow_rollups(df, group_cols=["team_id"], prefix="")
 
@@ -1147,7 +1134,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     df = _merge_opponent_rows(df)
     df = _add_allowed_rollups(df)
 
-    # re-merge so opp_* includes opponent allowed rollups too (no _x/_y now because we drop opp_* before merge)
+    # re-merge so opp_* includes opponent allowed rollups too
     df = _merge_opponent_rows(df)
 
     df = _add_sos_proxies(df)
