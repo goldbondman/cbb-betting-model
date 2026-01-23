@@ -4,53 +4,53 @@
     "teamId": 41,
     "team": "Campbell",
     "conference": "CAA",
-    "trackedShots": 1128,
-    "freeThrowRate": 45.1,
-    "assistedPct": 20.9,
+    "trackedShots": 1194,
+    "freeThrowRate": 43.6,
+    "assistedPct": 21,
     "dunks": {
-      "attempted": 32,
-      "made": 27,
-      "pct": 84.4,
-      "assisted": 18,
-      "assistedPct": 66.7
+      "attempted": 34,
+      "made": 29,
+      "pct": 85.3,
+      "assisted": 20,
+      "assistedPct": 69
     },
     "layups": {
-      "attempted": 467,
-      "made": 265,
-      "pct": 56.7,
-      "assisted": 102,
-      "assistedPct": 38.5
+      "attempted": 478,
+      "made": 272,
+      "pct": 56.9,
+      "assisted": 105,
+      "assistedPct": 38.6
     },
     "tipIns": {
-      "attempted": 33,
-      "made": 25,
-      "pct": 75.8
+      "attempted": 35,
+      "made": 27,
+      "pct": 77.1
     },
     "twoPointJumpers": {
-      "attempted": 176,
-      "made": 65,
-      "pct": 36.9,
+      "attempted": 196,
+      "made": 72,
+      "pct": 36.7,
       "assisted": 12,
-      "assistedPct": 18.5
+      "assistedPct": 16.7
     },
     "threePointJumpers": {
-      "attempted": 420,
-      "made": 135,
-      "pct": 32.1,
-      "assisted": 104,
+      "attempted": 451,
+      "made": 148,
+      "pct": 32.8,
+      "assisted": 114,
       "assistedPct": 77
     },
     "freeThrows": {
-      "attempted": 509,
-      "made": 362,
-      "pct": 71.1
+      "attempted": 521,
+      "made": 370,
+      "pct": 71
     },
     "attemptsBreakdown": {
       "dunks": 2.8,
-      "layups": 41.4,
+      "layups": 40,
       "tipIns": 2.9,
-      "twoPointJumpers": 15.6,
-      "threePointJumpers": 37.2
+      "twoPointJumpers": 16.4,
+      "threePointJumpers": 37.8
     }
   }
 ]

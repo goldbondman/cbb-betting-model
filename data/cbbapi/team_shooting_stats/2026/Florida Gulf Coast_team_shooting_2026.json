@@ -4,9 +4,9 @@
     "teamId": 88,
     "team": "Florida Gulf Coast",
     "conference": "ASUN",
-    "trackedShots": 1142,
-    "freeThrowRate": 28.8,
-    "assistedPct": 24.3,
+    "trackedShots": 1201,
+    "freeThrowRate": 28.1,
+    "assistedPct": 24.1,
     "dunks": {
       "attempted": 56,
       "made": 48,
@@ -15,42 +15,42 @@
       "assistedPct": 72.9
     },
     "layups": {
-      "attempted": 318,
-      "made": 181,
-      "pct": 56.9,
-      "assisted": 70,
-      "assistedPct": 38.7
+      "attempted": 340,
+      "made": 194,
+      "pct": 57.1,
+      "assisted": 77,
+      "assistedPct": 39.7
     },
     "tipIns": {
-      "attempted": 40,
-      "made": 23,
-      "pct": 57.5
+      "attempted": 42,
+      "made": 25,
+      "pct": 59.5
     },
     "twoPointJumpers": {
-      "attempted": 270,
-      "made": 116,
-      "pct": 43,
-      "assisted": 32,
-      "assistedPct": 27.6
+      "attempted": 284,
+      "made": 121,
+      "pct": 42.6,
+      "assisted": 34,
+      "assistedPct": 28.1
     },
     "threePointJumpers": {
-      "attempted": 458,
-      "made": 155,
-      "pct": 33.8,
-      "assisted": 140,
-      "assistedPct": 90.3
+      "attempted": 479,
+      "made": 161,
+      "pct": 33.6,
+      "assisted": 144,
+      "assistedPct": 89.4
     },
     "freeThrows": {
-      "attempted": 329,
-      "made": 247,
-      "pct": 75.1
+      "attempted": 338,
+      "made": 251,
+      "pct": 74.3
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 27.8,
+      "dunks": 4.7,
+      "layups": 28.3,
       "tipIns": 3.5,
       "twoPointJumpers": 23.6,
-      "threePointJumpers": 40.1
+      "threePointJumpers": 39.9
     }
   }
 ]

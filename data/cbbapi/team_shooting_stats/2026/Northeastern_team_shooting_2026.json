@@ -4,9 +4,9 @@
     "teamId": 205,
     "team": "Northeastern",
     "conference": "CAA",
-    "trackedShots": 1060,
-    "freeThrowRate": 33.1,
-    "assistedPct": 25.6,
+    "trackedShots": 1125,
+    "freeThrowRate": 32.9,
+    "assistedPct": 25.8,
     "dunks": {
       "attempted": 48,
       "made": 43,
@@ -15,42 +15,42 @@
       "assistedPct": 83.7
     },
     "layups": {
-      "attempted": 429,
-      "made": 239,
-      "pct": 55.7,
-      "assisted": 92,
-      "assistedPct": 38.5
+      "attempted": 451,
+      "made": 257,
+      "pct": 57,
+      "assisted": 100,
+      "assistedPct": 38.9
     },
     "tipIns": {
-      "attempted": 23,
-      "made": 19,
-      "pct": 82.6
+      "attempted": 24,
+      "made": 20,
+      "pct": 83.3
     },
     "twoPointJumpers": {
-      "attempted": 169,
-      "made": 59,
-      "pct": 34.9,
-      "assisted": 23,
-      "assistedPct": 39
+      "attempted": 181,
+      "made": 61,
+      "pct": 33.7,
+      "assisted": 25,
+      "assistedPct": 41
     },
     "threePointJumpers": {
-      "attempted": 391,
-      "made": 136,
-      "pct": 34.8,
-      "assisted": 120,
-      "assistedPct": 88.2
+      "attempted": 421,
+      "made": 146,
+      "pct": 34.7,
+      "assisted": 129,
+      "assistedPct": 88.4
     },
     "freeThrows": {
-      "attempted": 351,
-      "made": 248,
-      "pct": 70.7
+      "attempted": 370,
+      "made": 256,
+      "pct": 69.2
     },
     "attemptsBreakdown": {
-      "dunks": 4.5,
-      "layups": 40.5,
-      "tipIns": 2.2,
-      "twoPointJumpers": 15.9,
-      "threePointJumpers": 36.9
+      "dunks": 4.3,
+      "layups": 40.1,
+      "tipIns": 2.1,
+      "twoPointJumpers": 16.1,
+      "threePointJumpers": 37.4
     }
   }
 ]

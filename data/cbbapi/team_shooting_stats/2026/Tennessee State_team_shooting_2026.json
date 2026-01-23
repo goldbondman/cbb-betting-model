@@ -4,53 +4,53 @@
     "teamId": 290,
     "team": "Tennessee State",
     "conference": "OVC",
-    "trackedShots": 1160,
+    "trackedShots": 1227,
     "freeThrowRate": 33.5,
-    "assistedPct": 21.6,
+    "assistedPct": 21.1,
     "dunks": {
-      "attempted": 83,
-      "made": 72,
-      "pct": 86.7,
-      "assisted": 57,
-      "assistedPct": 79.2
+      "attempted": 86,
+      "made": 74,
+      "pct": 86,
+      "assisted": 59,
+      "assistedPct": 79.7
     },
     "layups": {
-      "attempted": 365,
-      "made": 207,
-      "pct": 56.7,
-      "assisted": 77,
-      "assistedPct": 37.2
+      "attempted": 389,
+      "made": 218,
+      "pct": 56,
+      "assisted": 80,
+      "assistedPct": 36.7
     },
     "tipIns": {
-      "attempted": 52,
-      "made": 31,
-      "pct": 59.6
+      "attempted": 55,
+      "made": 32,
+      "pct": 58.2
     },
     "twoPointJumpers": {
-      "attempted": 303,
-      "made": 108,
-      "pct": 35.6,
-      "assisted": 22,
-      "assistedPct": 20.4
+      "attempted": 318,
+      "made": 112,
+      "pct": 35.2,
+      "assisted": 23,
+      "assistedPct": 20.5
     },
     "threePointJumpers": {
-      "attempted": 357,
-      "made": 114,
-      "pct": 31.9,
-      "assisted": 95,
-      "assistedPct": 83.3
+      "attempted": 379,
+      "made": 118,
+      "pct": 31.1,
+      "assisted": 97,
+      "assistedPct": 82.2
     },
     "freeThrows": {
-      "attempted": 389,
-      "made": 287,
-      "pct": 73.8
+      "attempted": 411,
+      "made": 305,
+      "pct": 74.2
     },
     "attemptsBreakdown": {
-      "dunks": 7.2,
-      "layups": 31.5,
+      "dunks": 7,
+      "layups": 31.7,
       "tipIns": 4.5,
-      "twoPointJumpers": 26.1,
-      "threePointJumpers": 30.8
+      "twoPointJumpers": 25.9,
+      "threePointJumpers": 30.9
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 192,
     "team": "New Mexico State",
     "conference": "CUSA",
-    "trackedShots": 967,
-    "freeThrowRate": 33.5,
-    "assistedPct": 22.5,
+    "trackedShots": 1029,
+    "freeThrowRate": 33.4,
+    "assistedPct": 22.2,
     "dunks": {
-      "attempted": 50,
-      "made": 47,
-      "pct": 94,
-      "assisted": 38,
-      "assistedPct": 80.9
+      "attempted": 52,
+      "made": 49,
+      "pct": 94.2,
+      "assisted": 40,
+      "assistedPct": 81.6
     },
     "layups": {
-      "attempted": 256,
-      "made": 144,
-      "pct": 56.3,
-      "assisted": 54,
-      "assistedPct": 37.5
+      "attempted": 268,
+      "made": 153,
+      "pct": 57.1,
+      "assisted": 55,
+      "assistedPct": 35.9
     },
     "tipIns": {
-      "attempted": 18,
-      "made": 9,
-      "pct": 50
+      "attempted": 21,
+      "made": 12,
+      "pct": 57.1
     },
     "twoPointJumpers": {
-      "attempted": 265,
-      "made": 105,
-      "pct": 39.6,
-      "assisted": 21,
-      "assistedPct": 20
+      "attempted": 287,
+      "made": 112,
+      "pct": 39,
+      "assisted": 23,
+      "assistedPct": 20.5
     },
     "threePointJumpers": {
-      "attempted": 378,
-      "made": 132,
-      "pct": 34.9,
-      "assisted": 105,
-      "assistedPct": 79.5
+      "attempted": 401,
+      "made": 138,
+      "pct": 34.4,
+      "assisted": 110,
+      "assistedPct": 79.7
     },
     "freeThrows": {
-      "attempted": 324,
-      "made": 236,
-      "pct": 72.8
+      "attempted": 344,
+      "made": 251,
+      "pct": 73
     },
     "attemptsBreakdown": {
-      "dunks": 5.2,
-      "layups": 26.5,
-      "tipIns": 1.9,
-      "twoPointJumpers": 27.4,
-      "threePointJumpers": 39.1
+      "dunks": 5.1,
+      "layups": 26,
+      "tipIns": 2,
+      "twoPointJumpers": 27.9,
+      "threePointJumpers": 39
     }
   }
 ]

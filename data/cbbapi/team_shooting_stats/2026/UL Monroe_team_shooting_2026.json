@@ -4,22 +4,22 @@
     "teamId": 316,
     "team": "UL Monroe",
     "conference": "Sun Belt",
-    "trackedShots": 1102,
-    "freeThrowRate": 36.6,
-    "assistedPct": 22.3,
+    "trackedShots": 1161,
+    "freeThrowRate": 37.2,
+    "assistedPct": 21.9,
     "dunks": {
-      "attempted": 47,
-      "made": 38,
-      "pct": 80.9,
-      "assisted": 26,
-      "assistedPct": 68.4
+      "attempted": 51,
+      "made": 41,
+      "pct": 80.4,
+      "assisted": 28,
+      "assistedPct": 68.3
     },
     "layups": {
-      "attempted": 342,
-      "made": 173,
-      "pct": 50.6,
-      "assisted": 76,
-      "assistedPct": 43.9
+      "attempted": 359,
+      "made": 177,
+      "pct": 49.3,
+      "assisted": 77,
+      "assistedPct": 43.5
     },
     "tipIns": {
       "attempted": 47,
@@ -27,30 +27,30 @@
       "pct": 74.5
     },
     "twoPointJumpers": {
-      "attempted": 210,
-      "made": 63,
-      "pct": 30,
+      "attempted": 221,
+      "made": 68,
+      "pct": 30.8,
       "assisted": 16,
-      "assistedPct": 25.4
+      "assistedPct": 23.5
     },
     "threePointJumpers": {
-      "attempted": 456,
-      "made": 159,
-      "pct": 34.9,
-      "assisted": 128,
-      "assistedPct": 80.5
+      "attempted": 483,
+      "made": 164,
+      "pct": 34,
+      "assisted": 133,
+      "assistedPct": 81.1
     },
     "freeThrows": {
-      "attempted": 403,
-      "made": 289,
-      "pct": 71.7
+      "attempted": 432,
+      "made": 310,
+      "pct": 71.8
     },
     "attemptsBreakdown": {
-      "dunks": 4.3,
-      "layups": 31,
-      "tipIns": 4.3,
-      "twoPointJumpers": 19.1,
-      "threePointJumpers": 41.4
+      "dunks": 4.4,
+      "layups": 30.9,
+      "tipIns": 4,
+      "twoPointJumpers": 19,
+      "threePointJumpers": 41.6
     }
   }
 ]

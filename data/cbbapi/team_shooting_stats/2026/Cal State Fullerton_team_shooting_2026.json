@@ -4,22 +4,22 @@
     "teamId": 37,
     "team": "Cal State Fullerton",
     "conference": "Big West",
-    "trackedShots": 1290,
+    "trackedShots": 1339,
     "freeThrowRate": 39.9,
-    "assistedPct": 24.3,
+    "assistedPct": 24.6,
     "dunks": {
-      "attempted": 23,
-      "made": 19,
-      "pct": 82.6,
-      "assisted": 11,
-      "assistedPct": 57.9
+      "attempted": 25,
+      "made": 20,
+      "pct": 80,
+      "assisted": 12,
+      "assistedPct": 60
     },
     "layups": {
-      "attempted": 476,
-      "made": 280,
-      "pct": 58.8,
-      "assisted": 118,
-      "assistedPct": 42.1
+      "attempted": 491,
+      "made": 291,
+      "pct": 59.3,
+      "assisted": 124,
+      "assistedPct": 42.6
     },
     "tipIns": {
       "attempted": 32,
@@ -27,30 +27,30 @@
       "pct": 75
     },
     "twoPointJumpers": {
-      "attempted": 232,
-      "made": 86,
-      "pct": 37.1,
-      "assisted": 24,
-      "assistedPct": 27.9
+      "attempted": 245,
+      "made": 96,
+      "pct": 39.2,
+      "assisted": 29,
+      "assistedPct": 30.2
     },
     "threePointJumpers": {
-      "attempted": 527,
-      "made": 176,
-      "pct": 33.4,
-      "assisted": 160,
-      "assistedPct": 90.9
+      "attempted": 546,
+      "made": 180,
+      "pct": 33,
+      "assisted": 164,
+      "assistedPct": 91.1
     },
     "freeThrows": {
-      "attempted": 515,
-      "made": 356,
-      "pct": 69.1
+      "attempted": 534,
+      "made": 371,
+      "pct": 69.5
     },
     "attemptsBreakdown": {
-      "dunks": 1.8,
-      "layups": 36.9,
-      "tipIns": 2.5,
-      "twoPointJumpers": 18,
-      "threePointJumpers": 40.9
+      "dunks": 1.9,
+      "layups": 36.7,
+      "tipIns": 2.4,
+      "twoPointJumpers": 18.3,
+      "threePointJumpers": 40.8
     }
   }
 ]

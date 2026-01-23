@@ -4,53 +4,53 @@
     "teamId": 123,
     "team": "Iona",
     "conference": "MAAC",
-    "trackedShots": 1211,
+    "trackedShots": 1265,
     "freeThrowRate": 28,
-    "assistedPct": 23,
+    "assistedPct": 23.2,
     "dunks": {
-      "attempted": 47,
-      "made": 38,
-      "pct": 80.9,
-      "assisted": 29,
-      "assistedPct": 76.3
+      "attempted": 51,
+      "made": 41,
+      "pct": 80.4,
+      "assisted": 32,
+      "assistedPct": 78
     },
     "layups": {
-      "attempted": 386,
-      "made": 204,
-      "pct": 52.8,
-      "assisted": 81,
-      "assistedPct": 39.7
+      "attempted": 396,
+      "made": 207,
+      "pct": 52.3,
+      "assisted": 82,
+      "assistedPct": 39.6
     },
     "tipIns": {
-      "attempted": 36,
+      "attempted": 38,
       "made": 21,
-      "pct": 58.3
+      "pct": 55.3
     },
     "twoPointJumpers": {
-      "attempted": 211,
-      "made": 85,
-      "pct": 40.3,
-      "assisted": 14,
-      "assistedPct": 16.5
+      "attempted": 221,
+      "made": 88,
+      "pct": 39.8,
+      "assisted": 15,
+      "assistedPct": 17
     },
     "threePointJumpers": {
-      "attempted": 531,
-      "made": 188,
-      "pct": 35.4,
-      "assisted": 154,
-      "assistedPct": 81.9
+      "attempted": 559,
+      "made": 199,
+      "pct": 35.6,
+      "assisted": 164,
+      "assistedPct": 82.4
     },
     "freeThrows": {
-      "attempted": 339,
-      "made": 234,
-      "pct": 69
+      "attempted": 354,
+      "made": 244,
+      "pct": 68.9
     },
     "attemptsBreakdown": {
-      "dunks": 3.9,
-      "layups": 31.9,
+      "dunks": 4,
+      "layups": 31.3,
       "tipIns": 3,
-      "twoPointJumpers": 17.4,
-      "threePointJumpers": 43.8
+      "twoPointJumpers": 17.5,
+      "threePointJumpers": 44.2
     }
   }
 ]

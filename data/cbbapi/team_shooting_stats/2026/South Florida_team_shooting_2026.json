@@ -4,53 +4,53 @@
     "teamId": 271,
     "team": "South Florida",
     "conference": "American",
-    "trackedShots": 1138,
-    "freeThrowRate": 44,
+    "trackedShots": 1203,
+    "freeThrowRate": 43.4,
     "assistedPct": 25.7,
     "dunks": {
-      "attempted": 74,
-      "made": 63,
-      "pct": 85.1,
-      "assisted": 52,
-      "assistedPct": 82.5
+      "attempted": 83,
+      "made": 69,
+      "pct": 83.1,
+      "assisted": 56,
+      "assistedPct": 81.2
     },
     "layups": {
-      "attempted": 410,
-      "made": 202,
-      "pct": 49.3,
-      "assisted": 77,
-      "assistedPct": 38.1
+      "attempted": 427,
+      "made": 208,
+      "pct": 48.7,
+      "assisted": 79,
+      "assistedPct": 38
     },
     "tipIns": {
-      "attempted": 43,
-      "made": 34,
-      "pct": 79.1
+      "attempted": 44,
+      "made": 35,
+      "pct": 79.5
     },
     "twoPointJumpers": {
-      "attempted": 100,
-      "made": 31,
-      "pct": 31,
+      "attempted": 105,
+      "made": 33,
+      "pct": 31.4,
       "assisted": 4,
-      "assistedPct": 12.9
+      "assistedPct": 12.1
     },
     "threePointJumpers": {
-      "attempted": 511,
-      "made": 175,
-      "pct": 34.2,
-      "assisted": 159,
-      "assistedPct": 90.9
+      "attempted": 544,
+      "made": 188,
+      "pct": 34.6,
+      "assisted": 170,
+      "assistedPct": 90.4
     },
     "freeThrows": {
-      "attempted": 501,
-      "made": 371,
-      "pct": 74.1
+      "attempted": 522,
+      "made": 384,
+      "pct": 73.6
     },
     "attemptsBreakdown": {
-      "dunks": 6.5,
-      "layups": 36,
-      "tipIns": 3.8,
-      "twoPointJumpers": 8.8,
-      "threePointJumpers": 44.9
+      "dunks": 6.9,
+      "layups": 35.5,
+      "tipIns": 3.7,
+      "twoPointJumpers": 8.7,
+      "threePointJumpers": 45.2
     }
   }
 ]

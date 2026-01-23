@@ -4,22 +4,22 @@
     "teamId": 106,
     "team": "Hampton",
     "conference": "CAA",
-    "trackedShots": 1094,
-    "freeThrowRate": 37.8,
+    "trackedShots": 1145,
+    "freeThrowRate": 38,
     "assistedPct": 21.1,
     "dunks": {
-      "attempted": 30,
-      "made": 26,
-      "pct": 86.7,
-      "assisted": 22,
-      "assistedPct": 84.6
+      "attempted": 32,
+      "made": 28,
+      "pct": 87.5,
+      "assisted": 23,
+      "assistedPct": 82.1
     },
     "layups": {
-      "attempted": 336,
-      "made": 202,
-      "pct": 60.1,
-      "assisted": 66,
-      "assistedPct": 32.7
+      "attempted": 353,
+      "made": 209,
+      "pct": 59.2,
+      "assisted": 67,
+      "assistedPct": 32.1
     },
     "tipIns": {
       "attempted": 27,
@@ -27,30 +27,30 @@
       "pct": 70.4
     },
     "twoPointJumpers": {
-      "attempted": 294,
-      "made": 108,
-      "pct": 36.7,
-      "assisted": 41,
-      "assistedPct": 38
+      "attempted": 309,
+      "made": 111,
+      "pct": 35.9,
+      "assisted": 43,
+      "assistedPct": 38.7
     },
     "threePointJumpers": {
-      "attempted": 407,
-      "made": 116,
-      "pct": 28.5,
-      "assisted": 102,
+      "attempted": 424,
+      "made": 124,
+      "pct": 29.2,
+      "assisted": 109,
       "assistedPct": 87.9
     },
     "freeThrows": {
-      "attempted": 413,
-      "made": 297,
-      "pct": 71.9
+      "attempted": 435,
+      "made": 314,
+      "pct": 72.2
     },
     "attemptsBreakdown": {
-      "dunks": 2.7,
-      "layups": 30.7,
-      "tipIns": 2.5,
-      "twoPointJumpers": 26.9,
-      "threePointJumpers": 37.2
+      "dunks": 2.8,
+      "layups": 30.8,
+      "tipIns": 2.4,
+      "twoPointJumpers": 27,
+      "threePointJumpers": 37
     }
   }
 ]

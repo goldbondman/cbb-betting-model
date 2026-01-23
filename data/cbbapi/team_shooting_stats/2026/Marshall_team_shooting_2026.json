@@ -4,53 +4,53 @@
     "teamId": 158,
     "team": "Marshall",
     "conference": "Sun Belt",
-    "trackedShots": 1160,
-    "freeThrowRate": 30.8,
-    "assistedPct": 27.2,
+    "trackedShots": 1236,
+    "freeThrowRate": 29.6,
+    "assistedPct": 27.8,
     "dunks": {
-      "attempted": 84,
-      "made": 79,
-      "pct": 94,
-      "assisted": 71,
-      "assistedPct": 89.9
+      "attempted": 89,
+      "made": 84,
+      "pct": 94.4,
+      "assisted": 76,
+      "assistedPct": 90.5
     },
     "layups": {
-      "attempted": 248,
-      "made": 140,
-      "pct": 56.5,
-      "assisted": 69,
-      "assistedPct": 49.3
+      "attempted": 261,
+      "made": 147,
+      "pct": 56.3,
+      "assisted": 72,
+      "assistedPct": 49
     },
     "tipIns": {
-      "attempted": 28,
-      "made": 22,
-      "pct": 78.6
+      "attempted": 30,
+      "made": 24,
+      "pct": 80
     },
     "twoPointJumpers": {
-      "attempted": 285,
-      "made": 105,
-      "pct": 36.8,
+      "attempted": 289,
+      "made": 106,
+      "pct": 36.7,
       "assisted": 29,
-      "assistedPct": 27.6
+      "assistedPct": 27.4
     },
     "threePointJumpers": {
-      "attempted": 515,
-      "made": 185,
-      "pct": 35.9,
-      "assisted": 146,
-      "assistedPct": 78.9
+      "attempted": 567,
+      "made": 211,
+      "pct": 37.2,
+      "assisted": 167,
+      "assistedPct": 79.1
     },
     "freeThrows": {
-      "attempted": 357,
-      "made": 263,
-      "pct": 73.7
+      "attempted": 366,
+      "made": 270,
+      "pct": 73.8
     },
     "attemptsBreakdown": {
       "dunks": 7.2,
-      "layups": 21.4,
+      "layups": 21.1,
       "tipIns": 2.4,
-      "twoPointJumpers": 24.6,
-      "threePointJumpers": 44.4
+      "twoPointJumpers": 23.4,
+      "threePointJumpers": 45.9
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 355,
     "team": "Wisconsin",
     "conference": "Big Ten",
-    "trackedShots": 1037,
-    "freeThrowRate": 37.6,
-    "assistedPct": 25.9,
+    "trackedShots": 1108,
+    "freeThrowRate": 36.6,
+    "assistedPct": 26.4,
     "dunks": {
-      "attempted": 32,
-      "made": 30,
-      "pct": 93.8,
-      "assisted": 29,
-      "assistedPct": 96.7
+      "attempted": 34,
+      "made": 32,
+      "pct": 94.1,
+      "assisted": 31,
+      "assistedPct": 96.9
     },
     "layups": {
-      "attempted": 289,
-      "made": 181,
-      "pct": 62.6,
-      "assisted": 74,
-      "assistedPct": 40.9
+      "attempted": 312,
+      "made": 195,
+      "pct": 62.5,
+      "assisted": 82,
+      "assistedPct": 42.1
     },
     "tipIns": {
-      "attempted": 36,
-      "made": 23,
-      "pct": 63.9
+      "attempted": 41,
+      "made": 26,
+      "pct": 63.4
     },
     "twoPointJumpers": {
-      "attempted": 151,
-      "made": 60,
-      "pct": 39.7,
+      "attempted": 157,
+      "made": 62,
+      "pct": 39.5,
       "assisted": 11,
-      "assistedPct": 18.3
+      "assistedPct": 17.7
     },
     "threePointJumpers": {
-      "attempted": 529,
-      "made": 184,
-      "pct": 34.8,
-      "assisted": 155,
-      "assistedPct": 84.2
+      "attempted": 564,
+      "made": 199,
+      "pct": 35.3,
+      "assisted": 169,
+      "assistedPct": 84.9
     },
     "freeThrows": {
-      "attempted": 390,
-      "made": 300,
-      "pct": 76.9
+      "attempted": 405,
+      "made": 311,
+      "pct": 76.8
     },
     "attemptsBreakdown": {
       "dunks": 3.1,
-      "layups": 27.9,
-      "tipIns": 3.5,
-      "twoPointJumpers": 14.6,
-      "threePointJumpers": 51
+      "layups": 28.2,
+      "tipIns": 3.7,
+      "twoPointJumpers": 14.2,
+      "threePointJumpers": 50.9
     }
   }
 ]

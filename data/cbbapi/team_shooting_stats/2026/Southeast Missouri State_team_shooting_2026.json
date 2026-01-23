@@ -4,22 +4,22 @@
     "teamId": 272,
     "team": "Southeast Missouri State",
     "conference": "OVC",
-    "trackedShots": 1203,
-    "freeThrowRate": 35.6,
-    "assistedPct": 21.9,
+    "trackedShots": 1256,
+    "freeThrowRate": 35.7,
+    "assistedPct": 22.1,
     "dunks": {
-      "attempted": 69,
-      "made": 64,
-      "pct": 92.8,
-      "assisted": 41,
-      "assistedPct": 64.1
+      "attempted": 73,
+      "made": 68,
+      "pct": 93.2,
+      "assisted": 44,
+      "assistedPct": 64.7
     },
     "layups": {
-      "attempted": 455,
-      "made": 242,
-      "pct": 53.2,
-      "assisted": 78,
-      "assistedPct": 32.2
+      "attempted": 475,
+      "made": 253,
+      "pct": 53.3,
+      "assisted": 82,
+      "assistedPct": 32.4
     },
     "tipIns": {
       "attempted": 29,
@@ -27,30 +27,30 @@
       "pct": 82.8
     },
     "twoPointJumpers": {
-      "attempted": 212,
-      "made": 89,
-      "pct": 42,
-      "assisted": 29,
-      "assistedPct": 32.6
+      "attempted": 218,
+      "made": 91,
+      "pct": 41.7,
+      "assisted": 30,
+      "assistedPct": 33
     },
     "threePointJumpers": {
-      "attempted": 438,
-      "made": 131,
+      "attempted": 461,
+      "made": 138,
       "pct": 29.9,
-      "assisted": 115,
-      "assistedPct": 87.8
+      "assisted": 122,
+      "assistedPct": 88.4
     },
     "freeThrows": {
-      "attempted": 428,
-      "made": 288,
-      "pct": 67.3
+      "attempted": 449,
+      "made": 303,
+      "pct": 67.5
     },
     "attemptsBreakdown": {
-      "dunks": 5.7,
+      "dunks": 5.8,
       "layups": 37.8,
-      "tipIns": 2.4,
-      "twoPointJumpers": 17.6,
-      "threePointJumpers": 36.4
+      "tipIns": 2.3,
+      "twoPointJumpers": 17.4,
+      "threePointJumpers": 36.7
     }
   }
 ]

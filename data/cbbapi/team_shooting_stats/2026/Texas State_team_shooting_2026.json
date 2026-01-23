@@ -4,22 +4,22 @@
     "teamId": 297,
     "team": "Texas State",
     "conference": "Sun Belt",
-    "trackedShots": 1160,
-    "freeThrowRate": 34.8,
-    "assistedPct": 22.8,
+    "trackedShots": 1226,
+    "freeThrowRate": 34.7,
+    "assistedPct": 22,
     "dunks": {
-      "attempted": 30,
-      "made": 25,
-      "pct": 83.3,
-      "assisted": 19,
-      "assistedPct": 76
+      "attempted": 31,
+      "made": 26,
+      "pct": 83.9,
+      "assisted": 20,
+      "assistedPct": 76.9
     },
     "layups": {
-      "attempted": 480,
-      "made": 275,
-      "pct": 57.3,
-      "assisted": 125,
-      "assistedPct": 45.5
+      "attempted": 506,
+      "made": 286,
+      "pct": 56.5,
+      "assisted": 128,
+      "assistedPct": 44.8
     },
     "tipIns": {
       "attempted": 37,
@@ -27,30 +27,30 @@
       "pct": 62.2
     },
     "twoPointJumpers": {
-      "attempted": 319,
-      "made": 122,
-      "pct": 38.2,
+      "attempted": 345,
+      "made": 134,
+      "pct": 38.8,
       "assisted": 36,
-      "assistedPct": 29.5
+      "assistedPct": 26.9
     },
     "threePointJumpers": {
-      "attempted": 294,
-      "made": 97,
-      "pct": 33,
-      "assisted": 85,
-      "assistedPct": 87.6
+      "attempted": 307,
+      "made": 98,
+      "pct": 31.9,
+      "assisted": 86,
+      "assistedPct": 87.8
     },
     "freeThrows": {
-      "attempted": 404,
-      "made": 300,
-      "pct": 74.3
+      "attempted": 425,
+      "made": 319,
+      "pct": 75.1
     },
     "attemptsBreakdown": {
-      "dunks": 2.6,
-      "layups": 41.4,
-      "tipIns": 3.2,
-      "twoPointJumpers": 27.5,
-      "threePointJumpers": 25.3
+      "dunks": 2.5,
+      "layups": 41.3,
+      "tipIns": 3,
+      "twoPointJumpers": 28.1,
+      "threePointJumpers": 25
     }
   }
 ]

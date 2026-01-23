@@ -4,53 +4,53 @@
     "teamId": 46,
     "team": "Charleston",
     "conference": "CAA",
-    "trackedShots": 1107,
-    "freeThrowRate": 43.5,
-    "assistedPct": 21,
+    "trackedShots": 1161,
+    "freeThrowRate": 43.9,
+    "assistedPct": 21.1,
     "dunks": {
-      "attempted": 56,
-      "made": 49,
-      "pct": 87.5,
-      "assisted": 42,
-      "assistedPct": 85.7
+      "attempted": 63,
+      "made": 56,
+      "pct": 88.9,
+      "assisted": 49,
+      "assistedPct": 87.5
     },
     "layups": {
-      "attempted": 307,
-      "made": 186,
-      "pct": 60.6,
-      "assisted": 68,
-      "assistedPct": 36.6
+      "attempted": 322,
+      "made": 196,
+      "pct": 60.9,
+      "assisted": 69,
+      "assistedPct": 35.2
     },
     "tipIns": {
-      "attempted": 39,
-      "made": 31,
-      "pct": 79.5
+      "attempted": 43,
+      "made": 33,
+      "pct": 76.7
     },
     "twoPointJumpers": {
-      "attempted": 254,
-      "made": 85,
-      "pct": 33.5,
-      "assisted": 18,
-      "assistedPct": 21.2
+      "attempted": 272,
+      "made": 92,
+      "pct": 33.8,
+      "assisted": 19,
+      "assistedPct": 20.7
     },
     "threePointJumpers": {
-      "attempted": 451,
-      "made": 133,
-      "pct": 29.5,
-      "assisted": 105,
-      "assistedPct": 78.9
+      "attempted": 461,
+      "made": 137,
+      "pct": 29.7,
+      "assisted": 108,
+      "assistedPct": 78.8
     },
     "freeThrows": {
-      "attempted": 481,
-      "made": 356,
-      "pct": 74
+      "attempted": 510,
+      "made": 379,
+      "pct": 74.3
     },
     "attemptsBreakdown": {
-      "dunks": 5.1,
+      "dunks": 5.4,
       "layups": 27.7,
-      "tipIns": 3.5,
-      "twoPointJumpers": 22.9,
-      "threePointJumpers": 40.7
+      "tipIns": 3.7,
+      "twoPointJumpers": 23.4,
+      "threePointJumpers": 39.7
     }
   }
 ]

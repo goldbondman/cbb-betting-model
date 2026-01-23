@@ -4,22 +4,22 @@
     "teamId": 35,
     "team": "Cal Poly",
     "conference": "Big West",
-    "trackedShots": 1169,
-    "freeThrowRate": 39,
-    "assistedPct": 19.8,
+    "trackedShots": 1218,
+    "freeThrowRate": 39.1,
+    "assistedPct": 20,
     "dunks": {
-      "attempted": 28,
-      "made": 26,
-      "pct": 92.9,
-      "assisted": 19,
-      "assistedPct": 73.1
+      "attempted": 31,
+      "made": 29,
+      "pct": 93.5,
+      "assisted": 22,
+      "assistedPct": 75.9
     },
     "layups": {
-      "attempted": 418,
-      "made": 218,
-      "pct": 52.2,
-      "assisted": 54,
-      "assistedPct": 24.8
+      "attempted": 434,
+      "made": 231,
+      "pct": 53.2,
+      "assisted": 59,
+      "assistedPct": 25.5
     },
     "tipIns": {
       "attempted": 13,
@@ -27,27 +27,27 @@
       "pct": 61.5
     },
     "twoPointJumpers": {
-      "attempted": 95,
+      "attempted": 99,
       "made": 32,
-      "pct": 33.7,
+      "pct": 32.3,
       "assisted": 1,
       "assistedPct": 3.1
     },
     "threePointJumpers": {
-      "attempted": 615,
-      "made": 206,
-      "pct": 33.5,
-      "assisted": 157,
-      "assistedPct": 76.2
+      "attempted": 641,
+      "made": 213,
+      "pct": 33.2,
+      "assisted": 161,
+      "assistedPct": 75.6
     },
     "freeThrows": {
-      "attempted": 456,
-      "made": 345,
-      "pct": 75.7
+      "attempted": 476,
+      "made": 359,
+      "pct": 75.4
     },
     "attemptsBreakdown": {
-      "dunks": 2.4,
-      "layups": 35.8,
+      "dunks": 2.5,
+      "layups": 35.6,
       "tipIns": 1.1,
       "twoPointJumpers": 8.1,
       "threePointJumpers": 52.6

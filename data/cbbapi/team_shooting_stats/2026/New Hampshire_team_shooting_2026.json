@@ -4,22 +4,22 @@
     "teamId": 190,
     "team": "New Hampshire",
     "conference": "Am. East",
-    "trackedShots": 1029,
-    "freeThrowRate": 26.4,
+    "trackedShots": 1108,
+    "freeThrowRate": 27.2,
     "assistedPct": 18,
     "dunks": {
-      "attempted": 31,
-      "made": 21,
-      "pct": 67.7,
-      "assisted": 16,
-      "assistedPct": 76.2
+      "attempted": 32,
+      "made": 22,
+      "pct": 68.8,
+      "assisted": 17,
+      "assistedPct": 77.3
     },
     "layups": {
-      "attempted": 397,
-      "made": 211,
+      "attempted": 426,
+      "made": 226,
       "pct": 53.1,
-      "assisted": 53,
-      "assistedPct": 25.1
+      "assisted": 56,
+      "assistedPct": 24.8
     },
     "tipIns": {
       "attempted": 6,
@@ -27,30 +27,30 @@
       "pct": 66.7
     },
     "twoPointJumpers": {
-      "attempted": 178,
-      "made": 60,
-      "pct": 33.7,
+      "attempted": 188,
+      "made": 63,
+      "pct": 33.5,
       "assisted": 7,
-      "assistedPct": 11.7
+      "assistedPct": 11.1
     },
     "threePointJumpers": {
-      "attempted": 417,
-      "made": 132,
-      "pct": 31.7,
-      "assisted": 109,
-      "assistedPct": 82.6
+      "attempted": 456,
+      "made": 142,
+      "pct": 31.1,
+      "assisted": 119,
+      "assistedPct": 83.8
     },
     "freeThrows": {
-      "attempted": 272,
-      "made": 185,
-      "pct": 68
+      "attempted": 301,
+      "made": 205,
+      "pct": 68.1
     },
     "attemptsBreakdown": {
-      "dunks": 3,
-      "layups": 38.6,
-      "tipIns": 0.6,
-      "twoPointJumpers": 17.3,
-      "threePointJumpers": 40.5
+      "dunks": 2.9,
+      "layups": 38.4,
+      "tipIns": 0.5,
+      "twoPointJumpers": 17,
+      "threePointJumpers": 41.2
     }
   }
 ]
