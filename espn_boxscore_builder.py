@@ -417,7 +417,7 @@ def _append_dedupe_write(existing_path: str, new_df: pd.DataFrame, subset_keys, 
 
         if "pulled_at_utc" in combined.columns:
             pulled = pd.to_datetime(combined["pulled_at_utc"], utc=True, errors="coerce")
-            combined["_pulled_ts"] = pulled.view("int64")
+            combined["_pulled_ts"] = pulled.astype("int64")
         else:
             combined["_pulled_ts"] = 0
 
