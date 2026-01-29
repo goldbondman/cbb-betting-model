@@ -1147,42 +1147,15 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
 
     out = out.drop_duplicates(subset=["_key"], keep="last")
 
-    candidate_cols = [
-        "_key",
-        "team", "team_id",
-        "points_for", "points_against",
-        "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
-        "ortg", "drtg", "netrtg", "pace",
-        "ortg_l3_pre", "ortg_l7_pre", "ortg_std_l7_pre", "ortg_season_pre",
-        "drtg_l3_pre", "drtg_l7_pre", "drtg_std_l7_pre", "drtg_season_pre",
-        "netrtg_l3_pre", "netrtg_l7_pre", "netrtg_std_l7_pre", "netrtg_season_pre",
-        "pace_l3_pre", "pace_l7_pre", "pace_std_l7_pre", "pace_season_pre",
-        "efg_l3_pre", "efg_l7_pre", "efg_std_l7_pre", "efg_season_pre",
-        "tov_pct_l3_pre", "tov_pct_l7_pre", "tov_pct_std_l7_pre", "tov_pct_season_pre",
-        "orb_pct_l3_pre", "orb_pct_l7_pre", "orb_pct_std_l7_pre", "orb_pct_season_pre",
-        "drb_pct_l3_pre", "drb_pct_l7_pre", "drb_pct_std_l7_pre", "drb_pct_season_pre",
-        "ftr_l3_pre", "ftr_l7_pre", "ftr_std_l7_pre", "ftr_season_pre",
-        "3par_l3_pre", "3par_l7_pre", "3par_std_l7_pre", "3par_season_pre",
-        "ortg_l7_noblow_pre", "drtg_l7_noblow_pre", "netrtg_l7_noblow_pre",
-        "ha_ortg_l3_pre", "ha_ortg_l7_pre", "ha_ortg_std_l7_pre", "ha_ortg_season_pre",
-        "ha_drtg_l3_pre", "ha_drtg_l7_pre", "ha_drtg_std_l7_pre", "ha_drtg_season_pre",
-        "ha_netrtg_l3_pre", "ha_netrtg_l7_pre", "ha_netrtg_std_l7_pre", "ha_netrtg_season_pre",
-        "ha_pace_l3_pre", "ha_pace_l7_pre", "ha_pace_std_l7_pre", "ha_pace_season_pre",
-        "ha_efg_l3_pre", "ha_efg_l7_pre", "ha_efg_std_l7_pre", "ha_efg_season_pre",
-        "ha_tov_pct_l3_pre", "ha_tov_pct_l7_pre", "ha_tov_pct_std_l7_pre", "ha_tov_pct_season_pre",
-        "ha_orb_pct_l3_pre", "ha_orb_pct_l7_pre", "ha_orb_pct_std_l7_pre", "ha_orb_pct_season_pre",
-        "ha_drb_pct_l3_pre", "ha_drb_pct_l7_pre", "ha_drb_pct_std_l7_pre", "ha_drb_pct_season_pre",
-        "ha_ftr_l3_pre", "ha_ftr_l7_pre", "ha_ftr_std_l7_pre", "ha_ftr_season_pre",
-        "ha_3par_l3_pre", "ha_3par_l7_pre", "ha_3par_std_l7_pre", "ha_3par_season_pre",
-        "ha_ortg_l7_noblow_pre", "ha_drtg_l7_noblow_pre", "ha_netrtg_l7_noblow_pre",
-        "games_played_pre", "ha_games_played_pre",
-        "games_played_noblow_pre", "ha_games_played_noblow_pre",
-        "ftr_allowed_l7_pre", "ftr_allowed_season_pre",
-        "efg_allowed_l7_pre", "efg_allowed_season_pre",
-    ]
-    cols = [c for c in candidate_cols if c in out.columns]
-    lookup = out[cols].copy()
-
+   # Get ALL columns that should be opponent features
+opp_cols = [c for c in out.columns if (
+    c.endswith("_pre") or 
+    c in ["team", "team_id", "points_for", "points_against", 
+          "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
+          "ortg", "drtg", "netrtg", "pace", "_key"]
+)]
+lookup = out[opp_cols].copy() 
+    
     lookup = lookup.rename(columns={"_key": "_lookup_key"})
     lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_lookup_key"})
 
