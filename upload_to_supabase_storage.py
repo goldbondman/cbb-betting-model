@@ -11,11 +11,19 @@ SUPABASE_URL = (os.getenv("SUPABASE_URL") or "").strip().rstrip("/")
 SERVICE_ROLE_KEY = (os.getenv("SUPABASE_SERVICE_ROLE_KEY") or "").strip()
 BUCKET = (os.getenv("SUPABASE_BUCKET") or "cbb-data").strip()
 
-# If set (1/true/yes), missing local files are skipped instead of failing the run.
+# Controls behavior:
+# - UPLOAD_GROUP: "espn" | "torvik" | "all"  (default: "all")
+# - SKIP_MISSING: if set (1/true/yes), missing local files are skipped instead of failing the run.
+UPLOAD_GROUP = (os.getenv("UPLOAD_GROUP") or "all").strip().lower()
 SKIP_MISSING = (os.getenv("SKIP_MISSING") or "0").strip().lower() in ("1", "true", "yes")
 
-FILES = [
-    # ESPN pipeline outputs
+# Basic retry (helps with transient 429/5xx)
+MAX_RETRIES = int(os.getenv("SUPABASE_UPLOAD_MAX_RETRIES", "3"))
+RETRY_INITIAL_DELAY = float(os.getenv("SUPABASE_UPLOAD_RETRY_INITIAL_DELAY", "1.0"))
+RETRY_BACKOFF = float(os.getenv("SUPABASE_UPLOAD_RETRY_BACKOFF", "2.0"))
+
+# File groups
+FILES_ESPN = [
     ("espn_games.csv", "espn/latest/espn_games.csv"),
     ("espn_team_game_logs.csv", "espn/latest/espn_team_game_logs.csv"),
     ("espn_team_game_features.csv", "espn/latest/espn_team_game_features.csv"),
@@ -23,16 +31,12 @@ FILES = [
     ("espn_feature_diagnostics.csv", "espn/latest/espn_feature_diagnostics.csv"),
     ("espn_dq_audit.csv", "espn/latest/espn_dq_audit.csv"),
     ("espn_pipeline_errors.json", "espn/latest/espn_pipeline_errors.json"),
+]
 
-    # Torvik refresh outputs (from scripts/refresh_sources.py)
+FILES_TORVIK = [
     ("barttorvik.csv", "torvik/latest/barttorvik.csv"),
     ("barttorvik_team_results.csv", "torvik/latest/barttorvik_team_results.csv"),
 ]
-
-# Basic retry (helps with transient 429/5xx)
-MAX_RETRIES = int(os.getenv("SUPABASE_UPLOAD_MAX_RETRIES", "3"))
-RETRY_INITIAL_DELAY = float(os.getenv("SUPABASE_UPLOAD_RETRY_INITIAL_DELAY", "1.0"))
-RETRY_BACKOFF = float(os.getenv("SUPABASE_UPLOAD_RETRY_BACKOFF", "2.0"))
 
 
 def _die(msg: str, code: int = 1):
@@ -49,12 +53,13 @@ def _validate_env():
         _die("SUPABASE_URL is missing/empty.")
     if not SERVICE_ROLE_KEY:
         _die("SUPABASE_SERVICE_ROLE_KEY is missing/empty.")
-    # Supabase bucket naming: keep it simple: lowercase letters, digits, hyphen
     if not re.fullmatch(r"[a-z0-9-]+", BUCKET):
         _die(
             f"SUPABASE_BUCKET looks invalid: '{BUCKET}'. "
             "Use lowercase letters, digits, hyphen only. Example: cbb-data"
         )
+    if UPLOAD_GROUP not in ("espn", "torvik", "all"):
+        _die("UPLOAD_GROUP must be one of: espn, torvik, all")
 
 
 def _guess_content_type(local_path: str) -> str:
@@ -71,9 +76,16 @@ def _headers(content_type: str):
         "Authorization": f"Bearer {SERVICE_ROLE_KEY}",
         "apikey": SERVICE_ROLE_KEY,
         "Content-Type": content_type,
-        # overwrite if exists
         "x-upsert": "true",
     }
+
+
+def _files_for_group():
+    if UPLOAD_GROUP == "espn":
+        return FILES_ESPN
+    if UPLOAD_GROUP == "torvik":
+        return FILES_TORVIK
+    return FILES_ESPN + FILES_TORVIK
 
 
 def upload(local_path: str, remote_path: str):
@@ -85,7 +97,6 @@ def upload(local_path: str, remote_path: str):
             return
         _die(f"Local file missing: {local_path}")
 
-    # PUT /storage/v1/object/<bucket>/<path>
     url = f"{SUPABASE_URL}/storage/v1/object/{BUCKET}/{remote_path}"
     content_type = _guess_content_type(local_path)
 
@@ -102,8 +113,8 @@ def upload(local_path: str, remote_path: str):
                 r = requests.put(
                     url,
                     headers=_headers(content_type),
-                    data=f,  # streamed upload
-                    timeout=(15, 180),  # (connect, read)
+                    data=f,
+                    timeout=(15, 180),
                 )
 
             last_status = r.status_code
@@ -113,11 +124,9 @@ def upload(local_path: str, remote_path: str):
                 print(f"[OK] Uploaded {local_path} -> {remote_path}")
                 return
 
-            # Retry on rate limit / transient server errors
             if r.status_code == 429 or (500 <= r.status_code <= 599):
                 continue
 
-            # Non-retryable
             raise RuntimeError(
                 f"Upload failed {local_path} -> {remote_path}\n"
                 f"HTTP {r.status_code}: {r.text}"
@@ -140,7 +149,9 @@ def upload(local_path: str, remote_path: str):
 
 def main():
     _validate_env()
-    for local, remote in FILES:
+    files = _files_for_group()
+    print(f"[INFO] Uploading group='{UPLOAD_GROUP}' files={len(files)} skip_missing={SKIP_MISSING}")
+    for local, remote in files:
         upload(local, remote)
 
 
