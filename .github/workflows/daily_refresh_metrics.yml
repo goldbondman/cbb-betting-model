@@ -71,11 +71,12 @@ jobs:
             echo "No changes to commit."
           fi
 
-      - name: Upload refreshed files to Supabase Storage (skip missing)
+      - name: Upload Torvik outputs to Supabase Storage (skip missing)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
+          UPLOAD_GROUP: "torvik"
           SKIP_MISSING: "1"
         run: |
           python upload_to_supabase_storage.py
