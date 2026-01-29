@@ -34,6 +34,7 @@ import json
 import hashlib
 import shutil
 import tempfile
+import re
 from typing import Any, Dict, List, Tuple, Optional
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
@@ -46,6 +47,7 @@ import numpy as np
 # ---- feature modules (new) ----
 from weights import WeightConfig, add_all_base_weights
 from plus_and_fit import PlusConfig, CompositeConfig, add_all_plus_and_composites
+
 
 # ---------------- config ----------------
 ESPN_SUMMARY_URL = (
@@ -99,6 +101,11 @@ GATE_MIN_EXPECTED_PRESENT_FINAL = float(os.getenv("GATE_MIN_EXPECTED_PRESENT_FIN
 RETRY_SUMMARY_ON_BASE_MISS = int(os.getenv("RETRY_SUMMARY_ON_BASE_MISS", "1"))
 MAX_SUMMARY_RETRIES = int(os.getenv("MAX_SUMMARY_RETRIES", "1"))
 SUMMARY_RETRY_SLEEP_SEC = float(os.getenv("SUMMARY_RETRY_SLEEP_SEC", "0.35"))
+
+# DQRG controls
+DQRG_ENABLE = os.getenv("DQRG_ENABLE", "1").strip().lower() in ("1", "true", "yes")
+DQRG_MAX_EVENTS = int(os.getenv("DQRG_MAX_EVENTS", "300"))
+DQRG_REFETCH_ON_FAIL = os.getenv("DQRG_REFETCH_ON_FAIL", "1").strip().lower() in ("1", "true", "yes")
 
 VALID_HOME_AWAY = {"home", "away"}
 
@@ -318,11 +325,17 @@ def _normalize_home_away_series(s: pd.Series) -> pd.Series:
     return s2
 
 
+def _normalize_id_series(s: pd.Series) -> pd.Series:
+    s2 = s.astype(str)
+    s2 = s2.str.replace(r"\.0$", "", regex=True)
+    s2 = s2.replace({"nan": np.nan, "None": np.nan})
+    return s2
+
+
 def _read_csv_if_exists(path: str) -> pd.DataFrame:
     if os.path.exists(path) and os.path.getsize(path) > 0:
         try:
             df = pd.read_csv(path)
-            # Normalize IDs immediately on read
             if "game_id" in df.columns:
                 df["game_id"] = _normalize_id_series(df["game_id"])
             if "event_id" in df.columns:
@@ -336,13 +349,6 @@ def _read_csv_if_exists(path: str) -> pd.DataFrame:
             log_error("read_csv", e, extra={"path": path})
             return pd.DataFrame()
     return pd.DataFrame()
-
-
-def _normalize_id_series(s: pd.Series) -> pd.Series:
-    s2 = s.astype(str)
-    s2 = s2.str.replace(r"\.0$", "", regex=True)
-    s2 = s2.replace({"nan": np.nan, "None": np.nan})
-    return s2
 
 
 def _completeness_score_row(r: pd.Series) -> float:
@@ -406,7 +412,6 @@ def _append_dedupe_write(existing_path: str, new_df: pd.DataFrame, subset_keys, 
 
     if new_df is not None and not new_df.empty:
         new_df = new_df.copy()
-        # Normalize all ID fields
         if "game_id" in new_df.columns:
             new_df["game_id"] = _normalize_id_series(new_df["game_id"])
         if "event_id" in new_df.columns:
@@ -430,13 +435,17 @@ def _append_dedupe_write(existing_path: str, new_df: pd.DataFrame, subset_keys, 
     if subset_keys:
         for k in subset_keys:
             if k in combined.columns:
-                combined[k] = _normalize_id_series(combined[k])
+                if k == "home_away":
+                    combined[k] = _normalize_home_away_series(combined[k])
+                else:
+                    combined[k] = _normalize_id_series(combined[k])
 
         combined["_dq_score"] = combined.apply(_completeness_score_row, axis=1)
 
         if "pulled_at_utc" in combined.columns:
             pulled = pd.to_datetime(combined["pulled_at_utc"], utc=True, errors="coerce")
-            combined["_pulled_ts"] = pulled.astype("int64")
+            combined["_pulled_ts"] = pulled.astype("int64", errors="ignore")
+            combined["_pulled_ts"] = combined["_pulled_ts"].fillna(0)
         else:
             combined["_pulled_ts"] = 0
 
@@ -595,6 +604,7 @@ def build_espn_games_csv(days_back=DEFAULT_DAYS_BACK, out_csv=OUT_GAMES, verbose
 
     return df_all
 
+
 # ---------------- ESPN fetch: summary / boxscore ----------------
 def _extract_players(summary_json, team_id: str):
     players = []
@@ -718,6 +728,20 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
     status_desc = stype.get("description") or ""
     status_detail = stype.get("detail") or stype.get("shortDetail") or ""
 
+    neutral_site = bool(comp0.get("neutralSite")) if isinstance(comp0, dict) else False
+
+    sd = str(status_detail or "").upper()
+    is_ot = 1 if "OT" in sd else 0
+    num_ot = 0
+    if "OT" in sd:
+        num_ot = 1
+        m = re.search(r"(\d+)\s*OT", sd)
+        if m:
+            try:
+                num_ot = int(m.group(1))
+            except Exception:
+                num_ot = 1
+
     home_team_id = None
     away_team_id = None
     home_points = None
@@ -839,6 +863,7 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
         fga = _to_int(row.get("fga"), 0)
         tpm = _to_int(row.get("tpm"), 0)
         tpa = _to_int(row.get("tpa"), 0)
+        ftm = _to_int(row.get("ftm"), 0)
         fta = _to_int(row.get("fta"), 0)
         tov = _to_int(row.get("tov"), 0)
         orb = _to_int(row.get("orb"), 0)
@@ -846,12 +871,16 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
         efg = _safe_div((fgm + 0.5 * tpm), fga, np.nan)
         ftr = _safe_div(fta, fga, np.nan)
         threepar = _safe_div(tpa, fga, np.nan)
+        three_pct = _safe_div(tpm, tpa, np.nan)
+        ft_pct = _safe_div(ftm, fta, np.nan)
         poss = _estimate_possessions(fga, fta, tov, orb)
 
         row["efg"] = float(efg) if pd.notna(efg) else np.nan
         row["ftr"] = float(ftr) if pd.notna(ftr) else np.nan
         row["3par"] = float(threepar) if pd.notna(threepar) else np.nan
-        row["poss"] = float(poss)
+        row["3p_pct"] = float(three_pct) if pd.notna(three_pct) else np.nan
+        row["ft_pct"] = float(ft_pct) if pd.notna(ft_pct) else np.nan
+        row["poss"] = float(poss) if pd.notna(poss) else np.nan
         return row
 
     home_row = add_independent_derivatives(home_row)
@@ -889,6 +918,9 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
         "state": state,
         "status_desc": status_desc,
         "status_detail": status_detail,
+        "neutral_site": int(neutral_site),
+        "is_ot": int(is_ot),
+        "num_ot": int(num_ot),
         "home": home_row,
         "away": away_row,
         "players_home": players_home,
@@ -913,6 +945,9 @@ def summary_to_team_rows(parsed_summary: dict):
         "state": parsed_summary.get("state"),
         "status_desc": parsed_summary.get("status_desc"),
         "status_detail": parsed_summary.get("status_detail"),
+        "neutral_site": parsed_summary.get("neutral_site", 0),
+        "is_ot": parsed_summary.get("is_ot", 0),
+        "num_ot": parsed_summary.get("num_ot", 0),
         "pulled_at_utc": _utc_now_iso(),
         "source": SOURCE_NAME,
         "parse_version": PARSE_VERSION,
@@ -953,7 +988,7 @@ def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
     numeric_cols = [
         "points_for", "points_against", "poss", "fga", "fta", "tov", "orb", "drb", "reb", "margin",
-        "efg", "ftr", "3par", "tov_pct", "orb_pct", "drb_pct",
+        "efg", "ftr", "3par", "3p_pct", "ft_pct", "tov_pct", "orb_pct", "drb_pct",
     ]
     for c in numeric_cols:
         if c in out.columns:
@@ -967,50 +1002,31 @@ def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
     out["blowout"] = (out["margin"].abs() >= 18).astype(int)
 
-        # ---------------- OT flag (best-effort) ----------------
-    # ESPN often encodes OT in status_detail (ex: "Final/OT", "Final/2OT")
-    # We also check status_desc as a backup.
+    # OT detection from status strings (backup to parsed flags)
     status_detail = out["status_detail"] if "status_detail" in out.columns else pd.Series("", index=out.index)
     status_desc = out["status_desc"] if "status_desc" in out.columns else pd.Series("", index=out.index)
-
     status_txt = (status_detail.astype(str) + " " + status_desc.astype(str)).str.upper()
 
-    out["is_ot"] = status_txt.str.contains(r"\bOT\b|/OT|OT$", regex=True).astype(int)
+    if "is_ot" not in out.columns:
+        out["is_ot"] = status_txt.str.contains(r"\bOT\b|/OT|OT$", regex=True).astype(int)
+    else:
+        out["is_ot"] = pd.to_numeric(out["is_ot"], errors="coerce").fillna(0).astype(int)
 
-    # Optional: number of OTs if present (Final/2OT -> 2). Defaults to 1 for generic OT.
-    # This is "nice to have" for later noise weighting.
-    ot_num = status_txt.str.extract(r"/(\d+)OT", expand=False)
-    out["num_ot"] = pd.to_numeric(ot_num, errors="coerce").fillna(0).astype(int)
-    out.loc[(out["is_ot"] == 1) & (out["num_ot"] == 0), "num_ot"] = 1
+    if "num_ot" not in out.columns:
+        ot_num = status_txt.str.extract(r"/(\d+)OT", expand=False)
+        out["num_ot"] = pd.to_numeric(ot_num, errors="coerce").fillna(0).astype(int)
+        out.loc[(out["is_ot"] == 1) & (out["num_ot"] == 0), "num_ot"] = 1
+    else:
+        out["num_ot"] = pd.to_numeric(out["num_ot"], errors="coerce").fillna(0).astype(int)
 
-        # ---------------- OT + noise flags (best-effort) ----------------
-    status_detail = out["status_detail"] if "status_detail" in out.columns else pd.Series("", index=out.index)
-    status_desc = out["status_desc"] if "status_desc" in out.columns else pd.Series("", index=out.index)
-
-    status_txt = (status_detail.astype(str) + " " + status_desc.astype(str)).str.upper()
-
-    # OT detection
-    out["is_ot"] = status_txt.str.contains(r"\bOT\b|/OT|OT$", regex=True).astype(int)
-
-    # OT count if present (Final/2OT -> 2), else 1 if OT, else 0
-    ot_num = status_txt.str.extract(r"/(\d+)OT", expand=False)
-    out["num_ot"] = pd.to_numeric(ot_num, errors="coerce").fillna(0).astype(int)
-    out.loc[(out["is_ot"] == 1) & (out["num_ot"] == 0), "num_ot"] = 1
-
-    # Optional "noise" heuristics (do NOT change data_ok)
-    # Useful later for weights.w_noise beyond OT.
-    # These thresholds are conservative defaults.
     out["extreme_pace_flag"] = ((out["poss"].fillna(0) >= 85) | (out["poss"].fillna(999) <= 55)).astype(int)
     out["blowout_flag"] = out["blowout"].fillna(0).astype(int)
-
-    # one combined flag you can use later if you want
     out["noise_flag"] = ((out["is_ot"] == 1) | (out["extreme_pace_flag"] == 1)).astype(int)
 
-    
     out["data_ok"] = True
     out.loc[out["poss"].fillna(0) <= 40, "data_ok"] = False
-    out.loc[(out["completed"] == True) & (out["fga"].fillna(0) == 0), "data_ok"] = False
-    out.loc[(out["completed"] == True) & (out["points_for"].fillna(0) == 0) & (out["points_against"].fillna(0) == 0), "data_ok"] = False
+    out.loc[(out.get("completed", False) == True) & (out["fga"].fillna(0) == 0), "data_ok"] = False
+    out.loc[(out.get("completed", False) == True) & (out["points_for"].fillna(0) == 0) & (out["points_against"].fillna(0) == 0), "data_ok"] = False
 
     out["row_hash"] = out.apply(
         lambda r: _stable_row_hash(
@@ -1170,6 +1186,7 @@ def _flip_home_away(val: Any) -> Optional[str]:
         return "home"
     return None
 
+
 def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
 
@@ -1183,23 +1200,20 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     out = out.drop(columns=[c for c in out.columns if c.startswith("opp_")], errors="ignore")
 
     out["_key"] = out["event_id"].astype(str) + "|" + out["home_away"].astype("string")
-
     out["_opp_ha"] = out["home_away"].apply(_flip_home_away)
     out["_opp_key"] = out["event_id"].astype(str) + "|" + out["_opp_ha"].astype("string")
 
     out = out.drop_duplicates(subset=["_key"], keep="last")
 
-    # Get ALL columns that should be opponent features
     opp_cols = [c for c in out.columns if (
-        c.endswith("_pre") or 
+        c.endswith("_pre") or
         c in ["team", "team_id", "points_for", "points_against",
-            "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
-            "off_ppp", "def_ppp",
-            "ortg", "drtg", "netrtg", "pace", "_key"]
-
+              "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
+              "off_ppp", "def_ppp",
+              "ortg", "drtg", "netrtg", "pace", "_key"]
     )]
+
     lookup = out[opp_cols].copy()
-    
     lookup = lookup.rename(columns={"_key": "_lookup_key"})
     lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_lookup_key"})
 
@@ -1215,7 +1229,7 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     out["ftr_allowed_game"] = out["opp_ftr"] if "opp_ftr" in out.columns else np.nan
     out["tov_forced_game"] = out["opp_tov_pct"] if "opp_tov_pct" in out.columns else np.nan
 
-    out["opp_join_ok"] = out["opp_team_id"].notna() if "opp_team_id" in out.columns else out["opp_team"].notna() if "opp_team" in out.columns else False
+    out["opp_join_ok"] = out["opp_team_id"].notna() if "opp_team_id" in out.columns else (out["opp_team"].notna() if "opp_team" in out.columns else False)
     out["opp_join_source"] = np.where(out["opp_join_ok"] == True, "merge", pd.NA)
 
     return out.drop(columns=["_key", "_opp_key", "_opp_ha"], errors="ignore")
@@ -1237,6 +1251,7 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
         "points_for", "points_against", "margin",
         "completed", "data_ok",
         "state", "status_desc", "status_detail",
+        "neutral_site", "is_ot", "num_ot",
     ]
     keep_base = [c for c in keep_base if c in home.columns]
 
@@ -1303,18 +1318,12 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
 
     return m
 
+
 def _add_allowed_forced_pack(df: pd.DataFrame, group_cols, prefix: str):
     """
-    Build leak-free defensive baselines for each team, derived from opponent game stats.
-
-    Requires these per-row columns to exist before calling:
+    Defensive baselines derived from opponent game stats (leak-free via shift).
+    Requires per-row game-level columns:
       - efg_allowed_game, ftr_allowed_game, orb_allowed_game, tov_forced_game, def_ppp_allowed_game
-    Produces:
-      - {prefix}efg_allowed_l3_pre / l7_pre / season_pre
-      - {prefix}ftr_allowed_l3_pre / l7_pre / season_pre
-      - {prefix}orb_allowed_l3_pre / l7_pre / season_pre
-      - {prefix}tov_forced_l3_pre / l7_pre / season_pre
-      - {prefix}def_ppp_allowed_l3_pre / l7_pre / season_pre
     """
     out = df.copy()
     g = out.groupby(group_cols, sort=False)
@@ -1340,17 +1349,218 @@ def _add_allowed_forced_pack(df: pd.DataFrame, group_cols, prefix: str):
     return out
 
 
+# ---------------- Step 11: DQ Repair Gate (DQRG) ----------------
+def _dqrg_find_issues(df_logs: pd.DataFrame) -> pd.DataFrame:
+    """
+    Identify team-game rows that are completed but missing key derived fields.
+    """
+    if df_logs is None or df_logs.empty:
+        return pd.DataFrame()
+
+    d = df_logs.copy()
+    for c in ["completed", "fga", "fta", "tov", "orb", "fgm", "tpm", "tpa", "ftm", "poss", "efg", "ftr", "3par", "3p_pct", "ft_pct", "ortg", "drtg"]:
+        if c in d.columns:
+            d[c] = pd.to_numeric(d[c], errors="coerce") if c not in ("completed",) else d[c]
+
+    completed = d["completed"] == True if "completed" in d.columns else pd.Series(False, index=d.index)
+    has_base = (d.get("fga", 0).fillna(0) > 0) & (d.get("fta", 0).fillna(0) >= 0) & (d.get("tov", 0).fillna(0) >= 0) & (d.get("orb", 0).fillna(0) >= 0)
+
+    missing_poss = d.get("poss", pd.Series(np.nan, index=d.index)).isna()
+    missing_efg = d.get("efg", pd.Series(np.nan, index=d.index)).isna()
+    missing_rates = (
+        d.get("ftr", pd.Series(np.nan, index=d.index)).isna() |
+        d.get("3par", pd.Series(np.nan, index=d.index)).isna() |
+        d.get("3p_pct", pd.Series(np.nan, index=d.index)).isna() |
+        d.get("ft_pct", pd.Series(np.nan, index=d.index)).isna()
+    )
+    missing_rtgs = d.get("ortg", pd.Series(np.nan, index=d.index)).isna() | d.get("drtg", pd.Series(np.nan, index=d.index)).isna()
+
+    mask = completed & has_base & (missing_poss | missing_efg | missing_rates | missing_rtgs)
+
+    issues = d.loc[mask, ["event_id", "team_id", "team", "home_away", "game_datetime_utc"]].copy()
+    if issues.empty:
+        return issues
+
+    def _missing_list(ridx):
+        miss = []
+        if missing_poss.loc[ridx]:
+            miss.append("poss")
+        if missing_efg.loc[ridx]:
+            miss.append("efg")
+        if d.get("ftr", pd.Series(np.nan, index=d.index)).isna().loc[ridx]:
+            miss.append("ftr")
+        if d.get("3par", pd.Series(np.nan, index=d.index)).isna().loc[ridx]:
+            miss.append("3par")
+        if d.get("3p_pct", pd.Series(np.nan, index=d.index)).isna().loc[ridx]:
+            miss.append("3p_pct")
+        if d.get("ft_pct", pd.Series(np.nan, index=d.index)).isna().loc[ridx]:
+            miss.append("ft_pct")
+        if d.get("ortg", pd.Series(np.nan, index=d.index)).isna().loc[ridx]:
+            miss.append("ortg")
+        if d.get("drtg", pd.Series(np.nan, index=d.index)).isna().loc[ridx]:
+            miss.append("drtg")
+        return "|".join(miss)
+
+    issues["dq_missing_fields"] = [ _missing_list(i) for i in issues.index ]
+    issues["dq_reason_codes"] = "derived_missing_base_present"
+    return issues
+
+
+def _dqrg_repair_in_place(df_logs: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Attempt to repair derived fields for completed rows when base inputs are present.
+    Also builds an audit df for what happened.
+    """
+    if df_logs is None or df_logs.empty or not DQRG_ENABLE:
+        return df_logs, pd.DataFrame()
+
+    df = df_logs.copy()
+    df["event_id"] = _normalize_id_series(df["event_id"]) if "event_id" in df.columns else df.get("event_id")
+    df["team_id"] = _normalize_id_series(df["team_id"]) if "team_id" in df.columns else df.get("team_id")
+    if "home_away" in df.columns:
+        df["home_away"] = _normalize_home_away_series(df["home_away"])
+
+    issues = _dqrg_find_issues(df)
+    if issues.empty:
+        return df, pd.DataFrame()
+
+    issues = issues.head(DQRG_MAX_EVENTS).copy()
+
+    audit_rows: List[Dict[str, Any]] = []
+
+    for _, r in issues.iterrows():
+        event_id = str(r.get("event_id"))
+        team_id = str(r.get("team_id"))
+        missing = str(r.get("dq_missing_fields") or "")
+
+        action_plan = []
+        success = False
+        actions_taken = []
+
+        try:
+            m = (df["event_id"].astype(str) == event_id) & (df["team_id"].astype(str) == team_id)
+            if m.sum() != 1:
+                raise ValueError("dqrg_key_mismatch")
+
+            idx = df.index[m][0]
+            row = df.loc[idx].to_dict()
+
+            # Repair purely from base columns
+            fgm = _to_int(row.get("fgm"), 0)
+            fga = _to_int(row.get("fga"), 0)
+            tpm = _to_int(row.get("tpm"), 0)
+            tpa = _to_int(row.get("tpa"), 0)
+            ftm = _to_int(row.get("ftm"), 0)
+            fta = _to_int(row.get("fta"), 0)
+            tov = _to_int(row.get("tov"), 0)
+            orb = _to_int(row.get("orb"), 0)
+            pf = _to_int(row.get("points_for"), 0)
+            pa = _to_int(row.get("points_against"), 0)
+
+            if fga <= 0:
+                raise ValueError("dqrg_no_fga")
+
+            # Poss + shooting rates
+            poss = _estimate_possessions(fga, fta, tov, orb)
+            efg = _safe_div((fgm + 0.5 * tpm), fga, np.nan)
+            ftr = _safe_div(fta, fga, np.nan)
+            threepar = _safe_div(tpa, fga, np.nan)
+            three_pct = _safe_div(tpm, tpa, np.nan)
+            ft_pct = _safe_div(ftm, fta, np.nan)
+
+            df.at[idx, "poss"] = float(poss) if pd.notna(poss) else np.nan
+            df.at[idx, "efg"] = float(efg) if pd.notna(efg) else np.nan
+            df.at[idx, "ftr"] = float(ftr) if pd.notna(ftr) else np.nan
+            df.at[idx, "3par"] = float(threepar) if pd.notna(threepar) else np.nan
+            df.at[idx, "3p_pct"] = float(three_pct) if pd.notna(three_pct) else np.nan
+            df.at[idx, "ft_pct"] = float(ft_pct) if pd.notna(ft_pct) else np.nan
+
+            # Ratings
+            ortg = _safe_div(pf * 100.0, poss, np.nan)
+            drtg = _safe_div(pa * 100.0, poss, np.nan)
+            netrtg = (ortg - drtg) if (pd.notna(ortg) and pd.notna(drtg)) else np.nan
+
+            df.at[idx, "ortg"] = float(ortg) if pd.notna(ortg) else np.nan
+            df.at[idx, "drtg"] = float(drtg) if pd.notna(drtg) else np.nan
+            df.at[idx, "netrtg"] = float(netrtg) if pd.notna(netrtg) else np.nan
+            df.at[idx, "pace"] = df.at[idx, "poss"]
+
+            actions_taken.append("recompute_derived_from_base")
+            success = True
+
+        except Exception as e:
+            action_plan.append("refetch_summary_and_rebuild") if DQRG_REFETCH_ON_FAIL else action_plan.append("skip_refetch")
+            actions_taken.append(f"repair_failed:{type(e).__name__}")
+
+            if DQRG_REFETCH_ON_FAIL:
+                try:
+                    s = fetch_and_parse_espn_summary(event_id)
+                    hrow, arow = summary_to_team_rows(s)
+                    repair_rows = [hrow, arow]
+                    repair_df = pd.DataFrame(repair_rows)
+                    repair_df = _compute_per_game_advanced_metrics(repair_df)
+                    repair_df["event_id"] = _normalize_id_series(repair_df["event_id"])
+                    repair_df["team_id"] = _normalize_id_series(repair_df["team_id"])
+                    if "home_away" in repair_df.columns:
+                        repair_df["home_away"] = _normalize_home_away_series(repair_df["home_away"])
+
+                    # Replace both team rows for that event_id (only if both exist)
+                    if (repair_df["event_id"].astype(str) == event_id).sum() == 2:
+                        df = df[df["event_id"].astype(str) != event_id].copy()
+                        df = pd.concat([df, repair_df], ignore_index=True)
+                        actions_taken.append("refetch_summary_replaced_event_rows")
+                        success = True
+                except Exception as e2:
+                    actions_taken.append(f"refetch_failed:{type(e2).__name__}")
+                    log_error("dqrg_refetch", e2, event_id=event_id, extra={"team_id": team_id})
+
+        audit_rows.append({
+            "event_id": event_id,
+            "team_id": team_id,
+            "team": r.get("team"),
+            "home_away": r.get("home_away"),
+            "dq_missing_fields": missing,
+            "dq_reason_codes": str(r.get("dq_reason_codes") or ""),
+            "dq_action_plan": "|".join(action_plan) if action_plan else "recompute_derived_from_base",
+            "dq_repair_success": int(success),
+            "dq_repair_actions_taken": "|".join(actions_taken),
+            "pulled_at_utc": _utc_now_iso(),
+            "parse_version": PARSE_VERSION,
+        })
+
+    audit_df = pd.DataFrame(audit_rows)
+    return df, audit_df
+
+
 # ---------------- end-to-end pipeline ----------------
 def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     pulled_at = _utc_now_iso()
     print(f"Run started: {pulled_at} | DAYS_BACK={days_back} | PARSE_VERSION={PARSE_VERSION}")
 
-    _ensure_csv_exists(OUT_GAMES, columns=["date","game_id","game_datetime_utc","venue","home_team","away_team","home_score","away_score","home_win","away_win","completed","state","status_desc","status_detail","pulled_at_utc","source"])
-    _ensure_csv_exists(OUT_TEAM_LOGS, columns=["event_id","team_id","team","home_away","game_datetime_utc","game_date","game_date_utc","venue","points_for","points_against","margin","fga","fta","tov","orb","drb","reb","poss","efg","ftr","3par","tov_pct","orb_pct","drb_pct","ortg","drtg","netrtg","pace","data_ok","completed","state","status_desc","status_detail","pulled_at_utc","source","parse_version"])
+    _ensure_csv_exists(
+        OUT_GAMES,
+        columns=["date","game_id","game_datetime_utc","venue","home_team","away_team","home_score","away_score","home_win","away_win",
+                 "completed","state","status_desc","status_detail","pulled_at_utc","source"]
+    )
+    _ensure_csv_exists(
+        OUT_TEAM_LOGS,
+        columns=["event_id","team_id","team","home_away","game_datetime_utc","game_date","game_date_utc","venue",
+                 "points_for","points_against","margin",
+                 "fgm","fga","tpm","tpa","ftm","fta","tov","orb","drb","reb",
+                 "poss","efg","ftr","3par","3p_pct","ft_pct","tov_pct","orb_pct","drb_pct",
+                 "ortg","drtg","netrtg","pace",
+                 "neutral_site","is_ot","num_ot","noise_flag",
+                 "data_ok","completed","state","status_desc","status_detail",
+                 "pulled_at_utc","source","parse_version"]
+    )
     _ensure_csv_exists(OUT_TEAM_FEATURES, columns=["event_id","team_id","team","home_away","game_datetime_utc"])
     _ensure_csv_exists(OUT_MATCHUPS, columns=["event_id"])
     _ensure_csv_exists(OUT_DIAGNOSTICS, columns=["event_id","team_id","team","diagnostic_reason"])
-    _ensure_csv_exists(OUT_DQ_AUDIT, columns=["event_id","team_id","team","dq_missing_fields","dq_reason_codes","dq_action_plan","dq_repair_success","dq_repair_actions_taken","pulled_at_utc","parse_version"])
+    _ensure_csv_exists(
+        OUT_DQ_AUDIT,
+        columns=["event_id","team_id","team","home_away","dq_missing_fields","dq_reason_codes","dq_action_plan",
+                 "dq_repair_success","dq_repair_actions_taken","pulled_at_utc","parse_version"]
+    )
 
     # PASS 0: Build games CSV
     games_df = build_espn_games_csv(days_back=days_back, out_csv=OUT_GAMES, verbose=True)
@@ -1403,7 +1613,6 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         write_error_summary()
         return
 
-    # Success path: we have new rows, so clear checkpoint now
     clear_checkpoint()
 
     # PASS 1: Compute metrics, dedupe, write team logs
@@ -1415,6 +1624,9 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
 
     df_logs_new = _compute_per_game_advanced_metrics(df_logs_new)
 
+    # Step 11 DQRG on new rows (repairs derived missing when base present; optional refetch)
+    df_logs_new, dq_audit_new = _dqrg_repair_in_place(df_logs_new)
+
     df_logs_new = _dedupe_by_completeness(df_logs_new, keys=["event_id", "team_id"], label="PASS1 logs_new")
     df_logs_new = _drop_bad_event_ids_keep_good(df_logs_new, label="PASS1 logs_new symmetry")
 
@@ -1425,6 +1637,15 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         sort_cols=["game_datetime_utc", "event_id", "team_id", "home_away"],
     )
     print(f"{OUT_TEAM_LOGS} total rows: {len(df_logs_all)}")
+
+    if WRITE_DQ_AUDIT and dq_audit_new is not None and not dq_audit_new.empty:
+        _append_dedupe_write(
+            OUT_DQ_AUDIT,
+            dq_audit_new,
+            subset_keys=["event_id", "team_id"],
+            sort_cols=["pulled_at_utc", "event_id", "team_id"],
+        )
+        print(f"{OUT_DQ_AUDIT} appended: {len(dq_audit_new)} rows")
 
     # PASS 2: Load all historical logs, normalize, filter
     df = df_logs_all.copy()
@@ -1452,67 +1673,67 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
 
     # PASS 4: Time-based features
     df_clean = _time_window_counts_per_team(df_clean)
-    print(f"PASS4: Time window features added")
+    print("PASS4: Time window features added")
 
     # PASS 5A: Opponent merge (game-level opponent stats so we can derive allowed/forced)
-df_clean = _merge_opponent_rows(df_clean)
+    df_clean = _merge_opponent_rows(df_clean)
 
-# Create PPP columns (per-possession, not per-100) used by plus metrics
-df_clean["off_ppp"] = df_clean.apply(lambda r: _safe_div(r.get("points_for", np.nan), r.get("poss", np.nan), np.nan), axis=1)
-df_clean["def_ppp"] = df_clean.apply(lambda r: _safe_div(r.get("points_against", np.nan), r.get("poss", np.nan), np.nan), axis=1)
+    # Create PPP columns (per-possession, not per-100) used by plus metrics
+    df_clean["off_ppp"] = df_clean.apply(lambda r: _safe_div(r.get("points_for", np.nan), r.get("poss", np.nan), np.nan), axis=1)
+    df_clean["def_ppp"] = df_clean.apply(lambda r: _safe_div(r.get("points_against", np.nan), r.get("poss", np.nan), np.nan), axis=1)
 
-# Defensive "allowed/forced" game-level signals for THIS team (what opponent did vs this team)
-# These are the raw ingredients we roll into leak-free defensive baselines.
-df_clean["efg_allowed_game"] = df_clean["opp_efg"] if "opp_efg" in df_clean.columns else np.nan
-df_clean["ftr_allowed_game"] = df_clean["opp_ftr"] if "opp_ftr" in df_clean.columns else np.nan
-df_clean["orb_allowed_game"] = df_clean["opp_orb_pct"] if "opp_orb_pct" in df_clean.columns else np.nan
-df_clean["tov_forced_game"] = df_clean["opp_tov_pct"] if "opp_tov_pct" in df_clean.columns else np.nan
-df_clean["def_ppp_allowed_game"] = df_clean["opp_off_ppp"] if "opp_off_ppp" in df_clean.columns else np.nan
+    # Defensive allowed/forced signals (what opponent did vs this team)
+    df_clean["efg_allowed_game"] = df_clean["opp_efg"] if "opp_efg" in df_clean.columns else np.nan
+    df_clean["ftr_allowed_game"] = df_clean["opp_ftr"] if "opp_ftr" in df_clean.columns else np.nan
+    df_clean["orb_allowed_game"] = df_clean["opp_orb_pct"] if "opp_orb_pct" in df_clean.columns else np.nan
+    df_clean["tov_forced_game"] = df_clean["opp_tov_pct"] if "opp_tov_pct" in df_clean.columns else np.nan
 
-# If opp_off_ppp does not exist (it won't yet), derive it from opp points and poss
-if "opp_points_for" in df_clean.columns and "opp_poss" in df_clean.columns:
-    opp_off_ppp = df_clean.apply(lambda r: _safe_div(r.get("opp_points_for", np.nan), r.get("opp_poss", np.nan), np.nan), axis=1)
-    df_clean["def_ppp_allowed_game"] = df_clean["def_ppp_allowed_game"].fillna(opp_off_ppp)
+    df_clean["def_ppp_allowed_game"] = df_clean.get("opp_off_ppp", np.nan)
+    if "opp_points_for" in df_clean.columns and "opp_poss" in df_clean.columns:
+        opp_off_ppp = df_clean.apply(lambda r: _safe_div(r.get("opp_points_for", np.nan), r.get("opp_poss", np.nan), np.nan), axis=1)
+        df_clean["def_ppp_allowed_game"] = df_clean["def_ppp_allowed_game"].fillna(opp_off_ppp)
 
-# Build leak-free defensive rollups for each team (and optional home/away split)
-df_clean = _add_allowed_forced_pack(df_clean, group_cols=["team_id"], prefix="")
-df_clean = _add_allowed_forced_pack(df_clean, group_cols=["team_id", "home_away"], prefix="ha_")
+    # Leak-free defensive rollups
+    df_clean = _add_allowed_forced_pack(df_clean, group_cols=["team_id"], prefix="")
+    df_clean = _add_allowed_forced_pack(df_clean, group_cols=["team_id", "home_away"], prefix="ha_")
 
-# PASS 5B: Re-run opponent merge so each row now also gets opponent's defensive baselines (opp_*_pre)
-# We need those to compute plus metrics for the matchup.
-df_clean = _merge_opponent_rows(df_clean)
+    # PASS 5B: Re-run opponent merge so each row also gets opponent defensive baselines (opp_*_pre)
+    df_clean = _merge_opponent_rows(df_clean)
 
-# Create the exact columns plus_and_fit.py expects (aliases to opponent defensive baselines)
-# Use opponent l7_pre by default (fast-reacting, still stable).
-df_clean["opp_efg_allowed_pre"] = df_clean.get("opp_efg_allowed_l7_pre", np.nan)
-df_clean["opp_ftr_allowed_pre"] = df_clean.get("opp_ftr_allowed_l7_pre", np.nan)
-df_clean["opp_orb_allowed_pre"] = df_clean.get("opp_orb_allowed_l7_pre", np.nan)
-df_clean["opp_tov_forced_pre"] = df_clean.get("opp_tov_forced_l7_pre", np.nan)
-df_clean["opp_def_ppp_allowed_pre"] = df_clean.get("opp_def_ppp_allowed_l7_pre", np.nan)
+    # Aliases expected by plus_and_fit.py
+    df_clean["opp_efg_allowed_pre"] = df_clean.get("opp_efg_allowed_l7_pre", np.nan)
+    df_clean["opp_ftr_allowed_pre"] = df_clean.get("opp_ftr_allowed_l7_pre", np.nan)
+    df_clean["opp_orb_allowed_pre"] = df_clean.get("opp_orb_allowed_l7_pre", np.nan)
+    df_clean["opp_tov_forced_pre"] = df_clean.get("opp_tov_forced_l7_pre", np.nan)
+    df_clean["opp_def_ppp_allowed_pre"] = df_clean.get("opp_def_ppp_allowed_l7_pre", np.nan)
 
-# Weights (w_g) and plus/composites (Triangle, MOI, PWR+, EPI, etc.)
-wcfg = WeightConfig(
-    group_cols=("team_id",),
-    order_col="game_datetime_utc",
-    opp_rating_col="opp_netrtg_l7_pre",
+    # Weights + plus/composites
+    wcfg = WeightConfig(
+        group_cols=("team_id",),
+        order_col="game_datetime_utc",
+        opp_rating_col="opp_netrtg_l7_pre",
+        site_col="home_away",
+        ot_flag_col="is_ot",
+    )
+    df_clean = add_all_base_weights(df_clean, wcfg)
+    df_clean = add_all_plus_and_composites(df_clean, PlusConfig(), CompositeConfig())
 
-    # IMPORTANT: your df uses home_away, not site
-    site_col="home_away",
-
-    # Optional, only if you add is_ot below
-    ot_flag_col="is_ot",
-)
-df_clean = add_all_base_weights(df_clean, wcfg)
-
-df_clean = add_all_plus_and_composites(df_clean, PlusConfig(), CompositeConfig())
-
-    
-    # Check merge success
+    # Gate: opponent join rate
     opp_join_rate = df_clean["opp_join_ok"].sum() / len(df_clean) if len(df_clean) > 0 else 0
     print(f"PASS5: Opponent merge complete. Join rate: {opp_join_rate*100:.2f}%")
-    
     if opp_join_rate < GATE_MIN_OPP_JOIN_RATE_FINAL:
         print(f"[WARN] Opponent join rate {opp_join_rate*100:.2f}% below gate {GATE_MIN_OPP_JOIN_RATE_FINAL*100:.2f}%")
+
+    # Gate: poss present (on clean rows)
+    poss_present = df_clean["poss"].notna().mean() if len(df_clean) else 0.0
+    if poss_present < GATE_MIN_POSS_PRESENT_FINAL:
+        print(f"[WARN] Poss present rate {poss_present*100:.2f}% below gate {GATE_MIN_POSS_PRESENT_FINAL*100:.2f}%")
+
+    # Gate: expected present (lightweight proxy: ortg/drtg + key pre features)
+    expected_cols = [c for c in ["ortg", "drtg", "netrtg", "ortg_l7_pre", "drtg_l7_pre", "netrtg_l7_pre"] if c in df_clean.columns]
+    expected_present = df_clean[expected_cols].notna().all(axis=1).mean() if expected_cols and len(df_clean) else 0.0
+    if expected_cols and expected_present < GATE_MIN_EXPECTED_PRESENT_FINAL:
+        print(f"[WARN] Expected present rate {expected_present*100:.2f}% below gate {GATE_MIN_EXPECTED_PRESENT_FINAL*100:.2f}%")
 
     # Write features CSV
     df_features = _append_dedupe_write(
@@ -1525,14 +1746,13 @@ df_clean = add_all_plus_and_composites(df_clean, PlusConfig(), CompositeConfig()
 
     # Build matchups table
     df_matchups = build_matchups_model_ready(df_features)
-    
     if DRY_RUN:
         print(f"[DRY RUN] Would write {len(df_matchups)} rows -> {OUT_MATCHUPS}")
     else:
         _atomic_csv_write(df_matchups, OUT_MATCHUPS)
         print(f"{OUT_MATCHUPS} written: {len(df_matchups)} rows")
 
-    # Write diagnostics if enabled
+    # Diagnostics
     if WRITE_DIAGNOSTICS:
         diagnostics = []
         for _, row in df_features.iterrows():
@@ -1541,9 +1761,9 @@ df_clean = add_all_plus_and_composites(df_clean, PlusConfig(), CompositeConfig()
                 issues.append("missing_poss")
             if pd.isna(row.get("ortg")):
                 issues.append("missing_ortg")
-            if not row.get("opp_join_ok"):
+            if not bool(row.get("opp_join_ok", True)):
                 issues.append("opp_join_failed")
-            
+
             if issues:
                 diagnostics.append({
                     "event_id": row.get("event_id"),
@@ -1551,7 +1771,7 @@ df_clean = add_all_plus_and_composites(df_clean, PlusConfig(), CompositeConfig()
                     "team": row.get("team"),
                     "diagnostic_reason": "|".join(issues),
                 })
-        
+
         if diagnostics:
             df_diag = pd.DataFrame(diagnostics)
             if DRY_RUN:
@@ -1570,4 +1790,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
