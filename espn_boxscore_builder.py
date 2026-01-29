@@ -1156,16 +1156,16 @@ opp_cols = [c for c in out.columns if (
 )]
 lookup = out[opp_cols].copy() 
     
-    lookup = lookup.rename(columns={"_key": "_lookup_key"})
-    lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_lookup_key"})
+lookup = lookup.rename(columns={"_key": "_lookup_key"})
+lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_lookup_key"})
 
-    out = out.merge(
-        lookup,
-        left_on="_opp_key",
-        right_on="_lookup_key",
-        how="left",
-        validate="many_to_one",
-    ).drop(columns=["_lookup_key"], errors="ignore")
+out = out.merge(
+    lookup,
+    left_on="_opp_key",
+    right_on="_lookup_key",
+    how="left",
+    validate="many_to_one",
+).drop(columns=["_lookup_key"], errors="ignore")
 
     out["efg_allowed_game"] = out["opp_efg"] if "opp_efg" in out.columns else np.nan
     out["ftr_allowed_game"] = out["opp_ftr"] if "opp_ftr" in out.columns else np.nan
