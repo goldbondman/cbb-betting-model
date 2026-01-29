@@ -1199,7 +1199,7 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     out["tov_forced_game"] = out["opp_tov_pct"] if "opp_tov_pct" in out.columns else np.nan
 
     out["opp_join_ok"] = out["opp_team_id"].notna() if "opp_team_id" in out.columns else out["opp_team"].notna() if "opp_team" in out.columns else False
-    out["opp_join_source"] = np.where(out["opp_join_ok"] == True, "merge", np.nan)
+    out["opp_join_source"] = np.where(out["opp_join_ok"] == True, "merge", pd.NA)
 
     return out.drop(columns=["_key", "_opp_key", "_opp_ha"], errors="ignore")
 
