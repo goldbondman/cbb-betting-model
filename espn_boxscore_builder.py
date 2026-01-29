@@ -18,13 +18,14 @@ Key guarantees:
 - Segmented pipeline with gates; if a gate fails, we drop bad games and proceed (daily automation safe).
 - Step 11: Data Quality Repair Gate (DQRG) attempts self-heal when raw inputs exist but derived fields are missing.
 
-Hardening additions (v1.4.1):
+Hardening additions (v1.4.2):
 - fetch_with_retry() for ESPN endpoints (timeouts, 429, 5xx backoff)
 - Atomic CSV writes with backup
 - Checkpointing for summary parsing loop (resume-safe)
 - Error log to JSON for post-run audit
 - home_away normalization on read + merge key safety
 - Integrity gate before writing CSVs (fail fast on missing required columns)
+- game_id and team_id added to all key operations for better tracking
 """
 
 import os
@@ -56,7 +57,7 @@ DEFAULT_HEADERS = {
     "Accept": "application/json,text/plain,*/*",
 }
 
-PARSE_VERSION = "v1.4.1"
+PARSE_VERSION = "v1.4.2"
 SOURCE_NAME = "espn"
 TZ_PST = ZoneInfo("America/Los_Angeles")
 
@@ -318,6 +319,13 @@ def _read_csv_if_exists(path: str) -> pd.DataFrame:
     if os.path.exists(path) and os.path.getsize(path) > 0:
         try:
             df = pd.read_csv(path)
+            # Normalize IDs immediately on read
+            if "game_id" in df.columns:
+                df["game_id"] = _normalize_id_series(df["game_id"])
+            if "event_id" in df.columns:
+                df["event_id"] = _normalize_id_series(df["event_id"])
+            if "team_id" in df.columns:
+                df["team_id"] = _normalize_id_series(df["team_id"])
             if "home_away" in df.columns:
                 df["home_away"] = _normalize_home_away_series(df["home_away"])
             return df
@@ -393,9 +401,17 @@ def _append_dedupe_write(existing_path: str, new_df: pd.DataFrame, subset_keys, 
     """
     filename = os.path.basename(existing_path)
 
-    if new_df is not None and not new_df.empty and "home_away" in new_df.columns:
+    if new_df is not None and not new_df.empty:
         new_df = new_df.copy()
-        new_df["home_away"] = _normalize_home_away_series(new_df["home_away"])
+        # Normalize all ID fields
+        if "game_id" in new_df.columns:
+            new_df["game_id"] = _normalize_id_series(new_df["game_id"])
+        if "event_id" in new_df.columns:
+            new_df["event_id"] = _normalize_id_series(new_df["event_id"])
+        if "team_id" in new_df.columns:
+            new_df["team_id"] = _normalize_id_series(new_df["team_id"])
+        if "home_away" in new_df.columns:
+            new_df["home_away"] = _normalize_home_away_series(new_df["home_away"])
 
     ok, issues = verify_dataframe_integrity(new_df, filename)
     if issues:
@@ -458,6 +474,8 @@ def _iso_to_game_dates(game_datetime_utc: str):
 def _drop_bad_event_ids_keep_good(df: pd.DataFrame, label: str):
     if "event_id" not in df.columns:
         return df
+    df = df.copy()
+    df["event_id"] = _normalize_id_series(df["event_id"])
     counts = df.groupby("event_id").size()
     good_ids = counts[counts == 2].index
     bad_ids = counts[counts != 2].index
@@ -573,7 +591,6 @@ def build_espn_games_csv(days_back=DEFAULT_DAYS_BACK, out_csv=OUT_GAMES, verbose
         print(f"{out_csv} total rows: {len(df_all)}")
 
     return df_all
-
 
 # ---------------- ESPN fetch: summary / boxscore ----------------
 def _extract_players(summary_json, team_id: str):
@@ -1187,10 +1204,6 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     return out.drop(columns=["_key", "_opp_key", "_opp_ha"], errors="ignore")
 
 
-# ---------------- (all your existing functions below remain unchanged) ----------------
-# NOTE: I did not rewrite your Step 11 DQRG blocks and downstream feature builders since they were fine.
-# The only other change you need is in run_pipeline to add checkpointing + always write error summary.
-
 # ---------------- matchup table builder ----------------
 def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
     df = df_features.copy()
@@ -1273,12 +1286,6 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
 
     return m
 
-
-# ---------------- (your remaining DQRG + feature functions unchanged) ----------------
-# IMPORTANT: keep your existing DQRG functions exactly as you pasted them.
-# To keep this response sane, I am not duplicating them here.
-
-
 # ---------------- end-to-end pipeline ----------------
 def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     pulled_at = _utc_now_iso()
@@ -1291,6 +1298,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     _ensure_csv_exists(OUT_DIAGNOSTICS, columns=["event_id","team_id","team","diagnostic_reason"])
     _ensure_csv_exists(OUT_DQ_AUDIT, columns=["event_id","team_id","team","dq_missing_fields","dq_reason_codes","dq_action_plan","dq_repair_success","dq_repair_actions_taken","pulled_at_utc","parse_version"])
 
+    # PASS 0: Build games CSV
     games_df = build_espn_games_csv(days_back=days_back, out_csv=OUT_GAMES, verbose=True)
     if games_df.empty:
         print("No games from scoreboard. Exiting.")
@@ -1341,12 +1349,10 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         write_error_summary()
         return
 
-    # Success path: we have new rows, so clear checkpoint now (we can always re-run safely)
+    # Success path: we have new rows, so clear checkpoint now
     clear_checkpoint()
 
-    # ---- From here down, keep your existing passes (PASS 1..5) exactly as-is,
-    #      but add home_away normalization once after reading df_logs_all and before merges.
-
+    # PASS 1: Compute metrics, dedupe, write team logs
     df_logs_new = pd.DataFrame(team_rows)
     df_logs_new["event_id"] = _normalize_id_series(df_logs_new["event_id"])
     df_logs_new["team_id"] = _normalize_id_series(df_logs_new["team_id"])
@@ -1366,6 +1372,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     )
     print(f"{OUT_TEAM_LOGS} total rows: {len(df_logs_all)}")
 
+    # PASS 2: Load all historical logs, normalize, filter
     df = df_logs_all.copy()
     df["event_id"] = _normalize_id_series(df["event_id"])
     df["team_id"] = _normalize_id_series(df["team_id"])
@@ -1373,17 +1380,81 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         df["home_away"] = _normalize_home_away_series(df["home_away"])
         bad = df[~df["home_away"].isin(list(VALID_HOME_AWAY)) & df["home_away"].notna()]
         if len(bad) > 0:
-            print(f"[WARN] Found {len(bad)} invalid home_away values in historical logs. Dropping them. Sample:")
-            print(bad[["event_id", "team_id", "team", "home_away"]].head(10).to_string(index=False))
+            print(f"[WARN] Found {len(bad)} invalid home_away values in historical logs. Dropping them.")
             df = df[df["home_away"].isin(list(VALID_HOME_AWAY)) | df["home_away"].isna()].copy()
 
-    # IMPORTANT:
-    # Paste your existing PASS 2..PASS 5 blocks here unchanged, but:
-    # - wherever you call _append_dedupe_write, it is now atomic and integrity-gated.
-    # - _merge_opponent_rows is now safe against nan home_away flips.
+    df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
+    df = df.sort_values(["team_id", "game_dt", "event_id", "home_away"])
 
-    # If you want, I can return the fully re-expanded file with your full PASS 2..5 blocks included,
-    # but the changes above are the only required edits.
+    df_clean = df[df["data_ok"] == True].copy()
+    print(f"PASS2: {len(df_clean)}/{len(df)} rows with data_ok=True")
+
+    # PASS 3: Rolling features (all games, home/away splits)
+    df_clean = _add_rolling_pack(df_clean, group_cols=["team_id"], prefix="")
+    df_clean = _add_rolling_pack(df_clean, group_cols=["team_id", "home_away"], prefix="ha_")
+    df_clean = _add_noblow_rollups(df_clean, group_cols=["team_id"], prefix="")
+    df_clean = _add_noblow_rollups(df_clean, group_cols=["team_id", "home_away"], prefix="ha_")
+    print(f"PASS3: Rolling features computed on {len(df_clean)} rows")
+
+    # PASS 4: Time-based features
+    df_clean = _time_window_counts_per_team(df_clean)
+    print(f"PASS4: Time window features added")
+
+    # PASS 5: Opponent merge
+    df_clean = _merge_opponent_rows(df_clean)
+    
+    # Check merge success
+    opp_join_rate = df_clean["opp_join_ok"].sum() / len(df_clean) if len(df_clean) > 0 else 0
+    print(f"PASS5: Opponent merge complete. Join rate: {opp_join_rate*100:.2f}%")
+    
+    if opp_join_rate < GATE_MIN_OPP_JOIN_RATE_FINAL:
+        print(f"[WARN] Opponent join rate {opp_join_rate*100:.2f}% below gate {GATE_MIN_OPP_JOIN_RATE_FINAL*100:.2f}%")
+
+    # Write features CSV
+    df_features = _append_dedupe_write(
+        OUT_TEAM_FEATURES,
+        df_clean.drop(columns=["game_dt"], errors="ignore"),
+        subset_keys=["event_id", "team_id"],
+        sort_cols=["game_datetime_utc", "event_id", "team_id", "home_away"],
+    )
+    print(f"{OUT_TEAM_FEATURES} total rows: {len(df_features)}")
+
+    # Build matchups table
+    df_matchups = build_matchups_model_ready(df_features)
+    
+    if DRY_RUN:
+        print(f"[DRY RUN] Would write {len(df_matchups)} rows -> {OUT_MATCHUPS}")
+    else:
+        _atomic_csv_write(df_matchups, OUT_MATCHUPS)
+        print(f"{OUT_MATCHUPS} written: {len(df_matchups)} rows")
+
+    # Write diagnostics if enabled
+    if WRITE_DIAGNOSTICS:
+        diagnostics = []
+        for _, row in df_features.iterrows():
+            issues = []
+            if pd.isna(row.get("poss")):
+                issues.append("missing_poss")
+            if pd.isna(row.get("ortg")):
+                issues.append("missing_ortg")
+            if not row.get("opp_join_ok"):
+                issues.append("opp_join_failed")
+            
+            if issues:
+                diagnostics.append({
+                    "event_id": row.get("event_id"),
+                    "team_id": row.get("team_id"),
+                    "team": row.get("team"),
+                    "diagnostic_reason": "|".join(issues),
+                })
+        
+        if diagnostics:
+            df_diag = pd.DataFrame(diagnostics)
+            if DRY_RUN:
+                print(f"[DRY RUN] Would write {len(df_diag)} diagnostic rows")
+            else:
+                _atomic_csv_write(df_diag, OUT_DIAGNOSTICS)
+                print(f"{OUT_DIAGNOSTICS} written: {len(df_diag)} rows")
 
     print(f"Run finished. Summary parse errors: {errors}")
     write_error_summary()
