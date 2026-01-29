@@ -11,15 +11,22 @@ SUPABASE_URL = (os.getenv("SUPABASE_URL") or "").strip().rstrip("/")
 SERVICE_ROLE_KEY = (os.getenv("SUPABASE_SERVICE_ROLE_KEY") or "").strip()
 BUCKET = (os.getenv("SUPABASE_BUCKET") or "cbb-data").strip()
 
+# If set (1/true/yes), missing local files are skipped instead of failing the run.
+SKIP_MISSING = (os.getenv("SKIP_MISSING") or "0").strip().lower() in ("1", "true", "yes")
+
 FILES = [
+    # ESPN pipeline outputs
     ("espn_games.csv", "espn/latest/espn_games.csv"),
     ("espn_team_game_logs.csv", "espn/latest/espn_team_game_logs.csv"),
     ("espn_team_game_features.csv", "espn/latest/espn_team_game_features.csv"),
     ("espn_matchups_model_ready.csv", "espn/latest/espn_matchups_model_ready.csv"),
-
     ("espn_feature_diagnostics.csv", "espn/latest/espn_feature_diagnostics.csv"),
     ("espn_dq_audit.csv", "espn/latest/espn_dq_audit.csv"),
     ("espn_pipeline_errors.json", "espn/latest/espn_pipeline_errors.json"),
+
+    # Torvik refresh outputs (from scripts/refresh_sources.py)
+    ("barttorvik.csv", "torvik/latest/barttorvik.csv"),
+    ("barttorvik_team_results.csv", "torvik/latest/barttorvik_team_results.csv"),
 ]
 
 # Basic retry (helps with transient 429/5xx)
@@ -31,6 +38,10 @@ RETRY_BACKOFF = float(os.getenv("SUPABASE_UPLOAD_RETRY_BACKOFF", "2.0"))
 def _die(msg: str, code: int = 1):
     print(f"[ERROR] {msg}", file=sys.stderr)
     sys.exit(code)
+
+
+def _warn(msg: str):
+    print(f"[WARN] {msg}")
 
 
 def _validate_env():
@@ -67,7 +78,11 @@ def _headers(content_type: str):
 
 def upload(local_path: str, remote_path: str):
     lp = Path(local_path)
+
     if not lp.exists():
+        if SKIP_MISSING:
+            _warn(f"Skipping missing local file: {local_path}")
+            return
         _die(f"Local file missing: {local_path}")
 
     # PUT /storage/v1/object/<bucket>/<path>
@@ -98,11 +113,11 @@ def upload(local_path: str, remote_path: str):
                 print(f"[OK] Uploaded {local_path} -> {remote_path}")
                 return
 
-            # retry on rate limit / transient server errors
+            # Retry on rate limit / transient server errors
             if r.status_code == 429 or (500 <= r.status_code <= 599):
                 continue
 
-            # non-retryable
+            # Non-retryable
             raise RuntimeError(
                 f"Upload failed {local_path} -> {remote_path}\n"
                 f"HTTP {r.status_code}: {r.text}"
