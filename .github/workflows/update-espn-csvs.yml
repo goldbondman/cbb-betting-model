@@ -30,11 +30,15 @@ jobs:
         env:
           DAYS_BACK: "100"
 
+      - name: Ensure optional artifacts exist
+        run: |
+          test -f espn_pipeline_errors.json || echo '{"run_ts_utc":"", "total_errors":0, "errors":[]}' > espn_pipeline_errors.json
+
       - name: Show file sizes
         run: |
-          ls -lh espn_games.csv espn_team_game_logs.csv espn_team_game_features.csv espn_matchups_model_ready.csv
+          ls -lh *.csv *.json || true
 
-      - name: Upload CSVs to Supabase Storage (public bucket)
+      - name: Upload outputs to Supabase Storage (public bucket)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
