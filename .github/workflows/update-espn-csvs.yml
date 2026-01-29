@@ -24,11 +24,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas numpy requests
 
-      - name: Run ESPN builder (80-day backfill)
+      - name: Run ESPN builder (100-day backfill)
         run: |
           python espn_boxscore_builder.py
         env:
-          DAYS_BACK: "80"
+          DAYS_BACK: "100"
 
       - name: Show file sizes
         run: |
