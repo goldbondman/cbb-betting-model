@@ -967,6 +967,46 @@ def _compute_per_game_advanced_metrics(df: pd.DataFrame) -> pd.DataFrame:
 
     out["blowout"] = (out["margin"].abs() >= 18).astype(int)
 
+        # ---------------- OT flag (best-effort) ----------------
+    # ESPN often encodes OT in status_detail (ex: "Final/OT", "Final/2OT")
+    # We also check status_desc as a backup.
+    status_detail = out["status_detail"] if "status_detail" in out.columns else pd.Series("", index=out.index)
+    status_desc = out["status_desc"] if "status_desc" in out.columns else pd.Series("", index=out.index)
+
+    status_txt = (status_detail.astype(str) + " " + status_desc.astype(str)).str.upper()
+
+    out["is_ot"] = status_txt.str.contains(r"\bOT\b|/OT|OT$", regex=True).astype(int)
+
+    # Optional: number of OTs if present (Final/2OT -> 2). Defaults to 1 for generic OT.
+    # This is "nice to have" for later noise weighting.
+    ot_num = status_txt.str.extract(r"/(\d+)OT", expand=False)
+    out["num_ot"] = pd.to_numeric(ot_num, errors="coerce").fillna(0).astype(int)
+    out.loc[(out["is_ot"] == 1) & (out["num_ot"] == 0), "num_ot"] = 1
+
+        # ---------------- OT + noise flags (best-effort) ----------------
+    status_detail = out["status_detail"] if "status_detail" in out.columns else pd.Series("", index=out.index)
+    status_desc = out["status_desc"] if "status_desc" in out.columns else pd.Series("", index=out.index)
+
+    status_txt = (status_detail.astype(str) + " " + status_desc.astype(str)).str.upper()
+
+    # OT detection
+    out["is_ot"] = status_txt.str.contains(r"\bOT\b|/OT|OT$", regex=True).astype(int)
+
+    # OT count if present (Final/2OT -> 2), else 1 if OT, else 0
+    ot_num = status_txt.str.extract(r"/(\d+)OT", expand=False)
+    out["num_ot"] = pd.to_numeric(ot_num, errors="coerce").fillna(0).astype(int)
+    out.loc[(out["is_ot"] == 1) & (out["num_ot"] == 0), "num_ot"] = 1
+
+    # Optional "noise" heuristics (do NOT change data_ok)
+    # Useful later for weights.w_noise beyond OT.
+    # These thresholds are conservative defaults.
+    out["extreme_pace_flag"] = ((out["poss"].fillna(0) >= 85) | (out["poss"].fillna(999) <= 55)).astype(int)
+    out["blowout_flag"] = out["blowout"].fillna(0).astype(int)
+
+    # one combined flag you can use later if you want
+    out["noise_flag"] = ((out["is_ot"] == 1) | (out["extreme_pace_flag"] == 1)).astype(int)
+
+    
     out["data_ok"] = True
     out.loc[out["poss"].fillna(0) <= 40, "data_ok"] = False
     out.loc[(out["completed"] == True) & (out["fga"].fillna(0) == 0), "data_ok"] = False
@@ -1454,10 +1494,13 @@ df_clean["opp_def_ppp_allowed_pre"] = df_clean.get("opp_def_ppp_allowed_l7_pre",
 wcfg = WeightConfig(
     group_cols=("team_id",),
     order_col="game_datetime_utc",
-    # This should exist after opponent merge. If not, set to None in weights.py or map to an available opp strength feature.
     opp_rating_col="opp_netrtg_l7_pre",
-    home_away_col="home_away",
-    game_dt_col="game_datetime_utc",
+
+    # IMPORTANT: your df uses home_away, not site
+    site_col="home_away",
+
+    # Optional, only if you add is_ot below
+    ot_flag_col="is_ot",
 )
 df_clean = add_all_base_weights(df_clean, wcfg)
 
