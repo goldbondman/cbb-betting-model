@@ -1156,25 +1156,25 @@ opp_cols = [c for c in out.columns if (
 )]
 lookup = out[opp_cols].copy()
     
-    lookup = lookup.rename(columns={"_key": "_lookup_key"})
-    lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_lookup_key"})
+lookup = lookup.rename(columns={"_key": "_lookup_key"})
+lookup = lookup.rename(columns={c: f"opp_{c}" for c in lookup.columns if c != "_lookup_key"})
 
-    out = out.merge(
-        lookup,
-        left_on="_opp_key",
-        right_on="_lookup_key",
-        how="left",
-        validate="many_to_one",
-    ).drop(columns=["_lookup_key"], errors="ignore")
+out = out.merge(
+    lookup,
+    left_on="_opp_key",
+    right_on="_lookup_key",
+    how="left",
+    validate="many_to_one",
+).drop(columns=["_lookup_key"], errors="ignore")
 
-    out["efg_allowed_game"] = out["opp_efg"] if "opp_efg" in out.columns else np.nan
-    out["ftr_allowed_game"] = out["opp_ftr"] if "opp_ftr" in out.columns else np.nan
-    out["tov_forced_game"] = out["opp_tov_pct"] if "opp_tov_pct" in out.columns else np.nan
+out["efg_allowed_game"] = out["opp_efg"] if "opp_efg" in out.columns else np.nan
+out["ftr_allowed_game"] = out["opp_ftr"] if "opp_ftr" in out.columns else np.nan
+out["tov_forced_game"] = out["opp_tov_pct"] if "opp_tov_pct" in out.columns else np.nan
 
-    out["opp_join_ok"] = out["opp_team_id"].notna() if "opp_team_id" in out.columns else out["opp_team"].notna() if "opp_team" in out.columns else False
-    out["opp_join_source"] = np.where(out["opp_join_ok"] == True, "merge", pd.NA)
+out["opp_join_ok"] = out["opp_team_id"].notna() if "opp_team_id" in out.columns else out["opp_team"].notna() if "opp_team" in out.columns else False
+out["opp_join_source"] = np.where(out["opp_join_ok"] == True, "merge", pd.NA)
 
-    return out.drop(columns=["_key", "_opp_key", "_opp_ha"], errors="ignore")
+return out.drop(columns=["_key", "_opp_key", "_opp_ha"], errors="ignore")
 
 
 # ---------------- matchup table builder ----------------
