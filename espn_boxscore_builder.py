@@ -43,6 +43,9 @@ import requests
 import pandas as pd
 import numpy as np
 
+# ---- feature modules (new) ----
+from weights import WeightConfig, add_all_base_weights
+from plus_and_fit import PlusConfig, CompositeConfig, add_all_plus_and_composites
 
 # ---------------- config ----------------
 ESPN_SUMMARY_URL = (
@@ -1149,9 +1152,11 @@ def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     # Get ALL columns that should be opponent features
     opp_cols = [c for c in out.columns if (
         c.endswith("_pre") or 
-        c in ["team", "team_id", "points_for", "points_against", 
-              "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
-              "ortg", "drtg", "netrtg", "pace", "_key"]
+        c in ["team", "team_id", "points_for", "points_against",
+            "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
+            "off_ppp", "def_ppp",
+            "ortg", "drtg", "netrtg", "pace", "_key"]
+
     )]
     lookup = out[opp_cols].copy()
     
@@ -1257,6 +1262,43 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
         m = m.sort_values(["event_id"])
 
     return m
+
+def _add_allowed_forced_pack(df: pd.DataFrame, group_cols, prefix: str):
+    """
+    Build leak-free defensive baselines for each team, derived from opponent game stats.
+
+    Requires these per-row columns to exist before calling:
+      - efg_allowed_game, ftr_allowed_game, orb_allowed_game, tov_forced_game, def_ppp_allowed_game
+    Produces:
+      - {prefix}efg_allowed_l3_pre / l7_pre / season_pre
+      - {prefix}ftr_allowed_l3_pre / l7_pre / season_pre
+      - {prefix}orb_allowed_l3_pre / l7_pre / season_pre
+      - {prefix}tov_forced_l3_pre / l7_pre / season_pre
+      - {prefix}def_ppp_allowed_l3_pre / l7_pre / season_pre
+    """
+    out = df.copy()
+    g = out.groupby(group_cols, sort=False)
+
+    core = {
+        "efg_allowed": "efg_allowed_game",
+        "ftr_allowed": "ftr_allowed_game",
+        "orb_allowed": "orb_allowed_game",
+        "tov_forced": "tov_forced_game",
+        "def_ppp_allowed": "def_ppp_allowed_game",
+    }
+
+    for metric, col in core.items():
+        if col not in out.columns:
+            out[col] = np.nan
+        else:
+            out[col] = pd.to_numeric(out[col], errors="coerce")
+
+        out[f"{prefix}{metric}_l3_pre"] = g[col].apply(lambda s: _group_shift_rolling(s, 3, "mean")).reset_index(level=group_cols, drop=True)
+        out[f"{prefix}{metric}_l7_pre"] = g[col].apply(lambda s: _group_shift_rolling(s, 7, "mean")).reset_index(level=group_cols, drop=True)
+        out[f"{prefix}{metric}_season_pre"] = g[col].apply(lambda s: _group_shift_expanding_mean(s)).reset_index(level=group_cols, drop=True)
+
+    return out
+
 
 # ---------------- end-to-end pipeline ----------------
 def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
@@ -1372,8 +1414,55 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     df_clean = _time_window_counts_per_team(df_clean)
     print(f"PASS4: Time window features added")
 
-    # PASS 5: Opponent merge
-    df_clean = _merge_opponent_rows(df_clean)
+    # PASS 5A: Opponent merge (game-level opponent stats so we can derive allowed/forced)
+df_clean = _merge_opponent_rows(df_clean)
+
+# Create PPP columns (per-possession, not per-100) used by plus metrics
+df_clean["off_ppp"] = df_clean.apply(lambda r: _safe_div(r.get("points_for", np.nan), r.get("poss", np.nan), np.nan), axis=1)
+df_clean["def_ppp"] = df_clean.apply(lambda r: _safe_div(r.get("points_against", np.nan), r.get("poss", np.nan), np.nan), axis=1)
+
+# Defensive "allowed/forced" game-level signals for THIS team (what opponent did vs this team)
+# These are the raw ingredients we roll into leak-free defensive baselines.
+df_clean["efg_allowed_game"] = df_clean["opp_efg"] if "opp_efg" in df_clean.columns else np.nan
+df_clean["ftr_allowed_game"] = df_clean["opp_ftr"] if "opp_ftr" in df_clean.columns else np.nan
+df_clean["orb_allowed_game"] = df_clean["opp_orb_pct"] if "opp_orb_pct" in df_clean.columns else np.nan
+df_clean["tov_forced_game"] = df_clean["opp_tov_pct"] if "opp_tov_pct" in df_clean.columns else np.nan
+df_clean["def_ppp_allowed_game"] = df_clean["opp_off_ppp"] if "opp_off_ppp" in df_clean.columns else np.nan
+
+# If opp_off_ppp does not exist (it won't yet), derive it from opp points and poss
+if "opp_points_for" in df_clean.columns and "opp_poss" in df_clean.columns:
+    opp_off_ppp = df_clean.apply(lambda r: _safe_div(r.get("opp_points_for", np.nan), r.get("opp_poss", np.nan), np.nan), axis=1)
+    df_clean["def_ppp_allowed_game"] = df_clean["def_ppp_allowed_game"].fillna(opp_off_ppp)
+
+# Build leak-free defensive rollups for each team (and optional home/away split)
+df_clean = _add_allowed_forced_pack(df_clean, group_cols=["team_id"], prefix="")
+df_clean = _add_allowed_forced_pack(df_clean, group_cols=["team_id", "home_away"], prefix="ha_")
+
+# PASS 5B: Re-run opponent merge so each row now also gets opponent's defensive baselines (opp_*_pre)
+# We need those to compute plus metrics for the matchup.
+df_clean = _merge_opponent_rows(df_clean)
+
+# Create the exact columns plus_and_fit.py expects (aliases to opponent defensive baselines)
+# Use opponent l7_pre by default (fast-reacting, still stable).
+df_clean["opp_efg_allowed_pre"] = df_clean.get("opp_efg_allowed_l7_pre", np.nan)
+df_clean["opp_ftr_allowed_pre"] = df_clean.get("opp_ftr_allowed_l7_pre", np.nan)
+df_clean["opp_orb_allowed_pre"] = df_clean.get("opp_orb_allowed_l7_pre", np.nan)
+df_clean["opp_tov_forced_pre"] = df_clean.get("opp_tov_forced_l7_pre", np.nan)
+df_clean["opp_def_ppp_allowed_pre"] = df_clean.get("opp_def_ppp_allowed_l7_pre", np.nan)
+
+# Weights (w_g) and plus/composites (Triangle, MOI, PWR+, EPI, etc.)
+wcfg = WeightConfig(
+    group_cols=("team_id",),
+    order_col="game_datetime_utc",
+    # This should exist after opponent merge. If not, set to None in weights.py or map to an available opp strength feature.
+    opp_rating_col="opp_netrtg_l7_pre",
+    home_away_col="home_away",
+    game_dt_col="game_datetime_utc",
+)
+df_clean = add_all_base_weights(df_clean, wcfg)
+
+df_clean = add_all_plus_and_composites(df_clean, PlusConfig(), CompositeConfig())
+
     
     # Check merge success
     opp_join_rate = df_clean["opp_join_ok"].sum() / len(df_clean) if len(df_clean) > 0 else 0
