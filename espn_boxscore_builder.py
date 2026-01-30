@@ -618,8 +618,7 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
         if not isinstance(comp, dict):
             skipped["no_comp"] += 1
             continue
-            
-         odds = _extract_odds_from_comp(comp)
+        odds = _extract_odds_from_comp(comp)
 
         competitors = comp.get("competitors") or []
         if len(competitors) < 2:
@@ -652,7 +651,7 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
         home_win = home.get("winner")
         away_win = away.get("winner")
 
-                # ---- market / Vegas lines (best-effort from ESPN scoreboard) ----
+        # ---- market / Vegas lines (best-effort from ESPN scoreboard) ----
         odds_list = comp.get("odds") or []
         odds0 = odds_list[0] if (isinstance(odds_list, list) and len(odds_list) > 0 and isinstance(odds_list[0], dict)) else {}
 
