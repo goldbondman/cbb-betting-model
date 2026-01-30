@@ -54,7 +54,8 @@ ESPN_SUMMARY_URL = (
     "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event={event_id}"
 )
 ESPN_SCOREBOARD_URL = (
-    "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates={date}"
+    "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
+    "?dates={date}&groups=50&limit=1000"
 )
 
 DEFAULT_HEADERS = {
@@ -508,29 +509,125 @@ def _dedupe_by_completeness(df: pd.DataFrame, keys: list, label: str) -> pd.Data
     print(f"{label}: deduped to {len(out)} rows using completeness score on keys={keys}")
     return out
 
+def _extract_odds_from_comp(comp: dict) -> dict:
+    """
+    Best-effort extraction of market lines from ESPN scoreboard competition payload.
+    ESPN schema varies by sport/event; expect missing fields often.
+    """
+    out = {
+        "odds_provider": None,
+        "odds_details": None,      # often like "UNC -3.5" or similar
+        "spread": None,            # numeric if available
+        "over_under": None,        # numeric if available
+        "home_moneyline": None,    # int if available
+        "away_moneyline": None,    # int if available
+    }
+
+    odds_list = comp.get("odds") or []
+    if not isinstance(odds_list, list) or len(odds_list) == 0:
+        return out
+
+    o = odds_list[0] if isinstance(odds_list[0], dict) else {}
+    if not o:
+        return out
+
+    provider = o.get("provider") or {}
+    if isinstance(provider, dict):
+        out["odds_provider"] = provider.get("name") or provider.get("id")
+
+    out["odds_details"] = o.get("details") or o.get("displayValue")
+
+    # Totals
+    ou = o.get("overUnder")
+    if ou is not None:
+        try:
+            out["over_under"] = float(ou)
+        except Exception:
+            pass
+
+    # Spread
+    sp = o.get("spread")
+    if sp is not None:
+        try:
+            out["spread"] = float(sp)
+        except Exception:
+            pass
+
+    # Moneylines (field names vary, so check a few common ones)
+    for k in ["homeTeamOdds", "homeOdds", "homeMoneyLine", "homeMoneyline"]:
+        v = o.get(k)
+        if isinstance(v, dict):
+            v = v.get("moneyLine") or v.get("moneyline") or v.get("american") or v.get("value")
+        if v is not None:
+            try:
+                out["home_moneyline"] = int(float(v))
+                break
+            except Exception:
+                pass
+
+    for k in ["awayTeamOdds", "awayOdds", "awayMoneyLine", "awayMoneyline"]:
+        v = o.get(k)
+        if isinstance(v, dict):
+            v = v.get("moneyLine") or v.get("moneyline") or v.get("american") or v.get("value")
+        if v is not None:
+            try:
+                out["away_moneyline"] = int(float(v))
+                break
+            except Exception:
+                pass
+
+    return out
+
 
 # ---------------- ESPN fetch: scoreboard ----------------
 def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
-    url = ESPN_SCOREBOARD_URL.format(date=date_yyyymmdd)
+    # Force full slate (ESPN sometimes defaults to a small “top events” subset)
+    url = (
+        "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
+        f"?dates={date_yyyymmdd}&groups=50&limit=1000"
+    )
+
     try:
         data = fetch_with_retry(url, headers=DEFAULT_HEADERS, timeout=timeout)
     except Exception as e:
         log_error("fetch_scoreboard", e, extra={"url": url, "date": date_yyyymmdd})
         return []
 
-    rows = []
-    for e in (data.get("events") or []):
-        game_id = e.get("id")
-        competitions = e.get("competitions") or []
-        comp = competitions[0] if competitions else {}
-        competitors = comp.get("competitors") or []
+    events = data.get("events") or []
+    # Debug: verify how many events ESPN returned (this isolates endpoint vs parsing)
+    print(f"[DEBUG] scoreboard {date_yyyymmdd}: events_returned={len(events)}")
 
-        if not game_id or len(competitors) < 2:
+    # Debug counters for why events get skipped
+    skipped = {"no_id": 0, "no_competitions": 0, "no_comp": 0, "lt2_competitors": 0, "no_home_away": 0}
+
+    rows = []
+    for e in events:
+        game_id = e.get("id")
+        if not game_id:
+            skipped["no_id"] += 1
+            continue
+
+        competitions = e.get("competitions") or []
+        if not competitions:
+            skipped["no_competitions"] += 1
+            continue
+
+        comp = competitions[0] if competitions else None
+        if not isinstance(comp, dict):
+            skipped["no_comp"] += 1
+            continue
+            
+         odds = _extract_odds_from_comp(comp)
+
+        competitors = comp.get("competitors") or []
+        if len(competitors) < 2:
+            skipped["lt2_competitors"] += 1
             continue
 
         home = next((c for c in competitors if c.get("homeAway") == "home"), None)
         away = next((c for c in competitors if c.get("homeAway") == "away"), None)
         if not home or not away:
+            skipped["no_home_away"] += 1
             continue
 
         status = comp.get("status") or {}
@@ -553,6 +650,25 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
         home_win = home.get("winner")
         away_win = away.get("winner")
 
+                # ---- market / Vegas lines (best-effort from ESPN scoreboard) ----
+        odds_list = comp.get("odds") or []
+        odds0 = odds_list[0] if (isinstance(odds_list, list) and len(odds_list) > 0 and isinstance(odds_list[0], dict)) else {}
+
+        provider = odds0.get("provider") or {}
+        market_provider = provider.get("name") if isinstance(provider, dict) else None
+
+        market_details = odds0.get("details")  # often like "DUKE -6.5"
+        market_over_under = _to_float(odds0.get("overUnder"), np.nan)
+
+        # Spread is not always a clean numeric field. ESPN often uses "details" as the reliable string.
+        market_spread = _to_float(odds0.get("spread"), np.nan)
+
+        home_odds = odds0.get("homeTeamOdds") or {}
+        away_odds = odds0.get("awayTeamOdds") or {}
+
+        market_home_ml = _to_int(home_odds.get("moneyLine"), np.nan) if isinstance(home_odds, dict) else np.nan
+        market_away_ml = _to_int(away_odds.get("moneyLine"), np.nan) if isinstance(away_odds, dict) else np.nan
+
         rows.append({
             "date": date_yyyymmdd,
             "game_id": str(game_id),
@@ -570,16 +686,42 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
             "status_detail": detail or short_detail,
             "pulled_at_utc": _utc_now_iso(),
             "source": SOURCE_NAME,
+
+            # ---- market fields ----
+            "market_provider": market_provider,
+            "market_details": market_details,
+            "market_spread": market_spread,
+            "market_total": market_over_under,
+            "market_home_ml": market_home_ml,
+            "market_away_ml": market_away_ml,
         })
+
+    # Debug: if ESPN returned lots of events but you only produced 2 rows, this shows why
+    if len(events) and len(rows) < len(events):
+        print(f"[DEBUG] scoreboard {date_yyyymmdd}: produced_rows={len(rows)} skipped={skipped}")
 
     return rows
 
 
 def build_espn_games_csv(days_back=DEFAULT_DAYS_BACK, out_csv=OUT_GAMES, verbose=True):
+    """
+    Always include today + tomorrow to avoid PST/UTC boundary misses.
+
+    days_back = how many days back from today (PST) to include, inclusive.
+    Example:
+      days_back=3 -> today, yesterday, 2 days ago, PLUS tomorrow.
+    """
     now_pst = datetime.now(TZ_PST)
-    all_rows = []
+
+    # Build date set: past window + today + tomorrow
+    date_set = set()
     for i in range(days_back):
-        d = (now_pst - timedelta(days=i)).strftime("%Y%m%d")
+        date_set.add((now_pst - timedelta(days=i)).strftime("%Y%m%d"))
+    date_set.add(now_pst.strftime("%Y%m%d"))  # redundant but explicit
+    date_set.add((now_pst + timedelta(days=1)).strftime("%Y%m%d"))  # tomorrow
+
+    all_rows = []
+    for d in sorted(date_set, reverse=True):
         rows = fetch_scoreboard_games(d)
         all_rows.extend(rows)
         if verbose:
@@ -603,6 +745,7 @@ def build_espn_games_csv(days_back=DEFAULT_DAYS_BACK, out_csv=OUT_GAMES, verbose
         print(f"{out_csv} total rows: {len(df_all)}")
 
     return df_all
+
 
 
 # ---------------- ESPN fetch: summary / boxscore ----------------
@@ -1539,9 +1682,18 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
 
     _ensure_csv_exists(
         OUT_GAMES,
-        columns=["date","game_id","game_datetime_utc","venue","home_team","away_team","home_score","away_score","home_win","away_win",
-                 "completed","state","status_desc","status_detail","pulled_at_utc","source"]
+        columns=[
+            "date","game_id","game_datetime_utc","venue","home_team","away_team",
+            "home_score","away_score","home_win","away_win",
+            "completed","state","status_desc","status_detail",
+            "pulled_at_utc","source",
+
+            # market / Vegas (from ESPN scoreboard, best-effort)
+            "market_provider","market_details","market_spread","market_total",
+            "market_home_ml","market_away_ml",
+        ]
     )
+
     _ensure_csv_exists(
         OUT_TEAM_LOGS,
         columns=["event_id","team_id","team","home_away","game_datetime_utc","game_date","game_date_utc","venue",
