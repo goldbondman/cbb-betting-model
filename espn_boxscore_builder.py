@@ -9,6 +9,8 @@ Outputs:
 - espn_matchups_model_ready.csv      (one row per game, home/away pregame features + labels, rebuild each run)
 - espn_feature_diagnostics.csv       (row-level diagnostics for sparse/NaN fields)
 - espn_dq_audit.csv                  (Data Quality Repair Gate audit, per-row reasons + actions)
+- espn_player_boxscores.csv          (player box score rows, one row per player per game, append+dedupe)
+
 
 Key guarantees:
 - Pregame features are leak-free (shifted so current game is excluded).
@@ -1713,7 +1715,19 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         columns=["event_id","team_id","team","home_away","dq_missing_fields","dq_reason_codes","dq_action_plan",
                  "dq_repair_success","dq_repair_actions_taken","pulled_at_utc","parse_version"]
     )
-
+    _ensure_csv_exists(
+        OUT_PLAYER_BOX,
+        columns=[
+            "event_id","game_datetime_utc","team_id","team","home_away",
+            "athlete_id","player","starter",
+            "min","pts",
+            "fgm","fga","tpm","tpa","ftm","fta",
+            "reb","orb","drb","ast","stl","blk","tov","pf",
+            "pulled_at_utc","source","parse_version"
+        ]
+    )
+    
+    
     # PASS 0: Build games CSV
     games_df = build_espn_games_csv(days_back=days_back, out_csv=OUT_GAMES, verbose=True)
     if games_df.empty:
