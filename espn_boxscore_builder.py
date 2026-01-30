@@ -91,6 +91,7 @@ OUT_TEAM_FEATURES = "espn_team_game_features.csv"
 OUT_MATCHUPS = "espn_matchups_model_ready.csv"
 OUT_DIAGNOSTICS = "espn_feature_diagnostics.csv"
 OUT_DQ_AUDIT = "espn_dq_audit.csv"
+OUT_PLAYER_BOX = "espn_player_boxscores.csv"
 
 WRITE_DIAGNOSTICS = os.getenv("WRITE_DIAGNOSTICS", "1").strip() not in ("0", "false", "False", "no", "NO")
 WRITE_DQ_AUDIT = os.getenv("WRITE_DQ_AUDIT", "1").strip() not in ("0", "false", "False", "no", "NO")
@@ -618,8 +619,7 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
         if not isinstance(comp, dict):
             skipped["no_comp"] += 1
             continue
-            
-         odds = _extract_odds_from_comp(comp)
+        odds = _extract_odds_from_comp(comp)
 
         competitors = comp.get("competitors") or []
         if len(competitors) < 2:
@@ -652,7 +652,7 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
         home_win = home.get("winner")
         away_win = away.get("winner")
 
-                # ---- market / Vegas lines (best-effort from ESPN scoreboard) ----
+        # ---- market / Vegas lines (best-effort from ESPN scoreboard) ----
         odds_list = comp.get("odds") or []
         odds0 = odds_list[0] if (isinstance(odds_list, list) and len(odds_list) > 0 and isinstance(odds_list[0], dict)) else {}
 
