@@ -1589,6 +1589,16 @@ elif page == "🎯 Single Prediction":
         game_date = st.text_input("Game Date (YYYYMMDD)", value=datetime.now().strftime("%Y%m%d"))
     with col2:
         vegas_line = st.number_input("Vegas Spread (optional)", value=0.0, step=0.5)
+
+    has_sb_creds = has_supabase_creds()
+    auto_save = st.checkbox(
+        "Auto-save to Supabase",
+        value=False,
+        disabled=not has_sb_creds,
+        help="Requires SUPABASE_URL and SUPABASE_ANON_KEY.",
+    )
+    if not has_sb_creds:
+        st.caption("Supabase credentials missing: set SUPABASE_URL and SUPABASE_ANON_KEY to enable auto-save.")
     
     if home_team == away_team:
         st.error("Teams must be different")
@@ -1611,6 +1621,25 @@ elif page == "🎯 Single Prediction":
                 st.success("✅ Prediction complete")
                 
                 ens = result["ensemble"]
+
+                payload = {
+                    **result,
+                    "prediction_key": f"{game_date}:{make_game_id(home_team, away_team, game_date)}",
+                    "model_version": MODEL_VERSION,
+                    "inputs": {
+                        "home_team": home_team,
+                        "away_team": away_team,
+                        "venue": venue,
+                        "vegas_spread": vegas_line if vegas_line != 0.0 else None,
+                    },
+                }
+
+                if auto_save:
+                    try:
+                        sb_upsert_prediction(payload)
+                        st.success("✅ Auto-saved to Supabase")
+                    except Exception as e:
+                        st.error(f"❌ Auto-save failed: {e}")
                 
                 col1, col2, col3, col4 = st.columns(4)
                 with col1:
@@ -1632,11 +1661,6 @@ elif page == "🎯 Single Prediction":
                     st.json(result)
                 
                 if st.button("💾 Save to Supabase"):
-                    payload = {
-                        **result,
-                        "prediction_key": f"{game_date}:{make_game_id(home_team, away_team, game_date)}",
-                        "model_version": MODEL_VERSION,
-                    }
                     try:
                         sb_upsert_prediction(payload)
                         st.success("✅ Saved to Supabase")
