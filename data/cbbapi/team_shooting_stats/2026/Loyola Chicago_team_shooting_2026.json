@@ -4,53 +4,53 @@
     "teamId": 151,
     "team": "Loyola Chicago",
     "conference": "A-10",
-    "trackedShots": 1104,
-    "freeThrowRate": 34.9,
-    "assistedPct": 24.5,
+    "trackedShots": 1283,
+    "freeThrowRate": 33.6,
+    "assistedPct": 24.2,
     "dunks": {
-      "attempted": 52,
-      "made": 47,
-      "pct": 90.4,
-      "assisted": 37,
-      "assistedPct": 78.7
+      "attempted": 57,
+      "made": 52,
+      "pct": 91.2,
+      "assisted": 41,
+      "assistedPct": 78.8
     },
     "layups": {
-      "attempted": 339,
-      "made": 175,
-      "pct": 51.6,
-      "assisted": 76,
-      "assistedPct": 43.4
+      "attempted": 388,
+      "made": 202,
+      "pct": 52.1,
+      "assisted": 88,
+      "assistedPct": 43.6
     },
     "tipIns": {
-      "attempted": 37,
-      "made": 24,
-      "pct": 64.9
+      "attempted": 44,
+      "made": 29,
+      "pct": 65.9
     },
     "twoPointJumpers": {
-      "attempted": 158,
-      "made": 58,
-      "pct": 36.7,
-      "assisted": 15,
-      "assistedPct": 25.9
+      "attempted": 194,
+      "made": 69,
+      "pct": 35.6,
+      "assisted": 21,
+      "assistedPct": 30.4
     },
     "threePointJumpers": {
-      "attempted": 518,
-      "made": 162,
-      "pct": 31.3,
-      "assisted": 143,
-      "assistedPct": 88.3
+      "attempted": 600,
+      "made": 185,
+      "pct": 30.8,
+      "assisted": 161,
+      "assistedPct": 87
     },
     "freeThrows": {
-      "attempted": 385,
-      "made": 262,
-      "pct": 68.1
+      "attempted": 431,
+      "made": 295,
+      "pct": 68.4
     },
     "attemptsBreakdown": {
-      "dunks": 4.7,
-      "layups": 30.7,
+      "dunks": 4.4,
+      "layups": 30.2,
       "tipIns": 3.4,
-      "twoPointJumpers": 14.3,
-      "threePointJumpers": 46.9
+      "twoPointJumpers": 15.1,
+      "threePointJumpers": 46.8
     }
   }
 ]

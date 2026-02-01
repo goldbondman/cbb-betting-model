@@ -4,53 +4,53 @@
     "teamId": 287,
     "team": "TCU",
     "conference": "Big 12",
-    "trackedShots": 1100,
-    "freeThrowRate": 35.4,
-    "assistedPct": 26.4,
+    "trackedShots": 1207,
+    "freeThrowRate": 37.9,
+    "assistedPct": 26.1,
     "dunks": {
-      "attempted": 53,
-      "made": 44,
-      "pct": 83,
-      "assisted": 33,
+      "attempted": 61,
+      "made": 52,
+      "pct": 85.2,
+      "assisted": 39,
       "assistedPct": 75
     },
     "layups": {
-      "attempted": 341,
-      "made": 203,
-      "pct": 59.5,
-      "assisted": 104,
-      "assistedPct": 51.2
+      "attempted": 361,
+      "made": 214,
+      "pct": 59.3,
+      "assisted": 109,
+      "assistedPct": 50.9
     },
     "tipIns": {
-      "attempted": 34,
+      "attempted": 35,
       "made": 22,
-      "pct": 64.7
+      "pct": 62.9
     },
     "twoPointJumpers": {
-      "attempted": 246,
-      "made": 95,
-      "pct": 38.6,
-      "assisted": 29,
-      "assistedPct": 30.5
+      "attempted": 296,
+      "made": 119,
+      "pct": 40.2,
+      "assisted": 35,
+      "assistedPct": 29.4
     },
     "threePointJumpers": {
-      "attempted": 426,
-      "made": 141,
-      "pct": 33.1,
-      "assisted": 124,
-      "assistedPct": 87.9
+      "attempted": 454,
+      "made": 151,
+      "pct": 33.3,
+      "assisted": 132,
+      "assistedPct": 87.4
     },
     "freeThrows": {
-      "attempted": 389,
-      "made": 278,
-      "pct": 71.5
+      "attempted": 457,
+      "made": 329,
+      "pct": 72
     },
     "attemptsBreakdown": {
-      "dunks": 4.8,
-      "layups": 31,
-      "tipIns": 3.1,
-      "twoPointJumpers": 22.4,
-      "threePointJumpers": 38.7
+      "dunks": 5.1,
+      "layups": 29.9,
+      "tipIns": 2.9,
+      "twoPointJumpers": 24.5,
+      "threePointJumpers": 37.6
     }
   }
 ]

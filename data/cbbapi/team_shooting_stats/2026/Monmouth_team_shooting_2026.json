@@ -4,53 +4,53 @@
     "teamId": 178,
     "team": "Monmouth",
     "conference": "CAA",
-    "trackedShots": 1100,
+    "trackedShots": 1280,
     "freeThrowRate": 34,
-    "assistedPct": 23,
+    "assistedPct": 22.9,
     "dunks": {
-      "attempted": 36,
-      "made": 34,
-      "pct": 94.4,
-      "assisted": 25,
-      "assistedPct": 73.5
+      "attempted": 39,
+      "made": 37,
+      "pct": 94.9,
+      "assisted": 27,
+      "assistedPct": 73
     },
     "layups": {
-      "attempted": 396,
-      "made": 199,
-      "pct": 50.3,
-      "assisted": 100,
-      "assistedPct": 50.3
+      "attempted": 456,
+      "made": 232,
+      "pct": 50.9,
+      "assisted": 115,
+      "assistedPct": 49.6
     },
     "tipIns": {
-      "attempted": 38,
-      "made": 25,
-      "pct": 65.8
+      "attempted": 46,
+      "made": 31,
+      "pct": 67.4
     },
     "twoPointJumpers": {
-      "attempted": 273,
-      "made": 93,
-      "pct": 34.1,
-      "assisted": 29,
-      "assistedPct": 31.2
+      "attempted": 329,
+      "made": 117,
+      "pct": 35.6,
+      "assisted": 36,
+      "assistedPct": 30.8
     },
     "threePointJumpers": {
-      "attempted": 357,
-      "made": 121,
-      "pct": 33.9,
-      "assisted": 99,
-      "assistedPct": 81.8
+      "attempted": 410,
+      "made": 138,
+      "pct": 33.7,
+      "assisted": 115,
+      "assistedPct": 83.3
     },
     "freeThrows": {
-      "attempted": 374,
-      "made": 273,
-      "pct": 73
+      "attempted": 435,
+      "made": 318,
+      "pct": 73.1
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
-      "layups": 36,
-      "tipIns": 3.5,
-      "twoPointJumpers": 24.8,
-      "threePointJumpers": 32.5
+      "dunks": 3,
+      "layups": 35.6,
+      "tipIns": 3.6,
+      "twoPointJumpers": 25.7,
+      "threePointJumpers": 32
     }
   }
 ]

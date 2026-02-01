@@ -4,53 +4,53 @@
     "teamId": 301,
     "team": "Towson",
     "conference": "CAA",
-    "trackedShots": 1220,
-    "freeThrowRate": 27.6,
-    "assistedPct": 17,
+    "trackedShots": 1450,
+    "freeThrowRate": 29.7,
+    "assistedPct": 17.2,
     "dunks": {
-      "attempted": 42,
-      "made": 33,
-      "pct": 78.6,
-      "assisted": 23,
-      "assistedPct": 69.7
+      "attempted": 52,
+      "made": 43,
+      "pct": 82.7,
+      "assisted": 29,
+      "assistedPct": 67.4
     },
     "layups": {
-      "attempted": 368,
-      "made": 200,
-      "pct": 54.3,
-      "assisted": 71,
-      "assistedPct": 35.5
+      "attempted": 440,
+      "made": 240,
+      "pct": 54.5,
+      "assisted": 87,
+      "assistedPct": 36.3
     },
     "tipIns": {
-      "attempted": 36,
-      "made": 25,
-      "pct": 69.4
+      "attempted": 40,
+      "made": 28,
+      "pct": 70
     },
     "twoPointJumpers": {
-      "attempted": 324,
-      "made": 127,
-      "pct": 39.2,
-      "assisted": 16,
-      "assistedPct": 12.6
+      "attempted": 391,
+      "made": 156,
+      "pct": 39.9,
+      "assisted": 21,
+      "assistedPct": 13.5
     },
     "threePointJumpers": {
-      "attempted": 450,
-      "made": 127,
-      "pct": 28.2,
-      "assisted": 97,
-      "assistedPct": 76.4
+      "attempted": 527,
+      "made": 151,
+      "pct": 28.7,
+      "assisted": 112,
+      "assistedPct": 74.2
     },
     "freeThrows": {
-      "attempted": 337,
-      "made": 234,
-      "pct": 69.4
+      "attempted": 430,
+      "made": 298,
+      "pct": 69.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 30.2,
-      "tipIns": 3,
-      "twoPointJumpers": 26.6,
-      "threePointJumpers": 36.9
+      "dunks": 3.6,
+      "layups": 30.3,
+      "tipIns": 2.8,
+      "twoPointJumpers": 27,
+      "threePointJumpers": 36.3
     }
   }
 ]

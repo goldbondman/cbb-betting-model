@@ -4,53 +4,53 @@
     "teamId": 140,
     "team": "Le Moyne",
     "conference": "NEC",
-    "trackedShots": 1061,
-    "freeThrowRate": 36.7,
-    "assistedPct": 25.2,
+    "trackedShots": 1272,
+    "freeThrowRate": 38.6,
+    "assistedPct": 24.3,
     "dunks": {
-      "attempted": 62,
-      "made": 58,
-      "pct": 93.5,
-      "assisted": 35,
-      "assistedPct": 60.3
+      "attempted": 65,
+      "made": 61,
+      "pct": 93.8,
+      "assisted": 37,
+      "assistedPct": 60.7
     },
     "layups": {
-      "attempted": 383,
-      "made": 211,
-      "pct": 55.1,
-      "assisted": 80,
-      "assistedPct": 37.9
+      "attempted": 473,
+      "made": 251,
+      "pct": 53.1,
+      "assisted": 97,
+      "assistedPct": 38.6
     },
     "tipIns": {
-      "attempted": 18,
-      "made": 14,
-      "pct": 77.8
+      "attempted": 23,
+      "made": 17,
+      "pct": 73.9
     },
     "twoPointJumpers": {
-      "attempted": 168,
-      "made": 58,
+      "attempted": 194,
+      "made": 67,
       "pct": 34.5,
-      "assisted": 21,
-      "assistedPct": 36.2
+      "assisted": 23,
+      "assistedPct": 34.3
     },
     "threePointJumpers": {
-      "attempted": 430,
-      "made": 149,
-      "pct": 34.7,
-      "assisted": 131,
-      "assistedPct": 87.9
+      "attempted": 517,
+      "made": 179,
+      "pct": 34.6,
+      "assisted": 152,
+      "assistedPct": 84.9
     },
     "freeThrows": {
-      "attempted": 389,
-      "made": 282,
-      "pct": 72.5
+      "attempted": 491,
+      "made": 353,
+      "pct": 71.9
     },
     "attemptsBreakdown": {
-      "dunks": 5.8,
-      "layups": 36.1,
-      "tipIns": 1.7,
-      "twoPointJumpers": 15.8,
-      "threePointJumpers": 40.5
+      "dunks": 5.1,
+      "layups": 37.2,
+      "tipIns": 1.8,
+      "twoPointJumpers": 15.3,
+      "threePointJumpers": 40.6
     }
   }
 ]

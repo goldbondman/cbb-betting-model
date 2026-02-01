@@ -4,9 +4,9 @@
     "teamId": 203,
     "team": "North Florida",
     "conference": "ASUN",
-    "trackedShots": 1260,
-    "freeThrowRate": 25.2,
-    "assistedPct": 22.8,
+    "trackedShots": 1448,
+    "freeThrowRate": 25.8,
+    "assistedPct": 23.8,
     "dunks": {
       "attempted": 25,
       "made": 21,
@@ -15,42 +15,42 @@
       "assistedPct": 76.2
     },
     "layups": {
-      "attempted": 395,
-      "made": 225,
-      "pct": 57,
-      "assisted": 86,
-      "assistedPct": 38.2
+      "attempted": 457,
+      "made": 267,
+      "pct": 58.4,
+      "assisted": 109,
+      "assistedPct": 40.8
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 19,
-      "pct": 59.4
+      "attempted": 38,
+      "made": 23,
+      "pct": 60.5
     },
     "twoPointJumpers": {
-      "attempted": 157,
-      "made": 68,
-      "pct": 43.3,
-      "assisted": 16,
-      "assistedPct": 23.5
+      "attempted": 172,
+      "made": 74,
+      "pct": 43,
+      "assisted": 17,
+      "assistedPct": 23
     },
     "threePointJumpers": {
-      "attempted": 651,
-      "made": 229,
-      "pct": 35.2,
-      "assisted": 169,
-      "assistedPct": 73.8
+      "attempted": 756,
+      "made": 274,
+      "pct": 36.2,
+      "assisted": 203,
+      "assistedPct": 74.1
     },
     "freeThrows": {
-      "attempted": 318,
-      "made": 247,
-      "pct": 77.7
+      "attempted": 374,
+      "made": 296,
+      "pct": 79.1
     },
     "attemptsBreakdown": {
-      "dunks": 2,
-      "layups": 31.3,
-      "tipIns": 2.5,
-      "twoPointJumpers": 12.5,
-      "threePointJumpers": 51.7
+      "dunks": 1.7,
+      "layups": 31.6,
+      "tipIns": 2.6,
+      "twoPointJumpers": 11.9,
+      "threePointJumpers": 52.2
     }
   }
 ]

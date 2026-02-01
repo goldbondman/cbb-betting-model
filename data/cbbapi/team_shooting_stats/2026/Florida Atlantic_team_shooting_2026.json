@@ -4,53 +4,53 @@
     "teamId": 86,
     "team": "Florida Atlantic",
     "conference": "American",
-    "trackedShots": 1255,
-    "freeThrowRate": 32.4,
-    "assistedPct": 22.7,
+    "trackedShots": 1373,
+    "freeThrowRate": 33.9,
+    "assistedPct": 22,
     "dunks": {
-      "attempted": 73,
-      "made": 61,
-      "pct": 83.6,
-      "assisted": 49,
-      "assistedPct": 80.3
+      "attempted": 74,
+      "made": 62,
+      "pct": 83.8,
+      "assisted": 50,
+      "assistedPct": 80.6
     },
     "layups": {
-      "attempted": 386,
-      "made": 208,
-      "pct": 53.9,
-      "assisted": 66,
-      "assistedPct": 31.7
+      "attempted": 415,
+      "made": 221,
+      "pct": 53.3,
+      "assisted": 69,
+      "assistedPct": 31.2
     },
     "tipIns": {
-      "attempted": 56,
-      "made": 39,
-      "pct": 69.6
+      "attempted": 62,
+      "made": 41,
+      "pct": 66.1
     },
     "twoPointJumpers": {
-      "attempted": 220,
-      "made": 109,
-      "pct": 49.5,
-      "assisted": 21,
-      "assistedPct": 19.3
+      "attempted": 258,
+      "made": 123,
+      "pct": 47.7,
+      "assisted": 25,
+      "assistedPct": 20.3
     },
     "threePointJumpers": {
-      "attempted": 520,
-      "made": 178,
-      "pct": 34.2,
-      "assisted": 149,
-      "assistedPct": 83.7
+      "attempted": 564,
+      "made": 191,
+      "pct": 33.9,
+      "assisted": 158,
+      "assistedPct": 82.7
     },
     "freeThrows": {
-      "attempted": 407,
-      "made": 294,
-      "pct": 72.2
+      "attempted": 465,
+      "made": 335,
+      "pct": 72
     },
     "attemptsBreakdown": {
-      "dunks": 5.8,
-      "layups": 30.8,
+      "dunks": 5.4,
+      "layups": 30.2,
       "tipIns": 4.5,
-      "twoPointJumpers": 17.5,
-      "threePointJumpers": 41.4
+      "twoPointJumpers": 18.8,
+      "threePointJumpers": 41.1
     }
   }
 ]

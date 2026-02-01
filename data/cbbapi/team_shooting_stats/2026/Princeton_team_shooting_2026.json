@@ -4,53 +4,53 @@
     "teamId": 234,
     "team": "Princeton",
     "conference": "Ivy",
-    "trackedShots": 1067,
-    "freeThrowRate": 33.6,
-    "assistedPct": 22.4,
+    "trackedShots": 1232,
+    "freeThrowRate": 33.5,
+    "assistedPct": 22.5,
     "dunks": {
-      "attempted": 17,
-      "made": 12,
-      "pct": 70.6,
-      "assisted": 10,
-      "assistedPct": 83.3
+      "attempted": 22,
+      "made": 16,
+      "pct": 72.7,
+      "assisted": 14,
+      "assistedPct": 87.5
     },
     "layups": {
-      "attempted": 322,
-      "made": 177,
-      "pct": 55,
-      "assisted": 69,
-      "assistedPct": 39
+      "attempted": 374,
+      "made": 198,
+      "pct": 52.9,
+      "assisted": 78,
+      "assistedPct": 39.4
     },
     "tipIns": {
-      "attempted": 21,
-      "made": 10,
-      "pct": 47.6
+      "attempted": 30,
+      "made": 16,
+      "pct": 53.3
     },
     "twoPointJumpers": {
-      "attempted": 198,
-      "made": 77,
-      "pct": 38.9,
-      "assisted": 16,
-      "assistedPct": 20.8
+      "attempted": 235,
+      "made": 93,
+      "pct": 39.6,
+      "assisted": 21,
+      "assistedPct": 22.6
     },
     "threePointJumpers": {
-      "attempted": 509,
-      "made": 172,
-      "pct": 33.8,
-      "assisted": 144,
-      "assistedPct": 83.7
+      "attempted": 571,
+      "made": 194,
+      "pct": 34,
+      "assisted": 164,
+      "assistedPct": 84.5
     },
     "freeThrows": {
-      "attempted": 358,
-      "made": 262,
-      "pct": 73.2
+      "attempted": 413,
+      "made": 309,
+      "pct": 74.8
     },
     "attemptsBreakdown": {
-      "dunks": 1.6,
-      "layups": 30.2,
-      "tipIns": 2,
-      "twoPointJumpers": 18.6,
-      "threePointJumpers": 47.7
+      "dunks": 1.8,
+      "layups": 30.4,
+      "tipIns": 2.4,
+      "twoPointJumpers": 19.1,
+      "threePointJumpers": 46.3
     }
   }
 ]

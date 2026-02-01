@@ -4,53 +4,53 @@
     "teamId": 245,
     "team": "Rutgers",
     "conference": "Big Ten",
-    "trackedShots": 1093,
-    "freeThrowRate": 40,
-    "assistedPct": 18.8,
+    "trackedShots": 1287,
+    "freeThrowRate": 37.8,
+    "assistedPct": 18.3,
     "dunks": {
-      "attempted": 40,
-      "made": 36,
-      "pct": 90,
+      "attempted": 42,
+      "made": 37,
+      "pct": 88.1,
       "assisted": 24,
-      "assistedPct": 66.7
+      "assistedPct": 64.9
     },
     "layups": {
-      "attempted": 295,
-      "made": 142,
-      "pct": 48.1,
-      "assisted": 44,
-      "assistedPct": 31
+      "attempted": 345,
+      "made": 165,
+      "pct": 47.8,
+      "assisted": 53,
+      "assistedPct": 32.1
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 15,
-      "pct": 55.6
+      "attempted": 34,
+      "made": 20,
+      "pct": 58.8
     },
     "twoPointJumpers": {
-      "attempted": 345,
-      "made": 130,
-      "pct": 37.7,
-      "assisted": 27,
-      "assistedPct": 20.8
+      "attempted": 410,
+      "made": 153,
+      "pct": 37.3,
+      "assisted": 29,
+      "assistedPct": 19
     },
     "threePointJumpers": {
-      "attempted": 386,
-      "made": 124,
-      "pct": 32.1,
-      "assisted": 110,
-      "assistedPct": 88.7
+      "attempted": 456,
+      "made": 147,
+      "pct": 32.2,
+      "assisted": 130,
+      "assistedPct": 88.4
     },
     "freeThrows": {
-      "attempted": 437,
-      "made": 317,
-      "pct": 72.5
+      "attempted": 486,
+      "made": 357,
+      "pct": 73.5
     },
     "attemptsBreakdown": {
-      "dunks": 3.7,
-      "layups": 27,
-      "tipIns": 2.5,
-      "twoPointJumpers": 31.6,
-      "threePointJumpers": 35.3
+      "dunks": 3.3,
+      "layups": 26.8,
+      "tipIns": 2.6,
+      "twoPointJumpers": 31.9,
+      "threePointJumpers": 35.4
     }
   }
 ]

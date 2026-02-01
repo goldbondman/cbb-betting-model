@@ -4,52 +4,52 @@
     "teamId": 66,
     "team": "Delaware",
     "conference": "CUSA",
-    "trackedShots": 970,
-    "freeThrowRate": 26.5,
-    "assistedPct": 24.4,
+    "trackedShots": 1107,
+    "freeThrowRate": 28.4,
+    "assistedPct": 23.3,
     "dunks": {
-      "attempted": 30,
-      "made": 25,
-      "pct": 83.3,
-      "assisted": 20,
-      "assistedPct": 80
+      "attempted": 31,
+      "made": 26,
+      "pct": 83.9,
+      "assisted": 21,
+      "assistedPct": 80.8
     },
     "layups": {
-      "attempted": 303,
-      "made": 154,
-      "pct": 50.8,
-      "assisted": 75,
-      "assistedPct": 48.7
+      "attempted": 338,
+      "made": 180,
+      "pct": 53.3,
+      "assisted": 81,
+      "assistedPct": 45
     },
     "tipIns": {
-      "attempted": 21,
-      "made": 15,
-      "pct": 71.4
+      "attempted": 24,
+      "made": 17,
+      "pct": 70.8
     },
     "twoPointJumpers": {
-      "attempted": 185,
-      "made": 76,
-      "pct": 41.1,
-      "assisted": 23,
-      "assistedPct": 30.3
+      "attempted": 222,
+      "made": 88,
+      "pct": 39.6,
+      "assisted": 25,
+      "assistedPct": 28.4
     },
     "threePointJumpers": {
-      "attempted": 431,
-      "made": 155,
-      "pct": 36,
-      "assisted": 119,
-      "assistedPct": 76.8
+      "attempted": 492,
+      "made": 171,
+      "pct": 34.8,
+      "assisted": 131,
+      "assistedPct": 76.6
     },
     "freeThrows": {
-      "attempted": 257,
-      "made": 186,
-      "pct": 72.4
+      "attempted": 314,
+      "made": 235,
+      "pct": 74.8
     },
     "attemptsBreakdown": {
-      "dunks": 3.1,
-      "layups": 31.2,
+      "dunks": 2.8,
+      "layups": 30.5,
       "tipIns": 2.2,
-      "twoPointJumpers": 19.1,
+      "twoPointJumpers": 20.1,
       "threePointJumpers": 44.4
     }
   }

@@ -4,53 +4,53 @@
     "teamId": 212,
     "team": "Northwestern",
     "conference": "Big Ten",
-    "trackedShots": 1105,
-    "freeThrowRate": 38.4,
-    "assistedPct": 30,
+    "trackedShots": 1278,
+    "freeThrowRate": 36.9,
+    "assistedPct": 30.2,
     "dunks": {
-      "attempted": 50,
-      "made": 47,
-      "pct": 94,
-      "assisted": 32,
-      "assistedPct": 68.1
+      "attempted": 60,
+      "made": 56,
+      "pct": 93.3,
+      "assisted": 38,
+      "assistedPct": 67.9
     },
     "layups": {
-      "attempted": 326,
-      "made": 196,
-      "pct": 60.1,
-      "assisted": 127,
-      "assistedPct": 64.8
+      "attempted": 380,
+      "made": 228,
+      "pct": 60,
+      "assisted": 148,
+      "assistedPct": 64.9
     },
     "tipIns": {
-      "attempted": 41,
-      "made": 26,
-      "pct": 63.4
+      "attempted": 47,
+      "made": 30,
+      "pct": 63.8
     },
     "twoPointJumpers": {
-      "attempted": 313,
-      "made": 133,
-      "pct": 42.5,
-      "assisted": 77,
-      "assistedPct": 57.9
+      "attempted": 352,
+      "made": 144,
+      "pct": 40.9,
+      "assisted": 85,
+      "assistedPct": 59
     },
     "threePointJumpers": {
-      "attempted": 375,
-      "made": 116,
-      "pct": 30.9,
-      "assisted": 96,
-      "assistedPct": 82.8
+      "attempted": 439,
+      "made": 140,
+      "pct": 31.9,
+      "assisted": 115,
+      "assistedPct": 82.1
     },
     "freeThrows": {
-      "attempted": 424,
-      "made": 314,
-      "pct": 74.1
+      "attempted": 471,
+      "made": 350,
+      "pct": 74.3
     },
     "attemptsBreakdown": {
-      "dunks": 4.5,
-      "layups": 29.5,
+      "dunks": 4.7,
+      "layups": 29.7,
       "tipIns": 3.7,
-      "twoPointJumpers": 28.3,
-      "threePointJumpers": 33.9
+      "twoPointJumpers": 27.5,
+      "threePointJumpers": 34.4
     }
   }
 ]

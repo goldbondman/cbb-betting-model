@@ -4,53 +4,53 @@
     "teamId": 95,
     "team": "George Mason",
     "conference": "A-10",
-    "trackedShots": 1013,
-    "freeThrowRate": 50.6,
-    "assistedPct": 25.8,
+    "trackedShots": 1163,
+    "freeThrowRate": 49.4,
+    "assistedPct": 24.9,
     "dunks": {
-      "attempted": 44,
-      "made": 37,
-      "pct": 84.1,
-      "assisted": 32,
-      "assistedPct": 86.5
+      "attempted": 48,
+      "made": 41,
+      "pct": 85.4,
+      "assisted": 34,
+      "assistedPct": 82.9
     },
     "layups": {
-      "attempted": 363,
-      "made": 223,
+      "attempted": 425,
+      "made": 261,
       "pct": 61.4,
-      "assisted": 109,
-      "assistedPct": 48.9
+      "assisted": 124,
+      "assistedPct": 47.5
     },
     "tipIns": {
-      "attempted": 28,
-      "made": 17,
-      "pct": 60.7
+      "attempted": 31,
+      "made": 20,
+      "pct": 64.5
     },
     "twoPointJumpers": {
-      "attempted": 240,
-      "made": 95,
-      "pct": 39.6,
-      "assisted": 23,
-      "assistedPct": 24.2
+      "attempted": 266,
+      "made": 109,
+      "pct": 41,
+      "assisted": 25,
+      "assistedPct": 22.9
     },
     "threePointJumpers": {
-      "attempted": 338,
-      "made": 122,
-      "pct": 36.1,
-      "assisted": 97,
-      "assistedPct": 79.5
+      "attempted": 393,
+      "made": 136,
+      "pct": 34.6,
+      "assisted": 107,
+      "assistedPct": 78.7
     },
     "freeThrows": {
-      "attempted": 513,
-      "made": 378,
-      "pct": 73.7
+      "attempted": 574,
+      "made": 420,
+      "pct": 73.2
     },
     "attemptsBreakdown": {
-      "dunks": 4.3,
-      "layups": 35.8,
-      "tipIns": 2.8,
-      "twoPointJumpers": 23.7,
-      "threePointJumpers": 33.4
+      "dunks": 4.1,
+      "layups": 36.5,
+      "tipIns": 2.7,
+      "twoPointJumpers": 22.9,
+      "threePointJumpers": 33.8
     }
   }
 ]

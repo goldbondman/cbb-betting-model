@@ -4,9 +4,9 @@
     "teamId": 53,
     "team": "Cleveland State",
     "conference": "Horizon",
-    "trackedShots": 1210,
-    "freeThrowRate": 39.6,
-    "assistedPct": 26,
+    "trackedShots": 1261,
+    "freeThrowRate": 40,
+    "assistedPct": 26.6,
     "dunks": {
       "attempted": 20,
       "made": 17,
@@ -15,42 +15,42 @@
       "assistedPct": 82.4
     },
     "layups": {
-      "attempted": 402,
-      "made": 236,
-      "pct": 58.7,
-      "assisted": 104,
-      "assistedPct": 44.1
+      "attempted": 413,
+      "made": 241,
+      "pct": 58.4,
+      "assisted": 107,
+      "assistedPct": 44.4
     },
     "tipIns": {
-      "attempted": 24,
-      "made": 15,
-      "pct": 62.5
+      "attempted": 25,
+      "made": 16,
+      "pct": 64
     },
     "twoPointJumpers": {
-      "attempted": 189,
-      "made": 62,
-      "pct": 32.8,
-      "assisted": 19,
-      "assistedPct": 30.6
+      "attempted": 199,
+      "made": 66,
+      "pct": 33.2,
+      "assisted": 21,
+      "assistedPct": 31.8
     },
     "threePointJumpers": {
-      "attempted": 575,
-      "made": 217,
-      "pct": 37.7,
-      "assisted": 178,
-      "assistedPct": 82
+      "attempted": 604,
+      "made": 233,
+      "pct": 38.6,
+      "assisted": 193,
+      "assistedPct": 82.8
     },
     "freeThrows": {
-      "attempted": 479,
-      "made": 358,
-      "pct": 74.7
+      "attempted": 505,
+      "made": 379,
+      "pct": 75
     },
     "attemptsBreakdown": {
-      "dunks": 1.7,
-      "layups": 33.2,
+      "dunks": 1.6,
+      "layups": 32.8,
       "tipIns": 2,
-      "twoPointJumpers": 15.6,
-      "threePointJumpers": 47.5
+      "twoPointJumpers": 15.8,
+      "threePointJumpers": 47.9
     }
   }
 ]

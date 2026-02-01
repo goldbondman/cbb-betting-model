@@ -4,53 +4,53 @@
     "teamId": 116,
     "team": "Idaho State",
     "conference": "Big Sky",
-    "trackedShots": 1113,
-    "freeThrowRate": 40.1,
+    "trackedShots": 1225,
+    "freeThrowRate": 38.9,
     "assistedPct": 21.6,
     "dunks": {
-      "attempted": 45,
-      "made": 35,
-      "pct": 77.8,
-      "assisted": 26,
-      "assistedPct": 74.3
+      "attempted": 46,
+      "made": 36,
+      "pct": 78.3,
+      "assisted": 27,
+      "assistedPct": 75
     },
     "layups": {
-      "attempted": 340,
-      "made": 190,
-      "pct": 55.9,
-      "assisted": 60,
-      "assistedPct": 31.6
+      "attempted": 378,
+      "made": 211,
+      "pct": 55.8,
+      "assisted": 66,
+      "assistedPct": 31.3
     },
     "tipIns": {
-      "attempted": 43,
-      "made": 26,
-      "pct": 60.5
+      "attempted": 44,
+      "made": 27,
+      "pct": 61.4
     },
     "twoPointJumpers": {
-      "attempted": 203,
-      "made": 100,
-      "pct": 49.3,
-      "assisted": 27,
-      "assistedPct": 27
+      "attempted": 228,
+      "made": 110,
+      "pct": 48.2,
+      "assisted": 30,
+      "assistedPct": 27.3
     },
     "threePointJumpers": {
-      "attempted": 482,
-      "made": 164,
-      "pct": 34,
-      "assisted": 127,
-      "assistedPct": 77.4
+      "attempted": 529,
+      "made": 181,
+      "pct": 34.2,
+      "assisted": 141,
+      "assistedPct": 77.9
     },
     "freeThrows": {
-      "attempted": 446,
-      "made": 330,
-      "pct": 74
+      "attempted": 476,
+      "made": 352,
+      "pct": 73.9
     },
     "attemptsBreakdown": {
-      "dunks": 4,
-      "layups": 30.5,
-      "tipIns": 3.9,
-      "twoPointJumpers": 18.2,
-      "threePointJumpers": 43.3
+      "dunks": 3.8,
+      "layups": 30.9,
+      "tipIns": 3.6,
+      "twoPointJumpers": 18.6,
+      "threePointJumpers": 43.2
     }
   }
 ]

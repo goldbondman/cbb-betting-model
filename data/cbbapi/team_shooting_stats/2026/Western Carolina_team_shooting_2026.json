@@ -4,53 +4,53 @@
     "teamId": 348,
     "team": "Western Carolina",
     "conference": "SoCon",
-    "trackedShots": 1157,
-    "freeThrowRate": 28.5,
-    "assistedPct": 20.2,
+    "trackedShots": 1285,
+    "freeThrowRate": 28.1,
+    "assistedPct": 20.9,
     "dunks": {
-      "attempted": 33,
-      "made": 26,
-      "pct": 78.8,
-      "assisted": 23,
-      "assistedPct": 88.5
+      "attempted": 37,
+      "made": 30,
+      "pct": 81.1,
+      "assisted": 27,
+      "assistedPct": 90
     },
     "layups": {
-      "attempted": 394,
-      "made": 208,
-      "pct": 52.8,
-      "assisted": 84,
-      "assistedPct": 40.4
+      "attempted": 434,
+      "made": 235,
+      "pct": 54.1,
+      "assisted": 98,
+      "assistedPct": 41.7
     },
     "tipIns": {
-      "attempted": 45,
-      "made": 34,
-      "pct": 75.6
+      "attempted": 49,
+      "made": 38,
+      "pct": 77.6
     },
     "twoPointJumpers": {
-      "attempted": 229,
-      "made": 94,
-      "pct": 41,
+      "attempted": 251,
+      "made": 101,
+      "pct": 40.2,
       "assisted": 11,
-      "assistedPct": 11.7
+      "assistedPct": 10.9
     },
     "threePointJumpers": {
-      "attempted": 456,
-      "made": 145,
-      "pct": 31.8,
-      "assisted": 116,
-      "assistedPct": 80
+      "attempted": 514,
+      "made": 169,
+      "pct": 32.9,
+      "assisted": 133,
+      "assistedPct": 78.7
     },
     "freeThrows": {
-      "attempted": 330,
-      "made": 229,
-      "pct": 69.4
+      "attempted": 361,
+      "made": 251,
+      "pct": 69.5
     },
     "attemptsBreakdown": {
       "dunks": 2.9,
-      "layups": 34.1,
-      "tipIns": 3.9,
-      "twoPointJumpers": 19.8,
-      "threePointJumpers": 39.4
+      "layups": 33.8,
+      "tipIns": 3.8,
+      "twoPointJumpers": 19.5,
+      "threePointJumpers": 40
     }
   }
 ]

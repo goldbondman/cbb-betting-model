@@ -4,53 +4,53 @@
     "teamId": 51,
     "team": "Cincinnati",
     "conference": "Big 12",
-    "trackedShots": 1172,
-    "freeThrowRate": 32.2,
-    "assistedPct": 26.2,
+    "trackedShots": 1341,
+    "freeThrowRate": 31.2,
+    "assistedPct": 26.1,
     "dunks": {
-      "attempted": 79,
-      "made": 66,
-      "pct": 83.5,
-      "assisted": 56,
-      "assistedPct": 84.8
+      "attempted": 87,
+      "made": 74,
+      "pct": 85.1,
+      "assisted": 62,
+      "assistedPct": 83.8
     },
     "layups": {
-      "attempted": 271,
-      "made": 150,
-      "pct": 55.4,
-      "assisted": 77,
-      "assistedPct": 51.3
+      "attempted": 294,
+      "made": 157,
+      "pct": 53.4,
+      "assisted": 82,
+      "assistedPct": 52.2
     },
     "tipIns": {
-      "attempted": 29,
-      "made": 21,
-      "pct": 72.4
+      "attempted": 32,
+      "made": 22,
+      "pct": 68.8
     },
     "twoPointJumpers": {
-      "attempted": 264,
-      "made": 97,
-      "pct": 36.7,
-      "assisted": 46,
-      "assistedPct": 47.4
+      "attempted": 330,
+      "made": 128,
+      "pct": 38.8,
+      "assisted": 58,
+      "assistedPct": 45.3
     },
     "threePointJumpers": {
-      "attempted": 529,
-      "made": 160,
-      "pct": 30.2,
-      "assisted": 128,
-      "assistedPct": 80
+      "attempted": 598,
+      "made": 182,
+      "pct": 30.4,
+      "assisted": 148,
+      "assistedPct": 81.3
     },
     "freeThrows": {
-      "attempted": 377,
-      "made": 246,
-      "pct": 65.3
+      "attempted": 419,
+      "made": 275,
+      "pct": 65.6
     },
     "attemptsBreakdown": {
-      "dunks": 6.7,
-      "layups": 23.1,
-      "tipIns": 2.5,
-      "twoPointJumpers": 22.5,
-      "threePointJumpers": 45.1
+      "dunks": 6.5,
+      "layups": 21.9,
+      "tipIns": 2.4,
+      "twoPointJumpers": 24.6,
+      "threePointJumpers": 44.6
     }
   }
 ]

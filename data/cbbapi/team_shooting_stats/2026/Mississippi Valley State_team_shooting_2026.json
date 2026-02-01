@@ -4,53 +4,53 @@
     "teamId": 175,
     "team": "Mississippi Valley State",
     "conference": "SWAC",
-    "trackedShots": 1125,
-    "freeThrowRate": 31.5,
-    "assistedPct": 21.2,
+    "trackedShots": 1236,
+    "freeThrowRate": 31.6,
+    "assistedPct": 21.4,
     "dunks": {
-      "attempted": 38,
-      "made": 32,
-      "pct": 84.2,
-      "assisted": 24,
-      "assistedPct": 75
+      "attempted": 41,
+      "made": 35,
+      "pct": 85.4,
+      "assisted": 27,
+      "assistedPct": 77.1
     },
     "layups": {
-      "attempted": 302,
-      "made": 154,
-      "pct": 51,
-      "assisted": 77,
-      "assistedPct": 50
+      "attempted": 326,
+      "made": 166,
+      "pct": 50.9,
+      "assisted": 84,
+      "assistedPct": 50.6
     },
     "tipIns": {
-      "attempted": 17,
-      "made": 11,
-      "pct": 64.7
+      "attempted": 19,
+      "made": 13,
+      "pct": 68.4
     },
     "twoPointJumpers": {
-      "attempted": 416,
-      "made": 148,
-      "pct": 35.6,
-      "assisted": 58,
-      "assistedPct": 39.2
+      "attempted": 464,
+      "made": 172,
+      "pct": 37.1,
+      "assisted": 65,
+      "assistedPct": 37.8
     },
     "threePointJumpers": {
-      "attempted": 352,
-      "made": 103,
+      "attempted": 386,
+      "made": 113,
       "pct": 29.3,
-      "assisted": 79,
-      "assistedPct": 76.7
+      "assisted": 88,
+      "assistedPct": 77.9
     },
     "freeThrows": {
-      "attempted": 354,
-      "made": 256,
-      "pct": 72.3
+      "attempted": 390,
+      "made": 283,
+      "pct": 72.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 26.8,
+      "dunks": 3.3,
+      "layups": 26.4,
       "tipIns": 1.5,
-      "twoPointJumpers": 37,
-      "threePointJumpers": 31.3
+      "twoPointJumpers": 37.5,
+      "threePointJumpers": 31.2
     }
   }
 ]

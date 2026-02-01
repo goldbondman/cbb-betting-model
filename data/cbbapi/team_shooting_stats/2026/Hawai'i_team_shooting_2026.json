@@ -4,53 +4,53 @@
     "teamId": 108,
     "team": "Hawai'i",
     "conference": "Big West",
-    "trackedShots": 980,
-    "freeThrowRate": 42.2,
-    "assistedPct": 24.9,
+    "trackedShots": 1224,
+    "freeThrowRate": 42.9,
+    "assistedPct": 24.4,
     "dunks": {
-      "attempted": 35,
-      "made": 28,
-      "pct": 80,
-      "assisted": 18,
-      "assistedPct": 64.3
+      "attempted": 47,
+      "made": 37,
+      "pct": 78.7,
+      "assisted": 23,
+      "assistedPct": 62.2
     },
     "layups": {
-      "attempted": 395,
-      "made": 239,
-      "pct": 60.5,
-      "assisted": 106,
-      "assistedPct": 44.4
+      "attempted": 475,
+      "made": 282,
+      "pct": 59.4,
+      "assisted": 114,
+      "assistedPct": 40.4
     },
     "tipIns": {
-      "attempted": 21,
-      "made": 14,
-      "pct": 66.7
+      "attempted": 25,
+      "made": 15,
+      "pct": 60
     },
     "twoPointJumpers": {
-      "attempted": 141,
-      "made": 55,
-      "pct": 39,
-      "assisted": 19,
-      "assistedPct": 34.5
+      "attempted": 187,
+      "made": 74,
+      "pct": 39.6,
+      "assisted": 25,
+      "assistedPct": 33.8
     },
     "threePointJumpers": {
-      "attempted": 388,
-      "made": 123,
-      "pct": 31.7,
-      "assisted": 101,
-      "assistedPct": 82.1
+      "attempted": 490,
+      "made": 163,
+      "pct": 33.3,
+      "assisted": 137,
+      "assistedPct": 84
     },
     "freeThrows": {
-      "attempted": 414,
-      "made": 300,
-      "pct": 72.5
+      "attempted": 525,
+      "made": 388,
+      "pct": 73.9
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 40.3,
-      "tipIns": 2.1,
-      "twoPointJumpers": 14.4,
-      "threePointJumpers": 39.6
+      "dunks": 3.8,
+      "layups": 38.8,
+      "tipIns": 2,
+      "twoPointJumpers": 15.3,
+      "threePointJumpers": 40
     }
   }
 ]

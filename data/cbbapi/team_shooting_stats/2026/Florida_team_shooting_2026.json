@@ -4,53 +4,53 @@
     "teamId": 87,
     "team": "Florida",
     "conference": "SEC",
-    "trackedShots": 1228,
-    "freeThrowRate": 40.8,
-    "assistedPct": 23.6,
+    "trackedShots": 1348,
+    "freeThrowRate": 40.2,
+    "assistedPct": 24.5,
     "dunks": {
-      "attempted": 106,
-      "made": 100,
-      "pct": 94.3,
-      "assisted": 82,
-      "assistedPct": 82
+      "attempted": 118,
+      "made": 111,
+      "pct": 94.1,
+      "assisted": 92,
+      "assistedPct": 82.9
     },
     "layups": {
-      "attempted": 408,
-      "made": 228,
-      "pct": 55.9,
-      "assisted": 75,
-      "assistedPct": 32.9
+      "attempted": 441,
+      "made": 250,
+      "pct": 56.7,
+      "assisted": 84,
+      "assistedPct": 33.6
     },
     "tipIns": {
-      "attempted": 43,
-      "made": 27,
-      "pct": 62.8
+      "attempted": 48,
+      "made": 29,
+      "pct": 60.4
     },
     "twoPointJumpers": {
-      "attempted": 174,
-      "made": 73,
-      "pct": 42,
-      "assisted": 20,
-      "assistedPct": 27.4
+      "attempted": 196,
+      "made": 82,
+      "pct": 41.8,
+      "assisted": 27,
+      "assistedPct": 32.9
     },
     "threePointJumpers": {
-      "attempted": 497,
-      "made": 142,
-      "pct": 28.6,
-      "assisted": 113,
-      "assistedPct": 79.6
+      "attempted": 545,
+      "made": 158,
+      "pct": 29,
+      "assisted": 127,
+      "assistedPct": 80.4
     },
     "freeThrows": {
-      "attempted": 501,
-      "made": 354,
-      "pct": 70.7
+      "attempted": 542,
+      "made": 380,
+      "pct": 70.1
     },
     "attemptsBreakdown": {
-      "dunks": 8.6,
-      "layups": 33.2,
-      "tipIns": 3.5,
-      "twoPointJumpers": 14.2,
-      "threePointJumpers": 40.5
+      "dunks": 8.8,
+      "layups": 32.7,
+      "tipIns": 3.6,
+      "twoPointJumpers": 14.5,
+      "threePointJumpers": 40.4
     }
   }
 ]

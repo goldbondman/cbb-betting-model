@@ -4,53 +4,53 @@
     "teamId": 223,
     "team": "Oregon",
     "conference": "Big Ten",
-    "trackedShots": 1116,
-    "freeThrowRate": 36,
-    "assistedPct": 24.8,
+    "trackedShots": 1217,
+    "freeThrowRate": 36.1,
+    "assistedPct": 23.7,
     "dunks": {
-      "attempted": 50,
-      "made": 45,
-      "pct": 90,
-      "assisted": 41,
-      "assistedPct": 91.1
+      "attempted": 53,
+      "made": 48,
+      "pct": 90.6,
+      "assisted": 43,
+      "assistedPct": 89.6
     },
     "layups": {
-      "attempted": 263,
-      "made": 133,
-      "pct": 50.6,
-      "assisted": 59,
-      "assistedPct": 44.4
+      "attempted": 282,
+      "made": 143,
+      "pct": 50.7,
+      "assisted": 63,
+      "assistedPct": 44.1
     },
     "tipIns": {
-      "attempted": 56,
-      "made": 39,
-      "pct": 69.6
+      "attempted": 58,
+      "made": 41,
+      "pct": 70.7
     },
     "twoPointJumpers": {
-      "attempted": 258,
-      "made": 99,
-      "pct": 38.4,
-      "assisted": 37,
-      "assistedPct": 37.4
+      "attempted": 288,
+      "made": 108,
+      "pct": 37.5,
+      "assisted": 39,
+      "assistedPct": 36.1
     },
     "threePointJumpers": {
-      "attempted": 489,
-      "made": 164,
-      "pct": 33.5,
-      "assisted": 140,
-      "assistedPct": 85.4
+      "attempted": 536,
+      "made": 176,
+      "pct": 32.8,
+      "assisted": 144,
+      "assistedPct": 81.8
     },
     "freeThrows": {
-      "attempted": 402,
-      "made": 281,
-      "pct": 69.9
+      "attempted": 439,
+      "made": 311,
+      "pct": 70.8
     },
     "attemptsBreakdown": {
-      "dunks": 4.5,
-      "layups": 23.6,
-      "tipIns": 5,
-      "twoPointJumpers": 23.1,
-      "threePointJumpers": 43.8
+      "dunks": 4.4,
+      "layups": 23.2,
+      "tipIns": 4.8,
+      "twoPointJumpers": 23.7,
+      "threePointJumpers": 44
     }
   }
 ]

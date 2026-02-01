@@ -4,53 +4,53 @@
     "teamId": 246,
     "team": "SE Louisiana",
     "conference": "Southland",
-    "trackedShots": 1042,
-    "freeThrowRate": 39,
-    "assistedPct": 22,
+    "trackedShots": 1181,
+    "freeThrowRate": 41.3,
+    "assistedPct": 21,
     "dunks": {
-      "attempted": 36,
-      "made": 28,
-      "pct": 77.8,
-      "assisted": 21,
-      "assistedPct": 75
+      "attempted": 37,
+      "made": 29,
+      "pct": 78.4,
+      "assisted": 22,
+      "assistedPct": 75.9
     },
     "layups": {
-      "attempted": 319,
-      "made": 184,
-      "pct": 57.7,
-      "assisted": 89,
-      "assistedPct": 48.4
+      "attempted": 355,
+      "made": 204,
+      "pct": 57.5,
+      "assisted": 96,
+      "assistedPct": 47.1
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 17,
-      "pct": 63
+      "attempted": 31,
+      "made": 20,
+      "pct": 64.5
     },
     "twoPointJumpers": {
-      "attempted": 246,
-      "made": 80,
-      "pct": 32.5,
-      "assisted": 28,
-      "assistedPct": 35
+      "attempted": 284,
+      "made": 93,
+      "pct": 32.7,
+      "assisted": 30,
+      "assistedPct": 32.3
     },
     "threePointJumpers": {
-      "attempted": 414,
-      "made": 113,
-      "pct": 27.3,
-      "assisted": 91,
-      "assistedPct": 80.5
+      "attempted": 474,
+      "made": 131,
+      "pct": 27.6,
+      "assisted": 100,
+      "assistedPct": 76.3
     },
     "freeThrows": {
-      "attempted": 406,
-      "made": 281,
-      "pct": 69.2
+      "attempted": 488,
+      "made": 344,
+      "pct": 70.5
     },
     "attemptsBreakdown": {
-      "dunks": 3.5,
-      "layups": 30.6,
+      "dunks": 3.1,
+      "layups": 30.1,
       "tipIns": 2.6,
-      "twoPointJumpers": 23.6,
-      "threePointJumpers": 39.7
+      "twoPointJumpers": 24,
+      "threePointJumpers": 40.1
     }
   }
 ]

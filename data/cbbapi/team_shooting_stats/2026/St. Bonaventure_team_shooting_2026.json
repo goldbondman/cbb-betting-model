@@ -4,53 +4,53 @@
     "teamId": 277,
     "team": "St. Bonaventure",
     "conference": "A-10",
-    "trackedShots": 1174,
-    "freeThrowRate": 26.8,
-    "assistedPct": 25.1,
+    "trackedShots": 1336,
+    "freeThrowRate": 29.2,
+    "assistedPct": 25.7,
     "dunks": {
-      "attempted": 40,
-      "made": 37,
-      "pct": 92.5,
-      "assisted": 30,
-      "assistedPct": 81.1
+      "attempted": 51,
+      "made": 46,
+      "pct": 90.2,
+      "assisted": 38,
+      "assistedPct": 82.6
     },
     "layups": {
-      "attempted": 384,
-      "made": 211,
-      "pct": 54.9,
-      "assisted": 99,
-      "assistedPct": 46.9
+      "attempted": 431,
+      "made": 235,
+      "pct": 54.5,
+      "assisted": 115,
+      "assistedPct": 48.9
     },
     "tipIns": {
-      "attempted": 51,
+      "attempted": 54,
       "made": 24,
-      "pct": 47.1
+      "pct": 44.4
     },
     "twoPointJumpers": {
-      "attempted": 327,
-      "made": 135,
-      "pct": 41.3,
-      "assisted": 49,
-      "assistedPct": 36.3
+      "attempted": 379,
+      "made": 162,
+      "pct": 42.7,
+      "assisted": 57,
+      "assistedPct": 35.2
     },
     "threePointJumpers": {
-      "attempted": 372,
-      "made": 141,
-      "pct": 37.9,
-      "assisted": 117,
-      "assistedPct": 83
+      "attempted": 421,
+      "made": 158,
+      "pct": 37.5,
+      "assisted": 134,
+      "assistedPct": 84.8
     },
     "freeThrows": {
-      "attempted": 315,
-      "made": 243,
-      "pct": 77.1
+      "attempted": 390,
+      "made": 294,
+      "pct": 75.4
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 32.7,
-      "tipIns": 4.3,
-      "twoPointJumpers": 27.9,
-      "threePointJumpers": 31.7
+      "dunks": 3.8,
+      "layups": 32.3,
+      "tipIns": 4,
+      "twoPointJumpers": 28.4,
+      "threePointJumpers": 31.5
     }
   }
 ]

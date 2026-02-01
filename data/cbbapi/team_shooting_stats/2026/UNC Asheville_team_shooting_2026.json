@@ -4,53 +4,53 @@
     "teamId": 319,
     "team": "UNC Asheville",
     "conference": "Big South",
-    "trackedShots": 1180,
-    "freeThrowRate": 39.8,
-    "assistedPct": 20,
+    "trackedShots": 1287,
+    "freeThrowRate": 40,
+    "assistedPct": 20.2,
     "dunks": {
-      "attempted": 43,
-      "made": 42,
-      "pct": 97.7,
-      "assisted": 35,
-      "assistedPct": 83.3
+      "attempted": 47,
+      "made": 46,
+      "pct": 97.9,
+      "assisted": 39,
+      "assistedPct": 84.8
     },
     "layups": {
-      "attempted": 285,
-      "made": 158,
-      "pct": 55.4,
-      "assisted": 41,
-      "assistedPct": 25.9
+      "attempted": 308,
+      "made": 170,
+      "pct": 55.2,
+      "assisted": 46,
+      "assistedPct": 27.1
     },
     "tipIns": {
-      "attempted": 45,
-      "made": 29,
-      "pct": 64.4
+      "attempted": 47,
+      "made": 31,
+      "pct": 66
     },
     "twoPointJumpers": {
-      "attempted": 394,
-      "made": 165,
-      "pct": 41.9,
+      "attempted": 428,
+      "made": 178,
+      "pct": 41.6,
       "assisted": 27,
-      "assistedPct": 16.4
+      "assistedPct": 15.2
     },
     "threePointJumpers": {
-      "attempted": 413,
-      "made": 150,
-      "pct": 36.3,
-      "assisted": 133,
-      "assistedPct": 88.7
+      "attempted": 457,
+      "made": 165,
+      "pct": 36.1,
+      "assisted": 148,
+      "assistedPct": 89.7
     },
     "freeThrows": {
-      "attempted": 470,
-      "made": 329,
-      "pct": 70
+      "attempted": 515,
+      "made": 362,
+      "pct": 70.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 24.2,
-      "tipIns": 3.8,
-      "twoPointJumpers": 33.4,
-      "threePointJumpers": 35
+      "dunks": 3.7,
+      "layups": 23.9,
+      "tipIns": 3.7,
+      "twoPointJumpers": 33.3,
+      "threePointJumpers": 35.5
     }
   }
 ]

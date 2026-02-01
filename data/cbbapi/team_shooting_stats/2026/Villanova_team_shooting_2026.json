@@ -4,9 +4,9 @@
     "teamId": 338,
     "team": "Villanova",
     "conference": "Big East",
-    "trackedShots": 1131,
-    "freeThrowRate": 30.2,
-    "assistedPct": 24.7,
+    "trackedShots": 1249,
+    "freeThrowRate": 30.9,
+    "assistedPct": 24.9,
     "dunks": {
       "attempted": 39,
       "made": 28,
@@ -15,42 +15,42 @@
       "assistedPct": 82.1
     },
     "layups": {
-      "attempted": 340,
-      "made": 210,
-      "pct": 61.8,
-      "assisted": 93,
-      "assistedPct": 44.3
+      "attempted": 372,
+      "made": 225,
+      "pct": 60.5,
+      "assisted": 100,
+      "assistedPct": 44.4
     },
     "tipIns": {
-      "attempted": 39,
-      "made": 25,
-      "pct": 64.1
+      "attempted": 45,
+      "made": 27,
+      "pct": 60
     },
     "twoPointJumpers": {
-      "attempted": 202,
-      "made": 79,
-      "pct": 39.1,
-      "assisted": 20,
-      "assistedPct": 25.3
+      "attempted": 227,
+      "made": 89,
+      "pct": 39.2,
+      "assisted": 25,
+      "assistedPct": 28.1
     },
     "threePointJumpers": {
-      "attempted": 511,
-      "made": 185,
-      "pct": 36.2,
-      "assisted": 143,
-      "assistedPct": 77.3
+      "attempted": 566,
+      "made": 208,
+      "pct": 36.7,
+      "assisted": 163,
+      "assistedPct": 78.4
     },
     "freeThrows": {
-      "attempted": 342,
-      "made": 242,
-      "pct": 70.8
+      "attempted": 386,
+      "made": 273,
+      "pct": 70.7
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 30.1,
-      "tipIns": 3.4,
-      "twoPointJumpers": 17.9,
-      "threePointJumpers": 45.2
+      "dunks": 3.1,
+      "layups": 29.8,
+      "tipIns": 3.6,
+      "twoPointJumpers": 18.2,
+      "threePointJumpers": 45.3
     }
   }
 ]

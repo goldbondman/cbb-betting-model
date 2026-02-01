@@ -4,53 +4,53 @@
     "teamId": 7,
     "team": "Alcorn State",
     "conference": "SWAC",
-    "trackedShots": 941,
-    "freeThrowRate": 25.4,
-    "assistedPct": 19.6,
+    "trackedShots": 1108,
+    "freeThrowRate": 25.5,
+    "assistedPct": 20.3,
     "dunks": {
-      "attempted": 23,
-      "made": 19,
-      "pct": 82.6,
-      "assisted": 14,
-      "assistedPct": 73.7
+      "attempted": 32,
+      "made": 28,
+      "pct": 87.5,
+      "assisted": 23,
+      "assistedPct": 82.1
     },
     "layups": {
-      "attempted": 277,
-      "made": 143,
-      "pct": 51.6,
-      "assisted": 47,
-      "assistedPct": 32.9
+      "attempted": 335,
+      "made": 170,
+      "pct": 50.7,
+      "assisted": 59,
+      "assistedPct": 34.7
     },
     "tipIns": {
-      "attempted": 29,
-      "made": 20,
-      "pct": 69
+      "attempted": 36,
+      "made": 27,
+      "pct": 75
     },
     "twoPointJumpers": {
-      "attempted": 279,
-      "made": 82,
-      "pct": 29.4,
-      "assisted": 23,
-      "assistedPct": 28
+      "attempted": 315,
+      "made": 98,
+      "pct": 31.1,
+      "assisted": 26,
+      "assistedPct": 26.5
     },
     "threePointJumpers": {
-      "attempted": 333,
-      "made": 118,
+      "attempted": 390,
+      "made": 138,
       "pct": 35.4,
-      "assisted": 100,
-      "assistedPct": 84.7
+      "assisted": 117,
+      "assistedPct": 84.8
     },
     "freeThrows": {
-      "attempted": 239,
-      "made": 164,
-      "pct": 68.6
+      "attempted": 282,
+      "made": 195,
+      "pct": 69.1
     },
     "attemptsBreakdown": {
-      "dunks": 2.4,
-      "layups": 29.4,
-      "tipIns": 3.1,
-      "twoPointJumpers": 29.6,
-      "threePointJumpers": 35.4
+      "dunks": 2.9,
+      "layups": 30.2,
+      "tipIns": 3.2,
+      "twoPointJumpers": 28.4,
+      "threePointJumpers": 35.2
     }
   }
 ]

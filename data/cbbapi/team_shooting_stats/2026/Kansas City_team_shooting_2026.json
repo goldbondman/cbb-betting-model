@@ -4,53 +4,53 @@
     "teamId": 130,
     "team": "Kansas City",
     "conference": "Summit",
-    "trackedShots": 1130,
-    "freeThrowRate": 34,
-    "assistedPct": 19.8,
+    "trackedShots": 1253,
+    "freeThrowRate": 33.1,
+    "assistedPct": 19.4,
     "dunks": {
-      "attempted": 41,
-      "made": 31,
-      "pct": 75.6,
-      "assisted": 25,
-      "assistedPct": 80.6
+      "attempted": 43,
+      "made": 33,
+      "pct": 76.7,
+      "assisted": 26,
+      "assistedPct": 78.8
     },
     "layups": {
-      "attempted": 344,
-      "made": 190,
-      "pct": 55.2,
-      "assisted": 69,
+      "attempted": 360,
+      "made": 201,
+      "pct": 55.8,
+      "assisted": 73,
       "assistedPct": 36.3
     },
     "tipIns": {
-      "attempted": 39,
+      "attempted": 41,
       "made": 22,
-      "pct": 56.4
+      "pct": 53.7
     },
     "twoPointJumpers": {
-      "attempted": 317,
-      "made": 115,
-      "pct": 36.3,
-      "assisted": 27,
-      "assistedPct": 23.5
+      "attempted": 364,
+      "made": 135,
+      "pct": 37.1,
+      "assisted": 31,
+      "assistedPct": 23
     },
     "threePointJumpers": {
-      "attempted": 389,
-      "made": 125,
-      "pct": 32.1,
-      "assisted": 103,
-      "assistedPct": 82.4
+      "attempted": 445,
+      "made": 138,
+      "pct": 31,
+      "assisted": 113,
+      "assistedPct": 81.9
     },
     "freeThrows": {
-      "attempted": 384,
-      "made": 274,
-      "pct": 71.4
+      "attempted": 415,
+      "made": 290,
+      "pct": 69.9
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 30.4,
-      "tipIns": 3.5,
-      "twoPointJumpers": 28.1,
-      "threePointJumpers": 34.4
+      "dunks": 3.4,
+      "layups": 28.7,
+      "tipIns": 3.3,
+      "twoPointJumpers": 29.1,
+      "threePointJumpers": 35.5
     }
   }
 ]

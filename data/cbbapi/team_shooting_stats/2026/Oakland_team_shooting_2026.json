@@ -4,53 +4,53 @@
     "teamId": 214,
     "team": "Oakland",
     "conference": "Horizon",
-    "trackedShots": 1290,
-    "freeThrowRate": 40.3,
-    "assistedPct": 24.3,
+    "trackedShots": 1410,
+    "freeThrowRate": 40.1,
+    "assistedPct": 24.5,
     "dunks": {
-      "attempted": 60,
-      "made": 53,
-      "pct": 88.3,
-      "assisted": 37,
-      "assistedPct": 69.8
+      "attempted": 64,
+      "made": 57,
+      "pct": 89.1,
+      "assisted": 40,
+      "assistedPct": 70.2
     },
     "layups": {
-      "attempted": 494,
-      "made": 275,
-      "pct": 55.7,
-      "assisted": 120,
+      "attempted": 545,
+      "made": 303,
+      "pct": 55.6,
+      "assisted": 132,
       "assistedPct": 43.6
     },
     "tipIns": {
-      "attempted": 33,
-      "made": 25,
-      "pct": 75.8
+      "attempted": 36,
+      "made": 28,
+      "pct": 77.8
     },
     "twoPointJumpers": {
-      "attempted": 275,
-      "made": 110,
-      "pct": 40,
-      "assisted": 31,
-      "assistedPct": 28.2
+      "attempted": 295,
+      "made": 119,
+      "pct": 40.3,
+      "assisted": 34,
+      "assistedPct": 28.6
     },
     "threePointJumpers": {
-      "attempted": 428,
-      "made": 149,
-      "pct": 34.8,
-      "assisted": 126,
-      "assistedPct": 84.6
+      "attempted": 470,
+      "made": 164,
+      "pct": 34.9,
+      "assisted": 139,
+      "assistedPct": 84.8
     },
     "freeThrows": {
-      "attempted": 520,
-      "made": 387,
-      "pct": 74.4
+      "attempted": 566,
+      "made": 423,
+      "pct": 74.7
     },
     "attemptsBreakdown": {
-      "dunks": 4.7,
-      "layups": 38.3,
+      "dunks": 4.5,
+      "layups": 38.7,
       "tipIns": 2.6,
-      "twoPointJumpers": 21.3,
-      "threePointJumpers": 33.2
+      "twoPointJumpers": 20.9,
+      "threePointJumpers": 33.3
     }
   }
 ]

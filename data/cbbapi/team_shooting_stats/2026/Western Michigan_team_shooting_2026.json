@@ -4,53 +4,53 @@
     "teamId": 351,
     "team": "Western Michigan",
     "conference": "MAC",
-    "trackedShots": 1150,
-    "freeThrowRate": 30.7,
-    "assistedPct": 22.3,
+    "trackedShots": 1256,
+    "freeThrowRate": 32.9,
+    "assistedPct": 21.8,
     "dunks": {
-      "attempted": 28,
-      "made": 26,
-      "pct": 92.9,
-      "assisted": 23,
-      "assistedPct": 88.5
+      "attempted": 31,
+      "made": 27,
+      "pct": 87.1,
+      "assisted": 24,
+      "assistedPct": 88.9
     },
     "layups": {
-      "attempted": 426,
-      "made": 223,
-      "pct": 52.3,
-      "assisted": 85,
-      "assistedPct": 38.1
+      "attempted": 467,
+      "made": 241,
+      "pct": 51.6,
+      "assisted": 90,
+      "assistedPct": 37.3
     },
     "tipIns": {
-      "attempted": 29,
-      "made": 25,
-      "pct": 86.2
+      "attempted": 31,
+      "made": 27,
+      "pct": 87.1
     },
     "twoPointJumpers": {
-      "attempted": 262,
-      "made": 110,
+      "attempted": 281,
+      "made": 118,
       "pct": 42,
-      "assisted": 28,
-      "assistedPct": 25.5
+      "assisted": 29,
+      "assistedPct": 24.6
     },
     "threePointJumpers": {
-      "attempted": 405,
-      "made": 138,
-      "pct": 34.1,
-      "assisted": 121,
-      "assistedPct": 87.7
+      "attempted": 446,
+      "made": 151,
+      "pct": 33.9,
+      "assisted": 131,
+      "assistedPct": 86.8
     },
     "freeThrows": {
-      "attempted": 353,
-      "made": 260,
-      "pct": 73.7
+      "attempted": 413,
+      "made": 305,
+      "pct": 73.8
     },
     "attemptsBreakdown": {
-      "dunks": 2.4,
-      "layups": 37,
+      "dunks": 2.5,
+      "layups": 37.2,
       "tipIns": 2.5,
-      "twoPointJumpers": 22.8,
-      "threePointJumpers": 35.2
+      "twoPointJumpers": 22.4,
+      "threePointJumpers": 35.5
     }
   }
 ]

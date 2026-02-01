@@ -4,22 +4,22 @@
     "teamId": 19,
     "team": "Ball State",
     "conference": "MAC",
-    "trackedShots": 1021,
-    "freeThrowRate": 34.1,
-    "assistedPct": 20.8,
+    "trackedShots": 1119,
+    "freeThrowRate": 35.1,
+    "assistedPct": 20.3,
     "dunks": {
-      "attempted": 16,
-      "made": 13,
-      "pct": 81.3,
-      "assisted": 10,
-      "assistedPct": 76.9
+      "attempted": 18,
+      "made": 15,
+      "pct": 83.3,
+      "assisted": 12,
+      "assistedPct": 80
     },
     "layups": {
-      "attempted": 375,
-      "made": 198,
-      "pct": 52.8,
-      "assisted": 75,
-      "assistedPct": 37.9
+      "attempted": 414,
+      "made": 217,
+      "pct": 52.4,
+      "assisted": 80,
+      "assistedPct": 36.9
     },
     "tipIns": {
       "attempted": 21,
@@ -27,30 +27,30 @@
       "pct": 81
     },
     "twoPointJumpers": {
-      "attempted": 209,
-      "made": 77,
+      "attempted": 228,
+      "made": 84,
       "pct": 36.8,
       "assisted": 23,
-      "assistedPct": 29.9
+      "assistedPct": 27.4
     },
     "threePointJumpers": {
-      "attempted": 400,
-      "made": 124,
-      "pct": 31,
-      "assisted": 104,
-      "assistedPct": 83.9
+      "attempted": 438,
+      "made": 133,
+      "pct": 30.4,
+      "assisted": 112,
+      "assistedPct": 84.2
     },
     "freeThrows": {
-      "attempted": 348,
-      "made": 245,
-      "pct": 70.4
+      "attempted": 393,
+      "made": 275,
+      "pct": 70
     },
     "attemptsBreakdown": {
       "dunks": 1.6,
-      "layups": 36.7,
-      "tipIns": 2.1,
-      "twoPointJumpers": 20.5,
-      "threePointJumpers": 39.2
+      "layups": 37,
+      "tipIns": 1.9,
+      "twoPointJumpers": 20.4,
+      "threePointJumpers": 39.1
     }
   }
 ]
