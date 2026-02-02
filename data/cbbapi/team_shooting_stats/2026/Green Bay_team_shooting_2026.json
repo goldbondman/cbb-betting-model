@@ -4,53 +4,53 @@
     "teamId": 105,
     "team": "Green Bay",
     "conference": "Horizon",
-    "trackedShots": 1206,
-    "freeThrowRate": 42.8,
+    "trackedShots": 1256,
+    "freeThrowRate": 43.2,
     "assistedPct": 25.5,
     "dunks": {
-      "attempted": 38,
-      "made": 37,
+      "attempted": 39,
+      "made": 38,
       "pct": 97.4,
-      "assisted": 27,
-      "assistedPct": 73
+      "assisted": 28,
+      "assistedPct": 73.7
     },
     "layups": {
-      "attempted": 481,
-      "made": 284,
-      "pct": 59,
-      "assisted": 126,
-      "assistedPct": 44.4
+      "attempted": 503,
+      "made": 294,
+      "pct": 58.4,
+      "assisted": 132,
+      "assistedPct": 44.9
     },
     "tipIns": {
-      "attempted": 23,
-      "made": 15,
-      "pct": 65.2
+      "attempted": 24,
+      "made": 16,
+      "pct": 66.7
     },
     "twoPointJumpers": {
-      "attempted": 187,
-      "made": 76,
+      "attempted": 197,
+      "made": 80,
       "pct": 40.6,
       "assisted": 14,
-      "assistedPct": 18.4
+      "assistedPct": 17.5
     },
     "threePointJumpers": {
-      "attempted": 477,
-      "made": 170,
-      "pct": 35.6,
-      "assisted": 140,
-      "assistedPct": 82.4
+      "attempted": 493,
+      "made": 177,
+      "pct": 35.9,
+      "assisted": 146,
+      "assistedPct": 82.5
     },
     "freeThrows": {
-      "attempted": 516,
-      "made": 381,
-      "pct": 73.8
+      "attempted": 542,
+      "made": 403,
+      "pct": 74.4
     },
     "attemptsBreakdown": {
-      "dunks": 3.2,
-      "layups": 39.9,
+      "dunks": 3.1,
+      "layups": 40,
       "tipIns": 1.9,
-      "twoPointJumpers": 15.5,
-      "threePointJumpers": 39.6
+      "twoPointJumpers": 15.7,
+      "threePointJumpers": 39.3
     }
   }
 ]

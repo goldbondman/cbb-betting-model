@@ -4,9 +4,9 @@
     "teamId": 188,
     "team": "Nebraska",
     "conference": "Big Ten",
-    "trackedShots": 1263,
-    "freeThrowRate": 27.2,
-    "assistedPct": 30.5,
+    "trackedShots": 1322,
+    "freeThrowRate": 26.4,
+    "assistedPct": 30.4,
     "dunks": {
       "attempted": 25,
       "made": 23,
@@ -15,11 +15,11 @@
       "assistedPct": 78.3
     },
     "layups": {
-      "attempted": 373,
-      "made": 262,
-      "pct": 70.2,
-      "assisted": 136,
-      "assistedPct": 51.9
+      "attempted": 385,
+      "made": 269,
+      "pct": 69.9,
+      "assisted": 137,
+      "assistedPct": 50.9
     },
     "tipIns": {
       "attempted": 17,
@@ -27,30 +27,30 @@
       "pct": 76.5
     },
     "twoPointJumpers": {
-      "attempted": 204,
-      "made": 74,
-      "pct": 36.3,
-      "assisted": 30,
-      "assistedPct": 40.5
+      "attempted": 216,
+      "made": 77,
+      "pct": 35.6,
+      "assisted": 31,
+      "assistedPct": 40.3
     },
     "threePointJumpers": {
-      "attempted": 644,
-      "made": 228,
-      "pct": 35.4,
-      "assisted": 201,
-      "assistedPct": 88.2
+      "attempted": 679,
+      "made": 243,
+      "pct": 35.8,
+      "assisted": 216,
+      "assistedPct": 88.9
     },
     "freeThrows": {
-      "attempted": 344,
-      "made": 262,
+      "attempted": 349,
+      "made": 266,
       "pct": 76.2
     },
     "attemptsBreakdown": {
-      "dunks": 2,
-      "layups": 29.5,
+      "dunks": 1.9,
+      "layups": 29.1,
       "tipIns": 1.3,
-      "twoPointJumpers": 16.2,
-      "threePointJumpers": 51
+      "twoPointJumpers": 16.3,
+      "threePointJumpers": 51.4
     }
   }
 ]

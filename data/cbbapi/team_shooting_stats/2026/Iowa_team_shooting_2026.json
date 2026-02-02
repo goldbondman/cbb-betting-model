@@ -4,53 +4,53 @@
     "teamId": 124,
     "team": "Iowa",
     "conference": "Big Ten",
-    "trackedShots": 1026,
-    "freeThrowRate": 36.6,
-    "assistedPct": 29.9,
+    "trackedShots": 1082,
+    "freeThrowRate": 35.7,
+    "assistedPct": 30,
     "dunks": {
-      "attempted": 71,
-      "made": 65,
-      "pct": 91.5,
-      "assisted": 56,
-      "assistedPct": 86.2
+      "attempted": 72,
+      "made": 66,
+      "pct": 91.7,
+      "assisted": 57,
+      "assistedPct": 86.4
     },
     "layups": {
-      "attempted": 303,
-      "made": 192,
-      "pct": 63.4,
-      "assisted": 108,
-      "assistedPct": 56.3
+      "attempted": 328,
+      "made": 209,
+      "pct": 63.7,
+      "assisted": 119,
+      "assistedPct": 56.9
     },
     "tipIns": {
-      "attempted": 26,
-      "made": 16,
-      "pct": 61.5
+      "attempted": 27,
+      "made": 17,
+      "pct": 63
     },
     "twoPointJumpers": {
-      "attempted": 204,
-      "made": 92,
-      "pct": 45.1,
-      "assisted": 21,
-      "assistedPct": 22.8
+      "attempted": 211,
+      "made": 96,
+      "pct": 45.5,
+      "assisted": 22,
+      "assistedPct": 22.9
     },
     "threePointJumpers": {
-      "attempted": 422,
-      "made": 157,
-      "pct": 37.2,
-      "assisted": 122,
-      "assistedPct": 77.7
+      "attempted": 444,
+      "made": 167,
+      "pct": 37.6,
+      "assisted": 127,
+      "assistedPct": 76
     },
     "freeThrows": {
-      "attempted": 376,
-      "made": 293,
-      "pct": 77.9
+      "attempted": 386,
+      "made": 301,
+      "pct": 78
     },
     "attemptsBreakdown": {
-      "dunks": 6.9,
-      "layups": 29.5,
+      "dunks": 6.7,
+      "layups": 30.3,
       "tipIns": 2.5,
-      "twoPointJumpers": 19.9,
-      "threePointJumpers": 41.1
+      "twoPointJumpers": 19.5,
+      "threePointJumpers": 41
     }
   }
 ]

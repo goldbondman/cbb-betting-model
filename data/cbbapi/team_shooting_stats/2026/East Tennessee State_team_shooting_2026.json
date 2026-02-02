@@ -4,53 +4,53 @@
     "teamId": 75,
     "team": "East Tennessee State",
     "conference": "SoCon",
-    "trackedShots": 1270,
-    "freeThrowRate": 32.3,
-    "assistedPct": 24.7,
+    "trackedShots": 1326,
+    "freeThrowRate": 33,
+    "assistedPct": 24.6,
     "dunks": {
-      "attempted": 64,
-      "made": 59,
-      "pct": 92.2,
-      "assisted": 45,
-      "assistedPct": 76.3
+      "attempted": 67,
+      "made": 61,
+      "pct": 91,
+      "assisted": 47,
+      "assistedPct": 77
     },
     "layups": {
-      "attempted": 455,
-      "made": 273,
-      "pct": 60,
-      "assisted": 110,
-      "assistedPct": 40.3
+      "attempted": 484,
+      "made": 288,
+      "pct": 59.5,
+      "assisted": 115,
+      "assistedPct": 39.9
     },
     "tipIns": {
-      "attempted": 22,
-      "made": 19,
-      "pct": 86.4
+      "attempted": 24,
+      "made": 21,
+      "pct": 87.5
     },
     "twoPointJumpers": {
-      "attempted": 237,
-      "made": 108,
-      "pct": 45.6,
+      "attempted": 244,
+      "made": 110,
+      "pct": 45.1,
       "assisted": 16,
-      "assistedPct": 14.8
+      "assistedPct": 14.5
     },
     "threePointJumpers": {
-      "attempted": 492,
-      "made": 165,
-      "pct": 33.5,
-      "assisted": 143,
-      "assistedPct": 86.7
+      "attempted": 507,
+      "made": 171,
+      "pct": 33.7,
+      "assisted": 148,
+      "assistedPct": 86.5
     },
     "freeThrows": {
-      "attempted": 410,
-      "made": 309,
-      "pct": 75.4
+      "attempted": 438,
+      "made": 335,
+      "pct": 76.5
     },
     "attemptsBreakdown": {
-      "dunks": 5,
-      "layups": 35.8,
-      "tipIns": 1.7,
-      "twoPointJumpers": 18.7,
-      "threePointJumpers": 38.7
+      "dunks": 5.1,
+      "layups": 36.5,
+      "tipIns": 1.8,
+      "twoPointJumpers": 18.4,
+      "threePointJumpers": 38.2
     }
   }
 ]

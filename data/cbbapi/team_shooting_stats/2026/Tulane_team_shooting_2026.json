@@ -4,9 +4,9 @@
     "teamId": 303,
     "team": "Tulane",
     "conference": "American",
-    "trackedShots": 1152,
-    "freeThrowRate": 44.4,
-    "assistedPct": 23.2,
+    "trackedShots": 1200,
+    "freeThrowRate": 44.8,
+    "assistedPct": 23.7,
     "dunks": {
       "attempted": 19,
       "made": 18,
@@ -15,42 +15,42 @@
       "assistedPct": 72.2
     },
     "layups": {
-      "attempted": 381,
-      "made": 221,
+      "attempted": 400,
+      "made": 232,
       "pct": 58,
-      "assisted": 81,
-      "assistedPct": 36.7
+      "assisted": 87,
+      "assistedPct": 37.5
     },
     "tipIns": {
-      "attempted": 19,
-      "made": 15,
-      "pct": 78.9
+      "attempted": 20,
+      "made": 16,
+      "pct": 80
     },
     "twoPointJumpers": {
-      "attempted": 222,
-      "made": 77,
-      "pct": 34.7,
-      "assisted": 27,
-      "assistedPct": 35.1
+      "attempted": 226,
+      "made": 79,
+      "pct": 35,
+      "assisted": 29,
+      "assistedPct": 36.7
     },
     "threePointJumpers": {
-      "attempted": 511,
-      "made": 164,
-      "pct": 32.1,
-      "assisted": 146,
-      "assistedPct": 89
+      "attempted": 535,
+      "made": 174,
+      "pct": 32.5,
+      "assisted": 155,
+      "assistedPct": 89.1
     },
     "freeThrows": {
-      "attempted": 512,
-      "made": 392,
+      "attempted": 538,
+      "made": 412,
       "pct": 76.6
     },
     "attemptsBreakdown": {
       "dunks": 1.6,
-      "layups": 33.1,
-      "tipIns": 1.6,
-      "twoPointJumpers": 19.3,
-      "threePointJumpers": 44.4
+      "layups": 33.3,
+      "tipIns": 1.7,
+      "twoPointJumpers": 18.8,
+      "threePointJumpers": 44.6
     }
   }
 ]

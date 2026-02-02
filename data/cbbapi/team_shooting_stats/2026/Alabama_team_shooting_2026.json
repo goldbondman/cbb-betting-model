@@ -4,21 +4,21 @@
     "teamId": 5,
     "team": "Alabama",
     "conference": "SEC",
-    "trackedShots": 1341,
-    "freeThrowRate": 36.6,
-    "assistedPct": 23.9,
+    "trackedShots": 1403,
+    "freeThrowRate": 35.9,
+    "assistedPct": 24,
     "dunks": {
-      "attempted": 63,
-      "made": 53,
-      "pct": 84.1,
-      "assisted": 44,
-      "assistedPct": 83
+      "attempted": 64,
+      "made": 54,
+      "pct": 84.4,
+      "assisted": 45,
+      "assistedPct": 83.3
     },
     "layups": {
-      "attempted": 369,
-      "made": 214,
-      "pct": 58,
-      "assisted": 65,
+      "attempted": 387,
+      "made": 224,
+      "pct": 57.9,
+      "assisted": 68,
       "assistedPct": 30.4
     },
     "tipIns": {
@@ -27,30 +27,30 @@
       "pct": 65.5
     },
     "twoPointJumpers": {
-      "attempted": 166,
-      "made": 76,
-      "pct": 45.8,
+      "attempted": 175,
+      "made": 78,
+      "pct": 44.6,
       "assisted": 7,
-      "assistedPct": 9.2
+      "assistedPct": 9
     },
     "threePointJumpers": {
-      "attempted": 714,
-      "made": 248,
-      "pct": 34.7,
-      "assisted": 205,
-      "assistedPct": 82.7
+      "attempted": 748,
+      "made": 262,
+      "pct": 35,
+      "assisted": 217,
+      "assistedPct": 82.8
     },
     "freeThrows": {
-      "attempted": 491,
-      "made": 371,
-      "pct": 75.6
+      "attempted": 504,
+      "made": 380,
+      "pct": 75.4
     },
     "attemptsBreakdown": {
-      "dunks": 4.7,
-      "layups": 27.5,
-      "tipIns": 2.2,
-      "twoPointJumpers": 12.4,
-      "threePointJumpers": 53.2
+      "dunks": 4.6,
+      "layups": 27.6,
+      "tipIns": 2.1,
+      "twoPointJumpers": 12.5,
+      "threePointJumpers": 53.3
     }
   }
 ]

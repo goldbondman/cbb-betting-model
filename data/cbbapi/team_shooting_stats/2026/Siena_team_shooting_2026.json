@@ -4,22 +4,22 @@
     "teamId": 264,
     "team": "Siena",
     "conference": "MAAC",
-    "trackedShots": 1186,
-    "freeThrowRate": 31.7,
-    "assistedPct": 23.3,
+    "trackedShots": 1237,
+    "freeThrowRate": 32.2,
+    "assistedPct": 23.6,
     "dunks": {
-      "attempted": 31,
-      "made": 29,
-      "pct": 93.5,
-      "assisted": 27,
-      "assistedPct": 93.1
+      "attempted": 35,
+      "made": 33,
+      "pct": 94.3,
+      "assisted": 30,
+      "assistedPct": 90.9
     },
     "layups": {
-      "attempted": 427,
-      "made": 239,
-      "pct": 56,
-      "assisted": 107,
-      "assistedPct": 44.8
+      "attempted": 442,
+      "made": 250,
+      "pct": 56.6,
+      "assisted": 113,
+      "assistedPct": 45.2
     },
     "tipIns": {
       "attempted": 23,
@@ -27,30 +27,30 @@
       "pct": 56.5
     },
     "twoPointJumpers": {
-      "attempted": 331,
-      "made": 148,
-      "pct": 44.7,
-      "assisted": 30,
-      "assistedPct": 20.3
+      "attempted": 345,
+      "made": 154,
+      "pct": 44.6,
+      "assisted": 31,
+      "assistedPct": 20.1
     },
     "threePointJumpers": {
-      "attempted": 374,
-      "made": 118,
-      "pct": 31.6,
-      "assisted": 112,
-      "assistedPct": 94.9
+      "attempted": 392,
+      "made": 125,
+      "pct": 31.9,
+      "assisted": 118,
+      "assistedPct": 94.4
     },
     "freeThrows": {
-      "attempted": 376,
-      "made": 284,
-      "pct": 75.5
+      "attempted": 398,
+      "made": 299,
+      "pct": 75.1
     },
     "attemptsBreakdown": {
-      "dunks": 2.6,
-      "layups": 36,
+      "dunks": 2.8,
+      "layups": 35.7,
       "tipIns": 1.9,
       "twoPointJumpers": 27.9,
-      "threePointJumpers": 31.5
+      "threePointJumpers": 31.7
     }
   }
 ]

@@ -4,9 +4,9 @@
     "teamId": 172,
     "team": "Milwaukee",
     "conference": "Horizon",
-    "trackedShots": 1466,
-    "freeThrowRate": 30.4,
-    "assistedPct": 20.3,
+    "trackedShots": 1524,
+    "freeThrowRate": 31,
+    "assistedPct": 20.5,
     "dunks": {
       "attempted": 42,
       "made": 36,
@@ -15,11 +15,11 @@
       "assistedPct": 72.2
     },
     "layups": {
-      "attempted": 521,
-      "made": 284,
-      "pct": 54.5,
-      "assisted": 106,
-      "assistedPct": 37.3
+      "attempted": 539,
+      "made": 295,
+      "pct": 54.7,
+      "assisted": 111,
+      "assistedPct": 37.6
     },
     "tipIns": {
       "attempted": 29,
@@ -27,30 +27,30 @@
       "pct": 69
     },
     "twoPointJumpers": {
-      "attempted": 330,
-      "made": 133,
-      "pct": 40.3,
-      "assisted": 20,
-      "assistedPct": 15
+      "attempted": 341,
+      "made": 139,
+      "pct": 40.8,
+      "assisted": 22,
+      "assistedPct": 15.8
     },
     "threePointJumpers": {
-      "attempted": 544,
-      "made": 172,
-      "pct": 31.6,
-      "assisted": 145,
-      "assistedPct": 84.3
+      "attempted": 573,
+      "made": 183,
+      "pct": 31.9,
+      "assisted": 154,
+      "assistedPct": 84.2
     },
     "freeThrows": {
-      "attempted": 445,
-      "made": 301,
-      "pct": 67.6
+      "attempted": 472,
+      "made": 322,
+      "pct": 68.2
     },
     "attemptsBreakdown": {
-      "dunks": 2.9,
-      "layups": 35.5,
-      "tipIns": 2,
-      "twoPointJumpers": 22.5,
-      "threePointJumpers": 37.1
+      "dunks": 2.8,
+      "layups": 35.4,
+      "tipIns": 1.9,
+      "twoPointJumpers": 22.4,
+      "threePointJumpers": 37.6
     }
   }
 ]

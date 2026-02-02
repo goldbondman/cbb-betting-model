@@ -4,9 +4,9 @@
     "teamId": 210,
     "team": "Northern Kentucky",
     "conference": "Horizon",
-    "trackedShots": 1425,
-    "freeThrowRate": 35.7,
-    "assistedPct": 24.6,
+    "trackedShots": 1498,
+    "freeThrowRate": 34.8,
+    "assistedPct": 24.4,
     "dunks": {
       "attempted": 70,
       "made": 62,
@@ -15,42 +15,42 @@
       "assistedPct": 58.1
     },
     "layups": {
-      "attempted": 469,
-      "made": 279,
-      "pct": 59.5,
-      "assisted": 111,
-      "assistedPct": 39.8
+      "attempted": 493,
+      "made": 290,
+      "pct": 58.8,
+      "assisted": 115,
+      "assistedPct": 39.7
     },
     "tipIns": {
-      "attempted": 57,
-      "made": 41,
-      "pct": 71.9
+      "attempted": 59,
+      "made": 43,
+      "pct": 72.9
     },
     "twoPointJumpers": {
-      "attempted": 209,
-      "made": 86,
-      "pct": 41.1,
-      "assisted": 14,
-      "assistedPct": 16.3
+      "attempted": 216,
+      "made": 88,
+      "pct": 40.7,
+      "assisted": 16,
+      "assistedPct": 18.2
     },
     "threePointJumpers": {
-      "attempted": 620,
-      "made": 211,
-      "pct": 34,
-      "assisted": 190,
-      "assistedPct": 90
+      "attempted": 660,
+      "made": 220,
+      "pct": 33.3,
+      "assisted": 199,
+      "assistedPct": 90.5
     },
     "freeThrows": {
-      "attempted": 509,
-      "made": 370,
-      "pct": 72.7
+      "attempted": 522,
+      "made": 378,
+      "pct": 72.4
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
+      "dunks": 4.7,
       "layups": 32.9,
-      "tipIns": 4,
-      "twoPointJumpers": 14.7,
-      "threePointJumpers": 43.5
+      "tipIns": 3.9,
+      "twoPointJumpers": 14.4,
+      "threePointJumpers": 44.1
     }
   }
 ]

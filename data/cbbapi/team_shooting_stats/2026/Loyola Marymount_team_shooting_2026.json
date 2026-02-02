@@ -4,7 +4,7 @@
     "teamId": 153,
     "team": "Loyola Marymount",
     "conference": "WCC",
-    "trackedShots": 1415,
+    "trackedShots": 1416,
     "freeThrowRate": 31.1,
     "assistedPct": 22.7,
     "dunks": {
@@ -15,9 +15,9 @@
       "assistedPct": 76.7
     },
     "layups": {
-      "attempted": 396,
+      "attempted": 397,
       "made": 231,
-      "pct": 58.3,
+      "pct": 58.2,
       "assisted": 74,
       "assistedPct": 32
     },

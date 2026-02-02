@@ -4,53 +4,53 @@
     "teamId": 256,
     "team": "Samford",
     "conference": "SoCon",
-    "trackedShots": 1316,
-    "freeThrowRate": 39.7,
-    "assistedPct": 25,
+    "trackedShots": 1364,
+    "freeThrowRate": 41.3,
+    "assistedPct": 25.1,
     "dunks": {
-      "attempted": 47,
-      "made": 40,
-      "pct": 85.1,
-      "assisted": 35,
-      "assistedPct": 87.5
+      "attempted": 49,
+      "made": 42,
+      "pct": 85.7,
+      "assisted": 36,
+      "assistedPct": 85.7
     },
     "layups": {
-      "attempted": 393,
-      "made": 231,
-      "pct": 58.8,
-      "assisted": 99,
-      "assistedPct": 42.9
+      "attempted": 407,
+      "made": 241,
+      "pct": 59.2,
+      "assisted": 102,
+      "assistedPct": 42.3
     },
     "tipIns": {
-      "attempted": 31,
-      "made": 16,
-      "pct": 51.6
+      "attempted": 34,
+      "made": 17,
+      "pct": 50
     },
     "twoPointJumpers": {
-      "attempted": 229,
-      "made": 79,
-      "pct": 34.5,
+      "attempted": 234,
+      "made": 80,
+      "pct": 34.2,
       "assisted": 14,
-      "assistedPct": 17.7
+      "assistedPct": 17.5
     },
     "threePointJumpers": {
-      "attempted": 616,
-      "made": 206,
-      "pct": 33.4,
-      "assisted": 181,
-      "assistedPct": 87.9
+      "attempted": 640,
+      "made": 216,
+      "pct": 33.8,
+      "assisted": 190,
+      "assistedPct": 88
     },
     "freeThrows": {
-      "attempted": 523,
-      "made": 349,
-      "pct": 66.7
+      "attempted": 564,
+      "made": 379,
+      "pct": 67.2
     },
     "attemptsBreakdown": {
       "dunks": 3.6,
-      "layups": 29.9,
-      "tipIns": 2.4,
-      "twoPointJumpers": 17.4,
-      "threePointJumpers": 46.8
+      "layups": 29.8,
+      "tipIns": 2.5,
+      "twoPointJumpers": 17.2,
+      "threePointJumpers": 46.9
     }
   }
 ]

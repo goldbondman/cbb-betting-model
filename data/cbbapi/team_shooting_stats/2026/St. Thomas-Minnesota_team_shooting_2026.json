@@ -4,53 +4,53 @@
     "teamId": 280,
     "team": "St. Thomas-Minnesota",
     "conference": "Summit",
-    "trackedShots": 1324,
-    "freeThrowRate": 37.2,
-    "assistedPct": 29.2,
+    "trackedShots": 1390,
+    "freeThrowRate": 36.1,
+    "assistedPct": 29.8,
     "dunks": {
-      "attempted": 32,
-      "made": 31,
-      "pct": 96.9,
-      "assisted": 21,
-      "assistedPct": 67.7
+      "attempted": 33,
+      "made": 32,
+      "pct": 97,
+      "assisted": 22,
+      "assistedPct": 68.8
     },
     "layups": {
-      "attempted": 554,
-      "made": 364,
-      "pct": 65.7,
-      "assisted": 162,
-      "assistedPct": 44.5
+      "attempted": 576,
+      "made": 380,
+      "pct": 66,
+      "assisted": 172,
+      "assistedPct": 45.3
     },
     "tipIns": {
-      "attempted": 14,
-      "made": 8,
-      "pct": 57.1
+      "attempted": 15,
+      "made": 9,
+      "pct": 60
     },
     "twoPointJumpers": {
-      "attempted": 133,
-      "made": 53,
-      "pct": 39.8,
+      "attempted": 136,
+      "made": 54,
+      "pct": 39.7,
       "assisted": 19,
-      "assistedPct": 35.8
+      "assistedPct": 35.2
     },
     "threePointJumpers": {
-      "attempted": 591,
-      "made": 209,
-      "pct": 35.4,
-      "assisted": 185,
+      "attempted": 630,
+      "made": 227,
+      "pct": 36,
+      "assisted": 201,
       "assistedPct": 88.5
     },
     "freeThrows": {
-      "attempted": 493,
-      "made": 345,
-      "pct": 70
+      "attempted": 502,
+      "made": 352,
+      "pct": 70.1
     },
     "attemptsBreakdown": {
       "dunks": 2.4,
-      "layups": 41.8,
+      "layups": 41.4,
       "tipIns": 1.1,
-      "twoPointJumpers": 10,
-      "threePointJumpers": 44.6
+      "twoPointJumpers": 9.8,
+      "threePointJumpers": 45.3
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 183,
     "team": "Mount St. Mary's",
     "conference": "MAAC",
-    "trackedShots": 1250,
-    "freeThrowRate": 34,
-    "assistedPct": 23.8,
+    "trackedShots": 1311,
+    "freeThrowRate": 33.5,
+    "assistedPct": 23.9,
     "dunks": {
-      "attempted": 47,
-      "made": 41,
-      "pct": 87.2,
+      "attempted": 48,
+      "made": 42,
+      "pct": 87.5,
       "assisted": 31,
-      "assistedPct": 75.6
+      "assistedPct": 73.8
     },
     "layups": {
-      "attempted": 422,
-      "made": 233,
-      "pct": 55.2,
-      "assisted": 103,
-      "assistedPct": 44.2
+      "attempted": 445,
+      "made": 243,
+      "pct": 54.6,
+      "assisted": 109,
+      "assistedPct": 44.9
     },
     "tipIns": {
-      "attempted": 31,
-      "made": 24,
-      "pct": 77.4
+      "attempted": 32,
+      "made": 25,
+      "pct": 78.1
     },
     "twoPointJumpers": {
-      "attempted": 192,
-      "made": 64,
+      "attempted": 204,
+      "made": 68,
       "pct": 33.3,
-      "assisted": 21,
-      "assistedPct": 32.8
+      "assisted": 23,
+      "assistedPct": 33.8
     },
     "threePointJumpers": {
-      "attempted": 558,
-      "made": 180,
-      "pct": 32.3,
-      "assisted": 143,
+      "attempted": 582,
+      "made": 189,
+      "pct": 32.5,
+      "assisted": 150,
       "assistedPct": 79.4
     },
     "freeThrows": {
-      "attempted": 425,
-      "made": 284,
-      "pct": 66.8
+      "attempted": 439,
+      "made": 297,
+      "pct": 67.7
     },
     "attemptsBreakdown": {
-      "dunks": 3.8,
-      "layups": 33.8,
-      "tipIns": 2.5,
-      "twoPointJumpers": 15.4,
-      "threePointJumpers": 44.6
+      "dunks": 3.7,
+      "layups": 33.9,
+      "tipIns": 2.4,
+      "twoPointJumpers": 15.6,
+      "threePointJumpers": 44.4
     }
   }
 ]

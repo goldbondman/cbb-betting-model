@@ -4,22 +4,22 @@
     "teamId": 225,
     "team": "Pacific",
     "conference": "WCC",
-    "trackedShots": 1296,
-    "freeThrowRate": 32.2,
-    "assistedPct": 25.5,
+    "trackedShots": 1355,
+    "freeThrowRate": 31.9,
+    "assistedPct": 25.8,
     "dunks": {
-      "attempted": 52,
-      "made": 44,
-      "pct": 84.6,
-      "assisted": 31,
-      "assistedPct": 70.5
+      "attempted": 55,
+      "made": 46,
+      "pct": 83.6,
+      "assisted": 33,
+      "assistedPct": 71.7
     },
     "layups": {
-      "attempted": 456,
-      "made": 249,
-      "pct": 54.6,
-      "assisted": 112,
-      "assistedPct": 45
+      "attempted": 486,
+      "made": 266,
+      "pct": 54.7,
+      "assisted": 121,
+      "assistedPct": 45.5
     },
     "tipIns": {
       "attempted": 37,
@@ -27,30 +27,30 @@
       "pct": 67.6
     },
     "twoPointJumpers": {
-      "attempted": 272,
-      "made": 129,
-      "pct": 47.4,
-      "assisted": 41,
+      "attempted": 281,
+      "made": 132,
+      "pct": 47,
+      "assisted": 42,
       "assistedPct": 31.8
     },
     "threePointJumpers": {
-      "attempted": 479,
-      "made": 170,
-      "pct": 35.5,
-      "assisted": 147,
+      "attempted": 496,
+      "made": 178,
+      "pct": 35.9,
+      "assisted": 154,
       "assistedPct": 86.5
     },
     "freeThrows": {
-      "attempted": 417,
-      "made": 317,
-      "pct": 76
+      "attempted": 432,
+      "made": 331,
+      "pct": 76.6
     },
     "attemptsBreakdown": {
-      "dunks": 4,
-      "layups": 35.2,
-      "tipIns": 2.9,
-      "twoPointJumpers": 21,
-      "threePointJumpers": 37
+      "dunks": 4.1,
+      "layups": 35.9,
+      "tipIns": 2.7,
+      "twoPointJumpers": 20.7,
+      "threePointJumpers": 36.6
     }
   }
 ]
