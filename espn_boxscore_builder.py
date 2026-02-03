@@ -1300,6 +1300,8 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
     out["days_rest"] = (out["days_since_last_game"] - 1.0).clip(lower=0)
     out["back_to_back"] = (out["days_since_last_game"].fillna(999) <= 1.5).astype(int)
 
+    windows = list(range(3, 13))
+    games_last_n = {n: [] for n in windows}
     games_last_7 = []
     three_in_six = []
 
@@ -1309,10 +1311,15 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
         dt = r.get("game_dt")
         dq = by_team[k]
 
-        cutoff7 = dt - pd.Timedelta(days=7)
-        while dq and dq[0] < cutoff7:
+        cutoff_max = dt - pd.Timedelta(days=max(windows))
+        while dq and dq[0] < cutoff_max:
             dq.popleft()
-        games_last_7.append(len(dq))
+
+        for n in windows:
+            cutoff = dt - pd.Timedelta(days=n)
+            games_last_n[n].append(sum(1 for x in dq if x >= cutoff))
+
+        games_last_7.append(games_last_n[7][-1])
 
         cutoff6 = dt - pd.Timedelta(days=6)
         cnt6 = sum(1 for x in dq if x >= cutoff6)
@@ -1320,6 +1327,8 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
 
         dq.append(dt)
 
+    for n in windows:
+        out[f"games_last_{n}_days"] = games_last_n[n]
     out["games_last_7_days"] = games_last_7
     out["three_in_six"] = three_in_six
     return out.drop(columns=["prev_game_dt"], errors="ignore")
