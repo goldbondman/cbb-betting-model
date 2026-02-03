@@ -49,6 +49,8 @@ import numpy as np
 # ---- feature modules (new) ----
 from weights import WeightConfig, add_all_base_weights
 from plus_and_fit import PlusConfig, CompositeConfig, add_all_plus_and_composites
+from cbb_advanced_metrics import add_all_advanced_metrics
+from rolling_features import RollingConfig, add_unweighted_rollups
 
 
 # ---------------- config ----------------
@@ -1883,6 +1885,35 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     )
     df_clean = add_all_base_weights(df_clean, wcfg)
     df_clean = add_all_plus_and_composites(df_clean, PlusConfig(), CompositeConfig())
+
+    # Advanced matchup metrics (expected margin, GPS, style mismatch, volatility)
+    df_clean = add_all_advanced_metrics(df_clean, n_last=10)
+
+    # Extra leak-free rolling signals (trend/percentiles) on key metrics
+    rolling_cfg = RollingConfig(
+        group_cols=("team_id",),
+        order_col="game_datetime_utc",
+        window=10,
+        prefix="rf10_",
+    )
+    df_clean = add_unweighted_rollups(
+        df_clean,
+        metrics=[
+            "netrtg",
+            "ortg",
+            "drtg",
+            "pace",
+            "efg",
+            "tov_pct",
+            "orb_pct",
+            "drb_pct",
+            "ftr",
+            "3par",
+            "gps",
+            "net_over_exp",
+        ],
+        cfg=rolling_cfg,
+    )
 
     # Gate: opponent join rate
     opp_join_rate = df_clean["opp_join_ok"].sum() / len(df_clean) if len(df_clean) > 0 else 0
