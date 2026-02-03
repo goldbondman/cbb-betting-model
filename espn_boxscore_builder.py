@@ -1311,6 +1311,13 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
         dt = r.get("game_dt")
         dq = by_team[k]
 
+        if pd.isna(dt):
+            for n in windows:
+                games_last_n[n].append(0)
+            games_last_7.append(0)
+            three_in_six.append(0)
+            continue
+
         cutoff_max = dt - pd.Timedelta(days=max(windows))
         while dq and dq[0] < cutoff_max:
             dq.popleft()
