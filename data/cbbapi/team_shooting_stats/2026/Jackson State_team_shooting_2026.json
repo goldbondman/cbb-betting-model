@@ -4,8 +4,8 @@
     "teamId": 126,
     "team": "Jackson State",
     "conference": "SWAC",
-    "trackedShots": 1215,
-    "freeThrowRate": 32.2,
+    "trackedShots": 1280,
+    "freeThrowRate": 33,
     "assistedPct": 18.4,
     "dunks": {
       "attempted": 23,
@@ -15,11 +15,11 @@
       "assistedPct": 94.7
     },
     "layups": {
-      "attempted": 323,
-      "made": 159,
-      "pct": 49.2,
-      "assisted": 48,
-      "assistedPct": 30.2
+      "attempted": 341,
+      "made": 166,
+      "pct": 48.7,
+      "assisted": 49,
+      "assistedPct": 29.5
     },
     "tipIns": {
       "attempted": 28,
@@ -27,30 +27,30 @@
       "pct": 60.7
     },
     "twoPointJumpers": {
-      "attempted": 309,
-      "made": 110,
-      "pct": 35.6,
+      "attempted": 325,
+      "made": 117,
+      "pct": 36,
       "assisted": 26,
-      "assistedPct": 23.6
+      "assistedPct": 22.2
     },
     "threePointJumpers": {
-      "attempted": 532,
-      "made": 165,
-      "pct": 31,
-      "assisted": 131,
-      "assistedPct": 79.4
+      "attempted": 563,
+      "made": 178,
+      "pct": 31.6,
+      "assisted": 142,
+      "assistedPct": 79.8
     },
     "freeThrows": {
-      "attempted": 391,
-      "made": 299,
+      "attempted": 422,
+      "made": 323,
       "pct": 76.5
     },
     "attemptsBreakdown": {
-      "dunks": 1.9,
+      "dunks": 1.8,
       "layups": 26.6,
-      "tipIns": 2.3,
+      "tipIns": 2.2,
       "twoPointJumpers": 25.4,
-      "threePointJumpers": 43.8
+      "threePointJumpers": 44
     }
   }
 ]

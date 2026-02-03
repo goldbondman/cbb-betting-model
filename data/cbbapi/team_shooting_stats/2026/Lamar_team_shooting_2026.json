@@ -4,51 +4,51 @@
     "teamId": 139,
     "team": "Lamar",
     "conference": "Southland",
-    "trackedShots": 1325,
-    "freeThrowRate": 28.1,
-    "assistedPct": 25.1,
+    "trackedShots": 1390,
+    "freeThrowRate": 27.5,
+    "assistedPct": 25.4,
     "dunks": {
-      "attempted": 49,
-      "made": 46,
-      "pct": 93.9,
-      "assisted": 36,
-      "assistedPct": 78.3
+      "attempted": 50,
+      "made": 47,
+      "pct": 94,
+      "assisted": 37,
+      "assistedPct": 78.7
     },
     "layups": {
-      "attempted": 355,
-      "made": 177,
-      "pct": 49.9,
-      "assisted": 78,
-      "assistedPct": 44.1
+      "attempted": 374,
+      "made": 189,
+      "pct": 50.5,
+      "assisted": 85,
+      "assistedPct": 45
     },
     "tipIns": {
-      "attempted": 37,
+      "attempted": 38,
       "made": 27,
-      "pct": 73
+      "pct": 71.1
     },
     "twoPointJumpers": {
-      "attempted": 413,
-      "made": 166,
-      "pct": 40.2,
-      "assisted": 80,
-      "assistedPct": 48.2
+      "attempted": 434,
+      "made": 175,
+      "pct": 40.3,
+      "assisted": 84,
+      "assistedPct": 48
     },
     "threePointJumpers": {
-      "attempted": 471,
-      "made": 163,
+      "attempted": 494,
+      "made": 171,
       "pct": 34.6,
-      "assisted": 139,
-      "assistedPct": 85.3
+      "assisted": 147,
+      "assistedPct": 86
     },
     "freeThrows": {
-      "attempted": 372,
-      "made": 267,
-      "pct": 71.8
+      "attempted": 382,
+      "made": 272,
+      "pct": 71.2
     },
     "attemptsBreakdown": {
-      "dunks": 3.7,
-      "layups": 26.8,
-      "tipIns": 2.8,
+      "dunks": 3.6,
+      "layups": 26.9,
+      "tipIns": 2.7,
       "twoPointJumpers": 31.2,
       "threePointJumpers": 35.5
     }

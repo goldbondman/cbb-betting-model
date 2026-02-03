@@ -4,9 +4,9 @@
     "teamId": 282,
     "team": "Stephen F. Austin",
     "conference": "Southland",
-    "trackedShots": 1385,
-    "freeThrowRate": 27.8,
-    "assistedPct": 22.5,
+    "trackedShots": 1442,
+    "freeThrowRate": 28.1,
+    "assistedPct": 22.2,
     "dunks": {
       "attempted": 35,
       "made": 32,
@@ -15,42 +15,42 @@
       "assistedPct": 81.3
     },
     "layups": {
-      "attempted": 421,
-      "made": 233,
-      "pct": 55.3,
+      "attempted": 438,
+      "made": 239,
+      "pct": 54.6,
       "assisted": 77,
-      "assistedPct": 33
+      "assistedPct": 32.2
     },
     "tipIns": {
-      "attempted": 42,
+      "attempted": 43,
       "made": 31,
-      "pct": 73.8
+      "pct": 72.1
     },
     "twoPointJumpers": {
-      "attempted": 321,
-      "made": 127,
-      "pct": 39.6,
-      "assisted": 32,
-      "assistedPct": 25.2
+      "attempted": 335,
+      "made": 133,
+      "pct": 39.7,
+      "assisted": 33,
+      "assistedPct": 24.8
     },
     "threePointJumpers": {
-      "attempted": 566,
-      "made": 209,
+      "attempted": 591,
+      "made": 218,
       "pct": 36.9,
-      "assisted": 177,
-      "assistedPct": 84.7
+      "assisted": 184,
+      "assistedPct": 84.4
     },
     "freeThrows": {
-      "attempted": 385,
-      "made": 252,
-      "pct": 65.5
+      "attempted": 405,
+      "made": 268,
+      "pct": 66.2
     },
     "attemptsBreakdown": {
-      "dunks": 2.5,
+      "dunks": 2.4,
       "layups": 30.4,
       "tipIns": 3,
       "twoPointJumpers": 23.2,
-      "threePointJumpers": 40.9
+      "threePointJumpers": 41
     }
   }
 ]

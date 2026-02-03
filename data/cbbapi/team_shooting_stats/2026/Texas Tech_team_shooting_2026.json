@@ -4,9 +4,9 @@
     "teamId": 298,
     "team": "Texas Tech",
     "conference": "Big 12",
-    "trackedShots": 1318,
-    "freeThrowRate": 29.2,
-    "assistedPct": 25.3,
+    "trackedShots": 1390,
+    "freeThrowRate": 28.1,
+    "assistedPct": 24.8,
     "dunks": {
       "attempted": 34,
       "made": 28,
@@ -15,42 +15,42 @@
       "assistedPct": 82.1
     },
     "layups": {
-      "attempted": 278,
-      "made": 170,
-      "pct": 61.2,
+      "attempted": 286,
+      "made": 172,
+      "pct": 60.1,
       "assisted": 76,
-      "assistedPct": 44.7
+      "assistedPct": 44.2
     },
     "tipIns": {
-      "attempted": 44,
-      "made": 27,
-      "pct": 61.4
+      "attempted": 46,
+      "made": 28,
+      "pct": 60.9
     },
     "twoPointJumpers": {
-      "attempted": 351,
-      "made": 162,
-      "pct": 46.2,
-      "assisted": 55,
-      "assistedPct": 34
+      "attempted": 373,
+      "made": 170,
+      "pct": 45.6,
+      "assisted": 57,
+      "assistedPct": 33.5
     },
     "threePointJumpers": {
-      "attempted": 611,
-      "made": 239,
-      "pct": 39.1,
-      "assisted": 179,
-      "assistedPct": 74.9
+      "attempted": 651,
+      "made": 251,
+      "pct": 38.6,
+      "assisted": 189,
+      "assistedPct": 75.3
     },
     "freeThrows": {
-      "attempted": 385,
-      "made": 272,
-      "pct": 70.6
+      "attempted": 390,
+      "made": 275,
+      "pct": 70.5
     },
     "attemptsBreakdown": {
-      "dunks": 2.6,
-      "layups": 21.1,
+      "dunks": 2.4,
+      "layups": 20.6,
       "tipIns": 3.3,
-      "twoPointJumpers": 26.6,
-      "threePointJumpers": 46.4
+      "twoPointJumpers": 26.8,
+      "threePointJumpers": 46.8
     }
   }
 ]
