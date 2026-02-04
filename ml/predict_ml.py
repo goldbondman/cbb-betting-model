@@ -61,6 +61,7 @@ def predict(cfg: PredictConfig) -> pd.DataFrame:
     for _, r in df.iterrows():
         margin_pred = _score_row(r, margin_model)
         total_pred = _score_row(r, total_model)
+        model_version = margin_model.get("model_version", "ml-linear-v1")
         rows.append(
             {
                 "event_id": r.get("event_id"),
@@ -73,6 +74,7 @@ def predict(cfg: PredictConfig) -> pd.DataFrame:
                 "actual_total": r.get("actual_total"),
                 "pred_margin_home": margin_pred,
                 "pred_total": total_pred,
+                "model_version": model_version,
                 "model_version": "ml-linear-v1",
             }
         )

@@ -180,6 +180,333 @@ def sb_try(table_name, fn_desc, fn):
     except Exception as e:
         return None, f"{fn_desc}: {e}"
 
+def sb_auth_sign_in(email: str, password: str):
+    sb = supabase_client()
+    return sb.auth.sign_in_with_password({"email": email, "password": password})
+
+def sb_auth_sign_out():
+    sb = supabase_client()
+    return sb.auth.sign_out()
+
+def sb_auth_session():
+    sb = supabase_client()
+    return sb.auth.get_session()
+
+# ============================================================
+# LOAD DATA (YOUR UPLOADED FILES FIRST)
+# ============================================================
+
+def _read_csv_any(paths):
+    for p in paths:
+        try:
+            if os.path.exists(p):
+                return pd.read_csv(p)
+        except Exception:
+            continue
+    return None
+
+@st.cache_data
+def load_feature_store():
+    # Prefer uploaded paths in this chat, then fall back to repo filenames
+    df = _read_csv_any([
+        "/mnt/data/espn_team_game_features (1).csv",
+        "espn_team_game_features.csv",
+    ])
+    if df is None or len(df) == 0:
+        return pd.DataFrame()
+
+    # enforce types
+    df["team_norm"] = df["team"].astype(str).apply(normalize_team_name)
+    if "opponent" in df.columns:
+        df["opp_norm"] = df["opponent"].astype(str).apply(normalize_team_name)
+    else:
+        df["opp_norm"] = ""
+    df["game_date"] = df["game_date"].astype(str)
+    df["event_id"] = df["event_id"].astype(str)
+
+    # numeric columns we care about (exist in your feature file)
+    base_metrics = ["ortg", "drtg", "netrtg", "pace", "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par"]
+    for c in base_metrics:
+        if c in df.columns:
+            df[c] = pd.to_numeric(df[c], errors="coerce")
+
+    # Ensure rolling windows exist for 3/5/7/10, leak-free
+    df = df.sort_values(["team_norm", "game_date", "event_id"]).reset_index(drop=True)
+
+    def add_roll(window):
+        metrics = ["ortg", "drtg", "netrtg", "pace", "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par"]
+        g = df.groupby("team_norm", group_keys=False)
+
+        for m in metrics:
+            if m not in df.columns:
+                continue
+            # shift so current game is excluded
+            shifted = g[m].shift(1)
+            df[f"{m}_l{window}_pre"] = shifted.groupby(df["team_norm"]).rolling(window, min_periods=3).mean().reset_index(level=0, drop=True)
+            df[f"{m}_std_l{window}_pre"] = shifted.groupby(df["team_norm"]).rolling(window, min_periods=3).std().reset_index(level=0, drop=True)
+
+    for w in [3, 5, 7, 10]:
+        # If l3/l7 already present, we still recompute to guarantee consistency
+        add_roll(w)
+
+    # season-to-date pregame mean (shifted)
+    for m in ["ortg", "drtg", "netrtg", "pace", "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par"]:
+        if m not in df.columns:
+            continue
+        g = df.groupby("team_norm", group_keys=False)
+        df[f"{m}_season_pre"] = g[m].shift(1).groupby(df["team_norm"]).expanding(min_periods=6).mean().reset_index(level=0, drop=True)
+
+    return df
+
+@st.cache_data
+def load_torvik():
+    df = _read_csv_any([
+        "/mnt/data/barttorvik_team_results.csv",
+        "barttorvik_team_results.csv",
+        "barttorvik.csv",
+    ])
+    if df is None or len(df) == 0:
+        return pd.DataFrame()
+
+    df.columns = [str(c).strip().lower().replace(" ", "_").replace(".", "") for c in df.columns]
+    if "team" not in df.columns:
+        return pd.DataFrame()
+
+    df["team_norm"] = df["team"].astype(str).apply(normalize_team_name)
+    if "adjoe" in df.columns and "adjde" in df.columns:
+        df["adjem"] = pd.to_numeric(df["adjoe"], errors="coerce") - pd.to_numeric(df["adjde"], errors="coerce")
+
+    for c in ["adjoe", "adjde", "adjem", "barthag", "sos", "ncsos"]:
+        if c in df.columns:
+            df[c] = pd.to_numeric(df[c], errors="coerce")
+
+    return df
+
+@st.cache_data
+def load_optional_espn_games():
+    # If you have this file in your repo, we will use it for backtesting lines.
+    df = _read_csv_any(["espn_games.csv"])
+    if df is None or len(df) == 0:
+        return pd.DataFrame()
+    df.columns = [str(c).strip().lower() for c in df.columns]
+    # attempt to standardize ids
+    for idcol in ["game_id", "event_id", "id"]:
+        if idcol in df.columns:
+            df["event_id"] = df[idcol].astype(str)
+            break
+    if "game_date" in df.columns:
+        df["game_date"] = df["game_date"].astype(str)
+    if "date" in df.columns and "game_date" not in df.columns:
+        df["game_date"] = df["date"].astype(str)
+    return df
+
+FEATURES = load_feature_store()
+TORVIK = load_torvik()
+ESPN_GAMES_OPT = load_optional_espn_games()
+
+if FEATURES.empty:
+    st.error("Feature store missing. Expected espn_team_game_features.csv (or the uploaded file).")
+    st.stop()
+
+# ============================================================
+# TEAM LOOKUPS (TORVIK BASE STRENGTH)
+# ============================================================
+
+def get_torvik_row(team_name: str) -> dict:
+    if TORVIK.empty:
+        return {}
+    tn = normalize_team_name(team_name)
+    row = TORVIK[TORVIK["team_norm"] == tn]
+    if len(row) == 0:
+        # try closest match
+        close = get_close_matches(tn, TORVIK["team_norm"].dropna().unique().tolist(), n=1, cutoff=0.92)
+        if close:
+            row = TORVIK[TORVIK["team_norm"] == close[0]]
+    if len(row) == 0:
+        return {}
+    return row.iloc[0].to_dict()
+
+def get_latest_team_snapshot(team_name: str) -> dict:
+    """
+    Latest pregame features available for that team (based on last completed game).
+    This is what we use for upcoming games.
+    """
+    tn = normalize_team_name(team_name)
+    df = FEATURES[FEATURES["team_norm"] == tn]
+    if df.empty:
+        return {}
+    last = df.sort_values(["game_date", "event_id"], ascending=True).iloc[-1].to_dict()
+    # attach torvik base
+    base = get_torvik_row(team_name)
+    out = {**base, **last}
+    out["team_display"] = team_name
+    out["team_norm"] = tn
+    return out
+
+# ============================================================
+# MODEL CONFIG (MODEL STUDIO)
+# ============================================================
+
+DEFAULT_MODEL_CONFIG = {
+    "meta": {
+        "name": "Baseline v1",
+        "created_at": datetime.now(tz=LOCAL_TZ).isoformat(),
+        "version_id": "baseline-v1",
+    },
+    "spread": {
+        "recent_window": 7,
+        "recent_blend": 0.35,   # recent vs season
+        "weights": {
+            "torvik_adjem": 0.55,
+            "recent_netrtg": 0.25,
+            "four_factors": 0.20,
+        },
+        "home_court": 2.7,
+        "sos_conf_strength": 0.5,  # confidence only
+        "volatility_penalty": 0.8,
+        "market_anchor": 0.10,
+        "market_anchor_min_conf": 0.80,
+    },
+    "total": {
+        "recent_window": 7,
+        "recent_blend": 0.35,
+        "weights": {
+            "tempo": 0.25,
+            "efficiency": 0.60,
+            "four_factors": 0.15,
+        },
+        "sos_conf_strength": 0.5,
+        "volatility_penalty": 0.9,
+        "market_anchor": 0.10,
+        "market_anchor_min_conf": 0.82,
+    },
+    "ml": {
+        "recent_window": 7,
+        "recent_blend": 0.35,
+        "weights": {
+            "spread_margin": 0.70,
+            "four_factors": 0.30,
+        },
+        "sos_conf_strength": 0.6,
+        "volatility_penalty": 0.9,
+        "market_anchor": 0.10,
+        "market_anchor_min_conf": 0.84,
+    },
+}
+
+DEFAULT_STRATEGY = {
+    "spread": {"edge_min": 3.0, "conf_min": 0.82},
+    "total":  {"edge_min": 3.5, "conf_min": 0.84},
+    "ml":     {"edge_min_prob": 0.03, "conf_min": 0.84},  # 3% winprob edge
+    "units": {
+        "tier_1u_edge_bonus": 0.0,
+        "tier_2u_edge_bonus": 1.5,
+        "tier_3u_edge_bonus": 3.0,
+        "tier_2u_conf_bonus": 0.03,
+        "tier_3u_conf_bonus": 0.05,
+        "ml_dog_micro_stakes": True,
+    },
+    "assumptions": {
+        "spread_odds_default": -110,
+        "total_odds_default": -110,
+        "bankroll": 1000,
+    }
+}
+
+def get_active_model_config() -> dict:
+    if "model_config" not in st.session_state:
+        st.session_state["model_config"] = DEFAULT_MODEL_CONFIG
+    return st.session_state["model_config"]
+
+def set_active_model_config(cfg: dict):
+    st.session_state["model_config"] = cfg
+
+def get_strategy() -> dict:
+    if "strategy" not in st.session_state:
+        st.session_state["strategy"] = DEFAULT_STRATEGY
+    return st.session_state["strategy"]
+
+# Optional persistence: model_versions table
+# Columns used:
+# model_version_id (text), ensemble_weights (jsonb), notes (text), is_active (bool), created_at (timestamptz)
+
+def sb_save_model_config(cfg: dict, is_active=False):
+    payload = {
+        "model_version_id": cfg.get("meta", {}).get("version_id", f"cfg-{int(datetime.now().timestamp())}"),
+        "ensemble_weights": cfg,
+        "notes": cfg.get("meta", {}).get("name", "Unnamed"),
+        "is_active": bool(is_active),
+        "created_at": datetime.now(tz=LOCAL_TZ).isoformat(),
+    }
+
+    def _do(tbl):
+        return tbl.upsert(payload).execute()
+
+    _, err = sb_try("model_versions", "save model config", _do)
+    return err
+
+def sb_load_model_configs():
+    def _do(tbl):
+        return tbl.select("*").order("created_at", desc=True).limit(50).execute()
+    resp, err = sb_try("model_versions", "load model configs", _do)
+    if err or resp is None:
+        return [], err
+    return resp.data or [], None
+
+def sb_set_active_model_config(version_id: str):
+    def _deactivate(tbl):
+        return tbl.update({"is_active": False}).neq("model_version_id", "___nope___").execute()
+    def _activate(tbl):
+        return tbl.update({"is_active": True}).eq("model_version_id", version_id).execute()
+
+    _, err1 = sb_try("model_versions", "deactivate all configs", _deactivate)
+    _, err2 = sb_try("model_versions", "activate selected config", _activate)
+    return err1 or err2
+
+# ============================================================
+# LEDGER (PAPER BETS)
+# Optional persistence: bet_ledger table
+# ============================================================
+
+# Columns recommended:
+# id (text), run_date (text), game_date (text), event_id (text), home_team (text), away_team (text),
+# market (text), side (text), model_value (float), vegas_value (float),
+# edge (float), conf (float), recommended (bool), units (float),
+# result (text nullable), pnl (float nullable), model_version (text), meta (jsonb)
+
+def ledger_key(run_date, event_id, market, side):
+    return f"{run_date}:{event_id}:{market}:{side}"
+
+def sb_upsert_ledger_rows(rows: list[dict]):
+    if not rows:
+        return None
+    def _do(tbl):
+        return tbl.upsert(rows).execute()
+    _, err = sb_try("bet_ledger", "upsert ledger rows", _do)
+    return err
+
+def get_local_ledger_df():
+    if "local_ledger" not in st.session_state:
+        st.session_state["local_ledger"] = pd.DataFrame()
+    return st.session_state["local_ledger"]
+
+def append_local_ledger(rows: list[dict]):
+    if not rows:
+        return
+    df = pd.DataFrame(rows)
+    existing = get_local_ledger_df()
+    if existing.empty:
+        st.session_state["local_ledger"] = df
+    else:
+        merged = pd.concat([existing, df], ignore_index=True)
+        merged = merged.drop_duplicates(subset=["id"], keep="last")
+        st.session_state["local_ledger"] = merged
+
+# ============================================================
+# ESPN UPCOMING GAMES (SCOREBOARD)
+# ============================================================
+
+
 # ============================================================
 # LOAD DATA (YOUR UPLOADED FILES FIRST)
 # ============================================================
@@ -1187,6 +1514,37 @@ def backtest_run(df_games: pd.DataFrame, config: dict, strategy: dict,
 st.sidebar.title("🏀 CBB Model")
 st.sidebar.markdown("---")
 
+with st.sidebar.expander("Supabase Auth", expanded=False):
+    if has_supabase_creds():
+        sb_session = None
+        try:
+            sb_session = sb_auth_session()
+        except Exception:
+            sb_session = None
+        user_email = None
+        if sb_session and sb_session.user:
+            user_email = sb_session.user.email
+
+        if user_email:
+            st.success(f"Signed in as {user_email}")
+            if st.button("Sign out"):
+                try:
+                    sb_auth_sign_out()
+                    st.info("Signed out.")
+                except Exception as exc:
+                    st.warning(f"Sign out failed: {exc}")
+        else:
+            email = st.text_input("Email", key="sb_auth_email")
+            password = st.text_input("Password", type="password", key="sb_auth_password")
+            if st.button("Sign in"):
+                try:
+                    sb_auth_sign_in(email, password)
+                    st.success("Signed in.")
+                except Exception as exc:
+                    st.warning(f"Sign in failed: {exc}")
+    else:
+        st.info("Supabase credentials missing.")
+
 strategy = get_strategy()
 strategy["assumptions"]["bankroll"] = st.sidebar.number_input(
     "Bankroll ($)",
@@ -1215,6 +1573,380 @@ st.sidebar.caption(f"Updated: {datetime.now(tz=LOCAL_TZ).strftime('%m/%d %I:%M%p
 if page == "📅 Slate (Upcoming)":
     st.title("📅 Slate (Upcoming)")
     st.caption("Every game. Spread, Total, ML. Ranked. No cap.")
+
+    upcoming, errors = get_upcoming_games(days_ahead=7)
+
+    if errors:
+        with st.expander("ESPN Fetch Errors", expanded=False):
+            for e in errors:
+                st.error(f"{e['date']}: {e['error']}")
+
+    if upcoming.empty:
+        st.warning("No games found.")
+        st.stop()
+
+    cfg = get_active_model_config()
+
+    # Strategy controls (placeholders allowed)
+    st.subheader("Filters and Strategy (no-code)")
+    c1, c2, c3 = st.columns(3)
+
+    with c1:
+        strategy["spread"]["edge_min"] = st.slider("Spread edge min (pts)", 0.0, 10.0, float(strategy["spread"]["edge_min"]), 0.5)
+        strategy["spread"]["conf_min"] = st.slider("Spread conf min", 0.70, 0.95, float(strategy["spread"]["conf_min"]), 0.01)
+
+    with c2:
+        strategy["total"]["edge_min"] = st.slider("Total edge min (pts)", 0.0, 10.0, float(strategy["total"]["edge_min"]), 0.5)
+        strategy["total"]["conf_min"] = st.slider("Total conf min", 0.70, 0.95, float(strategy["total"]["conf_min"]), 0.01)
+
+    with c3:
+        strategy["ml"]["edge_min_prob"] = st.slider("ML win-prob edge min", 0.00, 0.10, float(strategy["ml"]["edge_min_prob"]), 0.005)
+        strategy["ml"]["conf_min"] = st.slider("ML conf min", 0.70, 0.95, float(strategy["ml"]["conf_min"]), 0.01)
+
+    st.markdown("---")
+
+    run_date = datetime.now(tz=LOCAL_TZ).strftime("%Y%m%d")
+
+    rows = []
+    ledger_rows = []
+
+    for _, g in upcoming.iterrows():
+        pred = predict_markets(
+            home_team=g["home_team"],
+            away_team=g["away_team"],
+            venue=g.get("venue") or "Unknown",
+            vegas_spread=g.get("vegas_spread"),
+            vegas_total=g.get("vegas_total"),
+            ml_home=g.get("ml_home"),
+            ml_away=g.get("ml_away"),
+        )
+        if pred is None:
+            continue
+
+        # Build ranked "value score"
+        # Simple: prioritize recommended, then edge magnitude, then confidence.
+        value_score = 0.0
+        for mk in ["spread", "total", "ml"]:
+            rec = pred[mk]["recommended"]
+            edge = pred[mk].get("edge", pred[mk].get("edge_home", 0.0))
+            conf = pred[mk]["conf"]
+            if rec and edge is not None:
+                value_score += (abs(safe_float(edge, 0.0)) * conf)
+
+        rows.append({
+            "Date": g["game_date"],
+            "Time": g.get("event_time_local") or "",
+            "Matchup": f"{g['away_team']} @ {g['home_team']}",
+            "Venue": g.get("venue") or "",
+            "Spread Model": round(pred["spread"]["model_margin_home"], 2),
+            "Spread Vegas": pred["spread"]["vegas_spread"],
+            "Spread Edge": round(pred["spread"]["edge"], 2) if pred["spread"]["edge"] is not None else None,
+            "Spread Conf": round(pred["spread"]["conf"], 3),
+            "Spread Reco": pred["spread"]["side"] if pred["spread"]["recommended"] else "",
+            "Spread Units": pred["spread"]["units"] if pred["spread"]["recommended"] else 0.0,
+            "Total Model": round(pred["total"]["model_total"], 1),
+            "Total Vegas": pred["total"]["vegas_total"],
+            "Total Edge": round(pred["total"]["edge"], 2) if pred["total"]["edge"] is not None else None,
+            "Total Conf": round(pred["total"]["conf"], 3),
+            "Total Reco": pred["total"]["side"] if pred["total"]["recommended"] else "",
+            "Total Units": pred["total"]["units"] if pred["total"]["recommended"] else 0.0,
+            "ML Win% Home": round(pred["ml"]["model_win_prob_home"], 3),
+            "ML Implied Home": round(pred["ml"]["implied_home"], 3) if pred["ml"]["implied_home"] is not None else None,
+            "ML Edge": round(pred["ml"]["edge_home"], 3) if pred["ml"]["edge_home"] is not None else None,
+            "ML Conf": round(pred["ml"]["conf"], 3),
+            "ML Reco": pred["ml"]["side"] if pred["ml"]["recommended"] else "",
+            "ML Units": pred["ml"]["units"] if pred["ml"]["recommended"] else 0.0,
+            "Value Score": round(value_score, 4),
+            "event_id": g["event_id"],
+        })
+
+        # Ledger rows (system WOULD bet)
+        for mk in ["spread", "total", "ml"]:
+            if mk == "ml":
+                side = pred["ml"]["side"]
+                rec = pred["ml"]["recommended"]
+                conf = pred["ml"]["conf"]
+                units = pred["ml"]["units"]
+                model_val = pred["ml"]["model_win_prob_home"]
+                vegas_val = pred["ml"]["implied_home"]
+                edge_val = pred["ml"]["edge_home"]
+            else:
+                side = pred[mk]["side"]
+                rec = pred[mk]["recommended"]
+                conf = pred[mk]["conf"]
+                units = pred[mk]["units"]
+                model_val = pred[mk]["model_margin_home"] if mk == "spread" else pred[mk]["model_total"]
+                vegas_val = pred[mk]["vegas_spread"] if mk == "spread" else pred[mk]["vegas_total"]
+                edge_val = pred[mk]["edge"]
+
+            if rec and side:
+                ledger_rows.append({
+                    "id": ledger_key(run_date, g["event_id"], mk.upper(), side),
+                    "run_date": run_date,
+                    "game_date": g["game_date"],
+                    "event_id": g["event_id"],
+                    "home_team": g["home_team"],
+                    "away_team": g["away_team"],
+                    "market": mk.upper(),
+                    "side": side,
+                    "model_value": float(model_val) if model_val is not None else None,
+                    "vegas_value": float(vegas_val) if vegas_val is not None else None,
+                    "edge": float(edge_val) if edge_val is not None else None,
+                    "conf": float(conf),
+                    "recommended": True,
+                    "units": float(units),
+                    "result": None,
+                    "pnl": None,
+                    "model_version": cfg["meta"]["version_id"],
+                    "meta": {
+                        "venue": g.get("venue"),
+                        "time": g.get("event_time_local"),
+                        "odds_provider": g.get("odds_provider"),
+                    }
+                })
+
+    slate = pd.DataFrame(rows)
+    if slate.empty:
+        st.warning("No predictions generated.")
+        st.stop()
+
+    slate = slate.sort_values(["Value Score"], ascending=False).reset_index(drop=True)
+
+    st.subheader("Ranked Slate")
+    st.dataframe(
+        slate.drop(columns=["event_id"]),
+        use_container_width=True,
+        hide_index=True
+    )
+
+    st.markdown("---")
+    st.subheader("Game Cards (why the edge exists)")
+
+    # Card view
+    for i in range(min(len(slate), 50)):
+        r = slate.iloc[i]
+        title = f"{r['Matchup']} | {r['Date']} | Value: {r['Value Score']}"
+        with st.expander(title, expanded=(i < 8)):
+            st.caption(r.get("Venue") or "")
+
+            c1, c2, c3 = st.columns(3)
+
+            with c1:
+                st.markdown("### Spread")
+                st.write(f"Model margin (home): {r['Spread Model']:+.2f}")
+                st.write(f"Vegas: {r['Spread Vegas']}")
+                st.write(f"Edge: {r['Spread Edge']}")
+                st.write(f"Conf: {r['Spread Conf']}")
+                if r["Spread Reco"]:
+                    st.success(f"Reco: {r['Spread Reco']} | Units: {r['Spread Units']}")
+                else:
+                    st.info("No spread bet")
+
+            with c2:
+                st.markdown("### Total")
+                st.write(f"Model total: {r['Total Model']:.1f}")
+                st.write(f"Vegas: {r['Total Vegas']}")
+                st.write(f"Edge: {r['Total Edge']}")
+                st.write(f"Conf: {r['Total Conf']}")
+                if r["Total Reco"]:
+                    st.success(f"Reco: {r['Total Reco']} | Units: {r['Total Units']}")
+                else:
+                    st.info("No total bet")
+
+            with c3:
+                st.markdown("### Moneyline")
+                st.write(f"Home win%: {r['ML Win% Home']:.1%}")
+                st.write(f"Implied home: {r['ML Implied Home']}")
+                st.write(f"Edge: {r['ML Edge']}")
+                st.write(f"Conf: {r['ML Conf']}")
+                if r["ML Reco"]:
+                    st.success(f"Reco: {r['ML Reco']} | Units: {r['ML Units']}")
+                else:
+                    st.info("No ML bet")
+
+    st.markdown("---")
+    st.subheader("Daily Ledger: What the system WOULD bet")
+
+    reco_df = pd.DataFrame(ledger_rows)
+    st.write(f"Recommended bets today: {len(reco_df)}")
+
+    if not reco_df.empty:
+        st.dataframe(reco_df[[
+            "game_date", "event_id", "home_team", "away_team",
+            "market", "side", "edge", "conf", "units", "model_version"
+        ]], use_container_width=True, hide_index=True)
+
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("Save ledger rows"):
+                # save to supabase if possible, else keep local
+                err = sb_upsert_ledger_rows(reco_df.to_dict(orient="records"))
+                if err:
+                    append_local_ledger(reco_df.to_dict(orient="records"))
+                    st.warning(f"Saved locally only. Supabase issue: {err}")
+                else:
+                    st.success("Saved to Supabase bet_ledger.")
+        with c2:
+            csv = reco_df.to_csv(index=False).encode("utf-8")
+            st.download_button("Download ledger CSV", csv, file_name=f"ledger_{run_date}.csv", mime="text/csv")
+
+# ============================================================
+# PAGE: MODEL STUDIO
+# ============================================================
+
+elif page == "🧠 Model Studio":
+    st.title("🧠 Model Studio")
+    st.caption("No-code knobs. Three tabs: Spread, Total, Moneyline. Save versions. Compare later.")
+
+    cfg = get_active_model_config()
+
+    st.subheader("Model Identity")
+    c1, c2 = st.columns(2)
+    with c1:
+        cfg["meta"]["name"] = st.text_input("Model name", value=cfg["meta"].get("name", "Baseline v1"))
+    with c2:
+        cfg["meta"]["version_id"] = st.text_input("Version id", value=cfg["meta"].get("version_id", "baseline-v1"))
+
+    st.markdown("---")
+
+    tabs = st.tabs(["Spread", "Total", "Moneyline"])
+
+    def studio_controls(market_key: str, label: str):
+        mcfg = cfg[market_key]
+
+        st.markdown(f"### {label} Controls")
+
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            mcfg["recent_window"] = st.selectbox(
+                "Recent window (games)",
+                options=[3, 5, 7, 10],
+                index=[3, 5, 7, 10].index(int(mcfg.get("recent_window", 7)))
+            )
+        with c2:
+            mcfg["recent_blend"] = st.slider("Recent blend", 0.0, 0.70, float(mcfg.get("recent_blend", 0.35)), 0.05)
+        with c3:
+            mcfg["volatility_penalty"] = st.slider("Volatility penalty", 0.0, 1.2, float(mcfg.get("volatility_penalty", 0.8)), 0.05)
+
+        if market_key == "spread":
+            mcfg["home_court"] = st.slider("Home court points", 0.0, 5.0, float(mcfg.get("home_court", 2.7)), 0.1)
+
+        st.markdown("#### Component Weights")
+        w = mcfg["weights"]
+
+        # Keep these simple and stable
+        if market_key == "spread":
+            w["torvik_adjem"] = st.slider("Season strength (Torvik AdjEM)", 0.0, 1.0, float(w.get("torvik_adjem", 0.55)), 0.05)
+            w["recent_netrtg"] = st.slider("Recent net rating (feature store)", 0.0, 1.0, float(w.get("recent_netrtg", 0.25)), 0.05)
+            w["four_factors"] = st.slider("Four factors (eFG/TO/ORB/FTR)", 0.0, 1.0, float(w.get("four_factors", 0.20)), 0.05)
+
+        if market_key == "total":
+            w["tempo"] = st.slider("Tempo (pace)", 0.0, 1.0, float(w.get("tempo", 0.25)), 0.05)
+            w["efficiency"] = st.slider("Efficiency (ORTG/DRTG blend)", 0.0, 1.0, float(w.get("efficiency", 0.60)), 0.05)
+            w["four_factors"] = st.slider("Four factors (small total adjustment)", 0.0, 1.0, float(w.get("four_factors", 0.15)), 0.05)
+
+        if market_key == "ml":
+            w["spread_margin"] = st.slider("Use spread margin as main driver", 0.0, 1.0, float(w.get("spread_margin", 0.70)), 0.05)
+            w["four_factors"] = st.slider("Four factors (winprob tweak)", 0.0, 1.0, float(w.get("four_factors", 0.30)), 0.05)
+
+        st.markdown("#### Confidence Stabilizers (do not pick sides directly)")
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            mcfg["sos_conf_strength"] = st.slider("SoS confidence strength", 0.0, 1.0, float(mcfg.get("sos_conf_strength", 0.5)), 0.05)
+        with c2:
+            mcfg["market_anchor"] = st.slider("Market anchor %", 0.0, 0.30, float(mcfg.get("market_anchor", 0.10)), 0.02)
+        with c3:
+            mcfg["market_anchor_min_conf"] = st.slider("Anchor only if conf below", 0.70, 0.95, float(mcfg.get("market_anchor_min_conf", 0.80)), 0.01)
+
+        # Normalize weights to sum to 1.0 to keep behavior predictable
+        wt = sum(float(v) for v in w.values())
+        if wt > 0:
+            for k in list(w.keys()):
+                w[k] = float(w[k]) / wt
+
+        cfg[market_key] = mcfg
+
+    with tabs[0]:
+        studio_controls("spread", "Spread")
+
+    with tabs[1]:
+        studio_controls("total", "Total")
+
+    with tabs[2]:
+        studio_controls("ml", "Moneyline")
+
+    st.markdown("---")
+
+    st.subheader("Save / Load Versions")
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        if st.button("Save as new version"):
+            cfg["meta"]["created_at"] = datetime.now(tz=LOCAL_TZ).isoformat()
+            set_active_model_config(cfg)
+            err = sb_save_model_config(cfg, is_active=False)
+            if err:
+                st.warning(f"Saved in-session only. Supabase issue: {err}")
+            else:
+                st.success("Saved to Supabase model_versions.")
+    with c2:
+        if st.button("Set active (Supabase)"):
+            err = sb_set_active_model_config(cfg["meta"]["version_id"])
+            if err:
+                st.warning(f"Could not set active in Supabase. {err}")
+            else:
+                st.success("Active model set in Supabase.")
+    with c3:
+        if st.button("Reset to Baseline v1"):
+            set_active_model_config(json.loads(json.dumps(DEFAULT_MODEL_CONFIG)))
+            st.success("Reset.")
+
+    configs, err = sb_load_model_configs()
+    if err:
+        st.info("Model versions in Supabase not available. If you want persistence, create a table named model_versions.")
+    else:
+        if configs:
+            options = [
+                f"{c.get('notes')} | {c.get('model_version_id')} | active={c.get('is_active')}"
+                for c in configs
+            ]
+            pick = st.selectbox("Load a saved model config", options=options, index=0)
+            if st.button("Load selected"):
+                selected = configs[options.index(pick)]
+                cfg_loaded = selected.get("ensemble_weights")
+                if isinstance(cfg_loaded, dict):
+                    set_active_model_config(cfg_loaded)
+                    st.success("Loaded into app.")
+                else:
+                    st.error("Selected row has no ensemble_weights.")
+
+    st.markdown("---")
+    st.subheader("Quick sanity check (single matchup)")
+    teams = sorted(TORVIK["team"].dropna().unique().tolist()) if not TORVIK.empty else sorted(FEATURES["team"].dropna().unique().tolist())
+    c1, c2 = st.columns(2)
+    with c1:
+        home = st.selectbox("Home team", options=teams, index=0)
+    with c2:
+        away = st.selectbox("Away team", options=teams, index=1 if len(teams) > 1 else 0)
+
+    if home == away:
+        st.error("Pick two different teams.")
+    else:
+        pred = predict_markets(home, away, "Neutral", vegas_spread=None, vegas_total=None, ml_home=None, ml_away=None)
+        if pred:
+            st.json(pred)
+
+# ============================================================
+# PAGE: BACKTEST LAB
+# ============================================================
+
+elif page == "🔁 Backtest Lab":
+    st.title("🔁 Backtest Lab")
+    st.caption("Test thresholds and unit rules. See what worked. Then adjust Model Studio and rerun.")
+
+    cfg = get_active_model_config()
+    strat = get_strategy()
+
 
     upcoming, errors = get_upcoming_games(days_ahead=7)
 
@@ -1643,6 +2375,26 @@ elif page == "🔁 Backtest Lab":
 
         st.markdown("### By market")
         st.dataframe(summary["by_market"], use_container_width=True, hide_index=True)
+
+        st.markdown("### Bet log")
+        st.dataframe(res.sort_values(["game_date"], ascending=False), use_container_width=True, hide_index=True)
+
+        csv = res.to_csv(index=False).encode("utf-8")
+        st.download_button("Download backtest CSV", csv, file_name="backtest_results.csv", mime="text/csv")
+
+# ============================================================
+# PAGE: LEDGER
+# ============================================================
+
+elif page == "📒 Ledger":
+    st.title("📒 Ledger")
+    st.caption("This is the daily log of what the system WOULD bet. Use this for accountability and learning.")
+
+    if has_supabase_creds():
+        def _do(tbl):
+            return tbl.select("*").order("run_date", desc=True).limit(5000).execute()
+        resp, err = sb_try("bet_ledger", "load ledger", _do)
+
 
         st.markdown("### Bet log")
         st.dataframe(res.sort_values(["game_date"], ascending=False), use_container_width=True, hide_index=True)

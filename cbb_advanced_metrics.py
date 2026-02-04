@@ -204,7 +204,7 @@ def add_style_mismatch(
 def add_shooting_profile(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds game-level:
-      - tp_pct, two_pct, ft_pct
+      - 3p_pct, two_pct, ft_pct
     Requires: fgm,fga,tpm,tpa,ftm,fta if present.
     """
     out = df.copy()
@@ -214,7 +214,7 @@ def add_shooting_profile(df: pd.DataFrame) -> pd.DataFrame:
 
     out = ensure_numeric(out, ["fgm", "fga", "tpm", "tpa", "ftm", "fta"])
 
-    out["tp_pct"] = out.apply(lambda r: safe_div(r["tpm"], r["tpa"]), axis=1)
+    out["3p_pct"] = out.apply(lambda r: safe_div(r["tpm"], r["tpa"]), axis=1)
     out["two_m"] = out["fgm"] - out["tpm"]
     out["two_a"] = out["fga"] - out["tpa"]
     out["two_pct"] = out.apply(lambda r: safe_div(r["two_m"], r["two_a"]), axis=1)
@@ -234,7 +234,7 @@ def add_lastn_rollups(
     n: int = 10,
     metrics: Sequence[str] = (
         "netrtg", "ortg", "drtg", "pace", "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par",
-        "tp_pct", "gps", "net_over_exp",
+        "3p_pct", "gps", "net_over_exp",
     ),
     prefix: str = "l10_",
 ) -> pd.DataFrame:

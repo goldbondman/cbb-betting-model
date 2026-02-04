@@ -139,6 +139,14 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     home = df[df["home_away"] == "home"].copy()
     away = df[df["home_away"] == "away"].copy()
 
+    counts = df.groupby(["event_id", "home_away"]).size().unstack(fill_value=0)
+    bad_events = counts[(counts.get("home", 0) != 1) | (counts.get("away", 0) != 1)].index.tolist()
+    if bad_events:
+        for event_id in bad_events:
+            issues.append((str(event_id), "home_away_mismatch"))
+        home = home[~home["event_id"].isin(bad_events)]
+        away = away[~away["event_id"].isin(bad_events)]
+
     merged = home.merge(
         away,
         on=["event_id"],
