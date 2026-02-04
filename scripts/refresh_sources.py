@@ -14,6 +14,9 @@ UA_HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 TIMEOUT = 30
+MAX_RETRIES = int(os.environ.get("REFRESH_MAX_RETRIES", "3"))
+RETRY_INITIAL_DELAY = float(os.environ.get("REFRESH_RETRY_INITIAL_DELAY", "1.0"))
+RETRY_BACKOFF = float(os.environ.get("REFRESH_RETRY_BACKOFF", "2.0"))
 
 TEAM_ALIASES = {
     "uconn": "connecticut",
@@ -37,9 +40,19 @@ def _clean_columns(df):
     return df
 
 def fetch_bytes(url, session):
-    r = session.get(url, headers=UA_HEADERS, timeout=TIMEOUT)
-    r.raise_for_status()
-    return r.content
+    last_exc = None
+    for attempt in range(MAX_RETRIES):
+        if attempt > 0:
+            delay = RETRY_INITIAL_DELAY * (RETRY_BACKOFF ** (attempt - 1))
+            time.sleep(delay)
+        try:
+            r = session.get(url, headers=UA_HEADERS, timeout=TIMEOUT)
+            r.raise_for_status()
+            return r.content
+        except requests.exceptions.RequestException as exc:
+            last_exc = exc
+            continue
+    raise RuntimeError(f"Failed to fetch {url} after {MAX_RETRIES} attempts: {last_exc}")
 
 def read_csv_bytes(content):
     head = content[:300].decode("utf-8", errors="ignore").lower()

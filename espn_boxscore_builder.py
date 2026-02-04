@@ -49,6 +49,8 @@ import numpy as np
 # ---- feature modules (new) ----
 from weights import WeightConfig, add_all_base_weights
 from plus_and_fit import PlusConfig, CompositeConfig, add_all_plus_and_composites
+from cbb_advanced_metrics import add_all_advanced_metrics
+from rolling_features import RollingConfig, add_unweighted_rollups
 
 
 # ---------------- config ----------------
@@ -91,6 +93,7 @@ OUT_TEAM_FEATURES = "espn_team_game_features.csv"
 OUT_MATCHUPS = "espn_matchups_model_ready.csv"
 OUT_DIAGNOSTICS = "espn_feature_diagnostics.csv"
 OUT_DQ_AUDIT = "espn_dq_audit.csv"
+OUT_PLAYER_BOX = "espn_player_boxscores.csv"
 
 WRITE_DIAGNOSTICS = os.getenv("WRITE_DIAGNOSTICS", "1").strip() not in ("0", "false", "False", "no", "NO")
 WRITE_DQ_AUDIT = os.getenv("WRITE_DQ_AUDIT", "1").strip() not in ("0", "false", "False", "no", "NO")
@@ -618,8 +621,7 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
         if not isinstance(comp, dict):
             skipped["no_comp"] += 1
             continue
-            
-         odds = _extract_odds_from_comp(comp)
+        odds = _extract_odds_from_comp(comp)
 
         competitors = comp.get("competitors") or []
         if len(competitors) < 2:
@@ -652,7 +654,7 @@ def fetch_scoreboard_games(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT):
         home_win = home.get("winner")
         away_win = away.get("winner")
 
-                # ---- market / Vegas lines (best-effort from ESPN scoreboard) ----
+        # ---- market / Vegas lines (best-effort from ESPN scoreboard) ----
         odds_list = comp.get("odds") or []
         odds0 = odds_list[0] if (isinstance(odds_list, list) and len(odds_list) > 0 and isinstance(odds_list[0], dict)) else {}
 
@@ -1298,6 +1300,8 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
     out["days_rest"] = (out["days_since_last_game"] - 1.0).clip(lower=0)
     out["back_to_back"] = (out["days_since_last_game"].fillna(999) <= 1.5).astype(int)
 
+    windows = list(range(3, 13))
+    games_last_n = {n: [] for n in windows}
     games_last_7 = []
     three_in_six = []
 
@@ -1307,10 +1311,22 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
         dt = r.get("game_dt")
         dq = by_team[k]
 
-        cutoff7 = dt - pd.Timedelta(days=7)
-        while dq and dq[0] < cutoff7:
+        if pd.isna(dt):
+            for n in windows:
+                games_last_n[n].append(0)
+            games_last_7.append(0)
+            three_in_six.append(0)
+            continue
+
+        cutoff_max = dt - pd.Timedelta(days=max(windows))
+        while dq and dq[0] < cutoff_max:
             dq.popleft()
-        games_last_7.append(len(dq))
+
+        for n in windows:
+            cutoff = dt - pd.Timedelta(days=n)
+            games_last_n[n].append(sum(1 for x in dq if x >= cutoff))
+
+        games_last_7.append(games_last_n[7][-1])
 
         cutoff6 = dt - pd.Timedelta(days=6)
         cnt6 = sum(1 for x in dq if x >= cutoff6)
@@ -1318,6 +1334,8 @@ def _time_window_counts_per_team(df: pd.DataFrame) -> pd.DataFrame:
 
         dq.append(dt)
 
+    for n in windows:
+        out[f"games_last_{n}_days"] = games_last_n[n]
     out["games_last_7_days"] = games_last_7
     out["three_in_six"] = three_in_six
     return out.drop(columns=["prev_game_dt"], errors="ignore")
@@ -1883,6 +1901,35 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     )
     df_clean = add_all_base_weights(df_clean, wcfg)
     df_clean = add_all_plus_and_composites(df_clean, PlusConfig(), CompositeConfig())
+
+    # Advanced matchup metrics (expected margin, GPS, style mismatch, volatility)
+    df_clean = add_all_advanced_metrics(df_clean, n_last=10)
+
+    # Extra leak-free rolling signals (trend/percentiles) on key metrics
+    rolling_cfg = RollingConfig(
+        group_cols=("team_id",),
+        order_col="game_datetime_utc",
+        window=10,
+        prefix="rf10_",
+    )
+    df_clean = add_unweighted_rollups(
+        df_clean,
+        metrics=[
+            "netrtg",
+            "ortg",
+            "drtg",
+            "pace",
+            "efg",
+            "tov_pct",
+            "orb_pct",
+            "drb_pct",
+            "ftr",
+            "3par",
+            "gps",
+            "net_over_exp",
+        ],
+        cfg=rolling_cfg,
+    )
 
     # Gate: opponent join rate
     opp_join_rate = df_clean["opp_join_ok"].sum() / len(df_clean) if len(df_clean) > 0 else 0
