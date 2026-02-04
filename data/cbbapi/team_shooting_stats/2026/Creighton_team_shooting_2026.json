@@ -4,53 +4,53 @@
     "teamId": 61,
     "team": "Creighton",
     "conference": "Big East",
-    "trackedShots": 1202,
-    "freeThrowRate": 27.9,
-    "assistedPct": 25.5,
+    "trackedShots": 1310,
+    "freeThrowRate": 27.7,
+    "assistedPct": 25.6,
     "dunks": {
-      "attempted": 57,
-      "made": 53,
-      "pct": 93,
-      "assisted": 44,
-      "assistedPct": 83
+      "attempted": 61,
+      "made": 56,
+      "pct": 91.8,
+      "assisted": 47,
+      "assistedPct": 83.9
     },
     "layups": {
-      "attempted": 316,
-      "made": 197,
-      "pct": 62.3,
-      "assisted": 86,
-      "assistedPct": 43.7
+      "attempted": 336,
+      "made": 212,
+      "pct": 63.1,
+      "assisted": 95,
+      "assistedPct": 44.8
     },
     "tipIns": {
-      "attempted": 18,
-      "made": 16,
-      "pct": 88.9
+      "attempted": 21,
+      "made": 17,
+      "pct": 81
     },
     "twoPointJumpers": {
-      "attempted": 228,
-      "made": 87,
-      "pct": 38.2,
-      "assisted": 16,
-      "assistedPct": 18.4
+      "attempted": 254,
+      "made": 100,
+      "pct": 39.4,
+      "assisted": 23,
+      "assistedPct": 23
     },
     "threePointJumpers": {
-      "attempted": 583,
-      "made": 207,
-      "pct": 35.5,
-      "assisted": 160,
-      "assistedPct": 77.3
+      "attempted": 638,
+      "made": 219,
+      "pct": 34.3,
+      "assisted": 171,
+      "assistedPct": 78.1
     },
     "freeThrows": {
-      "attempted": 335,
-      "made": 253,
-      "pct": 75.5
+      "attempted": 363,
+      "made": 273,
+      "pct": 75.2
     },
     "attemptsBreakdown": {
       "dunks": 4.7,
-      "layups": 26.3,
-      "tipIns": 1.5,
-      "twoPointJumpers": 19,
-      "threePointJumpers": 48.5
+      "layups": 25.6,
+      "tipIns": 1.6,
+      "twoPointJumpers": 19.4,
+      "threePointJumpers": 48.7
     }
   }
 ]

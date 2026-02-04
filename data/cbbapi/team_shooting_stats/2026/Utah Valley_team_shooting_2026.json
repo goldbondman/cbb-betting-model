@@ -4,53 +4,53 @@
     "teamId": 332,
     "team": "Utah Valley",
     "conference": "WAC",
-    "trackedShots": 1121,
-    "freeThrowRate": 34.3,
-    "assistedPct": 32.3,
+    "trackedShots": 1236,
+    "freeThrowRate": 35,
+    "assistedPct": 31.5,
     "dunks": {
-      "attempted": 86,
-      "made": 77,
-      "pct": 89.5,
-      "assisted": 70,
-      "assistedPct": 90.9
+      "attempted": 96,
+      "made": 86,
+      "pct": 89.6,
+      "assisted": 79,
+      "assistedPct": 91.9
     },
     "layups": {
-      "attempted": 405,
-      "made": 255,
-      "pct": 63,
-      "assisted": 140,
-      "assistedPct": 54.9
+      "attempted": 448,
+      "made": 276,
+      "pct": 61.6,
+      "assisted": 146,
+      "assistedPct": 52.9
     },
     "tipIns": {
-      "attempted": 48,
-      "made": 30,
-      "pct": 62.5
+      "attempted": 50,
+      "made": 32,
+      "pct": 64
     },
     "twoPointJumpers": {
-      "attempted": 201,
-      "made": 79,
-      "pct": 39.3,
-      "assisted": 32,
-      "assistedPct": 40.5
+      "attempted": 225,
+      "made": 90,
+      "pct": 40,
+      "assisted": 35,
+      "assistedPct": 38.9
     },
     "threePointJumpers": {
-      "attempted": 381,
-      "made": 131,
-      "pct": 34.4,
-      "assisted": 120,
-      "assistedPct": 91.6
+      "attempted": 417,
+      "made": 141,
+      "pct": 33.8,
+      "assisted": 129,
+      "assistedPct": 91.5
     },
     "freeThrows": {
-      "attempted": 384,
-      "made": 267,
-      "pct": 69.5
+      "attempted": 432,
+      "made": 305,
+      "pct": 70.6
     },
     "attemptsBreakdown": {
-      "dunks": 7.7,
-      "layups": 36.1,
-      "tipIns": 4.3,
-      "twoPointJumpers": 17.9,
-      "threePointJumpers": 34
+      "dunks": 7.8,
+      "layups": 36.2,
+      "tipIns": 4,
+      "twoPointJumpers": 18.2,
+      "threePointJumpers": 33.7
     }
   }
 ]

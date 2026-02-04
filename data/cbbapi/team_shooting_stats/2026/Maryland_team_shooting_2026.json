@@ -4,22 +4,22 @@
     "teamId": 160,
     "team": "Maryland",
     "conference": "Big Ten",
-    "trackedShots": 1117,
-    "freeThrowRate": 41.1,
-    "assistedPct": 18,
+    "trackedShots": 1220,
+    "freeThrowRate": 40.6,
+    "assistedPct": 17.8,
     "dunks": {
-      "attempted": 29,
-      "made": 28,
-      "pct": 96.6,
-      "assisted": 20,
-      "assistedPct": 71.4
+      "attempted": 31,
+      "made": 30,
+      "pct": 96.8,
+      "assisted": 22,
+      "assistedPct": 73.3
     },
     "layups": {
-      "attempted": 343,
-      "made": 169,
-      "pct": 49.3,
-      "assisted": 40,
-      "assistedPct": 23.7
+      "attempted": 369,
+      "made": 180,
+      "pct": 48.8,
+      "assisted": 42,
+      "assistedPct": 23.3
     },
     "tipIns": {
       "attempted": 16,
@@ -27,30 +27,30 @@
       "pct": 56.3
     },
     "twoPointJumpers": {
-      "attempted": 216,
-      "made": 80,
-      "pct": 37,
-      "assisted": 23,
-      "assistedPct": 28.8
+      "attempted": 248,
+      "made": 92,
+      "pct": 37.1,
+      "assisted": 28,
+      "assistedPct": 30.4
     },
     "threePointJumpers": {
-      "attempted": 513,
-      "made": 167,
-      "pct": 32.6,
-      "assisted": 118,
-      "assistedPct": 70.7
+      "attempted": 556,
+      "made": 179,
+      "pct": 32.2,
+      "assisted": 125,
+      "assistedPct": 69.8
     },
     "freeThrows": {
-      "attempted": 459,
-      "made": 338,
-      "pct": 73.6
+      "attempted": 495,
+      "made": 363,
+      "pct": 73.3
     },
     "attemptsBreakdown": {
-      "dunks": 2.6,
-      "layups": 30.7,
-      "tipIns": 1.4,
-      "twoPointJumpers": 19.3,
-      "threePointJumpers": 45.9
+      "dunks": 2.5,
+      "layups": 30.2,
+      "tipIns": 1.3,
+      "twoPointJumpers": 20.3,
+      "threePointJumpers": 45.6
     }
   }
 ]

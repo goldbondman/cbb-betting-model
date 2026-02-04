@@ -4,53 +4,53 @@
     "teamId": 138,
     "team": "Lafayette",
     "conference": "Patriot",
-    "trackedShots": 1112,
-    "freeThrowRate": 30.1,
-    "assistedPct": 23.5,
+    "trackedShots": 1278,
+    "freeThrowRate": 31.6,
+    "assistedPct": 23.4,
     "dunks": {
-      "attempted": 5,
-      "made": 4,
-      "pct": 80,
-      "assisted": 3,
-      "assistedPct": 75
+      "attempted": 7,
+      "made": 6,
+      "pct": 85.7,
+      "assisted": 5,
+      "assistedPct": 83.3
     },
     "layups": {
-      "attempted": 413,
-      "made": 228,
+      "attempted": 475,
+      "made": 262,
       "pct": 55.2,
-      "assisted": 112,
-      "assistedPct": 49.1
+      "assisted": 130,
+      "assistedPct": 49.6
     },
     "tipIns": {
-      "attempted": 25,
-      "made": 14,
-      "pct": 56
+      "attempted": 30,
+      "made": 17,
+      "pct": 56.7
     },
     "twoPointJumpers": {
-      "attempted": 223,
-      "made": 71,
-      "pct": 31.8,
-      "assisted": 21,
-      "assistedPct": 29.6
+      "attempted": 248,
+      "made": 81,
+      "pct": 32.7,
+      "assisted": 22,
+      "assistedPct": 27.2
     },
     "threePointJumpers": {
-      "attempted": 446,
-      "made": 155,
-      "pct": 34.8,
-      "assisted": 125,
-      "assistedPct": 80.6
+      "attempted": 518,
+      "made": 176,
+      "pct": 34,
+      "assisted": 142,
+      "assistedPct": 80.7
     },
     "freeThrows": {
-      "attempted": 335,
-      "made": 233,
-      "pct": 69.6
+      "attempted": 404,
+      "made": 279,
+      "pct": 69.1
     },
     "attemptsBreakdown": {
-      "dunks": 0.4,
-      "layups": 37.1,
-      "tipIns": 2.2,
-      "twoPointJumpers": 20.1,
-      "threePointJumpers": 40.1
+      "dunks": 0.5,
+      "layups": 37.2,
+      "tipIns": 2.3,
+      "twoPointJumpers": 19.4,
+      "threePointJumpers": 40.5
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 185,
     "team": "NC State",
     "conference": "ACC",
-    "trackedShots": 1095,
-    "freeThrowRate": 35.4,
-    "assistedPct": 26.9,
+    "trackedShots": 1276,
+    "freeThrowRate": 35.3,
+    "assistedPct": 27.2,
     "dunks": {
-      "attempted": 55,
-      "made": 50,
-      "pct": 90.9,
-      "assisted": 41,
-      "assistedPct": 82
+      "attempted": 68,
+      "made": 62,
+      "pct": 91.2,
+      "assisted": 51,
+      "assistedPct": 82.3
     },
     "layups": {
-      "attempted": 326,
-      "made": 184,
-      "pct": 56.4,
-      "assisted": 72,
-      "assistedPct": 39.1
+      "attempted": 386,
+      "made": 217,
+      "pct": 56.2,
+      "assisted": 83,
+      "assistedPct": 38.2
     },
     "tipIns": {
-      "attempted": 25,
-      "made": 20,
-      "pct": 80
+      "attempted": 32,
+      "made": 26,
+      "pct": 81.3
     },
     "twoPointJumpers": {
-      "attempted": 195,
-      "made": 64,
-      "pct": 32.8,
-      "assisted": 14,
-      "assistedPct": 21.9
+      "attempted": 224,
+      "made": 75,
+      "pct": 33.5,
+      "assisted": 18,
+      "assistedPct": 24
     },
     "threePointJumpers": {
-      "attempted": 494,
-      "made": 197,
-      "pct": 39.9,
-      "assisted": 168,
-      "assistedPct": 85.3
+      "attempted": 566,
+      "made": 227,
+      "pct": 40.1,
+      "assisted": 195,
+      "assistedPct": 85.9
     },
     "freeThrows": {
-      "attempted": 388,
-      "made": 293,
-      "pct": 75.5
+      "attempted": 451,
+      "made": 344,
+      "pct": 76.3
     },
     "attemptsBreakdown": {
-      "dunks": 5,
-      "layups": 29.8,
-      "tipIns": 2.3,
-      "twoPointJumpers": 17.8,
-      "threePointJumpers": 45.1
+      "dunks": 5.3,
+      "layups": 30.3,
+      "tipIns": 2.5,
+      "twoPointJumpers": 17.6,
+      "threePointJumpers": 44.4
     }
   }
 ]

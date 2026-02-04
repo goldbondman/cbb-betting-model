@@ -37,3 +37,10 @@ jobs:
           UPLOAD_GROUP: all
           SKIP_MISSING: "1"
         run: python upload_to_supabase_storage.py
+        run: python ml/feature_matrix.py
+
+      - name: Train models
+        run: python ml/train_ml_models.py
+
+      - name: Generate predictions
+        run: python ml/predict_ml.py

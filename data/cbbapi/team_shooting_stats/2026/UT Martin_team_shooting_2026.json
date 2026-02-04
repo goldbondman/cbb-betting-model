@@ -4,53 +4,53 @@
     "teamId": 325,
     "team": "UT Martin",
     "conference": "OVC",
-    "trackedShots": 1080,
-    "freeThrowRate": 41.7,
-    "assistedPct": 22.8,
+    "trackedShots": 1189,
+    "freeThrowRate": 41,
+    "assistedPct": 23.9,
     "dunks": {
-      "attempted": 36,
-      "made": 32,
-      "pct": 88.9,
-      "assisted": 19,
-      "assistedPct": 59.4
+      "attempted": 46,
+      "made": 41,
+      "pct": 89.1,
+      "assisted": 28,
+      "assistedPct": 68.3
     },
     "layups": {
-      "attempted": 331,
-      "made": 184,
-      "pct": 55.6,
-      "assisted": 78,
-      "assistedPct": 42.4
+      "attempted": 367,
+      "made": 207,
+      "pct": 56.4,
+      "assisted": 90,
+      "assistedPct": 43.5
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 17,
-      "pct": 56.7
+      "attempted": 31,
+      "made": 18,
+      "pct": 58.1
     },
     "twoPointJumpers": {
-      "attempted": 194,
-      "made": 81,
-      "pct": 41.8,
-      "assisted": 18,
-      "assistedPct": 22.2
+      "attempted": 201,
+      "made": 85,
+      "pct": 42.3,
+      "assisted": 19,
+      "assistedPct": 22.4
     },
     "threePointJumpers": {
-      "attempted": 489,
-      "made": 151,
-      "pct": 30.9,
-      "assisted": 131,
-      "assistedPct": 86.8
+      "attempted": 544,
+      "made": 171,
+      "pct": 31.4,
+      "assisted": 147,
+      "assistedPct": 86
     },
     "freeThrows": {
-      "attempted": 450,
-      "made": 303,
-      "pct": 67.3
+      "attempted": 487,
+      "made": 329,
+      "pct": 67.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
-      "layups": 30.6,
-      "tipIns": 2.8,
-      "twoPointJumpers": 18,
-      "threePointJumpers": 45.3
+      "dunks": 3.9,
+      "layups": 30.9,
+      "tipIns": 2.6,
+      "twoPointJumpers": 16.9,
+      "threePointJumpers": 45.8
     }
   }
 ]

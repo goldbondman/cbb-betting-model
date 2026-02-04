@@ -4,53 +4,53 @@
     "teamId": 148,
     "team": "Louisiana",
     "conference": "Sun Belt",
-    "trackedShots": 1137,
-    "freeThrowRate": 26.1,
-    "assistedPct": 19.2,
+    "trackedShots": 1243,
+    "freeThrowRate": 26.7,
+    "assistedPct": 19.7,
     "dunks": {
-      "attempted": 17,
-      "made": 14,
-      "pct": 82.4,
-      "assisted": 12,
-      "assistedPct": 85.7
+      "attempted": 19,
+      "made": 16,
+      "pct": 84.2,
+      "assisted": 14,
+      "assistedPct": 87.5
     },
     "layups": {
-      "attempted": 268,
-      "made": 134,
-      "pct": 50,
-      "assisted": 38,
-      "assistedPct": 28.4
+      "attempted": 297,
+      "made": 149,
+      "pct": 50.2,
+      "assisted": 44,
+      "assistedPct": 29.5
     },
     "tipIns": {
-      "attempted": 8,
-      "made": 8,
+      "attempted": 9,
+      "made": 9,
       "pct": 100
     },
     "twoPointJumpers": {
-      "attempted": 331,
-      "made": 130,
-      "pct": 39.3,
-      "assisted": 22,
-      "assistedPct": 16.9
+      "attempted": 369,
+      "made": 147,
+      "pct": 39.8,
+      "assisted": 24,
+      "assistedPct": 16.3
     },
     "threePointJumpers": {
-      "attempted": 513,
-      "made": 163,
-      "pct": 31.8,
-      "assisted": 146,
-      "assistedPct": 89.6
+      "attempted": 549,
+      "made": 181,
+      "pct": 33,
+      "assisted": 163,
+      "assistedPct": 90.1
     },
     "freeThrows": {
-      "attempted": 297,
-      "made": 201,
-      "pct": 67.7
+      "attempted": 332,
+      "made": 228,
+      "pct": 68.7
     },
     "attemptsBreakdown": {
       "dunks": 1.5,
-      "layups": 23.6,
+      "layups": 23.9,
       "tipIns": 0.7,
-      "twoPointJumpers": 29.1,
-      "threePointJumpers": 45.1
+      "twoPointJumpers": 29.7,
+      "threePointJumpers": 44.2
     }
   }
 ]

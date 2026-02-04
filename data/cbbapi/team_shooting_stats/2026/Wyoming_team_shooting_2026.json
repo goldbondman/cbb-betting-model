@@ -4,53 +4,53 @@
     "teamId": 358,
     "team": "Wyoming",
     "conference": "Mountain West",
-    "trackedShots": 1128,
-    "freeThrowRate": 38.7,
-    "assistedPct": 24.2,
+    "trackedShots": 1280,
+    "freeThrowRate": 39.5,
+    "assistedPct": 23.6,
     "dunks": {
-      "attempted": 50,
-      "made": 43,
+      "attempted": 57,
+      "made": 49,
       "pct": 86,
-      "assisted": 39,
-      "assistedPct": 90.7
+      "assisted": 44,
+      "assistedPct": 89.8
     },
     "layups": {
-      "attempted": 437,
-      "made": 249,
-      "pct": 57,
-      "assisted": 89,
-      "assistedPct": 35.7
+      "attempted": 487,
+      "made": 272,
+      "pct": 55.9,
+      "assisted": 95,
+      "assistedPct": 34.9
     },
     "tipIns": {
-      "attempted": 17,
-      "made": 7,
-      "pct": 41.2
+      "attempted": 20,
+      "made": 9,
+      "pct": 45
     },
     "twoPointJumpers": {
-      "attempted": 169,
-      "made": 75,
-      "pct": 44.4,
+      "attempted": 188,
+      "made": 82,
+      "pct": 43.6,
       "assisted": 8,
-      "assistedPct": 10.7
+      "assistedPct": 9.8
     },
     "threePointJumpers": {
-      "attempted": 455,
-      "made": 153,
-      "pct": 33.6,
-      "assisted": 137,
-      "assistedPct": 89.5
+      "attempted": 528,
+      "made": 175,
+      "pct": 33.1,
+      "assisted": 155,
+      "assistedPct": 88.6
     },
     "freeThrows": {
-      "attempted": 437,
-      "made": 319,
-      "pct": 73
+      "attempted": 506,
+      "made": 373,
+      "pct": 73.7
     },
     "attemptsBreakdown": {
-      "dunks": 4.4,
-      "layups": 38.7,
-      "tipIns": 1.5,
-      "twoPointJumpers": 15,
-      "threePointJumpers": 40.3
+      "dunks": 4.5,
+      "layups": 38,
+      "tipIns": 1.6,
+      "twoPointJumpers": 14.7,
+      "threePointJumpers": 41.3
     }
   }
 ]

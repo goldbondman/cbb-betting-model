@@ -4,53 +4,53 @@
     "teamId": 177,
     "team": "Missouri",
     "conference": "SEC",
-    "trackedShots": 1078,
-    "freeThrowRate": 40.6,
-    "assistedPct": 26.1,
+    "trackedShots": 1267,
+    "freeThrowRate": 41.6,
+    "assistedPct": 24.9,
     "dunks": {
-      "attempted": 77,
-      "made": 72,
-      "pct": 93.5,
-      "assisted": 53,
-      "assistedPct": 73.6
+      "attempted": 84,
+      "made": 79,
+      "pct": 94,
+      "assisted": 58,
+      "assistedPct": 73.4
     },
     "layups": {
-      "attempted": 363,
-      "made": 223,
-      "pct": 61.4,
-      "assisted": 85,
-      "assistedPct": 38.1
+      "attempted": 418,
+      "made": 252,
+      "pct": 60.3,
+      "assisted": 94,
+      "assistedPct": 37.3
     },
     "tipIns": {
-      "attempted": 40,
-      "made": 34,
-      "pct": 85
+      "attempted": 54,
+      "made": 44,
+      "pct": 81.5
     },
     "twoPointJumpers": {
-      "attempted": 194,
-      "made": 70,
-      "pct": 36.1,
-      "assisted": 20,
-      "assistedPct": 28.6
+      "attempted": 239,
+      "made": 85,
+      "pct": 35.6,
+      "assisted": 22,
+      "assistedPct": 25.9
     },
     "threePointJumpers": {
-      "attempted": 404,
-      "made": 145,
-      "pct": 35.9,
-      "assisted": 123,
-      "assistedPct": 84.8
+      "attempted": 472,
+      "made": 164,
+      "pct": 34.7,
+      "assisted": 141,
+      "assistedPct": 86
     },
     "freeThrows": {
-      "attempted": 438,
-      "made": 298,
-      "pct": 68
+      "attempted": 527,
+      "made": 355,
+      "pct": 67.4
     },
     "attemptsBreakdown": {
-      "dunks": 7.1,
-      "layups": 33.7,
-      "tipIns": 3.7,
-      "twoPointJumpers": 18,
-      "threePointJumpers": 37.5
+      "dunks": 6.6,
+      "layups": 33,
+      "tipIns": 4.3,
+      "twoPointJumpers": 18.9,
+      "threePointJumpers": 37.3
     }
   }
 ]

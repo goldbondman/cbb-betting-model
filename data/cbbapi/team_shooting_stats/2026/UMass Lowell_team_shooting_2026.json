@@ -4,53 +4,53 @@
     "teamId": 318,
     "team": "UMass Lowell",
     "conference": "Am. East",
-    "trackedShots": 1100,
-    "freeThrowRate": 41.2,
-    "assistedPct": 22.3,
+    "trackedShots": 1344,
+    "freeThrowRate": 37.6,
+    "assistedPct": 21.3,
     "dunks": {
-      "attempted": 44,
-      "made": 40,
-      "pct": 90.9,
-      "assisted": 33,
-      "assistedPct": 82.5
+      "attempted": 46,
+      "made": 42,
+      "pct": 91.3,
+      "assisted": 35,
+      "assistedPct": 83.3
     },
     "layups": {
-      "attempted": 466,
-      "made": 251,
-      "pct": 53.9,
-      "assisted": 102,
-      "assistedPct": 40.6
+      "attempted": 565,
+      "made": 299,
+      "pct": 52.9,
+      "assisted": 118,
+      "assistedPct": 39.5
     },
     "tipIns": {
-      "attempted": 41,
-      "made": 29,
-      "pct": 70.7
+      "attempted": 52,
+      "made": 38,
+      "pct": 73.1
     },
     "twoPointJumpers": {
-      "attempted": 212,
-      "made": 87,
-      "pct": 41,
-      "assisted": 22,
-      "assistedPct": 25.3
+      "attempted": 266,
+      "made": 113,
+      "pct": 42.5,
+      "assisted": 25,
+      "assistedPct": 22.1
     },
     "threePointJumpers": {
-      "attempted": 337,
-      "made": 113,
-      "pct": 33.5,
-      "assisted": 88,
-      "assistedPct": 77.9
+      "attempted": 415,
+      "made": 135,
+      "pct": 32.5,
+      "assisted": 108,
+      "assistedPct": 80
     },
     "freeThrows": {
-      "attempted": 453,
-      "made": 298,
-      "pct": 65.8
+      "attempted": 505,
+      "made": 338,
+      "pct": 66.9
     },
     "attemptsBreakdown": {
-      "dunks": 4,
-      "layups": 42.4,
-      "tipIns": 3.7,
-      "twoPointJumpers": 19.3,
-      "threePointJumpers": 30.6
+      "dunks": 3.4,
+      "layups": 42,
+      "tipIns": 3.9,
+      "twoPointJumpers": 19.8,
+      "threePointJumpers": 30.9
     }
   }
 ]

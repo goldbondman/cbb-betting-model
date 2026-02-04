@@ -4,52 +4,52 @@
     "teamId": 62,
     "team": "Dartmouth",
     "conference": "Ivy",
-    "trackedShots": 989,
-    "freeThrowRate": 36.5,
-    "assistedPct": 24.4,
+    "trackedShots": 1159,
+    "freeThrowRate": 35.8,
+    "assistedPct": 23.9,
     "dunks": {
-      "attempted": 22,
-      "made": 21,
-      "pct": 95.5,
-      "assisted": 11,
-      "assistedPct": 52.4
+      "attempted": 29,
+      "made": 28,
+      "pct": 96.6,
+      "assisted": 15,
+      "assistedPct": 53.6
     },
     "layups": {
-      "attempted": 322,
-      "made": 180,
-      "pct": 55.9,
-      "assisted": 69,
-      "assistedPct": 38.3
+      "attempted": 368,
+      "made": 199,
+      "pct": 54.1,
+      "assisted": 76,
+      "assistedPct": 38.2
     },
     "tipIns": {
-      "attempted": 11,
-      "made": 8,
-      "pct": 72.7
+      "attempted": 12,
+      "made": 9,
+      "pct": 75
     },
     "twoPointJumpers": {
-      "attempted": 149,
-      "made": 60,
-      "pct": 40.3,
-      "assisted": 7,
-      "assistedPct": 11.7
+      "attempted": 182,
+      "made": 76,
+      "pct": 41.8,
+      "assisted": 9,
+      "assistedPct": 11.8
     },
     "threePointJumpers": {
-      "attempted": 485,
-      "made": 186,
-      "pct": 38.4,
-      "assisted": 154,
-      "assistedPct": 82.8
+      "attempted": 568,
+      "made": 215,
+      "pct": 37.9,
+      "assisted": 177,
+      "assistedPct": 82.3
     },
     "freeThrows": {
-      "attempted": 361,
-      "made": 257,
-      "pct": 71.2
+      "attempted": 415,
+      "made": 298,
+      "pct": 71.8
     },
     "attemptsBreakdown": {
-      "dunks": 2.2,
-      "layups": 32.6,
-      "tipIns": 1.1,
-      "twoPointJumpers": 15.1,
+      "dunks": 2.5,
+      "layups": 31.8,
+      "tipIns": 1,
+      "twoPointJumpers": 15.7,
       "threePointJumpers": 49
     }
   }

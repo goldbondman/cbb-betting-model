@@ -4,22 +4,22 @@
     "teamId": 259,
     "team": "San Francisco",
     "conference": "WCC",
-    "trackedShots": 1160,
-    "freeThrowRate": 37.2,
+    "trackedShots": 1332,
+    "freeThrowRate": 37,
     "assistedPct": 24.4,
     "dunks": {
-      "attempted": 65,
-      "made": 56,
-      "pct": 86.2,
-      "assisted": 43,
-      "assistedPct": 76.8
+      "attempted": 72,
+      "made": 61,
+      "pct": 84.7,
+      "assisted": 47,
+      "assistedPct": 77
     },
     "layups": {
-      "attempted": 313,
-      "made": 163,
-      "pct": 52.1,
-      "assisted": 63,
-      "assistedPct": 38.7
+      "attempted": 369,
+      "made": 196,
+      "pct": 53.1,
+      "assisted": 74,
+      "assistedPct": 37.8
     },
     "tipIns": {
       "attempted": 39,
@@ -27,30 +27,30 @@
       "pct": 71.8
     },
     "twoPointJumpers": {
-      "attempted": 206,
-      "made": 82,
-      "pct": 39.8,
-      "assisted": 22,
-      "assistedPct": 26.8
+      "attempted": 246,
+      "made": 94,
+      "pct": 38.2,
+      "assisted": 24,
+      "assistedPct": 25.5
     },
     "threePointJumpers": {
-      "attempted": 537,
-      "made": 190,
-      "pct": 35.4,
-      "assisted": 155,
-      "assistedPct": 81.6
+      "attempted": 606,
+      "made": 218,
+      "pct": 36,
+      "assisted": 180,
+      "assistedPct": 82.6
     },
     "freeThrows": {
-      "attempted": 431,
-      "made": 300,
-      "pct": 69.6
+      "attempted": 493,
+      "made": 342,
+      "pct": 69.4
     },
     "attemptsBreakdown": {
-      "dunks": 5.6,
-      "layups": 27,
-      "tipIns": 3.4,
-      "twoPointJumpers": 17.8,
-      "threePointJumpers": 46.3
+      "dunks": 5.4,
+      "layups": 27.7,
+      "tipIns": 2.9,
+      "twoPointJumpers": 18.5,
+      "threePointJumpers": 45.5
     }
   }
 ]

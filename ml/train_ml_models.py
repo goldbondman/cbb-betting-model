@@ -87,6 +87,14 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     X_train = train_df[feature_cols].astype(float).to_numpy()
     X_val = val_df[feature_cols].astype(float).to_numpy() if not val_df.empty else None
     n_val = len(val_df)
+    X = df[feature_cols].astype(float).to_numpy()
+    val_split = max(0.0, min(0.5, float(cfg.val_split)))
+    if val_split > 0 and len(df) > 10:
+        n_val = max(1, int(len(df) * val_split))
+        X_train, X_val = X[:-n_val], X[-n_val:]
+    else:
+        n_val = 0
+        X_train, X_val = X, None
 
     results: Dict[str, Dict[str, object]] = {}
     for target, fname in [
@@ -96,11 +104,16 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         y = df[target].astype(float).to_numpy()
         y_train = train_df[target].astype(float).to_numpy()
         y_val = val_df[target].astype(float).to_numpy() if n_val else None
+        y_train = y[:-n_val] if n_val else y
+        y_val = y[-n_val:] if n_val else None
         coef, rmse = _fit_linear(X_train, y_train)
         val_rmse = _rmse_from_coef(X_val, y_val, coef) if n_val else None
         model = {
             "target": target,
             "model_version": cfg.model_version,
+        coef, rmse = _fit_linear(X, y)
+        model = {
+            "target": target,
             "intercept": float(coef[0]),
             "coefficients": [float(c) for c in coef[1:]],
             "feature_order": feature_cols,

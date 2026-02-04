@@ -4,53 +4,53 @@
     "teamId": 15,
     "team": "Army",
     "conference": "Patriot",
-    "trackedShots": 1244,
-    "freeThrowRate": 26.8,
-    "assistedPct": 24,
+    "trackedShots": 1422,
+    "freeThrowRate": 26,
+    "assistedPct": 24.3,
     "dunks": {
-      "attempted": 6,
-      "made": 5,
-      "pct": 83.3,
-      "assisted": 4,
-      "assistedPct": 80
+      "attempted": 9,
+      "made": 7,
+      "pct": 77.8,
+      "assisted": 5,
+      "assistedPct": 71.4
     },
     "layups": {
-      "attempted": 430,
-      "made": 245,
-      "pct": 57,
-      "assisted": 92,
-      "assistedPct": 37.6
+      "attempted": 471,
+      "made": 265,
+      "pct": 56.3,
+      "assisted": 104,
+      "assistedPct": 39.2
     },
     "tipIns": {
-      "attempted": 22,
-      "made": 13,
-      "pct": 59.1
+      "attempted": 26,
+      "made": 15,
+      "pct": 57.7
     },
     "twoPointJumpers": {
-      "attempted": 139,
-      "made": 44,
-      "pct": 31.7,
-      "assisted": 14,
-      "assistedPct": 31.8
+      "attempted": 169,
+      "made": 56,
+      "pct": 33.1,
+      "assisted": 18,
+      "assistedPct": 32.1
     },
     "threePointJumpers": {
-      "attempted": 647,
-      "made": 220,
+      "attempted": 747,
+      "made": 254,
       "pct": 34,
-      "assisted": 188,
-      "assistedPct": 85.5
+      "assisted": 219,
+      "assistedPct": 86.2
     },
     "freeThrows": {
-      "attempted": 334,
-      "made": 242,
-      "pct": 72.5
+      "attempted": 370,
+      "made": 260,
+      "pct": 70.3
     },
     "attemptsBreakdown": {
-      "dunks": 0.5,
-      "layups": 34.6,
+      "dunks": 0.6,
+      "layups": 33.1,
       "tipIns": 1.8,
-      "twoPointJumpers": 11.2,
-      "threePointJumpers": 52
+      "twoPointJumpers": 11.9,
+      "threePointJumpers": 52.5
     }
   }
 ]

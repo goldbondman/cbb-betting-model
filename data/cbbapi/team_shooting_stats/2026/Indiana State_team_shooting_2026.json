@@ -4,53 +4,53 @@
     "teamId": 122,
     "team": "Indiana State",
     "conference": "MVC",
-    "trackedShots": 1121,
-    "freeThrowRate": 30.4,
-    "assistedPct": 29.1,
+    "trackedShots": 1293,
+    "freeThrowRate": 29.9,
+    "assistedPct": 29.5,
     "dunks": {
-      "attempted": 69,
-      "made": 60,
-      "pct": 87,
-      "assisted": 53,
-      "assistedPct": 88.3
+      "attempted": 81,
+      "made": 72,
+      "pct": 88.9,
+      "assisted": 65,
+      "assistedPct": 90.3
     },
     "layups": {
-      "attempted": 398,
-      "made": 236,
-      "pct": 59.3,
-      "assisted": 119,
-      "assistedPct": 50.4
+      "attempted": 454,
+      "made": 274,
+      "pct": 60.4,
+      "assisted": 141,
+      "assistedPct": 51.5
     },
     "tipIns": {
-      "attempted": 22,
+      "attempted": 25,
       "made": 17,
-      "pct": 77.3
+      "pct": 68
     },
     "twoPointJumpers": {
-      "attempted": 126,
-      "made": 52,
-      "pct": 41.3,
-      "assisted": 15,
-      "assistedPct": 28.8
+      "attempted": 148,
+      "made": 60,
+      "pct": 40.5,
+      "assisted": 19,
+      "assistedPct": 31.7
     },
     "threePointJumpers": {
-      "attempted": 506,
-      "made": 161,
-      "pct": 31.8,
-      "assisted": 139,
-      "assistedPct": 86.3
+      "attempted": 585,
+      "made": 183,
+      "pct": 31.3,
+      "assisted": 157,
+      "assistedPct": 85.8
     },
     "freeThrows": {
-      "attempted": 341,
-      "made": 237,
-      "pct": 69.5
+      "attempted": 387,
+      "made": 263,
+      "pct": 68
     },
     "attemptsBreakdown": {
-      "dunks": 6.2,
-      "layups": 35.5,
-      "tipIns": 2,
-      "twoPointJumpers": 11.2,
-      "threePointJumpers": 45.1
+      "dunks": 6.3,
+      "layups": 35.1,
+      "tipIns": 1.9,
+      "twoPointJumpers": 11.4,
+      "threePointJumpers": 45.2
     }
   }
 ]

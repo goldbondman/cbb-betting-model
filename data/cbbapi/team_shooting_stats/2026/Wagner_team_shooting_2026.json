@@ -4,53 +4,53 @@
     "teamId": 341,
     "team": "Wagner",
     "conference": "NEC",
-    "trackedShots": 963,
-    "freeThrowRate": 29.2,
-    "assistedPct": 21.8,
+    "trackedShots": 1129,
+    "freeThrowRate": 29.9,
+    "assistedPct": 21.7,
     "dunks": {
-      "attempted": 33,
-      "made": 28,
-      "pct": 84.8,
-      "assisted": 19,
-      "assistedPct": 67.9
+      "attempted": 35,
+      "made": 30,
+      "pct": 85.7,
+      "assisted": 20,
+      "assistedPct": 66.7
     },
     "layups": {
-      "attempted": 361,
-      "made": 178,
-      "pct": 49.3,
-      "assisted": 69,
-      "assistedPct": 38.8
+      "attempted": 418,
+      "made": 201,
+      "pct": 48.1,
+      "assisted": 80,
+      "assistedPct": 39.8
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 24,
-      "pct": 80
+      "attempted": 36,
+      "made": 28,
+      "pct": 77.8
     },
     "twoPointJumpers": {
-      "attempted": 199,
-      "made": 90,
-      "pct": 45.2,
-      "assisted": 29,
-      "assistedPct": 32.2
+      "attempted": 232,
+      "made": 106,
+      "pct": 45.7,
+      "assisted": 34,
+      "assistedPct": 32.1
     },
     "threePointJumpers": {
-      "attempted": 340,
-      "made": 118,
-      "pct": 34.7,
-      "assisted": 93,
-      "assistedPct": 78.8
+      "attempted": 408,
+      "made": 140,
+      "pct": 34.3,
+      "assisted": 111,
+      "assistedPct": 79.3
     },
     "freeThrows": {
-      "attempted": 281,
-      "made": 203,
+      "attempted": 338,
+      "made": 244,
       "pct": 72.2
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 37.5,
-      "tipIns": 3.1,
-      "twoPointJumpers": 20.7,
-      "threePointJumpers": 35.3
+      "dunks": 3.1,
+      "layups": 37,
+      "tipIns": 3.2,
+      "twoPointJumpers": 20.5,
+      "threePointJumpers": 36.1
     }
   }
 ]

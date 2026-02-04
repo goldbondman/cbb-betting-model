@@ -4,53 +4,53 @@
     "teamId": 56,
     "team": "Colorado",
     "conference": "Big 12",
-    "trackedShots": 1147,
-    "freeThrowRate": 38.6,
-    "assistedPct": 25.5,
+    "trackedShots": 1320,
+    "freeThrowRate": 37.7,
+    "assistedPct": 26.1,
     "dunks": {
-      "attempted": 40,
-      "made": 38,
-      "pct": 95,
-      "assisted": 34,
-      "assistedPct": 89.5
+      "attempted": 49,
+      "made": 47,
+      "pct": 95.9,
+      "assisted": 43,
+      "assistedPct": 91.5
     },
     "layups": {
-      "attempted": 437,
-      "made": 246,
-      "pct": 56.3,
-      "assisted": 111,
+      "attempted": 484,
+      "made": 275,
+      "pct": 56.8,
+      "assisted": 124,
       "assistedPct": 45.1
     },
     "tipIns": {
-      "attempted": 49,
-      "made": 26,
-      "pct": 53.1
+      "attempted": 54,
+      "made": 30,
+      "pct": 55.6
     },
     "twoPointJumpers": {
-      "attempted": 244,
-      "made": 104,
-      "pct": 42.6,
-      "assisted": 27,
-      "assistedPct": 26
+      "attempted": 289,
+      "made": 120,
+      "pct": 41.5,
+      "assisted": 31,
+      "assistedPct": 25.8
     },
     "threePointJumpers": {
-      "attempted": 377,
-      "made": 132,
-      "pct": 35,
-      "assisted": 120,
-      "assistedPct": 90.9
+      "attempted": 444,
+      "made": 161,
+      "pct": 36.3,
+      "assisted": 146,
+      "assistedPct": 90.7
     },
     "freeThrows": {
-      "attempted": 443,
-      "made": 342,
-      "pct": 77.2
+      "attempted": 497,
+      "made": 379,
+      "pct": 76.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.5,
-      "layups": 38.1,
-      "tipIns": 4.3,
-      "twoPointJumpers": 21.3,
-      "threePointJumpers": 32.9
+      "dunks": 3.7,
+      "layups": 36.7,
+      "tipIns": 4.1,
+      "twoPointJumpers": 21.9,
+      "threePointJumpers": 33.6
     }
   }
 ]

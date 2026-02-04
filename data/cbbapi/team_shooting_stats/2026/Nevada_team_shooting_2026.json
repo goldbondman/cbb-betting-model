@@ -4,53 +4,53 @@
     "teamId": 189,
     "team": "Nevada",
     "conference": "Mountain West",
-    "trackedShots": 1015,
-    "freeThrowRate": 46.4,
-    "assistedPct": 24.9,
+    "trackedShots": 1189,
+    "freeThrowRate": 46.2,
+    "assistedPct": 24.7,
     "dunks": {
-      "attempted": 25,
-      "made": 23,
-      "pct": 92,
-      "assisted": 13,
-      "assistedPct": 56.5
+      "attempted": 31,
+      "made": 28,
+      "pct": 90.3,
+      "assisted": 16,
+      "assistedPct": 57.1
     },
     "layups": {
-      "attempted": 339,
-      "made": 169,
-      "pct": 49.9,
-      "assisted": 71,
-      "assistedPct": 42
+      "attempted": 401,
+      "made": 198,
+      "pct": 49.4,
+      "assisted": 86,
+      "assistedPct": 43.4
     },
     "tipIns": {
-      "attempted": 31,
-      "made": 13,
-      "pct": 41.9
+      "attempted": 37,
+      "made": 15,
+      "pct": 40.5
     },
     "twoPointJumpers": {
-      "attempted": 293,
-      "made": 113,
+      "attempted": 339,
+      "made": 131,
       "pct": 38.6,
-      "assisted": 51,
-      "assistedPct": 45.1
+      "assisted": 58,
+      "assistedPct": 44.3
     },
     "threePointJumpers": {
-      "attempted": 327,
-      "made": 127,
+      "attempted": 381,
+      "made": 148,
       "pct": 38.8,
-      "assisted": 118,
-      "assistedPct": 92.9
+      "assisted": 134,
+      "assistedPct": 90.5
     },
     "freeThrows": {
-      "attempted": 471,
-      "made": 360,
-      "pct": 76.4
+      "attempted": 549,
+      "made": 417,
+      "pct": 76
     },
     "attemptsBreakdown": {
-      "dunks": 2.5,
-      "layups": 33.4,
+      "dunks": 2.6,
+      "layups": 33.7,
       "tipIns": 3.1,
-      "twoPointJumpers": 28.9,
-      "threePointJumpers": 32.2
+      "twoPointJumpers": 28.5,
+      "threePointJumpers": 32
     }
   }
 ]

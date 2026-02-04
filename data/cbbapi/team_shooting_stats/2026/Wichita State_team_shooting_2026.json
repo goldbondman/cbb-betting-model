@@ -4,53 +4,53 @@
     "teamId": 352,
     "team": "Wichita State",
     "conference": "American",
-    "trackedShots": 1167,
-    "freeThrowRate": 37.4,
-    "assistedPct": 19,
+    "trackedShots": 1298,
+    "freeThrowRate": 36.7,
+    "assistedPct": 19.3,
     "dunks": {
-      "attempted": 57,
-      "made": 49,
-      "pct": 86,
-      "assisted": 43,
-      "assistedPct": 87.8
+      "attempted": 69,
+      "made": 60,
+      "pct": 87,
+      "assisted": 54,
+      "assistedPct": 90
     },
     "layups": {
-      "attempted": 353,
-      "made": 180,
-      "pct": 51,
-      "assisted": 51,
-      "assistedPct": 28.3
+      "attempted": 397,
+      "made": 201,
+      "pct": 50.6,
+      "assisted": 55,
+      "assistedPct": 27.4
     },
     "tipIns": {
-      "attempted": 63,
-      "made": 36,
-      "pct": 57.1
+      "attempted": 65,
+      "made": 37,
+      "pct": 56.9
     },
     "twoPointJumpers": {
-      "attempted": 278,
-      "made": 103,
-      "pct": 37.1,
-      "assisted": 21,
-      "assistedPct": 20.4
+      "attempted": 307,
+      "made": 112,
+      "pct": 36.5,
+      "assisted": 22,
+      "assistedPct": 19.6
     },
     "threePointJumpers": {
-      "attempted": 416,
-      "made": 152,
+      "attempted": 460,
+      "made": 168,
       "pct": 36.5,
-      "assisted": 107,
-      "assistedPct": 70.4
+      "assisted": 119,
+      "assistedPct": 70.8
     },
     "freeThrows": {
-      "attempted": 437,
-      "made": 303,
-      "pct": 69.3
+      "attempted": 477,
+      "made": 328,
+      "pct": 68.8
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 30.2,
-      "tipIns": 5.4,
-      "twoPointJumpers": 23.8,
-      "threePointJumpers": 35.6
+      "dunks": 5.3,
+      "layups": 30.6,
+      "tipIns": 5,
+      "twoPointJumpers": 23.7,
+      "threePointJumpers": 35.4
     }
   }
 ]

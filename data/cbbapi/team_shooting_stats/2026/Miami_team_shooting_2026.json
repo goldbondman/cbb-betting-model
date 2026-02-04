@@ -4,53 +4,53 @@
     "teamId": 168,
     "team": "Miami",
     "conference": "ACC",
-    "trackedShots": 1164,
-    "freeThrowRate": 37.9,
-    "assistedPct": 27.8,
+    "trackedShots": 1326,
+    "freeThrowRate": 39.2,
+    "assistedPct": 28.1,
     "dunks": {
-      "attempted": 100,
-      "made": 84,
-      "pct": 84,
-      "assisted": 71,
-      "assistedPct": 84.5
+      "attempted": 116,
+      "made": 98,
+      "pct": 84.5,
+      "assisted": 80,
+      "assistedPct": 81.6
     },
     "layups": {
-      "attempted": 420,
-      "made": 253,
-      "pct": 60.2,
-      "assisted": 109,
-      "assistedPct": 43.1
+      "attempted": 482,
+      "made": 292,
+      "pct": 60.6,
+      "assisted": 132,
+      "assistedPct": 45.2
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 21,
-      "pct": 70
+      "attempted": 33,
+      "made": 23,
+      "pct": 69.7
     },
     "twoPointJumpers": {
-      "attempted": 218,
-      "made": 99,
-      "pct": 45.4,
-      "assisted": 27,
-      "assistedPct": 27.3
+      "attempted": 259,
+      "made": 116,
+      "pct": 44.8,
+      "assisted": 29,
+      "assistedPct": 25
     },
     "threePointJumpers": {
-      "attempted": 396,
-      "made": 132,
-      "pct": 33.3,
-      "assisted": 117,
-      "assistedPct": 88.6
+      "attempted": 436,
+      "made": 149,
+      "pct": 34.2,
+      "assisted": 131,
+      "assistedPct": 87.9
     },
     "freeThrows": {
-      "attempted": 441,
-      "made": 304,
-      "pct": 68.9
+      "attempted": 520,
+      "made": 358,
+      "pct": 68.8
     },
     "attemptsBreakdown": {
-      "dunks": 8.6,
-      "layups": 36.1,
-      "tipIns": 2.6,
-      "twoPointJumpers": 18.7,
-      "threePointJumpers": 34
+      "dunks": 8.7,
+      "layups": 36.3,
+      "tipIns": 2.5,
+      "twoPointJumpers": 19.5,
+      "threePointJumpers": 32.9
     }
   }
 ]

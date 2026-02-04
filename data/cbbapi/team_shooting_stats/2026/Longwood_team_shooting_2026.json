@@ -4,53 +4,53 @@
     "teamId": 147,
     "team": "Longwood",
     "conference": "Big South",
-    "trackedShots": 1151,
-    "freeThrowRate": 41.3,
-    "assistedPct": 23.4,
+    "trackedShots": 1321,
+    "freeThrowRate": 39.9,
+    "assistedPct": 22.1,
     "dunks": {
-      "attempted": 68,
-      "made": 62,
-      "pct": 91.2,
-      "assisted": 47,
+      "attempted": 72,
+      "made": 66,
+      "pct": 91.7,
+      "assisted": 50,
       "assistedPct": 75.8
     },
     "layups": {
-      "attempted": 428,
-      "made": 240,
-      "pct": 56.1,
-      "assisted": 99,
-      "assistedPct": 41.3
+      "attempted": 484,
+      "made": 269,
+      "pct": 55.6,
+      "assisted": 106,
+      "assistedPct": 39.4
     },
     "tipIns": {
-      "attempted": 47,
-      "made": 29,
-      "pct": 61.7
+      "attempted": 52,
+      "made": 33,
+      "pct": 63.5
     },
     "twoPointJumpers": {
-      "attempted": 217,
-      "made": 92,
-      "pct": 42.4,
-      "assisted": 16,
-      "assistedPct": 17.4
+      "attempted": 269,
+      "made": 113,
+      "pct": 42,
+      "assisted": 17,
+      "assistedPct": 15
     },
     "threePointJumpers": {
-      "attempted": 391,
-      "made": 120,
-      "pct": 30.7,
-      "assisted": 107,
-      "assistedPct": 89.2
+      "attempted": 444,
+      "made": 135,
+      "pct": 30.4,
+      "assisted": 119,
+      "assistedPct": 88.1
     },
     "freeThrows": {
-      "attempted": 475,
-      "made": 357,
-      "pct": 75.2
+      "attempted": 527,
+      "made": 396,
+      "pct": 75.1
     },
     "attemptsBreakdown": {
-      "dunks": 5.9,
-      "layups": 37.2,
-      "tipIns": 4.1,
-      "twoPointJumpers": 18.9,
-      "threePointJumpers": 34
+      "dunks": 5.5,
+      "layups": 36.6,
+      "tipIns": 3.9,
+      "twoPointJumpers": 20.4,
+      "threePointJumpers": 33.6
     }
   }
 ]
