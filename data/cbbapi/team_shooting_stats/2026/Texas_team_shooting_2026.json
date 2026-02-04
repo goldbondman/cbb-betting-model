@@ -4,53 +4,53 @@
     "teamId": 295,
     "team": "Texas",
     "conference": "SEC",
-    "trackedShots": 1130,
-    "freeThrowRate": 47.3,
-    "assistedPct": 21.4,
+    "trackedShots": 1290,
+    "freeThrowRate": 45.3,
+    "assistedPct": 22.1,
     "dunks": {
-      "attempted": 76,
-      "made": 66,
-      "pct": 86.8,
-      "assisted": 43,
-      "assistedPct": 65.2
+      "attempted": 85,
+      "made": 75,
+      "pct": 88.2,
+      "assisted": 46,
+      "assistedPct": 61.3
     },
     "layups": {
-      "attempted": 356,
-      "made": 220,
-      "pct": 61.8,
-      "assisted": 75,
-      "assistedPct": 34.1
+      "attempted": 399,
+      "made": 251,
+      "pct": 62.9,
+      "assisted": 88,
+      "assistedPct": 35.1
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 15,
-      "pct": 55.6
+      "attempted": 30,
+      "made": 17,
+      "pct": 56.7
     },
     "twoPointJumpers": {
-      "attempted": 244,
-      "made": 103,
-      "pct": 42.2,
-      "assisted": 18,
-      "assistedPct": 17.5
+      "attempted": 281,
+      "made": 124,
+      "pct": 44.1,
+      "assisted": 22,
+      "assistedPct": 17.7
     },
     "threePointJumpers": {
-      "attempted": 427,
-      "made": 144,
-      "pct": 33.7,
-      "assisted": 106,
-      "assistedPct": 73.6
+      "attempted": 495,
+      "made": 172,
+      "pct": 34.7,
+      "assisted": 129,
+      "assistedPct": 75
     },
     "freeThrows": {
-      "attempted": 535,
-      "made": 394,
-      "pct": 73.6
+      "attempted": 585,
+      "made": 432,
+      "pct": 73.8
     },
     "attemptsBreakdown": {
-      "dunks": 6.7,
-      "layups": 31.5,
-      "tipIns": 2.4,
-      "twoPointJumpers": 21.6,
-      "threePointJumpers": 37.8
+      "dunks": 6.6,
+      "layups": 30.9,
+      "tipIns": 2.3,
+      "twoPointJumpers": 21.8,
+      "threePointJumpers": 38.4
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 33,
     "team": "Buffalo",
     "conference": "MAC",
-    "trackedShots": 1052,
-    "freeThrowRate": 43.3,
-    "assistedPct": 25.3,
+    "trackedShots": 1208,
+    "freeThrowRate": 42.9,
+    "assistedPct": 25.9,
     "dunks": {
-      "attempted": 38,
-      "made": 34,
-      "pct": 89.5,
-      "assisted": 22,
-      "assistedPct": 64.7
+      "attempted": 40,
+      "made": 36,
+      "pct": 90,
+      "assisted": 24,
+      "assistedPct": 66.7
     },
     "layups": {
-      "attempted": 368,
-      "made": 206,
-      "pct": 56,
-      "assisted": 81,
-      "assistedPct": 39.3
+      "attempted": 418,
+      "made": 239,
+      "pct": 57.2,
+      "assisted": 96,
+      "assistedPct": 40.2
     },
     "tipIns": {
-      "attempted": 16,
-      "made": 11,
-      "pct": 68.8
+      "attempted": 19,
+      "made": 14,
+      "pct": 73.7
     },
     "twoPointJumpers": {
-      "attempted": 161,
-      "made": 69,
-      "pct": 42.9,
-      "assisted": 12,
-      "assistedPct": 17.4
+      "attempted": 197,
+      "made": 87,
+      "pct": 44.2,
+      "assisted": 18,
+      "assistedPct": 20.7
     },
     "threePointJumpers": {
-      "attempted": 469,
-      "made": 182,
-      "pct": 38.8,
-      "assisted": 151,
-      "assistedPct": 83
+      "attempted": 534,
+      "made": 210,
+      "pct": 39.3,
+      "assisted": 175,
+      "assistedPct": 83.3
     },
     "freeThrows": {
-      "attempted": 455,
-      "made": 338,
-      "pct": 74.3
+      "attempted": 518,
+      "made": 381,
+      "pct": 73.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 35,
-      "tipIns": 1.5,
-      "twoPointJumpers": 15.3,
-      "threePointJumpers": 44.6
+      "dunks": 3.3,
+      "layups": 34.6,
+      "tipIns": 1.6,
+      "twoPointJumpers": 16.3,
+      "threePointJumpers": 44.2
     }
   }
 ]

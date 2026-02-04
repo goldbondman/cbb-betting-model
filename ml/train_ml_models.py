@@ -95,6 +95,9 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         model = {
             "target": target,
             "model_version": cfg.model_version,
+        coef, rmse = _fit_linear(X, y)
+        model = {
+            "target": target,
             "intercept": float(coef[0]),
             "coefficients": [float(c) for c in coef[1:]],
             "feature_order": feature_cols,

@@ -4,53 +4,53 @@
     "teamId": 307,
     "team": "UC Davis",
     "conference": "Big West",
-    "trackedShots": 1033,
-    "freeThrowRate": 41.6,
-    "assistedPct": 27.8,
+    "trackedShots": 1267,
+    "freeThrowRate": 42,
+    "assistedPct": 27.6,
     "dunks": {
-      "attempted": 32,
-      "made": 30,
-      "pct": 93.8,
-      "assisted": 20,
-      "assistedPct": 66.7
+      "attempted": 39,
+      "made": 37,
+      "pct": 94.9,
+      "assisted": 27,
+      "assistedPct": 73
     },
     "layups": {
-      "attempted": 339,
-      "made": 202,
-      "pct": 59.6,
-      "assisted": 100,
-      "assistedPct": 49.5
+      "attempted": 413,
+      "made": 237,
+      "pct": 57.4,
+      "assisted": 117,
+      "assistedPct": 49.4
     },
     "tipIns": {
-      "attempted": 13,
-      "made": 11,
-      "pct": 84.6
+      "attempted": 18,
+      "made": 15,
+      "pct": 83.3
     },
     "twoPointJumpers": {
-      "attempted": 202,
-      "made": 79,
-      "pct": 39.1,
-      "assisted": 26,
-      "assistedPct": 32.9
+      "attempted": 255,
+      "made": 96,
+      "pct": 37.6,
+      "assisted": 33,
+      "assistedPct": 34.4
     },
     "threePointJumpers": {
-      "attempted": 447,
-      "made": 160,
-      "pct": 35.8,
-      "assisted": 141,
-      "assistedPct": 88.1
+      "attempted": 542,
+      "made": 196,
+      "pct": 36.2,
+      "assisted": 173,
+      "assistedPct": 88.3
     },
     "freeThrows": {
-      "attempted": 430,
-      "made": 322,
-      "pct": 74.9
+      "attempted": 532,
+      "made": 394,
+      "pct": 74.1
     },
     "attemptsBreakdown": {
       "dunks": 3.1,
-      "layups": 32.8,
-      "tipIns": 1.3,
-      "twoPointJumpers": 19.6,
-      "threePointJumpers": 43.3
+      "layups": 32.6,
+      "tipIns": 1.4,
+      "twoPointJumpers": 20.1,
+      "threePointJumpers": 42.8
     }
   }
 ]

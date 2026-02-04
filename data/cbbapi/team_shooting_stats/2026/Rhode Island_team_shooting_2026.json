@@ -4,53 +4,53 @@
     "teamId": 240,
     "team": "Rhode Island",
     "conference": "A-10",
-    "trackedShots": 1044,
-    "freeThrowRate": 37,
-    "assistedPct": 20.2,
+    "trackedShots": 1201,
+    "freeThrowRate": 39.1,
+    "assistedPct": 20.6,
     "dunks": {
-      "attempted": 47,
-      "made": 44,
-      "pct": 93.6,
-      "assisted": 32,
-      "assistedPct": 72.7
+      "attempted": 50,
+      "made": 47,
+      "pct": 94,
+      "assisted": 34,
+      "assistedPct": 72.3
     },
     "layups": {
-      "attempted": 359,
-      "made": 199,
-      "pct": 55.4,
-      "assisted": 53,
-      "assistedPct": 26.6
+      "attempted": 414,
+      "made": 228,
+      "pct": 55.1,
+      "assisted": 64,
+      "assistedPct": 28.1
     },
     "tipIns": {
-      "attempted": 23,
-      "made": 18,
-      "pct": 78.3
+      "attempted": 29,
+      "made": 21,
+      "pct": 72.4
     },
     "twoPointJumpers": {
-      "attempted": 158,
-      "made": 76,
-      "pct": 48.1,
-      "assisted": 15,
-      "assistedPct": 19.7
+      "attempted": 190,
+      "made": 85,
+      "pct": 44.7,
+      "assisted": 18,
+      "assistedPct": 21.2
     },
     "threePointJumpers": {
-      "attempted": 457,
-      "made": 139,
-      "pct": 30.4,
-      "assisted": 111,
-      "assistedPct": 79.9
+      "attempted": 518,
+      "made": 162,
+      "pct": 31.3,
+      "assisted": 131,
+      "assistedPct": 80.9
     },
     "freeThrows": {
-      "attempted": 386,
-      "made": 279,
-      "pct": 72.3
+      "attempted": 469,
+      "made": 338,
+      "pct": 72.1
     },
     "attemptsBreakdown": {
-      "dunks": 4.5,
-      "layups": 34.4,
-      "tipIns": 2.2,
-      "twoPointJumpers": 15.1,
-      "threePointJumpers": 43.8
+      "dunks": 4.2,
+      "layups": 34.5,
+      "tipIns": 2.4,
+      "twoPointJumpers": 15.8,
+      "threePointJumpers": 43.1
     }
   }
 ]

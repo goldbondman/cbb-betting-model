@@ -4,53 +4,53 @@
     "teamId": 215,
     "team": "Ohio",
     "conference": "MAC",
-    "trackedShots": 1178,
+    "trackedShots": 1369,
     "freeThrowRate": 37,
-    "assistedPct": 22.7,
+    "assistedPct": 21.8,
     "dunks": {
-      "attempted": 62,
-      "made": 49,
-      "pct": 79,
-      "assisted": 40,
-      "assistedPct": 81.6
+      "attempted": 67,
+      "made": 51,
+      "pct": 76.1,
+      "assisted": 41,
+      "assistedPct": 80.4
     },
     "layups": {
-      "attempted": 364,
-      "made": 212,
-      "pct": 58.2,
-      "assisted": 93,
-      "assistedPct": 43.9
+      "attempted": 435,
+      "made": 249,
+      "pct": 57.2,
+      "assisted": 105,
+      "assistedPct": 42.2
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 23,
-      "pct": 76.7
+      "attempted": 35,
+      "made": 26,
+      "pct": 74.3
     },
     "twoPointJumpers": {
-      "attempted": 284,
-      "made": 142,
-      "pct": 50,
-      "assisted": 27,
-      "assistedPct": 19
+      "attempted": 327,
+      "made": 158,
+      "pct": 48.3,
+      "assisted": 31,
+      "assistedPct": 19.6
     },
     "threePointJumpers": {
-      "attempted": 438,
-      "made": 137,
-      "pct": 31.3,
-      "assisted": 107,
-      "assistedPct": 78.1
+      "attempted": 505,
+      "made": 153,
+      "pct": 30.3,
+      "assisted": 122,
+      "assistedPct": 79.7
     },
     "freeThrows": {
-      "attempted": 436,
-      "made": 300,
-      "pct": 68.8
+      "attempted": 506,
+      "made": 353,
+      "pct": 69.8
     },
     "attemptsBreakdown": {
-      "dunks": 5.3,
-      "layups": 30.9,
-      "tipIns": 2.5,
-      "twoPointJumpers": 24.1,
-      "threePointJumpers": 37.2
+      "dunks": 4.9,
+      "layups": 31.8,
+      "tipIns": 2.6,
+      "twoPointJumpers": 23.9,
+      "threePointJumpers": 36.9
     }
   }
 ]

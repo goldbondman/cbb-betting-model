@@ -4,53 +4,53 @@
     "teamId": 235,
     "team": "Providence",
     "conference": "Big East",
-    "trackedShots": 1231,
-    "freeThrowRate": 36.4,
-    "assistedPct": 24.2,
+    "trackedShots": 1400,
+    "freeThrowRate": 36.7,
+    "assistedPct": 23.6,
     "dunks": {
-      "attempted": 98,
-      "made": 87,
-      "pct": 88.8,
-      "assisted": 66,
-      "assistedPct": 75.9
+      "attempted": 108,
+      "made": 94,
+      "pct": 87,
+      "assisted": 69,
+      "assistedPct": 73.4
     },
     "layups": {
-      "attempted": 387,
-      "made": 222,
-      "pct": 57.4,
-      "assisted": 77,
-      "assistedPct": 34.7
+      "attempted": 443,
+      "made": 251,
+      "pct": 56.7,
+      "assisted": 85,
+      "assistedPct": 33.9
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 23,
-      "pct": 71.9
+      "attempted": 43,
+      "made": 31,
+      "pct": 72.1
     },
     "twoPointJumpers": {
-      "attempted": 204,
-      "made": 78,
-      "pct": 38.2,
-      "assisted": 11,
-      "assistedPct": 14.1
+      "attempted": 238,
+      "made": 93,
+      "pct": 39.1,
+      "assisted": 17,
+      "assistedPct": 18.3
     },
     "threePointJumpers": {
-      "attempted": 510,
-      "made": 179,
-      "pct": 35.1,
-      "assisted": 144,
-      "assistedPct": 80.4
+      "attempted": 568,
+      "made": 200,
+      "pct": 35.2,
+      "assisted": 159,
+      "assistedPct": 79.5
     },
     "freeThrows": {
-      "attempted": 448,
-      "made": 348,
-      "pct": 77.7
+      "attempted": 514,
+      "made": 399,
+      "pct": 77.6
     },
     "attemptsBreakdown": {
-      "dunks": 8,
-      "layups": 31.4,
-      "tipIns": 2.6,
-      "twoPointJumpers": 16.6,
-      "threePointJumpers": 41.4
+      "dunks": 7.7,
+      "layups": 31.6,
+      "tipIns": 3.1,
+      "twoPointJumpers": 17,
+      "threePointJumpers": 40.6
     }
   }
 ]

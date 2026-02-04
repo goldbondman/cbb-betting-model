@@ -4,53 +4,53 @@
     "teamId": 227,
     "team": "Pennsylvania",
     "conference": "Ivy",
-    "trackedShots": 1014,
-    "freeThrowRate": 39.7,
-    "assistedPct": 23.9,
+    "trackedShots": 1186,
+    "freeThrowRate": 39,
+    "assistedPct": 24.1,
     "dunks": {
-      "attempted": 17,
-      "made": 14,
-      "pct": 82.4,
-      "assisted": 10,
-      "assistedPct": 71.4
+      "attempted": 20,
+      "made": 17,
+      "pct": 85,
+      "assisted": 13,
+      "assistedPct": 76.5
     },
     "layups": {
-      "attempted": 330,
-      "made": 172,
-      "pct": 52.1,
-      "assisted": 66,
-      "assistedPct": 38.4
+      "attempted": 387,
+      "made": 204,
+      "pct": 52.7,
+      "assisted": 81,
+      "assistedPct": 39.7
     },
     "tipIns": {
-      "attempted": 24,
+      "attempted": 25,
       "made": 18,
-      "pct": 75
+      "pct": 72
     },
     "twoPointJumpers": {
-      "attempted": 297,
-      "made": 113,
-      "pct": 38,
-      "assisted": 54,
-      "assistedPct": 47.8
+      "attempted": 345,
+      "made": 130,
+      "pct": 37.7,
+      "assisted": 61,
+      "assistedPct": 46.9
     },
     "threePointJumpers": {
-      "attempted": 346,
-      "made": 137,
+      "attempted": 409,
+      "made": 162,
       "pct": 39.6,
-      "assisted": 112,
-      "assistedPct": 81.8
+      "assisted": 131,
+      "assistedPct": 80.9
     },
     "freeThrows": {
-      "attempted": 403,
-      "made": 283,
-      "pct": 70.2
+      "attempted": 462,
+      "made": 322,
+      "pct": 69.7
     },
     "attemptsBreakdown": {
       "dunks": 1.7,
-      "layups": 32.5,
-      "tipIns": 2.4,
-      "twoPointJumpers": 29.3,
-      "threePointJumpers": 34.1
+      "layups": 32.6,
+      "tipIns": 2.1,
+      "twoPointJumpers": 29.1,
+      "threePointJumpers": 34.5
     }
   }
 ]

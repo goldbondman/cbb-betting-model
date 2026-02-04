@@ -4,53 +4,53 @@
     "teamId": 85,
     "team": "Florida A&M",
     "conference": "SWAC",
-    "trackedShots": 787,
-    "freeThrowRate": 36.6,
-    "assistedPct": 21.3,
+    "trackedShots": 946,
+    "freeThrowRate": 36.3,
+    "assistedPct": 21.9,
     "dunks": {
-      "attempted": 31,
-      "made": 27,
-      "pct": 87.1,
-      "assisted": 22,
-      "assistedPct": 81.5
+      "attempted": 39,
+      "made": 34,
+      "pct": 87.2,
+      "assisted": 27,
+      "assistedPct": 79.4
     },
     "layups": {
-      "attempted": 269,
-      "made": 146,
-      "pct": 54.3,
-      "assisted": 50,
-      "assistedPct": 34.2
+      "attempted": 315,
+      "made": 174,
+      "pct": 55.2,
+      "assisted": 62,
+      "assistedPct": 35.6
     },
     "tipIns": {
-      "attempted": 13,
-      "made": 9,
-      "pct": 69.2
+      "attempted": 20,
+      "made": 13,
+      "pct": 65
     },
     "twoPointJumpers": {
-      "attempted": 180,
-      "made": 57,
-      "pct": 31.7,
-      "assisted": 18,
-      "assistedPct": 31.6
+      "attempted": 215,
+      "made": 65,
+      "pct": 30.2,
+      "assisted": 20,
+      "assistedPct": 30.8
     },
     "threePointJumpers": {
-      "attempted": 294,
-      "made": 89,
-      "pct": 30.3,
-      "assisted": 78,
-      "assistedPct": 87.6
+      "attempted": 357,
+      "made": 111,
+      "pct": 31.1,
+      "assisted": 98,
+      "assistedPct": 88.3
     },
     "freeThrows": {
-      "attempted": 288,
-      "made": 185,
-      "pct": 64.2
+      "attempted": 343,
+      "made": 221,
+      "pct": 64.4
     },
     "attemptsBreakdown": {
-      "dunks": 3.9,
-      "layups": 34.2,
-      "tipIns": 1.7,
-      "twoPointJumpers": 22.9,
-      "threePointJumpers": 37.4
+      "dunks": 4.1,
+      "layups": 33.3,
+      "tipIns": 2.1,
+      "twoPointJumpers": 22.7,
+      "threePointJumpers": 37.7
     }
   }
 ]

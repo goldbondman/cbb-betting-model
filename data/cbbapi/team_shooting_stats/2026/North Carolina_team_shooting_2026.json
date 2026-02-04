@@ -4,53 +4,53 @@
     "teamId": 200,
     "team": "North Carolina",
     "conference": "ACC",
-    "trackedShots": 1009,
-    "freeThrowRate": 43.1,
-    "assistedPct": 28,
+    "trackedShots": 1149,
+    "freeThrowRate": 40.8,
+    "assistedPct": 27.9,
     "dunks": {
-      "attempted": 104,
-      "made": 93,
-      "pct": 89.4,
-      "assisted": 62,
-      "assistedPct": 66.7
+      "attempted": 113,
+      "made": 102,
+      "pct": 90.3,
+      "assisted": 71,
+      "assistedPct": 69.6
     },
     "layups": {
-      "attempted": 255,
-      "made": 145,
-      "pct": 56.9,
-      "assisted": 58,
-      "assistedPct": 40
+      "attempted": 288,
+      "made": 165,
+      "pct": 57.3,
+      "assisted": 69,
+      "assistedPct": 41.8
     },
     "tipIns": {
-      "attempted": 35,
-      "made": 25,
-      "pct": 71.4
+      "attempted": 38,
+      "made": 28,
+      "pct": 73.7
     },
     "twoPointJumpers": {
-      "attempted": 178,
-      "made": 77,
-      "pct": 43.3,
-      "assisted": 23,
-      "assistedPct": 29.9
+      "attempted": 220,
+      "made": 93,
+      "pct": 42.3,
+      "assisted": 27,
+      "assistedPct": 29
     },
     "threePointJumpers": {
-      "attempted": 437,
-      "made": 154,
-      "pct": 35.2,
-      "assisted": 140,
-      "assistedPct": 90.9
+      "attempted": 490,
+      "made": 172,
+      "pct": 35.1,
+      "assisted": 153,
+      "assistedPct": 89
     },
     "freeThrows": {
-      "attempted": 435,
-      "made": 295,
-      "pct": 67.8
+      "attempted": 469,
+      "made": 321,
+      "pct": 68.4
     },
     "attemptsBreakdown": {
-      "dunks": 10.3,
-      "layups": 25.3,
-      "tipIns": 3.5,
-      "twoPointJumpers": 17.6,
-      "threePointJumpers": 43.3
+      "dunks": 9.8,
+      "layups": 25.1,
+      "tipIns": 3.3,
+      "twoPointJumpers": 19.1,
+      "threePointJumpers": 42.6
     }
   }
 ]

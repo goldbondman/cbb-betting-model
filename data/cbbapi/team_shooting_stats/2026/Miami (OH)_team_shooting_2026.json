@@ -4,53 +4,53 @@
     "teamId": 167,
     "team": "Miami (OH)",
     "conference": "MAC",
-    "trackedShots": 1085,
-    "freeThrowRate": 38.4,
-    "assistedPct": 28,
+    "trackedShots": 1200,
+    "freeThrowRate": 39.6,
+    "assistedPct": 27.8,
     "dunks": {
-      "attempted": 44,
-      "made": 42,
-      "pct": 95.5,
-      "assisted": 26,
-      "assistedPct": 61.9
+      "attempted": 51,
+      "made": 49,
+      "pct": 96.1,
+      "assisted": 32,
+      "assistedPct": 65.3
     },
     "layups": {
-      "attempted": 387,
-      "made": 263,
-      "pct": 68,
-      "assisted": 93,
-      "assistedPct": 35.4
+      "attempted": 420,
+      "made": 281,
+      "pct": 66.9,
+      "assisted": 101,
+      "assistedPct": 35.9
     },
     "tipIns": {
-      "attempted": 18,
-      "made": 12,
-      "pct": 66.7
+      "attempted": 22,
+      "made": 16,
+      "pct": 72.7
     },
     "twoPointJumpers": {
-      "attempted": 149,
-      "made": 69,
-      "pct": 46.3,
+      "attempted": 163,
+      "made": 78,
+      "pct": 47.9,
       "assisted": 10,
-      "assistedPct": 14.5
+      "assistedPct": 12.8
     },
     "threePointJumpers": {
-      "attempted": 487,
-      "made": 195,
-      "pct": 40,
-      "assisted": 175,
-      "assistedPct": 89.7
+      "attempted": 544,
+      "made": 212,
+      "pct": 39,
+      "assisted": 191,
+      "assistedPct": 90.1
     },
     "freeThrows": {
-      "attempted": 417,
-      "made": 323,
-      "pct": 77.5
+      "attempted": 475,
+      "made": 367,
+      "pct": 77.3
     },
     "attemptsBreakdown": {
-      "dunks": 4.1,
-      "layups": 35.7,
-      "tipIns": 1.7,
-      "twoPointJumpers": 13.7,
-      "threePointJumpers": 44.9
+      "dunks": 4.3,
+      "layups": 35,
+      "tipIns": 1.8,
+      "twoPointJumpers": 13.6,
+      "threePointJumpers": 45.3
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 38,
     "team": "Cal State Northridge",
     "conference": "Big West",
-    "trackedShots": 1293,
-    "freeThrowRate": 36.4,
-    "assistedPct": 25.4,
+    "trackedShots": 1494,
+    "freeThrowRate": 35.9,
+    "assistedPct": 26.1,
     "dunks": {
-      "attempted": 32,
-      "made": 28,
-      "pct": 87.5,
-      "assisted": 23,
-      "assistedPct": 82.1
+      "attempted": 39,
+      "made": 33,
+      "pct": 84.6,
+      "assisted": 28,
+      "assistedPct": 84.8
     },
     "layups": {
-      "attempted": 546,
-      "made": 289,
-      "pct": 52.9,
-      "assisted": 141,
-      "assistedPct": 48.8
+      "attempted": 632,
+      "made": 337,
+      "pct": 53.3,
+      "assisted": 174,
+      "assistedPct": 51.6
     },
     "tipIns": {
-      "attempted": 45,
-      "made": 29,
-      "pct": 64.4
+      "attempted": 49,
+      "made": 32,
+      "pct": 65.3
     },
     "twoPointJumpers": {
-      "attempted": 217,
-      "made": 87,
-      "pct": 40.1,
-      "assisted": 29,
-      "assistedPct": 33.3
+      "attempted": 252,
+      "made": 100,
+      "pct": 39.7,
+      "assisted": 32,
+      "assistedPct": 32
     },
     "threePointJumpers": {
-      "attempted": 453,
-      "made": 146,
+      "attempted": 522,
+      "made": 168,
       "pct": 32.2,
-      "assisted": 135,
-      "assistedPct": 92.5
+      "assisted": 156,
+      "assistedPct": 92.9
     },
     "freeThrows": {
-      "attempted": 471,
-      "made": 316,
-      "pct": 67.1
+      "attempted": 536,
+      "made": 355,
+      "pct": 66.2
     },
     "attemptsBreakdown": {
-      "dunks": 2.5,
-      "layups": 42.2,
-      "tipIns": 3.5,
-      "twoPointJumpers": 16.8,
-      "threePointJumpers": 35
+      "dunks": 2.6,
+      "layups": 42.3,
+      "tipIns": 3.3,
+      "twoPointJumpers": 16.9,
+      "threePointJumpers": 34.9
     }
   }
 ]

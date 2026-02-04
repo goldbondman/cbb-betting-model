@@ -4,53 +4,53 @@
     "teamId": 283,
     "team": "Stetson",
     "conference": "ASUN",
-    "trackedShots": 1146,
-    "freeThrowRate": 34,
-    "assistedPct": 24.5,
+    "trackedShots": 1325,
+    "freeThrowRate": 33.7,
+    "assistedPct": 25.3,
     "dunks": {
-      "attempted": 37,
-      "made": 34,
-      "pct": 91.9,
-      "assisted": 30,
-      "assistedPct": 88.2
+      "attempted": 39,
+      "made": 36,
+      "pct": 92.3,
+      "assisted": 31,
+      "assistedPct": 86.1
     },
     "layups": {
-      "attempted": 318,
-      "made": 184,
-      "pct": 57.9,
-      "assisted": 89,
-      "assistedPct": 48.4
+      "attempted": 384,
+      "made": 222,
+      "pct": 57.8,
+      "assisted": 114,
+      "assistedPct": 51.4
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 19,
-      "pct": 70.4
+      "attempted": 34,
+      "made": 22,
+      "pct": 64.7
     },
     "twoPointJumpers": {
-      "attempted": 246,
-      "made": 97,
-      "pct": 39.4,
-      "assisted": 16,
-      "assistedPct": 16.5
+      "attempted": 278,
+      "made": 105,
+      "pct": 37.8,
+      "assisted": 21,
+      "assistedPct": 20
     },
     "threePointJumpers": {
-      "attempted": 518,
-      "made": 173,
+      "attempted": 590,
+      "made": 197,
       "pct": 33.4,
-      "assisted": 146,
-      "assistedPct": 84.4
+      "assisted": 169,
+      "assistedPct": 85.8
     },
     "freeThrows": {
-      "attempted": 390,
-      "made": 260,
-      "pct": 66.7
+      "attempted": 446,
+      "made": 301,
+      "pct": 67.5
     },
     "attemptsBreakdown": {
-      "dunks": 3.2,
-      "layups": 27.7,
-      "tipIns": 2.4,
-      "twoPointJumpers": 21.5,
-      "threePointJumpers": 45.2
+      "dunks": 2.9,
+      "layups": 29,
+      "tipIns": 2.6,
+      "twoPointJumpers": 21,
+      "threePointJumpers": 44.5
     }
   }
 ]

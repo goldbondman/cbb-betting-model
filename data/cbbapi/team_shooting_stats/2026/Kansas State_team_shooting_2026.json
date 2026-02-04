@@ -4,53 +4,53 @@
     "teamId": 132,
     "team": "Kansas State",
     "conference": "Big 12",
-    "trackedShots": 1239,
-    "freeThrowRate": 28.2,
-    "assistedPct": 28.8,
+    "trackedShots": 1418,
+    "freeThrowRate": 26.4,
+    "assistedPct": 27.6,
     "dunks": {
-      "attempted": 50,
-      "made": 48,
-      "pct": 96,
-      "assisted": 40,
-      "assistedPct": 83.3
+      "attempted": 52,
+      "made": 50,
+      "pct": 96.2,
+      "assisted": 42,
+      "assistedPct": 84
     },
     "layups": {
-      "attempted": 409,
-      "made": 249,
-      "pct": 60.9,
-      "assisted": 141,
-      "assistedPct": 56.6
+      "attempted": 453,
+      "made": 271,
+      "pct": 59.8,
+      "assisted": 150,
+      "assistedPct": 55.4
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 19,
-      "pct": 63.3
+      "attempted": 39,
+      "made": 24,
+      "pct": 61.5
     },
     "twoPointJumpers": {
-      "attempted": 222,
-      "made": 72,
-      "pct": 32.4,
-      "assisted": 13,
-      "assistedPct": 18.1
+      "attempted": 269,
+      "made": 85,
+      "pct": 31.6,
+      "assisted": 15,
+      "assistedPct": 17.6
     },
     "threePointJumpers": {
-      "attempted": 528,
-      "made": 198,
-      "pct": 37.5,
-      "assisted": 163,
-      "assistedPct": 82.3
+      "attempted": 605,
+      "made": 223,
+      "pct": 36.9,
+      "assisted": 184,
+      "assistedPct": 82.5
     },
     "freeThrows": {
-      "attempted": 350,
-      "made": 250,
-      "pct": 71.4
+      "attempted": 374,
+      "made": 268,
+      "pct": 71.7
     },
     "attemptsBreakdown": {
-      "dunks": 4,
-      "layups": 33,
-      "tipIns": 2.4,
-      "twoPointJumpers": 17.9,
-      "threePointJumpers": 42.6
+      "dunks": 3.7,
+      "layups": 31.9,
+      "tipIns": 2.8,
+      "twoPointJumpers": 19,
+      "threePointJumpers": 42.7
     }
   }
 ]

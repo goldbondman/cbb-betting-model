@@ -4,53 +4,53 @@
     "teamId": 365,
     "team": "Southern Indiana",
     "conference": "OVC",
-    "trackedShots": 990,
-    "freeThrowRate": 33.4,
-    "assistedPct": 17.7,
+    "trackedShots": 1235,
+    "freeThrowRate": 33.1,
+    "assistedPct": 17.1,
     "dunks": {
-      "attempted": 33,
-      "made": 26,
-      "pct": 78.8,
-      "assisted": 23,
-      "assistedPct": 88.5
+      "attempted": 42,
+      "made": 34,
+      "pct": 81,
+      "assisted": 29,
+      "assistedPct": 85.3
     },
     "layups": {
-      "attempted": 317,
-      "made": 153,
-      "pct": 48.3,
-      "assisted": 48,
-      "assistedPct": 31.4
+      "attempted": 396,
+      "made": 184,
+      "pct": 46.5,
+      "assisted": 57,
+      "assistedPct": 31
     },
     "tipIns": {
-      "attempted": 28,
-      "made": 18,
-      "pct": 64.3
+      "attempted": 32,
+      "made": 21,
+      "pct": 65.6
     },
     "twoPointJumpers": {
-      "attempted": 179,
-      "made": 57,
-      "pct": 31.8,
-      "assisted": 16,
-      "assistedPct": 28.1
+      "attempted": 232,
+      "made": 72,
+      "pct": 31,
+      "assisted": 20,
+      "assistedPct": 27.8
     },
     "threePointJumpers": {
-      "attempted": 433,
-      "made": 131,
-      "pct": 30.3,
-      "assisted": 88,
-      "assistedPct": 67.2
+      "attempted": 533,
+      "made": 159,
+      "pct": 29.8,
+      "assisted": 105,
+      "assistedPct": 66
     },
     "freeThrows": {
-      "attempted": 331,
-      "made": 216,
-      "pct": 65.3
+      "attempted": 409,
+      "made": 271,
+      "pct": 66.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
-      "layups": 32,
-      "tipIns": 2.8,
-      "twoPointJumpers": 18.1,
-      "threePointJumpers": 43.7
+      "dunks": 3.4,
+      "layups": 32.1,
+      "tipIns": 2.6,
+      "twoPointJumpers": 18.8,
+      "threePointJumpers": 43.2
     }
   }
 ]

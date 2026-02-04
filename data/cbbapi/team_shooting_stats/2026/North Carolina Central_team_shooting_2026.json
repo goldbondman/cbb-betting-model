@@ -4,22 +4,22 @@
     "teamId": 199,
     "team": "North Carolina Central",
     "conference": "MEAC",
-    "trackedShots": 1098,
-    "freeThrowRate": 40.6,
-    "assistedPct": 26.3,
+    "trackedShots": 1148,
+    "freeThrowRate": 40.2,
+    "assistedPct": 26.4,
     "dunks": {
-      "attempted": 64,
-      "made": 58,
-      "pct": 90.6,
-      "assisted": 51,
-      "assistedPct": 87.9
+      "attempted": 65,
+      "made": 59,
+      "pct": 90.8,
+      "assisted": 52,
+      "assistedPct": 88.1
     },
     "layups": {
-      "attempted": 397,
-      "made": 207,
-      "pct": 52.1,
-      "assisted": 101,
-      "assistedPct": 48.8
+      "attempted": 416,
+      "made": 220,
+      "pct": 52.9,
+      "assisted": 105,
+      "assistedPct": 47.7
     },
     "tipIns": {
       "attempted": 35,
@@ -27,30 +27,30 @@
       "pct": 54.3
     },
     "twoPointJumpers": {
-      "attempted": 235,
-      "made": 76,
-      "pct": 32.3,
-      "assisted": 33,
-      "assistedPct": 43.4
+      "attempted": 243,
+      "made": 79,
+      "pct": 32.5,
+      "assisted": 36,
+      "assistedPct": 45.6
     },
     "threePointJumpers": {
-      "attempted": 367,
-      "made": 118,
-      "pct": 32.2,
-      "assisted": 104,
-      "assistedPct": 88.1
+      "attempted": 389,
+      "made": 125,
+      "pct": 32.1,
+      "assisted": 110,
+      "assistedPct": 88
     },
     "freeThrows": {
-      "attempted": 446,
-      "made": 325,
-      "pct": 72.9
+      "attempted": 462,
+      "made": 335,
+      "pct": 72.5
     },
     "attemptsBreakdown": {
-      "dunks": 5.8,
+      "dunks": 5.7,
       "layups": 36.2,
-      "tipIns": 3.2,
-      "twoPointJumpers": 21.4,
-      "threePointJumpers": 33.4
+      "tipIns": 3,
+      "twoPointJumpers": 21.2,
+      "threePointJumpers": 33.9
     }
   }
 ]

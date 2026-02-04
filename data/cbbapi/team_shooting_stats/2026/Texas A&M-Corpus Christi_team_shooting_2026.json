@@ -4,53 +4,53 @@
     "teamId": 294,
     "team": "Texas A&M-Corpus Christi",
     "conference": "Southland",
-    "trackedShots": 1125,
-    "freeThrowRate": 35.6,
+    "trackedShots": 1270,
+    "freeThrowRate": 39.2,
     "assistedPct": 22.9,
     "dunks": {
-      "attempted": 43,
-      "made": 41,
-      "pct": 95.3,
-      "assisted": 29,
-      "assistedPct": 70.7
+      "attempted": 45,
+      "made": 43,
+      "pct": 95.6,
+      "assisted": 31,
+      "assistedPct": 72.1
     },
     "layups": {
-      "attempted": 436,
-      "made": 223,
-      "pct": 51.1,
-      "assisted": 88,
-      "assistedPct": 39.5
+      "attempted": 500,
+      "made": 258,
+      "pct": 51.6,
+      "assisted": 103,
+      "assistedPct": 39.9
     },
     "tipIns": {
-      "attempted": 45,
-      "made": 27,
-      "pct": 60
+      "attempted": 47,
+      "made": 28,
+      "pct": 59.6
     },
     "twoPointJumpers": {
-      "attempted": 247,
-      "made": 96,
-      "pct": 38.9,
-      "assisted": 35,
-      "assistedPct": 36.5
+      "attempted": 283,
+      "made": 107,
+      "pct": 37.8,
+      "assisted": 38,
+      "assistedPct": 35.5
     },
     "threePointJumpers": {
-      "attempted": 354,
-      "made": 119,
-      "pct": 33.6,
-      "assisted": 106,
-      "assistedPct": 89.1
+      "attempted": 395,
+      "made": 135,
+      "pct": 34.2,
+      "assisted": 119,
+      "assistedPct": 88.1
     },
     "freeThrows": {
-      "attempted": 400,
-      "made": 267,
-      "pct": 66.8
+      "attempted": 498,
+      "made": 328,
+      "pct": 65.9
     },
     "attemptsBreakdown": {
-      "dunks": 3.8,
-      "layups": 38.8,
-      "tipIns": 4,
-      "twoPointJumpers": 22,
-      "threePointJumpers": 31.5
+      "dunks": 3.5,
+      "layups": 39.4,
+      "tipIns": 3.7,
+      "twoPointJumpers": 22.3,
+      "threePointJumpers": 31.1
     }
   }
 ]

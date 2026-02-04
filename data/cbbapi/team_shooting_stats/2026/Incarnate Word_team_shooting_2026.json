@@ -4,53 +4,53 @@
     "teamId": 120,
     "team": "Incarnate Word",
     "conference": "Southland",
-    "trackedShots": 1150,
-    "freeThrowRate": 32.3,
-    "assistedPct": 19.7,
+    "trackedShots": 1325,
+    "freeThrowRate": 32.5,
+    "assistedPct": 19.6,
     "dunks": {
-      "attempted": 28,
-      "made": 24,
-      "pct": 85.7,
-      "assisted": 16,
-      "assistedPct": 66.7
+      "attempted": 30,
+      "made": 26,
+      "pct": 86.7,
+      "assisted": 18,
+      "assistedPct": 69.2
     },
     "layups": {
-      "attempted": 387,
-      "made": 203,
-      "pct": 52.5,
-      "assisted": 73,
-      "assistedPct": 36
+      "attempted": 446,
+      "made": 236,
+      "pct": 52.9,
+      "assisted": 78,
+      "assistedPct": 33.1
     },
     "tipIns": {
-      "attempted": 29,
-      "made": 22,
-      "pct": 75.9
+      "attempted": 34,
+      "made": 25,
+      "pct": 73.5
     },
     "twoPointJumpers": {
-      "attempted": 270,
-      "made": 100,
-      "pct": 37,
-      "assisted": 15,
-      "assistedPct": 15
+      "attempted": 306,
+      "made": 117,
+      "pct": 38.2,
+      "assisted": 17,
+      "assistedPct": 14.5
     },
     "threePointJumpers": {
-      "attempted": 436,
-      "made": 162,
-      "pct": 37.2,
-      "assisted": 122,
-      "assistedPct": 75.3
+      "attempted": 509,
+      "made": 192,
+      "pct": 37.7,
+      "assisted": 147,
+      "assistedPct": 76.6
     },
     "freeThrows": {
-      "attempted": 372,
-      "made": 264,
-      "pct": 71
+      "attempted": 431,
+      "made": 303,
+      "pct": 70.3
     },
     "attemptsBreakdown": {
-      "dunks": 2.4,
+      "dunks": 2.3,
       "layups": 33.7,
-      "tipIns": 2.5,
-      "twoPointJumpers": 23.5,
-      "threePointJumpers": 37.9
+      "tipIns": 2.6,
+      "twoPointJumpers": 23.1,
+      "threePointJumpers": 38.4
     }
   }
 ]

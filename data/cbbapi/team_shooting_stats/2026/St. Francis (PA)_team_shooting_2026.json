@@ -4,53 +4,53 @@
     "teamId": 278,
     "team": "St. Francis (PA)",
     "conference": "NEC",
-    "trackedShots": 1158,
-    "freeThrowRate": 26.3,
-    "assistedPct": 21.7,
+    "trackedShots": 1265,
+    "freeThrowRate": 26.8,
+    "assistedPct": 22.8,
     "dunks": {
-      "attempted": 24,
-      "made": 17,
-      "pct": 70.8,
-      "assisted": 11,
-      "assistedPct": 64.7
+      "attempted": 28,
+      "made": 20,
+      "pct": 71.4,
+      "assisted": 13,
+      "assistedPct": 65
     },
     "layups": {
-      "attempted": 377,
-      "made": 201,
-      "pct": 53.3,
-      "assisted": 80,
-      "assistedPct": 39.8
+      "attempted": 413,
+      "made": 228,
+      "pct": 55.2,
+      "assisted": 95,
+      "assistedPct": 41.7
     },
     "tipIns": {
-      "attempted": 10,
-      "made": 7,
-      "pct": 70
+      "attempted": 11,
+      "made": 8,
+      "pct": 72.7
     },
     "twoPointJumpers": {
-      "attempted": 297,
-      "made": 104,
-      "pct": 35,
-      "assisted": 26,
-      "assistedPct": 25
+      "attempted": 317,
+      "made": 108,
+      "pct": 34.1,
+      "assisted": 30,
+      "assistedPct": 27.8
     },
     "threePointJumpers": {
-      "attempted": 450,
-      "made": 150,
-      "pct": 33.3,
-      "assisted": 134,
-      "assistedPct": 89.3
+      "attempted": 496,
+      "made": 168,
+      "pct": 33.9,
+      "assisted": 151,
+      "assistedPct": 89.9
     },
     "freeThrows": {
-      "attempted": 305,
-      "made": 213,
-      "pct": 69.8
+      "attempted": 339,
+      "made": 239,
+      "pct": 70.5
     },
     "attemptsBreakdown": {
-      "dunks": 2.1,
+      "dunks": 2.2,
       "layups": 32.6,
       "tipIns": 0.9,
-      "twoPointJumpers": 25.6,
-      "threePointJumpers": 38.9
+      "twoPointJumpers": 25.1,
+      "threePointJumpers": 39.2
     }
   }
 ]

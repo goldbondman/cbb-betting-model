@@ -4,22 +4,22 @@
     "teamId": 142,
     "team": "Liberty",
     "conference": "CUSA",
-    "trackedShots": 1050,
-    "freeThrowRate": 29.7,
-    "assistedPct": 31.5,
+    "trackedShots": 1153,
+    "freeThrowRate": 29.1,
+    "assistedPct": 31.6,
     "dunks": {
-      "attempted": 51,
-      "made": 44,
-      "pct": 86.3,
-      "assisted": 37,
-      "assistedPct": 84.1
+      "attempted": 58,
+      "made": 51,
+      "pct": 87.9,
+      "assisted": 44,
+      "assistedPct": 86.3
     },
     "layups": {
-      "attempted": 406,
-      "made": 258,
-      "pct": 63.5,
-      "assisted": 119,
-      "assistedPct": 46.1
+      "attempted": 442,
+      "made": 282,
+      "pct": 63.8,
+      "assisted": 129,
+      "assistedPct": 45.7
     },
     "tipIns": {
       "attempted": 17,
@@ -27,30 +27,30 @@
       "pct": 52.9
     },
     "twoPointJumpers": {
-      "attempted": 81,
-      "made": 36,
+      "attempted": 90,
+      "made": 40,
       "pct": 44.4,
       "assisted": 4,
-      "assistedPct": 11.1
+      "assistedPct": 10
     },
     "threePointJumpers": {
-      "attempted": 495,
-      "made": 203,
+      "attempted": 546,
+      "made": 224,
       "pct": 41,
-      "assisted": 171,
-      "assistedPct": 84.2
+      "assisted": 187,
+      "assistedPct": 83.5
     },
     "freeThrows": {
-      "attempted": 312,
-      "made": 218,
-      "pct": 69.9
+      "attempted": 335,
+      "made": 233,
+      "pct": 69.6
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 38.7,
-      "tipIns": 1.6,
-      "twoPointJumpers": 7.7,
-      "threePointJumpers": 47.1
+      "dunks": 5,
+      "layups": 38.3,
+      "tipIns": 1.5,
+      "twoPointJumpers": 7.8,
+      "threePointJumpers": 47.4
     }
   }
 ]

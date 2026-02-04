@@ -4,53 +4,53 @@
     "teamId": 12,
     "team": "Arkansas",
     "conference": "SEC",
-    "trackedShots": 1202,
-    "freeThrowRate": 38.7,
-    "assistedPct": 27.3,
+    "trackedShots": 1384,
+    "freeThrowRate": 37.7,
+    "assistedPct": 26.7,
     "dunks": {
-      "attempted": 126,
-      "made": 114,
-      "pct": 90.5,
-      "assisted": 81,
-      "assistedPct": 71.1
+      "attempted": 141,
+      "made": 128,
+      "pct": 90.8,
+      "assisted": 92,
+      "assistedPct": 71.9
     },
     "layups": {
-      "attempted": 317,
-      "made": 184,
-      "pct": 58,
-      "assisted": 77,
-      "assistedPct": 41.8
+      "attempted": 380,
+      "made": 227,
+      "pct": 59.7,
+      "assisted": 89,
+      "assistedPct": 39.2
     },
     "tipIns": {
-      "attempted": 41,
-      "made": 25,
-      "pct": 61
+      "attempted": 45,
+      "made": 28,
+      "pct": 62.2
     },
     "twoPointJumpers": {
-      "attempted": 271,
-      "made": 96,
-      "pct": 35.4,
-      "assisted": 31,
-      "assistedPct": 32.3
+      "attempted": 318,
+      "made": 119,
+      "pct": 37.4,
+      "assisted": 37,
+      "assistedPct": 31.1
     },
     "threePointJumpers": {
-      "attempted": 447,
-      "made": 172,
-      "pct": 38.5,
-      "assisted": 139,
-      "assistedPct": 80.8
+      "attempted": 500,
+      "made": 187,
+      "pct": 37.4,
+      "assisted": 152,
+      "assistedPct": 81.3
     },
     "freeThrows": {
-      "attempted": 465,
-      "made": 353,
-      "pct": 75.9
+      "attempted": 522,
+      "made": 387,
+      "pct": 74.1
     },
     "attemptsBreakdown": {
-      "dunks": 10.5,
-      "layups": 26.4,
-      "tipIns": 3.4,
-      "twoPointJumpers": 22.5,
-      "threePointJumpers": 37.2
+      "dunks": 10.2,
+      "layups": 27.5,
+      "tipIns": 3.3,
+      "twoPointJumpers": 23,
+      "threePointJumpers": 36.1
     }
   }
 ]

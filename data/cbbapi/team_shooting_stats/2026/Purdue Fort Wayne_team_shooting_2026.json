@@ -4,53 +4,53 @@
     "teamId": 237,
     "team": "Purdue Fort Wayne",
     "conference": "Horizon",
-    "trackedShots": 1297,
-    "freeThrowRate": 28.3,
-    "assistedPct": 23.7,
+    "trackedShots": 1422,
+    "freeThrowRate": 27.7,
+    "assistedPct": 23.6,
     "dunks": {
-      "attempted": 68,
-      "made": 62,
-      "pct": 91.2,
-      "assisted": 48,
-      "assistedPct": 77.4
+      "attempted": 71,
+      "made": 65,
+      "pct": 91.5,
+      "assisted": 50,
+      "assistedPct": 76.9
     },
     "layups": {
-      "attempted": 413,
-      "made": 240,
-      "pct": 58.1,
-      "assisted": 68,
-      "assistedPct": 28.3
+      "attempted": 459,
+      "made": 260,
+      "pct": 56.6,
+      "assisted": 74,
+      "assistedPct": 28.5
     },
     "tipIns": {
-      "attempted": 37,
-      "made": 26,
-      "pct": 70.3
+      "attempted": 40,
+      "made": 28,
+      "pct": 70
     },
     "twoPointJumpers": {
-      "attempted": 183,
-      "made": 74,
-      "pct": 40.4,
+      "attempted": 194,
+      "made": 77,
+      "pct": 39.7,
       "assisted": 7,
-      "assistedPct": 9.5
+      "assistedPct": 9.1
     },
     "threePointJumpers": {
-      "attempted": 596,
-      "made": 212,
-      "pct": 35.6,
-      "assisted": 184,
-      "assistedPct": 86.8
+      "attempted": 658,
+      "made": 235,
+      "pct": 35.7,
+      "assisted": 205,
+      "assistedPct": 87.2
     },
     "freeThrows": {
-      "attempted": 367,
-      "made": 264,
-      "pct": 71.9
+      "attempted": 394,
+      "made": 287,
+      "pct": 72.8
     },
     "attemptsBreakdown": {
-      "dunks": 5.2,
-      "layups": 31.8,
-      "tipIns": 2.9,
-      "twoPointJumpers": 14.1,
-      "threePointJumpers": 46
+      "dunks": 5,
+      "layups": 32.3,
+      "tipIns": 2.8,
+      "twoPointJumpers": 13.6,
+      "threePointJumpers": 46.3
     }
   }
 ]

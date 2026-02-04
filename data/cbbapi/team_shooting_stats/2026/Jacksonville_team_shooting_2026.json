@@ -4,9 +4,9 @@
     "teamId": 127,
     "team": "Jacksonville",
     "conference": "ASUN",
-    "trackedShots": 1161,
-    "freeThrowRate": 31.1,
-    "assistedPct": 22.2,
+    "trackedShots": 1320,
+    "freeThrowRate": 31.9,
+    "assistedPct": 21.1,
     "dunks": {
       "attempted": 54,
       "made": 48,
@@ -15,11 +15,11 @@
       "assistedPct": 68.8
     },
     "layups": {
-      "attempted": 384,
-      "made": 208,
-      "pct": 54.2,
-      "assisted": 71,
-      "assistedPct": 34.1
+      "attempted": 435,
+      "made": 243,
+      "pct": 55.9,
+      "assisted": 79,
+      "assistedPct": 32.5
     },
     "tipIns": {
       "attempted": 33,
@@ -27,30 +27,30 @@
       "pct": 72.7
     },
     "twoPointJumpers": {
-      "attempted": 199,
-      "made": 80,
-      "pct": 40.2,
-      "assisted": 20,
-      "assistedPct": 25
+      "attempted": 258,
+      "made": 107,
+      "pct": 41.5,
+      "assisted": 27,
+      "assistedPct": 25.2
     },
     "threePointJumpers": {
-      "attempted": 491,
-      "made": 163,
-      "pct": 33.2,
-      "assisted": 134,
-      "assistedPct": 82.2
+      "attempted": 540,
+      "made": 174,
+      "pct": 32.2,
+      "assisted": 140,
+      "assistedPct": 80.5
     },
     "freeThrows": {
-      "attempted": 361,
-      "made": 250,
-      "pct": 69.3
+      "attempted": 421,
+      "made": 293,
+      "pct": 69.6
     },
     "attemptsBreakdown": {
-      "dunks": 4.7,
-      "layups": 33.1,
-      "tipIns": 2.8,
-      "twoPointJumpers": 17.1,
-      "threePointJumpers": 42.3
+      "dunks": 4.1,
+      "layups": 33,
+      "tipIns": 2.5,
+      "twoPointJumpers": 19.5,
+      "threePointJumpers": 40.9
     }
   }
 ]

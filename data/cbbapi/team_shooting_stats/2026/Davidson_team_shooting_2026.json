@@ -4,53 +4,53 @@
     "teamId": 63,
     "team": "Davidson",
     "conference": "A-10",
-    "trackedShots": 995,
-    "freeThrowRate": 36.2,
-    "assistedPct": 24.2,
+    "trackedShots": 1168,
+    "freeThrowRate": 32.9,
+    "assistedPct": 23.9,
     "dunks": {
-      "attempted": 38,
-      "made": 33,
-      "pct": 86.8,
-      "assisted": 24,
-      "assistedPct": 72.7
+      "attempted": 40,
+      "made": 35,
+      "pct": 87.5,
+      "assisted": 26,
+      "assistedPct": 74.3
     },
     "layups": {
-      "attempted": 283,
-      "made": 156,
-      "pct": 55.1,
-      "assisted": 61,
-      "assistedPct": 39.1
+      "attempted": 318,
+      "made": 175,
+      "pct": 55,
+      "assisted": 70,
+      "assistedPct": 40
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 20,
-      "pct": 74.1
+      "attempted": 32,
+      "made": 24,
+      "pct": 75
     },
     "twoPointJumpers": {
-      "attempted": 212,
-      "made": 86,
-      "pct": 40.6,
-      "assisted": 20,
-      "assistedPct": 23.3
+      "attempted": 270,
+      "made": 111,
+      "pct": 41.1,
+      "assisted": 23,
+      "assistedPct": 20.7
     },
     "threePointJumpers": {
-      "attempted": 435,
-      "made": 159,
-      "pct": 36.6,
-      "assisted": 136,
-      "assistedPct": 85.5
+      "attempted": 508,
+      "made": 188,
+      "pct": 37,
+      "assisted": 160,
+      "assistedPct": 85.1
     },
     "freeThrows": {
-      "attempted": 360,
-      "made": 242,
-      "pct": 67.2
+      "attempted": 384,
+      "made": 255,
+      "pct": 66.4
     },
     "attemptsBreakdown": {
-      "dunks": 3.8,
-      "layups": 28.4,
+      "dunks": 3.4,
+      "layups": 27.2,
       "tipIns": 2.7,
-      "twoPointJumpers": 21.3,
-      "threePointJumpers": 43.7
+      "twoPointJumpers": 23.1,
+      "threePointJumpers": 43.5
     }
   }
 ]

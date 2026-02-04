@@ -75,6 +75,7 @@ def predict(cfg: PredictConfig) -> pd.DataFrame:
                 "pred_margin_home": margin_pred,
                 "pred_total": total_pred,
                 "model_version": model_version,
+                "model_version": "ml-linear-v1",
             }
         )
 

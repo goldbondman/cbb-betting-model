@@ -4,52 +4,52 @@
     "teamId": 238,
     "team": "Quinnipiac",
     "conference": "MAAC",
-    "trackedShots": 1327,
-    "freeThrowRate": 31.3,
-    "assistedPct": 22.8,
+    "trackedShots": 1519,
+    "freeThrowRate": 30.7,
+    "assistedPct": 22.6,
     "dunks": {
-      "attempted": 79,
-      "made": 71,
-      "pct": 89.9,
-      "assisted": 57,
-      "assistedPct": 80.3
+      "attempted": 89,
+      "made": 81,
+      "pct": 91,
+      "assisted": 66,
+      "assistedPct": 81.5
     },
     "layups": {
-      "attempted": 454,
-      "made": 228,
-      "pct": 50.2,
-      "assisted": 86,
-      "assistedPct": 37.7
+      "attempted": 530,
+      "made": 268,
+      "pct": 50.6,
+      "assisted": 97,
+      "assistedPct": 36.2
     },
     "tipIns": {
-      "attempted": 56,
-      "made": 35,
-      "pct": 62.5
+      "attempted": 67,
+      "made": 44,
+      "pct": 65.7
     },
     "twoPointJumpers": {
-      "attempted": 298,
-      "made": 94,
-      "pct": 31.5,
-      "assisted": 25,
-      "assistedPct": 26.6
+      "attempted": 329,
+      "made": 105,
+      "pct": 31.9,
+      "assisted": 30,
+      "assistedPct": 28.6
     },
     "threePointJumpers": {
-      "attempted": 440,
-      "made": 163,
-      "pct": 37,
-      "assisted": 134,
-      "assistedPct": 82.2
+      "attempted": 504,
+      "made": 180,
+      "pct": 35.7,
+      "assisted": 150,
+      "assistedPct": 83.3
     },
     "freeThrows": {
-      "attempted": 415,
-      "made": 288,
-      "pct": 69.4
+      "attempted": 466,
+      "made": 324,
+      "pct": 69.5
     },
     "attemptsBreakdown": {
-      "dunks": 6,
-      "layups": 34.2,
-      "tipIns": 4.2,
-      "twoPointJumpers": 22.5,
+      "dunks": 5.9,
+      "layups": 34.9,
+      "tipIns": 4.4,
+      "twoPointJumpers": 21.7,
       "threePointJumpers": 33.2
     }
   }

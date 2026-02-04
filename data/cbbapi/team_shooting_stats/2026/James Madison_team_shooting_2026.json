@@ -4,53 +4,53 @@
     "teamId": 129,
     "team": "James Madison",
     "conference": "Sun Belt",
-    "trackedShots": 1098,
-    "freeThrowRate": 35.3,
-    "assistedPct": 22.4,
+    "trackedShots": 1317,
+    "freeThrowRate": 35.7,
+    "assistedPct": 22.6,
     "dunks": {
-      "attempted": 34,
-      "made": 32,
-      "pct": 94.1,
-      "assisted": 27,
-      "assistedPct": 84.4
+      "attempted": 37,
+      "made": 35,
+      "pct": 94.6,
+      "assisted": 28,
+      "assistedPct": 80
     },
     "layups": {
-      "attempted": 365,
-      "made": 200,
-      "pct": 54.8,
-      "assisted": 69,
-      "assistedPct": 34.5
+      "attempted": 435,
+      "made": 242,
+      "pct": 55.6,
+      "assisted": 84,
+      "assistedPct": 34.7
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 22,
-      "pct": 68.8
+      "attempted": 34,
+      "made": 24,
+      "pct": 70.6
     },
     "twoPointJumpers": {
-      "attempted": 179,
-      "made": 56,
-      "pct": 31.3,
-      "assisted": 9,
-      "assistedPct": 16.1
+      "attempted": 210,
+      "made": 70,
+      "pct": 33.3,
+      "assisted": 11,
+      "assistedPct": 15.7
     },
     "threePointJumpers": {
-      "attempted": 488,
-      "made": 171,
-      "pct": 35,
-      "assisted": 141,
-      "assistedPct": 82.5
+      "attempted": 601,
+      "made": 213,
+      "pct": 35.4,
+      "assisted": 174,
+      "assistedPct": 81.7
     },
     "freeThrows": {
-      "attempted": 388,
-      "made": 276,
-      "pct": 71.1
+      "attempted": 470,
+      "made": 331,
+      "pct": 70.4
     },
     "attemptsBreakdown": {
-      "dunks": 3.1,
-      "layups": 33.2,
-      "tipIns": 2.9,
-      "twoPointJumpers": 16.3,
-      "threePointJumpers": 44.4
+      "dunks": 2.8,
+      "layups": 33,
+      "tipIns": 2.6,
+      "twoPointJumpers": 15.9,
+      "threePointJumpers": 45.6
     }
   }
 ]

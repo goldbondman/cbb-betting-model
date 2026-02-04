@@ -4,53 +4,53 @@
     "teamId": 216,
     "team": "Ohio State",
     "conference": "Big Ten",
-    "trackedShots": 907,
-    "freeThrowRate": 39.8,
-    "assistedPct": 26.1,
+    "trackedShots": 1089,
+    "freeThrowRate": 37.6,
+    "assistedPct": 24.5,
     "dunks": {
-      "attempted": 44,
-      "made": 40,
-      "pct": 90.9,
-      "assisted": 34,
-      "assistedPct": 85
+      "attempted": 50,
+      "made": 46,
+      "pct": 92,
+      "assisted": 39,
+      "assistedPct": 84.8
     },
     "layups": {
-      "attempted": 234,
-      "made": 166,
-      "pct": 70.9,
-      "assisted": 79,
-      "assistedPct": 47.6
+      "attempted": 268,
+      "made": 184,
+      "pct": 68.7,
+      "assisted": 82,
+      "assistedPct": 44.6
     },
     "tipIns": {
-      "attempted": 17,
-      "made": 10,
-      "pct": 58.8
+      "attempted": 22,
+      "made": 11,
+      "pct": 50
     },
     "twoPointJumpers": {
-      "attempted": 238,
-      "made": 113,
-      "pct": 47.5,
-      "assisted": 22,
-      "assistedPct": 19.5
+      "attempted": 296,
+      "made": 144,
+      "pct": 48.6,
+      "assisted": 29,
+      "assistedPct": 20.1
     },
     "threePointJumpers": {
-      "attempted": 374,
-      "made": 133,
-      "pct": 35.6,
-      "assisted": 102,
-      "assistedPct": 76.7
+      "attempted": 453,
+      "made": 159,
+      "pct": 35.1,
+      "assisted": 117,
+      "assistedPct": 73.6
     },
     "freeThrows": {
-      "attempted": 361,
-      "made": 282,
-      "pct": 78.1
+      "attempted": 409,
+      "made": 320,
+      "pct": 78.2
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 25.8,
-      "tipIns": 1.9,
-      "twoPointJumpers": 26.2,
-      "threePointJumpers": 41.2
+      "dunks": 4.6,
+      "layups": 24.6,
+      "tipIns": 2,
+      "twoPointJumpers": 27.2,
+      "threePointJumpers": 41.6
     }
   }
 ]

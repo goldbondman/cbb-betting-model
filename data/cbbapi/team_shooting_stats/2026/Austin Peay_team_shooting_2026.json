@@ -4,53 +4,53 @@
     "teamId": 17,
     "team": "Austin Peay",
     "conference": "ASUN",
-    "trackedShots": 1069,
-    "freeThrowRate": 33.5,
-    "assistedPct": 25.4,
+    "trackedShots": 1289,
+    "freeThrowRate": 36.3,
+    "assistedPct": 26.1,
     "dunks": {
-      "attempted": 24,
-      "made": 23,
-      "pct": 95.8,
-      "assisted": 18,
-      "assistedPct": 78.3
+      "attempted": 37,
+      "made": 31,
+      "pct": 83.8,
+      "assisted": 26,
+      "assistedPct": 83.9
     },
     "layups": {
-      "attempted": 378,
-      "made": 201,
-      "pct": 53.2,
-      "assisted": 87,
-      "assistedPct": 43.3
+      "attempted": 427,
+      "made": 233,
+      "pct": 54.6,
+      "assisted": 104,
+      "assistedPct": 44.6
     },
     "tipIns": {
-      "attempted": 37,
-      "made": 21,
-      "pct": 56.8
+      "attempted": 47,
+      "made": 28,
+      "pct": 59.6
     },
     "twoPointJumpers": {
-      "attempted": 185,
-      "made": 75,
-      "pct": 40.5,
-      "assisted": 20,
-      "assistedPct": 26.7
+      "attempted": 245,
+      "made": 102,
+      "pct": 41.6,
+      "assisted": 31,
+      "assistedPct": 30.4
     },
     "threePointJumpers": {
-      "attempted": 445,
-      "made": 155,
-      "pct": 34.8,
-      "assisted": 147,
-      "assistedPct": 94.8
+      "attempted": 533,
+      "made": 184,
+      "pct": 34.5,
+      "assisted": 175,
+      "assistedPct": 95.1
     },
     "freeThrows": {
-      "attempted": 358,
-      "made": 256,
-      "pct": 71.5
+      "attempted": 468,
+      "made": 348,
+      "pct": 74.4
     },
     "attemptsBreakdown": {
-      "dunks": 2.2,
-      "layups": 35.4,
-      "tipIns": 3.5,
-      "twoPointJumpers": 17.3,
-      "threePointJumpers": 41.6
+      "dunks": 2.9,
+      "layups": 33.1,
+      "tipIns": 3.6,
+      "twoPointJumpers": 19,
+      "threePointJumpers": 41.3
     }
   }
 ]

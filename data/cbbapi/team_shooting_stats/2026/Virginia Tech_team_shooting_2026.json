@@ -4,53 +4,53 @@
     "teamId": 340,
     "team": "Virginia Tech",
     "conference": "ACC",
-    "trackedShots": 1229,
-    "freeThrowRate": 39.6,
-    "assistedPct": 22.9,
+    "trackedShots": 1411,
+    "freeThrowRate": 37.3,
+    "assistedPct": 22.5,
     "dunks": {
-      "attempted": 60,
-      "made": 56,
-      "pct": 93.3,
-      "assisted": 43,
-      "assistedPct": 76.8
+      "attempted": 68,
+      "made": 62,
+      "pct": 91.2,
+      "assisted": 47,
+      "assistedPct": 75.8
     },
     "layups": {
-      "attempted": 346,
-      "made": 211,
-      "pct": 61,
-      "assisted": 86,
-      "assistedPct": 40.8
+      "attempted": 379,
+      "made": 227,
+      "pct": 59.9,
+      "assisted": 91,
+      "assistedPct": 40.1
     },
     "tipIns": {
-      "attempted": 44,
+      "attempted": 46,
       "made": 25,
-      "pct": 56.8
+      "pct": 54.3
     },
     "twoPointJumpers": {
-      "attempted": 307,
-      "made": 110,
-      "pct": 35.8,
-      "assisted": 19,
+      "attempted": 361,
+      "made": 127,
+      "pct": 35.2,
+      "assisted": 22,
       "assistedPct": 17.3
     },
     "threePointJumpers": {
-      "attempted": 472,
-      "made": 161,
-      "pct": 34.1,
-      "assisted": 133,
-      "assistedPct": 82.6
+      "attempted": 557,
+      "made": 192,
+      "pct": 34.5,
+      "assisted": 158,
+      "assistedPct": 82.3
     },
     "freeThrows": {
-      "attempted": 487,
-      "made": 353,
+      "attempted": 527,
+      "made": 382,
       "pct": 72.5
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 28.2,
-      "tipIns": 3.6,
-      "twoPointJumpers": 25,
-      "threePointJumpers": 38.4
+      "dunks": 4.8,
+      "layups": 26.9,
+      "tipIns": 3.3,
+      "twoPointJumpers": 25.6,
+      "threePointJumpers": 39.5
     }
   }
 ]
