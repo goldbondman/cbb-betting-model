@@ -4,53 +4,53 @@
     "teamId": 293,
     "team": "Texas A&M",
     "conference": "SEC",
-    "trackedShots": 1148,
-    "freeThrowRate": 41.4,
-    "assistedPct": 30.3,
+    "trackedShots": 1284,
+    "freeThrowRate": 39.3,
+    "assistedPct": 30.4,
     "dunks": {
-      "attempted": 45,
-      "made": 38,
-      "pct": 84.4,
-      "assisted": 34,
-      "assistedPct": 89.5
+      "attempted": 46,
+      "made": 39,
+      "pct": 84.8,
+      "assisted": 35,
+      "assistedPct": 89.7
     },
     "layups": {
-      "attempted": 378,
-      "made": 222,
-      "pct": 58.7,
-      "assisted": 111,
-      "assistedPct": 50
+      "attempted": 425,
+      "made": 248,
+      "pct": 58.4,
+      "assisted": 121,
+      "assistedPct": 48.8
     },
     "tipIns": {
-      "attempted": 43,
-      "made": 25,
-      "pct": 58.1
+      "attempted": 50,
+      "made": 26,
+      "pct": 52
     },
     "twoPointJumpers": {
-      "attempted": 138,
-      "made": 59,
-      "pct": 42.8,
-      "assisted": 25,
-      "assistedPct": 42.4
+      "attempted": 146,
+      "made": 64,
+      "pct": 43.8,
+      "assisted": 28,
+      "assistedPct": 43.8
     },
     "threePointJumpers": {
-      "attempted": 544,
-      "made": 201,
-      "pct": 36.9,
-      "assisted": 178,
-      "assistedPct": 88.6
+      "attempted": 617,
+      "made": 231,
+      "pct": 37.4,
+      "assisted": 206,
+      "assistedPct": 89.2
     },
     "freeThrows": {
-      "attempted": 475,
-      "made": 354,
-      "pct": 74.5
+      "attempted": 505,
+      "made": 382,
+      "pct": 75.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.9,
-      "layups": 32.9,
-      "tipIns": 3.7,
-      "twoPointJumpers": 12,
-      "threePointJumpers": 47.4
+      "dunks": 3.6,
+      "layups": 33.1,
+      "tipIns": 3.9,
+      "twoPointJumpers": 11.4,
+      "threePointJumpers": 48.1
     }
   }
 ]

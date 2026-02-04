@@ -4,53 +4,53 @@
     "teamId": 32,
     "team": "Bucknell",
     "conference": "Patriot",
-    "trackedShots": 1118,
-    "freeThrowRate": 29.9,
-    "assistedPct": 22.5,
+    "trackedShots": 1291,
+    "freeThrowRate": 31.8,
+    "assistedPct": 23.1,
     "dunks": {
-      "attempted": 26,
-      "made": 24,
-      "pct": 92.3,
-      "assisted": 17,
-      "assistedPct": 70.8
+      "attempted": 28,
+      "made": 26,
+      "pct": 92.9,
+      "assisted": 19,
+      "assistedPct": 73.1
     },
     "layups": {
-      "attempted": 391,
-      "made": 217,
+      "attempted": 447,
+      "made": 248,
       "pct": 55.5,
-      "assisted": 90,
-      "assistedPct": 41.5
+      "assisted": 105,
+      "assistedPct": 42.3
     },
     "tipIns": {
-      "attempted": 22,
-      "made": 10,
-      "pct": 45.5
+      "attempted": 26,
+      "made": 12,
+      "pct": 46.2
     },
     "twoPointJumpers": {
-      "attempted": 189,
-      "made": 52,
-      "pct": 27.5,
-      "assisted": 12,
-      "assistedPct": 23.1
+      "attempted": 232,
+      "made": 73,
+      "pct": 31.5,
+      "assisted": 19,
+      "assistedPct": 26
     },
     "threePointJumpers": {
-      "attempted": 490,
-      "made": 154,
-      "pct": 31.4,
-      "assisted": 132,
-      "assistedPct": 85.7
+      "attempted": 558,
+      "made": 178,
+      "pct": 31.9,
+      "assisted": 155,
+      "assistedPct": 87.1
     },
     "freeThrows": {
-      "attempted": 334,
-      "made": 255,
-      "pct": 76.3
+      "attempted": 410,
+      "made": 315,
+      "pct": 76.8
     },
     "attemptsBreakdown": {
-      "dunks": 2.3,
-      "layups": 35,
+      "dunks": 2.2,
+      "layups": 34.6,
       "tipIns": 2,
-      "twoPointJumpers": 16.9,
-      "threePointJumpers": 43.8
+      "twoPointJumpers": 18,
+      "threePointJumpers": 43.2
     }
   }
 ]

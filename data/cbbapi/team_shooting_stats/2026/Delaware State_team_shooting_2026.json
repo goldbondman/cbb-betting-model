@@ -4,52 +4,52 @@
     "teamId": 67,
     "team": "Delaware State",
     "conference": "MEAC",
-    "trackedShots": 1021,
-    "freeThrowRate": 29.9,
-    "assistedPct": 19.4,
+    "trackedShots": 1123,
+    "freeThrowRate": 31.5,
+    "assistedPct": 19.7,
     "dunks": {
-      "attempted": 19,
-      "made": 17,
-      "pct": 89.5,
-      "assisted": 15,
-      "assistedPct": 88.2
+      "attempted": 22,
+      "made": 20,
+      "pct": 90.9,
+      "assisted": 18,
+      "assistedPct": 90
     },
     "layups": {
-      "attempted": 338,
-      "made": 165,
-      "pct": 48.8,
-      "assisted": 68,
-      "assistedPct": 41.2
+      "attempted": 376,
+      "made": 183,
+      "pct": 48.7,
+      "assisted": 74,
+      "assistedPct": 40.4
     },
     "tipIns": {
-      "attempted": 30,
+      "attempted": 32,
       "made": 20,
-      "pct": 66.7
+      "pct": 62.5
     },
     "twoPointJumpers": {
-      "attempted": 338,
-      "made": 108,
-      "pct": 32,
-      "assisted": 38,
-      "assistedPct": 35.2
+      "attempted": 367,
+      "made": 119,
+      "pct": 32.4,
+      "assisted": 43,
+      "assistedPct": 36.1
     },
     "threePointJumpers": {
-      "attempted": 296,
-      "made": 95,
-      "pct": 32.1,
-      "assisted": 77,
-      "assistedPct": 81.1
+      "attempted": 326,
+      "made": 105,
+      "pct": 32.2,
+      "assisted": 86,
+      "assistedPct": 81.9
     },
     "freeThrows": {
-      "attempted": 305,
-      "made": 205,
-      "pct": 67.2
+      "attempted": 354,
+      "made": 240,
+      "pct": 67.8
     },
     "attemptsBreakdown": {
-      "dunks": 1.9,
-      "layups": 33.1,
-      "tipIns": 2.9,
-      "twoPointJumpers": 33.1,
+      "dunks": 2,
+      "layups": 33.5,
+      "tipIns": 2.8,
+      "twoPointJumpers": 32.7,
       "threePointJumpers": 29
     }
   }

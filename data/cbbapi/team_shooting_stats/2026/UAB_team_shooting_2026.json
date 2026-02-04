@@ -4,53 +4,53 @@
     "teamId": 305,
     "team": "UAB",
     "conference": "American",
-    "trackedShots": 1265,
-    "freeThrowRate": 37.6,
-    "assistedPct": 21.7,
+    "trackedShots": 1377,
+    "freeThrowRate": 38.2,
+    "assistedPct": 21.6,
     "dunks": {
-      "attempted": 63,
-      "made": 56,
-      "pct": 88.9,
-      "assisted": 49,
-      "assistedPct": 87.5
+      "attempted": 69,
+      "made": 60,
+      "pct": 87,
+      "assisted": 52,
+      "assistedPct": 86.7
     },
     "layups": {
-      "attempted": 481,
-      "made": 271,
-      "pct": 56.3,
-      "assisted": 100,
-      "assistedPct": 36.9
+      "attempted": 516,
+      "made": 296,
+      "pct": 57.4,
+      "assisted": 106,
+      "assistedPct": 35.8
     },
     "tipIns": {
-      "attempted": 43,
-      "made": 24,
-      "pct": 55.8
+      "attempted": 48,
+      "made": 26,
+      "pct": 54.2
     },
     "twoPointJumpers": {
-      "attempted": 321,
-      "made": 107,
-      "pct": 33.3,
-      "assisted": 39,
-      "assistedPct": 36.4
+      "attempted": 352,
+      "made": 121,
+      "pct": 34.4,
+      "assisted": 41,
+      "assistedPct": 33.9
     },
     "threePointJumpers": {
-      "attempted": 357,
-      "made": 106,
-      "pct": 29.7,
-      "assisted": 87,
-      "assistedPct": 82.1
+      "attempted": 392,
+      "made": 117,
+      "pct": 29.8,
+      "assisted": 98,
+      "assistedPct": 83.8
     },
     "freeThrows": {
-      "attempted": 476,
-      "made": 343,
-      "pct": 72.1
+      "attempted": 526,
+      "made": 375,
+      "pct": 71.3
     },
     "attemptsBreakdown": {
       "dunks": 5,
-      "layups": 38,
-      "tipIns": 3.4,
-      "twoPointJumpers": 25.4,
-      "threePointJumpers": 28.2
+      "layups": 37.5,
+      "tipIns": 3.5,
+      "twoPointJumpers": 25.6,
+      "threePointJumpers": 28.5
     }
   }
 ]

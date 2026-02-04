@@ -4,53 +4,53 @@
     "teamId": 334,
     "team": "VMI",
     "conference": "SoCon",
-    "trackedShots": 1230,
-    "freeThrowRate": 31.4,
-    "assistedPct": 20.2,
+    "trackedShots": 1399,
+    "freeThrowRate": 29.9,
+    "assistedPct": 20.1,
     "dunks": {
-      "attempted": 23,
-      "made": 19,
-      "pct": 82.6,
-      "assisted": 12,
-      "assistedPct": 63.2
+      "attempted": 25,
+      "made": 20,
+      "pct": 80,
+      "assisted": 13,
+      "assistedPct": 65
     },
     "layups": {
-      "attempted": 351,
-      "made": 178,
-      "pct": 50.7,
-      "assisted": 50,
-      "assistedPct": 28.1
+      "attempted": 398,
+      "made": 205,
+      "pct": 51.5,
+      "assisted": 56,
+      "assistedPct": 27.3
     },
     "tipIns": {
-      "attempted": 24,
-      "made": 15,
-      "pct": 62.5
+      "attempted": 26,
+      "made": 16,
+      "pct": 61.5
     },
     "twoPointJumpers": {
-      "attempted": 168,
-      "made": 67,
-      "pct": 39.9,
+      "attempted": 188,
+      "made": 70,
+      "pct": 37.2,
       "assisted": 14,
-      "assistedPct": 20.9
+      "assistedPct": 20
     },
     "threePointJumpers": {
-      "attempted": 664,
-      "made": 217,
-      "pct": 32.7,
-      "assisted": 173,
-      "assistedPct": 79.7
+      "attempted": 762,
+      "made": 252,
+      "pct": 33.1,
+      "assisted": 198,
+      "assistedPct": 78.6
     },
     "freeThrows": {
-      "attempted": 386,
-      "made": 273,
-      "pct": 70.7
+      "attempted": 418,
+      "made": 299,
+      "pct": 71.5
     },
     "attemptsBreakdown": {
-      "dunks": 1.9,
-      "layups": 28.5,
-      "tipIns": 2,
-      "twoPointJumpers": 13.7,
-      "threePointJumpers": 54
+      "dunks": 1.8,
+      "layups": 28.4,
+      "tipIns": 1.9,
+      "twoPointJumpers": 13.4,
+      "threePointJumpers": 54.5
     }
   }
 ]

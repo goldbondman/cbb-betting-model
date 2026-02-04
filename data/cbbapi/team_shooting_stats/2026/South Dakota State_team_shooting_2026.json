@@ -4,53 +4,53 @@
     "teamId": 270,
     "team": "South Dakota State",
     "conference": "Summit",
-    "trackedShots": 1179,
-    "freeThrowRate": 33.1,
-    "assistedPct": 25.1,
+    "trackedShots": 1367,
+    "freeThrowRate": 32.2,
+    "assistedPct": 25,
     "dunks": {
-      "attempted": 32,
-      "made": 30,
-      "pct": 93.8,
-      "assisted": 25,
-      "assistedPct": 83.3
+      "attempted": 33,
+      "made": 31,
+      "pct": 93.9,
+      "assisted": 26,
+      "assistedPct": 83.9
     },
     "layups": {
-      "attempted": 413,
-      "made": 243,
-      "pct": 58.8,
-      "assisted": 115,
-      "assistedPct": 47.3
+      "attempted": 483,
+      "made": 283,
+      "pct": 58.6,
+      "assisted": 138,
+      "assistedPct": 48.8
     },
     "tipIns": {
-      "attempted": 26,
-      "made": 15,
-      "pct": 57.7
+      "attempted": 32,
+      "made": 20,
+      "pct": 62.5
     },
     "twoPointJumpers": {
-      "attempted": 231,
-      "made": 96,
-      "pct": 41.6,
-      "assisted": 22,
-      "assistedPct": 22.9
+      "attempted": 273,
+      "made": 116,
+      "pct": 42.5,
+      "assisted": 27,
+      "assistedPct": 23.3
     },
     "threePointJumpers": {
-      "attempted": 477,
-      "made": 165,
+      "attempted": 546,
+      "made": 189,
       "pct": 34.6,
-      "assisted": 134,
-      "assistedPct": 81.2
+      "assisted": 151,
+      "assistedPct": 79.9
     },
     "freeThrows": {
-      "attempted": 390,
-      "made": 271,
-      "pct": 69.5
+      "attempted": 440,
+      "made": 302,
+      "pct": 68.6
     },
     "attemptsBreakdown": {
-      "dunks": 2.7,
-      "layups": 35,
-      "tipIns": 2.2,
-      "twoPointJumpers": 19.6,
-      "threePointJumpers": 40.5
+      "dunks": 2.4,
+      "layups": 35.3,
+      "tipIns": 2.3,
+      "twoPointJumpers": 20,
+      "threePointJumpers": 39.9
     }
   }
 ]

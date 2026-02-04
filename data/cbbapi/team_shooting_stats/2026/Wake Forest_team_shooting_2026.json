@@ -4,22 +4,22 @@
     "teamId": 342,
     "team": "Wake Forest",
     "conference": "ACC",
-    "trackedShots": 1233,
-    "freeThrowRate": 32.2,
-    "assistedPct": 24,
+    "trackedShots": 1399,
+    "freeThrowRate": 32.4,
+    "assistedPct": 23.7,
     "dunks": {
-      "attempted": 101,
-      "made": 88,
-      "pct": 87.1,
-      "assisted": 65,
-      "assistedPct": 73.9
+      "attempted": 108,
+      "made": 94,
+      "pct": 87,
+      "assisted": 69,
+      "assistedPct": 73.4
     },
     "layups": {
-      "attempted": 290,
-      "made": 150,
-      "pct": 51.7,
-      "assisted": 54,
-      "assistedPct": 36
+      "attempted": 336,
+      "made": 175,
+      "pct": 52.1,
+      "assisted": 59,
+      "assistedPct": 33.7
     },
     "tipIns": {
       "attempted": 36,
@@ -27,30 +27,30 @@
       "pct": 69.4
     },
     "twoPointJumpers": {
-      "attempted": 259,
-      "made": 112,
-      "pct": 43.2,
+      "attempted": 296,
+      "made": 127,
+      "pct": 42.9,
       "assisted": 27,
-      "assistedPct": 24.1
+      "assistedPct": 21.3
     },
     "threePointJumpers": {
-      "attempted": 547,
-      "made": 184,
-      "pct": 33.6,
-      "assisted": 150,
-      "assistedPct": 81.5
+      "attempted": 623,
+      "made": 212,
+      "pct": 34,
+      "assisted": 176,
+      "assistedPct": 83
     },
     "freeThrows": {
-      "attempted": 397,
-      "made": 299,
-      "pct": 75.3
+      "attempted": 453,
+      "made": 346,
+      "pct": 76.4
     },
     "attemptsBreakdown": {
-      "dunks": 8.2,
-      "layups": 23.5,
-      "tipIns": 2.9,
-      "twoPointJumpers": 21,
-      "threePointJumpers": 44.4
+      "dunks": 7.7,
+      "layups": 24,
+      "tipIns": 2.6,
+      "twoPointJumpers": 21.2,
+      "threePointJumpers": 44.5
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 349,
     "team": "Western Illinois",
     "conference": "OVC",
-    "trackedShots": 1082,
+    "trackedShots": 1307,
     "freeThrowRate": 37.2,
-    "assistedPct": 14,
+    "assistedPct": 13.9,
     "dunks": {
-      "attempted": 17,
-      "made": 17,
+      "attempted": 21,
+      "made": 21,
       "pct": 100,
-      "assisted": 7,
-      "assistedPct": 41.2
+      "assisted": 9,
+      "assistedPct": 42.9
     },
     "layups": {
-      "attempted": 416,
-      "made": 220,
-      "pct": 52.9,
-      "assisted": 53,
-      "assistedPct": 24.1
+      "attempted": 497,
+      "made": 252,
+      "pct": 50.7,
+      "assisted": 58,
+      "assistedPct": 23
     },
     "tipIns": {
-      "attempted": 15,
-      "made": 10,
+      "attempted": 18,
+      "made": 12,
       "pct": 66.7
     },
     "twoPointJumpers": {
-      "attempted": 305,
-      "made": 99,
-      "pct": 32.5,
-      "assisted": 12,
-      "assistedPct": 12.1
+      "attempted": 354,
+      "made": 114,
+      "pct": 32.2,
+      "assisted": 13,
+      "assistedPct": 11.4
     },
     "threePointJumpers": {
-      "attempted": 329,
-      "made": 96,
-      "pct": 29.2,
-      "assisted": 79,
-      "assistedPct": 82.3
+      "attempted": 417,
+      "made": 125,
+      "pct": 30,
+      "assisted": 102,
+      "assistedPct": 81.6
     },
     "freeThrows": {
-      "attempted": 402,
-      "made": 273,
-      "pct": 67.9
+      "attempted": 486,
+      "made": 328,
+      "pct": 67.5
     },
     "attemptsBreakdown": {
       "dunks": 1.6,
-      "layups": 38.4,
+      "layups": 38,
       "tipIns": 1.4,
-      "twoPointJumpers": 28.2,
-      "threePointJumpers": 30.4
+      "twoPointJumpers": 27.1,
+      "threePointJumpers": 31.9
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 153,
     "team": "Loyola Marymount",
     "conference": "WCC",
-    "trackedShots": 1308,
-    "freeThrowRate": 30.1,
-    "assistedPct": 22.5,
+    "trackedShots": 1416,
+    "freeThrowRate": 31.1,
+    "assistedPct": 22.7,
     "dunks": {
-      "attempted": 63,
-      "made": 53,
-      "pct": 84.1,
-      "assisted": 42,
-      "assistedPct": 79.2
+      "attempted": 70,
+      "made": 60,
+      "pct": 85.7,
+      "assisted": 46,
+      "assistedPct": 76.7
     },
     "layups": {
-      "attempted": 370,
-      "made": 216,
-      "pct": 58.4,
-      "assisted": 66,
-      "assistedPct": 30.6
+      "attempted": 397,
+      "made": 231,
+      "pct": 58.2,
+      "assisted": 74,
+      "assistedPct": 32
     },
     "tipIns": {
-      "attempted": 23,
+      "attempted": 24,
       "made": 14,
-      "pct": 60.9
+      "pct": 58.3
     },
     "twoPointJumpers": {
-      "attempted": 307,
-      "made": 116,
-      "pct": 37.8,
-      "assisted": 28,
-      "assistedPct": 24.1
+      "attempted": 340,
+      "made": 130,
+      "pct": 38.2,
+      "assisted": 34,
+      "assistedPct": 26.2
     },
     "threePointJumpers": {
-      "attempted": 545,
-      "made": 193,
-      "pct": 35.4,
-      "assisted": 158,
-      "assistedPct": 81.9
+      "attempted": 585,
+      "made": 205,
+      "pct": 35,
+      "assisted": 167,
+      "assistedPct": 81.5
     },
     "freeThrows": {
-      "attempted": 394,
-      "made": 270,
-      "pct": 68.5
+      "attempted": 440,
+      "made": 304,
+      "pct": 69.1
     },
     "attemptsBreakdown": {
-      "dunks": 4.8,
-      "layups": 28.3,
-      "tipIns": 1.8,
-      "twoPointJumpers": 23.5,
-      "threePointJumpers": 41.7
+      "dunks": 4.9,
+      "layups": 28,
+      "tipIns": 1.7,
+      "twoPointJumpers": 24,
+      "threePointJumpers": 41.3
     }
   }
 ]

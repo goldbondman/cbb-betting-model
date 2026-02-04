@@ -4,53 +4,53 @@
     "teamId": 2,
     "team": "Air Force",
     "conference": "Mountain West",
-    "trackedShots": 954,
-    "freeThrowRate": 38.4,
-    "assistedPct": 23.3,
+    "trackedShots": 1061,
+    "freeThrowRate": 36.5,
+    "assistedPct": 23.1,
     "dunks": {
-      "attempted": 25,
-      "made": 22,
-      "pct": 88,
-      "assisted": 19,
-      "assistedPct": 86.4
+      "attempted": 26,
+      "made": 23,
+      "pct": 88.5,
+      "assisted": 20,
+      "assistedPct": 87
     },
     "layups": {
-      "attempted": 331,
-      "made": 196,
-      "pct": 59.2,
-      "assisted": 84,
-      "assistedPct": 42.9
+      "attempted": 361,
+      "made": 209,
+      "pct": 57.9,
+      "assisted": 89,
+      "assistedPct": 42.6
     },
     "tipIns": {
-      "attempted": 28,
-      "made": 22,
-      "pct": 78.6
+      "attempted": 31,
+      "made": 24,
+      "pct": 77.4
     },
     "twoPointJumpers": {
-      "attempted": 171,
-      "made": 51,
-      "pct": 29.8,
-      "assisted": 11,
-      "assistedPct": 21.6
+      "attempted": 196,
+      "made": 61,
+      "pct": 31.1,
+      "assisted": 13,
+      "assistedPct": 21.3
     },
     "threePointJumpers": {
-      "attempted": 399,
-      "made": 118,
-      "pct": 29.6,
-      "assisted": 108,
-      "assistedPct": 91.5
+      "attempted": 447,
+      "made": 135,
+      "pct": 30.2,
+      "assisted": 123,
+      "assistedPct": 91.1
     },
     "freeThrows": {
-      "attempted": 366,
-      "made": 236,
-      "pct": 64.5
+      "attempted": 387,
+      "made": 249,
+      "pct": 64.3
     },
     "attemptsBreakdown": {
-      "dunks": 2.6,
-      "layups": 34.7,
+      "dunks": 2.5,
+      "layups": 34,
       "tipIns": 2.9,
-      "twoPointJumpers": 17.9,
-      "threePointJumpers": 41.8
+      "twoPointJumpers": 18.5,
+      "threePointJumpers": 42.1
     }
   }
 ]

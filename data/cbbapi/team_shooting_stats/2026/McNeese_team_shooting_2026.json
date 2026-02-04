@@ -4,53 +4,53 @@
     "teamId": 162,
     "team": "McNeese",
     "conference": "Southland",
-    "trackedShots": 1075,
-    "freeThrowRate": 37.6,
-    "assistedPct": 23.3,
+    "trackedShots": 1241,
+    "freeThrowRate": 38.8,
+    "assistedPct": 23.2,
     "dunks": {
-      "attempted": 52,
-      "made": 49,
-      "pct": 94.2,
-      "assisted": 37,
-      "assistedPct": 75.5
+      "attempted": 63,
+      "made": 59,
+      "pct": 93.7,
+      "assisted": 46,
+      "assistedPct": 78
     },
     "layups": {
-      "attempted": 425,
-      "made": 240,
-      "pct": 56.5,
-      "assisted": 95,
-      "assistedPct": 39.6
+      "attempted": 487,
+      "made": 272,
+      "pct": 55.9,
+      "assisted": 107,
+      "assistedPct": 39.3
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 22,
-      "pct": 73.3
+      "attempted": 33,
+      "made": 23,
+      "pct": 69.7
     },
     "twoPointJumpers": {
-      "attempted": 196,
-      "made": 83,
-      "pct": 42.3,
-      "assisted": 21,
-      "assistedPct": 25.3
+      "attempted": 233,
+      "made": 94,
+      "pct": 40.3,
+      "assisted": 26,
+      "assistedPct": 27.7
     },
     "threePointJumpers": {
-      "attempted": 372,
-      "made": 121,
+      "attempted": 425,
+      "made": 138,
       "pct": 32.5,
-      "assisted": 97,
-      "assistedPct": 80.2
+      "assisted": 109,
+      "assistedPct": 79
     },
     "freeThrows": {
-      "attempted": 404,
-      "made": 311,
-      "pct": 77
+      "attempted": 482,
+      "made": 374,
+      "pct": 77.6
     },
     "attemptsBreakdown": {
-      "dunks": 4.8,
-      "layups": 39.5,
-      "tipIns": 2.8,
-      "twoPointJumpers": 18.2,
-      "threePointJumpers": 34.6
+      "dunks": 5.1,
+      "layups": 39.2,
+      "tipIns": 2.7,
+      "twoPointJumpers": 18.8,
+      "threePointJumpers": 34.2
     }
   }
 ]

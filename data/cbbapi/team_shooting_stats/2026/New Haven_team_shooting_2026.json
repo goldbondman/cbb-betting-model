@@ -4,22 +4,22 @@
     "teamId": 1507,
     "team": "New Haven",
     "conference": "NEC",
-    "trackedShots": 1047,
-    "freeThrowRate": 25.7,
-    "assistedPct": 23.3,
+    "trackedShots": 1185,
+    "freeThrowRate": 28.4,
+    "assistedPct": 23.5,
     "dunks": {
-      "attempted": 17,
-      "made": 15,
-      "pct": 88.2,
-      "assisted": 11,
-      "assistedPct": 73.3
+      "attempted": 18,
+      "made": 16,
+      "pct": 88.9,
+      "assisted": 12,
+      "assistedPct": 75
     },
     "layups": {
-      "attempted": 359,
-      "made": 219,
-      "pct": 61,
-      "assisted": 92,
-      "assistedPct": 42
+      "attempted": 413,
+      "made": 256,
+      "pct": 62,
+      "assisted": 105,
+      "assistedPct": 41
     },
     "tipIns": {
       "attempted": 33,
@@ -27,30 +27,30 @@
       "pct": 72.7
     },
     "twoPointJumpers": {
-      "attempted": 216,
-      "made": 71,
-      "pct": 32.9,
-      "assisted": 17,
-      "assistedPct": 23.9
+      "attempted": 250,
+      "made": 83,
+      "pct": 33.2,
+      "assisted": 24,
+      "assistedPct": 28.9
     },
     "threePointJumpers": {
-      "attempted": 422,
-      "made": 134,
-      "pct": 31.8,
-      "assisted": 124,
-      "assistedPct": 92.5
+      "attempted": 471,
+      "made": 148,
+      "pct": 31.4,
+      "assisted": 138,
+      "assistedPct": 93.2
     },
     "freeThrows": {
-      "attempted": 269,
-      "made": 178,
-      "pct": 66.2
+      "attempted": 336,
+      "made": 225,
+      "pct": 67
     },
     "attemptsBreakdown": {
-      "dunks": 1.6,
-      "layups": 34.3,
-      "tipIns": 3.2,
-      "twoPointJumpers": 20.6,
-      "threePointJumpers": 40.3
+      "dunks": 1.5,
+      "layups": 34.9,
+      "tipIns": 2.8,
+      "twoPointJumpers": 21.1,
+      "threePointJumpers": 39.7
     }
   }
 ]

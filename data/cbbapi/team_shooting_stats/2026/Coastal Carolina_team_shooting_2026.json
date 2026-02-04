@@ -4,53 +4,53 @@
     "teamId": 54,
     "team": "Coastal Carolina",
     "conference": "Sun Belt",
-    "trackedShots": 1240,
-    "freeThrowRate": 31.1,
-    "assistedPct": 16.7,
+    "trackedShots": 1465,
+    "freeThrowRate": 30.6,
+    "assistedPct": 17.3,
     "dunks": {
-      "attempted": 33,
-      "made": 29,
-      "pct": 87.9,
-      "assisted": 22,
-      "assistedPct": 75.9
+      "attempted": 38,
+      "made": 32,
+      "pct": 84.2,
+      "assisted": 25,
+      "assistedPct": 78.1
     },
     "layups": {
-      "attempted": 355,
-      "made": 182,
-      "pct": 51.3,
-      "assisted": 42,
-      "assistedPct": 23.1
+      "attempted": 404,
+      "made": 213,
+      "pct": 52.7,
+      "assisted": 48,
+      "assistedPct": 22.5
     },
     "tipIns": {
-      "attempted": 19,
-      "made": 11,
-      "pct": 57.9
+      "attempted": 26,
+      "made": 16,
+      "pct": 61.5
     },
     "twoPointJumpers": {
-      "attempted": 329,
-      "made": 117,
-      "pct": 35.6,
-      "assisted": 12,
-      "assistedPct": 10.3
+      "attempted": 374,
+      "made": 135,
+      "pct": 36.1,
+      "assisted": 16,
+      "assistedPct": 11.9
     },
     "threePointJumpers": {
-      "attempted": 504,
-      "made": 169,
-      "pct": 33.5,
-      "assisted": 131,
-      "assistedPct": 77.5
+      "attempted": 623,
+      "made": 212,
+      "pct": 34,
+      "assisted": 165,
+      "assistedPct": 77.8
     },
     "freeThrows": {
-      "attempted": 386,
-      "made": 283,
-      "pct": 73.3
+      "attempted": 448,
+      "made": 328,
+      "pct": 73.2
     },
     "attemptsBreakdown": {
-      "dunks": 2.7,
-      "layups": 28.6,
-      "tipIns": 1.5,
-      "twoPointJumpers": 26.5,
-      "threePointJumpers": 40.6
+      "dunks": 2.6,
+      "layups": 27.6,
+      "tipIns": 1.8,
+      "twoPointJumpers": 25.5,
+      "threePointJumpers": 42.5
     }
   }
 ]

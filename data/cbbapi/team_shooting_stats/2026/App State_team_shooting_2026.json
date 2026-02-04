@@ -4,53 +4,53 @@
     "teamId": 9,
     "team": "App State",
     "conference": "Sun Belt",
-    "trackedShots": 1206,
-    "freeThrowRate": 35.7,
-    "assistedPct": 22.6,
+    "trackedShots": 1380,
+    "freeThrowRate": 34.6,
+    "assistedPct": 22.4,
     "dunks": {
-      "attempted": 46,
-      "made": 42,
-      "pct": 91.3,
-      "assisted": 36,
+      "attempted": 55,
+      "made": 49,
+      "pct": 89.1,
+      "assisted": 42,
       "assistedPct": 85.7
     },
     "layups": {
-      "attempted": 381,
-      "made": 224,
-      "pct": 58.8,
-      "assisted": 71,
+      "attempted": 428,
+      "made": 246,
+      "pct": 57.5,
+      "assisted": 78,
       "assistedPct": 31.7
     },
     "tipIns": {
-      "attempted": 51,
-      "made": 42,
-      "pct": 82.4
+      "attempted": 58,
+      "made": 45,
+      "pct": 77.6
     },
     "twoPointJumpers": {
-      "attempted": 198,
-      "made": 70,
-      "pct": 35.4,
+      "attempted": 216,
+      "made": 77,
+      "pct": 35.6,
       "assisted": 13,
-      "assistedPct": 18.6
+      "assistedPct": 16.9
     },
     "threePointJumpers": {
-      "attempted": 530,
-      "made": 170,
-      "pct": 32.1,
-      "assisted": 153,
-      "assistedPct": 90
+      "attempted": 623,
+      "made": 197,
+      "pct": 31.6,
+      "assisted": 176,
+      "assistedPct": 89.3
     },
     "freeThrows": {
-      "attempted": 431,
-      "made": 263,
-      "pct": 61
+      "attempted": 477,
+      "made": 299,
+      "pct": 62.7
     },
     "attemptsBreakdown": {
-      "dunks": 3.8,
-      "layups": 31.6,
+      "dunks": 4,
+      "layups": 31,
       "tipIns": 4.2,
-      "twoPointJumpers": 16.4,
-      "threePointJumpers": 43.9
+      "twoPointJumpers": 15.7,
+      "threePointJumpers": 45.1
     }
   }
 ]

@@ -4,52 +4,52 @@
     "teamId": 49,
     "team": "Chattanooga",
     "conference": "SoCon",
-    "trackedShots": 1093,
-    "freeThrowRate": 30.5,
-    "assistedPct": 26.1,
+    "trackedShots": 1258,
+    "freeThrowRate": 30.9,
+    "assistedPct": 25.1,
     "dunks": {
-      "attempted": 9,
-      "made": 9,
-      "pct": 100,
-      "assisted": 6,
-      "assistedPct": 66.7
+      "attempted": 12,
+      "made": 11,
+      "pct": 91.7,
+      "assisted": 8,
+      "assistedPct": 72.7
     },
     "layups": {
-      "attempted": 301,
-      "made": 178,
-      "pct": 59.1,
-      "assisted": 86,
-      "assistedPct": 48.3
+      "attempted": 339,
+      "made": 198,
+      "pct": 58.4,
+      "assisted": 92,
+      "assistedPct": 46.5
     },
     "tipIns": {
-      "attempted": 15,
-      "made": 9,
-      "pct": 60
+      "attempted": 18,
+      "made": 11,
+      "pct": 61.1
     },
     "twoPointJumpers": {
-      "attempted": 206,
-      "made": 95,
-      "pct": 46.1,
-      "assisted": 18,
+      "attempted": 243,
+      "made": 111,
+      "pct": 45.7,
+      "assisted": 21,
       "assistedPct": 18.9
     },
     "threePointJumpers": {
-      "attempted": 562,
-      "made": 202,
-      "pct": 35.9,
-      "assisted": 175,
-      "assistedPct": 86.6
+      "attempted": 646,
+      "made": 226,
+      "pct": 35,
+      "assisted": 195,
+      "assistedPct": 86.3
     },
     "freeThrows": {
-      "attempted": 333,
-      "made": 260,
-      "pct": 78.1
+      "attempted": 389,
+      "made": 297,
+      "pct": 76.3
     },
     "attemptsBreakdown": {
-      "dunks": 0.8,
-      "layups": 27.5,
+      "dunks": 1,
+      "layups": 26.9,
       "tipIns": 1.4,
-      "twoPointJumpers": 18.8,
+      "twoPointJumpers": 19.3,
       "threePointJumpers": 51.4
     }
   }

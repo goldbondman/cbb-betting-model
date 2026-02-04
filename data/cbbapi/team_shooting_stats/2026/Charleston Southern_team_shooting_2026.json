@@ -4,53 +4,53 @@
     "teamId": 47,
     "team": "Charleston Southern",
     "conference": "Big South",
-    "trackedShots": 1378,
-    "freeThrowRate": 29.8,
-    "assistedPct": 26.5,
+    "trackedShots": 1502,
+    "freeThrowRate": 31,
+    "assistedPct": 25.9,
     "dunks": {
-      "attempted": 56,
-      "made": 44,
-      "pct": 78.6,
-      "assisted": 42,
-      "assistedPct": 95.5
+      "attempted": 59,
+      "made": 47,
+      "pct": 79.7,
+      "assisted": 44,
+      "assistedPct": 93.6
     },
     "layups": {
-      "attempted": 423,
-      "made": 248,
-      "pct": 58.6,
-      "assisted": 94,
+      "attempted": 464,
+      "made": 269,
+      "pct": 58,
+      "assisted": 102,
       "assistedPct": 37.9
     },
     "tipIns": {
-      "attempted": 36,
-      "made": 19,
-      "pct": 52.8
+      "attempted": 39,
+      "made": 21,
+      "pct": 53.8
     },
     "twoPointJumpers": {
-      "attempted": 138,
-      "made": 54,
-      "pct": 39.1,
-      "assisted": 11,
-      "assistedPct": 20.4
+      "attempted": 145,
+      "made": 56,
+      "pct": 38.6,
+      "assisted": 12,
+      "assistedPct": 21.4
     },
     "threePointJumpers": {
-      "attempted": 725,
-      "made": 260,
-      "pct": 35.9,
-      "assisted": 218,
-      "assistedPct": 83.8
+      "attempted": 795,
+      "made": 281,
+      "pct": 35.3,
+      "assisted": 231,
+      "assistedPct": 82.2
     },
     "freeThrows": {
-      "attempted": 410,
-      "made": 263,
-      "pct": 64.1
+      "attempted": 466,
+      "made": 298,
+      "pct": 63.9
     },
     "attemptsBreakdown": {
-      "dunks": 4.1,
-      "layups": 30.7,
+      "dunks": 3.9,
+      "layups": 30.9,
       "tipIns": 2.6,
-      "twoPointJumpers": 10,
-      "threePointJumpers": 52.6
+      "twoPointJumpers": 9.7,
+      "threePointJumpers": 52.9
     }
   }
 ]

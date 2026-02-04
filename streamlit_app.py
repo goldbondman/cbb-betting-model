@@ -1668,6 +1668,282 @@ elif page == "📒 Ledger":
             df = get_local_ledger_df()
         else:
             df = pd.DataFrame(resp.data or [])
+                # Sort: predictions first (by confidence desc), then no predictions
+                def sort_key(entry):
+                    if not entry["has_prediction"]:
+                        return (1, 0)
+                    return (0, -safe_float(entry["prediction"].get("confidence"), 0.0))
+
+                for entry in sorted(filtered, key=sort_key):
+                    pred = entry["prediction"]
+                    
+                    if not pred:
+                        # No prediction
+                        title = f"⚠️ {entry['home_team']} vs {entry['away_team']}"
+                        with st.expander(title, expanded=False):
+                            st.warning("Prediction not available")
+                            
+                            col1, col2 = st.columns(2)
+                            with col1:
+                                st.caption("🏟️ Venue")
+                                st.write(entry.get("venue", "N/A"))
+                            with col2:
+                                st.caption("🕐 Time")
+                                st.write(entry.get("event_time", "TBD"))
+                            
+                            if st.button("🔄 Run Prediction", key=f"run_{entry['prediction_key']}"):
+                                result = predict_game(
+                                    team_a_name=entry["home_team"],
+                                    team_b_name=entry["away_team"],
+                                    home_a=True,
+                                    venue=entry["venue"],
+                                    vegas=entry.get("vegas_spread"),
+                                    bankroll=bankroll,
+                                    game_date=entry["game_date"],
+                                )
+                                
+                                if result:
+                                    payload = {
+                                        **result,
+                                        "prediction_key": entry["prediction_key"],
+                                        "model_version": MODEL_VERSION,
+                                    }
+                                    sb_upsert_prediction(payload)
+                                    st.success("Saved!")
+                                    st.rerun()
+                                else:
+                                    st.error("Failed - check team names")
+                        continue
+                    
+                    # Has prediction
+                    conf = safe_float(pred.get("confidence"), 0.0)
+                    is_alpha = pred.get("is_alpha") is True
+                    is_bet = pred.get("kelly_recommended") == "BET"
+                    kelly_amt = safe_float(pred.get("kelly_dollars"), 0.0)
+                    ensemble_pred = safe_float(pred.get("ensemble_prediction"), 0.0)
+                    
+                    # Build title
+                    icons = []
+                    if is_alpha:
+                        icons.append("🚨")
+                    if is_bet:
+                        icons.append("💰")
+                    if conf > 0.85:
+                        icons.append("⭐")
+                    
+                    icon_str = " ".join(icons) if icons else "📊"
+                    
+                    title = f"{icon_str} {pred.get('team_a')} vs {pred.get('team_b')} | {conf:.0%}"
+                    if is_bet:
+                        title += f" | ${kelly_amt:.0f}"
+                    
+                    if entry["is_stale"]:
+                        title = "🔄 " + title + " (OLD MODEL)"
+                    
+                    expand = is_alpha or (is_bet and kelly_amt > 50)
+                    
+                    with st.expander(title, expanded=expand):
+                        # Stale warning
+                        if entry["is_stale"]:
+                            st.warning(f"⚠️ Using old model: {pred.get('model_version')}")
+                            if st.button("Update to current model", key=f"update_{entry['prediction_key']}"):
+                                result = predict_game(
+                                    team_a_name=entry["home_team"],
+                                    team_b_name=entry["away_team"],
+                                    home_a=True,
+                                    venue=entry["venue"],
+                                    vegas=entry.get("vegas_spread"),
+                                    bankroll=bankroll,
+                                    game_date=entry["game_date"],
+                                )
+                                if result:
+                                    payload = {**result, "prediction_key": entry["prediction_key"], "model_version": MODEL_VERSION}
+                                    sb_upsert_prediction(payload)
+                                    st.rerun()
+                        
+                        # Main metrics
+                        col1, col2, col3, col4 = st.columns(4)
+                        with col1:
+                            st.metric("Prediction", f"{pred.get('team_a')} {ensemble_pred:+.1f}")
+                        with col2:
+                            st.metric("Confidence", f"{conf:.0%}")
+                        with col3:
+                            st.metric("Win %", f"{safe_float(pred.get('ensemble_win_prob'), 0.0):.1%}")
+                        with col4:
+                            if is_bet:
+                                st.metric("💰 Kelly", f"${kelly_amt:.0f}", f"{safe_float(pred.get('kelly_pct'), 0.0):.1%}")
+                            else:
+                                st.info("PASS")
+                        
+                        # Game details
+                        st.markdown("---")
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.caption("🏟️ Venue")
+                            st.write(entry.get("venue", "N/A"))
+                        with col2:
+                            st.caption("🕐 Time")
+                            st.write(entry.get("event_time", "TBD"))
+                        with col3:
+                            if entry.get("vegas_spread"):
+                                st.caption("🎰 Vegas")
+                                st.write(f"{entry['vegas_spread']:+.1f}")
+                                edge = abs(ensemble_pred - entry['vegas_spread'])
+                                if edge > 3:
+                                    st.success(f"**{edge:.1f}pt edge**")
+                        
+                        # Alpha reasons
+                        if is_alpha:
+                            st.markdown("---")
+                            st.success("🚨 **ALPHA SIGNAL**")
+                            for reason in pred.get("alpha_reasons", []):
+                                st.markdown(f"• {reason}")
+                        
+                        # Model breakdown
+                        with st.expander("📊 Model Details"):
+                            model_preds = pred.get("model_predictions", {})
+                            if model_preds:
+                                model_data = []
+                                for name, data in model_preds.items():
+                                    model_data.append({
+                                        "Model": name.replace("M1_", "1: ").replace("M2_", "2: ").replace("M3_", "3: ").replace("M4_", "4: "),
+                                        "Prediction": f"{safe_float(data.get('prediction'), 0.0):+.1f}",
+                                        "Win %": f"{safe_float(data.get('win_prob'), 0.0):.1%}",
+                                    })
+                                st.dataframe(pd.DataFrame(model_data), use_container_width=True, hide_index=True)
+
+elif page == "📆 Today's Schedule":
+    st.title("📆 Today's Schedule")
+    
+    upcoming, _, _ = get_upcoming_games(days_ahead=1)
+    
+    if len(upcoming) == 0:
+        st.warning("No games found for today")
+    else:
+        schedule_rows = []
+        for _, game in upcoming.iterrows():
+            schedule_rows.append({
+                "Time": game.get("event_time_local", "TBD"),
+                "Away": game.get("away_team", ""),
+                "@": "vs",
+                "Home": game.get("home_team", ""),
+                "Venue": game.get("venue", ""),
+                "TV": game.get("broadcast", ""),
+            })
+        
+        st.dataframe(pd.DataFrame(schedule_rows), use_container_width=True, hide_index=True)
+
+elif page == "🎯 Single Prediction":
+    st.title("🎯 Single Prediction")
+    
+    team_options = sorted(bart_clean["team"].dropna().unique().tolist())
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        home_team = st.selectbox("Home Team", team_options, index=0)
+    with col2:
+        away_team = st.selectbox("Away Team", team_options, index=1 if len(team_options) > 1 else 0)
+    
+    venue = st.text_input("Venue", value="Neutral")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        game_date = st.text_input("Game Date (YYYYMMDD)", value=datetime.now().strftime("%Y%m%d"))
+    with col2:
+        vegas_line = st.number_input("Vegas Spread (optional)", value=0.0, step=0.5)
+
+    has_sb_creds = has_supabase_creds()
+    auto_save = st.checkbox(
+        "Auto-save to Supabase",
+        value=False,
+        disabled=not has_sb_creds,
+        help="Requires SUPABASE_URL and SUPABASE_ANON_KEY.",
+    )
+    if not has_sb_creds:
+        st.caption("Supabase credentials missing: set SUPABASE_URL and SUPABASE_ANON_KEY to enable auto-save.")
+    
+    if home_team == away_team:
+        st.error("Teams must be different")
+    else:
+        if st.button("🔮 Generate Prediction", type="primary"):
+            with st.spinner("Analyzing matchup..."):
+                result = predict_game(
+                    team_a_name=home_team,
+                    team_b_name=away_team,
+                    home_a=True,
+                    venue=venue,
+                    vegas=vegas_line if vegas_line != 0.0 else None,
+                    bankroll=bankroll,
+                    game_date=game_date,
+                )
+            
+            if result is None:
+                st.error("❌ Prediction failed - check team names in BartTorvik data")
+            else:
+                st.success("✅ Prediction complete")
+                
+                ens = result["ensemble"]
+
+                payload = {
+                    **result,
+                    "prediction_key": f"{game_date}:{make_game_id(home_team, away_team, game_date)}",
+                    "model_version": MODEL_VERSION,
+                    "inputs": {
+                        "home_team": home_team,
+                        "away_team": away_team,
+                        "venue": venue,
+                        "vegas_spread": vegas_line if vegas_line != 0.0 else None,
+                    },
+                }
+
+                if auto_save:
+                    try:
+                        sb_upsert_prediction(payload)
+                        st.success("✅ Auto-saved to Supabase")
+                    except Exception as e:
+                        st.error(f"❌ Auto-save failed: {e}")
+                
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.metric("Prediction", f"{home_team} {ens['prediction']:+.1f}")
+                with col2:
+                    st.metric("Confidence", f"{ens['confidence']:.0%}")
+                with col3:
+                    st.metric("Win %", f"{ens['win_prob']:.1%}")
+                with col4:
+                    if ens["kelly"]["recommended"] == "BET":
+                        st.metric("Kelly", f"${ens['kelly']['kelly_dollars']:.0f}")
+                    else:
+                        st.info("PASS")
+                
+                if ens["is_alpha"]:
+                    st.success(f"🚨 ALPHA: {', '.join(ens['alpha_reasons'])}")
+                
+                with st.expander("📋 Full Result JSON"):
+                    st.json(result)
+                
+                if st.button("💾 Save to Supabase"):
+                    try:
+                        sb_upsert_prediction(payload)
+                        st.success("✅ Saved to Supabase")
+                    except Exception as e:
+                        st.error(f"❌ Save failed: {e}")
+
+elif page == "📊 Model Performance":
+    st.title("📊 Model Performance")
+    
+    if not has_supabase_creds():
+        st.error("Supabase credentials required")
+        st.stop()
+    
+    try:
+        stats = sb_get_performance_stats()
+    except Exception as e:
+        stats = None
+        st.error(f"Failed to load stats: {e}")
+    
+    if stats is None:
+        st.info("No completed predictions yet. Update game results to see performance stats.")
     else:
         df = get_local_ledger_df()
 

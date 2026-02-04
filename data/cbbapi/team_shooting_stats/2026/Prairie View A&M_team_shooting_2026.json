@@ -4,51 +4,51 @@
     "teamId": 232,
     "team": "Prairie View A&M",
     "conference": "SWAC",
-    "trackedShots": 1155,
-    "freeThrowRate": 44.3,
-    "assistedPct": 20.3,
+    "trackedShots": 1340,
+    "freeThrowRate": 43.5,
+    "assistedPct": 19.9,
     "dunks": {
-      "attempted": 32,
-      "made": 30,
-      "pct": 93.8,
-      "assisted": 22,
-      "assistedPct": 73.3
+      "attempted": 34,
+      "made": 32,
+      "pct": 94.1,
+      "assisted": 23,
+      "assistedPct": 71.9
     },
     "layups": {
-      "attempted": 397,
-      "made": 221,
-      "pct": 55.7,
-      "assisted": 73,
-      "assistedPct": 33
+      "attempted": 466,
+      "made": 262,
+      "pct": 56.2,
+      "assisted": 87,
+      "assistedPct": 33.2
     },
     "tipIns": {
-      "attempted": 25,
-      "made": 20,
-      "pct": 80
+      "attempted": 26,
+      "made": 21,
+      "pct": 80.8
     },
     "twoPointJumpers": {
-      "attempted": 343,
-      "made": 129,
-      "pct": 37.6,
-      "assisted": 35,
-      "assistedPct": 27.1
+      "attempted": 398,
+      "made": 144,
+      "pct": 36.2,
+      "assisted": 40,
+      "assistedPct": 27.8
     },
     "threePointJumpers": {
-      "attempted": 358,
-      "made": 122,
-      "pct": 34.1,
-      "assisted": 104,
-      "assistedPct": 85.2
+      "attempted": 416,
+      "made": 138,
+      "pct": 33.2,
+      "assisted": 117,
+      "assistedPct": 84.8
     },
     "freeThrows": {
-      "attempted": 512,
-      "made": 385,
-      "pct": 75.2
+      "attempted": 583,
+      "made": 444,
+      "pct": 76.2
     },
     "attemptsBreakdown": {
-      "dunks": 2.8,
-      "layups": 34.4,
-      "tipIns": 2.2,
+      "dunks": 2.5,
+      "layups": 34.8,
+      "tipIns": 1.9,
       "twoPointJumpers": 29.7,
       "threePointJumpers": 31
     }

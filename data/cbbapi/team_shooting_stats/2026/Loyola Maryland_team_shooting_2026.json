@@ -4,53 +4,53 @@
     "teamId": 152,
     "team": "Loyola Maryland",
     "conference": "Patriot",
-    "trackedShots": 1204,
-    "freeThrowRate": 32.1,
-    "assistedPct": 23.2,
+    "trackedShots": 1371,
+    "freeThrowRate": 32.6,
+    "assistedPct": 22.5,
     "dunks": {
-      "attempted": 27,
-      "made": 25,
-      "pct": 92.6,
-      "assisted": 21,
-      "assistedPct": 84
+      "attempted": 28,
+      "made": 26,
+      "pct": 92.9,
+      "assisted": 22,
+      "assistedPct": 84.6
     },
     "layups": {
-      "attempted": 414,
-      "made": 228,
-      "pct": 55.1,
-      "assisted": 71,
-      "assistedPct": 31.1
+      "attempted": 457,
+      "made": 246,
+      "pct": 53.8,
+      "assisted": 77,
+      "assistedPct": 31.3
     },
     "tipIns": {
-      "attempted": 19,
-      "made": 12,
-      "pct": 63.2
+      "attempted": 23,
+      "made": 16,
+      "pct": 69.6
     },
     "twoPointJumpers": {
-      "attempted": 178,
-      "made": 73,
-      "pct": 41,
-      "assisted": 23,
-      "assistedPct": 31.5
+      "attempted": 221,
+      "made": 92,
+      "pct": 41.6,
+      "assisted": 25,
+      "assistedPct": 27.2
     },
     "threePointJumpers": {
-      "attempted": 566,
-      "made": 191,
-      "pct": 33.7,
-      "assisted": 164,
-      "assistedPct": 85.9
+      "attempted": 642,
+      "made": 217,
+      "pct": 33.8,
+      "assisted": 185,
+      "assistedPct": 85.3
     },
     "freeThrows": {
-      "attempted": 386,
-      "made": 255,
-      "pct": 66.1
+      "attempted": 447,
+      "made": 308,
+      "pct": 68.9
     },
     "attemptsBreakdown": {
-      "dunks": 2.2,
-      "layups": 34.4,
-      "tipIns": 1.6,
-      "twoPointJumpers": 14.8,
-      "threePointJumpers": 47
+      "dunks": 2,
+      "layups": 33.3,
+      "tipIns": 1.7,
+      "twoPointJumpers": 16.1,
+      "threePointJumpers": 46.8
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 186,
     "team": "NJIT",
     "conference": "Am. East",
-    "trackedShots": 1164,
-    "freeThrowRate": 33.8,
+    "trackedShots": 1348,
+    "freeThrowRate": 33.5,
     "assistedPct": 17.6,
     "dunks": {
-      "attempted": 42,
-      "made": 34,
-      "pct": 81,
-      "assisted": 25,
-      "assistedPct": 73.5
+      "attempted": 44,
+      "made": 36,
+      "pct": 81.8,
+      "assisted": 27,
+      "assistedPct": 75
     },
     "layups": {
-      "attempted": 320,
-      "made": 152,
-      "pct": 47.5,
-      "assisted": 46,
-      "assistedPct": 30.3
+      "attempted": 384,
+      "made": 184,
+      "pct": 47.9,
+      "assisted": 55,
+      "assistedPct": 29.9
     },
     "tipIns": {
-      "attempted": 12,
-      "made": 5,
-      "pct": 41.7
+      "attempted": 15,
+      "made": 6,
+      "pct": 40
     },
     "twoPointJumpers": {
-      "attempted": 277,
-      "made": 100,
-      "pct": 36.1,
-      "assisted": 14,
-      "assistedPct": 14
+      "attempted": 332,
+      "made": 127,
+      "pct": 38.3,
+      "assisted": 16,
+      "assistedPct": 12.6
     },
     "threePointJumpers": {
-      "attempted": 513,
-      "made": 161,
-      "pct": 31.4,
-      "assisted": 120,
-      "assistedPct": 74.5
+      "attempted": 573,
+      "made": 183,
+      "pct": 31.9,
+      "assisted": 139,
+      "assistedPct": 76
     },
     "freeThrows": {
-      "attempted": 394,
-      "made": 288,
-      "pct": 73.1
+      "attempted": 452,
+      "made": 328,
+      "pct": 72.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 27.5,
-      "tipIns": 1,
-      "twoPointJumpers": 23.8,
-      "threePointJumpers": 44.1
+      "dunks": 3.3,
+      "layups": 28.5,
+      "tipIns": 1.1,
+      "twoPointJumpers": 24.6,
+      "threePointJumpers": 42.5
     }
   }
 ]

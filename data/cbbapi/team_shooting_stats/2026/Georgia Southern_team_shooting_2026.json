@@ -4,9 +4,9 @@
     "teamId": 99,
     "team": "Georgia Southern",
     "conference": "Sun Belt",
-    "trackedShots": 1332,
+    "trackedShots": 1494,
     "freeThrowRate": 41,
-    "assistedPct": 17.5,
+    "assistedPct": 17.7,
     "dunks": {
       "attempted": 34,
       "made": 28,
@@ -15,41 +15,41 @@
       "assistedPct": 67.9
     },
     "layups": {
-      "attempted": 490,
-      "made": 257,
-      "pct": 52.4,
-      "assisted": 64,
-      "assistedPct": 24.9
+      "attempted": 548,
+      "made": 289,
+      "pct": 52.7,
+      "assisted": 74,
+      "assistedPct": 25.6
     },
     "tipIns": {
-      "attempted": 39,
-      "made": 25,
-      "pct": 64.1
+      "attempted": 42,
+      "made": 28,
+      "pct": 66.7
     },
     "twoPointJumpers": {
-      "attempted": 146,
-      "made": 66,
-      "pct": 45.2,
-      "assisted": 7,
-      "assistedPct": 10.6
+      "attempted": 171,
+      "made": 79,
+      "pct": 46.2,
+      "assisted": 9,
+      "assistedPct": 11.4
     },
     "threePointJumpers": {
-      "attempted": 623,
-      "made": 198,
-      "pct": 31.8,
-      "assisted": 143,
-      "assistedPct": 72.2
+      "attempted": 699,
+      "made": 221,
+      "pct": 31.6,
+      "assisted": 163,
+      "assistedPct": 73.8
     },
     "freeThrows": {
-      "attempted": 546,
-      "made": 390,
-      "pct": 71.4
+      "attempted": 612,
+      "made": 442,
+      "pct": 72.2
     },
     "attemptsBreakdown": {
-      "dunks": 2.6,
-      "layups": 36.8,
-      "tipIns": 2.9,
-      "twoPointJumpers": 11,
+      "dunks": 2.3,
+      "layups": 36.7,
+      "tipIns": 2.8,
+      "twoPointJumpers": 11.4,
       "threePointJumpers": 46.8
     }
   }

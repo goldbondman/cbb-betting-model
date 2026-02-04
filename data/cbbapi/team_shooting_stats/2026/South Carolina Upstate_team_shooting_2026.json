@@ -4,53 +4,53 @@
     "teamId": 268,
     "team": "South Carolina Upstate",
     "conference": "Big South",
-    "trackedShots": 1283,
+    "trackedShots": 1395,
     "freeThrowRate": 33.9,
-    "assistedPct": 20.7,
+    "assistedPct": 20.8,
     "dunks": {
-      "attempted": 27,
-      "made": 20,
-      "pct": 74.1,
-      "assisted": 11,
-      "assistedPct": 55
+      "attempted": 29,
+      "made": 22,
+      "pct": 75.9,
+      "assisted": 13,
+      "assistedPct": 59.1
     },
     "layups": {
-      "attempted": 467,
-      "made": 257,
-      "pct": 55,
-      "assisted": 114,
-      "assistedPct": 44.4
+      "attempted": 508,
+      "made": 281,
+      "pct": 55.3,
+      "assisted": 123,
+      "assistedPct": 43.8
     },
     "tipIns": {
-      "attempted": 43,
-      "made": 26,
-      "pct": 60.5
+      "attempted": 44,
+      "made": 27,
+      "pct": 61.4
     },
     "twoPointJumpers": {
-      "attempted": 288,
-      "made": 113,
-      "pct": 39.2,
+      "attempted": 310,
+      "made": 117,
+      "pct": 37.7,
       "assisted": 14,
-      "assistedPct": 12.4
+      "assistedPct": 12
     },
     "threePointJumpers": {
-      "attempted": 458,
-      "made": 157,
-      "pct": 34.3,
-      "assisted": 127,
-      "assistedPct": 80.9
+      "attempted": 504,
+      "made": 172,
+      "pct": 34.1,
+      "assisted": 140,
+      "assistedPct": 81.4
     },
     "freeThrows": {
-      "attempted": 435,
-      "made": 297,
-      "pct": 68.3
+      "attempted": 473,
+      "made": 320,
+      "pct": 67.7
     },
     "attemptsBreakdown": {
       "dunks": 2.1,
       "layups": 36.4,
-      "tipIns": 3.4,
-      "twoPointJumpers": 22.4,
-      "threePointJumpers": 35.7
+      "tipIns": 3.2,
+      "twoPointJumpers": 22.2,
+      "threePointJumpers": 36.1
     }
   }
 ]

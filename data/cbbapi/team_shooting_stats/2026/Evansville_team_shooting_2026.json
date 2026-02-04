@@ -4,22 +4,22 @@
     "teamId": 82,
     "team": "Evansville",
     "conference": "MVC",
-    "trackedShots": 1106,
-    "freeThrowRate": 34.1,
+    "trackedShots": 1213,
+    "freeThrowRate": 32.6,
     "assistedPct": 23.7,
     "dunks": {
-      "attempted": 39,
-      "made": 33,
-      "pct": 84.6,
-      "assisted": 25,
-      "assistedPct": 75.8
+      "attempted": 42,
+      "made": 36,
+      "pct": 85.7,
+      "assisted": 28,
+      "assistedPct": 77.8
     },
     "layups": {
-      "attempted": 286,
-      "made": 165,
-      "pct": 57.7,
-      "assisted": 75,
-      "assistedPct": 45.5
+      "attempted": 307,
+      "made": 180,
+      "pct": 58.6,
+      "assisted": 79,
+      "assistedPct": 43.9
     },
     "tipIns": {
       "attempted": 20,
@@ -27,30 +27,30 @@
       "pct": 90
     },
     "twoPointJumpers": {
-      "attempted": 300,
-      "made": 108,
-      "pct": 36,
-      "assisted": 38,
-      "assistedPct": 35.2
+      "attempted": 335,
+      "made": 123,
+      "pct": 36.7,
+      "assisted": 40,
+      "assistedPct": 32.5
     },
     "threePointJumpers": {
-      "attempted": 461,
-      "made": 142,
-      "pct": 30.8,
-      "assisted": 124,
-      "assistedPct": 87.3
+      "attempted": 509,
+      "made": 160,
+      "pct": 31.4,
+      "assisted": 140,
+      "assistedPct": 87.5
     },
     "freeThrows": {
-      "attempted": 377,
-      "made": 271,
-      "pct": 71.9
+      "attempted": 396,
+      "made": 284,
+      "pct": 71.7
     },
     "attemptsBreakdown": {
       "dunks": 3.5,
-      "layups": 25.9,
-      "tipIns": 1.8,
-      "twoPointJumpers": 27.1,
-      "threePointJumpers": 41.7
+      "layups": 25.3,
+      "tipIns": 1.6,
+      "twoPointJumpers": 27.6,
+      "threePointJumpers": 42
     }
   }
 ]

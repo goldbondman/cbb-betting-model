@@ -4,52 +4,52 @@
     "teamId": 362,
     "team": "Queens University",
     "conference": "ASUN",
-    "trackedShots": 1218,
-    "freeThrowRate": 35.5,
-    "assistedPct": 26.5,
+    "trackedShots": 1398,
+    "freeThrowRate": 34.6,
+    "assistedPct": 26.3,
     "dunks": {
-      "attempted": 42,
-      "made": 40,
-      "pct": 95.2,
-      "assisted": 24,
-      "assistedPct": 60
+      "attempted": 46,
+      "made": 44,
+      "pct": 95.7,
+      "assisted": 26,
+      "assistedPct": 59.1
     },
     "layups": {
-      "attempted": 397,
-      "made": 245,
-      "pct": 61.7,
-      "assisted": 90,
-      "assistedPct": 36.7
+      "attempted": 451,
+      "made": 272,
+      "pct": 60.3,
+      "assisted": 96,
+      "assistedPct": 35.3
     },
     "tipIns": {
-      "attempted": 33,
-      "made": 22,
-      "pct": 66.7
+      "attempted": 42,
+      "made": 27,
+      "pct": 64.3
     },
     "twoPointJumpers": {
-      "attempted": 151,
-      "made": 68,
-      "pct": 45,
-      "assisted": 17,
-      "assistedPct": 25
+      "attempted": 175,
+      "made": 77,
+      "pct": 44,
+      "assisted": 20,
+      "assistedPct": 26
     },
     "threePointJumpers": {
-      "attempted": 595,
-      "made": 205,
-      "pct": 34.5,
-      "assisted": 192,
-      "assistedPct": 93.7
+      "attempted": 684,
+      "made": 241,
+      "pct": 35.2,
+      "assisted": 226,
+      "assistedPct": 93.8
     },
     "freeThrows": {
-      "attempted": 432,
-      "made": 322,
-      "pct": 74.5
+      "attempted": 484,
+      "made": 355,
+      "pct": 73.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 32.6,
-      "tipIns": 2.7,
-      "twoPointJumpers": 12.4,
+      "dunks": 3.3,
+      "layups": 32.3,
+      "tipIns": 3,
+      "twoPointJumpers": 12.5,
       "threePointJumpers": 48.9
     }
   }

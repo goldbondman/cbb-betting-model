@@ -4,53 +4,53 @@
     "teamId": 262,
     "team": "Seattle U",
     "conference": "WCC",
-    "trackedShots": 1240,
-    "freeThrowRate": 34.3,
-    "assistedPct": 23.4,
+    "trackedShots": 1350,
+    "freeThrowRate": 33.5,
+    "assistedPct": 23,
     "dunks": {
-      "attempted": 54,
-      "made": 45,
-      "pct": 83.3,
-      "assisted": 39,
-      "assistedPct": 86.7
+      "attempted": 56,
+      "made": 47,
+      "pct": 83.9,
+      "assisted": 41,
+      "assistedPct": 87.2
     },
     "layups": {
-      "attempted": 428,
-      "made": 243,
-      "pct": 56.8,
-      "assisted": 98,
-      "assistedPct": 40.3
+      "attempted": 467,
+      "made": 263,
+      "pct": 56.3,
+      "assisted": 105,
+      "assistedPct": 39.9
     },
     "tipIns": {
-      "attempted": 29,
+      "attempted": 30,
       "made": 16,
-      "pct": 55.2
+      "pct": 53.3
     },
     "twoPointJumpers": {
-      "attempted": 268,
-      "made": 102,
-      "pct": 38.1,
-      "assisted": 29,
-      "assistedPct": 28.4
+      "attempted": 290,
+      "made": 107,
+      "pct": 36.9,
+      "assisted": 30,
+      "assistedPct": 28
     },
     "threePointJumpers": {
-      "attempted": 461,
-      "made": 156,
-      "pct": 33.8,
-      "assisted": 124,
-      "assistedPct": 79.5
+      "attempted": 507,
+      "made": 169,
+      "pct": 33.3,
+      "assisted": 134,
+      "assistedPct": 79.3
     },
     "freeThrows": {
-      "attempted": 425,
-      "made": 298,
+      "attempted": 452,
+      "made": 317,
       "pct": 70.1
     },
     "attemptsBreakdown": {
-      "dunks": 4.4,
-      "layups": 34.5,
-      "tipIns": 2.3,
-      "twoPointJumpers": 21.6,
-      "threePointJumpers": 37.2
+      "dunks": 4.1,
+      "layups": 34.6,
+      "tipIns": 2.2,
+      "twoPointJumpers": 21.5,
+      "threePointJumpers": 37.6
     }
   }
 ]

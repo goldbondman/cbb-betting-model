@@ -4,53 +4,53 @@
     "teamId": 354,
     "team": "Winthrop",
     "conference": "Big South",
-    "trackedShots": 1389,
-    "freeThrowRate": 40.4,
-    "assistedPct": 23.3,
+    "trackedShots": 1503,
+    "freeThrowRate": 41.5,
+    "assistedPct": 23.4,
     "dunks": {
-      "attempted": 37,
-      "made": 30,
-      "pct": 81.1,
-      "assisted": 26,
-      "assistedPct": 86.7
+      "attempted": 39,
+      "made": 32,
+      "pct": 82.1,
+      "assisted": 28,
+      "assistedPct": 87.5
     },
     "layups": {
-      "attempted": 455,
-      "made": 262,
-      "pct": 57.6,
-      "assisted": 103,
-      "assistedPct": 39.3
+      "attempted": 496,
+      "made": 278,
+      "pct": 56,
+      "assisted": 113,
+      "assistedPct": 40.6
     },
     "tipIns": {
-      "attempted": 46,
-      "made": 30,
-      "pct": 65.2
+      "attempted": 49,
+      "made": 32,
+      "pct": 65.3
     },
     "twoPointJumpers": {
-      "attempted": 227,
-      "made": 81,
-      "pct": 35.7,
-      "assisted": 12,
-      "assistedPct": 14.8
+      "attempted": 245,
+      "made": 92,
+      "pct": 37.6,
+      "assisted": 16,
+      "assistedPct": 17.4
     },
     "threePointJumpers": {
-      "attempted": 624,
-      "made": 218,
-      "pct": 34.9,
-      "assisted": 182,
-      "assistedPct": 83.5
+      "attempted": 674,
+      "made": 236,
+      "pct": 35,
+      "assisted": 194,
+      "assistedPct": 82.2
     },
     "freeThrows": {
-      "attempted": 561,
-      "made": 408,
-      "pct": 72.7
+      "attempted": 624,
+      "made": 458,
+      "pct": 73.4
     },
     "attemptsBreakdown": {
-      "dunks": 2.7,
-      "layups": 32.8,
+      "dunks": 2.6,
+      "layups": 33,
       "tipIns": 3.3,
       "twoPointJumpers": 16.3,
-      "threePointJumpers": 44.9
+      "threePointJumpers": 44.8
     }
   }
 ]
