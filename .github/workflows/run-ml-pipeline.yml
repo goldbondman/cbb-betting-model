@@ -34,6 +34,19 @@ jobs:
       - name: Generate feature matrix files
         run: python ml/feature_matrix.py
 
+      - name: Print ML CSV headers
+        run: |
+          echo "model_features.csv header:"
+          head -n 1 ml/model_features.csv || echo "model_features.csv missing"
+
+          echo ""
+          echo "dq_audit_ml.csv header:"
+          head -n 1 ml/dq_audit_ml.csv || echo "dq_audit_ml.csv missing"
+
+          echo ""
+          echo "predictions_latest.csv header:"
+          head -n 1 ml/predictions_latest.csv || echo "predictions_latest.csv missing"
+
       - name: Show ML artifact sizes
         run: |
           ls -lh ml/*.csv ml/*.json ml/*.txt ml/models/*.json || true
