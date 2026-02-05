@@ -1479,8 +1479,44 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
     else:
         m = m.sort_values(["event_id"])
 
-    return m
+    # ---- row_hash (required for DB upsert / NOT NULL) ----
+    # Build a deterministic hash from stable identifiers.
+    # Goal: never null, stable across runs, changes if key identity changes.
+    hash_keys = [
+        "event_id",
+        "game_datetime_utc",
+        "h_team_id",
+        "a_team_id",
+        "h_team",
+        "a_team",
+        # include parse_version if present (keeps lineage consistent)
+        "h_parse_version",
+        "a_parse_version",
+    ]
+    present_keys = [k for k in hash_keys if k in m.columns]
 
+    def _row_hash_from_row(r: pd.Series) -> str:
+        d = {}
+        for k in present_keys:
+            v = r.get(k)
+            if pd.isna(v):
+                v = ""
+            d[k] = str(v)
+        if present_keys:
+            return _stable_row_hash(d, keys=present_keys)
+        return hashlib.sha1(str(r.to_dict()).encode("utf-8")).hexdigest()
+
+    m["row_hash"] = m.apply(_row_hash_from_row, axis=1)
+
+    # Hard guarantee: no nulls/blanks
+    m["row_hash"] = m["row_hash"].astype(str)
+    bad = m["row_hash"].isin(["", "nan", "None"])
+    if bad.any() and "event_id" in m.columns:
+        m.loc[bad, "row_hash"] = m.loc[bad, "event_id"].astype(str).apply(
+            lambda x: hashlib.sha1(x.encode("utf-8")).hexdigest()
+        )
+
+    return m
 
 def _add_allowed_forced_pack(df: pd.DataFrame, group_cols, prefix: str):
     """
