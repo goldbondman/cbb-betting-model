@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+import gzip
 import os
 import re
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -16,6 +18,14 @@ BUCKET = (os.getenv("SUPABASE_BUCKET") or "cbb-data").strip()
 # - SKIP_MISSING: if set (1/true/yes), missing local files are skipped instead of failing the run.
 UPLOAD_GROUP = (os.getenv("UPLOAD_GROUP") or "all").strip().lower()
 SKIP_MISSING = (os.getenv("SKIP_MISSING") or "0").strip().lower() in ("1", "true", "yes")
+
+# Optional safety guard for object size (bytes). If 0/empty, no pre-check is enforced.
+MAX_OBJECT_BYTES = int(os.getenv("SUPABASE_MAX_OBJECT_BYTES", "0"))
+GZIP_FALLBACK = (os.getenv("SUPABASE_GZIP_FALLBACK") or "1").strip().lower() in (
+    "1",
+    "true",
+    "yes",
+)
 
 # Basic retry (helps with transient 429/5xx)
 MAX_RETRIES = int(os.getenv("SUPABASE_UPLOAD_MAX_RETRIES", "3"))
@@ -78,6 +88,8 @@ def _guess_content_type(local_path: str) -> str:
         return "application/json"
     if p.endswith(".csv"):
         return "text/csv"
+    if p.endswith(".gz"):
+        return "application/gzip"
     return "application/octet-stream"
 
 
@@ -100,6 +112,37 @@ def _files_for_group():
     return FILES_ESPN + FILES_TORVIK + FILES_ML
 
 
+def _format_bytes(num_bytes: int) -> str:
+    if num_bytes < 1024:
+        return f"{num_bytes} B"
+    if num_bytes < 1024**2:
+        return f"{num_bytes / 1024:.1f} KB"
+    if num_bytes < 1024**3:
+        return f"{num_bytes / 1024**2:.1f} MB"
+    return f"{num_bytes / 1024**3:.1f} GB"
+
+
+def _gzip_to_temp(local_path: Path) -> Path:
+    with local_path.open("rb") as src:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".gz") as tmp:
+            with gzip.GzipFile(fileobj=tmp, mode="wb") as gz:
+                for chunk in iter(lambda: src.read(1024 * 1024), b""):
+                    gz.write(chunk)
+            return Path(tmp.name)
+
+
+def _upload_file(local_path: Path, remote_path: str) -> requests.Response:
+    url = f"{SUPABASE_URL}/storage/v1/object/{BUCKET}/{remote_path}"
+    content_type = _guess_content_type(local_path)
+    with local_path.open("rb") as f:
+        return requests.put(
+            url,
+            headers=_headers(content_type),
+            data=f,
+            timeout=(15, 180),
+        )
+
+
 def upload(local_path: str, remote_path: str):
     lp = Path(local_path)
 
@@ -109,8 +152,15 @@ def upload(local_path: str, remote_path: str):
             return
         _die(f"Local file missing: {local_path}")
 
-    url = f"{SUPABASE_URL}/storage/v1/object/{BUCKET}/{remote_path}"
-    content_type = _guess_content_type(local_path)
+    size_bytes = lp.stat().st_size
+    if MAX_OBJECT_BYTES and size_bytes > MAX_OBJECT_BYTES:
+        msg = (
+            f"Local file size {_format_bytes(size_bytes)} exceeds "
+            f"SUPABASE_MAX_OBJECT_BYTES={_format_bytes(MAX_OBJECT_BYTES)}: {local_path}"
+        )
+        if not GZIP_FALLBACK:
+            _die(msg)
+        _warn(msg)
 
     last_status = None
     last_text = None
@@ -121,20 +171,39 @@ def upload(local_path: str, remote_path: str):
             time.sleep(delay)
 
         try:
-            with lp.open("rb") as f:
-                r = requests.put(
-                    url,
-                    headers=_headers(content_type),
-                    data=f,
-                    timeout=(15, 180),
-                )
-
+            r = _upload_file(lp, remote_path)
             last_status = r.status_code
             last_text = r.text
 
             if r.status_code in (200, 201):
                 print(f"[OK] Uploaded {local_path} -> {remote_path}")
                 return
+
+            if r.status_code == 413 and GZIP_FALLBACK and not str(lp).endswith(".gz"):
+                _warn(
+                    "Upload exceeded storage size limit; attempting gzip fallback for "
+                    f"{local_path}."
+                )
+                gz_path = _gzip_to_temp(lp)
+                gz_remote = f"{remote_path}.gz"
+                try:
+                    gz_response = _upload_file(gz_path, gz_remote)
+                    if gz_response.status_code in (200, 201):
+                        print(
+                            "[OK] Uploaded gzip fallback "
+                            f"{gz_path} -> {gz_remote}"
+                        )
+                        _warn(
+                            "Original file was not uploaded; update any downstream "
+                            "consumers to read the .gz artifact."
+                        )
+                        return
+                    raise RuntimeError(
+                        f"Gzip upload failed {local_path} -> {gz_remote}\n"
+                        f"HTTP {gz_response.status_code}: {gz_response.text}"
+                    )
+                finally:
+                    gz_path.unlink(missing_ok=True)
 
             if r.status_code == 429 or (500 <= r.status_code <= 599):
                 continue
