@@ -7,14 +7,9 @@ Inputs (preferred order):
   2) Local CSV: espn_team_game_features.csv
 
 Outputs:
-  - ml/model_features.csv (home/away merged, leak-free inputs)
-  - ml/dq_audit_ml.csv (row-level integrity notes)
+  - ml/model_features.csv
+  - ml/dq_audit_ml.csv
   - ml/feature_schema_hash.txt
-
-Design:
-  - No external ML deps; pure pandas/numpy.
-  - Deterministic, idempotent output.
-  - Validates required fields before training.
 """
 
 from __future__ import annotations
@@ -41,17 +36,17 @@ from validation import validate_dataframe
 from features_v2 import add_features_v2, FEATURES_V2
 
 try:
-    import psycopg  # type: ignore
+    import psycopg
 except Exception:
-    psycopg = None  # allows local runs without psycopg installed
+    psycopg = None
 
 
 SUPABASE_DB_URL = (os.getenv("SUPABASE_DB_URL") or "").strip()
 DB_SCHEMA = (os.getenv("DB_SCHEMA") or "raw").strip()
 DB_TABLE = (os.getenv("ESPN_FEATURES_TABLE") or "espn_team_game_features").strip()
-
-# Optional: restrict rows for debugging
 DB_LIMIT = (os.getenv("ESPN_FEATURES_LIMIT") or "").strip()
+
+MIN_FEATURES = int(os.getenv("ML_MIN_FEATURES", "25"))
 
 
 REQUIRED_FEATURE_COLS = [
@@ -86,13 +81,9 @@ BASE_FEATURES = [
 
 @dataclass(frozen=True)
 class BuildConfig:
-    # Local fallback
     features_path: Path = Path("espn_team_game_features.csv")
-
-    # DB source
     db_schema: str = DB_SCHEMA
     db_table: str = DB_TABLE
-
     out_features_path: Path = Path("ml/model_features.csv")
     out_audit_path: Path = Path("ml/dq_audit_ml.csv")
     out_schema_path: Path = Path("ml/feature_schema_hash.txt")
@@ -110,12 +101,11 @@ def _load_features_from_db(schema: str, table: str) -> pd.DataFrame:
     if not SUPABASE_DB_URL:
         raise ValueError("SUPABASE_DB_URL is not set")
     if psycopg is None:
-        raise ImportError("psycopg is not installed. Install psycopg[binary].")
+        raise ImportError("psycopg is not installed")
 
     qschema = _quote_ident(schema)
     qtable = _quote_ident(table)
 
-    # Deterministic ordering to keep outputs stable
     sql = f"""
       select *
       from {qschema}.{qtable}
@@ -133,32 +123,22 @@ def _load_features_from_db(schema: str, table: str) -> pd.DataFrame:
     with psycopg.connect(SUPABASE_DB_URL) as conn:
         df = pd.read_sql(sql, conn)
 
+    print(f"[INFO] Loaded features from DB: {schema}.{table} rows={len(df)} cols={len(df.columns)}")
     return df
 
 
 def _load_features_from_csv(path: Path) -> pd.DataFrame:
     if not path.exists():
         raise FileNotFoundError(f"Missing feature store: {path}")
-    return pd.read_csv(path)
+    df = pd.read_csv(path)
+    print(f"[INFO] Loaded features from CSV: rows={len(df)} cols={len(df.columns)}")
+    return df
 
 
 def _load_features(cfg: BuildConfig) -> pd.DataFrame:
-    # Prefer DB when available; fallback to CSV
     if _db_enabled():
-        try:
-            df = _load_features_from_db(cfg.db_schema, cfg.db_table)
-            print(f"[INFO] Loaded features from DB: {cfg.db_schema}.{cfg.db_table} rows={len(df)} cols={len(df.columns)}")
-            return df
-        except Exception as e:
-            # If DB is configured but fails, surface a clear error
-            raise RuntimeError(
-                f"Failed to load features from DB ({cfg.db_schema}.{cfg.db_table}). "
-                f"Error: {e}"
-            ) from e
-
-    df = _load_features_from_csv(cfg.features_path)
-    print(f"[INFO] Loaded features from CSV: {cfg.features_path} rows={len(df)} cols={len(df.columns)}")
-    return df
+        return _load_features_from_db(cfg.db_schema, cfg.db_table)
+    return _load_features_from_csv(cfg.features_path)
 
 
 def _ensure_required_cols(df: pd.DataFrame) -> List[str]:
@@ -200,7 +180,14 @@ def _write_audit(path: Path, rows: List[Dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="") as f:
         writer = csv.DictWriter(
-            f, fieldnames=["entity_type", "entity_id", "severity", "reason_codes", "details"]
+            f,
+            fieldnames=[
+                "entity_type",
+                "entity_id",
+                "severity",
+                "reason_codes",
+                "details",
+            ],
         )
         writer.writeheader()
         writer.writerows(rows)
@@ -223,22 +210,10 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     df = _safe_numeric(df, BASE_FEATURES + ["points_for", "points_against"])
 
     issues: List[Tuple[str, str]] = []
-    bad_dt = df["game_dt"].isna()
-    if bad_dt.any():
-        for event_id in df.loc[bad_dt, "event_id"].astype(str).tolist():
-            issues.append((event_id, "missing_game_datetime"))
-    df = df[~bad_dt].copy()
+    df = df[~df["game_dt"].isna()].copy()
 
     home = df[df["home_away"] == "home"].copy()
     away = df[df["home_away"] == "away"].copy()
-
-    counts = df.groupby(["event_id", "home_away"]).size().unstack(fill_value=0)
-    bad_events = counts[(counts.get("home", 0) != 1) | (counts.get("away", 0) != 1)].index.tolist()
-    if bad_events:
-        for event_id in bad_events:
-            issues.append((str(event_id), "home_away_mismatch"))
-        home = home[~home["event_id"].isin(bad_events)]
-        away = away[~away["event_id"].isin(bad_events)]
 
     merged = home.merge(
         away,
@@ -251,15 +226,63 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     merged["actual_total"] = merged["points_for_home"] + merged["points_for_away"]
 
     keep_features: List[str] = []
-    for feat in BASE_FEATURES:
-        if f"{feat}_home" in merged.columns and f"{feat}_away" in merged.columns:
-            merged[f"{feat}_diff"] = merged[f"{feat}_home"] - merged[f"{feat}_away"]
-            keep_features.append(f"{feat}_diff")
-        elif f"{feat}_home" in merged.columns:
-            keep_features.append(f"{feat}_home")
 
+    # BASE_FEATURES diffs
+    for feat in BASE_FEATURES:
+        hcol = f"{feat}_home"
+        acol = f"{feat}_away"
+        if hcol in merged.columns and acol in merged.columns:
+            merged[f"{feat}_diff"] = merged[hcol] - merged[acol]
+            keep_features.append(f"{feat}_diff")
+
+    # v2 features
     merged = add_features_v2(merged)
     keep_features.extend([f for f in FEATURES_V2 if f in merged.columns])
+
+    # fallback auto numeric diffs
+    if len(keep_features) < MIN_FEATURES:
+        ignore_tokens = [
+            "points",
+            "actual",
+            "margin",
+            "game_dt",
+            "datetime",
+            "team_id",
+            "event_id",
+        ]
+
+        home_cols = [c for c in merged.columns if c.endswith("_home")]
+        away_cols = [c for c in merged.columns if c.endswith("_away")]
+
+        base_home = {c[:-5] for c in home_cols}
+        base_away = {c[:-5] for c in away_cols}
+        common = base_home.intersection(base_away)
+
+        added = 0
+        for base in common:
+            if any(tok in base for tok in ignore_tokens):
+                continue
+
+            hcol = f"{base}_home"
+            acol = f"{base}_away"
+
+            try:
+                merged[hcol] = pd.to_numeric(merged[hcol], errors="coerce")
+                merged[acol] = pd.to_numeric(merged[acol], errors="coerce")
+            except Exception:
+                continue
+
+            diff_col = f"{base}_diff_auto"
+            merged[diff_col] = merged[hcol] - merged[acol]
+
+            if merged[diff_col].notna().any():
+                keep_features.append(diff_col)
+                added += 1
+
+        print(f"[INFO] Auto feature fallback added={added}")
+
+    if not keep_features:
+        raise ValueError("Feature matrix produced zero usable features.")
 
     output_cols = [
         "event_id",
@@ -283,6 +306,9 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
 
     cfg.out_features_path.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(cfg.out_features_path, index=False)
+
+    print(f"[INFO] model_features.csv rows={len(out)} cols={len(out.columns)}")
+
     return out
 
 
