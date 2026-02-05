@@ -29,6 +29,9 @@ jobs:
       - name: Build feature matrix
         run: python ml/pipeline.py
 
+      - name: Generate feature matrix files
+        run: python ml/feature_matrix.py
+
       - name: Upload ML artifacts to Supabase Storage
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -37,7 +40,6 @@ jobs:
           UPLOAD_GROUP: all
           SKIP_MISSING: "1"
         run: python upload_to_supabase_storage.py
-        run: python ml/feature_matrix.py
 
       - name: Train models
         run: python ml/train_ml_models.py
