@@ -56,8 +56,7 @@ def _select_feature_cols(df: pd.DataFrame) -> List[str]:
         "actual_margin_home",
         "actual_total",
     }
-    feature_cols = [c for c in df.columns if c not in ignore]
-    return feature_cols
+    return [c for c in df.columns if c not in ignore]
 
 
 def _fit_linear(X: np.ndarray, y: np.ndarray) -> Tuple[np.ndarray, float]:
@@ -81,48 +80,46 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     if not feature_cols:
         raise ValueError("No feature columns available for training.")
 
-    split_cfg = SplitConfig(val_ratio=cfg.val_split, test_ratio=0.0)
+    # Use your existing splitter for time-series consistency
+    val_ratio = max(0.0, min(0.5, float(cfg.val_split)))
+    split_cfg = SplitConfig(val_ratio=val_ratio, test_ratio=0.0)
     train_df, val_df, _ = time_series_split(df, split_cfg)
-    X = df[feature_cols].astype(float).to_numpy()
+
+    # Build matrices
     X_train = train_df[feature_cols].astype(float).to_numpy()
-    X_val = val_df[feature_cols].astype(float).to_numpy() if not val_df.empty else None
-    n_val = len(val_df)
-    X = df[feature_cols].astype(float).to_numpy()
-    val_split = max(0.0, min(0.5, float(cfg.val_split)))
-    if val_split > 0 and len(df) > 10:
-        n_val = max(1, int(len(df) * val_split))
-        X_train, X_val = X[:-n_val], X[-n_val:]
-    else:
-        n_val = 0
-        X_train, X_val = X, None
+    y_rows = len(df)
+    n_val = int(len(val_df))
 
     results: Dict[str, Dict[str, object]] = {}
+
     for target, fname in [
         ("actual_margin_home", "margin_model.json"),
         ("actual_total", "total_model.json"),
     ]:
-        y = df[target].astype(float).to_numpy()
         y_train = train_df[target].astype(float).to_numpy()
-        y_val = val_df[target].astype(float).to_numpy() if n_val else None
-        y_train = y[:-n_val] if n_val else y
-        y_val = y[-n_val:] if n_val else None
-        coef, rmse = _fit_linear(X_train, y_train)
-        val_rmse = _rmse_from_coef(X_val, y_val, coef) if n_val else None
+
+        coef, train_rmse = _fit_linear(X_train, y_train)
+
+        val_rmse = None
+        if n_val > 0:
+            X_val = val_df[feature_cols].astype(float).to_numpy()
+            y_val = val_df[target].astype(float).to_numpy()
+            val_rmse = _rmse_from_coef(X_val, y_val, coef)
+
         model = {
             "target": target,
             "model_version": cfg.model_version,
-        coef, rmse = _fit_linear(X, y)
-        model = {
-            "target": target,
             "intercept": float(coef[0]),
             "coefficients": [float(c) for c in coef[1:]],
             "feature_order": feature_cols,
-            "rmse": rmse,
-            "val_rmse": val_rmse,
+            "rmse": float(train_rmse),
+            "val_rmse": (float(val_rmse) if val_rmse is not None else None),
             "val_rows": int(n_val),
-            "n_rows": int(len(df)),
+            "n_rows": int(y_rows),
         }
+
         results[target] = model
+
         cfg.out_dir.mkdir(parents=True, exist_ok=True)
         (cfg.out_dir / fname).write_text(json.dumps(model, indent=2))
 
