@@ -129,8 +129,33 @@ def _get_primary_key_columns(conn: psycopg.Connection, schema: str, table: str) 
     return [r[0] for r in rows]
 
 
+def _read_csv_header_columns(local_path: Path) -> List[str]:
+    # Read first line only, robust to encoding oddities
+    header_line = local_path.read_text(encoding="utf-8", errors="replace").splitlines()[0]
+    cols = [c.strip() for c in header_line.split(",") if c.strip()]
+    return cols
+
+
 def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path):
-    copy_sql = f"copy {qualified_table} from stdin with (format csv, header true, delimiter ',', quote '\"');"
+    """
+    IMPORTANT:
+    Postgres COPY maps by *position*, not by header names, unless you pass an explicit column list.
+    This function reads the CSV header and uses it as the COPY column list, making loads stable even
+    if the table's column order differs.
+
+    If a header column doesn't exist in the table, Postgres will throw a clear:
+      column "X" of relation "Y" does not exist
+    """
+    cols = _read_csv_header_columns(local_path)
+    if not cols:
+        raise ValueError(f"CSV appears to have an empty header: {local_path}")
+
+    col_list = ", ".join(_quote_ident(c) for c in cols)
+    copy_sql = (
+        f"copy {qualified_table} ({col_list}) "
+        f"from stdin with (format csv, header true, delimiter ',', quote '\"');"
+    )
+
     with conn.cursor() as cur:
         with local_path.open("rb") as f:
             with cur.copy(copy_sql) as copy:
@@ -156,7 +181,7 @@ def _upsert_from_staging(
     """
     Upsert pattern:
       1) create temp staging table with same structure as target
-      2) COPY CSV into staging
+      2) COPY CSV into staging (using explicit header column list)
       3) INSERT INTO target SELECT ... FROM staging
          ON CONFLICT (pk) DO UPDATE SET col=excluded.col for all non-PK cols
     """
@@ -164,8 +189,8 @@ def _upsert_from_staging(
     staging = f"tmp_{table}_{int(time.time() * 1000)}"
     qs = _quote_ident(staging)
 
-    cols = _get_table_columns(conn, schema, table)
-    if not cols:
+    table_cols = _get_table_columns(conn, schema, table)
+    if not table_cols:
         _die(f"Could not read columns for {schema}.{table} (table exists but no columns?)")
 
     pk_cols = _get_primary_key_columns(conn, schema, table)
@@ -175,25 +200,36 @@ def _upsert_from_staging(
             f"Add a PK and rerun."
         )
 
-    qcols = ", ".join(_quote_ident(c) for c in cols)
+    # Use CSV header as the source-of-truth column order for COPY + insert/upsert.
+    csv_cols = _read_csv_header_columns(local_path)
+
+    # Ensure CSV only references columns that exist on the target table.
+    missing_in_table = [c for c in csv_cols if c not in table_cols]
+    if missing_in_table:
+        _die(
+            f"Table {schema}.{table} is missing columns required by {local_path.name}:\n"
+            f"{missing_in_table}\n"
+            f"Fix: ALTER TABLE to add these columns (as text is fine), then rerun."
+        )
+
+    qcols = ", ".join(_quote_ident(c) for c in csv_cols)
     conflict = ", ".join(_quote_ident(c) for c in pk_cols)
 
-    non_pk_cols = [c for c in cols if c not in pk_cols]
+    # Only update columns that are both in CSV and not part of the PK
+    non_pk_cols = [c for c in csv_cols if c not in pk_cols]
     if non_pk_cols:
         set_clause = ", ".join(f"{_quote_ident(c)} = excluded.{_quote_ident(c)}" for c in non_pk_cols)
         on_conflict = f"on conflict ({conflict}) do update set {set_clause}"
     else:
-        # Edge case: table of only PK cols
         on_conflict = f"on conflict ({conflict}) do nothing"
 
     with conn.cursor() as cur:
-        # temp table matches target columns and types
         cur.execute(f"create temp table {qs} (like {qt} including defaults) on commit drop;")
 
-    # load CSV into temp staging
+    # Load CSV into staging using header-based COPY mapping
     _copy_csv_into_table(conn, qs, local_path)
 
-    # upsert into target
+    # Upsert into target using the same CSV column list
     sql = f"""
       insert into {qt} ({qcols})
       select {qcols} from {qs}
@@ -242,6 +278,9 @@ def load_one(local_path: str, table_name: str):
             print(f"[OK] Loaded {local_path} -> {DB_SCHEMA}.{table_name} (mode={LOAD_MODE})")
             return
 
+        except SystemExit:
+            # _die() calls sys.exit; preserve its behavior (no retries)
+            raise
         except Exception as e:
             last_err = str(e)
 
