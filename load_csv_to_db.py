@@ -141,6 +141,24 @@ def _sha256(s: str) -> str:
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
 
+def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, required_cols: List[str]) -> None:
+    """
+    Ensure all required columns exist on schema.table.
+    Adds missing columns as TEXT (fast + safe for CSV COPY).
+    """
+    existing = set(_get_table_columns(conn, schema, table))
+    missing = [c for c in required_cols if c not in existing]
+    if not missing:
+        return
+
+    qt = _qualified_table(schema, table)
+    with conn.cursor() as cur:
+        for c in missing:
+            cur.execute(f"alter table {qt} add column if not exists {_quote_ident(c)} text;")
+
+    print(f"[INFO] Added {len(missing)} missing columns to {schema}.{table}")
+
+
 def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     """
     Fix known bad inputs before COPY.
@@ -189,22 +207,17 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
             return local_path
         fout.write(header)
 
-        line_num = 1
         for line in fin:
-            line_num += 1
-            # naive CSV split is risky; but your files appear simple (no embedded commas in quoted fields).
-            # If this ever breaks, we can switch to csv module, but this is fast and works for typical numeric/text ESPN exports.
+            # NOTE: This assumes no embedded commas in fields (your pipeline outputs appear simple).
+            # If this ever breaks, we'll swap to Python's csv module for robust parsing.
             parts = line.rstrip("\n").split(",")
             if len(parts) < len(cols):
-                # keep line as-is; COPY will surface the real issue
                 fout.write(line)
                 continue
 
             if parts[rh_i].strip() == "":
                 key = "|".join((parts[idx[c]].strip() if idx[c] < len(parts) else "") for c in key_cols)
                 parts[rh_i] = _sha256(key)
-
-                # Rebuild line
                 fout.write(",".join(parts) + "\n")
             else:
                 fout.write(line)
@@ -253,12 +266,18 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
         _die(f"LOAD_MODE=upsert requires a PRIMARY KEY on {schema}.{table}.\nAdd a PK and rerun.")
 
     csv_cols = _read_csv_header_columns(local_path)
+
+    # Auto-add missing columns as TEXT so evolving feature CSVs don't break the pipeline
+    _ensure_columns_exist(conn, schema, table, csv_cols)
+
+    # Refresh after ALTERs
+    table_cols = _get_table_columns(conn, schema, table)
     missing_in_table = [c for c in csv_cols if c not in table_cols]
     if missing_in_table:
         _die(
-            f"Table {schema}.{table} is missing columns required by {local_path.name}:\n"
+            f"Table {schema}.{table} is still missing columns required by {local_path.name}:\n"
             f"{missing_in_table}\n"
-            f"Fix: ALTER TABLE to add these columns (as text is fine), then rerun."
+            f"Fix: investigate permissions or invalid identifiers."
         )
 
     qcols = ", ".join(_quote_ident(c) for c in csv_cols)
@@ -303,7 +322,6 @@ def load_one(local_path: str, table_name: str):
 
         tmp_path: Optional[Path] = None
         try:
-            # Pre-fix CSV issues (ex: missing row_hash values)
             prepared = _prepare_csv_for_load(lp, table_name)
             tmp_path = prepared if prepared != lp else None
 
@@ -334,7 +352,6 @@ def load_one(local_path: str, table_name: str):
         except Exception as e:
             last_err = str(e)
         finally:
-            # Clean up temp file if we created one
             if tmp_path and tmp_path.exists():
                 try:
                     tmp_path.unlink()
