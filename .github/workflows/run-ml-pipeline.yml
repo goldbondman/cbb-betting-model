@@ -11,6 +11,7 @@ on:
 
 jobs:
   ml_pipeline:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,6 +26,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install psycopg[binary]
 
       - name: Build feature matrix
         run: python ml/pipeline.py
@@ -32,17 +34,32 @@ jobs:
       - name: Generate feature matrix files
         run: python ml/feature_matrix.py
 
-      - name: Upload ML artifacts to Supabase Storage
+      - name: Show ML artifact sizes
+        run: |
+          ls -lh ml/*.csv ml/*.json ml/*.txt ml/models/*.json || true
+
+      - name: Load ML CSV artifacts to Supabase DB (raw schema)
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
-          UPLOAD_GROUP: all
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          UPLOAD_GROUP: "ml"
+          DB_SCHEMA: "raw"
+          LOAD_MODE: "replace"
           SKIP_MISSING: "1"
-        run: python upload_to_supabase_storage.py
+        run: |
+          python load_csv_to_db.py
 
       - name: Train models
         run: python ml/train_ml_models.py
 
       - name: Generate predictions
         run: python ml/predict_ml.py
+
+      - name: Load predictions to DB (in case predict step writes predictions_latest.csv)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          UPLOAD_GROUP: "ml"
+          DB_SCHEMA: "raw"
+          LOAD_MODE: "replace"
+          SKIP_MISSING: "1"
+        run: |
+          python load_csv_to_db.py
