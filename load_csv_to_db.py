@@ -4,6 +4,7 @@ import re
 import sys
 import time
 from pathlib import Path
+from typing import List, Tuple, Optional
 
 import psycopg
 
@@ -16,7 +17,9 @@ SKIP_MISSING = (os.getenv("SKIP_MISSING") or "0").strip().lower() in ("1", "true
 
 # DB settings
 DB_SCHEMA = (os.getenv("DB_SCHEMA") or "raw").strip()
-LOAD_MODE = (os.getenv("LOAD_MODE") or "replace").strip().lower()  # replace | append
+
+# replace | append | upsert
+LOAD_MODE = (os.getenv("LOAD_MODE") or "replace").strip().lower()
 
 # Basic retry (helps with transient network issues)
 MAX_RETRIES = int(os.getenv("DB_LOAD_MAX_RETRIES", "3"))
@@ -24,7 +27,6 @@ RETRY_INITIAL_DELAY = float(os.getenv("DB_LOAD_RETRY_INITIAL_DELAY", "1.0"))
 RETRY_BACKOFF = float(os.getenv("DB_LOAD_RETRY_BACKOFF", "2.0"))
 
 # File groups (local file -> destination table)
-# NOTE: Destination tables must already exist in Supabase (SQL Editor).
 FILES_ESPN = [
     ("espn_games.csv", "espn_games"),
     ("espn_team_game_logs.csv", "espn_team_game_logs"),
@@ -32,8 +34,6 @@ FILES_ESPN = [
     ("espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
     ("espn_feature_diagnostics.csv", "espn_feature_diagnostics"),
     ("espn_dq_audit.csv", "espn_dq_audit"),
-    # JSON is not loaded by this script
-    # ("espn_pipeline_errors.json", "espn_pipeline_errors"),
 ]
 
 FILES_TORVIK = [
@@ -41,16 +41,10 @@ FILES_TORVIK = [
     ("barttorvik_team_results.csv", "barttorvik_team_results"),
 ]
 
-# UPDATED: include predictions_latest.csv
 FILES_ML = [
     ("ml/model_features.csv", "model_features"),
     ("ml/dq_audit_ml.csv", "dq_audit_ml"),
     ("ml/predictions_latest.csv", "predictions_latest"),
-    # Non-CSV artifacts are skipped by this DB loader
-    # ("ml/feature_schema_hash.txt", "feature_schema_hash"),
-    # ("ml/run_log.json", "run_log"),
-    # ("ml/models/margin_model.json", "margin_model"),
-    # ("ml/models/total_model.json", "total_model"),
 ]
 
 
@@ -68,13 +62,13 @@ def _validate_env():
         _die("SUPABASE_DB_URL is missing/empty. Add it as a GitHub Secret / env var.")
     if UPLOAD_GROUP not in ("espn", "torvik", "ml", "all"):
         _die("UPLOAD_GROUP must be one of: espn, torvik, ml, all")
-    if LOAD_MODE not in ("replace", "append"):
-        _die("LOAD_MODE must be one of: replace, append")
+    if LOAD_MODE not in ("replace", "append", "upsert"):
+        _die("LOAD_MODE must be one of: replace, append, upsert")
     if not re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", DB_SCHEMA):
         _die(f"DB_SCHEMA looks invalid: '{DB_SCHEMA}'")
 
 
-def _files_for_group():
+def _files_for_group() -> List[Tuple[str, str]]:
     if UPLOAD_GROUP == "espn":
         return FILES_ESPN
     if UPLOAD_GROUP == "torvik":
@@ -85,7 +79,6 @@ def _files_for_group():
 
 
 def _quote_ident(ident: str) -> str:
-    # Safe quoting for schema/table names
     return '"' + ident.replace('"', '""') + '"'
 
 
@@ -105,19 +98,40 @@ def _check_table_exists(conn: psycopg.Connection, schema: str, table: str) -> bo
         return cur.fetchone() is not None
 
 
-def _copy_csv(conn: psycopg.Connection, local_path: Path, schema: str, table: str):
+def _get_table_columns(conn: psycopg.Connection, schema: str, table: str) -> List[str]:
+    q = """
+    select column_name
+    from information_schema.columns
+    where table_schema = %s and table_name = %s
+    order by ordinal_position
     """
-    Uses Postgres COPY FROM STDIN with HEADER.
-    IMPORTANT: This assumes the table columns are in the same order as the CSV header.
-    """
-    qt = _qualified_table(schema, table)
-
     with conn.cursor() as cur:
-        if LOAD_MODE == "replace":
-            cur.execute(f"truncate table {qt};")
+        cur.execute(q, (schema, table))
+        rows = cur.fetchall()
+    return [r[0] for r in rows]
 
-        copy_sql = f"copy {qt} from stdin with (format csv, header true, delimiter ',', quote '\"');"
 
+def _get_primary_key_columns(conn: psycopg.Connection, schema: str, table: str) -> List[str]:
+    q = """
+    select kcu.column_name
+    from information_schema.table_constraints tc
+    join information_schema.key_column_usage kcu
+      on tc.constraint_name = kcu.constraint_name
+     and tc.table_schema = kcu.table_schema
+    where tc.table_schema = %s
+      and tc.table_name = %s
+      and tc.constraint_type = 'PRIMARY KEY'
+    order by kcu.ordinal_position
+    """
+    with conn.cursor() as cur:
+        cur.execute(q, (schema, table))
+        rows = cur.fetchall()
+    return [r[0] for r in rows]
+
+
+def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path):
+    copy_sql = f"copy {qualified_table} from stdin with (format csv, header true, delimiter ',', quote '\"');"
+    with conn.cursor() as cur:
         with local_path.open("rb") as f:
             with cur.copy(copy_sql) as copy:
                 while True:
@@ -125,6 +139,68 @@ def _copy_csv(conn: psycopg.Connection, local_path: Path, schema: str, table: st
                     if not chunk:
                         break
                     copy.write(chunk)
+
+
+def _truncate(conn: psycopg.Connection, schema: str, table: str):
+    qt = _qualified_table(schema, table)
+    with conn.cursor() as cur:
+        cur.execute(f"truncate table {qt};")
+
+
+def _upsert_from_staging(
+    conn: psycopg.Connection,
+    schema: str,
+    table: str,
+    local_path: Path,
+):
+    """
+    Upsert pattern:
+      1) create temp staging table with same structure as target
+      2) COPY CSV into staging
+      3) INSERT INTO target SELECT ... FROM staging
+         ON CONFLICT (pk) DO UPDATE SET col=excluded.col for all non-PK cols
+    """
+    qt = _qualified_table(schema, table)
+    staging = f"tmp_{table}_{int(time.time() * 1000)}"
+    qs = _quote_ident(staging)
+
+    cols = _get_table_columns(conn, schema, table)
+    if not cols:
+        _die(f"Could not read columns for {schema}.{table} (table exists but no columns?)")
+
+    pk_cols = _get_primary_key_columns(conn, schema, table)
+    if not pk_cols:
+        _die(
+            f"LOAD_MODE=upsert requires a PRIMARY KEY on {schema}.{table}.\n"
+            f"Add a PK and rerun."
+        )
+
+    qcols = ", ".join(_quote_ident(c) for c in cols)
+    conflict = ", ".join(_quote_ident(c) for c in pk_cols)
+
+    non_pk_cols = [c for c in cols if c not in pk_cols]
+    if non_pk_cols:
+        set_clause = ", ".join(f"{_quote_ident(c)} = excluded.{_quote_ident(c)}" for c in non_pk_cols)
+        on_conflict = f"on conflict ({conflict}) do update set {set_clause}"
+    else:
+        # Edge case: table of only PK cols
+        on_conflict = f"on conflict ({conflict}) do nothing"
+
+    with conn.cursor() as cur:
+        # temp table matches target columns and types
+        cur.execute(f"create temp table {qs} (like {qt} including defaults) on commit drop;")
+
+    # load CSV into temp staging
+    _copy_csv_into_table(conn, qs, local_path)
+
+    # upsert into target
+    sql = f"""
+      insert into {qt} ({qcols})
+      select {qcols} from {qs}
+      {on_conflict};
+    """
+    with conn.cursor() as cur:
+        cur.execute(sql)
 
 
 def load_one(local_path: str, table_name: str):
@@ -136,7 +212,7 @@ def load_one(local_path: str, table_name: str):
             return
         _die(f"Local file missing: {local_path}")
 
-    last_err = None
+    last_err: Optional[str] = None
 
     for attempt in range(MAX_RETRIES):
         if attempt > 0:
@@ -151,7 +227,16 @@ def load_one(local_path: str, table_name: str):
                         f"Create it in Supabase first (SQL Editor)."
                     )
 
-                _copy_csv(conn, lp, DB_SCHEMA, table_name)
+                if LOAD_MODE == "replace":
+                    _truncate(conn, DB_SCHEMA, table_name)
+                    _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), lp)
+
+                elif LOAD_MODE == "append":
+                    _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), lp)
+
+                elif LOAD_MODE == "upsert":
+                    _upsert_from_staging(conn, DB_SCHEMA, table_name, lp)
+
                 conn.commit()
 
             print(f"[OK] Loaded {local_path} -> {DB_SCHEMA}.{table_name} (mode={LOAD_MODE})")
