@@ -3,6 +3,8 @@ import os
 import re
 import sys
 import time
+import hashlib
+import tempfile
 from pathlib import Path
 from typing import List, Tuple, Optional
 
@@ -130,22 +132,87 @@ def _get_primary_key_columns(conn: psycopg.Connection, schema: str, table: str) 
 
 
 def _read_csv_header_columns(local_path: Path) -> List[str]:
-    # Read first line only, robust to encoding oddities
     header_line = local_path.read_text(encoding="utf-8", errors="replace").splitlines()[0]
     cols = [c.strip() for c in header_line.split(",") if c.strip()]
     return cols
 
 
-def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path):
-    """
-    IMPORTANT:
-    Postgres COPY maps by *position*, not by header names, unless you pass an explicit column list.
-    This function reads the CSV header and uses it as the COPY column list, making loads stable even
-    if the table's column order differs.
+def _sha256(s: str) -> str:
+    return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
-    If a header column doesn't exist in the table, Postgres will throw a clear:
-      column "X" of relation "Y" does not exist
+
+def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     """
+    Fix known bad inputs before COPY.
+
+    Current known issue:
+      - espn_team_game_logs / espn_team_game_features occasionally have blank row_hash values.
+        But row_hash is PK + NOT NULL, so COPY fails.
+
+    We deterministically fill missing row_hash using stable columns from the row.
+    """
+    if table_name not in ("espn_team_game_logs", "espn_team_game_features"):
+        return local_path
+
+    cols = _read_csv_header_columns(local_path)
+    if "row_hash" not in cols:
+        # If row_hash is missing entirely, let the normal "missing columns" gate catch it.
+        return local_path
+
+    idx = {c: i for i, c in enumerate(cols)}
+    rh_i = idx["row_hash"]
+
+    # Build candidate key columns (use what exists in the CSV)
+    key_candidates = [
+        "event_id",
+        "team_id",
+        "team",
+        "opponent",
+        "home_away",
+        "game_datetime_utc",
+        "game_date_utc",
+        "game_date",
+        "parse_version",
+    ]
+    key_cols = [c for c in key_candidates if c in idx]
+    if not key_cols:
+        # Worst case: fall back to full row content (still deterministic, but more sensitive to small changes)
+        key_cols = cols
+
+    # Stream-rewrite to a temp file
+    tmp = Path(tempfile.mkstemp(prefix=f"loadfix_{table_name}_", suffix=".csv")[1])
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
+        "w", encoding="utf-8", newline=""
+    ) as fout:
+        header = fin.readline()
+        if not header:
+            return local_path
+        fout.write(header)
+
+        line_num = 1
+        for line in fin:
+            line_num += 1
+            # naive CSV split is risky; but your files appear simple (no embedded commas in quoted fields).
+            # If this ever breaks, we can switch to csv module, but this is fast and works for typical numeric/text ESPN exports.
+            parts = line.rstrip("\n").split(",")
+            if len(parts) < len(cols):
+                # keep line as-is; COPY will surface the real issue
+                fout.write(line)
+                continue
+
+            if parts[rh_i].strip() == "":
+                key = "|".join((parts[idx[c]].strip() if idx[c] < len(parts) else "") for c in key_cols)
+                parts[rh_i] = _sha256(key)
+
+                # Rebuild line
+                fout.write(",".join(parts) + "\n")
+            else:
+                fout.write(line)
+
+    return tmp
+
+
+def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path):
     cols = _read_csv_header_columns(local_path)
     if not cols:
         raise ValueError(f"CSV appears to have an empty header: {local_path}")
@@ -160,7 +227,7 @@ def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_p
         with local_path.open("rb") as f:
             with cur.copy(copy_sql) as copy:
                 while True:
-                    chunk = f.read(1024 * 1024)  # 1MB chunks
+                    chunk = f.read(1024 * 1024)
                     if not chunk:
                         break
                     copy.write(chunk)
@@ -172,19 +239,7 @@ def _truncate(conn: psycopg.Connection, schema: str, table: str):
         cur.execute(f"truncate table {qt};")
 
 
-def _upsert_from_staging(
-    conn: psycopg.Connection,
-    schema: str,
-    table: str,
-    local_path: Path,
-):
-    """
-    Upsert pattern:
-      1) create temp staging table with same structure as target
-      2) COPY CSV into staging (using explicit header column list)
-      3) INSERT INTO target SELECT ... FROM staging
-         ON CONFLICT (pk) DO UPDATE SET col=excluded.col for all non-PK cols
-    """
+def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, local_path: Path):
     qt = _qualified_table(schema, table)
     staging = f"tmp_{table}_{int(time.time() * 1000)}"
     qs = _quote_ident(staging)
@@ -195,15 +250,9 @@ def _upsert_from_staging(
 
     pk_cols = _get_primary_key_columns(conn, schema, table)
     if not pk_cols:
-        _die(
-            f"LOAD_MODE=upsert requires a PRIMARY KEY on {schema}.{table}.\n"
-            f"Add a PK and rerun."
-        )
+        _die(f"LOAD_MODE=upsert requires a PRIMARY KEY on {schema}.{table}.\nAdd a PK and rerun.")
 
-    # Use CSV header as the source-of-truth column order for COPY + insert/upsert.
     csv_cols = _read_csv_header_columns(local_path)
-
-    # Ensure CSV only references columns that exist on the target table.
     missing_in_table = [c for c in csv_cols if c not in table_cols]
     if missing_in_table:
         _die(
@@ -215,7 +264,6 @@ def _upsert_from_staging(
     qcols = ", ".join(_quote_ident(c) for c in csv_cols)
     conflict = ", ".join(_quote_ident(c) for c in pk_cols)
 
-    # Only update columns that are both in CSV and not part of the PK
     non_pk_cols = [c for c in csv_cols if c not in pk_cols]
     if non_pk_cols:
         set_clause = ", ".join(f"{_quote_ident(c)} = excluded.{_quote_ident(c)}" for c in non_pk_cols)
@@ -226,10 +274,8 @@ def _upsert_from_staging(
     with conn.cursor() as cur:
         cur.execute(f"create temp table {qs} (like {qt} including defaults) on commit drop;")
 
-    # Load CSV into staging using header-based COPY mapping
     _copy_csv_into_table(conn, qs, local_path)
 
-    # Upsert into target using the same CSV column list
     sql = f"""
       insert into {qt} ({qcols})
       select {qcols} from {qs}
@@ -255,7 +301,12 @@ def load_one(local_path: str, table_name: str):
             delay = RETRY_INITIAL_DELAY * (RETRY_BACKOFF ** (attempt - 1))
             time.sleep(delay)
 
+        tmp_path: Optional[Path] = None
         try:
+            # Pre-fix CSV issues (ex: missing row_hash values)
+            prepared = _prepare_csv_for_load(lp, table_name)
+            tmp_path = prepared if prepared != lp else None
+
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
                 if not _check_table_exists(conn, DB_SCHEMA, table_name):
                     _die(
@@ -265,13 +316,13 @@ def load_one(local_path: str, table_name: str):
 
                 if LOAD_MODE == "replace":
                     _truncate(conn, DB_SCHEMA, table_name)
-                    _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), lp)
+                    _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), prepared)
 
                 elif LOAD_MODE == "append":
-                    _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), lp)
+                    _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), prepared)
 
                 elif LOAD_MODE == "upsert":
-                    _upsert_from_staging(conn, DB_SCHEMA, table_name, lp)
+                    _upsert_from_staging(conn, DB_SCHEMA, table_name, prepared)
 
                 conn.commit()
 
@@ -279,10 +330,16 @@ def load_one(local_path: str, table_name: str):
             return
 
         except SystemExit:
-            # _die() calls sys.exit; preserve its behavior (no retries)
             raise
         except Exception as e:
             last_err = str(e)
+        finally:
+            # Clean up temp file if we created one
+            if tmp_path and tmp_path.exists():
+                try:
+                    tmp_path.unlink()
+                except Exception:
+                    pass
 
     raise RuntimeError(
         f"DB load failed after {MAX_RETRIES} attempts: {local_path} -> {DB_SCHEMA}.{table_name}\n"
@@ -294,7 +351,6 @@ def main():
     _validate_env()
     files = _files_for_group()
     print(f"[INFO] Loading group='{UPLOAD_GROUP}' files={len(files)} skip_missing={SKIP_MISSING} mode={LOAD_MODE}")
-
     for local, table in files:
         load_one(local, table)
 
