@@ -117,26 +117,26 @@ def add_unweighted_rollups(
 
     # base mean/std
     for m in metrics:
-        s = g[m]
-
-        shifted = s.apply(lambda x: x.shift(cfg.shift))
-
         out[f"{cfg.prefix}{m}_pre"] = (
-            shifted.apply(lambda x: x.rolling(cfg.window, min_periods=cfg.min_periods_mean).mean())
+            g[m]
+            .apply(lambda x: x.shift(cfg.shift).rolling(cfg.window, min_periods=cfg.min_periods_mean).mean())
             .reset_index(level=list(cfg.group_cols), drop=True)
         )
         out[f"{cfg.prefix}{m}_std_pre"] = (
-            shifted.apply(lambda x: x.rolling(cfg.window, min_periods=cfg.min_periods_std).std(ddof=cfg.ddof))
+            g[m]
+            .apply(lambda x: x.shift(cfg.shift).rolling(cfg.window, min_periods=cfg.min_periods_std).std(ddof=cfg.ddof))
             .reset_index(level=list(cfg.group_cols), drop=True)
         )
 
         if include_minmax:
             out[f"{cfg.prefix}{m}_min_pre"] = (
-                shifted.apply(lambda x: x.rolling(cfg.window, min_periods=cfg.min_periods_mean).min())
+                g[m]
+                .apply(lambda x: x.shift(cfg.shift).rolling(cfg.window, min_periods=cfg.min_periods_mean).min())
                 .reset_index(level=list(cfg.group_cols), drop=True)
             )
             out[f"{cfg.prefix}{m}_max_pre"] = (
-                shifted.apply(lambda x: x.rolling(cfg.window, min_periods=cfg.min_periods_mean).max())
+                g[m]
+                .apply(lambda x: x.shift(cfg.shift).rolling(cfg.window, min_periods=cfg.min_periods_mean).max())
                 .reset_index(level=list(cfg.group_cols), drop=True)
             )
             out[f"{cfg.prefix}{m}_range_pre"] = out[f"{cfg.prefix}{m}_max_pre"] - out[f"{cfg.prefix}{m}_min_pre"]
@@ -149,7 +149,12 @@ def add_unweighted_rollups(
                 return float(np.nanpercentile(arr, 75) - np.nanpercentile(arr, 25))
 
             out[f"{cfg.prefix}{m}_iqr_pre"] = (
-                shifted.apply(lambda x: x.rolling(cfg.window, min_periods=cfg.min_periods_mean).apply(_iqr, raw=False))
+                g[m]
+                .apply(
+                    lambda x: x.shift(cfg.shift)
+                    .rolling(cfg.window, min_periods=cfg.min_periods_mean)
+                    .apply(_iqr, raw=False)
+                )
                 .reset_index(level=list(cfg.group_cols), drop=True)
             )
 
@@ -162,7 +167,12 @@ def add_unweighted_rollups(
                         return np.nan
                     return float(np.nanpercentile(arr, q * 100))
                 out[f"{cfg.prefix}{m}_p{qn}_pre"] = (
-                    shifted.apply(lambda x: x.rolling(cfg.window, min_periods=cfg.min_periods_mean).apply(_pct, raw=False))
+                    g[m]
+                    .apply(
+                        lambda x: x.shift(cfg.shift)
+                        .rolling(cfg.window, min_periods=cfg.min_periods_mean)
+                        .apply(_pct, raw=False)
+                    )
                     .reset_index(level=list(cfg.group_cols), drop=True)
                 )
 
@@ -181,7 +191,12 @@ def add_unweighted_rollups(
                 return float(np.sum(t * y) / denom)
 
             out[f"{cfg.prefix}{m}_slope_pre"] = (
-                shifted.apply(lambda x: x.rolling(cfg.window, min_periods=cfg.min_periods_std).apply(_slope, raw=False))
+                g[m]
+                .apply(
+                    lambda x: x.shift(cfg.shift)
+                    .rolling(cfg.window, min_periods=cfg.min_periods_std)
+                    .apply(_slope, raw=False)
+                )
                 .reset_index(level=list(cfg.group_cols), drop=True)
             )
 
@@ -209,7 +224,12 @@ def add_unweighted_rollups(
                 return float(np.nanmean(last) - np.nanmean(prev))
 
             out[f"{cfg.prefix}{m}_shift_pre"] = (
-                shifted.apply(lambda x: x.rolling(cfg.window, min_periods=cfg.min_periods_std).apply(_shift, raw=False))
+                g[m]
+                .apply(
+                    lambda x: x.shift(cfg.shift)
+                    .rolling(cfg.window, min_periods=cfg.min_periods_std)
+                    .apply(_shift, raw=False)
+                )
                 .reset_index(level=list(cfg.group_cols), drop=True)
             )
 
