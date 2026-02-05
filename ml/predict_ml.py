@@ -14,12 +14,18 @@ Outputs:
 from __future__ import annotations
 
 import json
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List
 
 import numpy as np
 import pandas as pd
+
+from pathlib import Path as _Path
+_ML_DIR = _Path(__file__).resolve().parent
+if str(_ML_DIR) not in sys.path:
+    sys.path.insert(0, str(_ML_DIR))
 
 
 @dataclass(frozen=True)

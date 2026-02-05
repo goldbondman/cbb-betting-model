@@ -21,9 +21,19 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Tuple
+import sys
+
+from pathlib import Path as _Path
+_ML_DIR = _Path(__file__).resolve().parent
+if str(_ML_DIR) not in sys.path:
+    sys.path.insert(0, str(_ML_DIR))
 
 import numpy as np
 import pandas as pd
+
+from schema import FEATURE_SCHEMA, feature_schema_hash
+from validation import validate_dataframe
+from features_v2 import add_features_v2, FEATURES_V2
 
 
 REQUIRED_FEATURE_COLS = [
@@ -61,6 +71,7 @@ class BuildConfig:
     features_path: Path = Path("espn_team_game_features.csv")
     out_features_path: Path = Path("ml/model_features.csv")
     out_audit_path: Path = Path("ml/dq_audit_ml.csv")
+    out_schema_path: Path = Path("ml/feature_schema_hash.txt")
 
 
 def _load_features(path: Path) -> pd.DataFrame:
@@ -123,6 +134,10 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     if missing:
         raise ValueError(f"Missing required columns: {missing}")
 
+    ok, issues_schema = validate_dataframe(df, FEATURE_SCHEMA)
+    if not ok:
+        raise ValueError("Schema validation failed: " + "; ".join([i.message for i in issues_schema]))
+
     df["home_away"] = _normalize_home_away(df["home_away"])
     df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
 
@@ -165,6 +180,9 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
         elif f"{feat}_home" in merged.columns:
             keep_features.append(f"{feat}_home")
 
+    merged = add_features_v2(merged)
+    keep_features.extend([f for f in FEATURES_V2 if f in merged.columns])
+
     output_cols = [
         "event_id",
         "team_id_home",
@@ -181,6 +199,8 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
 
     audit_rows = _build_audit_rows(df, issues)
     _write_audit(cfg.out_audit_path, audit_rows)
+    cfg.out_schema_path.parent.mkdir(parents=True, exist_ok=True)
+    cfg.out_schema_path.write_text(feature_schema_hash() + "\n")
 
     cfg.out_features_path.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(cfg.out_features_path, index=False)

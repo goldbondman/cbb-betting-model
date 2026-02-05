@@ -15,12 +15,20 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
+
+from pathlib import Path as _Path
+_ML_DIR = _Path(__file__).resolve().parent
+if str(_ML_DIR) not in sys.path:
+    sys.path.insert(0, str(_ML_DIR))
+
+from splits import SplitConfig, time_series_split
 
 
 @dataclass(frozen=True)
@@ -73,6 +81,12 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     if not feature_cols:
         raise ValueError("No feature columns available for training.")
 
+    split_cfg = SplitConfig(val_ratio=cfg.val_split, test_ratio=0.0)
+    train_df, val_df, _ = time_series_split(df, split_cfg)
+    X = df[feature_cols].astype(float).to_numpy()
+    X_train = train_df[feature_cols].astype(float).to_numpy()
+    X_val = val_df[feature_cols].astype(float).to_numpy() if not val_df.empty else None
+    n_val = len(val_df)
     X = df[feature_cols].astype(float).to_numpy()
     val_split = max(0.0, min(0.5, float(cfg.val_split)))
     if val_split > 0 and len(df) > 10:
@@ -88,6 +102,8 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         ("actual_total", "total_model.json"),
     ]:
         y = df[target].astype(float).to_numpy()
+        y_train = train_df[target].astype(float).to_numpy()
+        y_val = val_df[target].astype(float).to_numpy() if n_val else None
         y_train = y[:-n_val] if n_val else y
         y_val = y[-n_val:] if n_val else None
         coef, rmse = _fit_linear(X_train, y_train)

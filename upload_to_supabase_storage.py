@@ -12,7 +12,7 @@ SERVICE_ROLE_KEY = (os.getenv("SUPABASE_SERVICE_ROLE_KEY") or "").strip()
 BUCKET = (os.getenv("SUPABASE_BUCKET") or "cbb-data").strip()
 
 # Controls behavior:
-# - UPLOAD_GROUP: "espn" | "torvik" | "all"  (default: "all")
+# - UPLOAD_GROUP: "espn" | "torvik" | "ml" | "all"  (default: "all")
 # - SKIP_MISSING: if set (1/true/yes), missing local files are skipped instead of failing the run.
 UPLOAD_GROUP = (os.getenv("UPLOAD_GROUP") or "all").strip().lower()
 SKIP_MISSING = (os.getenv("SKIP_MISSING") or "0").strip().lower() in ("1", "true", "yes")
@@ -38,6 +38,16 @@ FILES_TORVIK = [
     ("barttorvik_team_results.csv", "torvik/latest/barttorvik_team_results.csv"),
 ]
 
+FILES_ML = [
+    ("ml/model_features.csv", "ml/latest/model_features.csv"),
+    ("ml/dq_audit_ml.csv", "ml/latest/dq_audit_ml.csv"),
+    ("ml/feature_schema_hash.txt", "ml/latest/feature_schema_hash.txt"),
+    ("ml/run_log.json", "ml/latest/run_log.json"),
+    ("ml/predictions_latest.csv", "ml/latest/predictions_latest.csv"),
+    ("ml/models/margin_model.json", "ml/latest/margin_model.json"),
+    ("ml/models/total_model.json", "ml/latest/total_model.json"),
+]
+
 
 def _die(msg: str, code: int = 1):
     print(f"[ERROR] {msg}", file=sys.stderr)
@@ -58,8 +68,8 @@ def _validate_env():
             f"SUPABASE_BUCKET looks invalid: '{BUCKET}'. "
             "Use lowercase letters, digits, hyphen only. Example: cbb-data"
         )
-    if UPLOAD_GROUP not in ("espn", "torvik", "all"):
-        _die("UPLOAD_GROUP must be one of: espn, torvik, all")
+    if UPLOAD_GROUP not in ("espn", "torvik", "ml", "all"):
+        _die("UPLOAD_GROUP must be one of: espn, torvik, ml, all")
 
 
 def _guess_content_type(local_path: str) -> str:
@@ -85,7 +95,9 @@ def _files_for_group():
         return FILES_ESPN
     if UPLOAD_GROUP == "torvik":
         return FILES_TORVIK
-    return FILES_ESPN + FILES_TORVIK
+    if UPLOAD_GROUP == "ml":
+        return FILES_ML
+    return FILES_ESPN + FILES_TORVIK + FILES_ML
 
 
 def upload(local_path: str, remote_path: str):
