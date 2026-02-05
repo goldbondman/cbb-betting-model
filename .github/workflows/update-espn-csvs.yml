@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy requests
+          pip install pandas numpy requests psycopg[binary]
 
       - name: Run ESPN builder (100-day backfill)
         run: |
@@ -40,10 +40,12 @@ jobs:
         run: |
           ls -lh *.csv *.json || true
 
-      - name: Upload outputs to Supabase Storage (public bucket)
+      - name: Load outputs to Supabase DB (raw schema)
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          UPLOAD_GROUP: "espn"
+          DB_SCHEMA: "raw"
+          LOAD_MODE: "replace"
+          SKIP_MISSING: "0"
         run: |
-          python upload_to_supabase_storage.py
+          python load_csv_to_db.py
