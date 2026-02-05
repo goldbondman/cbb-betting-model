@@ -28,11 +28,23 @@ jobs:
           pip install -r requirements.txt
           pip install psycopg[binary]
 
-      - name: Build feature matrix
-        run: python ml/pipeline.py
+      # IMPORTANT: feature_matrix.py now pulls ESPN features from Supabase DB
+      - name: Build feature matrix (DB-backed)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          DB_SCHEMA: "raw"
+          ESPN_FEATURES_TABLE: "espn_team_game_features"
+        run: |
+          python ml/pipeline.py
 
-      - name: Generate feature matrix files
-        run: python ml/feature_matrix.py
+      # Optional: keep this if ml/pipeline.py doesn't always write these CSVs
+      - name: Generate feature matrix files (DB-backed)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          DB_SCHEMA: "raw"
+          ESPN_FEATURES_TABLE: "espn_team_game_features"
+        run: |
+          python ml/feature_matrix.py
 
       - name: Print ML CSV headers
         run: |
