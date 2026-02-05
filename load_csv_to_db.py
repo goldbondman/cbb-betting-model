@@ -158,7 +158,8 @@ def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, req
 
     print(f"[INFO] Added {len(missing)} missing columns to {schema}.{table}")
 
-
+    conn.commit()
+    
 def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     """
     Fix known bad inputs before COPY.
