@@ -24,7 +24,7 @@ RETRY_INITIAL_DELAY = float(os.getenv("DB_LOAD_RETRY_INITIAL_DELAY", "1.0"))
 RETRY_BACKOFF = float(os.getenv("DB_LOAD_RETRY_BACKOFF", "2.0"))
 
 # File groups (local file -> destination table)
-# Note: You should create these tables first in Supabase.
+# NOTE: Destination tables must already exist in Supabase (SQL Editor).
 FILES_ESPN = [
     ("espn_games.csv", "espn_games"),
     ("espn_team_game_logs.csv", "espn_team_game_logs"),
@@ -32,7 +32,7 @@ FILES_ESPN = [
     ("espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
     ("espn_feature_diagnostics.csv", "espn_feature_diagnostics"),
     ("espn_dq_audit.csv", "espn_dq_audit"),
-    # JSON file is not handled by CSV COPY; skip or load into a jsonb table separately
+    # JSON is not loaded by this script
     # ("espn_pipeline_errors.json", "espn_pipeline_errors"),
 ]
 
@@ -41,13 +41,14 @@ FILES_TORVIK = [
     ("barttorvik_team_results.csv", "barttorvik_team_results"),
 ]
 
+# UPDATED: include predictions_latest.csv
 FILES_ML = [
     ("ml/model_features.csv", "model_features"),
     ("ml/dq_audit_ml.csv", "dq_audit_ml"),
-    # Non-CSV artifacts are skipped by default; keep in Storage or add custom loaders
+    ("ml/predictions_latest.csv", "predictions_latest"),
+    # Non-CSV artifacts are skipped by this DB loader
     # ("ml/feature_schema_hash.txt", "feature_schema_hash"),
     # ("ml/run_log.json", "run_log"),
-    # ("ml/predictions_latest.csv", "predictions_latest"),
     # ("ml/models/margin_model.json", "margin_model"),
     # ("ml/models/total_model.json", "total_model"),
 ]
@@ -119,7 +120,6 @@ def _copy_csv(conn: psycopg.Connection, local_path: Path, schema: str, table: st
 
         with local_path.open("rb") as f:
             with cur.copy(copy_sql) as copy:
-                # Stream the file into COPY
                 while True:
                     chunk = f.read(1024 * 1024)  # 1MB chunks
                     if not chunk:
@@ -145,7 +145,6 @@ def load_one(local_path: str, table_name: str):
 
         try:
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
-                # Fail early if the destination table doesn't exist
                 if not _check_table_exists(conn, DB_SCHEMA, table_name):
                     _die(
                         f"Destination table missing: {DB_SCHEMA}.{table_name}\n"
