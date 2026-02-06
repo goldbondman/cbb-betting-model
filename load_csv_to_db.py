@@ -5,19 +5,13 @@ import os
 import re
 import sys
 import time
-import csv
-import hashlib
 import tempfile
-import time
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import List, Optional, Tuple
 
 import psycopg
-
-from datetime import datetime, timezone
-from decimal import Decimal, InvalidOperation
 
 # Required
 SUPABASE_DB_URL = (os.getenv("SUPABASE_DB_URL") or "").strip()
@@ -125,7 +119,6 @@ TABLE_SPECS = {
 
 
 def _die(msg: str, code: int = 1) -> None:
-def _die(msg: str, code: int = 1):
     print(f"[ERROR] {msg}", file=sys.stderr)
     sys.exit(code)
 
@@ -292,11 +285,9 @@ def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, req
             cur.execute(f"alter table {qt} add column if not exists {_quote_ident(c)} text;")
 
     print(f"[INFO] Added {len(missing)} missing columns to {schema}.{table}")
-
     conn.commit()
 
 
-    
 def _get_table_spec(table_name: str) -> dict:
     return TABLE_SPECS.get(table_name, {"required_cols": [], "row_hash_keys": [], "not_null": [], "dtypes": {}})
 
@@ -313,98 +304,50 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
 
     has_row_hash = "row_hash" in cols
     wants_row_hash = "row_hash" in spec.get("not_null", []) or bool(spec.get("row_hash_keys"))
-    if wants_row_hash and not has_row_hash:
-        _warn(f"{local_path.name}: missing row_hash column; generating deterministically for load")
-
-    keys = [k for k in spec.get("row_hash_keys", []) if k in cols]
-    if not keys and has_row_hash:
+    
+    # If we don't need row_hash handling, return original file
+    if not wants_row_hash:
         return local_path
+    
+    # If we have row_hash and just need to fill blanks, or need to add it
+    keys = [k for k in spec.get("row_hash_keys", []) if k in cols]
     if not keys:
         keys = cols
 
     idx = {c: i for i, c in enumerate(cols)}
     dtype_map = spec.get("dtypes", {})
 
-    if table_name not in ("espn_team_game_logs", "espn_team_game_features", "model_features"):
-        return local_path
-
-    cols = _read_csv_header_columns(local_path)
-    _validate_csv_header(cols, local_path)
-    has_row_hash = "row_hash" in cols
-    if not has_row_hash:
-        _warn(f"{local_path.name}: missing row_hash column; generating deterministically for load")
-
-    # Build candidate key columns (use what exists in the CSV)
-    key_candidates = [
-        "event_id",
-        "team_id",
-        "team_id_home",
-        "team_id_away",
-        "team",
-        "opponent",
-        "home_away",
-        "game_datetime_utc",
-        "game_date_utc",
-        "game_date",
-        "parse_version",
-    ]
-    idx = {c: i for i, c in enumerate(cols)}
-    key_cols = [c for c in key_candidates if c in idx]
-    if not key_cols:
-        # Worst case: fall back to full row content (still deterministic, but more sensitive to small changes)
-        key_cols = cols
-
     # Stream-rewrite to a temp file
     tmp = Path(tempfile.mkstemp(prefix=f"loadfix_{table_name}_", suffix=".csv")[1])
+    
     with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
         "w", encoding="utf-8", newline=""
     ) as fout:
         reader = csv.reader(fin)
         writer = csv.writer(fout)
+        
         try:
             header = next(reader)
         except StopIteration:
             return local_path
 
         if has_row_hash:
+            # row_hash column exists, just fill blanks
             writer.writerow(header)
             rh_i = idx["row_hash"]
             for row in reader:
                 if len(row) < len(header):
                     row = row + [""] * (len(header) - len(row))
-                if row[rh_i].strip() == "" and wants_row_hash:
+                if row[rh_i].strip() == "":
                     row[rh_i] = _stable_row_hash(row, keys, idx, dtype_map)
                 writer.writerow(row)
-        elif wants_row_hash:
         else:
-            if wants_row_hash:
-                writer.writerow(["row_hash"] + header)
-                for row in reader:
-                    if len(row) < len(header):
-                        row = row + [""] * (len(header) - len(row))
-                    row_hash = _stable_row_hash(row, keys, idx, dtype_map)
-                    writer.writerow([row_hash] + row)
-            else:
-                writer.writerow(header)
-                for row in reader:
-                    writer.writerow(row)
-                if row[rh_i].strip() == "":
-                    key = "|".join((row[idx[c]].strip() if idx[c] < len(row) else "") for c in key_cols)
-                    row[rh_i] = _sha256(key)
-                writer.writerow(row)
-        else:
+            # Add row_hash column
             writer.writerow(["row_hash"] + header)
             for row in reader:
                 if len(row) < len(header):
                     row = row + [""] * (len(header) - len(row))
                 row_hash = _stable_row_hash(row, keys, idx, dtype_map)
-                writer.writerow([row_hash] + row)
-        else:
-            writer.writerow(header)
-            for row in reader:
-                writer.writerow(row)
-                key = "|".join((row[idx[c]].strip() if idx[c] < len(row) else "") for c in key_cols)
-                row_hash = _sha256(key)
                 writer.writerow([row_hash] + row)
 
     return tmp
@@ -501,7 +444,6 @@ def _preflight_validate_csv(local_path: Path, table_name: str) -> dict:
 
 
 def _truncate(conn: psycopg.Connection, schema: str, table: str) -> None:
-def _truncate(conn: psycopg.Connection, schema: str, table: str):
     qt = _qualified_table(schema, table)
     with conn.cursor() as cur:
         cur.execute(f"truncate table {qt};")
