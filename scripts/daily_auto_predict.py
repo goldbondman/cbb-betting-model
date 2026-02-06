@@ -1,22 +1,23 @@
 #!/usr/bin/env python3
 """
-Daily auto-prediction pipeline:
-1) Pull ESPN scoreboard games.
-2) Upsert ingestion outputs to Supabase (teams, games, market_lines, dq_audit, raw_games).
-3) Build model feature matrix.
-4) Run ML predictions.
-5) (TODO) Map predictions into public.predictions schema and upsert.
+Daily auto-prediction pipeline (DB-backed predictions_latest):
 
-Notes (current state, Option 1):
-- ML pipeline still reads local CSV feature store(s), e.g. espn_team_game_features.csv.
-  The workflow should run espn_boxscore_builder.py before this script so the CSV exists.
-- DB schemas per your dump:
-  - public.teams: team_id (text) PK
-  - public.games: game_id (text) PK
-  - public.market_lines: id (uuid) PK, game_id/book/pulled_at required
-  - public.dq_audit: id (uuid) + created_at (timestamptz) required; reason_codes is text[]; details is jsonb
-  - raw.raw_games exists (also mirrored in public.raw_games)
-  - public.predictions does NOT match the old "pred_spread/edge_spread" payload (TODO mapping)
+1) Pull ESPN scoreboard games (today + DAYS_AHEAD).
+2) Upsert ingestion outputs to Supabase:
+   - raw.raw_games (or public.raw_games if RAW_SCHEMA=public)
+   - public.teams
+   - public.games
+   - public.market_lines
+   - public.dq_audit (warnings/errors)
+3) Pull latest ML predictions from Supabase DB (raw.predictions_latest).
+4) Join predictions to scoreboard market lines and upsert into public.predictions.
+
+Assumptions verified from your schema dump:
+- public.teams: team_id (text) PK
+- public.games: game_id (text) PK
+- public.market_lines: id uuid PK; required: game_id/book/pulled_at
+- public.dq_audit: id uuid NOT NULL; created_at timestamptz NOT NULL; reason_codes text[]; details jsonb NOT NULL
+- raw.predictions_latest columns are mostly text; numeric fields arrive as text and must be cast.
 """
 
 from __future__ import annotations
@@ -39,20 +40,21 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
 import espn_boxscore_builder as espn  # noqa: E402
-from ml.feature_matrix import BuildConfig, build_feature_matrix  # noqa: E402
-from ml.predict_ml import PredictConfig, predict  # noqa: E402
 
 
 SOURCE = "ESPN"
 EDGE_MIN = float(os.getenv("EDGE_MIN", "3.0"))
 EDGE_TIER2 = float(os.getenv("EDGE_TIER2", "6.0"))
 EDGE_TIER3 = float(os.getenv("EDGE_TIER3", "9.0"))
-MODEL_VERSION = os.getenv("MODEL_VERSION", "").strip()
+MODEL_VERSION_OVERRIDE = os.getenv("MODEL_VERSION", "").strip()
 DAYS_AHEAD = int(os.getenv("DAYS_AHEAD", "1"))
 SEASON = int(os.getenv("SEASON", datetime.now().year + (1 if datetime.now().month >= 7 else 0)))
 
-# You exposed "raw", so default to raw; can override to "public" if desired.
 RAW_SCHEMA = (os.getenv("RAW_SCHEMA") or "raw").strip()
+
+RAW_PREDICTIONS_SCHEMA = (os.getenv("RAW_PREDICTIONS_SCHEMA") or "raw").strip()
+RAW_PREDICTIONS_TABLE = (os.getenv("RAW_PREDICTIONS_TABLE") or "predictions_latest").strip()
+RAW_PREDICTIONS_LIMIT = int(os.getenv("RAW_PREDICTIONS_LIMIT", "10000"))
 
 
 def _utc_now() -> datetime:
@@ -63,17 +65,18 @@ def _iso(dt: datetime) -> str:
     return dt.astimezone(timezone.utc).isoformat()
 
 
-def _safe_num(value: object) -> Optional[float]:
-    if value is None or (isinstance(value, float) and math.isnan(value)):
+def _safe_float(value: object) -> Optional[float]:
+    if value is None:
+        return None
+    if isinstance(value, float) and math.isnan(value):
+        return None
+    s = str(value).strip()
+    if not s:
         return None
     try:
-        return float(value)
-    except (TypeError, ValueError):
+        return float(s)
+    except ValueError:
         return None
-
-
-def _has_value(value: object) -> bool:
-    return _safe_num(value) is not None
 
 
 def _has_text(value: object) -> bool:
@@ -107,6 +110,7 @@ def _parse_game_datetime(row: Dict[str, object]) -> Optional[str]:
 
 
 def _confidence_from_edge(edge: Optional[float]) -> Optional[float]:
+    # bounded [0,1)
     if edge is None:
         return None
     return float(1.0 - math.exp(-abs(edge) / 6.0))
@@ -125,21 +129,15 @@ def _bet_units(edge: Optional[float]) -> Optional[float]:
     return 0.0
 
 
-def _bet_side(edge: Optional[float]) -> Optional[str]:
-    if edge is None or abs(edge) < EDGE_MIN:
-        return None
-    return "home" if edge > 0 else "away"
-
-
 def _validate_game(row: Dict[str, object]) -> Tuple[str, List[str]]:
     reasons: List[str] = []
     if not _has_text(row.get("game_datetime_utc")) and not _has_text(row.get("date")):
         reasons.append("missing_game_datetime")
     if not row.get("home_team") or not row.get("away_team"):
         reasons.append("missing_team_name")
-    if row.get("completed") and (not _has_value(row.get("home_score")) or not _has_value(row.get("away_score"))):
+    if row.get("completed") and (_safe_float(row.get("home_score")) is None or _safe_float(row.get("away_score")) is None):
         reasons.append("missing_final_score")
-    if not _has_value(row.get("market_spread")) and not _has_value(row.get("market_total")):
+    if _safe_float(row.get("market_spread")) is None and _safe_float(row.get("market_total")) is None:
         reasons.append("missing_market_lines")
 
     if "missing_game_datetime" in reasons or "missing_team_name" in reasons:
@@ -168,7 +166,6 @@ class Counts:
 
 
 def fetch_scoreboard() -> pd.DataFrame:
-    # NOTE: this is "today + next DAYS_AHEAD days". DAYS_AHEAD=1 pulls today and tomorrow.
     now = datetime.now()
     today = now.strftime("%Y%m%d")
     dates = [today]
@@ -179,31 +176,6 @@ def fetch_scoreboard() -> pd.DataFrame:
     for d in dates:
         rows.extend(espn.fetch_scoreboard_games(d))
     return pd.DataFrame(rows)
-
-
-def _require_feature_store_files() -> None:
-    """
-    Option 1 guardrail:
-    ML expects local CSV feature store(s). Ensure they exist before building matrix.
-    The workflow should run: python espn_boxscore_builder.py
-    """
-    required = [
-        REPO_ROOT / "espn_team_game_features.csv",
-    ]
-    missing = [str(p) for p in required if not p.exists()]
-    if missing:
-        raise FileNotFoundError(
-            "Missing required feature store file(s): "
-            + ", ".join(missing)
-            + ". Run `python espn_boxscore_builder.py` earlier in the workflow (Option 1)."
-        )
-
-
-def build_ml_outputs() -> pd.DataFrame:
-    _require_feature_store_files()
-    build_feature_matrix(BuildConfig())
-    predict(PredictConfig())
-    return pd.read_csv(REPO_ROOT / "ml" / "predictions_latest.csv")
 
 
 def upsert_rows(client, schema: str, table: str, rows: List[Dict[str, object]], on_conflict: Optional[str] = None) -> int:
@@ -219,11 +191,34 @@ def upsert_rows(client, schema: str, table: str, rows: List[Dict[str, object]], 
     return len(data) if isinstance(data, list) else 1
 
 
-def main() -> None:
-    model_version = MODEL_VERSION or f"auto-{datetime.now().strftime('%Y%m%d')}"
-    pulled_at = _utc_now()
+def fetch_predictions_latest_from_db(sb) -> pd.DataFrame:
+    all_rows: List[Dict[str, object]] = []
+    offset = 0
+    page = 1000
 
+    while True:
+        resp = (
+            sb.schema(RAW_PREDICTIONS_SCHEMA)
+            .table(RAW_PREDICTIONS_TABLE)
+            .select("*")
+            .range(offset, offset + page - 1)
+            .execute()
+        )
+        rows = resp.data or []
+        all_rows.extend(rows)
+        if len(rows) < page:
+            break
+        offset += page
+        if offset >= RAW_PREDICTIONS_LIMIT:
+            break
+
+    return pd.DataFrame(all_rows)
+
+
+def main() -> None:
+    pulled_at = _utc_now()
     sb = _load_supabase()
+
     scoreboard = fetch_scoreboard()
     if scoreboard.empty:
         raise RuntimeError("No scoreboard data returned.")
@@ -250,15 +245,15 @@ def main() -> None:
                     "entity_type": "games",
                     "entity_id": None,
                     "severity": "warning" if status == "partial" else "error",
-                    "reason_codes": reasons,  # text[]
-                    "details": {"external_game_id": external_game_id},  # jsonb NOT NULL
-                    "created_at": _iso(pulled_at),  # timestamptz NOT NULL
+                    "reason_codes": reasons,
+                    "details": {"external_game_id": external_game_id},
+                    "created_at": _iso(pulled_at),
                 }
             )
 
         raw_rows.append(
             {
-                "id": str(uuid.uuid4()),  # uuid NOT NULL
+                "id": str(uuid.uuid4()),
                 "season": SEASON,
                 "source": SOURCE,
                 "external_game_id": external_game_id,
@@ -274,7 +269,6 @@ def main() -> None:
         if not home_team or not away_team:
             continue
 
-        # Align to public.teams.team_id (text)
         home_team_id = f"{SOURCE}:{str(home_team).strip()}"
         away_team_id = f"{SOURCE}:{str(away_team).strip()}"
 
@@ -289,20 +283,19 @@ def main() -> None:
             "conference": None,
         }
 
-        # Align to public.games.game_id (text). Use ESPN game_id directly.
         game_datetime = _parse_game_datetime(row.to_dict())
         game_rows.append(
             {
                 "game_id": external_game_id,
-                "game_date": str(row.get("date") or "")[:8] if _has_text(row.get("date")) else None,  # text NOT NULL per schema
-                "home_team": str(home_team).strip(),  # text NOT NULL
-                "away_team": str(away_team).strip(),  # text NOT NULL
-                "home_team_id": home_team_id,  # text NOT NULL
-                "away_team_id": away_team_id,  # text NOT NULL
-                "home_score": int(_safe_num(row.get("home_score"))) if _has_value(row.get("home_score")) else None,
-                "away_score": int(_safe_num(row.get("away_score"))) if _has_value(row.get("away_score")) else None,
+                "game_date": str(row.get("date") or "")[:8] if _has_text(row.get("date")) else None,
+                "home_team": str(home_team).strip(),
+                "away_team": str(away_team).strip(),
+                "home_team_id": home_team_id,
+                "away_team_id": away_team_id,
+                "home_score": int(_safe_float(row.get("home_score"))) if _safe_float(row.get("home_score")) is not None else None,
+                "away_score": int(_safe_float(row.get("away_score"))) if _safe_float(row.get("away_score")) is not None else None,
                 "venue": row.get("venue"),
-                "status": "final" if row.get("completed") else "scheduled",
+                "status": "final" if bool(row.get("completed")) else "scheduled",
                 "source": SOURCE,
                 "season": SEASON,
                 "external_game_id": external_game_id,
@@ -314,17 +307,17 @@ def main() -> None:
 
         market_rows.append(
             {
-                "game_id": external_game_id,  # text NOT NULL
-                "book": row.get("market_provider") or "espn",  # text NOT NULL
-                "pulled_at": _iso(pulled_at),  # timestamptz NOT NULL
-                "spread_home": _safe_num(row.get("market_spread")),
-                "total": _safe_num(row.get("market_total")),
-                "ml_home": int(_safe_num(row.get("market_home_ml"))) if _has_value(row.get("market_home_ml")) else None,
-                "ml_away": int(_safe_num(row.get("market_away_ml"))) if _has_value(row.get("market_away_ml")) else None,
+                "game_id": external_game_id,
+                "book": row.get("market_provider") or "espn",
+                "pulled_at": _iso(pulled_at),
+                "spread_home": _safe_float(row.get("market_spread")),
+                "total": _safe_float(row.get("market_total")),
+                "ml_home": int(_safe_float(row.get("market_home_ml"))) if _safe_float(row.get("market_home_ml")) is not None else None,
+                "ml_away": int(_safe_float(row.get("market_away_ml"))) if _safe_float(row.get("market_away_ml")) is not None else None,
             }
         )
 
-    # Upserts
+    # Ingestion upserts
     upsert_rows(sb, RAW_SCHEMA, "raw_games", raw_rows, on_conflict="season,source,external_game_id")
     teams_upserted = upsert_rows(sb, "public", "teams", list(team_rows.values()), on_conflict="team_id")
     games_upserted = upsert_rows(sb, "public", "games", game_rows, on_conflict="game_id")
@@ -333,23 +326,88 @@ def main() -> None:
     if dq_rows:
         upsert_rows(sb, "public", "dq_audit", dq_rows, on_conflict="id")
 
-    # ML predictions (still CSV-based for now)
-    preds = build_ml_outputs()
+    # Pull DB-backed predictions_latest
+    preds = fetch_predictions_latest_from_db(sb)
     if preds.empty:
-        raise RuntimeError("No predictions generated.")
+        raise RuntimeError(f"No rows found in {RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}.")
 
+    # Normalize join keys
     preds["event_id"] = preds["event_id"].astype(str)
-    playable = preds[preds["event_id"].isin(game_id_set)].copy()
+    scoreboard["game_id"] = scoreboard["game_id"].astype(str)
 
-    # TODO: map outputs -> public.predictions schema.
-    # Do NOT guess mapping here; we will implement once we have predictions_latest.csv headers.
+    merged = preds.merge(scoreboard, left_on="event_id", right_on="game_id", how="left", suffixes=("", "_game"))
+
+    # Build public.predictions rows
+    prediction_rows: List[Dict[str, object]] = []
+    for _, row in merged.iterrows():
+        event_id = str(row.get("event_id") or "").strip()
+        if not event_id or event_id not in game_id_set:
+            continue
+
+        model_version = (MODEL_VERSION_OVERRIDE or str(row.get("model_version") or "").strip() or "ml-linear-v1")
+
+        pred_margin_home = _safe_float(row.get("pred_margin_home"))
+        pred_total = _safe_float(row.get("pred_total"))
+
+        market_spread = _safe_float(row.get("market_spread"))
+        market_total = _safe_float(row.get("market_total"))
+
+        vegas_edge = (pred_margin_home - market_spread) if pred_margin_home is not None and market_spread is not None else None
+        total_edge = (pred_total - market_total) if pred_total is not None and market_total is not None else None
+
+        # confidence: prefer spread edge, fall back to predicted margin magnitude
+        confidence = _confidence_from_edge(vegas_edge if vegas_edge is not None else pred_margin_home)
+
+        prediction_key = f"{model_version}:{event_id}"
+
+        prediction_rows.append(
+            {
+                # required
+                "id": prediction_key,                 # predictions.id is text NOT NULL
+                "prediction_key": prediction_key,     # required
+                "model_version_id": model_version,    # required
+                "game_date": str(row.get("date") or "").strip() or str(row.get("game_date") or "").strip(),
+                "team_a": str(row.get("team_home") or row.get("home_team") or "").strip(),
+                "team_b": str(row.get("team_away") or row.get("away_team") or "").strip(),
+                "ensemble_prediction": pred_margin_home if pred_margin_home is not None else 0.0,
+                "confidence": confidence if confidence is not None else 0.0,
+                "model_predictions": {
+                    "source_table": f"{RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}",
+                    "row_hash": str(row.get("row_hash") or ""),
+                    "model_version": model_version,
+                    "pred_margin_home": pred_margin_home,
+                    "pred_total": pred_total,
+                },
+
+                # optional / useful
+                "game_id": event_id,
+                "home_team": str(row.get("team_home") or row.get("home_team") or "").strip() or None,
+                "away_team": str(row.get("team_away") or row.get("away_team") or "").strip() or None,
+                "venue": row.get("venue") or None,
+                "vegas_line": market_spread,
+                "vegas_edge": vegas_edge,
+                "vegas_total": market_total,
+                "odds_provider": (row.get("market_provider") or "espn"),
+                "inputs": {
+                    "predictions_latest_row_hash": str(row.get("row_hash") or ""),
+                    "pulled_at_utc": str(row.get("pulled_at_utc") or ""),
+                },
+                "model_version": model_version,
+                "updated_at": _iso(pulled_at),
+            }
+        )
+
+    predictions_upserted = 0
+    if prediction_rows:
+        # prediction_key is unique-like; if you have an actual unique constraint use that.
+        predictions_upserted = upsert_rows(sb, "public", "predictions", prediction_rows, on_conflict="prediction_key")
 
     counts = Counts(
         pulled=len(scoreboard),
         teams_upserted=teams_upserted,
         games_upserted=games_upserted,
         markets_upserted=markets_upserted,
-        predictions_upserted=0,
+        predictions_upserted=predictions_upserted,
         rejected=sum(1 for r in raw_rows if r["verification_status"] == "rejected"),
     )
 
@@ -360,10 +418,9 @@ def main() -> None:
                 "teams_upserted": counts.teams_upserted,
                 "games_upserted": counts.games_upserted,
                 "markets_upserted": counts.markets_upserted,
+                "predictions_upserted": counts.predictions_upserted,
                 "rejected": counts.rejected,
-                "pred_rows_available_for_games": int(len(playable)),
-                "model_version": model_version,
-                "note": "predictions upsert TODO: public.predictions schema mismatch until mapping is implemented",
+                "raw_predictions_table": f"{RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}",
             },
             indent=2,
         )
