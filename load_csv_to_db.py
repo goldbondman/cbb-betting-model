@@ -37,8 +37,8 @@ FILES_ESPN = [
     ("espn_team_game_logs.csv", "espn_team_game_logs"),
     ("espn_team_game_features.csv", "espn_team_game_features"),
     ("espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
-    ("espn_feature_diagnostics.csv", "espn_feature_diagnostics"),
-    ("espn_dq_audit.csv", "espn_dq_audit"),
+    # Diagnostic files (espn_feature_diagnostics.csv, espn_dq_audit.csv) 
+    # are only for troubleshooting storage uploads, not needed in database
 ]
 
 FILES_TORVIK = [
@@ -427,9 +427,6 @@ def _preflight_validate_csv(local_path: Path, table_name: str) -> dict:
                     except InvalidOperation:
                         bad_dtype[col] += 1
 
-    if rows == 0:
-        raise ValueError(f"{local_path.name}: CSV has zero data rows")
-
     bad_not_null = {k: v for k, v in bad_not_null.items() if v > 0}
     bad_dtype = {k: v for k, v in bad_dtype.items() if v > 0}
 
@@ -438,8 +435,11 @@ def _preflight_validate_csv(local_path: Path, table_name: str) -> dict:
     if bad_dtype:
         raise ValueError(f"{local_path.name}: dtype violations: {bad_dtype}")
 
-    report = {"rows": rows, "columns": len(cols), "table": table_name}
-    print(f"[INFO] Preflight ok: {table_name} rows={rows} cols={len(cols)}")
+    report = {"rows": rows, "columns": len(cols), "table": table_name, "empty": rows == 0}
+    if rows == 0:
+        print(f"[INFO] Preflight warning: {table_name} has zero data rows (will skip)")
+    else:
+        print(f"[INFO] Preflight ok: {table_name} rows={rows} cols={len(cols)}")
     return report
 
 
@@ -522,7 +522,12 @@ def load_one(local_path: str, table_name: str) -> None:
         try:
             prepared = _prepare_csv_for_load(lp, table_name)
             tmp_path = prepared if prepared != lp else None
-            _preflight_validate_csv(prepared, table_name)
+            validation_result = _preflight_validate_csv(prepared, table_name)
+            
+            # Skip empty files
+            if validation_result.get("empty", False):
+                print(f"[SKIP] {local_path} is empty (zero data rows)")
+                return
 
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
                 if not _check_table_exists(conn, DB_SCHEMA, table_name):
