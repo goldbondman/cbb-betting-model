@@ -1,12 +1,16 @@
 name: Daily Auto Predict
 
 on:
+  workflow_run:
+    workflows: ["Run ML pipeline"]
+    types: [completed]
+  workflow_dispatch: {}
   schedule:
     - cron: "0 15 * * *"
-  workflow_dispatch: {}
 
 jobs:
   auto-predict:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -16,8 +20,9 @@ jobs:
       EDGE_TIER2: "6.0"
       EDGE_TIER3: "9.0"
       DAYS_AHEAD: "1"
-      DAYS_BACK: "3"
       RAW_SCHEMA: "raw"
+      RAW_PREDICTIONS_SCHEMA: "raw"
+      RAW_PREDICTIONS_TABLE: "predictions_latest"
 
     steps:
       - name: Checkout repo
@@ -26,7 +31,6 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          # Recommend matching run-ml-pipeline.yml to avoid version drift
           python-version: "3.11"
 
       - name: Install dependencies
@@ -35,26 +39,6 @@ jobs:
           pip install -r requirements.txt
           pip install psycopg[binary]
 
-      - name: Run ESPN builder (3-day backfill)
-        run: |
-          python espn_boxscore_builder.py
-        env:
-          DAYS_BACK: ${{ env.DAYS_BACK }}
-
-      - name: Verify feature store exists
-        run: |
-          ls -lh *.csv *.json || true
-          test -f espn_team_game_features.csv
-
-      - name: Train models (creates ml/models/*.json)
-        run: |
-          python ml/train_ml_models.py
-
-      - name: Verify model artifacts exist
-        run: |
-          ls -lh ml/models || true
-          test -f ml/models/margin_model.json
-
-      - name: Run daily auto prediction
+      - name: Run daily auto prediction (DB-backed)
         run: |
           python scripts/daily_auto_predict.py
