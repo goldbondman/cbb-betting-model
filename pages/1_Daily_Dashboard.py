@@ -1,0 +1,104 @@
+import os
+from datetime import datetime, timedelta, timezone
+
+import pandas as pd
+import streamlit as st
+from supabase import create_client
+
+import espn_boxscore_builder as espn
+
+
+st.set_page_config(page_title="Daily Dashboard", page_icon="📅", layout="wide")
+
+
+def _get_supabase_client():
+    url = (os.getenv("SUPABASE_URL") or "").strip()
+    key = (os.getenv("SUPABASE_ANON_KEY") or "").strip()
+    if not url or not key:
+        return None
+    return create_client(url, key)
+
+
+def _load_predictions() -> pd.DataFrame:
+    client = _get_supabase_client()
+    if client is None:
+        path = "ml/predictions_latest.csv"
+        if os.path.exists(path):
+            return pd.read_csv(path)
+        return pd.DataFrame()
+
+    start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    end = start + timedelta(days=1)
+    try:
+        resp = (
+            client.table("predictions")
+            .select("*")
+            .gte("game_datetime_utc", start.isoformat())
+            .lt("game_datetime_utc", end.isoformat())
+            .execute()
+        )
+        return pd.DataFrame(resp.data or [])
+    except Exception:
+        path = "ml/predictions_latest.csv"
+        if os.path.exists(path):
+            return pd.read_csv(path)
+        return pd.DataFrame()
+
+
+def _load_scoreboard() -> pd.DataFrame:
+    today = datetime.now().strftime("%Y%m%d")
+    rows = espn.fetch_scoreboard_games(today)
+    return pd.DataFrame(rows)
+
+
+st.title("Daily Dashboard")
+st.caption("Today's games with model edges and bet recommendations.")
+
+preds = _load_predictions()
+scoreboard = _load_scoreboard()
+
+if scoreboard.empty:
+    st.warning("No ESPN scoreboard data returned.")
+    st.stop()
+
+if preds.empty:
+    st.info("No predictions found. Run the pipeline to populate predictions.")
+
+if "pred_margin_home" not in preds.columns and "pred_spread" in preds.columns:
+    preds["pred_margin_home"] = preds["pred_spread"]
+
+scoreboard["game_id"] = scoreboard["game_id"].astype(str)
+if "event_id" in preds.columns:
+    preds["event_id"] = preds["event_id"].astype(str)
+    merged = preds.merge(scoreboard, left_on="event_id", right_on="game_id", how="left", suffixes=("", "_game"))
+elif "external_game_id" in preds.columns:
+    preds["external_game_id"] = preds["external_game_id"].astype(str)
+    merged = preds.merge(scoreboard, left_on="external_game_id", right_on="game_id", how="left", suffixes=("", "_game"))
+else:
+    merged = scoreboard.copy()
+
+if "edge_spread" not in merged.columns:
+    if "pred_margin_home" in merged.columns:
+        merged["edge_spread"] = merged["pred_margin_home"] - merged.get("market_spread")
+    else:
+        merged["edge_spread"] = pd.NA
+
+edge_min = st.slider("Minimum edge", 0.0, 15.0, 3.0, 0.5)
+
+display_cols = [
+    "game_datetime_utc",
+    "home_team",
+    "away_team",
+    "market_spread",
+    "pred_margin_home",
+    "edge_spread",
+    "bet_side",
+    "bet_units",
+]
+
+table = merged.copy()
+table = table[table["edge_spread"].abs() >= edge_min] if "edge_spread" in table else table
+table = table.sort_values("edge_spread", ascending=False, key=lambda s: s.abs())
+table = table[[c for c in display_cols if c in table.columns]]
+
+st.dataframe(table, use_container_width=True)
