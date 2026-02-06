@@ -78,5 +78,6 @@ jobs:
           SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
           UPLOAD_GROUP: "torvik"
           SKIP_MISSING: "1"
-        run: |python load_csv_to_db.py
+        run: |
+          python load_csv_to_db.py
          

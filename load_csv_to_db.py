@@ -26,6 +26,14 @@ DB_SCHEMA = (os.getenv("DB_SCHEMA") or "raw").strip()
 # replace | append | upsert
 LOAD_MODE = (os.getenv("LOAD_MODE") or "replace").strip().lower()
 
+# NEW: Auto-add columns policy
+# Only allow automatic schema mutation for very wide, evolving raw feature tables.
+# For all other tables, missing columns should be handled via migrations or upstream CSV fixes.
+AUTO_ADD_COLUMN_ALLOWLIST = {
+    ("raw", "espn_team_game_features"),
+    ("raw", "espn_matchups_model_ready"),
+}
+
 # Basic retry (helps with transient network issues)
 MAX_RETRIES = int(os.getenv("DB_LOAD_MAX_RETRIES", "3"))
 RETRY_INITIAL_DELAY = float(os.getenv("DB_LOAD_RETRY_INITIAL_DELAY", "1.0"))
@@ -37,7 +45,7 @@ FILES_ESPN = [
     ("espn_team_game_logs.csv", "espn_team_game_logs"),
     ("espn_team_game_features.csv", "espn_team_game_features"),
     ("espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
-    # Diagnostic files (espn_feature_diagnostics.csv, espn_dq_audit.csv) 
+    # Diagnostic files (espn_feature_diagnostics.csv, espn_dq_audit.csv)
     # are only for troubleshooting storage uploads, not needed in database
 ]
 
@@ -272,19 +280,29 @@ def _stable_row_hash(row: List[str], keys: List[str], idx: dict, dtype_map: dict
 def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, required_cols: List[str]) -> None:
     """
     Ensure all required columns exist on schema.table.
-    Adds missing columns as TEXT (fast + safe for CSV COPY).
+
+    Policy change:
+    - Only auto-add missing columns for allowlisted tables (wide, evolving feature stores).
+    - For all other tables, fail fast to prevent silent schema drift and TEXT-typed numerics.
     """
     existing = set(_get_table_columns(conn, schema, table))
     missing = [c for c in required_cols if c not in existing]
     if not missing:
         return
 
+    if (schema, table) not in AUTO_ADD_COLUMN_ALLOWLIST:
+        preview = ", ".join(missing[:25]) + (" ..." if len(missing) > 25 else "")
+        raise ValueError(
+            f"{schema}.{table}: CSV contains {len(missing)} column(s) not present in destination table. "
+            f"Auto-add is disabled for this table. Missing columns: {preview}"
+        )
+
     qt = _qualified_table(schema, table)
     with conn.cursor() as cur:
         for c in missing:
             cur.execute(f"alter table {qt} add column if not exists {_quote_ident(c)} text;")
 
-    print(f"[INFO] Added {len(missing)} missing columns to {schema}.{table}")
+    print(f"[INFO] Added {len(missing)} missing columns to {schema}.{table} (auto-add allowlisted)")
     conn.commit()
 
 
@@ -304,11 +322,11 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
 
     has_row_hash = "row_hash" in cols
     wants_row_hash = "row_hash" in spec.get("not_null", []) or bool(spec.get("row_hash_keys"))
-    
+
     # If we don't need row_hash handling, return original file
     if not wants_row_hash:
         return local_path
-    
+
     # If we have row_hash and just need to fill blanks, or need to add it
     keys = [k for k in spec.get("row_hash_keys", []) if k in cols]
     if not keys:
@@ -319,13 +337,13 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
 
     # Stream-rewrite to a temp file
     tmp = Path(tempfile.mkstemp(prefix=f"loadfix_{table_name}_", suffix=".csv")[1])
-    
+
     with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
         "w", encoding="utf-8", newline=""
     ) as fout:
         reader = csv.reader(fin)
         writer = csv.writer(fout)
-        
+
         try:
             header = next(reader)
         except StopIteration:
@@ -465,7 +483,7 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
     csv_cols = _read_csv_header_columns(local_path)
     _validate_csv_header(csv_cols, local_path)
 
-    # Auto-add missing columns as TEXT so evolving feature CSVs don't break the pipeline
+    # Auto-add missing columns ONLY if allowlisted (new policy)
     _ensure_columns_exist(conn, schema, table, csv_cols)
 
     # Refresh after ALTERs
@@ -523,7 +541,7 @@ def load_one(local_path: str, table_name: str) -> None:
             prepared = _prepare_csv_for_load(lp, table_name)
             tmp_path = prepared if prepared != lp else None
             validation_result = _preflight_validate_csv(prepared, table_name)
-            
+
             # Skip empty files
             if validation_result.get("empty", False):
                 print(f"[SKIP] {local_path} is empty (zero data rows)")
