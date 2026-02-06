@@ -6,6 +6,14 @@ Daily auto-prediction pipeline:
 3) Run ML predictions.
 4) Calculate edges vs Vegas.
 5) Upsert to Supabase (teams, games, market_lines, predictions, dq_audit, raw_games).
+
+DB alignment notes (per your schema dump):
+- public.teams PK column is team_id (text). No "id" column exists.
+- public.games PK column is game_id (text). No "id" column exists.
+- public.market_lines has id uuid PK (server-generated), and game_id/book/pulled_at are required.
+- public.dq_audit has id uuid NOT NULL and created_at NOT NULL.
+- raw.raw_games exists and matches public.raw_games.
+- public.predictions schema does not match the "pred_spread/edge_spread" payload from this script (TODO).
 """
 
 from __future__ import annotations
@@ -31,7 +39,6 @@ import espn_boxscore_builder as espn  # noqa: E402
 from ml.feature_matrix import BuildConfig, build_feature_matrix  # noqa: E402
 from ml.predict_ml import PredictConfig, predict  # noqa: E402
 
-
 SOURCE = "ESPN"
 EDGE_MIN = float(os.getenv("EDGE_MIN", "3.0"))
 EDGE_TIER2 = float(os.getenv("EDGE_TIER2", "6.0"))
@@ -40,6 +47,8 @@ MODEL_VERSION = os.getenv("MODEL_VERSION", "").strip()
 DAYS_AHEAD = int(os.getenv("DAYS_AHEAD", "1"))
 SEASON = int(os.getenv("SEASON", datetime.now().year + (1 if datetime.now().month >= 7 else 0)))
 
+RAW_SCHEMA = (os.getenv("RAW_SCHEMA") or "raw").strip()  # you exposed "raw", so default to raw
+
 
 def _utc_now() -> datetime:
     return datetime.now(timezone.utc)
@@ -47,16 +56,6 @@ def _utc_now() -> datetime:
 
 def _iso(dt: datetime) -> str:
     return dt.astimezone(timezone.utc).isoformat()
-
-
-def _uuid_for_team(season: int, source: str, name: str) -> str:
-    key = f"{season}:{source}:{name.lower().strip()}"
-    return str(uuid.uuid5(uuid.NAMESPACE_URL, key))
-
-
-def _uuid_for_game(season: int, source: str, external_game_id: str) -> str:
-    key = f"{season}:{source}:{external_game_id}"
-    return str(uuid.uuid5(uuid.NAMESPACE_URL, key))
 
 
 def _safe_num(value: object) -> Optional[float]:
@@ -91,6 +90,7 @@ def _sanitize_payload(payload: Dict[str, object]) -> Dict[str, object]:
 
 
 def _parse_game_datetime(row: Dict[str, object]) -> Optional[str]:
+    # Your games table supports both game_datetime_utc (timestamptz) and game_date (text)
     if _has_text(row.get("game_datetime_utc")):
         return str(row.get("game_datetime_utc"))
     if _has_text(row.get("date")):
@@ -163,10 +163,11 @@ class Counts:
 
 
 def fetch_scoreboard() -> pd.DataFrame:
-    today = datetime.now().strftime("%Y%m%d")
+    now = datetime.now()
+    today = now.strftime("%Y%m%d")
     dates = [today]
     for i in range(1, DAYS_AHEAD + 1):
-        dates.append((datetime.now() + timedelta(days=i)).strftime("%Y%m%d"))
+        dates.append((now + timedelta(days=i)).strftime("%Y%m%d"))
 
     rows: List[Dict[str, object]] = []
     for d in dates:
@@ -180,7 +181,7 @@ def build_ml_outputs() -> pd.DataFrame:
     return pd.read_csv(REPO_ROOT / "ml" / "predictions_latest.csv")
 
 
-def upsert_rows(client, schema: str, table: str, rows: List[Dict[str, object]], on_conflict: Optional[str] = None):
+def upsert_rows(client, schema: str, table: str, rows: List[Dict[str, object]], on_conflict: Optional[str] = None) -> int:
     if not rows:
         return 0
     payload = rows if len(rows) > 1 else rows[0]
@@ -209,32 +210,37 @@ def main() -> None:
     dq_rows: List[Dict[str, object]] = []
 
     game_id_set = set()
+
     for _, row in scoreboard.iterrows():
         external_game_id = str(row.get("game_id") or "").strip()
         if not external_game_id:
             continue
 
         status, reasons = _validate_game(row.to_dict())
+
         if status != "verified":
             dq_rows.append(
                 {
+                    "id": str(uuid.uuid4()),
                     "entity_type": "games",
                     "entity_id": None,
                     "severity": "warning" if status == "partial" else "error",
-                    "reason_codes": reasons,
-                    "details": {"external_game_id": external_game_id},
+                    "reason_codes": reasons,  # text[] in DB, list[str] is correct
+                    "details": {"external_game_id": external_game_id},  # jsonb NOT NULL
+                    "created_at": _iso(pulled_at),  # timestamptz NOT NULL
                 }
             )
 
         raw_rows.append(
             {
+                "id": str(uuid.uuid4()),  # raw.raw_games.id is uuid NOT NULL
                 "season": SEASON,
                 "source": SOURCE,
                 "external_game_id": external_game_id,
                 "payload": _sanitize_payload(row.to_dict()),
                 "pulled_at": _iso(pulled_at),
                 "verification_status": status,
-                "verification_notes": "|".join(reasons),
+                "verification_notes": "|".join(reasons) if reasons else None,
             }
         )
 
@@ -243,140 +249,91 @@ def main() -> None:
         if not home_team or not away_team:
             continue
 
-        home_id = _uuid_for_team(SEASON, SOURCE, home_team)
-        away_id = _uuid_for_team(SEASON, SOURCE, away_team)
-        team_rows[home_id] = {
-            "id": home_id,
-            "season": SEASON,
-            "source_team_id": None,
-            "team_name": home_team,
+        # Align to public.teams.team_id (text)
+        home_team_id = f"{SOURCE}:{str(home_team).strip()}"
+        away_team_id = f"{SOURCE}:{str(away_team).strip()}"
+
+        team_rows[home_team_id] = {
+            "team_id": home_team_id,
+            "team_name": str(home_team).strip(),
             "conference": None,
         }
-        team_rows[away_id] = {
-            "id": away_id,
-            "season": SEASON,
-            "source_team_id": None,
-            "team_name": away_team,
+        team_rows[away_team_id] = {
+            "team_id": away_team_id,
+            "team_name": str(away_team).strip(),
             "conference": None,
         }
 
-        game_id = _uuid_for_game(SEASON, SOURCE, external_game_id)
+        # Align to public.games.game_id (text). Use ESPN game_id directly.
         game_datetime = _parse_game_datetime(row.to_dict())
-        if game_datetime is None:
-            continue
         game_rows.append(
             {
-                "id": game_id,
+                "game_id": external_game_id,
                 "season": SEASON,
-                "game_datetime_utc": game_datetime,
-                "home_team_id": home_id,
-                "away_team_id": away_id,
-                "home_score": _safe_num(row.get("home_score")),
-                "away_score": _safe_num(row.get("away_score")),
-                "status": "final" if row.get("completed") else "scheduled",
-                "venue": row.get("venue"),
                 "source": SOURCE,
                 "external_game_id": external_game_id,
+                "game_date": str(row.get("date") or "")[:8] if _has_text(row.get("date")) else None,
+                "game_datetime_utc": game_datetime,
+                "home_team": str(home_team).strip(),
+                "away_team": str(away_team).strip(),
+                "home_team_id": home_team_id,
+                "away_team_id": away_team_id,
+                "home_score": int(_safe_num(row.get("home_score"))) if _has_value(row.get("home_score")) else None,
+                "away_score": int(_safe_num(row.get("away_score"))) if _has_value(row.get("away_score")) else None,
+                "status": "final" if row.get("completed") else "scheduled",
+                "venue": row.get("venue"),
                 "verification_status": status,
             }
         )
-        game_id_set.add(game_id)
+        game_id_set.add(external_game_id)
 
         market_rows.append(
             {
-                "game_id": game_id,
+                "game_id": external_game_id,  # text
                 "book": row.get("market_provider") or "espn",
-                "pulled_at": _iso(pulled_at),
+                "pulled_at": _iso(pulled_at),  # timestamptz required
                 "spread_home": _safe_num(row.get("market_spread")),
                 "total": _safe_num(row.get("market_total")),
-                "ml_home": _safe_num(row.get("market_home_ml")),
-                "ml_away": _safe_num(row.get("market_away_ml")),
+                "ml_home": int(_safe_num(row.get("market_home_ml"))) if _has_value(row.get("market_home_ml")) else None,
+                "ml_away": int(_safe_num(row.get("market_away_ml"))) if _has_value(row.get("market_away_ml")) else None,
             }
         )
 
     counts = Counts(pulled=len(scoreboard), rejected=sum(1 for r in raw_rows if r["verification_status"] == "rejected"))
 
-    upsert_rows(sb, "raw", "raw_games", raw_rows, on_conflict="season,source,external_game_id")
-    upsert_rows(sb, "public", "teams", list(team_rows.values()), on_conflict="season,team_name")
-    counts = counts.__class__(
-        pulled=counts.pulled,
-        rejected=counts.rejected,
-        games_upserted=upsert_rows(sb, "public", "games", game_rows, on_conflict="season,source,external_game_id"),
-        markets_upserted=upsert_rows(sb, "public", "market_lines", market_rows, on_conflict="game_id,book,pulled_at"),
-        predictions_upserted=counts.predictions_upserted,
-    )
+    # raw schema write (now exposed). If you want to use public.raw_games instead, change RAW_SCHEMA to "public".
+    upsert_rows(sb, RAW_SCHEMA, "raw_games", raw_rows, on_conflict="season,source,external_game_id")
+
+    # teams: conflict should match how your DB is constrained. team_id is PK, so conflict on team_id is safe.
+    teams_upserted = upsert_rows(sb, "public", "teams", list(team_rows.values()), on_conflict="team_id")
+
+    games_upserted = upsert_rows(sb, "public", "games", game_rows, on_conflict="game_id")
+    markets_upserted = upsert_rows(sb, "public", "market_lines", market_rows, on_conflict="game_id,book,pulled_at")
 
     if dq_rows:
-        upsert_rows(sb, "public", "dq_audit", dq_rows)
+        upsert_rows(sb, "public", "dq_audit", dq_rows, on_conflict="id")
 
+    # ML predictions (file generation)
     preds = build_ml_outputs()
     if preds.empty:
         raise RuntimeError("No predictions generated.")
 
+    # IMPORTANT: public.predictions schema does NOT match the prediction payload used previously.
+    # TODO: map model outputs into public.predictions columns (prediction_key, model_predictions, etc.)
+    # For now, just compute and print a quick summary so the job can succeed end-to-end.
     preds["event_id"] = preds["event_id"].astype(str)
-    scoreboard["game_id"] = scoreboard["game_id"].astype(str)
-    merged = preds.merge(scoreboard, left_on="event_id", right_on="game_id", how="left", suffixes=("", "_game"))
-
-    prediction_rows: List[Dict[str, object]] = []
-    for _, row in merged.iterrows():
-        external_game_id = str(row.get("event_id") or "").strip()
-        if not external_game_id:
-            continue
-        game_id = _uuid_for_game(SEASON, SOURCE, external_game_id)
-        if game_id not in game_id_set:
-            continue
-        pred_spread = _safe_num(row.get("pred_margin_home"))
-        pred_total = _safe_num(row.get("pred_total"))
-        market_spread = _safe_num(row.get("market_spread"))
-        market_total = _safe_num(row.get("market_total"))
-        edge_spread = pred_spread - market_spread if pred_spread is not None and market_spread is not None else None
-        edge_total = pred_total - market_total if pred_total is not None and market_total is not None else None
-        confidence = _confidence_from_edge(edge_spread)
-        bet_side = _bet_side(edge_spread)
-        bet_units = _bet_units(edge_spread)
-        prediction_rows.append(
-            {
-                "model_version": model_version,
-                "game_id": game_id,
-                "source": SOURCE,
-                "external_game_id": external_game_id,
-                "game_datetime_utc": row.get("game_datetime_utc") or row.get("game_datetime_utc_game"),
-                "home_team": row.get("team_home") or row.get("home_team"),
-                "away_team": row.get("team_away") or row.get("away_team"),
-                "pred_spread": pred_spread,
-                "pred_total": pred_total,
-                "win_prob_home": None,
-                "market_spread": market_spread,
-                "market_total": market_total,
-                "edge_spread": edge_spread,
-                "edge_total": edge_total,
-                "bet_side": bet_side,
-                "bet_units": bet_units if bet_units else None,
-                "bet_signal": bool(bet_side),
-                "confidence": confidence,
-                "notes": None,
-                "model_inputs": json.dumps({"row_hash": row.get("row_hash")}),
-            }
-        )
-
-    counts = counts.__class__(
-        pulled=counts.pulled,
-        rejected=counts.rejected,
-        games_upserted=counts.games_upserted,
-        markets_upserted=counts.markets_upserted,
-        predictions_upserted=upsert_rows(
-            sb, "public", "predictions", prediction_rows, on_conflict="model_version,external_game_id"
-        ),
-    )
+    playable = preds[preds["event_id"].isin(game_id_set)].copy()
 
     print(
         json.dumps(
             {
                 "pulled": counts.pulled,
-                "games_upserted": counts.games_upserted,
-                "markets_upserted": counts.markets_upserted,
-                "predictions_upserted": counts.predictions_upserted,
+                "teams_upserted": teams_upserted,
+                "games_upserted": games_upserted,
+                "markets_upserted": markets_upserted,
                 "rejected": counts.rejected,
+                "pred_rows_available_for_games": int(len(playable)),
+                "note": "predictions upsert is TODO: public.predictions schema mismatch with current payload",
             },
             indent=2,
         )
