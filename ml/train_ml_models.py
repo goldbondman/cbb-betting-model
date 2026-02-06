@@ -101,8 +101,10 @@ def _sanitize_xy(
 
     # impute NaNs in X with column medians (fallback 0.0)
     if np.isnan(X).any():
-        med = np.nanmedian(X, axis=0)
-        med = np.where(np.isfinite(med), med, 0.0)
+        med = np.zeros(X.shape[1], dtype=np.float64)
+        col_has_finite = np.isfinite(X).any(axis=0)
+        if col_has_finite.any():
+            med[col_has_finite] = np.nanmedian(X[:, col_has_finite], axis=0)
         nan_idx = np.where(np.isnan(X))
         X[nan_idx] = med[nan_idx[1]]
 
@@ -131,10 +133,21 @@ def _fit_linear(
     """
     X_clean, y_clean, keep_mask = _sanitize_xy(X, y, drop_const_cols=True)
 
-    if X_clean.shape[0] < min_train_rows or X_clean.shape[1] == 0:
+    if X_clean.shape[0] < min_train_rows:
         raise ValueError(
             f"Not enough clean training data after sanitize: rows={X_clean.shape[0]} cols={X_clean.shape[1]}"
         )
+
+    if X_clean.shape[1] == 0:
+        mean_y = float(np.mean(y_clean)) if y_clean.size > 0 else 0.0
+        full_coef = np.zeros(X.shape[1] + 1, dtype=np.float64)
+        full_coef[0] = mean_y
+        rmse = float(np.sqrt(np.mean((y_clean - mean_y) ** 2)))
+        print(
+            "[WARN] All features dropped after sanitize; using intercept-only model.",
+            file=sys.stderr,
+        )
+        return full_coef, rmse
 
     X_aug = np.column_stack([np.ones(X_clean.shape[0], dtype=np.float64), X_clean])
 
@@ -181,8 +194,10 @@ def _rmse_from_coef(X: np.ndarray, y: np.ndarray, coef: np.ndarray) -> float:
         return float("nan")
 
     if np.isnan(X).any():
-        med = np.nanmedian(X, axis=0)
-        med = np.where(np.isfinite(med), med, 0.0)
+        med = np.zeros(X.shape[1], dtype=np.float64)
+        col_has_finite = np.isfinite(X).any(axis=0)
+        if col_has_finite.any():
+            med[col_has_finite] = np.nanmedian(X[:, col_has_finite], axis=0)
         nan_idx = np.where(np.isnan(X))
         X[nan_idx] = med[nan_idx[1]]
 
