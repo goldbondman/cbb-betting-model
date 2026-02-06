@@ -122,7 +122,9 @@ def _validate_game(row: Dict[str, object]) -> Tuple[str, List[str]]:
         reasons.append("missing_game_datetime")
     if not row.get("home_team") or not row.get("away_team"):
         reasons.append("missing_team_name")
-    if row.get("completed") and (_safe_float(row.get("home_score")) is None or _safe_float(row.get("away_score")) is None):
+    if row.get("completed") and (
+        _safe_float(row.get("home_score")) is None or _safe_float(row.get("away_score")) is None
+    ):
         reasons.append("missing_final_score")
     if _safe_float(row.get("market_spread")) is None and _safe_float(row.get("market_total")) is None:
         reasons.append("missing_market_lines")
@@ -179,7 +181,13 @@ def fetch_scoreboard() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def upsert_rows(client, schema: str, table: str, rows: List[Dict[str, object]], on_conflict: Optional[str] = None) -> int:
+def upsert_rows(
+    client,
+    schema: str,
+    table: str,
+    rows: List[Dict[str, object]],
+    on_conflict: Optional[str] = None,
+) -> int:
     if not rows:
         return 0
 
@@ -299,8 +307,12 @@ def main() -> None:
                 "away_team": str(away_team).strip(),
                 "home_team_id": home_team_id,
                 "away_team_id": away_team_id,
-                "home_score": int(_safe_float(row.get("home_score"))) if _safe_float(row.get("home_score")) is not None else None,
-                "away_score": int(_safe_float(row.get("away_score"))) if _safe_float(row.get("away_score")) is not None else None,
+                "home_score": int(_safe_float(row.get("home_score")))
+                if _safe_float(row.get("home_score")) is not None
+                else None,
+                "away_score": int(_safe_float(row.get("away_score")))
+                if _safe_float(row.get("away_score")) is not None
+                else None,
                 "venue": row.get("venue"),
                 "status": "final" if bool(row.get("completed")) else "scheduled",
                 "source": SOURCE,
@@ -319,8 +331,12 @@ def main() -> None:
                 "pulled_at": _iso(pulled_at),
                 "spread_home": _safe_float(row.get("market_spread")),
                 "total": _safe_float(row.get("market_total")),
-                "ml_home": int(_safe_float(row.get("market_home_ml"))) if _safe_float(row.get("market_home_ml")) is not None else None,
-                "ml_away": int(_safe_float(row.get("market_away_ml"))) if _safe_float(row.get("market_away_ml")) is not None else None,
+                "ml_home": int(_safe_float(row.get("market_home_ml")))
+                if _safe_float(row.get("market_home_ml")) is not None
+                else None,
+                "ml_away": int(_safe_float(row.get("market_away_ml")))
+                if _safe_float(row.get("market_away_ml")) is not None
+                else None,
             }
         )
 
