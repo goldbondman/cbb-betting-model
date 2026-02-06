@@ -2,18 +2,21 @@
 """
 Daily auto-prediction pipeline:
 1) Pull ESPN scoreboard games.
-2) Build model feature matrix.
-3) Run ML predictions.
-4) Calculate edges vs Vegas.
-5) Upsert to Supabase (teams, games, market_lines, predictions, dq_audit, raw_games).
+2) Upsert ingestion outputs to Supabase (teams, games, market_lines, dq_audit, raw_games).
+3) Build model feature matrix.
+4) Run ML predictions.
+5) (TODO) Map predictions into public.predictions schema and upsert.
 
-DB alignment notes (per your schema dump):
-- public.teams PK column is team_id (text). No "id" column exists.
-- public.games PK column is game_id (text). No "id" column exists.
-- public.market_lines has id uuid PK (server-generated), and game_id/book/pulled_at are required.
-- public.dq_audit has id uuid NOT NULL and created_at NOT NULL.
-- raw.raw_games exists and matches public.raw_games.
-- public.predictions schema does not match the "pred_spread/edge_spread" payload from this script (TODO).
+Notes (current state, Option 1):
+- ML pipeline still reads local CSV feature store(s), e.g. espn_team_game_features.csv.
+  The workflow should run espn_boxscore_builder.py before this script so the CSV exists.
+- DB schemas per your dump:
+  - public.teams: team_id (text) PK
+  - public.games: game_id (text) PK
+  - public.market_lines: id (uuid) PK, game_id/book/pulled_at required
+  - public.dq_audit: id (uuid) + created_at (timestamptz) required; reason_codes is text[]; details is jsonb
+  - raw.raw_games exists (also mirrored in public.raw_games)
+  - public.predictions does NOT match the old "pred_spread/edge_spread" payload (TODO mapping)
 """
 
 from __future__ import annotations
@@ -39,6 +42,7 @@ import espn_boxscore_builder as espn  # noqa: E402
 from ml.feature_matrix import BuildConfig, build_feature_matrix  # noqa: E402
 from ml.predict_ml import PredictConfig, predict  # noqa: E402
 
+
 SOURCE = "ESPN"
 EDGE_MIN = float(os.getenv("EDGE_MIN", "3.0"))
 EDGE_TIER2 = float(os.getenv("EDGE_TIER2", "6.0"))
@@ -47,7 +51,8 @@ MODEL_VERSION = os.getenv("MODEL_VERSION", "").strip()
 DAYS_AHEAD = int(os.getenv("DAYS_AHEAD", "1"))
 SEASON = int(os.getenv("SEASON", datetime.now().year + (1 if datetime.now().month >= 7 else 0)))
 
-RAW_SCHEMA = (os.getenv("RAW_SCHEMA") or "raw").strip()  # you exposed "raw", so default to raw
+# You exposed "raw", so default to raw; can override to "public" if desired.
+RAW_SCHEMA = (os.getenv("RAW_SCHEMA") or "raw").strip()
 
 
 def _utc_now() -> datetime:
@@ -90,7 +95,6 @@ def _sanitize_payload(payload: Dict[str, object]) -> Dict[str, object]:
 
 
 def _parse_game_datetime(row: Dict[str, object]) -> Optional[str]:
-    # Your games table supports both game_datetime_utc (timestamptz) and game_date (text)
     if _has_text(row.get("game_datetime_utc")):
         return str(row.get("game_datetime_utc"))
     if _has_text(row.get("date")):
@@ -156,6 +160,7 @@ def _load_supabase():
 @dataclass(frozen=True)
 class Counts:
     pulled: int = 0
+    teams_upserted: int = 0
     games_upserted: int = 0
     markets_upserted: int = 0
     predictions_upserted: int = 0
@@ -163,6 +168,7 @@ class Counts:
 
 
 def fetch_scoreboard() -> pd.DataFrame:
+    # NOTE: this is "today + next DAYS_AHEAD days". DAYS_AHEAD=1 pulls today and tomorrow.
     now = datetime.now()
     today = now.strftime("%Y%m%d")
     dates = [today]
@@ -175,7 +181,26 @@ def fetch_scoreboard() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def _require_feature_store_files() -> None:
+    """
+    Option 1 guardrail:
+    ML expects local CSV feature store(s). Ensure they exist before building matrix.
+    The workflow should run: python espn_boxscore_builder.py
+    """
+    required = [
+        REPO_ROOT / "espn_team_game_features.csv",
+    ]
+    missing = [str(p) for p in required if not p.exists()]
+    if missing:
+        raise FileNotFoundError(
+            "Missing required feature store file(s): "
+            + ", ".join(missing)
+            + ". Run `python espn_boxscore_builder.py` earlier in the workflow (Option 1)."
+        )
+
+
 def build_ml_outputs() -> pd.DataFrame:
+    _require_feature_store_files()
     build_feature_matrix(BuildConfig())
     predict(PredictConfig())
     return pd.read_csv(REPO_ROOT / "ml" / "predictions_latest.csv")
@@ -225,7 +250,7 @@ def main() -> None:
                     "entity_type": "games",
                     "entity_id": None,
                     "severity": "warning" if status == "partial" else "error",
-                    "reason_codes": reasons,  # text[] in DB, list[str] is correct
+                    "reason_codes": reasons,  # text[]
                     "details": {"external_game_id": external_game_id},  # jsonb NOT NULL
                     "created_at": _iso(pulled_at),  # timestamptz NOT NULL
                 }
@@ -233,7 +258,7 @@ def main() -> None:
 
         raw_rows.append(
             {
-                "id": str(uuid.uuid4()),  # raw.raw_games.id is uuid NOT NULL
+                "id": str(uuid.uuid4()),  # uuid NOT NULL
                 "season": SEASON,
                 "source": SOURCE,
                 "external_game_id": external_game_id,
@@ -269,19 +294,19 @@ def main() -> None:
         game_rows.append(
             {
                 "game_id": external_game_id,
-                "season": SEASON,
-                "source": SOURCE,
-                "external_game_id": external_game_id,
-                "game_date": str(row.get("date") or "")[:8] if _has_text(row.get("date")) else None,
-                "game_datetime_utc": game_datetime,
-                "home_team": str(home_team).strip(),
-                "away_team": str(away_team).strip(),
-                "home_team_id": home_team_id,
-                "away_team_id": away_team_id,
+                "game_date": str(row.get("date") or "")[:8] if _has_text(row.get("date")) else None,  # text NOT NULL per schema
+                "home_team": str(home_team).strip(),  # text NOT NULL
+                "away_team": str(away_team).strip(),  # text NOT NULL
+                "home_team_id": home_team_id,  # text NOT NULL
+                "away_team_id": away_team_id,  # text NOT NULL
                 "home_score": int(_safe_num(row.get("home_score"))) if _has_value(row.get("home_score")) else None,
                 "away_score": int(_safe_num(row.get("away_score"))) if _has_value(row.get("away_score")) else None,
-                "status": "final" if row.get("completed") else "scheduled",
                 "venue": row.get("venue"),
+                "status": "final" if row.get("completed") else "scheduled",
+                "source": SOURCE,
+                "season": SEASON,
+                "external_game_id": external_game_id,
+                "game_datetime_utc": game_datetime,
                 "verification_status": status,
             }
         )
@@ -289,9 +314,9 @@ def main() -> None:
 
         market_rows.append(
             {
-                "game_id": external_game_id,  # text
-                "book": row.get("market_provider") or "espn",
-                "pulled_at": _iso(pulled_at),  # timestamptz required
+                "game_id": external_game_id,  # text NOT NULL
+                "book": row.get("market_provider") or "espn",  # text NOT NULL
+                "pulled_at": _iso(pulled_at),  # timestamptz NOT NULL
                 "spread_home": _safe_num(row.get("market_spread")),
                 "total": _safe_num(row.get("market_total")),
                 "ml_home": int(_safe_num(row.get("market_home_ml"))) if _has_value(row.get("market_home_ml")) else None,
@@ -299,41 +324,46 @@ def main() -> None:
             }
         )
 
-    counts = Counts(pulled=len(scoreboard), rejected=sum(1 for r in raw_rows if r["verification_status"] == "rejected"))
-
-    # raw schema write (now exposed). If you want to use public.raw_games instead, change RAW_SCHEMA to "public".
+    # Upserts
     upsert_rows(sb, RAW_SCHEMA, "raw_games", raw_rows, on_conflict="season,source,external_game_id")
-
-    # teams: conflict should match how your DB is constrained. team_id is PK, so conflict on team_id is safe.
     teams_upserted = upsert_rows(sb, "public", "teams", list(team_rows.values()), on_conflict="team_id")
-
     games_upserted = upsert_rows(sb, "public", "games", game_rows, on_conflict="game_id")
     markets_upserted = upsert_rows(sb, "public", "market_lines", market_rows, on_conflict="game_id,book,pulled_at")
 
     if dq_rows:
         upsert_rows(sb, "public", "dq_audit", dq_rows, on_conflict="id")
 
-    # ML predictions (file generation)
+    # ML predictions (still CSV-based for now)
     preds = build_ml_outputs()
     if preds.empty:
         raise RuntimeError("No predictions generated.")
 
-    # IMPORTANT: public.predictions schema does NOT match the prediction payload used previously.
-    # TODO: map model outputs into public.predictions columns (prediction_key, model_predictions, etc.)
-    # For now, just compute and print a quick summary so the job can succeed end-to-end.
     preds["event_id"] = preds["event_id"].astype(str)
     playable = preds[preds["event_id"].isin(game_id_set)].copy()
+
+    # TODO: map outputs -> public.predictions schema.
+    # Do NOT guess mapping here; we will implement once we have predictions_latest.csv headers.
+
+    counts = Counts(
+        pulled=len(scoreboard),
+        teams_upserted=teams_upserted,
+        games_upserted=games_upserted,
+        markets_upserted=markets_upserted,
+        predictions_upserted=0,
+        rejected=sum(1 for r in raw_rows if r["verification_status"] == "rejected"),
+    )
 
     print(
         json.dumps(
             {
                 "pulled": counts.pulled,
-                "teams_upserted": teams_upserted,
-                "games_upserted": games_upserted,
-                "markets_upserted": markets_upserted,
+                "teams_upserted": counts.teams_upserted,
+                "games_upserted": counts.games_upserted,
+                "markets_upserted": counts.markets_upserted,
                 "rejected": counts.rejected,
                 "pred_rows_available_for_games": int(len(playable)),
-                "note": "predictions upsert is TODO: public.predictions schema mismatch with current payload",
+                "model_version": model_version,
+                "note": "predictions upsert TODO: public.predictions schema mismatch until mapping is implemented",
             },
             indent=2,
         )
