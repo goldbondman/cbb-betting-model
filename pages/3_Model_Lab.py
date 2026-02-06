@@ -34,6 +34,7 @@ def _upsert_registry(payload: dict) -> str | None:
     if client is None:
         return "Supabase credentials missing."
     try:
+        client.table("model_registry").upsert(payload, on_conflict="model_id").execute()
         client.table("model_registry").upsert(payload).execute()
         return None
     except Exception as exc:
