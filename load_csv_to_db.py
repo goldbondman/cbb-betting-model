@@ -317,6 +317,36 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     idx = {c: i for i, c in enumerate(cols)}
     dtype_map = spec.get("dtypes", {})
 
+    if table_name not in ("espn_team_game_logs", "espn_team_game_features", "model_features"):
+        return local_path
+
+    cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(cols, local_path)
+    has_row_hash = "row_hash" in cols
+    if not has_row_hash:
+        _warn(f"{local_path.name}: missing row_hash column; generating deterministically for load")
+
+    # Build candidate key columns (use what exists in the CSV)
+    key_candidates = [
+        "event_id",
+        "team_id",
+        "team_id_home",
+        "team_id_away",
+        "team",
+        "opponent",
+        "home_away",
+        "game_datetime_utc",
+        "game_date_utc",
+        "game_date",
+        "parse_version",
+    ]
+    idx = {c: i for i, c in enumerate(cols)}
+    key_cols = [c for c in key_candidates if c in idx]
+    if not key_cols:
+        # Worst case: fall back to full row content (still deterministic, but more sensitive to small changes)
+        key_cols = cols
+
+    # Stream-rewrite to a temp file
     tmp = Path(tempfile.mkstemp(prefix=f"loadfix_{table_name}_", suffix=".csv")[1])
     with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
         "w", encoding="utf-8", newline=""
@@ -349,6 +379,18 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
                 writer.writerow(header)
                 for row in reader:
                     writer.writerow(row)
+                if row[rh_i].strip() == "":
+                    key = "|".join((row[idx[c]].strip() if idx[c] < len(row) else "") for c in key_cols)
+                    row[rh_i] = _sha256(key)
+                writer.writerow(row)
+        else:
+            writer.writerow(["row_hash"] + header)
+            for row in reader:
+                if len(row) < len(header):
+                    row = row + [""] * (len(header) - len(row))
+                key = "|".join((row[idx[c]].strip() if idx[c] < len(row) else "") for c in key_cols)
+                row_hash = _sha256(key)
+                writer.writerow([row_hash] + row)
 
     return tmp
 
