@@ -13,17 +13,23 @@ from __future__ import annotations
 import json
 import math
 import os
+import sys
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 from supabase import create_client
 
-import espn_boxscore_builder as espn
-from ml.feature_matrix import build_feature_matrix, BuildConfig
-from ml.predict_ml import predict, PredictConfig
+# --- Ensure repo root is on sys.path so imports work when running: python scripts/daily_auto_predict.py
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT))
+
+import espn_boxscore_builder as espn  # noqa: E402
+from ml.feature_matrix import BuildConfig, build_feature_matrix  # noqa: E402
+from ml.predict_ml import PredictConfig, predict  # noqa: E402
 
 
 SOURCE = "ESPN"
@@ -75,7 +81,7 @@ def _has_text(value: object) -> bool:
 
 
 def _sanitize_payload(payload: Dict[str, object]) -> Dict[str, object]:
-    cleaned = {}
+    cleaned: Dict[str, object] = {}
     for key, value in payload.items():
         if isinstance(value, float) and math.isnan(value):
             cleaned[key] = None
@@ -171,7 +177,7 @@ def fetch_scoreboard() -> pd.DataFrame:
 def build_ml_outputs() -> pd.DataFrame:
     build_feature_matrix(BuildConfig())
     predict(PredictConfig())
-    return pd.read_csv("ml/predictions_latest.csv")
+    return pd.read_csv(REPO_ROOT / "ml" / "predictions_latest.csv")
 
 
 def upsert_rows(client, schema: str, table: str, rows: List[Dict[str, object]], on_conflict: Optional[str] = None):
@@ -358,7 +364,9 @@ def main() -> None:
         rejected=counts.rejected,
         games_upserted=counts.games_upserted,
         markets_upserted=counts.markets_upserted,
-        predictions_upserted=upsert_rows(sb, "public", "predictions", prediction_rows, on_conflict="model_version,external_game_id"),
+        predictions_upserted=upsert_rows(
+            sb, "public", "predictions", prediction_rows, on_conflict="model_version,external_game_id"
+        ),
     )
 
     print(
