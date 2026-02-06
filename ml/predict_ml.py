@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import sys
+import hashlib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List
@@ -58,6 +59,18 @@ def _score_row(row: pd.Series, model: Dict[str, object]) -> float:
     return float(model["intercept"] + np.dot(vec, np.array(model["coefficients"], dtype=float)))
 
 
+def _row_hash_for_row(row: Dict[str, object]) -> str:
+    keys = [
+        "event_id",
+        "team_id_home",
+        "team_id_away",
+        "game_datetime_utc",
+        "model_version",
+    ]
+    payload = "|".join(str(row.get(k, "") or "") for k in keys)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 def predict(cfg: PredictConfig) -> pd.DataFrame:
     margin_model = _load_model(cfg.margin_model_path)
     total_model = _load_model(cfg.total_model_path)
@@ -68,8 +81,7 @@ def predict(cfg: PredictConfig) -> pd.DataFrame:
         margin_pred = _score_row(r, margin_model)
         total_pred = _score_row(r, total_model)
         model_version = margin_model.get("model_version", "ml-linear-v1")
-        rows.append(
-            {
+        rec = {
                 "event_id": r.get("event_id"),
                 "team_id_home": r.get("team_id_home"),
                 "team_id_away": r.get("team_id_away"),
@@ -81,9 +93,9 @@ def predict(cfg: PredictConfig) -> pd.DataFrame:
                 "pred_margin_home": margin_pred,
                 "pred_total": total_pred,
                 "model_version": model_version,
-                "model_version": "ml-linear-v1",
-            }
-        )
+        }
+        rec["row_hash"] = _row_hash_for_row(rec)
+        rows.append(rec)
 
     out = pd.DataFrame(rows)
     cfg.out_path.parent.mkdir(parents=True, exist_ok=True)

@@ -3,12 +3,16 @@ import os
 import re
 import sys
 import time
+import csv
 import hashlib
 import tempfile
 from pathlib import Path
 from typing import List, Tuple, Optional
 
 import psycopg
+
+from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
 
 # Required
 SUPABASE_DB_URL = (os.getenv("SUPABASE_DB_URL") or "").strip()
@@ -48,6 +52,71 @@ FILES_ML = [
     ("ml/dq_audit_ml.csv", "dq_audit_ml"),
     ("ml/predictions_latest.csv", "predictions_latest"),
 ]
+
+
+TABLE_SPECS = {
+    "espn_games": {
+        "required_cols": ["date", "game_id", "game_datetime_utc", "home_team", "away_team", "completed"],
+        "row_hash_keys": [],
+        "not_null": [],
+        "dtypes": {"game_datetime_utc": "datetime"},
+    },
+    "espn_team_game_logs": {
+        "required_cols": ["event_id", "team_id", "team", "home_away", "game_datetime_utc"],
+        "row_hash_keys": ["event_id", "team_id", "home_away", "game_datetime_utc"],
+        "not_null": ["row_hash"],
+        "dtypes": {"game_datetime_utc": "datetime"},
+    },
+    "espn_team_game_features": {
+        "required_cols": ["event_id", "team_id", "game_datetime_utc"],
+        "row_hash_keys": ["event_id", "team_id", "game_datetime_utc"],
+        "not_null": ["row_hash"],
+        "dtypes": {"game_datetime_utc": "datetime"},
+    },
+    "espn_matchups_model_ready": {
+        "required_cols": ["event_id"],
+        "row_hash_keys": ["event_id", "game_datetime_utc", "h_team_id", "a_team_id"],
+        "not_null": ["row_hash"],
+        "dtypes": {"game_datetime_utc": "datetime"},
+    },
+    "model_features": {
+        "required_cols": [
+            "event_id",
+            "team_id_home",
+            "team_id_away",
+            "team_home",
+            "team_away",
+            "game_datetime_utc",
+            "actual_margin_home",
+            "actual_total",
+        ],
+        "row_hash_keys": ["event_id", "team_id_home", "team_id_away", "game_datetime_utc"],
+        "not_null": ["row_hash"],
+        "dtypes": {"game_datetime_utc": "datetime", "actual_margin_home": "float", "actual_total": "float"},
+    },
+    "predictions_latest": {
+        "required_cols": [
+            "event_id",
+            "team_id_home",
+            "team_id_away",
+            "team_home",
+            "team_away",
+            "game_datetime_utc",
+            "pred_margin_home",
+            "pred_total",
+            "model_version",
+        ],
+        "row_hash_keys": [
+            "event_id",
+            "team_id_home",
+            "team_id_away",
+            "game_datetime_utc",
+            "model_version",
+        ],
+        "not_null": ["row_hash"],
+        "dtypes": {"game_datetime_utc": "datetime", "pred_margin_home": "float", "pred_total": "float"},
+    },
+}
 
 
 def _die(msg: str, code: int = 1):
@@ -132,13 +201,73 @@ def _get_primary_key_columns(conn: psycopg.Connection, schema: str, table: str) 
 
 
 def _read_csv_header_columns(local_path: Path) -> List[str]:
-    header_line = local_path.read_text(encoding="utf-8", errors="replace").splitlines()[0]
-    cols = [c.strip() for c in header_line.split(",") if c.strip()]
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin:
+        reader = csv.reader(fin)
+        try:
+            header = next(reader)
+        except StopIteration:
+            return []
+    cols = [c.strip() for c in header if c.strip()]
     return cols
+
+
+def _validate_csv_header(cols: List[str], local_path: Path) -> None:
+    if not cols:
+        raise ValueError(f"CSV appears to have an empty header: {local_path}")
+    dupes = sorted({c for c in cols if cols.count(c) > 1})
+    if dupes:
+        raise ValueError(f"CSV header has duplicate columns {dupes} in {local_path}")
 
 
 def _sha256(s: str) -> str:
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+
+def _normalize_str(value: object) -> str:
+    if value is None:
+        return ""
+    text = str(value).strip()
+    if text.lower() in ("none", "nan"):
+        return ""
+    return text
+
+
+def _normalize_datetime(value: object) -> str:
+    text = _normalize_str(value)
+    if not text:
+        return ""
+    try:
+        dt = datetime.fromisoformat(text.replace("Z", "+00:00"))
+        return dt.astimezone(timezone.utc).isoformat()
+    except Exception:
+        return text
+
+
+def _normalize_float(value: object) -> str:
+    text = _normalize_str(value)
+    if not text:
+        return ""
+    try:
+        num = Decimal(text)
+    except InvalidOperation:
+        return text
+    return f"{num.quantize(Decimal('0.000001'))}"
+
+
+def _stable_row_hash(row: List[str], keys: List[str], idx: dict, dtype_map: dict) -> str:
+    parts: List[str] = []
+    for key in sorted(keys):
+        i = idx.get(key)
+        raw = row[i] if i is not None and i < len(row) else ""
+        dtype = dtype_map.get(key)
+        if dtype == "datetime":
+            parts.append(_normalize_datetime(raw))
+        elif dtype in ("float", "numeric"):
+            parts.append(_normalize_float(raw))
+        else:
+            parts.append(_normalize_str(raw))
+    payload = "|".join(parts)
+    return _sha256(payload)
 
 
 def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, required_cols: List[str]) -> None:
@@ -160,76 +289,73 @@ def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, req
 
     conn.commit()
     
+def _get_table_spec(table_name: str) -> dict:
+    return TABLE_SPECS.get(table_name, {"required_cols": [], "row_hash_keys": [], "not_null": [], "dtypes": {}})
+
+
 def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     """
     Fix known bad inputs before COPY.
 
-    Current known issue:
-      - espn_team_game_logs / espn_team_game_features occasionally have blank row_hash values.
-        But row_hash is PK + NOT NULL, so COPY fails.
-
     We deterministically fill missing row_hash using stable columns from the row.
     """
-    if table_name not in ("espn_team_game_logs", "espn_team_game_features"):
-        return local_path
-
+    spec = _get_table_spec(table_name)
     cols = _read_csv_header_columns(local_path)
-    if "row_hash" not in cols:
-        # If row_hash is missing entirely, let the normal "missing columns" gate catch it.
+    _validate_csv_header(cols, local_path)
+
+    has_row_hash = "row_hash" in cols
+    wants_row_hash = "row_hash" in spec.get("not_null", []) or bool(spec.get("row_hash_keys"))
+    if wants_row_hash and not has_row_hash:
+        _warn(f"{local_path.name}: missing row_hash column; generating deterministically for load")
+
+    keys = [k for k in spec.get("row_hash_keys", []) if k in cols]
+    if not keys and has_row_hash:
         return local_path
+    if not keys:
+        keys = cols
 
     idx = {c: i for i, c in enumerate(cols)}
-    rh_i = idx["row_hash"]
+    dtype_map = spec.get("dtypes", {})
 
-    # Build candidate key columns (use what exists in the CSV)
-    key_candidates = [
-        "event_id",
-        "team_id",
-        "team",
-        "opponent",
-        "home_away",
-        "game_datetime_utc",
-        "game_date_utc",
-        "game_date",
-        "parse_version",
-    ]
-    key_cols = [c for c in key_candidates if c in idx]
-    if not key_cols:
-        # Worst case: fall back to full row content (still deterministic, but more sensitive to small changes)
-        key_cols = cols
-
-    # Stream-rewrite to a temp file
     tmp = Path(tempfile.mkstemp(prefix=f"loadfix_{table_name}_", suffix=".csv")[1])
     with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
         "w", encoding="utf-8", newline=""
     ) as fout:
-        header = fin.readline()
-        if not header:
+        reader = csv.reader(fin)
+        writer = csv.writer(fout)
+        try:
+            header = next(reader)
+        except StopIteration:
             return local_path
-        fout.write(header)
 
-        for line in fin:
-            # NOTE: This assumes no embedded commas in fields (your pipeline outputs appear simple).
-            # If this ever breaks, we'll swap to Python's csv module for robust parsing.
-            parts = line.rstrip("\n").split(",")
-            if len(parts) < len(cols):
-                fout.write(line)
-                continue
-
-            if parts[rh_i].strip() == "":
-                key = "|".join((parts[idx[c]].strip() if idx[c] < len(parts) else "") for c in key_cols)
-                parts[rh_i] = _sha256(key)
-                fout.write(",".join(parts) + "\n")
+        if has_row_hash:
+            writer.writerow(header)
+            rh_i = idx["row_hash"]
+            for row in reader:
+                if len(row) < len(header):
+                    row = row + [""] * (len(header) - len(row))
+                if row[rh_i].strip() == "" and wants_row_hash:
+                    row[rh_i] = _stable_row_hash(row, keys, idx, dtype_map)
+                writer.writerow(row)
+        else:
+            if wants_row_hash:
+                writer.writerow(["row_hash"] + header)
+                for row in reader:
+                    if len(row) < len(header):
+                        row = row + [""] * (len(header) - len(row))
+                    row_hash = _stable_row_hash(row, keys, idx, dtype_map)
+                    writer.writerow([row_hash] + row)
             else:
-                fout.write(line)
+                writer.writerow(header)
+                for row in reader:
+                    writer.writerow(row)
 
     return tmp
 
 
 def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path):
     cols = _read_csv_header_columns(local_path)
-    if not cols:
-        raise ValueError(f"CSV appears to have an empty header: {local_path}")
+    _validate_csv_header(cols, local_path)
 
     col_list = ", ".join(_quote_ident(c) for c in cols)
     copy_sql = (
@@ -245,6 +371,76 @@ def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_p
                     if not chunk:
                         break
                     copy.write(chunk)
+
+
+def _preflight_validate_csv(local_path: Path, table_name: str) -> dict:
+    spec = _get_table_spec(table_name)
+    cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(cols, local_path)
+
+    required = spec.get("required_cols", [])
+    missing = [c for c in required if c not in cols]
+    if missing:
+        raise ValueError(f"{local_path.name}: missing required columns: {missing}")
+
+    idx = {c: i for i, c in enumerate(cols)}
+    not_null_cols = spec.get("not_null", [])
+    dtype_map = spec.get("dtypes", {})
+
+    rows = 0
+    bad_not_null = {c: 0 for c in not_null_cols}
+    bad_dtype = {c: 0 for c in dtype_map.keys()}
+
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin:
+        reader = csv.reader(fin)
+        try:
+            next(reader)
+        except StopIteration:
+            raise ValueError(f"{local_path.name}: CSV has no rows")
+
+        for row in reader:
+            rows += 1
+            if len(row) < len(cols):
+                row = row + [""] * (len(cols) - len(row))
+
+            for col in not_null_cols:
+                i = idx.get(col)
+                val = row[i] if i is not None else ""
+                if _normalize_str(val) == "":
+                    bad_not_null[col] += 1
+
+            for col, dtype in dtype_map.items():
+                i = idx.get(col)
+                if i is None:
+                    continue
+                val = row[i]
+                if _normalize_str(val) == "":
+                    continue
+                if dtype == "datetime":
+                    try:
+                        datetime.fromisoformat(_normalize_str(val).replace("Z", "+00:00"))
+                    except Exception:
+                        bad_dtype[col] += 1
+                elif dtype in ("float", "numeric"):
+                    try:
+                        Decimal(_normalize_str(val))
+                    except InvalidOperation:
+                        bad_dtype[col] += 1
+
+    if rows == 0:
+        raise ValueError(f"{local_path.name}: CSV has zero data rows")
+
+    bad_not_null = {k: v for k, v in bad_not_null.items() if v > 0}
+    bad_dtype = {k: v for k, v in bad_dtype.items() if v > 0}
+
+    if bad_not_null:
+        raise ValueError(f"{local_path.name}: NOT NULL violations: {bad_not_null}")
+    if bad_dtype:
+        raise ValueError(f"{local_path.name}: dtype violations: {bad_dtype}")
+
+    report = {"rows": rows, "columns": len(cols), "table": table_name}
+    print(f"[INFO] Preflight ok: {table_name} rows={rows} cols={len(cols)}")
+    return report
 
 
 def _truncate(conn: psycopg.Connection, schema: str, table: str):
@@ -267,6 +463,7 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
         _die(f"LOAD_MODE=upsert requires a PRIMARY KEY on {schema}.{table}.\nAdd a PK and rerun.")
 
     csv_cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(csv_cols, local_path)
 
     # Auto-add missing columns as TEXT so evolving feature CSVs don't break the pipeline
     _ensure_columns_exist(conn, schema, table, csv_cols)
@@ -325,6 +522,7 @@ def load_one(local_path: str, table_name: str):
         try:
             prepared = _prepare_csv_for_load(lp, table_name)
             tmp_path = prepared if prepared != lp else None
+            _preflight_validate_csv(prepared, table_name)
 
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
                 if not _check_table_exists(conn, DB_SCHEMA, table_name):
@@ -334,10 +532,34 @@ def load_one(local_path: str, table_name: str):
                     )
 
                 if LOAD_MODE == "replace":
+                    csv_cols = _read_csv_header_columns(prepared)
+                    _validate_csv_header(csv_cols, prepared)
+                    _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
+
+                    qt = _qualified_table(DB_SCHEMA, table_name)
+                    temp_name = f"tmp_{table_name}_{int(time.time() * 1000)}"
+                    qtemp = _quote_ident(temp_name)
+                    qcols = ", ".join(_quote_ident(c) for c in csv_cols)
+
+                    with conn.cursor() as cur:
+                        cur.execute(f"create temp table {qtemp} (like {qt} including defaults) on commit drop;")
+
+                    _copy_csv_into_table(conn, qtemp, prepared)
+
+                    with conn.cursor() as cur:
+                        cur.execute(f"select count(*) from {qtemp};")
+                        count = cur.fetchone()[0]
+                    if count == 0:
+                        raise ValueError(f"{prepared.name}: temp load produced zero rows")
+
                     _truncate(conn, DB_SCHEMA, table_name)
-                    _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), prepared)
+                    with conn.cursor() as cur:
+                        cur.execute(f"insert into {qt} ({qcols}) select {qcols} from {qtemp};")
 
                 elif LOAD_MODE == "append":
+                    csv_cols = _read_csv_header_columns(prepared)
+                    _validate_csv_header(csv_cols, prepared)
+                    _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
                     _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), prepared)
 
                 elif LOAD_MODE == "upsert":
