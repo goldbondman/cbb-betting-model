@@ -12,12 +12,8 @@ Daily auto-prediction pipeline (DB-backed predictions_latest):
 3) Pull latest ML predictions from Supabase DB (raw.predictions_latest).
 4) Join predictions to scoreboard market lines and upsert into public.predictions.
 
-Assumptions verified from your schema dump:
-- public.teams: team_id (text) PK
-- public.games: game_id (text) PK
-- public.market_lines: id uuid PK; required: game_id/book/pulled_at
-- public.dq_audit: id uuid NOT NULL; created_at timestamptz NOT NULL; reason_codes text[]; details jsonb NOT NULL
-- raw.predictions_latest columns are mostly text; numeric fields arrive as text and must be cast.
+Verified constraints:
+- public.predictions: PRIMARY KEY (id), UNIQUE (prediction_key)
 """
 
 from __future__ import annotations
@@ -35,7 +31,8 @@ from typing import Dict, List, Optional, Tuple
 import pandas as pd
 from supabase import create_client
 
-# --- Ensure repo root is on sys.path so imports work when running: python scripts/daily_auto_predict.py
+# Ensure repo root is on sys.path so imports work when running:
+# python scripts/daily_auto_predict.py
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
@@ -46,7 +43,7 @@ SOURCE = "ESPN"
 EDGE_MIN = float(os.getenv("EDGE_MIN", "3.0"))
 EDGE_TIER2 = float(os.getenv("EDGE_TIER2", "6.0"))
 EDGE_TIER3 = float(os.getenv("EDGE_TIER3", "9.0"))
-MODEL_VERSION_OVERRIDE = os.getenv("MODEL_VERSION", "").strip()
+MODEL_VERSION_OVERRIDE = (os.getenv("MODEL_VERSION") or "").strip()
 DAYS_AHEAD = int(os.getenv("DAYS_AHEAD", "1"))
 SEASON = int(os.getenv("SEASON", datetime.now().year + (1 if datetime.now().month >= 7 else 0)))
 
@@ -110,27 +107,14 @@ def _parse_game_datetime(row: Dict[str, object]) -> Optional[str]:
 
 
 def _confidence_from_edge(edge: Optional[float]) -> Optional[float]:
-    # bounded [0,1)
     if edge is None:
         return None
     return float(1.0 - math.exp(-abs(edge) / 6.0))
 
 
-def _bet_units(edge: Optional[float]) -> Optional[float]:
-    if edge is None:
-        return None
-    abs_edge = abs(edge)
-    if abs_edge >= EDGE_TIER3:
-        return 3.0
-    if abs_edge >= EDGE_TIER2:
-        return 2.0
-    if abs_edge >= EDGE_MIN:
-        return 1.0
-    return 0.0
-
-
 def _validate_game(row: Dict[str, object]) -> Tuple[str, List[str]]:
     reasons: List[str] = []
+
     if not _has_text(row.get("game_datetime_utc")) and not _has_text(row.get("date")):
         reasons.append("missing_game_datetime")
     if not row.get("home_team") or not row.get("away_team"):
@@ -181,12 +165,15 @@ def fetch_scoreboard() -> pd.DataFrame:
 def upsert_rows(client, schema: str, table: str, rows: List[Dict[str, object]], on_conflict: Optional[str] = None) -> int:
     if not rows:
         return 0
+
     payload = rows if len(rows) > 1 else rows[0]
     req = client.schema(schema).table(table)
+
     if on_conflict:
         resp = req.upsert(payload, on_conflict=on_conflict).execute()
     else:
         resp = req.upsert(payload).execute()
+
     data = resp.data or []
     return len(data) if isinstance(data, list) else 1
 
@@ -206,8 +193,10 @@ def fetch_predictions_latest_from_db(sb) -> pd.DataFrame:
         )
         rows = resp.data or []
         all_rows.extend(rows)
+
         if len(rows) < page:
             break
+
         offset += page
         if offset >= RAW_PREDICTIONS_LIMIT:
             break
@@ -284,6 +273,7 @@ def main() -> None:
         }
 
         game_datetime = _parse_game_datetime(row.to_dict())
+
         game_rows.append(
             {
                 "game_id": external_game_id,
@@ -337,14 +327,13 @@ def main() -> None:
 
     merged = preds.merge(scoreboard, left_on="event_id", right_on="game_id", how="left", suffixes=("", "_game"))
 
-    # Build public.predictions rows
     prediction_rows: List[Dict[str, object]] = []
     for _, row in merged.iterrows():
         event_id = str(row.get("event_id") or "").strip()
         if not event_id or event_id not in game_id_set:
             continue
 
-        model_version = (MODEL_VERSION_OVERRIDE or str(row.get("model_version") or "").strip() or "ml-linear-v1")
+        model_version = MODEL_VERSION_OVERRIDE or str(row.get("model_version") or "").strip() or "ml-linear-v1"
 
         pred_margin_home = _safe_float(row.get("pred_margin_home"))
         pred_total = _safe_float(row.get("pred_total"))
@@ -352,23 +341,32 @@ def main() -> None:
         market_spread = _safe_float(row.get("market_spread"))
         market_total = _safe_float(row.get("market_total"))
 
-        vegas_edge = (pred_margin_home - market_spread) if pred_margin_home is not None and market_spread is not None else None
-        total_edge = (pred_total - market_total) if pred_total is not None and market_total is not None else None
+        vegas_edge = None
+        if pred_margin_home is not None and market_spread is not None:
+            vegas_edge = pred_margin_home - market_spread
 
-        # confidence: prefer spread edge, fall back to predicted margin magnitude
+        total_edge = None
+        if pred_total is not None and market_total is not None:
+            total_edge = pred_total - market_total
+
         confidence = _confidence_from_edge(vegas_edge if vegas_edge is not None else pred_margin_home)
 
         prediction_key = f"{model_version}:{event_id}"
 
+        team_a = str(row.get("team_home") or row.get("home_team") or "").strip()
+        team_b = str(row.get("team_away") or row.get("away_team") or "").strip()
+        if not team_a or not team_b:
+            continue
+
         prediction_rows.append(
             {
                 # required
-                "id": prediction_key,                 # predictions.id is text NOT NULL
-                "prediction_key": prediction_key,     # required
-                "model_version_id": model_version,    # required
+                "id": prediction_key,
+                "prediction_key": prediction_key,
+                "model_version_id": model_version,
                 "game_date": str(row.get("date") or "").strip() or str(row.get("game_date") or "").strip(),
-                "team_a": str(row.get("team_home") or row.get("home_team") or "").strip(),
-                "team_b": str(row.get("team_away") or row.get("away_team") or "").strip(),
+                "team_a": team_a,
+                "team_b": team_b,
                 "ensemble_prediction": pred_margin_home if pred_margin_home is not None else 0.0,
                 "confidence": confidence if confidence is not None else 0.0,
                 "model_predictions": {
@@ -377,12 +375,13 @@ def main() -> None:
                     "model_version": model_version,
                     "pred_margin_home": pred_margin_home,
                     "pred_total": pred_total,
+                    "vegas_edge": vegas_edge,
+                    "total_edge": total_edge,
                 },
-
                 # optional / useful
                 "game_id": event_id,
-                "home_team": str(row.get("team_home") or row.get("home_team") or "").strip() or None,
-                "away_team": str(row.get("team_away") or row.get("away_team") or "").strip() or None,
+                "home_team": (str(row.get("team_home") or row.get("home_team") or "").strip() or None),
+                "away_team": (str(row.get("team_away") or row.get("away_team") or "").strip() or None),
                 "venue": row.get("venue") or None,
                 "vegas_line": market_spread,
                 "vegas_edge": vegas_edge,
@@ -399,8 +398,14 @@ def main() -> None:
 
     predictions_upserted = 0
     if prediction_rows:
-        # prediction_key is unique-like; if you have an actual unique constraint use that.
-        predictions_upserted = upsert_rows(sb, "public", "predictions", prediction_rows, on_conflict="prediction_key")
+        prediction_rows = [r for r in prediction_rows if r.get("prediction_key") and r.get("id")]
+        predictions_upserted = upsert_rows(
+            sb,
+            "public",
+            "predictions",
+            prediction_rows,
+            on_conflict="prediction_key",
+        )
 
     counts = Counts(
         pulled=len(scoreboard),
