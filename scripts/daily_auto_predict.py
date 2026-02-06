@@ -2,7 +2,7 @@
 """
 Daily auto-prediction pipeline (DB-backed predictions_latest):
 
-1) Pull ESPN scoreboard games (today + DAYS_AHEAD).
+1) Pull ESPN scoreboard games (today +/- DAYS_BACK + DAYS_AHEAD).
 2) Upsert ingestion outputs to Supabase:
    - raw.raw_games (or public.raw_games if RAW_SCHEMA=public)
    - public.teams
@@ -38,13 +38,16 @@ sys.path.insert(0, str(REPO_ROOT))
 
 import espn_boxscore_builder as espn  # noqa: E402
 
-
 SOURCE = "ESPN"
 EDGE_MIN = float(os.getenv("EDGE_MIN", "3.0"))
 EDGE_TIER2 = float(os.getenv("EDGE_TIER2", "6.0"))
 EDGE_TIER3 = float(os.getenv("EDGE_TIER3", "9.0"))
 MODEL_VERSION_OVERRIDE = (os.getenv("MODEL_VERSION") or "").strip()
+
+# Pull past days too (so completed games get final scores)
 DAYS_AHEAD = int(os.getenv("DAYS_AHEAD", "1"))
+DAYS_BACK = int(os.getenv("DAYS_BACK", "0"))
+
 SEASON = int(os.getenv("SEASON", datetime.now().year + (1 if datetime.now().month >= 7 else 0)))
 
 RAW_SCHEMA = (os.getenv("RAW_SCHEMA") or "raw").strip()
@@ -150,9 +153,23 @@ class Counts:
 
 
 def fetch_scoreboard() -> pd.DataFrame:
+    """
+    Pull scoreboard for:
+      - past DAYS_BACK days (oldest -> newest)
+      - today
+      - next DAYS_AHEAD days
+
+    Ordering matters: newer pulls should overwrite older snapshots via upserts.
+    """
     now = datetime.now()
-    today = now.strftime("%Y%m%d")
-    dates = [today]
+    dates: List[str] = []
+
+    # Past window (oldest -> newest)
+    for i in range(DAYS_BACK, 0, -1):
+        dates.append((now - timedelta(days=i)).strftime("%Y%m%d"))
+
+    # Today + future window
+    dates.append(now.strftime("%Y%m%d"))
     for i in range(1, DAYS_AHEAD + 1):
         dates.append((now + timedelta(days=i)).strftime("%Y%m%d"))
 
@@ -426,6 +443,8 @@ def main() -> None:
                 "predictions_upserted": counts.predictions_upserted,
                 "rejected": counts.rejected,
                 "raw_predictions_table": f"{RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}",
+                "days_back": DAYS_BACK,
+                "days_ahead": DAYS_AHEAD,
             },
             indent=2,
         )
