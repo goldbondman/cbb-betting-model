@@ -84,7 +84,7 @@ jobs:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
           UPLOAD_GROUP: "ml"
           DB_SCHEMA: "raw"
-          LOAD_MODE: "replace"
+          LOAD_MODE: "upsert"
           SKIP_MISSING: "1"
         run: |
           python load_csv_to_db.py
