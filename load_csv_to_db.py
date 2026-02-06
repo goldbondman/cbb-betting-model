@@ -334,10 +334,14 @@ def load_one(local_path: str, table_name: str):
                     )
 
                 if LOAD_MODE == "replace":
+                    csv_cols = _read_csv_header_columns(prepared)
+                    _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
                     _truncate(conn, DB_SCHEMA, table_name)
                     _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), prepared)
 
                 elif LOAD_MODE == "append":
+                    csv_cols = _read_csv_header_columns(prepared)
+                    _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
                     _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), prepared)
 
                 elif LOAD_MODE == "upsert":
