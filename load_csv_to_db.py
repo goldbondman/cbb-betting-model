@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import time
+import csv
 import hashlib
 import tempfile
 from pathlib import Path
@@ -132,9 +133,22 @@ def _get_primary_key_columns(conn: psycopg.Connection, schema: str, table: str) 
 
 
 def _read_csv_header_columns(local_path: Path) -> List[str]:
-    header_line = local_path.read_text(encoding="utf-8", errors="replace").splitlines()[0]
-    cols = [c.strip() for c in header_line.split(",") if c.strip()]
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin:
+        reader = csv.reader(fin)
+        try:
+            header = next(reader)
+        except StopIteration:
+            return []
+    cols = [c.strip() for c in header if c.strip()]
     return cols
+
+
+def _validate_csv_header(cols: List[str], local_path: Path) -> None:
+    if not cols:
+        raise ValueError(f"CSV appears to have an empty header: {local_path}")
+    dupes = sorted({c for c in cols if cols.count(c) > 1})
+    if dupes:
+        raise ValueError(f"CSV header has duplicate columns {dupes} in {local_path}")
 
 
 def _sha256(s: str) -> str:
@@ -170,21 +184,21 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
 
     We deterministically fill missing row_hash using stable columns from the row.
     """
-    if table_name not in ("espn_team_game_logs", "espn_team_game_features"):
+    if table_name not in ("espn_team_game_logs", "espn_team_game_features", "model_features"):
         return local_path
 
     cols = _read_csv_header_columns(local_path)
-    if "row_hash" not in cols:
-        # If row_hash is missing entirely, let the normal "missing columns" gate catch it.
-        return local_path
-
-    idx = {c: i for i, c in enumerate(cols)}
-    rh_i = idx["row_hash"]
+    _validate_csv_header(cols, local_path)
+    has_row_hash = "row_hash" in cols
+    if not has_row_hash:
+        _warn(f"{local_path.name}: missing row_hash column; generating deterministically for load")
 
     # Build candidate key columns (use what exists in the CSV)
     key_candidates = [
         "event_id",
         "team_id",
+        "team_id_home",
+        "team_id_away",
         "team",
         "opponent",
         "home_away",
@@ -193,6 +207,7 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
         "game_date",
         "parse_version",
     ]
+    idx = {c: i for i, c in enumerate(cols)}
     key_cols = [c for c in key_candidates if c in idx]
     if not key_cols:
         # Worst case: fall back to full row content (still deterministic, but more sensitive to small changes)
@@ -203,33 +218,38 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
         "w", encoding="utf-8", newline=""
     ) as fout:
-        header = fin.readline()
-        if not header:
+        reader = csv.reader(fin)
+        writer = csv.writer(fout)
+        try:
+            header = next(reader)
+        except StopIteration:
             return local_path
-        fout.write(header)
 
-        for line in fin:
-            # NOTE: This assumes no embedded commas in fields (your pipeline outputs appear simple).
-            # If this ever breaks, we'll swap to Python's csv module for robust parsing.
-            parts = line.rstrip("\n").split(",")
-            if len(parts) < len(cols):
-                fout.write(line)
-                continue
-
-            if parts[rh_i].strip() == "":
-                key = "|".join((parts[idx[c]].strip() if idx[c] < len(parts) else "") for c in key_cols)
-                parts[rh_i] = _sha256(key)
-                fout.write(",".join(parts) + "\n")
-            else:
-                fout.write(line)
+        if has_row_hash:
+            writer.writerow(header)
+            rh_i = idx["row_hash"]
+            for row in reader:
+                if len(row) < len(header):
+                    row = row + [""] * (len(header) - len(row))
+                if row[rh_i].strip() == "":
+                    key = "|".join((row[idx[c]].strip() if idx[c] < len(row) else "") for c in key_cols)
+                    row[rh_i] = _sha256(key)
+                writer.writerow(row)
+        else:
+            writer.writerow(["row_hash"] + header)
+            for row in reader:
+                if len(row) < len(header):
+                    row = row + [""] * (len(header) - len(row))
+                key = "|".join((row[idx[c]].strip() if idx[c] < len(row) else "") for c in key_cols)
+                row_hash = _sha256(key)
+                writer.writerow([row_hash] + row)
 
     return tmp
 
 
 def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path):
     cols = _read_csv_header_columns(local_path)
-    if not cols:
-        raise ValueError(f"CSV appears to have an empty header: {local_path}")
+    _validate_csv_header(cols, local_path)
 
     col_list = ", ".join(_quote_ident(c) for c in cols)
     copy_sql = (
@@ -267,6 +287,7 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
         _die(f"LOAD_MODE=upsert requires a PRIMARY KEY on {schema}.{table}.\nAdd a PK and rerun.")
 
     csv_cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(csv_cols, local_path)
 
     # Auto-add missing columns as TEXT so evolving feature CSVs don't break the pipeline
     _ensure_columns_exist(conn, schema, table, csv_cols)
@@ -335,12 +356,14 @@ def load_one(local_path: str, table_name: str):
 
                 if LOAD_MODE == "replace":
                     csv_cols = _read_csv_header_columns(prepared)
+                    _validate_csv_header(csv_cols, prepared)
                     _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
                     _truncate(conn, DB_SCHEMA, table_name)
                     _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), prepared)
 
                 elif LOAD_MODE == "append":
                     csv_cols = _read_csv_header_columns(prepared)
+                    _validate_csv_header(csv_cols, prepared)
                     _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
                     _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), prepared)
 
