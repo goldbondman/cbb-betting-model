@@ -26,14 +26,14 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          # Recommend matching run-ml-pipeline.yml to avoid version drift
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          # Safety net in case requirements.txt doesn't include these (harmless if already installed)
-          pip install pandas numpy requests psycopg[binary]
+          pip install psycopg[binary]
 
       - name: Run ESPN builder (3-day backfill)
         run: |
@@ -45,6 +45,15 @@ jobs:
         run: |
           ls -lh *.csv *.json || true
           test -f espn_team_game_features.csv
+
+      - name: Train models (creates ml/models/*.json)
+        run: |
+          python ml/train_ml_models.py
+
+      - name: Verify model artifacts exist
+        run: |
+          ls -lh ml/models || true
+          test -f ml/models/margin_model.json
 
       - name: Run daily auto prediction
         run: |
