@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import csv
+import hashlib
 import os
 import re
 import sys
@@ -6,8 +8,11 @@ import time
 import csv
 import hashlib
 import tempfile
+import time
+from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
 import psycopg
 
@@ -119,16 +124,17 @@ TABLE_SPECS = {
 }
 
 
+def _die(msg: str, code: int = 1) -> None:
 def _die(msg: str, code: int = 1):
     print(f"[ERROR] {msg}", file=sys.stderr)
     sys.exit(code)
 
 
-def _warn(msg: str):
+def _warn(msg: str) -> None:
     print(f"[WARN] {msg}")
 
 
-def _validate_env():
+def _validate_env() -> None:
     if not SUPABASE_DB_URL:
         _die("SUPABASE_DB_URL is missing/empty. Add it as a GitHub Secret / env var.")
     if UPLOAD_GROUP not in ("espn", "torvik", "ml", "all"):
@@ -288,6 +294,8 @@ def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, req
     print(f"[INFO] Added {len(missing)} missing columns to {schema}.{table}")
 
     conn.commit()
+
+
     
 def _get_table_spec(table_name: str) -> dict:
     return TABLE_SPECS.get(table_name, {"required_cols": [], "row_hash_keys": [], "not_null": [], "dtypes": {}})
@@ -367,6 +375,7 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
                 if row[rh_i].strip() == "" and wants_row_hash:
                     row[rh_i] = _stable_row_hash(row, keys, idx, dtype_map)
                 writer.writerow(row)
+        elif wants_row_hash:
         else:
             if wants_row_hash:
                 writer.writerow(["row_hash"] + header)
@@ -388,6 +397,12 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
             for row in reader:
                 if len(row) < len(header):
                     row = row + [""] * (len(header) - len(row))
+                row_hash = _stable_row_hash(row, keys, idx, dtype_map)
+                writer.writerow([row_hash] + row)
+        else:
+            writer.writerow(header)
+            for row in reader:
+                writer.writerow(row)
                 key = "|".join((row[idx[c]].strip() if idx[c] < len(row) else "") for c in key_cols)
                 row_hash = _sha256(key)
                 writer.writerow([row_hash] + row)
@@ -395,7 +410,7 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     return tmp
 
 
-def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path):
+def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path) -> None:
     cols = _read_csv_header_columns(local_path)
     _validate_csv_header(cols, local_path)
 
@@ -485,13 +500,14 @@ def _preflight_validate_csv(local_path: Path, table_name: str) -> dict:
     return report
 
 
+def _truncate(conn: psycopg.Connection, schema: str, table: str) -> None:
 def _truncate(conn: psycopg.Connection, schema: str, table: str):
     qt = _qualified_table(schema, table)
     with conn.cursor() as cur:
         cur.execute(f"truncate table {qt};")
 
 
-def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, local_path: Path):
+def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, local_path: Path) -> None:
     qt = _qualified_table(schema, table)
     staging = f"tmp_{table}_{int(time.time() * 1000)}"
     qs = _quote_ident(staging)
@@ -544,7 +560,7 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
         cur.execute(sql)
 
 
-def load_one(local_path: str, table_name: str):
+def load_one(local_path: str, table_name: str) -> None:
     lp = Path(local_path)
 
     if not lp.exists():
@@ -614,8 +630,8 @@ def load_one(local_path: str, table_name: str):
 
         except SystemExit:
             raise
-        except Exception as e:
-            last_err = str(e)
+        except Exception as exc:
+            last_err = str(exc)
         finally:
             if tmp_path and tmp_path.exists():
                 try:
@@ -629,7 +645,7 @@ def load_one(local_path: str, table_name: str):
     )
 
 
-def main():
+def main() -> None:
     _validate_env()
     files = _files_for_group()
     print(f"[INFO] Loading group='{UPLOAD_GROUP}' files={len(files)} skip_missing={SKIP_MISSING} mode={LOAD_MODE}")
