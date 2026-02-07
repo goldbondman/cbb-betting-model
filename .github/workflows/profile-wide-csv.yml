@@ -1,0 +1,37 @@
+name: Profile wide CSV
+
+on:
+  workflow_dispatch:
+    inputs:
+      csv_path:
+        description: "CSV path relative to repo root"
+        required: true
+        default: "espn_team_game_features.csv"
+      nrows:
+        description: "Rows to scan"
+        required: true
+        default: "20000"
+
+jobs:
+  profile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+
+      - name: Run profile_wide_csv.py
+        env:
+          CSV_PATH: ${{ inputs.csv_path }}
+          NROWS: ${{ inputs.nrows }}
+        run: |
+          python scripts/profile_wide_csv.py
