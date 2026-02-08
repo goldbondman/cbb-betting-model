@@ -123,8 +123,40 @@ def _load_features_from_db(schema: str, table: str) -> pd.DataFrame:
     with psycopg.connect(SUPABASE_DB_URL) as conn:
         df = pd.read_sql(sql, conn)
 
+    df = _expand_features_json(df)
     print(f"[INFO] Loaded features from DB: {schema}.{table} rows={len(df)} cols={len(df.columns)}")
     return df
+
+
+def _parse_features_cell(value: object) -> Dict[str, object]:
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return {}
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, str) and value.strip():
+        try:
+            parsed = json.loads(value)
+            return parsed if isinstance(parsed, dict) else {}
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+
+def _expand_features_json(df: pd.DataFrame) -> pd.DataFrame:
+    if "features" not in df.columns:
+        return df
+
+    base_df = df.drop(columns=["features"])
+    feature_series = df["features"].apply(_parse_features_cell)
+    features_df = pd.json_normalize(feature_series)
+
+    overlap = set(base_df.columns).intersection(features_df.columns)
+    if overlap:
+        features_df = features_df.drop(columns=list(overlap))
+
+    expanded = pd.concat([base_df.reset_index(drop=True), features_df.reset_index(drop=True)], axis=1)
+    print(f"[INFO] Expanded features json: +{len(features_df.columns)} cols")
+    return expanded
 
 
 def _load_features_from_csv(path: Path) -> pd.DataFrame:
