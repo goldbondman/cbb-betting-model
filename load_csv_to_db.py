@@ -40,6 +40,9 @@ PACK_FEATURES_JSON = (os.getenv("PACK_FEATURES_JSON") or "1").strip().lower() in
 PACK_FEATURES_BASE_COLS = {
     "espn_team_game_features": ["row_hash", "event_id", "team_id", "team", "home_away", "game_datetime_utc"],
 }
+PACK_FEATURES_JSON_ALLOWLIST = set()
+for table_name in PACK_FEATURES_BASE_COLS:
+    PACK_FEATURES_JSON_ALLOWLIST.add(("raw", table_name))
 PACK_FEATURES_JSON_ALLOWLIST = set(
     ("raw", table_name) for table_name in PACK_FEATURES_BASE_COLS
 )
