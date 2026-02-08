@@ -38,6 +38,10 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
 # Optional: pack wide feature CSVs into a single JSON column to avoid Postgres row-size limits.
 PACK_FEATURES_JSON = (os.getenv("PACK_FEATURES_JSON") or "1").strip().lower() in ("1", "true", "yes")
 PACK_FEATURES_JSON_ALLOWLIST = {
+    ("raw", table_name) for table_name in PACK_FEATURES_BASE_COLS.keys()
+}
+PACK_FEATURES_BASE_COLS = {
+    "espn_team_game_features": ["row_hash", "event_id", "team_id", "team", "home_away", "game_datetime_utc"],
     ("raw", "espn_team_game_features"),
     ("raw", "espn_matchups_model_ready"),
 }
@@ -616,6 +620,11 @@ def load_one(local_path: str, table_name: str) -> None:
                 prepared = _prepare_csv_for_load(lp, table_name)
                 tmp_path = prepared if prepared != lp else None
 
+                if (
+                    PACK_FEATURES_JSON
+                    and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST
+                ):
+                    base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
                 if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
                     base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
                     if not base_cols:
@@ -633,6 +642,7 @@ def load_one(local_path: str, table_name: str) -> None:
 
                 validation_result = _preflight_validate_csv(prepared, table_name)
 
+                # Skip empty files
                 if validation_result.get("empty", False):
                     print(f"[SKIP] {local_path} is empty (zero data rows)")
                     return
