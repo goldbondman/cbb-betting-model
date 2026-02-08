@@ -39,9 +39,26 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
 PACK_FEATURES_JSON = (os.getenv("PACK_FEATURES_JSON") or "1").strip().lower() in ("1", "true", "yes")
 PACK_FEATURES_JSON_ALLOWLIST = {
     ("raw", "espn_team_game_features"),
+    ("raw", "espn_matchups_model_ready"),
 }
+
+# Base columns kept as normal columns; everything else becomes JSON in "features"
 PACK_FEATURES_BASE_COLS = {
     "espn_team_game_features": ["row_hash", "event_id", "team_id", "team", "home_away", "game_datetime_utc"],
+    "espn_matchups_model_ready": [
+        "row_hash",
+        "event_id",
+        "game_datetime_utc",
+        "home_team",
+        "away_team",
+        "status",
+        "home_points",
+        "away_points",
+        "home_win",
+        "pulled_at_utc",
+        "parse_version",
+        "source",
+    ],
 }
 
 # Basic retry (helps with transient network issues)
@@ -70,7 +87,6 @@ FILES_ML = [
     ("ml/predictions_latest.csv", "predictions_latest"),
 ]
 
-
 TABLE_SPECS = {
     "espn_games": {
         "required_cols": ["date", "game_id", "game_datetime_utc", "home_team", "away_team", "completed"],
@@ -92,7 +108,9 @@ TABLE_SPECS = {
     },
     "espn_matchups_model_ready": {
         "required_cols": ["event_id"],
-        "row_hash_keys": ["event_id", "game_datetime_utc", "h_team_id", "a_team_id"],
+        # We will PACK this table, so row_hash_keys are mostly for safety/fill.
+        # row_hash should already exist in the CSV (builder adds it), but we still support deterministic fill.
+        "row_hash_keys": ["event_id", "game_datetime_utc"],
         "not_null": ["row_hash"],
         "dtypes": {"game_datetime_utc": "datetime"},
     },
@@ -291,7 +309,7 @@ def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, req
     """
     Ensure all required columns exist on schema.table.
 
-    Policy change:
+    Policy:
     - Only auto-add missing columns for allowlisted tables (wide, evolving feature stores).
     - For all other tables, fail fast to prevent silent schema drift and TEXT-typed numerics.
     """
@@ -333,11 +351,9 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     has_row_hash = "row_hash" in cols
     wants_row_hash = "row_hash" in spec.get("not_null", []) or bool(spec.get("row_hash_keys"))
 
-    # If we don't need row_hash handling, return original file
     if not wants_row_hash:
         return local_path
 
-    # If we have row_hash and just need to fill blanks, or need to add it
     keys = [k for k in spec.get("row_hash_keys", []) if k in cols]
     if not keys:
         keys = cols
@@ -345,7 +361,6 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     idx = {c: i for i, c in enumerate(cols)}
     dtype_map = spec.get("dtypes", {})
 
-    # Stream-rewrite to a temp file
     tmp = Path(tempfile.mkstemp(prefix=f"loadfix_{table_name}_", suffix=".csv")[1])
 
     with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
@@ -360,7 +375,6 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
             return local_path
 
         if has_row_hash:
-            # row_hash column exists, just fill blanks
             writer.writerow(header)
             rh_i = idx["row_hash"]
             for row in reader:
@@ -370,7 +384,6 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
                     row[rh_i] = _stable_row_hash(row, keys, idx, dtype_map)
                 writer.writerow(row)
         else:
-            # Add row_hash column
             writer.writerow(["row_hash"] + header)
             for row in reader:
                 if len(row) < len(header):
@@ -537,10 +550,8 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
     csv_cols = _read_csv_header_columns(local_path)
     _validate_csv_header(csv_cols, local_path)
 
-    # Auto-add missing columns ONLY if allowlisted (new policy)
     _ensure_columns_exist(conn, schema, table, csv_cols)
 
-    # Refresh after ALTERs
     table_cols = _get_table_columns(conn, schema, table)
     missing_in_table = [c for c in csv_cols if c not in table_cols]
     if missing_in_table:
@@ -605,11 +616,12 @@ def load_one(local_path: str, table_name: str) -> None:
                 prepared = _prepare_csv_for_load(lp, table_name)
                 tmp_path = prepared if prepared != lp else None
 
-                if (
-                    PACK_FEATURES_JSON
-                    and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST
-                ):
+                if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
                     base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
+                    if not base_cols:
+                        raise ValueError(
+                            f"{table_name}: PACK_FEATURES_JSON enabled but no base columns configured in PACK_FEATURES_BASE_COLS"
+                        )
                     if "features" not in table_cols:
                         raise ValueError(
                             f"{DB_SCHEMA}.{table_name} is missing a 'features' jsonb column required for "
@@ -621,7 +633,6 @@ def load_one(local_path: str, table_name: str) -> None:
 
                 validation_result = _preflight_validate_csv(prepared, table_name)
 
-                # Skip empty files
                 if validation_result.get("empty", False):
                     print(f"[SKIP] {local_path} is empty (zero data rows)")
                     return
