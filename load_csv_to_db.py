@@ -390,6 +390,24 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     return tmp
 
 
+def _clean_numeric_value(value: str, col_name: str) -> str:
+    """Clean numeric values for database insertion (e.g., convert 76.0 to 76 for integer columns)."""
+    normalized = _normalize_str(value)
+    if not normalized:
+        return ""
+    
+    # For columns that should be integers, remove .0 suffix
+    if col_name in ("home_points", "away_points", "home_win"):
+        try:
+            num = float(normalized)
+            if num.is_integer():
+                return str(int(num))
+        except (ValueError, AttributeError):
+            pass
+    
+    return normalized
+
+
 def _pack_features_json(local_path: Path, table_name: str, base_cols: List[str]) -> Path:
     cols = _read_csv_header_columns(local_path)
     _validate_csv_header(cols, local_path)
@@ -428,7 +446,13 @@ def _pack_features_json(local_path: Path, table_name: str, base_cols: List[str])
                     continue
                 payload[col] = raw
 
-            base_values = [row[idx[c]] if idx.get(c) is not None else "" for c in base_cols]
+            base_values = []
+            for c in base_cols:
+                raw = row[idx[c]] if idx.get(c) is not None else ""
+                # Clean numeric values for integer columns
+                cleaned = _clean_numeric_value(raw, c)
+                base_values.append(cleaned)
+            
             writer.writerow(base_values + [json.dumps(payload, separators=(",", ":"), ensure_ascii=False)])
 
     return tmp
