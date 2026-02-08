@@ -50,15 +50,10 @@ PACK_FEATURES_BASE_COLS = {
         "row_hash",
         "event_id",
         "game_datetime_utc",
-        "home_team",
-        "away_team",
         "status",
         "home_points",
         "away_points",
         "home_win",
-        "pulled_at_utc",
-        "parse_version",
-        "source",
     ],
 }
 
