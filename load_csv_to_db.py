@@ -37,24 +37,10 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
 
 # Optional: pack wide feature CSVs into a single JSON column to avoid Postgres row-size limits.
 PACK_FEATURES_JSON = (os.getenv("PACK_FEATURES_JSON") or "1").strip().lower() in ("1", "true", "yes")
-PACK_FEATURES_BASE_COLS = {
-    "espn_team_game_features": ["row_hash", "event_id", "team_id", "team", "home_away", "game_datetime_utc"],
-}
-PACK_FEATURES_JSON_ALLOWLIST = set()
-for table_name in PACK_FEATURES_BASE_COLS:
-    PACK_FEATURES_JSON_ALLOWLIST.add(("raw", table_name))
-PACK_FEATURES_JSON_ALLOWLIST = set(
-    ("raw", table_name) for table_name in PACK_FEATURES_BASE_COLS
-)
+
+# FIXED: Consolidated the duplicate/malformed definitions
 PACK_FEATURES_JSON_ALLOWLIST = {
-    ("raw", table_name) for table_name in PACK_FEATURES_BASE_COLS
-PACK_FEATURES_JSON_ALLOWLIST = {
-    ("raw", table_name) for table_name in PACK_FEATURES_BASE_COLS.keys()
-}
-PACK_FEATURES_BASE_COLS = {
-    "espn_team_game_features": ["row_hash", "event_id", "team_id", "team", "home_away", "game_datetime_utc"],
-    ("raw", "espn_team_game_features"),
-    ("raw", "espn_matchups_model_ready"),
+    ("raw", table_name) for table_name in ["espn_team_game_features", "espn_matchups_model_ready"]
 }
 
 # Base columns kept as normal columns; everything else becomes JSON in "features"
@@ -631,11 +617,7 @@ def load_one(local_path: str, table_name: str) -> None:
                 prepared = _prepare_csv_for_load(lp, table_name)
                 tmp_path = prepared if prepared != lp else None
 
-                if (
-                    PACK_FEATURES_JSON
-                    and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST
-                ):
-                    base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
+                # FIXED: Consolidated the duplicate if statements
                 if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
                     base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
                     if not base_cols:
