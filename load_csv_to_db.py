@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import csv
+import json
 import hashlib
 import os
 import re
@@ -33,6 +34,15 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
     ("raw", "espn_team_game_features"),
     ("raw", "espn_matchups_model_ready"),
 }
+
+# Optional: pack wide feature CSVs into a single JSON column to avoid Postgres row-size limits.
+PACK_FEATURES_JSON = (os.getenv("PACK_FEATURES_JSON") or "1").strip().lower() in ("1", "true", "yes")
+PACK_FEATURES_BASE_COLS = {
+    "espn_team_game_features": ["row_hash", "event_id", "team_id", "team", "home_away", "game_datetime_utc"],
+}
+PACK_FEATURES_JSON_ALLOWLIST = set()
+for table_name in PACK_FEATURES_BASE_COLS:
+    PACK_FEATURES_JSON_ALLOWLIST.add(("raw", table_name))
 
 # Basic retry (helps with transient network issues)
 MAX_RETRIES = int(os.getenv("DB_LOAD_MAX_RETRIES", "3"))
@@ -371,6 +381,50 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     return tmp
 
 
+def _pack_features_json(local_path: Path, table_name: str, base_cols: List[str]) -> Path:
+    cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(cols, local_path)
+
+    missing_base = [c for c in base_cols if c not in cols]
+    if missing_base:
+        raise ValueError(f"{local_path.name}: missing base columns required for packing: {missing_base}")
+
+    extra_cols = [c for c in cols if c not in base_cols]
+    if not extra_cols:
+        return local_path
+
+    idx = {c: i for i, c in enumerate(cols)}
+    tmp = Path(tempfile.mkstemp(prefix=f"loadpack_{table_name}_", suffix=".csv")[1])
+
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
+        "w", encoding="utf-8", newline=""
+    ) as fout:
+        reader = csv.reader(fin)
+        writer = csv.writer(fout)
+
+        try:
+            header = next(reader)
+        except StopIteration:
+            return local_path
+
+        writer.writerow(base_cols + ["features"])
+        for row in reader:
+            if len(row) < len(header):
+                row = row + [""] * (len(header) - len(row))
+
+            payload = {}
+            for col in extra_cols:
+                raw = row[idx[col]]
+                if _normalize_str(raw) == "":
+                    continue
+                payload[col] = raw
+
+            base_values = [row[idx[c]] if idx.get(c) is not None else "" for c in base_cols]
+            writer.writerow(base_values + [json.dumps(payload, separators=(",", ":"), ensure_ascii=False)])
+
+    return tmp
+
+
 def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path) -> None:
     cols = _read_csv_header_columns(local_path)
     _validate_csv_header(cols, local_path)
@@ -537,22 +591,40 @@ def load_one(local_path: str, table_name: str) -> None:
             time.sleep(delay)
 
         tmp_path: Optional[Path] = None
+        packed_path: Optional[Path] = None
         try:
-            prepared = _prepare_csv_for_load(lp, table_name)
-            tmp_path = prepared if prepared != lp else None
-            validation_result = _preflight_validate_csv(prepared, table_name)
-
-            # Skip empty files
-            if validation_result.get("empty", False):
-                print(f"[SKIP] {local_path} is empty (zero data rows)")
-                return
-
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
                 if not _check_table_exists(conn, DB_SCHEMA, table_name):
                     _die(
                         f"Destination table missing: {DB_SCHEMA}.{table_name}\n"
                         f"Create it in Supabase first (SQL Editor)."
                     )
+
+                table_cols = _get_table_columns(conn, DB_SCHEMA, table_name)
+
+                prepared = _prepare_csv_for_load(lp, table_name)
+                tmp_path = prepared if prepared != lp else None
+
+                if (
+                    PACK_FEATURES_JSON
+                    and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST
+                ):
+                    base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
+                    if "features" not in table_cols:
+                        raise ValueError(
+                            f"{DB_SCHEMA}.{table_name} is missing a 'features' jsonb column required for "
+                            f"PACK_FEATURES_JSON. Apply the migration and rerun."
+                        )
+                    packed = _pack_features_json(prepared, table_name, base_cols)
+                    packed_path = packed if packed != prepared else None
+                    prepared = packed
+
+                validation_result = _preflight_validate_csv(prepared, table_name)
+
+                # Skip empty files
+                if validation_result.get("empty", False):
+                    print(f"[SKIP] {local_path} is empty (zero data rows)")
+                    return
 
                 if LOAD_MODE == "replace":
                     csv_cols = _read_csv_header_columns(prepared)
@@ -601,6 +673,11 @@ def load_one(local_path: str, table_name: str) -> None:
             if tmp_path and tmp_path.exists():
                 try:
                     tmp_path.unlink()
+                except Exception:
+                    pass
+            if packed_path and packed_path.exists():
+                try:
+                    packed_path.unlink()
                 except Exception:
                     pass
 
