@@ -26,11 +26,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas numpy requests psycopg[binary]
 
-      - name: Run ESPN builder (10-day backfill)
+      - name: Run ESPN builder (110-day backfill)
         run: |
           python espn_boxscore_builder.py
         env:
-          DAYS_BACK: "10"
+          DAYS_BACK: "110"
 
       - name: Ensure optional artifacts exist
         run: |
