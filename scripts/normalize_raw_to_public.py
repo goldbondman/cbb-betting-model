@@ -143,7 +143,13 @@ def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Coun
     return Counts(pulled=pulled, upserted=upserted, rejected=0)
 
 
-def upsert_games(conn: psycopg.Connection) -> Counts:
+def _teams_pk_column(conn: psycopg.Connection) -> str:
+    if _has_column(conn, "public", "teams", "id"):
+        return "id"
+    return "team_id"
+
+
+def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
     pulled = _count_rows(
         conn,
         f"""
@@ -204,8 +210,8 @@ def upsert_games(conn: psycopg.Connection) -> Counts:
     select
       %s as season,
       j.game_datetime_utc,
-      ht.id as home_team_id,
-      at.id as away_team_id,
+      ht.{teams_pk} as home_team_id,
+      at.{teams_pk} as away_team_id,
       case when j.completed then j.home_score else null end as home_score,
       case when j.completed then j.away_score else null end as away_score,
       case when j.completed then 'final' else 'scheduled' end as status,
@@ -277,7 +283,7 @@ def upsert_games(conn: psycopg.Connection) -> Counts:
           on ht.season = {SEASON} and ht.source_team_id = j.home_source_team_id
         left join public.teams at
           on at.season = {SEASON} and at.source_team_id = j.away_source_team_id
-        where ht.id is null or at.id is null
+        where ht.{teams_pk} is null or at.{teams_pk} is null
         on conflict do nothing;
         """,
     )
@@ -285,7 +291,12 @@ def upsert_games(conn: psycopg.Connection) -> Counts:
     return Counts(pulled=pulled, upserted=upserted, rejected=rejected)
 
 
-def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str], has_data_ok: bool) -> Counts:
+def upsert_team_boxscores(
+    conn: psycopg.Connection,
+    pulled_at_col: Optional[str],
+    has_data_ok: bool,
+    teams_pk: str,
+) -> Counts:
     pulled = _count_rows(
         conn,
         f"""
@@ -328,7 +339,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str]
     )
     select
       g.id as game_id,
-      t.id as team_id,
+      t.{teams_pk} as team_id,
       lower(r.home_away) as home_away,
       %s as source,
       {pulled_at_expr} as pulled_at,
@@ -354,7 +365,12 @@ def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str]
     return Counts(pulled=pulled, upserted=upserted, rejected=rejected)
 
 
-def upsert_team_game_features(conn: psycopg.Connection, pulled_at_col: Optional[str], has_features_col: bool) -> Counts:
+def upsert_team_game_features(
+    conn: psycopg.Connection,
+    pulled_at_col: Optional[str],
+    has_features_col: bool,
+    teams_pk: str,
+) -> Counts:
     pulled = _count_rows(
         conn,
         f"""
@@ -390,7 +406,7 @@ def upsert_team_game_features(conn: psycopg.Connection, pulled_at_col: Optional[
     )
     select
       g.id as game_id,
-      t.id as team_id,
+      t.{teams_pk} as team_id,
       lower(r.home_away) as home_away,
       %s as feature_set,
       r.features as features,
@@ -421,21 +437,22 @@ def main() -> None:
         pulled_at_features = _pick_existing_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, ["pulled_at_utc", "pulled_at"])
         has_data_ok = _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, "data_ok")
         has_features_col = _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features")
+        teams_pk = _teams_pk_column(conn)
 
         print("[STEP] Upsert teams")
         counts = upsert_teams(conn, pulled_at_logs)
         print(f"[OK] teams: pulled={counts.pulled} upserted={counts.upserted}")
 
         print("[STEP] Upsert games")
-        counts = upsert_games(conn)
+        counts = upsert_games(conn, teams_pk)
         print(f"[OK] games: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
 
         print("[STEP] Upsert team_boxscores")
-        counts = upsert_team_boxscores(conn, pulled_at_logs, has_data_ok)
+        counts = upsert_team_boxscores(conn, pulled_at_logs, has_data_ok, teams_pk)
         print(f"[OK] team_boxscores: pulled={counts.pulled} upserted={counts.upserted}")
 
         print("[STEP] Upsert team_game_features")
-        counts = upsert_team_game_features(conn, pulled_at_features, has_features_col)
+        counts = upsert_team_game_features(conn, pulled_at_features, has_features_col, teams_pk)
         print(f"[OK] team_game_features: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
 
         conn.commit()
