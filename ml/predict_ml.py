@@ -9,6 +9,11 @@ Inputs:
 
 Outputs:
   - ml/predictions_latest.csv
+
+Future-proofing notes:
+- Vectorized scoring (no per-row loops for dot products)
+- Reuses training-time feature medians when present (train_ml_models.py writes feature_medians)
+- Deterministic row_hash and output ordering (when game_datetime_utc exists)
 """
 
 from __future__ import annotations
@@ -65,13 +70,11 @@ def _require_model_fields(model: Dict[str, object], model_path: Path) -> None:
     if not isinstance(model["coefficients"], list):
         raise ValueError(f"Model {model_path} has invalid coefficients (expected list)")
 
-    # intercept must be numeric
     try:
         float(model["intercept"])
     except Exception as e:
         raise ValueError(f"Model {model_path} has non-numeric intercept") from e
 
-    # coef length should match feature_order
     if len(model["coefficients"]) != len(model["feature_order"]):
         raise ValueError(
             f"Model {model_path} coefficient length mismatch: "
@@ -82,7 +85,7 @@ def _require_model_fields(model: Dict[str, object], model_path: Path) -> None:
 def _get_feature_medians(model: Dict[str, object]) -> Dict[str, float]:
     """
     Preferred: use feature_medians saved by training.
-    Fallback: empty dict, caller will fill with 0.0.
+    Fallback: empty dict (caller fills remaining NaNs with 0.0).
     """
     med = model.get("feature_medians")
     if not isinstance(med, dict):
@@ -90,9 +93,11 @@ def _get_feature_medians(model: Dict[str, object]) -> Dict[str, float]:
     out: Dict[str, float] = {}
     for k, v in med.items():
         try:
-            out[str(k)] = float(v)
+            fv = float(v)
+            if not np.isfinite(fv):
+                fv = 0.0
+            out[str(k)] = fv
         except Exception:
-            # ignore malformed values
             continue
     return out
 
@@ -104,33 +109,37 @@ def _prepare_X(
 ) -> np.ndarray:
     """
     Build numeric feature matrix in the model's feature_order.
-    - missing cols created as NaN
-    - values coerced to numeric
+    - Missing cols become NaN
+    - Values coerced to numeric
     - NaNs filled with model medians, then 0.0
     """
     feature_medians = feature_medians or {}
 
+    # Create any missing columns so reindex is stable
     missing_cols = [c for c in feature_order if c not in df.columns]
     if missing_cols:
-        print(f"[WARN] Missing {len(missing_cols)} feature columns in model_features.csv; filling with defaults.", file=sys.stderr)
-        # create cols so reindex works
+        print(
+            f"[WARN] Missing {len(missing_cols)} feature columns in {len(df.columns)}-col features; filling defaults.",
+            file=sys.stderr,
+        )
         for c in missing_cols:
             df[c] = np.nan
 
     Xdf = df.reindex(columns=feature_order).copy()
 
-    # coerce to numeric
+    # Coerce all to numeric (best-effort)
     for c in feature_order:
         Xdf[c] = pd.to_numeric(Xdf[c], errors="coerce")
 
     X = Xdf.to_numpy(dtype=np.float64)
 
-    # fill NaNs with medians (per column)
+    # Fill NaNs with per-feature medians (aligned to feature_order)
     if np.isnan(X).any():
-        # build fill vector aligned to feature_order
         fills = np.array([float(feature_medians.get(c, np.nan)) for c in feature_order], dtype=np.float64)
+        fills[~np.isfinite(fills)] = np.nan  # keep NaN to allow fallback to 0.0
+
         nan_mask = np.isnan(X)
-        # where fill is nan, we leave nan for now (will go to 0.0)
+        # Column-wise fill (fast enough, keeps logic simple)
         for j in range(X.shape[1]):
             if np.isnan(fills[j]):
                 continue
@@ -138,7 +147,7 @@ def _prepare_X(
             if col_nan.any():
                 X[col_nan, j] = fills[j]
 
-    # final fallback: remaining NaN -> 0.0
+    # Final fallback: remaining NaN/inf -> 0.0
     X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
     return X
 
@@ -152,21 +161,35 @@ def _score_df(df: pd.DataFrame, model: Dict[str, object], model_path: Path) -> n
 
     medians = _get_feature_medians(model)
     X = _prepare_X(df, feature_order, medians)
-
-    # preds = intercept + X @ coefs
     return intercept + (X @ coefs)
 
 
 def _row_hash_for_row(row: Dict[str, object]) -> str:
-    keys = [
-        "event_id",
-        "team_id_home",
-        "team_id_away",
-        "game_datetime_utc",
-        "model_version",
-    ]
+    keys = ["event_id", "team_id_home", "team_id_away", "game_datetime_utc", "model_version"]
     payload = "|".join(str(row.get(k, "") or "") for k in keys)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _sort_for_determinism(out: pd.DataFrame) -> pd.DataFrame:
+    """
+    Keep outputs stable across runs when possible.
+    Sort by game_datetime_utc, then event_id, then team ids.
+    If datetime parse fails, fall back to event_id sort.
+    """
+    df = out.copy()
+    if "game_datetime_utc" in df.columns:
+        dt = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
+        df["_dt_sort"] = dt
+        # stable sort
+        df = df.sort_values(
+            ["_dt_sort", "event_id", "team_id_home", "team_id_away"],
+            ascending=[True, True, True, True],
+            na_position="last",
+            kind="mergesort",
+        ).drop(columns=["_dt_sort"])
+        return df.reset_index(drop=True)
+
+    return df.sort_values(["event_id"], kind="mergesort").reset_index(drop=True)
 
 
 def predict(cfg: PredictConfig) -> pd.DataFrame:
@@ -174,18 +197,17 @@ def predict(cfg: PredictConfig) -> pd.DataFrame:
     total_model = _load_model(cfg.total_model_path)
     df = _load_features(cfg.features_path)
 
-    # Score vectorized
+    # Vectorized scoring
     margin_preds = _score_df(df, margin_model, cfg.margin_model_path)
     total_preds = _score_df(df, total_model, cfg.total_model_path)
 
-    # choose model_version (prefer margin, fallback total, fallback default)
+    # Model version preference order: margin -> total -> default
     model_version = (
-        str(margin_model.get("model_version") or "")
-        or str(total_model.get("model_version") or "")
+        str(margin_model.get("model_version") or "").strip()
+        or str(total_model.get("model_version") or "").strip()
         or "ml-linear-v1"
     )
 
-    # Build output
     out = pd.DataFrame(
         {
             "event_id": df.get("event_id"),
@@ -202,19 +224,22 @@ def predict(cfg: PredictConfig) -> pd.DataFrame:
         }
     )
 
-    # deterministic row_hash
-    out["row_hash"] = [
-        _row_hash_for_row(
+    out = _sort_for_determinism(out)
+
+    # Deterministic row_hash (based on stable columns + model_version)
+    # Use apply for clarity; performance is fine at typical daily volumes.
+    out["row_hash"] = out.apply(
+        lambda r: _row_hash_for_row(
             {
-                "event_id": out.at[i, "event_id"],
-                "team_id_home": out.at[i, "team_id_home"],
-                "team_id_away": out.at[i, "team_id_away"],
-                "game_datetime_utc": out.at[i, "game_datetime_utc"],
+                "event_id": r.get("event_id"),
+                "team_id_home": r.get("team_id_home"),
+                "team_id_away": r.get("team_id_away"),
+                "game_datetime_utc": r.get("game_datetime_utc"),
                 "model_version": model_version,
             }
-        )
-        for i in range(len(out))
-    ]
+        ),
+        axis=1,
+    )
 
     cfg.out_path.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(cfg.out_path, index=False)
