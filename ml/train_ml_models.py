@@ -21,6 +21,8 @@ Updates in this version:
   - Correct row counts (total/train/val/clean)
   - Store feature medians used for imputation (predict should reuse)
   - Record dropped constant features
+  - Guard against datetime parse failures (still deterministic)
+  - Safer medians serialization (no NaN/inf in JSON)
 """
 
 from __future__ import annotations
@@ -69,17 +71,31 @@ def _load_features(path: Path) -> pd.DataFrame:
 def _coerce_and_sort_by_datetime(df: pd.DataFrame) -> pd.DataFrame:
     """
     Ensures game_datetime_utc exists and sorts ascending for time-series split.
-    If parse fails, falls back to stable sort by string.
+    If parse fails, still produces deterministic order via fallback keys.
     """
     if "game_datetime_utc" not in df.columns:
         raise ValueError("Missing required column: game_datetime_utc")
 
-    dt = pd.to_datetime(df["game_datetime_utc"], errors="coerce", utc=True)
-    # Put NaT last, keep deterministic order
     df = df.copy()
+
+    # Create fallback deterministic keys if missing
+    if "event_id" not in df.columns:
+        df["event_id"] = df.index.astype(str)
+
+    # Parse datetime with UTC; NaT values go last
+    dt = pd.to_datetime(df["game_datetime_utc"], errors="coerce", utc=True)
     df["_dt_sort"] = dt
-    df = df.sort_values(["_dt_sort", "event_id"], ascending=[True, True], na_position="last")
-    df = df.drop(columns=["_dt_sort"])
+
+    # If everything is NaT, still deterministic (event_id, then stable index)
+    df["_event_sort"] = df["event_id"].astype(str)
+
+    df = df.sort_values(
+        ["_dt_sort", "_event_sort"],
+        ascending=[True, True],
+        na_position="last",
+        kind="mergesort",  # stable
+    ).drop(columns=["_dt_sort", "_event_sort"])
+
     return df
 
 
@@ -93,13 +109,17 @@ def _select_feature_cols(df: pd.DataFrame) -> List[str]:
         "game_datetime_utc",
         "actual_margin_home",
         "actual_total",
+        "row_hash",
+        "model_version",
     }
     cols = [c for c in df.columns if c not in ignore]
-    # Optional cheap leakage guard: drop any accidental target-ish columns
+
+    # Cheap leakage guard: drop any accidental target-ish columns
     suspicious = [c for c in cols if c.lower().startswith("actual_")]
     if suspicious:
         cols = [c for c in cols if c not in suspicious]
         print(f"[WARN] Dropping suspicious feature columns: {suspicious}", file=sys.stderr)
+
     return cols
 
 
@@ -114,6 +134,8 @@ def _compute_feature_medians(X: np.ndarray) -> np.ndarray:
     col_has_finite = np.isfinite(X).any(axis=0)
     if col_has_finite.any():
         med[col_has_finite] = np.nanmedian(X[:, col_has_finite], axis=0)
+    # ensure JSON-safe: replace any remaining non-finite with 0.0
+    med[~np.isfinite(med)] = 0.0
     return med
 
 
@@ -226,7 +248,7 @@ def _fit_linear(
     # Expand back to original feature space so coef aligns with feature_order
     full_coef = np.zeros(X.shape[1] + 1, dtype=np.float64)  # intercept + features
     full_coef[0] = coef_small[0]
-    if keep_mask.size > 0:
+    if keep_mask.size > 0 and coef_small.size > 1:
         full_coef[1:][keep_mask] = coef_small[1:]
 
     return full_coef, rmse, keep_mask, medians_full, dropped_const_idx, n_rows_clean
@@ -283,8 +305,14 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     train_df, val_df, _ = time_series_split(df, split_cfg)
 
     # matrices
-    X_train = train_df[feature_cols].astype(float).to_numpy()
-    X_val = val_df[feature_cols].astype(float).to_numpy() if len(val_df) > 0 else None
+    # NOTE: use to_numpy() without astype(float) to avoid throwing on bad strings; coerce below
+    X_train_df = train_df[feature_cols].apply(pd.to_numeric, errors="coerce")
+    X_train = X_train_df.to_numpy(dtype=np.float64)
+
+    X_val = None
+    if len(val_df) > 0:
+        X_val_df = val_df[feature_cols].apply(pd.to_numeric, errors="coerce")
+        X_val = X_val_df.to_numpy(dtype=np.float64)
 
     rows_total = int(len(df))
     rows_train = int(len(train_df))
@@ -300,7 +328,10 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         ("actual_margin_home", "margin_model.json"),
         ("actual_total", "total_model.json"),
     ]:
-        y_train = train_df[target].astype(float).to_numpy()
+        if target not in train_df.columns:
+            raise ValueError(f"Missing required target column: {target}")
+
+        y_train = pd.to_numeric(train_df[target], errors="coerce").to_numpy(dtype=np.float64)
 
         coef, train_rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean = _fit_linear(
             X_train,
@@ -311,10 +342,18 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
 
         val_rmse = None
         if rows_val > 0 and X_val is not None:
-            y_val = val_df[target].astype(float).to_numpy()
+            y_val = pd.to_numeric(val_df[target], errors="coerce").to_numpy(dtype=np.float64)
             val_rmse = _rmse_from_coef(X_val, y_val, coef, medians_full=medians_full)
 
         dropped_const_features = [feature_cols[i] for i in dropped_const_idx] if dropped_const_idx else []
+
+        # JSON-safe medians dict (no NaN/inf)
+        medians_dict: Dict[str, float] = {}
+        for i, col in enumerate(feature_cols):
+            v = float(medians_full[i]) if i < medians_full.shape[0] else 0.0
+            if not np.isfinite(v):
+                v = 0.0
+            medians_dict[col] = v
 
         model = {
             "target": target,
@@ -336,7 +375,7 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
             "val_split": float(val_ratio),
             "min_train_rows": int(cfg.min_train_rows),
             # sanitation metadata for predict to reuse
-            "feature_medians": {feature_cols[i]: float(medians_full[i]) for i in range(len(feature_cols))},
+            "feature_medians": medians_dict,
             "dropped_const_features": dropped_const_features,
             # split assumptions
             "split_type": "time_series",
