@@ -10,6 +10,15 @@ Outputs:
   - ml/model_features.csv
   - ml/dq_audit_ml.csv
   - ml/feature_schema_hash.txt
+
+Key behaviors:
+  - Expands JSONB `features` (if present) into columns.
+  - Validates schema (FEATURE_SCHEMA).
+  - Normalizes home/away and parses game datetime.
+  - Dedupe per side (home/away) per event_id deterministically.
+  - Builds diff features (home - away) and optional v2 features.
+  - Optional auto-diff fallback to reach minimum feature count.
+  - Writes a lightweight DQ audit CSV for surfaced issues.
 """
 
 from __future__ import annotations
@@ -20,7 +29,7 @@ import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple
 
 from pathlib import Path as _Path
 
@@ -113,6 +122,9 @@ def _parse_features_cell(value: object) -> Dict[str, object]:
 
 
 def _expand_features_json(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    If a 'features' json/jsonb column exists, expand it into top-level columns.
+    """
     if "features" not in df.columns:
         return df
 
@@ -120,6 +132,7 @@ def _expand_features_json(df: pd.DataFrame) -> pd.DataFrame:
     feature_series = df["features"].apply(_parse_features_cell)
     features_df = pd.json_normalize(feature_series)
 
+    # if json keys collide with base cols, prefer base cols
     overlap = set(base_df.columns).intersection(features_df.columns)
     if overlap:
         features_df = features_df.drop(columns=list(overlap))
@@ -233,37 +246,48 @@ def _alias_team_name_cols(df: pd.DataFrame) -> pd.DataFrame:
 def _dedupe_side(df: pd.DataFrame, side: str, issues: List[Tuple[str, str, Dict[str, object]]]) -> pd.DataFrame:
     """
     Ensure one row per event_id for each side (home/away).
-    Deterministic pick: latest pulled_at_utc/pulled_at if available, else keep first after sort.
+
+    Deterministic pick:
+      - if pulled_at_utc/pulled_at exists: keep most recent pulled_at
+      - else: keep last row after deterministic sort
     """
-    cols = set(df.columns)
+    out = df.copy()
+
+    # deterministic baseline sort
+    out["event_id"] = out["event_id"].astype(str)
+    if "team_id" in out.columns:
+        out["team_id"] = out["team_id"].astype(str)
+
+    sort_cols: List[str] = ["game_dt", "event_id"]
+    for c in ["team_id"]:
+        if c in out.columns:
+            sort_cols.append(c)
+
     pulled_col = None
     for c in ["pulled_at_utc", "pulled_at"]:
-        if c in cols:
+        if c in out.columns:
             pulled_col = c
             break
-
-    out = df.copy()
     if pulled_col:
         out[pulled_col] = pd.to_datetime(out[pulled_col], utc=True, errors="coerce")
-        out = out.sort_values([pulled_col], ascending=[True], na_position="last")
-    # count duplicates
+        sort_cols.append(pulled_col)
+
+    out = out.sort_values(sort_cols, ascending=[True] * len(sort_cols), na_position="last", kind="mergesort")
+
     dup_counts = out.groupby("event_id").size()
     dups = dup_counts[dup_counts > 1]
     if len(dups) > 0:
         for eid, n in dups.items():
-            issues.append(
-                (
-                    str(eid),
-                    f"duplicate_{side}_rows",
-                    {"side": side, "rows": int(n)},
-                )
-            )
+            issues.append((str(eid), f"duplicate_{side}_rows", {"side": side, "rows": int(n)}))
         out = out.drop_duplicates(subset=["event_id"], keep="last")
 
     return out
 
 
 def _leakage_guard(feature_cols: List[str]) -> None:
+    """
+    We only want pre-game features. Ban anything that smells like outcomes.
+    """
     bad_tokens = ["actual_", "points_for", "points_against", "score", "result", "winner"]
     offenders = [c for c in feature_cols if any(tok in c.lower() for tok in bad_tokens)]
     if offenders:
@@ -307,14 +331,12 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     home = _dedupe_side(home, "home", issues)
     away = _dedupe_side(away, "away", issues)
 
-    # Track missing pairs
+    # Track missing pairs (best-effort, capped)
     home_ids = set(home["event_id"].astype(str).tolist())
     away_ids = set(away["event_id"].astype(str).tolist())
-    missing_away = home_ids - away_ids
-    missing_home = away_ids - home_ids
-    for eid in list(sorted(missing_away))[:200]:
+    for eid in list(sorted(home_ids - away_ids))[:200]:
         issues.append((eid, "missing_away_row", {}))
-    for eid in list(sorted(missing_home))[:200]:
+    for eid in list(sorted(away_ids - home_ids))[:200]:
         issues.append((eid, "missing_home_row", {}))
 
     merged = home.merge(
@@ -336,7 +358,7 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
 
     keep_features: List[str] = []
 
-    # BASE_FEATURES diffs
+    # BASE_FEATURES diffs (home - away)
     for feat in BASE_FEATURES:
         hcol = f"{feat}_home"
         acol = f"{feat}_away"
@@ -350,15 +372,7 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
 
     # fallback auto numeric diffs
     if len(keep_features) < MIN_FEATURES:
-        ignore_tokens = [
-            "points",
-            "actual",
-            "margin",
-            "game_dt",
-            "datetime",
-            "team_id",
-            "event_id",
-        ]
+        ignore_tokens = ["points", "actual", "margin", "game_dt", "datetime", "team_id", "event_id"]
 
         home_cols = [c for c in merged.columns if c.endswith("_home")]
         away_cols = [c for c in merged.columns if c.endswith("_away")]
@@ -390,8 +404,11 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     if not keep_features:
         raise ValueError("Feature matrix produced zero usable features.")
 
-    # leakage guard
     _leakage_guard(keep_features)
+
+    # Ensure all keep features are numeric
+    for c in keep_features:
+        merged[c] = pd.to_numeric(merged[c], errors="coerce")
 
     output_cols = [
         "event_id",
@@ -404,15 +421,16 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
         "actual_total",
     ] + keep_features
 
-    # Ensure all keep features are numeric
-    for c in keep_features:
-        merged[c] = pd.to_numeric(merged[c], errors="coerce")
-
     out = merged[output_cols].copy()
     out = out.rename(columns={"game_dt_home": "game_datetime_utc"})
 
-    # deterministic order
-    out = out.sort_values(["game_datetime_utc", "event_id"], ascending=[True, True]).reset_index(drop=True)
+    # deterministic order; keep as ISO string in CSV (train parses)
+    out["game_datetime_utc"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce").dt.strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
+    )
+    out = out.sort_values(["game_datetime_utc", "event_id"], ascending=[True, True], na_position="last").reset_index(
+        drop=True
+    )
 
     audit_rows = _build_audit_rows(issues)
     _write_audit(cfg.out_audit_path, audit_rows)
