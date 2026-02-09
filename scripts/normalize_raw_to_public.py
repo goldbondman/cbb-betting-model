@@ -79,6 +79,12 @@ def _count_rows(conn: psycopg.Connection, sql: str, params: Optional[Iterable[ob
         return int(cur.fetchone()[0])
 
 
+def json_dump(obj: dict) -> str:
+    import json
+
+    return json.dumps(obj, ensure_ascii=False)
+
+
 def _insert_dq(conn: psycopg.Connection, entity_type: str, reason_codes: List[str], details: dict) -> int:
     sql = """
     insert into public.dq_audit (id, entity_type, entity_id, severity, reason_codes, details, created_at)
@@ -88,14 +94,12 @@ def _insert_dq(conn: psycopg.Connection, entity_type: str, reason_codes: List[st
     return _exec_rowcount(conn, sql, (str(uuid.uuid4()), entity_type, severity, reason_codes, json_dump(details)))
 
 
-def json_dump(obj: dict) -> str:
-    import json
+def _teams_pk_column(conn: psycopg.Connection) -> str:
+    if _has_column(conn, "public", "teams", "team_id"):
+        return "team_id"
+    return "id"
 
-    return json.dumps(obj, ensure_ascii=False)
 
-
-<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
-=======
 def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Counts:
     pulled = _count_rows(
         conn,
@@ -108,6 +112,7 @@ def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Coun
 
     has_team_id = _has_column(conn, "public", "teams", "team_id")
     has_id = _has_column(conn, "public", "teams", "id")
+
     if has_team_id:
         sql = f"""
         insert into public.teams (team_id, season, source_team_id, team_name, conference, created_at, updated_at)
@@ -161,14 +166,8 @@ def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Coun
                       updated_at = now();
         """
         upserted = _exec_rowcount(conn, sql, (SEASON,))
+
     return Counts(pulled=pulled, upserted=upserted, rejected=0)
-
-
->>>>>>> main
-def _teams_pk_column(conn: psycopg.Connection) -> str:
-    if _has_column(conn, "public", "teams", "team_id"):
-        return "team_id"
-    return "id"
 
 
 def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
@@ -234,11 +233,6 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
       j.game_datetime_utc,
       ht.{teams_pk} as home_team_id,
       at.{teams_pk} as away_team_id,
-<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
-=======
-      ht.id as home_team_id,
-      at.id as away_team_id,
->>>>>>> main
       case when j.completed then j.home_score else null end as home_score,
       case when j.completed then j.away_score else null end as away_score,
       case when j.completed then 'final' else 'scheduled' end as status,
@@ -324,7 +318,6 @@ def upsert_team_boxscores(
     has_data_ok: bool,
     teams_pk: str,
 ) -> Counts:
-    pass  # Explicit block opener to avoid indentation errors in partial merges.
     # Normalize team boxscores with explicit DQ logging for missing home_away.
     pulled = _count_rows(
         conn,
@@ -468,13 +461,10 @@ def main() -> None:
         has_features_col = _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features")
         teams_pk = _teams_pk_column(conn)
 
-<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
-=======
         print("[STEP] Upsert teams")
         counts = upsert_teams(conn, pulled_at_logs)
         print(f"[OK] teams: pulled={counts.pulled} upserted={counts.upserted}")
 
->>>>>>> main
         print("[STEP] Upsert games")
         counts = upsert_games(conn, teams_pk)
         print(f"[OK] games: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
