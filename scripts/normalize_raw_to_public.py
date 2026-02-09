@@ -94,6 +94,77 @@ def json_dump(obj: dict) -> str:
     return json.dumps(obj, ensure_ascii=False)
 
 
+<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
+=======
+def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Counts:
+    pulled = _count_rows(
+        conn,
+        f"""
+        select count(distinct team_id)
+        from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
+        where team_id is not null and team is not null
+        """,
+    )
+
+    has_team_id = _has_column(conn, "public", "teams", "team_id")
+    has_id = _has_column(conn, "public", "teams", "id")
+    if has_team_id:
+        sql = f"""
+        insert into public.teams (team_id, season, source_team_id, team_name, conference, created_at, updated_at)
+        select distinct
+          gen_random_uuid() as team_id,
+          %s as season,
+          team_id as source_team_id,
+          team as team_name,
+          null as conference,
+          now() as created_at,
+          now() as updated_at
+        from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
+        where team_id is not null and team is not null
+        on conflict (season, source_team_id)
+        do update set team_name = excluded.team_name,
+                      updated_at = now();
+        """
+        upserted = _exec_rowcount(conn, sql, (SEASON,))
+    elif has_id:
+        sql = f"""
+        insert into public.teams (id, season, source_team_id, team_name, conference, created_at, updated_at)
+        select distinct
+          gen_random_uuid() as id,
+          %s as season,
+          team_id as source_team_id,
+          team as team_name,
+          null as conference,
+          now() as created_at,
+          now() as updated_at
+        from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
+        where team_id is not null and team is not null
+        on conflict (season, source_team_id)
+        do update set team_name = excluded.team_name,
+                      updated_at = now();
+        """
+        upserted = _exec_rowcount(conn, sql, (SEASON,))
+    else:
+        sql = f"""
+        insert into public.teams (season, source_team_id, team_name, conference, created_at, updated_at)
+        select distinct
+          %s as season,
+          team_id as source_team_id,
+          team as team_name,
+          null as conference,
+          now() as created_at,
+          now() as updated_at
+        from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
+        where team_id is not null and team is not null
+        on conflict (season, source_team_id)
+        do update set team_name = excluded.team_name,
+                      updated_at = now();
+        """
+        upserted = _exec_rowcount(conn, sql, (SEASON,))
+    return Counts(pulled=pulled, upserted=upserted, rejected=0)
+
+
+>>>>>>> main
 def _teams_pk_column(conn: psycopg.Connection) -> str:
     if _has_column(conn, "public", "teams", "team_id"):
         return "team_id"
@@ -163,6 +234,11 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
       j.game_datetime_utc,
       ht.{teams_pk} as home_team_id,
       at.{teams_pk} as away_team_id,
+<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
+=======
+      ht.id as home_team_id,
+      at.id as away_team_id,
+>>>>>>> main
       case when j.completed then j.home_score else null end as home_score,
       case when j.completed then j.away_score else null end as away_score,
       case when j.completed then 'final' else 'scheduled' end as status,
@@ -392,6 +468,13 @@ def main() -> None:
         has_features_col = _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features")
         teams_pk = _teams_pk_column(conn)
 
+<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
+=======
+        print("[STEP] Upsert teams")
+        counts = upsert_teams(conn, pulled_at_logs)
+        print(f"[OK] teams: pulled={counts.pulled} upserted={counts.upserted}")
+
+>>>>>>> main
         print("[STEP] Upsert games")
         counts = upsert_games(conn, teams_pk)
         print(f"[OK] games: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")

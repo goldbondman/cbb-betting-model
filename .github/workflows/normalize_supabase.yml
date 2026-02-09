@@ -38,10 +38,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
       - name: Seed teams from JSON
         run: |
           python scripts/seed_teams_from_json.py
 
+=======
+>>>>>>> main
       - name: Run normalization script
         run: |
           python scripts/normalize_raw_to_public.py
