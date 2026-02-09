@@ -231,6 +231,8 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
       j.game_datetime_utc,
       ht.{teams_pk} as home_team_id,
       at.{teams_pk} as away_team_id,
+      ht.id as home_team_id,
+      at.id as away_team_id,
       case when j.completed then j.home_score else null end as home_score,
       case when j.completed then j.away_score else null end as away_score,
       case when j.completed then 'final' else 'scheduled' end as status,
