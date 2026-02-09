@@ -280,6 +280,21 @@ def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str]
     if has_data_ok:
         verification_expr = "case when r.data_ok then 'verified' else 'partial' end"
 
+    rejected = 0
+    rejected += _exec_rowcount(
+        conn,
+        f"""
+        insert into public.dq_audit (id, entity_type, entity_id, severity, reason_codes, details, created_at)
+        select gen_random_uuid(), 'team_boxscores', null, 'error', array['missing_home_away'],
+               jsonb_build_object('event_id', event_id, 'team_id', team_id), now()
+        from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
+        where event_id is not null
+          and team_id is not null
+          and (home_away is null or btrim(home_away) = '')
+        on conflict do nothing;
+        """,
+    )
+
     sql = f"""
     insert into public.team_boxscores (
       game_id,
@@ -305,6 +320,8 @@ def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str]
       on g.season = %s and g.source = %s and g.external_game_id = r.event_id
     join public.teams t
       on t.season = %s and t.source_team_id = r.team_id
+    where r.home_away is not null
+      and btrim(r.home_away) <> ''
     on conflict (game_id, team_id)
     do update set
       home_away = excluded.home_away,
@@ -314,7 +331,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str]
       verification_notes = excluded.verification_notes;
     """
     upserted = _exec_rowcount(conn, sql, (SOURCE, SEASON, SOURCE, SEASON))
-    return Counts(pulled=pulled, upserted=upserted, rejected=0)
+    return Counts(pulled=pulled, upserted=upserted, rejected=rejected)
 
 
 def upsert_team_game_features(conn: psycopg.Connection, pulled_at_col: Optional[str], has_features_col: bool) -> Counts:
