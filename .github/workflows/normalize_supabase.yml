@@ -24,6 +24,7 @@ jobs:
       SEASON: ${{ github.event.inputs.season }}
       SOURCE: ${{ github.event.inputs.source }}
       FEATURE_SET: ${{ github.event.inputs.feature_set }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -38,13 +39,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
-      - name: Seed teams from JSON
-        run: |
-          python scripts/seed_teams_from_json.py
+      # Optional: keep only if you want teams pre-populated (conference/name canonicalization)
+      # Normalization now upserts teams from raw logs, so this is not required.
+      # - name: Seed teams from JSON
+      #   run: |
+      #     python scripts/seed_teams_from_json.py
 
-=======
->>>>>>> main
       - name: Run normalization script
         run: |
           python scripts/normalize_raw_to_public.py
