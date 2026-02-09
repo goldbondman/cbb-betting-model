@@ -23,6 +23,7 @@ Updates in this version:
   - Record dropped constant features
   - Guard against datetime parse failures (still deterministic)
   - Safer medians serialization (no NaN/inf in JSON)
+  - More robust numeric coercion for X/y (no hard crash on string columns)
 """
 
 from __future__ import annotations
@@ -78,22 +79,20 @@ def _coerce_and_sort_by_datetime(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
 
-    # Create fallback deterministic keys if missing
+    # Ensure deterministic tie-breaker keys exist
     if "event_id" not in df.columns:
         df["event_id"] = df.index.astype(str)
 
-    # Parse datetime with UTC; NaT values go last
     dt = pd.to_datetime(df["game_datetime_utc"], errors="coerce", utc=True)
     df["_dt_sort"] = dt
-
-    # If everything is NaT, still deterministic (event_id, then stable index)
     df["_event_sort"] = df["event_id"].astype(str)
 
+    # Stable sort (mergesort) so ordering is deterministic even under ties
     df = df.sort_values(
         ["_dt_sort", "_event_sort"],
         ascending=[True, True],
         na_position="last",
-        kind="mergesort",  # stable
+        kind="mergesort",
     ).drop(columns=["_dt_sort", "_event_sort"])
 
     return df
@@ -114,7 +113,7 @@ def _select_feature_cols(df: pd.DataFrame) -> List[str]:
     }
     cols = [c for c in df.columns if c not in ignore]
 
-    # Cheap leakage guard: drop any accidental target-ish columns
+    # Leakage guard: drop any accidental target-ish columns
     suspicious = [c for c in cols if c.lower().startswith("actual_")]
     if suspicious:
         cols = [c for c in cols if c not in suspicious]
@@ -134,7 +133,7 @@ def _compute_feature_medians(X: np.ndarray) -> np.ndarray:
     col_has_finite = np.isfinite(X).any(axis=0)
     if col_has_finite.any():
         med[col_has_finite] = np.nanmedian(X[:, col_has_finite], axis=0)
-    # ensure JSON-safe: replace any remaining non-finite with 0.0
+    # JSON-safe
     med[~np.isfinite(med)] = 0.0
     return med
 
@@ -148,22 +147,13 @@ def _sanitize_xy(
     """
     Returns:
       X_clean, y_clean, keep_cols_mask, medians_full, dropped_const_idx, n_rows_clean
-
-    Behavior:
-      - forces float64
-      - converts inf -> nan
-      - drops rows where y is non-finite or all X features are non-finite
-      - imputes remaining NaNs in X with column medians (all-NaN col -> 0.0)
-      - optionally drops constant columns (std=0) to improve conditioning
     """
     X = np.asarray(X, dtype=np.float64)
     y = np.asarray(y, dtype=np.float64).reshape(-1)
 
-    # normalize non-finite
     X[~np.isfinite(X)] = np.nan
     y[~np.isfinite(y)] = np.nan
 
-    # keep rows where y is finite and at least one feature is finite
     row_ok = np.isfinite(y) & np.isfinite(X).any(axis=1)
     X = X[row_ok]
     y = y[row_ok]
@@ -176,7 +166,6 @@ def _sanitize_xy(
 
     medians_full = _compute_feature_medians(X)
 
-    # impute NaNs in X with precomputed medians
     if np.isnan(X).any():
         nan_idx = np.where(np.isnan(X))
         X[nan_idx] = medians_full[nan_idx[1]]
@@ -202,15 +191,13 @@ def _fit_linear(
 ) -> Tuple[np.ndarray, float, np.ndarray, np.ndarray, List[int], int]:
     """
     Fits linear regression with intercept.
-    - lstsq primary
-    - ridge fallback if SVD fails
-    - returns:
-        full_coef (intercept + coef per ORIGINAL X columns),
-        train_rmse,
-        keep_mask (const cols kept),
-        medians_full (per ORIGINAL col),
-        dropped_const_idx,
-        n_rows_clean (rows after dropping bad y/all-bad X)
+    Returns:
+      full_coef (intercept + coef per ORIGINAL X columns),
+      train_rmse,
+      keep_mask,
+      medians_full,
+      dropped_const_idx,
+      n_rows_clean
     """
     X_clean, y_clean, keep_mask, medians_full, dropped_const_idx, n_rows_clean = _sanitize_xy(
         X, y, drop_const_cols=True
@@ -245,8 +232,7 @@ def _fit_linear(
     preds = X_aug @ coef_small
     rmse = float(np.sqrt(np.mean((preds - y_clean) ** 2)))
 
-    # Expand back to original feature space so coef aligns with feature_order
-    full_coef = np.zeros(X.shape[1] + 1, dtype=np.float64)  # intercept + features
+    full_coef = np.zeros(X.shape[1] + 1, dtype=np.float64)
     full_coef[0] = coef_small[0]
     if keep_mask.size > 0 and coef_small.size > 1:
         full_coef[1:][keep_mask] = coef_small[1:]
@@ -262,9 +248,7 @@ def _rmse_from_coef(
     medians_full: Optional[np.ndarray] = None,
 ) -> float:
     """
-    RMSE with the SAME sanitation assumptions as training:
-      - drops rows where y non-finite or all X non-finite
-      - imputes remaining X NaNs with column medians (provided or computed)
+    RMSE under the same sanitation assumptions as training.
     """
     X = np.asarray(X, dtype=np.float64)
     y = np.asarray(y, dtype=np.float64).reshape(-1)
@@ -299,20 +283,17 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     if not feature_cols:
         raise ValueError("No feature columns available for training.")
 
-    # time-series split (assumes df already sorted)
     val_ratio = max(0.0, min(0.5, float(cfg.val_split)))
     split_cfg = SplitConfig(val_ratio=val_ratio, test_ratio=0.0)
     train_df, val_df, _ = time_series_split(df, split_cfg)
 
-    # matrices
-    # NOTE: use to_numpy() without astype(float) to avoid throwing on bad strings; coerce below
-    X_train_df = train_df[feature_cols].apply(pd.to_numeric, errors="coerce")
-    X_train = X_train_df.to_numpy(dtype=np.float64)
-
-    X_val = None
-    if len(val_df) > 0:
-        X_val_df = val_df[feature_cols].apply(pd.to_numeric, errors="coerce")
-        X_val = X_val_df.to_numpy(dtype=np.float64)
+    # Coerce feature matrix without hard-crashing on strings
+    X_train = train_df[feature_cols].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=np.float64)
+    X_val = (
+        val_df[feature_cols].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=np.float64)
+        if len(val_df) > 0
+        else None
+    )
 
     rows_total = int(len(df))
     rows_train = int(len(train_df))
@@ -348,12 +329,12 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         dropped_const_features = [feature_cols[i] for i in dropped_const_idx] if dropped_const_idx else []
 
         # JSON-safe medians dict (no NaN/inf)
-        medians_dict: Dict[str, float] = {}
+        feature_medians: Dict[str, float] = {}
         for i, col in enumerate(feature_cols):
             v = float(medians_full[i]) if i < medians_full.shape[0] else 0.0
             if not np.isfinite(v):
                 v = 0.0
-            medians_dict[col] = v
+            feature_medians[col] = v
 
         model = {
             "target": target,
@@ -370,12 +351,12 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
             "rows_train": rows_train,
             "rows_train_clean": int(rows_train_clean),
             "rows_val": rows_val,
-            # training params
+            # params
             "ridge_lambda": float(cfg.ridge_lambda),
             "val_split": float(val_ratio),
             "min_train_rows": int(cfg.min_train_rows),
             # sanitation metadata for predict to reuse
-            "feature_medians": medians_dict,
+            "feature_medians": feature_medians,
             "dropped_const_features": dropped_const_features,
             # split assumptions
             "split_type": "time_series",
