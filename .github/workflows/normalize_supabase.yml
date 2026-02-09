@@ -1,0 +1,47 @@
+name: normalize-supabase
+
+on:
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Season year (e.g., 2025)"
+        required: false
+        default: "2025"
+      source:
+        description: "Source name (default: espn)"
+        required: false
+        default: "espn"
+      feature_set:
+        description: "Feature set label for team_game_features"
+        required: false
+        default: "espn_v1"
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      SEASON: ${{ github.event.inputs.season }}
+      SOURCE: ${{ github.event.inputs.source }}
+      FEATURE_SET: ${{ github.event.inputs.feature_set }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Seed teams from JSON
+        run: |
+          python scripts/seed_teams_from_json.py
+
+      - name: Run normalization script
+        run: |
+          python scripts/normalize_raw_to_public.py
