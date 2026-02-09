@@ -94,6 +94,8 @@ def json_dump(obj: dict) -> str:
     return json.dumps(obj, ensure_ascii=False)
 
 
+<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
+=======
 def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Counts:
     pulled = _count_rows(
         conn,
@@ -162,6 +164,7 @@ def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Coun
     return Counts(pulled=pulled, upserted=upserted, rejected=0)
 
 
+>>>>>>> main
 def _teams_pk_column(conn: psycopg.Connection) -> str:
     if _has_column(conn, "public", "teams", "team_id"):
         return "team_id"
@@ -231,8 +234,11 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
       j.game_datetime_utc,
       ht.{teams_pk} as home_team_id,
       at.{teams_pk} as away_team_id,
+<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
+=======
       ht.id as home_team_id,
       at.id as away_team_id,
+>>>>>>> main
       case when j.completed then j.home_score else null end as home_score,
       case when j.completed then j.away_score else null end as away_score,
       case when j.completed then 'final' else 'scheduled' end as status,
@@ -462,10 +468,13 @@ def main() -> None:
         has_features_col = _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features")
         teams_pk = _teams_pk_column(conn)
 
+<<<<<<< codex/investigate-data-loading-issues-in-supabase-7hy65i
+=======
         print("[STEP] Upsert teams")
         counts = upsert_teams(conn, pulled_at_logs)
         print(f"[OK] teams: pulled={counts.pulled} upserted={counts.upserted}")
 
+>>>>>>> main
         print("[STEP] Upsert games")
         counts = upsert_games(conn, teams_pk)
         print(f"[OK] games: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
