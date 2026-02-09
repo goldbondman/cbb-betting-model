@@ -14,8 +14,9 @@ Updates:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
+import json
 import pandas as pd
 
 from schema import FeatureSpec
@@ -29,11 +30,60 @@ class ValidationIssue:
 
 
 def _coerce_numeric(series: pd.Series) -> pd.Series:
+    # Works for ints/floats/strings; coerces bad values to NaN
     return pd.to_numeric(series, errors="coerce")
 
 
 def _null_rate(series: pd.Series) -> float:
     return float(series.isna().mean()) if len(series) else 1.0
+
+
+def _empty_string_rate(series: pd.Series) -> float:
+    s = series.astype("string")
+    # Count empties among non-null rows
+    non_null = s.notna()
+    if not bool(non_null.any()):
+        return 0.0
+    return float(s[non_null].str.strip().eq("").mean())
+
+
+def _coerce_datetime(series: pd.Series) -> pd.Series:
+    return pd.to_datetime(series, errors="coerce", utc=True)
+
+
+def _is_boolish(series: pd.Series) -> bool:
+    # Accept actual bool dtype, or strings like "true/false/1/0/yes/no"
+    if str(series.dtype).lower() == "bool":
+        return True
+    s = series.astype("string").str.strip().str.lower()
+    s = s[s.notna()]
+    if len(s) == 0:
+        return True
+    allowed = {"true", "false", "1", "0", "yes", "no", "y", "n", "t", "f"}
+    sample = s.head(200)
+    return bool(sample.isin(allowed).mean() >= 0.95)
+
+
+def _is_jsonish(series: pd.Series) -> bool:
+    # Conservative: only checks a sample of non-null strings
+    s = series.dropna()
+    if s.empty:
+        return True
+    sample = s.astype("string").head(50)
+    ok = 0
+    for v in sample:
+        txt = str(v).strip()
+        if not txt:
+            ok += 1
+            continue
+        if txt[0] not in ("{", "["):
+            continue
+        try:
+            json.loads(txt)
+            ok += 1
+        except Exception:
+            pass
+    return ok >= max(1, int(0.7 * len(sample)))
 
 
 def validate_dataframe(
@@ -43,7 +93,7 @@ def validate_dataframe(
     null_threshold: float = 0.5,
     min_rows: int = 10,
     unique_keys: Optional[Sequence[str]] = ("event_id", "team_id"),
-    required_values: Optional[dict] = None,
+    required_values: Optional[Dict[str, Sequence[object]]] = None,
     leakage_tokens: Optional[Sequence[str]] = None,
 ) -> Tuple[bool, List[ValidationIssue]]:
     """
@@ -55,11 +105,11 @@ def validate_dataframe(
       null_threshold: warn if a column's null rate exceeds this threshold
       min_rows: warn if fewer rows than this
       unique_keys: if provided and all columns exist, enforce uniqueness (error on dupes)
-      required_values: optional dict of {col: set/list of allowed values} (error on out-of-set)
+      required_values: optional dict of {col: allowed values} (error on out-of-set, nulls ignored)
       leakage_tokens: optional token list to scan for suspicious columns
 
     Returns:
-      (ok, issues)
+      (ok, issues) where ok=False only if any severity="error" issues exist.
     """
     issues: List[ValidationIssue] = []
 
@@ -96,12 +146,12 @@ def validate_dataframe(
                 )
             )
 
-        # dtype-aware checks (best-effort)
         dtype = (spec.dtype or "").lower().strip()
+
+        # dtype-aware checks (best-effort, non-fatal by default)
         if dtype in ("float", "int", "number"):
             numeric = _coerce_numeric(series)
             if numeric.notna().sum() == 0:
-                # if it's required and all-null/uncastable, flag
                 if spec.required:
                     issues.append(
                         ValidationIssue(
@@ -115,33 +165,56 @@ def validate_dataframe(
                     mn = float(numeric.min(skipna=True))
                     if mn < float(spec.min_value):
                         issues.append(
-                            ValidationIssue(
-                                "range_violation",
-                                f"{spec.name} min {mn} < {spec.min_value}",
-                                "warning",
-                            )
+                            ValidationIssue("range_violation", f"{spec.name} min {mn} < {spec.min_value}", "warning")
                         )
                 if spec.max_value is not None:
                     mx = float(numeric.max(skipna=True))
                     if mx > float(spec.max_value):
                         issues.append(
-                            ValidationIssue(
-                                "range_violation",
-                                f"{spec.name} max {mx} > {spec.max_value}",
-                                "warning",
-                            )
+                            ValidationIssue("range_violation", f"{spec.name} max {mx} > {spec.max_value}", "warning")
                         )
+
         elif dtype in ("str", "string"):
-            # warn if mostly empty strings (distinct from NaN)
-            if series.astype("string").str.strip().eq("").mean() > float(null_threshold):
+            esr = _empty_string_rate(series)
+            if esr > float(null_threshold):
                 issues.append(
                     ValidationIssue(
                         "high_empty_string_rate",
-                        f"{spec.name} empty-string rate exceeds {float(null_threshold):.1%}",
+                        f"{spec.name} empty-string rate {esr:.1%} exceeds {float(null_threshold):.1%}",
                         "warning",
                     )
                 )
-        # other dtypes can be added as schema evolves
+
+        elif dtype in ("datetime", "date", "timestamp"):
+            dt = _coerce_datetime(series)
+            if spec.required and dt.notna().sum() == 0:
+                issues.append(
+                    ValidationIssue(
+                        "dtype_coerce_failed",
+                        f"{spec.name} could not be coerced to datetime (all values invalid/null).",
+                        "warning",
+                    )
+                )
+
+        elif dtype in ("bool", "boolean"):
+            if not _is_boolish(series):
+                issues.append(
+                    ValidationIssue(
+                        "dtype_coerce_failed",
+                        f"{spec.name} does not look boolean-like (expected bool/true/false/1/0).",
+                        "warning",
+                    )
+                )
+
+        elif dtype in ("json", "dict", "object"):
+            if not _is_jsonish(series):
+                issues.append(
+                    ValidationIssue(
+                        "dtype_coerce_failed",
+                        f"{spec.name} does not look JSON-like in sampled rows.",
+                        "warning",
+                    )
+                )
 
     # Unique key enforcement
     if unique_keys:
@@ -156,11 +229,11 @@ def validate_dataframe(
         for col, allowed in required_values.items():
             if col not in df.columns:
                 continue
-            allowed_set = set(allowed)
-            bad = ~df[col].astype("string").str.strip().isin({str(x) for x in allowed_set})
-            # treat nulls as bad only if column is required in schema
-            bad = bad & df[col].notna()
-            n_bad = int(bad.sum())
+            allowed_set = {str(x).strip() for x in allowed}
+            s = df[col].astype("string").str.strip()
+            # ignore nulls; this check is about invalid concrete values
+            mask = s.notna() & ~s.isin(allowed_set)
+            n_bad = int(mask.sum())
             if n_bad > 0:
                 issues.append(
                     ValidationIssue(
@@ -171,7 +244,6 @@ def validate_dataframe(
                 )
 
     # Leakage scans (column-name heuristics)
-    # Keep it conservative: warn only
     leakage_cols = [c for c in df.columns if c.endswith("_post") or c.endswith("_final")]
     if leakage_cols:
         issues.append(
@@ -182,9 +254,20 @@ def validate_dataframe(
             )
         )
 
-    tokens = list(leakage_tokens) if leakage_tokens else ["actual_", "final_", "result", "winner", "score_", "_score"]
+    tokens = list(leakage_tokens) if leakage_tokens else [
+        "actual_",
+        "final_",
+        "result",
+        "winner",
+        "score_",
+        "_score",
+        "closing",
+        "closing_line",
+        "vegas_",
+        "spread",
+        "total",
+    ]
     token_hits = [c for c in df.columns if any(tok in c.lower() for tok in tokens)]
-    # don't double-count obvious required targets if present, this module is for feature tables
     if token_hits:
         issues.append(
             ValidationIssue(
