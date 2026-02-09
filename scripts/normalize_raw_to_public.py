@@ -105,11 +105,30 @@ def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Coun
     )
 
     has_team_id = _has_column(conn, "public", "teams", "team_id")
+    has_id = _has_column(conn, "public", "teams", "id")
     if has_team_id:
         sql = f"""
         insert into public.teams (team_id, season, source_team_id, team_name, conference, created_at, updated_at)
         select distinct
           gen_random_uuid() as team_id,
+          %s as season,
+          team_id as source_team_id,
+          team as team_name,
+          null as conference,
+          now() as created_at,
+          now() as updated_at
+        from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
+        where team_id is not null and team is not null
+        on conflict (season, source_team_id)
+        do update set team_name = excluded.team_name,
+                      updated_at = now();
+        """
+        upserted = _exec_rowcount(conn, sql, (SEASON,))
+    elif has_id:
+        sql = f"""
+        insert into public.teams (id, season, source_team_id, team_name, conference, created_at, updated_at)
+        select distinct
+          gen_random_uuid() as id,
           %s as season,
           team_id as source_team_id,
           team as team_name,
@@ -144,6 +163,12 @@ def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Coun
 
 
 def _teams_pk_column(conn: psycopg.Connection) -> str:
+    if _has_column(conn, "public", "teams", "team_id"):
+        return "team_id"
+    return "id"
+
+
+def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
     if _has_column(conn, "public", "teams", "id"):
         return "id"
     return "team_id"
