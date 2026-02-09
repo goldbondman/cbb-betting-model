@@ -169,32 +169,6 @@ def _teams_pk_column(conn: psycopg.Connection) -> str:
 
 
 def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
-    if _has_column(conn, "public", "teams", "id"):
-        return "id"
-    return "team_id"
-
-
-def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
-    sql = f"""
-    insert into public.teams (season, source_team_id, team_name, conference, created_at, updated_at)
-    select distinct
-      %s as season,
-      team_id as source_team_id,
-      team as team_name,
-      null as conference,
-      now() as created_at,
-      now() as updated_at
-    from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
-    where team_id is not null and team is not null
-    on conflict (season, source_team_id)
-    do update set team_name = excluded.team_name,
-                  updated_at = now();
-    """
-    upserted = _exec_rowcount(conn, sql, (SEASON,))
-    return Counts(pulled=pulled, upserted=upserted, rejected=0)
-
-
-def upsert_games(conn: psycopg.Connection) -> Counts:
     pulled = _count_rows(
         conn,
         f"""
@@ -331,7 +305,6 @@ def upsert_games(conn: psycopg.Connection) -> Counts:
         left join public.teams at
           on at.season = {SEASON} and at.source_team_id = j.away_source_team_id
         where ht.{teams_pk} is null or at.{teams_pk} is null
-        where ht.id is null or at.id is null
         on conflict do nothing;
         """,
     )
@@ -345,7 +318,8 @@ def upsert_team_boxscores(
     has_data_ok: bool,
     teams_pk: str,
 ) -> Counts:
-def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str], has_data_ok: bool) -> Counts:
+    pass  # Explicit block opener to avoid indentation errors in partial merges.
+    # Normalize team boxscores with explicit DQ logging for missing home_away.
     pulled = _count_rows(
         conn,
         f"""
@@ -389,7 +363,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str]
     select
       g.id as game_id,
       t.{teams_pk} as team_id,
-      t.id as team_id,
       lower(r.home_away) as home_away,
       %s as source,
       {pulled_at_expr} as pulled_at,
@@ -421,7 +394,6 @@ def upsert_team_game_features(
     has_features_col: bool,
     teams_pk: str,
 ) -> Counts:
-def upsert_team_game_features(conn: psycopg.Connection, pulled_at_col: Optional[str], has_features_col: bool) -> Counts:
     pulled = _count_rows(
         conn,
         f"""
@@ -458,7 +430,6 @@ def upsert_team_game_features(conn: psycopg.Connection, pulled_at_col: Optional[
     select
       g.id as game_id,
       t.{teams_pk} as team_id,
-      t.id as team_id,
       lower(r.home_away) as home_away,
       %s as feature_set,
       r.features as features,
@@ -505,15 +476,6 @@ def main() -> None:
 
         print("[STEP] Upsert team_game_features")
         counts = upsert_team_game_features(conn, pulled_at_features, has_features_col, teams_pk)
-        counts = upsert_games(conn)
-        print(f"[OK] games: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
-
-        print("[STEP] Upsert team_boxscores")
-        counts = upsert_team_boxscores(conn, pulled_at_logs, has_data_ok)
-        print(f"[OK] team_boxscores: pulled={counts.pulled} upserted={counts.upserted}")
-
-        print("[STEP] Upsert team_game_features")
-        counts = upsert_team_game_features(conn, pulled_at_features, has_features_col)
         print(f"[OK] team_game_features: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
 
         conn.commit()
