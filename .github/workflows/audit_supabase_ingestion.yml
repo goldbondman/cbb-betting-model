@@ -6,8 +6,10 @@ on:
 jobs:
   audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -16,6 +18,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
+
+      - name: Preflight env
+        run: |
+          python --version
+          if [ -z "${SUPABASE_DB_URL}" ]; then
+            echo "SUPABASE_DB_URL is missing (repo secret not set)."
+            exit 1
+          fi
 
       - name: Install dependencies
         run: |
