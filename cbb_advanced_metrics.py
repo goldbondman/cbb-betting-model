@@ -8,22 +8,32 @@ Add-on metrics for ESPN CBB pipeline:
 - volatility/consistency measures (incl 3P variance + reliance)
 - style/mismatch metrics (team vs opponent pregame profiles)
 - generic leak-free last-N rolling means/stds (shifted)
+- optional matchup "edge" features when opponent-allowed pregame fields exist
 
 Designed to plug into espn_boxscore_builder.py AFTER opponent merge
 (PASS 5) and BEFORE writing espn_team_game_features.csv.
+
+Flexibility + safety goals:
+- Never break dependencies: existing function names kept, defaults conservative
+- "Write if missing" behavior by default (no overwrites unless overwrite=True)
+- Column presence tolerant: creates missing inputs as NaN; computes best-effort
+- Faster rolling via groupby().transform + rolling, avoids slow groupby-apply
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Iterable, List, Optional, Sequence
 
 import numpy as np
 import pandas as pd
 
-
 EPS = 1e-9
 
+
+# ----------------------------
+# Utilities
+# ----------------------------
 
 def safe_div(num, den, default=np.nan):
     if den is None:
@@ -48,6 +58,30 @@ def require_cols(df: pd.DataFrame, cols: Sequence[str], ctx: str) -> None:
     missing = [c for c in cols if c not in df.columns]
     if missing:
         raise ValueError(f"{ctx}: missing required columns: {missing}")
+
+
+def _set_col(out: pd.DataFrame, col: str, values: pd.Series | np.ndarray, overwrite: bool) -> None:
+    if (not overwrite) and (col in out.columns):
+        return
+    out[col] = values
+
+
+def _pick_first_present(df: pd.DataFrame, primary: str, fallback: str) -> pd.Series:
+    if primary in df.columns:
+        s = pd.to_numeric(df[primary], errors="coerce")
+        if s.notna().any():
+            return s
+    if fallback in df.columns:
+        return pd.to_numeric(df[fallback], errors="coerce")
+    return pd.Series(np.nan, index=df.index)
+
+
+def _ensure_cols(df: pd.DataFrame, cols: Sequence[str]) -> pd.DataFrame:
+    out = df.copy()
+    for c in cols:
+        if c not in out.columns:
+            out[c] = np.nan
+    return out
 
 
 # ----------------------------
@@ -82,26 +116,22 @@ class ExpectedConfig:
     out_exp_margin: str = "exp_margin"
 
 
-def _pick_first_present(df: pd.DataFrame, primary: str, fallback: str) -> pd.Series:
-    if primary in df.columns:
-        s = pd.to_numeric(df[primary], errors="coerce")
-        if s.notna().any():
-            return s
-    if fallback in df.columns:
-        return pd.to_numeric(df[fallback], errors="coerce")
-    return pd.Series(np.nan, index=df.index)
-
-
-def add_expected_matchup_metrics(df: pd.DataFrame, cfg: ExpectedConfig = ExpectedConfig()) -> pd.DataFrame:
+def add_expected_matchup_metrics(
+    df: pd.DataFrame,
+    cfg: ExpectedConfig = ExpectedConfig(),
+    *,
+    overwrite: bool = False,
+) -> pd.DataFrame:
     """
     Adds exp_pace, exp_ortg, exp_drtg, exp_netrtg, exp_margin.
+
     Uses simple blending:
       exp_ortg = avg(team_ortg_pre, opp_drtg_pre)
       exp_drtg = avg(team_drtg_pre, opp_ortg_pre)
       exp_pace = avg(team_pace_pre, opp_pace_pre)
       exp_margin = (exp_pace / 100) * (exp_ortg - exp_drtg)
 
-    All inputs must be pregame (already shifted in your pipeline).
+    Safe by default: will NOT overwrite existing columns unless overwrite=True.
     """
     out = df.copy()
 
@@ -113,11 +143,17 @@ def add_expected_matchup_metrics(df: pd.DataFrame, cfg: ExpectedConfig = Expecte
     opp_drtg = _pick_first_present(out, cfg.opp_drtg_pre, cfg.opp_drtg_pre_fallback)
     opp_pace = _pick_first_present(out, cfg.opp_pace_pre, cfg.opp_pace_pre_fallback)
 
-    out[cfg.out_exp_pace] = 0.5 * (team_pace + opp_pace)
-    out[cfg.out_exp_ortg] = 0.5 * (team_ortg + opp_drtg)
-    out[cfg.out_exp_drtg] = 0.5 * (team_drtg + opp_ortg)
-    out[cfg.out_exp_netrtg] = out[cfg.out_exp_ortg] - out[cfg.out_exp_drtg]
-    out[cfg.out_exp_margin] = (out[cfg.out_exp_pace] / 100.0) * out[cfg.out_exp_netrtg]
+    exp_pace = 0.5 * (team_pace + opp_pace)
+    exp_ortg = 0.5 * (team_ortg + opp_drtg)
+    exp_drtg = 0.5 * (team_drtg + opp_ortg)
+    exp_netrtg = exp_ortg - exp_drtg
+    exp_margin = (exp_pace / 100.0) * exp_netrtg
+
+    _set_col(out, cfg.out_exp_pace, exp_pace, overwrite)
+    _set_col(out, cfg.out_exp_ortg, exp_ortg, overwrite)
+    _set_col(out, cfg.out_exp_drtg, exp_drtg, overwrite)
+    _set_col(out, cfg.out_exp_netrtg, exp_netrtg, overwrite)
+    _set_col(out, cfg.out_exp_margin, exp_margin, overwrite)
 
     return out
 
@@ -134,6 +170,8 @@ def add_vs_expectation_scores(
     margin_col: str = "margin",
     ortg_col: str = "ortg",
     drtg_col: str = "drtg",
+    *,
+    overwrite: bool = False,
 ) -> pd.DataFrame:
     """
     Adds:
@@ -141,20 +179,23 @@ def add_vs_expectation_scores(
       off_delta = ortg - exp_ortg
       def_delta = exp_drtg - drtg  (positive = better defense than expected)
       net_over_exp = (ortg - drtg) - (exp_ortg - exp_drtg)
+
+    Safe by default: will NOT overwrite existing output columns unless overwrite=True.
     """
     out = df.copy()
     need = [exp_margin_col, exp_ortg_col, exp_drtg_col, margin_col, ortg_col, drtg_col]
-    for c in need:
-        if c not in out.columns:
-            out[c] = np.nan
-
+    out = _ensure_cols(out, need)
     out = ensure_numeric(out, need)
 
-    out["gps"] = out[margin_col] - out[exp_margin_col]
-    out["off_delta"] = out[ortg_col] - out[exp_ortg_col]
-    out["def_delta"] = out[exp_drtg_col] - out[drtg_col]
-    out["net_over_exp"] = (out[ortg_col] - out[drtg_col]) - (out[exp_ortg_col] - out[exp_drtg_col])
+    gps = out[margin_col] - out[exp_margin_col]
+    off_delta = out[ortg_col] - out[exp_ortg_col]
+    def_delta = out[exp_drtg_col] - out[drtg_col]
+    net_over_exp = (out[ortg_col] - out[drtg_col]) - (out[exp_ortg_col] - out[exp_drtg_col])
 
+    _set_col(out, "gps", gps, overwrite)
+    _set_col(out, "off_delta", off_delta, overwrite)
+    _set_col(out, "def_delta", def_delta, overwrite)
+    _set_col(out, "net_over_exp", net_over_exp, overwrite)
     return out
 
 
@@ -168,63 +209,63 @@ def add_style_mismatch(
     opp_cols: Sequence[str] = ("opp_pace_l7_pre", "opp_3par_l7_pre", "opp_ftr_l7_pre", "opp_orb_pct_l7_pre", "opp_tov_pct_l7_pre", "opp_efg_l7_pre"),
     out_distance_col: str = "style_distance_l7",
     out_pace_mismatch_col: str = "pace_mismatch_l7",
+    *,
+    overwrite: bool = False,
 ) -> pd.DataFrame:
     """
     Adds:
       - style_distance_l7: Euclidean distance between team + opp style vectors
       - pace_mismatch_l7: abs(pace - opp_pace)
     Uses l7_pre by default (pregame leak-free).
+
+    Safe by default: will NOT overwrite existing output columns unless overwrite=True.
     """
     out = df.copy()
-    for c in list(team_cols) + list(opp_cols):
-        if c not in out.columns:
-            out[c] = np.nan
-
+    out = _ensure_cols(out, list(team_cols) + list(opp_cols))
     out = ensure_numeric(out, list(team_cols) + list(opp_cols))
 
     tv = out[list(team_cols)].to_numpy(dtype=float)
     ov = out[list(opp_cols)].to_numpy(dtype=float)
 
-    # nan-safe distance: treat NaNs as 0 contribution (but this can understate distance)
     diff = np.nan_to_num(tv - ov, nan=0.0)
-    out[out_distance_col] = np.sqrt((diff ** 2).sum(axis=1))
+    style_distance = np.sqrt((diff ** 2).sum(axis=1))
 
     if "pace_l7_pre" in out.columns and "opp_pace_l7_pre" in out.columns:
-        out[out_pace_mismatch_col] = (out["pace_l7_pre"] - out["opp_pace_l7_pre"]).abs()
+        pace_mismatch = (pd.to_numeric(out["pace_l7_pre"], errors="coerce") - pd.to_numeric(out["opp_pace_l7_pre"], errors="coerce")).abs()
     else:
-        out[out_pace_mismatch_col] = np.nan
+        pace_mismatch = pd.Series(np.nan, index=out.index)
 
+    _set_col(out, out_distance_col, style_distance, overwrite)
+    _set_col(out, out_pace_mismatch_col, pace_mismatch, overwrite)
     return out
 
 
 # ----------------------------
-# Shooting profile + volatility helpers
+# Shooting profile helpers
 # ----------------------------
 
-def add_shooting_profile(df: pd.DataFrame) -> pd.DataFrame:
+def add_shooting_profile(df: pd.DataFrame, *, overwrite: bool = False) -> pd.DataFrame:
     """
     Adds game-level:
-      - 3p_pct, two_pct, ft_pct
+      - 3p_pct, ft_pct
     Requires: fgm,fga,tpm,tpa,ftm,fta if present.
+
+    Safe by default: will NOT overwrite existing output columns unless overwrite=True.
     """
     out = df.copy()
-    for c in ["fgm", "fga", "tpm", "tpa", "ftm", "fta"]:
-        if c not in out.columns:
-            out[c] = np.nan
-
+    out = _ensure_cols(out, ["fgm", "fga", "tpm", "tpa", "ftm", "fta"])
     out = ensure_numeric(out, ["fgm", "fga", "tpm", "tpa", "ftm", "fta"])
 
-    out["3p_pct"] = out.apply(lambda r: safe_div(r["tpm"], r["tpa"]), axis=1)
-    out["two_m"] = out["fgm"] - out["tpm"]
-    out["two_a"] = out["fga"] - out["tpa"]
-    out["two_pct"] = out.apply(lambda r: safe_div(r["two_m"], r["two_a"]), axis=1)
-    out["ft_pct"] = out.apply(lambda r: safe_div(r["ftm"], r["fta"]), axis=1)
+    three_p_pct = out.apply(lambda r: safe_div(r["tpm"], r["tpa"]), axis=1)
+    ft_pct = out.apply(lambda r: safe_div(r["ftm"], r["fta"]), axis=1)
 
-    return out.drop(columns=["two_m", "two_a"], errors="ignore")
+    _set_col(out, "3p_pct", three_p_pct, overwrite)
+    _set_col(out, "ft_pct", ft_pct, overwrite)
+    return out
 
 
 # ----------------------------
-# Generic leak-free last-N rolling (shifted)
+# Leak-free last-N rolling (shifted)
 # ----------------------------
 
 def add_lastn_rollups(
@@ -237,70 +278,138 @@ def add_lastn_rollups(
         "3p_pct", "gps", "net_over_exp",
     ),
     prefix: str = "l10_",
+    *,
+    overwrite: bool = False,
 ) -> pd.DataFrame:
     """
     For each metric x:
       - {prefix}{x}_pre = mean( x shifted 1, rolling n )
       - {prefix}{x}_std_pre = std( x shifted 1, rolling n )
 
-    This is leak-free if df is sorted by time within group.
+    Safe by default: will NOT overwrite existing output columns unless overwrite=True.
     """
     out = df.copy()
 
+    # ordering key
     if order_col in out.columns:
         out["_ord"] = pd.to_datetime(out[order_col], utc=True, errors="coerce")
     else:
         out["_ord"] = np.arange(len(out), dtype=float)
 
-    # ensure existence
-    for m in metrics:
-        if m not in out.columns:
-            out[m] = np.nan
-    out = ensure_numeric(out, metrics)
+    # ensure inputs exist and are numeric
+    out = _ensure_cols(out, list(metrics))
+    out = ensure_numeric(out, list(metrics))
 
-    out = out.sort_values(list(group_cols) + ["_ord"])
+    # stable sort for rolling
+    sort_cols = list(group_cols) + ["_ord"]
+    for gc in group_cols:
+        if gc not in out.columns:
+            out[gc] = np.nan
+    out = out.sort_values(sort_cols, kind="mergesort")
 
     g = out.groupby(list(group_cols), sort=False)
 
     for m in metrics:
-        s = g[m]
-        out[f"{prefix}{m}_pre"] = s.apply(lambda x: x.shift(1).rolling(n, min_periods=1).mean()).reset_index(level=list(group_cols), drop=True)
-        out[f"{prefix}{m}_std_pre"] = s.apply(lambda x: x.shift(1).rolling(n, min_periods=2).std(ddof=0)).reset_index(level=list(group_cols), drop=True)
+        mean_col = f"{prefix}{m}_pre"
+        std_col = f"{prefix}{m}_std_pre"
+
+        if overwrite or (mean_col not in out.columns):
+            out[mean_col] = g[m].transform(lambda s: s.shift(1).rolling(n, min_periods=1).mean())
+
+        if overwrite or (std_col not in out.columns):
+            out[std_col] = g[m].transform(lambda s: s.shift(1).rolling(n, min_periods=2).std(ddof=0))
 
     out = out.drop(columns=["_ord"], errors="ignore")
     return out
 
 
-def add_volatility_composites(df: pd.DataFrame, prefix: str = "l10_") -> pd.DataFrame:
+def add_volatility_composites(df: pd.DataFrame, prefix: str = "l10_", *, overwrite: bool = False) -> pd.DataFrame:
     """
     Assumes last-N rollups exist.
-    Adds:
-      - shoot_vol_{prefix}: 3par_pre * tp_pct_std_pre
-      - three_vol_risk_{prefix}: 3par_pre * (tp_pct_std_pre + 0.5*efg_std_pre)
+
+    Adds (names kept stable for downstream):
+      - shoot_vol_{prefix}: 3par_pre * 3p_pct_std_pre
+      - three_vol_risk_{prefix}: 3par_pre * (3p_pct_std_pre + 0.5*efg_std_pre)
       - consistency_{prefix}: 1/(1 + netrtg_std_pre)
+
+    Flex:
+      - supports legacy tp_pct naming if present (tp_pct_std_pre), but prefers 3p_pct_std_pre
     """
     out = df.copy()
 
+    # Prefer 3p_pct; allow tp_pct legacy alias
+    col_3p_std = f"{prefix}3p_pct_std_pre"
+    col_tp_std = f"{prefix}tp_pct_std_pre"  # legacy
+    use_3p_std = col_3p_std if col_3p_std in out.columns else col_tp_std
+
     need = [
         f"{prefix}3par_pre",
-        f"{prefix}tp_pct_std_pre",
+        use_3p_std,
         f"{prefix}efg_std_pre",
         f"{prefix}netrtg_std_pre",
     ]
-    for c in need:
-        if c not in out.columns:
-            out[c] = np.nan
+    out = _ensure_cols(out, need)
     out = ensure_numeric(out, need)
 
-    out[f"shoot_vol_{prefix}"] = out[f"{prefix}3par_pre"] * out[f"{prefix}tp_pct_std_pre"]
-    out[f"three_vol_risk_{prefix}"] = out[f"{prefix}3par_pre"] * (out[f"{prefix}tp_pct_std_pre"] + 0.5 * out[f"{prefix}efg_std_pre"])
-    out[f"consistency_{prefix}"] = 1.0 / (1.0 + out[f"{prefix}netrtg_std_pre"].fillna(np.nan))
+    shoot_vol = out[f"{prefix}3par_pre"] * out[use_3p_std]
+    three_vol_risk = out[f"{prefix}3par_pre"] * (out[use_3p_std] + 0.5 * out[f"{prefix}efg_std_pre"])
+    consistency = 1.0 / (1.0 + out[f"{prefix}netrtg_std_pre"])
 
+    _set_col(out, f"shoot_vol_{prefix}", shoot_vol, overwrite)
+    _set_col(out, f"three_vol_risk_{prefix}", three_vol_risk, overwrite)
+    _set_col(out, f"consistency_{prefix}", consistency, overwrite)
     return out
 
 
 # ----------------------------
-# Optional player-level features (if you have player game logs)
+# Matchup "edge" features (only if opponent allowed/forced fields exist)
+# ----------------------------
+
+def add_matchup_edges(
+    df: pd.DataFrame,
+    *,
+    overwrite: bool = False,
+) -> pd.DataFrame:
+    """
+    Adds leak-free matchup edges when these pregame fields exist:
+      - efg_edge_pre = efg_l7_pre - opp_efg_allowed_pre
+      - ftr_edge_pre = ftr_l7_pre - opp_ftr_allowed_pre
+      - orb_edge_pre = orb_pct_l7_pre - opp_orb_allowed_pre
+      - tov_edge_pre = opp_tov_forced_pre - tov_pct_l7_pre   (positive = opponent forces more TOs than you commit)
+      - def_ppp_edge_pre = opp_def_ppp_allowed_pre - def_ppp_allowed_l7_pre (if available)
+
+    All are best-effort: if inputs missing, output stays NaN.
+    """
+    out = df.copy()
+
+    # ensure likely inputs exist (won't error)
+    inputs = [
+        "efg_l7_pre", "ftr_l7_pre", "orb_pct_l7_pre", "tov_pct_l7_pre",
+        "opp_efg_allowed_pre", "opp_ftr_allowed_pre", "opp_orb_allowed_pre", "opp_tov_forced_pre",
+        "opp_def_ppp_allowed_pre", "def_ppp_allowed_l7_pre",
+    ]
+    out = _ensure_cols(out, inputs)
+    out = ensure_numeric(out, inputs)
+
+    efg_edge = out["efg_l7_pre"] - out["opp_efg_allowed_pre"]
+    ftr_edge = out["ftr_l7_pre"] - out["opp_ftr_allowed_pre"]
+    orb_edge = out["orb_pct_l7_pre"] - out["opp_orb_allowed_pre"]
+    tov_edge = out["opp_tov_forced_pre"] - out["tov_pct_l7_pre"]
+
+    def_ppp_edge = pd.Series(np.nan, index=out.index)
+    if ("opp_def_ppp_allowed_pre" in out.columns) and ("def_ppp_allowed_l7_pre" in out.columns):
+        def_ppp_edge = out["opp_def_ppp_allowed_pre"] - out["def_ppp_allowed_l7_pre"]
+
+    _set_col(out, "efg_edge_pre", efg_edge, overwrite)
+    _set_col(out, "ftr_edge_pre", ftr_edge, overwrite)
+    _set_col(out, "orb_edge_pre", orb_edge, overwrite)
+    _set_col(out, "tov_edge_pre", tov_edge, overwrite)
+    _set_col(out, "def_ppp_edge_pre", def_ppp_edge, overwrite)
+    return out
+
+
+# ----------------------------
+# Optional player-level features (unchanged)
 # ----------------------------
 
 def build_player_concentration_features(
@@ -360,18 +469,22 @@ def build_player_concentration_features(
 def add_all_advanced_metrics(df: pd.DataFrame, n_last: int = 10) -> pd.DataFrame:
     """
     Recommended call order:
-      1) add_shooting_profile (tp_pct, etc)
-      2) add_expected_matchup_metrics
-      3) add_vs_expectation_scores
-      4) add_style_mismatch
+      1) add_shooting_profile (3p_pct, ft_pct)
+      2) add_expected_matchup_metrics (exp_* incl exp_margin)
+      3) add_vs_expectation_scores (gps, deltas)
+      4) add_style_mismatch (style_distance_l7 etc)
       5) add_lastn_rollups (includes gps)
       6) add_volatility_composites
+      7) add_matchup_edges (if opponent allowed/forced pregame fields exist)
+
+    Default behavior is conservative: does NOT overwrite existing columns.
     """
     out = df.copy()
-    out = add_shooting_profile(out)
-    out = add_expected_matchup_metrics(out)
-    out = add_vs_expectation_scores(out)
-    out = add_style_mismatch(out)
-    out = add_lastn_rollups(out, n=n_last, prefix=f"l{n_last}_")
-    out = add_volatility_composites(out, prefix=f"l{n_last}_")
+    out = add_shooting_profile(out, overwrite=False)
+    out = add_expected_matchup_metrics(out, overwrite=False)
+    out = add_vs_expectation_scores(out, overwrite=False)
+    out = add_style_mismatch(out, overwrite=False)
+    out = add_lastn_rollups(out, n=n_last, prefix=f"l{n_last}_", overwrite=False)
+    out = add_volatility_composites(out, prefix=f"l{n_last}_", overwrite=False)
+    out = add_matchup_edges(out, overwrite=False)
     return out
