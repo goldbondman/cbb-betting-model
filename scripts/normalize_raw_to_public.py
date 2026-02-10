@@ -25,6 +25,13 @@ NOTE:
 - public.team_boxscores has GENERATED ALWAYS columns (efg, tov_pct). We never insert/update them.
 - IMPORTANT: public.team_boxscores.team_id has an FK to public.teams(team_id).
   So we must insert the *public teams PK* (teams.team_id), not the raw/source team_id.
+
+SEASON / DATE RANGE BEHAVIOR (important for 25-26 season):
+- In your pipeline, SEASON=2025 represents the 2025-26 season.
+- By default, we filter games to start at Oct 1 of SEASON (2025-10-01) through "now".
+- Override with:
+  - SEASON_START_DATE (YYYY-MM-DD), default: "{SEASON}-10-01"
+  - SEASON_END_DATE (YYYY-MM-DD), optional
 """
 
 from __future__ import annotations
@@ -49,6 +56,10 @@ RAW_LOGS_TABLE = (os.getenv("RAW_LOGS_TABLE", "espn_team_game_logs").strip() or 
 RAW_FEATURES_TABLE = (os.getenv("RAW_FEATURES_TABLE", "espn_team_game_features").strip() or "espn_team_game_features")
 
 TEAMS_SEED_JSON = (os.getenv("TEAMS_SEED_JSON") or "").strip()
+
+# Default: academic season window for SEASON=2025 -> start 2025-10-01
+SEASON_START_DATE = (os.getenv("SEASON_START_DATE") or f"{SEASON}-10-01").strip()
+SEASON_END_DATE = (os.getenv("SEASON_END_DATE") or "").strip()  # optional
 
 COMPLETED_TRUE_TOKENS = (
     "true",
@@ -105,6 +116,14 @@ def _validate_env_vars() -> None:
 
     if TEAMS_SEED_JSON and not os.path.exists(TEAMS_SEED_JSON):
         _warn(f"TEAMS_SEED_JSON points to non-existent file: {TEAMS_SEED_JSON}")
+
+    # Basic date sanity checks (lightweight, avoid extra deps)
+    if len(SEASON_START_DATE) != 10 or SEASON_START_DATE[4] != "-" or SEASON_START_DATE[7] != "-":
+        _die(f"SEASON_START_DATE must be YYYY-MM-DD, got: {SEASON_START_DATE}")
+
+    if SEASON_END_DATE:
+        if len(SEASON_END_DATE) != 10 or SEASON_END_DATE[4] != "-" or SEASON_END_DATE[7] != "-":
+            _die(f"SEASON_END_DATE must be YYYY-MM-DD, got: {SEASON_END_DATE}")
 
 
 def _table_exists(conn: psycopg.Connection, schema: str, table: str) -> bool:
@@ -519,15 +538,6 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
     if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id", "home_away"]):
         return Counts(rejected=1)
 
-    try:
-        pulled = _count_rows(
-            conn,
-            f"select count(distinct event_id) from {RAW_SCHEMA}.{RAW_LOGS_TABLE} where event_id is not null",
-        )
-    except Exception as e:
-        _warn(f"Error counting games: {e}")
-        return Counts(rejected=1)
-
     pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
     if pulled_at_col:
         pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())"
@@ -542,9 +552,61 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
     )
     if not game_dt_col:
         _insert_dq(conn, "games", ["missing_datetime_column"], {"table": f"{RAW_SCHEMA}.{RAW_LOGS_TABLE}"})
-        return Counts(pulled=pulled, rejected=1)
+        return Counts(rejected=1)
+
+    # Count pulled with season window filter
+    try:
+        if SEASON_END_DATE:
+            pulled = _count_rows(
+                conn,
+                f"""
+                select count(distinct event_id)
+                from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
+                where event_id is not null
+                  and {game_dt_col} >= %s::timestamptz
+                  and {game_dt_col} < (%s::date + interval '1 day')
+                """,
+                (SEASON_START_DATE, SEASON_END_DATE),
+            )
+        else:
+            pulled = _count_rows(
+                conn,
+                f"""
+                select count(distinct event_id)
+                from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
+                where event_id is not null
+                  and {game_dt_col} >= %s::timestamptz
+                """,
+                (SEASON_START_DATE,),
+            )
+    except Exception as e:
+        _warn(f"Error counting games: {e}")
+        return Counts(rejected=1)
 
     completed_true_list_sql = ", ".join([f"'{t}'" for t in COMPLETED_TRUE_TOKENS])
+
+    # Robust numeric->int parsing (handles '79', '79.0', numeric types, text, etc.)
+    def sql_int(expr: str, max_val: int = MAX_REASONABLE_SCORE) -> str:
+        return f"""
+        case
+          when {expr} is null then null
+          when btrim(({expr})::text) = '' then null
+          when btrim(({expr})::text) ~ '^\\d+(\\.\\d+)?$' then
+            case
+              when (({expr})::numeric)::int between 0 and {max_val} then (({expr})::numeric)::int
+              else null
+            end
+          else null
+        end
+        """
+
+    # Date filter clause (parameterized)
+    if SEASON_END_DATE:
+        date_filter_sql = f"and r.{game_dt_col} >= %s::timestamptz and r.{game_dt_col} < (%s::date + interval '1 day')"
+        date_params: Tuple[object, ...] = (SEASON_START_DATE, SEASON_END_DATE)
+    else:
+        date_filter_sql = f"and r.{game_dt_col} >= %s::timestamptz"
+        date_params = (SEASON_START_DATE,)
 
     try:
         sql = f"""
@@ -562,8 +624,8 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
               else false
             end as completed,
 
-            case when r.points_for::text ~ '^\\d+$' then r.points_for::text::int else null end as points_for,
-            case when r.points_against::text ~ '^\\d+$' then r.points_against::text::int else null end as points_against,
+            {sql_int("r.points_for", MAX_REASONABLE_SCORE)} as points_for,
+            {sql_int("r.points_against", MAX_REASONABLE_SCORE)} as points_against,
 
             {pulled_at_expr} as pulled_at
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
@@ -571,6 +633,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
             and r.team_id is not null
             and r.home_away is not null
             and btrim(r.home_away) <> ''
+            {date_filter_sql}
         ),
         dedup as (
           select *
@@ -657,8 +720,11 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           at.{teams_pk} as away_team_id,
           j.home_team_name as home_team,
           j.away_team_name as away_team,
+
+          -- If completed but scores are still null, we keep nulls and mark partial below.
           case when j.completed then j.home_score else null end as home_score,
           case when j.completed then j.away_score else null end as away_score,
+
           j.venue,
           case when j.completed then 'final' else 'scheduled' end as status,
           case when j.completed then 'post' else 'pre' end as status_state,
@@ -693,7 +759,32 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           verification_status = excluded.verification_status,
           updated_at = now();
         """
-        upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, SEASON, SOURCE, SEASON, SEASON), "upsert games")
+
+        params: List[object] = [
+            SEASON,
+            SOURCE,
+            SEASON,
+            SOURCE,
+            SEASON,
+            SEASON,
+        ]
+        # base CTE date params at end of query? No, they are inside SQL above, so they must appear
+        # in the execute params in correct order: base date params come BEFORE the final team season params?
+        #
+        # IMPORTANT: psycopg parameter ordering follows appearance in SQL text.
+        # In this SQL, the FIRST placeholders are in md5(...) select.
+        # The date filter placeholders appear earlier in base CTE, before insert-select.
+        # So we must place date_params FIRST.
+
+        # Rebuild params in correct appearance order:
+        # 1) date filter placeholders in base CTE
+        ordered: List[object] = list(date_params)
+        # 2) md5(...) placeholders and season/source placeholders in insert-select
+        ordered.extend([SEASON, SOURCE, SEASON, SOURCE])
+        # 3) ht/at season placeholders
+        ordered.extend([SEASON, SEASON])
+
+        upserted = _exec_rowcount(conn, sql, tuple(ordered), "upsert games")
 
     except Exception as e:
         _warn(f"Error upserting games: {e}")
@@ -701,12 +792,18 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         return Counts(pulled=pulled, rejected=pulled)
 
     rejected = 0
+
+    # DQ: missing away row (within season window)
     try:
-        dq_missing_away_sql = f"""
+        dq_sql = f"""
         with base as (
-          select event_id, lower(home_away) as ha, {pulled_at_expr} as pulled_at
+          select event_id, lower(home_away) as ha, {pulled_at_expr} as pulled_at, r.{game_dt_col} as game_dt
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
-          where event_id is not null and team_id is not null and home_away is not null and btrim(home_away) <> ''
+          where event_id is not null
+            and team_id is not null
+            and home_away is not null
+            and btrim(home_away) <> ''
+            {date_filter_sql}
         ),
         dedup as (
           select *
@@ -724,11 +821,31 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         select event_id from home_only limit 50;
         """
         with conn.cursor() as cur:
-            cur.execute(dq_missing_away_sql)
+            cur.execute(dq_sql, tuple(date_params))
             for (event_id,) in cur.fetchall():
                 rejected += _insert_dq(conn, "games", ["missing_away_row"], {"event_id": event_id})
     except Exception as e:
         _warn(f"Error during DQ audit for missing away rows: {e}")
+
+    # DQ: completed but missing scores (this is the exact symptom you had)
+    try:
+        dq_scores_sql = """
+        select external_game_id
+        from public.games
+        where season = %s and lower(source) = lower(%s)
+          and game_datetime_utc >= %s::timestamptz
+          and (%s = '' or game_datetime_utc < (%s::date + interval '1 day'))
+          and status = 'final'
+          and (home_score is null or away_score is null)
+        limit 50;
+        """
+        end_for_sql = SEASON_END_DATE or ""
+        with conn.cursor() as cur:
+            cur.execute(dq_scores_sql, (SEASON, SOURCE, SEASON_START_DATE, end_for_sql, end_for_sql))
+            for (event_id,) in cur.fetchall():
+                rejected += _insert_dq(conn, "games", ["final_missing_scores"], {"event_id": event_id})
+    except Exception as e:
+        _warn(f"Error during DQ audit for final_missing_scores: {e}")
 
     return Counts(pulled=pulled, upserted=upserted, rejected=rejected)
 
@@ -749,7 +866,11 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     try:
         pulled = _count_rows(
             conn,
-            f"select count(*) from {RAW_SCHEMA}.{RAW_LOGS_TABLE} where event_id is not null and team_id is not null",
+            f"""
+            select count(*)
+            from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
+            where r.event_id is not null and r.team_id is not null
+            """,
         )
     except Exception as e:
         _warn(f"Error counting team boxscores: {e}")
@@ -764,12 +885,15 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     def raw_col(name: str) -> str:
         return f"r.{name}" if _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, name) else "null"
 
+    # Robust numeric->int parsing (handles '79.0' etc.)
     def norm_int(expr: str, max_val: int = MAX_REASONABLE_SCORE) -> str:
         return f"""
         case
-          when ({expr})::text ~ '^\\d+$' then
+          when {expr} is null then null
+          when btrim(({expr})::text) = '' then null
+          when btrim(({expr})::text) ~ '^\\d+(\\.\\d+)?$' then
             case
-              when ({expr})::text::int <= {max_val} then ({expr})::text::int
+              when (({expr})::numeric)::int between 0 and {max_val} then (({expr})::numeric)::int
               else null
             end
           else null
@@ -786,19 +910,19 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
             lower(r.home_away) as home_away_norm,
             {pulled_at_expr} as pulled_at,
 
-            {norm_int(raw_col("points_for"))} as pts,
-            {norm_int(raw_col("fgm"))} as fgm,
-            {norm_int(raw_col("fga"))} as fga,
-            {norm_int(raw_col("tpm"))} as tpm,
-            {norm_int(raw_col("tpa"))} as tpa,
-            {norm_int(raw_col("ftm"))} as ftm,
-            {norm_int(raw_col("fta"))} as fta,
-            {norm_int(raw_col("oreb"))} as oreb,
-            {norm_int(raw_col("dreb"))} as dreb,
-            {norm_int(raw_col("ast"))} as ast,
-            {norm_int(raw_col("tov"))} as tov,
-            {norm_int(raw_col("stl"))} as stl,
-            {norm_int(raw_col("blk"))} as blk
+            {norm_int(raw_col("points_for"), MAX_REASONABLE_SCORE)} as pts,
+            {norm_int(raw_col("fgm"), 500)} as fgm,
+            {norm_int(raw_col("fga"), 500)} as fga,
+            {norm_int(raw_col("tpm"), 300)} as tpm,
+            {norm_int(raw_col("tpa"), 300)} as tpa,
+            {norm_int(raw_col("ftm"), 300)} as ftm,
+            {norm_int(raw_col("fta"), 300)} as fta,
+            {norm_int(raw_col("oreb"), 300)} as oreb,
+            {norm_int(raw_col("dreb"), 300)} as dreb,
+            {norm_int(raw_col("ast"), 300)} as ast,
+            {norm_int(raw_col("tov"), 300)} as tov,
+            {norm_int(raw_col("stl"), 300)} as stl,
+            {norm_int(raw_col("blk"), 300)} as blk
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
           where r.event_id is not null
             and r.team_id is not null
@@ -823,7 +947,10 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
             game_id,
             cast(external_game_id as text) as event_id
           from public.games
-          where season = %s and lower(source) = lower(%s)
+          where season = %s
+            and lower(source) = lower(%s)
+            and game_datetime_utc >= %s::timestamptz
+            and (%s = '' or game_datetime_utc < (%s::date + interval '1 day'))
         )
         insert into public.team_boxscores (
           game_id,
@@ -876,7 +1003,13 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           blk = excluded.blk,
           pulled_at = excluded.pulled_at;
         """
-        upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, SEASON), "upsert team_boxscores")
+        end_for_sql = SEASON_END_DATE or ""
+        upserted = _exec_rowcount(
+            conn,
+            sql,
+            (SEASON, SOURCE, SEASON_START_DATE, end_for_sql, end_for_sql, SEASON),
+            "upsert team_boxscores",
+        )
         return Counts(pulled=pulled, upserted=upserted, rejected=0)
     except Exception as e:
         _warn(f"Error upserting team boxscores: {e}")
@@ -936,9 +1069,12 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
           where rn = 1
         ),
         games as (
-          select game_id, external_game_id
+          select game_id, external_game_id, game_datetime_utc
           from public.games
-          where season = %s and lower(source) = lower(%s)
+          where season = %s
+            and lower(source) = lower(%s)
+            and game_datetime_utc >= %s::timestamptz
+            and (%s = '' or game_datetime_utc < (%s::date + interval '1 day'))
         )
         insert into public.team_game_features (
           game_id,
@@ -967,7 +1103,13 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
           pulled_at = excluded.pulled_at,
           verification_status = excluded.verification_status;
         """
-        upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, FEATURE_SET, SEASON), "upsert team_game_features")
+        end_for_sql = SEASON_END_DATE or ""
+        upserted = _exec_rowcount(
+            conn,
+            sql,
+            (SEASON, SOURCE, SEASON_START_DATE, end_for_sql, end_for_sql, FEATURE_SET, SEASON),
+            "upsert team_game_features",
+        )
         return Counts(pulled=pulled, upserted=upserted, rejected=0)
     except Exception as e:
         _warn(f"Error upserting team game features: {e}")
@@ -979,7 +1121,10 @@ def main() -> None:
     """Main normalization workflow."""
     _validate_env_vars()
 
-    _info(f"Starting normalization: SEASON={SEASON}, SOURCE={SOURCE}, FEATURE_SET={FEATURE_SET}")
+    _info(
+        f"Starting normalization: SEASON={SEASON}, SOURCE={SOURCE}, FEATURE_SET={FEATURE_SET}, "
+        f"WINDOW=[{SEASON_START_DATE}{'..'+SEASON_END_DATE if SEASON_END_DATE else '..now'}]"
+    )
 
     try:
         with psycopg.connect(SUPABASE_DB_URL) as conn:
@@ -1014,6 +1159,31 @@ def main() -> None:
             c = upsert_team_game_features(conn, teams_pk)
             print(f"[OK] team_game_features: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
             conn.commit()
+
+            # Quick sanity summary (non-fatal)
+            try:
+                end_for_sql = SEASON_END_DATE or ""
+                sanity_sql = """
+                select
+                  count(*) as games_total,
+                  count(*) filter (where status='final') as games_final,
+                  count(*) filter (where home_score is not null and away_score is not null) as games_with_scores,
+                  count(*) filter (where verification_status='verified') as games_verified
+                from public.games
+                where season=%s and lower(source)=lower(%s)
+                  and game_datetime_utc >= %s::timestamptz
+                  and (%s = '' or game_datetime_utc < (%s::date + interval '1 day'));
+                """
+                with conn.cursor() as cur:
+                    cur.execute(sanity_sql, (SEASON, SOURCE, SEASON_START_DATE, end_for_sql, end_for_sql))
+                    row = cur.fetchone()
+                if row:
+                    _info(
+                        f"Sanity: games_total={row[0]} games_final={row[1]} "
+                        f"games_with_scores={row[2]} games_verified={row[3]}"
+                    )
+            except Exception as e:
+                _warn(f"Sanity query failed (non-fatal): {e}")
 
             _info("Normalization completed successfully")
 
