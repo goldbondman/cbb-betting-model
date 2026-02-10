@@ -92,13 +92,13 @@ def _validate_env_vars() -> None:
     """Validate required environment variables."""
     if not SUPABASE_DB_URL:
         _die("SUPABASE_DB_URL is required but not set")
-    
+
     if not MIN_REASONABLE_YEAR <= SEASON <= MAX_REASONABLE_YEAR:
         _die(f"SEASON {SEASON} is outside reasonable range [{MIN_REASONABLE_YEAR}, {MAX_REASONABLE_YEAR}]")
-    
+
     if not SOURCE:
         _die("SOURCE cannot be empty")
-    
+
     if TEAMS_SEED_JSON and not os.path.exists(TEAMS_SEED_JSON):
         _warn(f"TEAMS_SEED_JSON points to non-existent file: {TEAMS_SEED_JSON}")
 
@@ -148,8 +148,8 @@ def _pick_existing_column(
 
 
 def _exec_rowcount(
-    conn: psycopg.Connection, 
-    sql: str, 
+    conn: psycopg.Connection,
+    sql: str,
     params: Optional[Iterable[object]] = None,
     description: str = ""
 ) -> int:
@@ -159,7 +159,7 @@ def _exec_rowcount(
             cur.execute(sql, params or ())
             return cur.rowcount
     except Exception as e:
-        error_msg = f"Error executing SQL"
+        error_msg = "Error executing SQL"
         if description:
             error_msg += f" ({description})"
         error_msg += f": {e}"
@@ -169,8 +169,8 @@ def _exec_rowcount(
 
 
 def _count_rows(
-    conn: psycopg.Connection, 
-    sql: str, 
+    conn: psycopg.Connection,
+    sql: str,
     params: Optional[Iterable[object]] = None
 ) -> int:
     """Execute count query and return integer result."""
@@ -200,9 +200,9 @@ def _dq_id(entity_type: str, reason_codes: List[str], details: dict) -> str:
 
 
 def _insert_dq(
-    conn: psycopg.Connection, 
-    entity_type: str, 
-    reason_codes: List[str], 
+    conn: psycopg.Connection,
+    entity_type: str,
+    reason_codes: List[str],
     details: dict
 ) -> int:
     """Insert data quality audit record (idempotent via deterministic ID)."""
@@ -214,8 +214,8 @@ def _insert_dq(
         on conflict (id) do nothing
         """
         return _exec_rowcount(
-            conn, 
-            sql, 
+            conn,
+            sql,
             (dqid, entity_type, "error", reason_codes, json_dump(details)),
             f"insert DQ audit for {entity_type}"
         )
@@ -228,11 +228,10 @@ def _teams_pk_column(conn: psycopg.Connection) -> str:
     """Determine the primary key column name for teams table."""
     if _has_column(conn, "public", "teams", "team_id"):
         return "team_id"
-    elif _has_column(conn, "public", "teams", "id"):
+    if _has_column(conn, "public", "teams", "id"):
         return "id"
-    else:
-        _warn("teams table has neither team_id nor id column, defaulting to 'id'")
-        return "id"
+    _warn("teams table has neither team_id nor id column, defaulting to 'id'")
+    return "id"
 
 
 def _teams_uuid_col(conn: psycopg.Connection) -> Optional[str]:
@@ -249,12 +248,12 @@ def _validate_raw_table(conn: psycopg.Connection, schema: str, table: str, requi
     if not _table_exists(conn, schema, table):
         _warn(f"Raw table {schema}.{table} does not exist")
         return False
-    
+
     missing_cols = [col for col in required_cols if not _has_column(conn, schema, table, col)]
     if missing_cols:
         _warn(f"Raw table {schema}.{table} is missing required columns: {missing_cols}")
         return False
-    
+
     return True
 
 
@@ -270,9 +269,9 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
     teams_uuid_col = _teams_uuid_col(conn)
     if not teams_uuid_col:
         _insert_dq(
-            conn, 
-            "teams", 
-            ["public_teams_missing_pk"], 
+            conn,
+            "teams",
+            ["public_teams_missing_pk"],
             {"note": "Expected public.teams to have team_id or id."}
         )
         return Counts(rejected=1)
@@ -285,37 +284,37 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
             data = json.load(f)
     except json.JSONDecodeError as e:
         _insert_dq(
-            conn, 
-            "teams", 
-            ["seed_file_invalid_json"], 
+            conn,
+            "teams",
+            ["seed_file_invalid_json"],
             {"seed_path": path, "error": str(e)}
         )
         return Counts(rejected=1)
     except Exception as e:
         _insert_dq(
-            conn, 
-            "teams", 
-            ["seed_file_read_error"], 
+            conn,
+            "teams",
+            ["seed_file_read_error"],
             {"seed_path": path, "error": str(e)}
         )
         return Counts(rejected=1)
 
     if not isinstance(data, list):
         _insert_dq(
-            conn, 
-            "teams", 
-            ["seed_file_invalid_json"], 
+            conn,
+            "teams",
+            ["seed_file_invalid_json"],
             {"seed_path": path, "note": "Expected JSON array."}
         )
         return Counts(rejected=1)
 
-    seen = {}
+    seen: Dict[str, Tuple[str, str, Optional[str], Optional[str]]] = {}
     skipped = 0
     for idx, row in enumerate(data):
         if not isinstance(row, dict):
             skipped += 1
             continue
-        
+
         source_id = row.get("sourceId")
         if source_id is None or str(source_id).strip() == "":
             skipped += 1
@@ -328,11 +327,11 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
 
         conf = row.get("conference")
         short_name = row.get("shortDisplayName") or row.get("school") or None
-        
+
         seen[str(source_id)] = (
-            str(source_id), 
-            str(team_name), 
-            (str(conf) if conf is not None else None), 
+            str(source_id),
+            str(team_name),
+            (str(conf) if conf is not None else None),
             (str(short_name) if short_name else None)
         )
 
@@ -433,7 +432,6 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
 
 def upsert_teams(conn: psycopg.Connection) -> Counts:
     """Upsert teams from raw logs table."""
-    # Validate raw table exists
     if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["team_id", "team"]):
         return Counts(rejected=1)
 
@@ -453,9 +451,9 @@ def upsert_teams(conn: psycopg.Connection) -> Counts:
     teams_uuid_col = _teams_uuid_col(conn)
     if not teams_uuid_col:
         _insert_dq(
-            conn, 
-            "teams", 
-            ["public_teams_missing_pk"], 
+            conn,
+            "teams",
+            ["public_teams_missing_pk"],
             {"note": "Expected public.teams to have team_id or id."}
         )
         return Counts(pulled=pulled, rejected=1)
@@ -529,7 +527,6 @@ def upsert_teams(conn: psycopg.Connection) -> Counts:
 
 def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
     """Upsert games from raw logs table."""
-    # Validate raw table
     if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id", "home_away"]):
         return Counts(rejected=1)
 
@@ -558,7 +555,6 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
     completed_true_list_sql = ", ".join([f"'{t}'" for t in COMPLETED_TRUE_TOKENS])
 
     try:
-        # Main upsert
         sql = f"""
         with base as (
           select
@@ -712,7 +708,6 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         traceback.print_exc()
         return Counts(pulled=pulled, rejected=pulled)
 
-    # DQ audit: missing away row
     rejected = 0
     try:
         dq_missing_away_sql = f"""
@@ -748,7 +743,6 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
 
 def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     """Upsert team boxscores from raw logs table."""
-    # Validate raw table
     if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id"]):
         return Counts(rejected=1)
 
@@ -762,27 +756,27 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
         return Counts(rejected=1)
 
     pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
-    pulled_at_expr = f"r.{pulled_at_col}" if pulled_at_col else "now()"
+    if pulled_at_col:
+        pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())"
+    else:
+        pulled_at_expr = "now()"
 
-    # Helper: only select raw columns if they exist
     def raw_col(name: str) -> str:
         return f"r.{name}" if _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, name) else "null"
 
-    # numeric normalization with bounds checking
     def norm_int(expr: str, max_val: int = MAX_REASONABLE_SCORE) -> str:
         return f"""
-        case 
-          when ({expr})::text ~ '^\\d+$' then 
-            case 
-              when ({expr})::text::int <= {max_val} then ({expr})::text::int 
-              else null 
+        case
+          when ({expr})::text ~ '^\\d+$' then
+            case
+              when ({expr})::text::int <= {max_val} then ({expr})::text::int
+              else null
             end
-          else null 
+          else null
         end
         """
 
     def norm_num(expr: str) -> str:
-        # allows decimals
         return f"case when ({expr}) is null then null when ({expr})::text ~ '^-?\\d+(\\.\\d+)?$' then ({expr})::text::numeric else null end"
 
     try:
@@ -808,7 +802,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
             {norm_int(raw_col("tov"))} as tov,
             {norm_int(raw_col("stl"))} as stl,
             {norm_int(raw_col("blk"))} as blk,
-            {norm_num(raw_col("efg"))} as efg,
             {norm_num(raw_col("tov_pct"))} as tov_pct
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
           where r.event_id is not null
@@ -849,7 +842,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           ftm, fta,
           oreb, dreb,
           ast, tov, stl, blk,
-          efg,
           tov_pct,
           pulled_at,
           created_at
@@ -865,7 +857,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           d.ftm, d.fta,
           d.oreb, d.dreb,
           d.ast, d.tov, d.stl, d.blk,
-          d.efg,
           d.tov_pct,
           d.pulled_at,
           now()
@@ -891,7 +882,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           tov = excluded.tov,
           stl = excluded.stl,
           blk = excluded.blk,
-          efg = excluded.efg,
           tov_pct = excluded.tov_pct,
           pulled_at = excluded.pulled_at;
         """
@@ -905,7 +895,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
 
 def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts:
     """Upsert team game features from raw features table."""
-    # Validate raw table
     if not _validate_raw_table(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, ["event_id", "team_id"]):
         return Counts(rejected=1)
 
@@ -920,15 +909,18 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
 
     if not _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features"):
         rejected = _insert_dq(
-            conn, 
-            "team_game_features", 
-            ["missing_features_column"], 
+            conn,
+            "team_game_features",
+            ["missing_features_column"],
             {"table": f"{RAW_SCHEMA}.{RAW_FEATURES_TABLE}"}
         )
         return Counts(pulled=pulled, rejected=rejected)
 
     pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, ["pulled_at_utc", "pulled_at"])
-    pulled_at_expr = f"r.{pulled_at_col}" if pulled_at_col else "now()"
+    if pulled_at_col:
+        pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())"
+    else:
+        pulled_at_expr = "now()"
 
     try:
         sql = f"""
@@ -997,50 +989,43 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
 
 def main() -> None:
     """Main normalization workflow."""
-    # Validate environment
     _validate_env_vars()
-    
+
     _info(f"Starting normalization: SEASON={SEASON}, SOURCE={SOURCE}, FEATURE_SET={FEATURE_SET}")
-    
+
     try:
         with psycopg.connect(SUPABASE_DB_URL) as conn:
-            # Validate public.teams table exists
             if not _table_exists(conn, "public", "teams"):
                 _die("public.teams table does not exist. Run migrations first.")
-            
+
             teams_pk = _teams_pk_column(conn)
             _info(f"Using teams PK column: {teams_pk}")
 
-            # Seed teams from JSON if provided
             if TEAMS_SEED_JSON:
                 print(f"[STEP] Seed teams from JSON: {TEAMS_SEED_JSON}")
                 c = seed_teams_from_json(conn, TEAMS_SEED_JSON)
                 print(f"[OK] seed teams: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
-                conn.commit()  # ← ADD THIS
+                conn.commit()
 
-            # Upsert teams from raw logs
             print("[STEP] Upsert teams")
             c = upsert_teams(conn)
             print(f"[OK] teams: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
-            conn.commit()  # ← ADD THIS
+            conn.commit()
 
-            # Upsert games
             print("[STEP] Upsert games")
             c = upsert_games(conn, teams_pk)
             print(f"[OK] games: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
-            conn.commit()  # ← ADD THIS
+            conn.commit()
 
-            # Upsert team boxscores
             print("[STEP] Upsert team_boxscores")
             c = upsert_team_boxscores(conn, teams_pk)
             print(f"[OK] team_boxscores: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
-            conn.commit()  # ← ADD THIS
+            conn.commit()
 
-            # Upsert team game features
             print("[STEP] Upsert team_game_features")
             c = upsert_team_game_features(conn, teams_pk)
             print(f"[OK] team_game_features: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
-            conn.commit()  # ← ADD THIS
+            conn.commit()
 
             _info("Normalization completed successfully")
 
@@ -1052,4 +1037,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-        
