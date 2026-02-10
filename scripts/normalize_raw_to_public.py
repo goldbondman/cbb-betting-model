@@ -23,8 +23,8 @@ This script:
 
 NOTE:
 - public.team_boxscores has GENERATED ALWAYS columns (efg, tov_pct). We never insert/update them.
-- IMPORTANT: public.team_boxscores.team_id is TEXT in your schema. This script writes SOURCE team_id (raw/team_id)
-  into that TEXT column (not the UUID PK from public.teams).
+- IMPORTANT: public.team_boxscores.team_id is constrained by FK. In your DB, it references public.teams.team_id (UUID PK),
+  so we must write the UUID PK value (t.{teams_pk}) into team_boxscores.team_id.
 """
 
 from __future__ import annotations
@@ -141,7 +141,9 @@ def _has_column(conn: psycopg.Connection, schema: str, table: str, column: str) 
         return False
 
 
-def _pick_existing_column(conn: psycopg.Connection, schema: str, table: str, candidates: Sequence[str]) -> Optional[str]:
+def _pick_existing_column(
+    conn: psycopg.Connection, schema: str, table: str, candidates: Sequence[str]
+) -> Optional[str]:
     """Return the first existing column from candidates, or None."""
     for col in candidates:
         if _has_column(conn, schema, table, col):
@@ -259,6 +261,47 @@ def _validate_raw_table(conn: psycopg.Connection, schema: str, table: str, requi
     return True
 
 
+def _team_boxscores_fk_target(conn: psycopg.Connection) -> Optional[Tuple[str, str]]:
+    """
+    Best-effort: figure out what public.team_boxscores.team_id references.
+
+    Returns:
+      ("public.teams", "<column>") if found, else None.
+
+    This helps avoid the exact FK mistake that caused:
+      Key (team_id)=(166) is not present in table "teams".
+    """
+    try:
+        q = """
+        select
+          ns2.nspname as ref_schema,
+          c2.relname as ref_table,
+          a2.attname as ref_column
+        from pg_constraint con
+        join pg_class c1 on c1.oid = con.conrelid
+        join pg_namespace ns1 on ns1.oid = c1.relnamespace
+        join pg_attribute a1 on a1.attrelid = c1.oid and a1.attnum = any(con.conkey)
+        join pg_class c2 on c2.oid = con.confrelid
+        join pg_namespace ns2 on ns2.oid = c2.relnamespace
+        join pg_attribute a2 on a2.attrelid = c2.oid and a2.attnum = any(con.confkey)
+        where con.contype = 'f'
+          and ns1.nspname = 'public'
+          and c1.relname = 'team_boxscores'
+          and a1.attname = 'team_id'
+        limit 1;
+        """
+        with conn.cursor() as cur:
+            cur.execute(q)
+            row = cur.fetchone()
+            if not row:
+                return None
+            ref_schema, ref_table, ref_column = row
+            return (f"{ref_schema}.{ref_table}", str(ref_column))
+    except Exception as e:
+        _warn(f"Could not introspect team_boxscores.team_id FK target: {e}")
+        return None
+
+
 def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
     """Seed teams from JSON reference file."""
     if not path:
@@ -270,7 +313,12 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
 
     teams_uuid_col = _teams_uuid_col(conn)
     if not teams_uuid_col:
-        _insert_dq(conn, "teams", ["public_teams_missing_pk"], {"note": "Expected public.teams to have team_id or id."})
+        _insert_dq(
+            conn,
+            "teams",
+            ["public_teams_missing_pk"],
+            {"note": "Expected public.teams to have team_id or id."},
+        )
         return Counts(rejected=1)
 
     has_conference = _has_column(conn, "public", "teams", "conference")
@@ -733,11 +781,19 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     IMPORTANT:
     - public.team_boxscores.efg and public.team_boxscores.tov_pct are GENERATED ALWAYS in your schema.
       We do not insert/update them.
-    - public.team_boxscores.team_id is TEXT. We write source_team_id (raw team_id cast to text) into it.
-      We do NOT write the UUID PK from public.teams.
+    - public.team_boxscores.team_id is constrained by FK in your DB.
+      Your error shows it references public.teams, so we MUST write the PK UUID (t.{teams_pk}) into team_boxscores.team_id.
+      Writing raw source ids (e.g., 166) will violate FK.
     """
-    if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id", "home_away"]):
+    if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id"]):
         return Counts(rejected=1)
+
+    fk = _team_boxscores_fk_target(conn)
+    if fk and fk[0] == "public.teams" and fk[1] != teams_pk:
+        _warn(
+            f"team_boxscores.team_id FK references {fk[0]}.{fk[1]} but teams_pk={teams_pk}. "
+            f"Proceeding with teams_pk insert; if this fails, adjust schema or FK."
+        )
 
     try:
         pulled = _count_rows(
@@ -749,7 +805,10 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
         return Counts(rejected=1)
 
     pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
-    pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())" if pulled_at_col else "now()"
+    if pulled_at_col:
+        pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())"
+    else:
+        pulled_at_expr = "now()"
 
     def raw_col(name: str) -> str:
         return f"r.{name}" if _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, name) else "null"
@@ -832,7 +891,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
         select
           g.game_id,
           d.team_name as team,
-          d.source_team_id as team_id,
+          t.{teams_pk} as team_id,
           (d.home_away_norm = 'home') as is_home,
           d.pts,
           d.fgm, d.fga,
@@ -845,6 +904,8 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
         from dedup d
         join games g
           on g.event_id = d.event_id
+        join public.teams t
+          on t.season = %s and cast(t.source_team_id as text) = d.source_team_id
         on conflict (game_id, team_id)
         do update set
           team = excluded.team,
@@ -864,8 +925,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           blk = excluded.blk,
           pulled_at = excluded.pulled_at;
         """
-        # FIX: you reference season/source once (games CTE), so 2 params is correct here.
-        upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE), "upsert team_boxscores")
+        upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, SEASON), "upsert team_boxscores")
         return Counts(pulled=pulled, upserted=upserted, rejected=0)
     except Exception as e:
         _warn(f"Error upserting team boxscores: {e}")
@@ -888,16 +948,14 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
         return Counts(rejected=1)
 
     if not _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features"):
-        rejected = _insert_dq(
-            conn,
-            "team_game_features",
-            ["missing_features_column"],
-            {"table": f"{RAW_SCHEMA}.{RAW_FEATURES_TABLE}"},
-        )
+        rejected = _insert_dq(conn, "team_game_features", ["missing_features_column"], {"table": f"{RAW_SCHEMA}.{RAW_FEATURES_TABLE}"})
         return Counts(pulled=pulled, rejected=rejected)
 
     pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, ["pulled_at_utc", "pulled_at"])
-    pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())" if pulled_at_col else "now()"
+    if pulled_at_col:
+        pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())"
+    else:
+        pulled_at_expr = "now()"
 
     try:
         sql = f"""
