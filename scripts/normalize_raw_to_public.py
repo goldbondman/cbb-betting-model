@@ -20,6 +20,10 @@ This script:
 - Normalizes types defensively (completed, scores, numeric stats).
 - Populates deterministic TEXT game_id (no DB default required).
 - Includes comprehensive error handling and validation.
+
+NOTE:
+- Some public.team_boxscores columns may be GENERATED ALWAYS (computed). If so, do not insert/update them.
+  This script avoids inserting into generated columns such as efg and tov_pct when present as generated columns.
 """
 
 from __future__ import annotations
@@ -310,7 +314,7 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
 
     seen: Dict[str, Tuple[str, str, Optional[str], Optional[str]]] = {}
     skipped = 0
-    for idx, row in enumerate(data):
+    for _, row in enumerate(data):
         if not isinstance(row, dict):
             skipped += 1
             continue
@@ -660,7 +664,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           j.game_datetime_utc as game_datetime_utc,
           j.game_datetime_utc as start_time_utc,
           (j.game_datetime_utc at time zone 'utc')::date as game_date,
-          (j.game_datetime_utc at time zone 'utc')::date as game_date_date,
+          (j.game_datetime_utc at timefTme zone 'utc')::date as game_date_date,
           ht.{teams_pk} as home_team_id,
           at.{teams_pk} as away_team_id,
           j.home_team_name as home_team,
@@ -742,7 +746,13 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
 
 
 def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
-    """Upsert team boxscores from raw logs table."""
+    """
+    Upsert team boxscores from raw logs table.
+
+    IMPORTANT:
+    - public.team_boxscores.efg and public.team_boxscores.tov_pct may be GENERATED ALWAYS columns.
+      If so, inserting/updating them will fail. This function does not insert/update those columns.
+    """
     if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id"]):
         return Counts(rejected=1)
 
@@ -801,8 +811,9 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
             {norm_int(raw_col("ast"))} as ast,
             {norm_int(raw_col("tov"))} as tov,
             {norm_int(raw_col("stl"))} as stl,
-            {norm_int(raw_col("blk"))} as blk,
-            {norm_num(raw_col("tov_pct"))} as tov_pct
+            {norm_int(raw_col("blk"))} as blk
+
+            -- Do not compute/insert efg or tov_pct here because these may be generated columns in public.team_boxscores
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
           where r.event_id is not null
             and r.team_id is not null
@@ -842,7 +853,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           ftm, fta,
           oreb, dreb,
           ast, tov, stl, blk,
-          tov_pct,
           pulled_at,
           created_at
         )
@@ -857,7 +867,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           d.ftm, d.fta,
           d.oreb, d.dreb,
           d.ast, d.tov, d.stl, d.blk,
-          d.tov_pct,
           d.pulled_at,
           now()
         from dedup d
@@ -882,7 +891,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           tov = excluded.tov,
           stl = excluded.stl,
           blk = excluded.blk,
-          tov_pct = excluded.tov_pct,
           pulled_at = excluded.pulled_at;
         """
         upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, SEASON), "upsert team_boxscores")
