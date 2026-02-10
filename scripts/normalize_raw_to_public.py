@@ -585,13 +585,15 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
 
     completed_true_list_sql = ", ".join([f"'{t}'" for t in COMPLETED_TRUE_TOKENS])
 
-    # Robust numeric->int parsing (handles '79', '79.0', numeric types, text, etc.)
+    # Robust numeric->int parsing:
+    # Accepts:  "79" or "79.0" or numeric 79.0
+    # Rejects: "79.5" (should never exist for basketball points)
     def sql_int(expr: str, max_val: int = MAX_REASONABLE_SCORE) -> str:
         return f"""
         case
           when {expr} is null then null
           when btrim(({expr})::text) = '' then null
-          when btrim(({expr})::text) ~ '^\\d+(\\.\\d+)?$' then
+          when btrim(({expr})::text) ~ '^\\d+(\\.0+)?$' then
             case
               when (({expr})::numeric)::int between 0 and {max_val} then (({expr})::numeric)::int
               else null
@@ -760,28 +762,11 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           updated_at = now();
         """
 
-        params: List[object] = [
-            SEASON,
-            SOURCE,
-            SEASON,
-            SOURCE,
-            SEASON,
-            SEASON,
-        ]
-        # base CTE date params at end of query? No, they are inside SQL above, so they must appear
-        # in the execute params in correct order: base date params come BEFORE the final team season params?
-        #
-        # IMPORTANT: psycopg parameter ordering follows appearance in SQL text.
-        # In this SQL, the FIRST placeholders are in md5(...) select.
-        # The date filter placeholders appear earlier in base CTE, before insert-select.
-        # So we must place date_params FIRST.
-
-        # Rebuild params in correct appearance order:
-        # 1) date filter placeholders in base CTE
+        # IMPORTANT: parameter ordering follows placeholder appearance in SQL.
+        # Placeholders first appear in base CTE date filter, then in md5/season/source,
+        # then in ht/at season joins.
         ordered: List[object] = list(date_params)
-        # 2) md5(...) placeholders and season/source placeholders in insert-select
         ordered.extend([SEASON, SOURCE, SEASON, SOURCE])
-        # 3) ht/at season placeholders
         ordered.extend([SEASON, SEASON])
 
         upserted = _exec_rowcount(conn, sql, tuple(ordered), "upsert games")
@@ -825,9 +810,9 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
             for (event_id,) in cur.fetchall():
                 rejected += _insert_dq(conn, "games", ["missing_away_row"], {"event_id": event_id})
     except Exception as e:
-        _warn(f"Error during DQ audit for missing away rows: {e}")
+        _warn(f"Error during DQ audit for missing_away_row: {e}")
 
-    # DQ: completed but missing scores (this is the exact symptom you had)
+    # DQ: completed but missing scores (your exact symptom)
     try:
         dq_scores_sql = """
         select external_game_id
@@ -885,13 +870,15 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     def raw_col(name: str) -> str:
         return f"r.{name}" if _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, name) else "null"
 
-    # Robust numeric->int parsing (handles '79.0' etc.)
+    # Robust numeric->int parsing:
+    # Accepts:  "79" or "79.0" or numeric 79.0
+    # Rejects: "79.5"
     def norm_int(expr: str, max_val: int = MAX_REASONABLE_SCORE) -> str:
         return f"""
         case
           when {expr} is null then null
           when btrim(({expr})::text) = '' then null
-          when btrim(({expr})::text) ~ '^\\d+(\\.\\d+)?$' then
+          when btrim(({expr})::text) ~ '^\\d+(\\.0+)?$' then
             case
               when (({expr})::numeric)::int between 0 and {max_val} then (({expr})::numeric)::int
               else null
