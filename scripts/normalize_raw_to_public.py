@@ -32,6 +32,14 @@ SEASON / DATE RANGE BEHAVIOR (important for 25-26 season):
 - Override with:
   - SEASON_START_DATE (YYYY-MM-DD), default: "{SEASON}-10-01"
   - SEASON_END_DATE (YYYY-MM-DD), optional
+
+CRITICAL DATA INTEGRITY FIX (scores being wiped):
+- Raw "completed=true" rows may arrive later without scores.
+- If you dedupe by latest pulled_at, you can select a null-score row.
+- If you ON CONFLICT update scores directly, you can overwrite a prior non-null score with null.
+Fixes in this file:
+1) Dedupe for games prefers rows WITH scores, then latest pulled_at.
+2) Upsert for games never overwrites existing non-null scores with nulls.
 """
 
 from __future__ import annotations
@@ -585,15 +593,13 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
 
     completed_true_list_sql = ", ".join([f"'{t}'" for t in COMPLETED_TRUE_TOKENS])
 
-    # Robust numeric->int parsing:
-    # Accepts:  "79" or "79.0" or numeric 79.0
-    # Rejects: "79.5" (should never exist for basketball points)
+    # Robust numeric->int parsing (handles '79', '79.0', numeric types, text, etc.)
     def sql_int(expr: str, max_val: int = MAX_REASONABLE_SCORE) -> str:
         return f"""
         case
           when {expr} is null then null
           when btrim(({expr})::text) = '' then null
-          when btrim(({expr})::text) ~ '^\\d+(\\.0+)?$' then
+          when btrim(({expr})::text) ~ '^\\d+(\\.\\d+)?$' then
             case
               when (({expr})::numeric)::int between 0 and {max_val} then (({expr})::numeric)::int
               else null
@@ -611,6 +617,9 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         date_params = (SEASON_START_DATE,)
 
     try:
+        pf_expr = sql_int("r.points_for", MAX_REASONABLE_SCORE)
+        pa_expr = sql_int("r.points_against", MAX_REASONABLE_SCORE)
+
         sql = f"""
         with base as (
           select
@@ -626,8 +635,10 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
               else false
             end as completed,
 
-            {sql_int("r.points_for", MAX_REASONABLE_SCORE)} as points_for,
-            {sql_int("r.points_against", MAX_REASONABLE_SCORE)} as points_against,
+            {pf_expr} as points_for,
+            {pa_expr} as points_against,
+
+            ({pf_expr} is not null and {pa_expr} is not null) as has_scores,
 
             {pulled_at_expr} as pulled_at
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
@@ -644,7 +655,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
               b.*,
               row_number() over (
                 partition by b.event_id, b.home_away
-                order by b.pulled_at desc nulls last
+                order by b.has_scores desc, b.pulled_at desc nulls last
               ) as rn
             from base b
           ) x
@@ -723,7 +734,6 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           j.home_team_name as home_team,
           j.away_team_name as away_team,
 
-          -- If completed but scores are still null, we keep nulls and mark partial below.
           case when j.completed then j.home_score else null end as home_score,
           case when j.completed then j.away_score else null end as away_score,
 
@@ -752,19 +762,32 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           away_team_id = excluded.away_team_id,
           home_team = excluded.home_team,
           away_team = excluded.away_team,
-          home_score = excluded.home_score,
-          away_score = excluded.away_score,
+
+          -- critical: never overwrite existing scores with nulls
+          home_score = coalesce(excluded.home_score, public.games.home_score),
+          away_score = coalesce(excluded.away_score, public.games.away_score),
+
           venue = excluded.venue,
           status = excluded.status,
           status_state = excluded.status_state,
           status_detail = excluded.status_detail,
-          verification_status = excluded.verification_status,
+
+          -- critical: preserve/upgrade verification status
+          verification_status =
+            case
+              when coalesce(excluded.home_score, public.games.home_score) is not null
+               and coalesce(excluded.away_score, public.games.away_score) is not null
+              then 'verified'
+              else 'partial'
+            end,
+
           updated_at = now();
         """
 
-        # IMPORTANT: parameter ordering follows placeholder appearance in SQL.
-        # Placeholders first appear in base CTE date filter, then in md5/season/source,
-        # then in ht/at season joins.
+        # psycopg parameter ordering follows appearance in SQL text.
+        # In this SQL, the date filter placeholders appear first (base CTE).
+        # Then md5/season/source placeholders appear in the insert-select.
+        # Then ht/at season placeholders appear at the end.
         ordered: List[object] = list(date_params)
         ordered.extend([SEASON, SOURCE, SEASON, SOURCE])
         ordered.extend([SEASON, SEASON])
@@ -810,9 +833,9 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
             for (event_id,) in cur.fetchall():
                 rejected += _insert_dq(conn, "games", ["missing_away_row"], {"event_id": event_id})
     except Exception as e:
-        _warn(f"Error during DQ audit for missing_away_row: {e}")
+        _warn(f"Error during DQ audit for missing away rows: {e}")
 
-    # DQ: completed but missing scores (your exact symptom)
+    # DQ: completed but missing scores
     try:
         dq_scores_sql = """
         select external_game_id
@@ -870,15 +893,13 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     def raw_col(name: str) -> str:
         return f"r.{name}" if _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, name) else "null"
 
-    # Robust numeric->int parsing:
-    # Accepts:  "79" or "79.0" or numeric 79.0
-    # Rejects: "79.5"
+    # Robust numeric->int parsing (handles '79.0' etc.)
     def norm_int(expr: str, max_val: int = MAX_REASONABLE_SCORE) -> str:
         return f"""
         case
           when {expr} is null then null
           when btrim(({expr})::text) = '' then null
-          when btrim(({expr})::text) ~ '^\\d+(\\.0+)?$' then
+          when btrim(({expr})::text) ~ '^\\d+(\\.\\d+)?$' then
             case
               when (({expr})::numeric)::int between 0 and {max_val} then (({expr})::numeric)::int
               else null
@@ -923,7 +944,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
               b.*,
               row_number() over (
                 partition by b.event_id, b.source_team_id
-                order by b.pulled_at desc nulls last
+                order by (b.pts is not null) desc, b.pulled_at desc nulls last
               ) as rn
             from base b
           ) x
@@ -975,19 +996,19 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
         do update set
           team = excluded.team,
           is_home = excluded.is_home,
-          pts = excluded.pts,
-          fgm = excluded.fgm,
-          fga = excluded.fga,
-          tpm = excluded.tpm,
-          tpa = excluded.tpa,
-          ftm = excluded.ftm,
-          fta = excluded.fta,
-          oreb = excluded.oreb,
-          dreb = excluded.dreb,
-          ast = excluded.ast,
-          tov = excluded.tov,
-          stl = excluded.stl,
-          blk = excluded.blk,
+          pts = coalesce(excluded.pts, public.team_boxscores.pts),
+          fgm = coalesce(excluded.fgm, public.team_boxscores.fgm),
+          fga = coalesce(excluded.fga, public.team_boxscores.fga),
+          tpm = coalesce(excluded.tpm, public.team_boxscores.tpm),
+          tpa = coalesce(excluded.tpa, public.team_boxscores.tpa),
+          ftm = coalesce(excluded.ftm, public.team_boxscores.ftm),
+          fta = coalesce(excluded.fta, public.team_boxscores.fta),
+          oreb = coalesce(excluded.oreb, public.team_boxscores.oreb),
+          dreb = coalesce(excluded.dreb, public.team_boxscores.dreb),
+          ast = coalesce(excluded.ast, public.team_boxscores.ast),
+          tov = coalesce(excluded.tov, public.team_boxscores.tov),
+          stl = coalesce(excluded.stl, public.team_boxscores.stl),
+          blk = coalesce(excluded.blk, public.team_boxscores.blk),
           pulled_at = excluded.pulled_at;
         """
         end_for_sql = SEASON_END_DATE or ""
