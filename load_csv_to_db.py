@@ -85,30 +85,71 @@ FILES_ML = [
 
 TABLE_SPECS = {
     "espn_games": {
-        "required_cols": ["date", "game_id", "game_datetime_utc", "home_team", "away_team", "completed"],
+        "required_cols": [
+            "date",
+            "game_id",
+            "game_datetime_utc",
+            "home_team",
+            "away_team",
+            "completed",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
         "row_hash_keys": [],
-        "not_null": [],
-        "dtypes": {"game_datetime_utc": "datetime"},
+        "not_null": ["game_id", "game_datetime_utc", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"game_datetime_utc": "datetime", "pulled_at_utc": "datetime"},
     },
     "espn_team_game_logs": {
-        "required_cols": ["event_id", "team_id", "team", "home_away", "game_datetime_utc"],
+        "required_cols": [
+            "event_id",
+            "team_id",
+            "team",
+            "home_away",
+            "game_datetime_utc",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
         "row_hash_keys": ["event_id", "team_id", "home_away", "game_datetime_utc"],
-        "not_null": ["row_hash"],
-        "dtypes": {"game_datetime_utc": "datetime"},
+        "not_null": [
+            "row_hash",
+            "event_id",
+            "team_id",
+            "home_away",
+            "game_datetime_utc",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "dtypes": {"game_datetime_utc": "datetime", "pulled_at_utc": "datetime"},
     },
     "espn_team_game_features": {
-        "required_cols": ["event_id", "team_id", "game_datetime_utc"],
+        "required_cols": [
+            "event_id",
+            "team_id",
+            "game_datetime_utc",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
         "row_hash_keys": ["event_id", "team_id", "game_datetime_utc"],
-        "not_null": ["row_hash"],
-        "dtypes": {"game_datetime_utc": "datetime"},
+        "not_null": ["row_hash", "event_id", "team_id", "game_datetime_utc", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"game_datetime_utc": "datetime", "pulled_at_utc": "datetime"},
     },
     "espn_matchups_model_ready": {
-        "required_cols": ["event_id"],
+        "required_cols": [
+            "event_id",
+            "game_datetime_utc",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
         # We will PACK this table, so row_hash_keys are mostly for safety/fill.
         # row_hash should already exist in the CSV (builder adds it), but we still support deterministic fill.
         "row_hash_keys": ["event_id", "game_datetime_utc"],
-        "not_null": ["row_hash"],
-        "dtypes": {"game_datetime_utc": "datetime"},
+        "not_null": ["row_hash", "event_id", "game_datetime_utc", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"game_datetime_utc": "datetime", "pulled_at_utc": "datetime"},
     },
     "model_features": {
         "required_cols": [
@@ -120,10 +161,27 @@ TABLE_SPECS = {
             "game_datetime_utc",
             "actual_margin_home",
             "actual_total",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
         ],
         "row_hash_keys": ["event_id", "team_id_home", "team_id_away", "game_datetime_utc"],
-        "not_null": ["row_hash"],
-        "dtypes": {"game_datetime_utc": "datetime", "actual_margin_home": "float", "actual_total": "float"},
+        "not_null": [
+            "row_hash",
+            "event_id",
+            "team_id_home",
+            "team_id_away",
+            "game_datetime_utc",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "dtypes": {
+            "game_datetime_utc": "datetime",
+            "pulled_at_utc": "datetime",
+            "actual_margin_home": "float",
+            "actual_total": "float",
+        },
     },
     "predictions_latest": {
         "required_cols": [
@@ -136,6 +194,9 @@ TABLE_SPECS = {
             "pred_margin_home",
             "pred_total",
             "model_version",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
         ],
         "row_hash_keys": [
             "event_id",
@@ -144,8 +205,23 @@ TABLE_SPECS = {
             "game_datetime_utc",
             "model_version",
         ],
-        "not_null": ["row_hash"],
-        "dtypes": {"game_datetime_utc": "datetime", "pred_margin_home": "float", "pred_total": "float"},
+        "not_null": [
+            "row_hash",
+            "event_id",
+            "team_id_home",
+            "team_id_away",
+            "game_datetime_utc",
+            "model_version",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "dtypes": {
+            "game_datetime_utc": "datetime",
+            "pulled_at_utc": "datetime",
+            "pred_margin_home": "float",
+            "pred_total": "float",
+        },
     },
 }
 
@@ -390,12 +466,80 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     return tmp
 
 
+def _drop_rows_missing_required_values(local_path: Path, table_name: str) -> Path:
+    """
+    Safety net: remove rows missing required value columns (spec.not_null),
+    treating both empty strings and Postgres COPY NULL token '\\N' as missing.
+    """
+    spec = _get_table_spec(table_name)
+    cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(cols, local_path)
+
+    required_vals = [c for c in spec.get("not_null", []) if c in cols]
+    if not required_vals:
+        return local_path
+
+    idx = {c: i for i, c in enumerate(cols)}
+    tmp = Path(tempfile.mkstemp(prefix=f"loadclean_{table_name}_", suffix=".csv")[1])
+
+    dropped = 0
+
+    def is_missing(v: str) -> bool:
+        raw = (v or "").strip()
+        if raw == r"\N":
+            return True
+        return _normalize_str(raw) == ""
+
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
+        "w", encoding="utf-8", newline=""
+    ) as fout:
+        reader = csv.reader(fin)
+        writer = csv.writer(fout)
+
+        try:
+            header = next(reader)
+        except StopIteration:
+            return local_path
+
+        writer.writerow(header)
+
+        for row in reader:
+            if len(row) < len(cols):
+                row = row + [""] * (len(cols) - len(row))
+
+            bad = False
+            for c in required_vals:
+                i = idx.get(c)
+                if i is None:
+                    continue
+                if is_missing(row[i]):
+                    bad = True
+                    break
+
+            if bad:
+                dropped += 1
+                continue
+
+            writer.writerow(row)
+
+    if dropped > 0:
+        print(f"[WARN] Dropped {dropped} row(s) from {local_path.name} missing required values for {table_name}")
+        return tmp
+
+    # no changes, delete tmp and return original
+    try:
+        tmp.unlink()
+    except Exception:
+        pass
+    return local_path
+
+
 def _clean_numeric_value(value: str, col_name: str) -> str:
     """Clean numeric values for database insertion (e.g., convert 76.0 to 76 for integer columns)."""
     normalized = _normalize_str(value)
     if not normalized:
         return ""
-    
+
     # For columns that should be integers, remove .0 suffix
     if col_name in ("home_points", "away_points", "home_win"):
         try:
@@ -404,7 +548,7 @@ def _clean_numeric_value(value: str, col_name: str) -> str:
                 return str(int(num))
         except (ValueError, AttributeError):
             pass
-    
+
     return normalized
 
 
@@ -449,10 +593,9 @@ def _pack_features_json(local_path: Path, table_name: str, base_cols: List[str])
             base_values = []
             for c in base_cols:
                 raw = row[idx[c]] if idx.get(c) is not None else ""
-                # Clean numeric values for integer columns
                 cleaned = _clean_numeric_value(raw, c)
                 base_values.append(cleaned)
-            
+
             writer.writerow(base_values + [json.dumps(payload, separators=(",", ":"), ensure_ascii=False)])
 
     return tmp
@@ -496,6 +639,12 @@ def _preflight_validate_csv(local_path: Path, table_name: str) -> dict:
     bad_not_null = {c: 0 for c in not_null_cols}
     bad_dtype = {c: 0 for c in dtype_map.keys()}
 
+    def is_missing(v: str) -> bool:
+        raw = (v or "").strip()
+        if raw == r"\N":
+            return True
+        return _normalize_str(raw) == ""
+
     with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin:
         reader = csv.reader(fin)
         try:
@@ -511,7 +660,7 @@ def _preflight_validate_csv(local_path: Path, table_name: str) -> dict:
             for col in not_null_cols:
                 i = idx.get(col)
                 val = row[i] if i is not None else ""
-                if _normalize_str(val) == "":
+                if is_missing(val):
                     bad_not_null[col] += 1
 
             for col, dtype in dtype_map.items():
@@ -519,7 +668,7 @@ def _preflight_validate_csv(local_path: Path, table_name: str) -> dict:
                 if i is None:
                     continue
                 val = row[i]
-                if _normalize_str(val) == "":
+                if is_missing(val):
                     continue
                 if dtype == "datetime":
                     try:
@@ -623,6 +772,8 @@ def load_one(local_path: str, table_name: str) -> None:
 
         tmp_path: Optional[Path] = None
         packed_path: Optional[Path] = None
+        cleaned_path: Optional[Path] = None
+
         try:
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
                 if not _check_table_exists(conn, DB_SCHEMA, table_name):
@@ -636,7 +787,6 @@ def load_one(local_path: str, table_name: str) -> None:
                 prepared = _prepare_csv_for_load(lp, table_name)
                 tmp_path = prepared if prepared != lp else None
 
-                # FIXED: Consolidated the duplicate if statements
                 if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
                     base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
                     if not base_cols:
@@ -651,6 +801,11 @@ def load_one(local_path: str, table_name: str) -> None:
                     packed = _pack_features_json(prepared, table_name, base_cols)
                     packed_path = packed if packed != prepared else None
                     prepared = packed
+
+                # NEW: safety net to drop rows missing required values (incl. '\\N')
+                cleaned = _drop_rows_missing_required_values(prepared, table_name)
+                cleaned_path = cleaned if cleaned != prepared else None
+                prepared = cleaned
 
                 validation_result = _preflight_validate_csv(prepared, table_name)
 
@@ -703,16 +858,12 @@ def load_one(local_path: str, table_name: str) -> None:
         except Exception as exc:
             last_err = str(exc)
         finally:
-            if tmp_path and tmp_path.exists():
-                try:
-                    tmp_path.unlink()
-                except Exception:
-                    pass
-            if packed_path and packed_path.exists():
-                try:
-                    packed_path.unlink()
-                except Exception:
-                    pass
+            for p in (tmp_path, packed_path, cleaned_path):
+                if p and p.exists():
+                    try:
+                        p.unlink()
+                    except Exception:
+                        pass
 
     raise RuntimeError(
         f"DB load failed after {MAX_RETRIES} attempts: {local_path} -> {DB_SCHEMA}.{table_name}\n"
