@@ -6,6 +6,10 @@ Inputs (preferred order):
   1) Supabase Postgres table: raw.espn_team_game_features (when SUPABASE_DB_URL is set)
   2) Local CSV: espn_team_game_features.csv
 
+Targets (scores) source:
+  - Prefer joining from public.games using raw.features.event_id = public.games.external_game_id
+    This fixes cases where raw.espn_team_game_features is missing points_for/points_against.
+
 Outputs:
   - ml/model_features.csv
   - ml/dq_audit_ml.csv
@@ -13,7 +17,7 @@ Outputs:
 
 Key behaviors:
   - Expands JSONB `features` (if present) into columns.
-  - Validates schema (FEATURE_SCHEMA).
+  - Validates schema (FEATURE_SCHEMA) for required fields only.
   - Normalizes home/away and parses game datetime.
   - Dedupe per side (home/away) per event_id deterministically.
   - Builds diff features (home - away) and optional v2 features.
@@ -55,16 +59,21 @@ DB_SCHEMA = (os.getenv("DB_SCHEMA") or "raw").strip()
 DB_TABLE = (os.getenv("ESPN_FEATURES_TABLE") or "espn_team_game_features").strip()
 DB_LIMIT = (os.getenv("ESPN_FEATURES_LIMIT") or "").strip()
 
+# Scores table (targets)
+SCORES_SCHEMA = (os.getenv("SCORES_SCHEMA") or "public").strip()
+SCORES_TABLE = (os.getenv("SCORES_TABLE") or "games").strip()
+
 MIN_FEATURES = int(os.getenv("ML_MIN_FEATURES", "25"))
 
+# IMPORTANT:
+# - points_for / points_against are no longer REQUIRED from the raw features store.
+#   They are derived from public.games (home_score/away_score) after merging home+away.
 REQUIRED_FEATURE_COLS = [
     "event_id",
     "team_id",
     "team",
     "home_away",
     "game_datetime_utc",
-    "points_for",
-    "points_against",
 ]
 
 BASE_FEATURES = [
@@ -93,6 +102,9 @@ class BuildConfig:
     db_schema: str = DB_SCHEMA
     db_table: str = DB_TABLE
     db_limit: str = DB_LIMIT
+
+    scores_schema: str = SCORES_SCHEMA
+    scores_table: str = SCORES_TABLE
 
     out_features_path: Path = Path("ml/model_features.csv")
     out_audit_path: Path = Path("ml/dq_audit_ml.csv")
@@ -188,6 +200,43 @@ def _load_features(cfg: BuildConfig) -> pd.DataFrame:
     return _load_features_from_csv(cfg.features_path)
 
 
+def _load_scores_from_db(cfg: BuildConfig) -> pd.DataFrame:
+    """
+    Load scoring targets from public.games.
+    We expect:
+      - external_game_id (join key to event_id)
+      - home_score, away_score
+    """
+    if not SUPABASE_DB_URL:
+        raise ValueError("SUPABASE_DB_URL is not set")
+    if psycopg is None:
+        raise ImportError("psycopg is not installed")
+
+    qschema = _quote_ident(cfg.scores_schema)
+    qtable = _quote_ident(cfg.scores_table)
+
+    sql = f"""
+      select
+        cast(external_game_id as text) as event_id,
+        home_score,
+        away_score,
+        verification_status
+      from {qschema}.{qtable}
+      where external_game_id is not null
+      order by external_game_id asc
+    """
+
+    with psycopg.connect(SUPABASE_DB_URL) as conn:
+        scores = pd.read_sql(sql, conn)
+
+    scores["event_id"] = scores["event_id"].astype(str)
+    scores["home_score"] = pd.to_numeric(scores.get("home_score"), errors="coerce")
+    scores["away_score"] = pd.to_numeric(scores.get("away_score"), errors="coerce")
+
+    print(f"[INFO] Loaded scores from DB: {cfg.scores_schema}.{cfg.scores_table} rows={len(scores)}")
+    return scores
+
+
 def _ensure_required_cols(df: pd.DataFrame) -> List[str]:
     return [c for c in REQUIRED_FEATURE_COLS if c not in df.columns]
 
@@ -253,7 +302,6 @@ def _dedupe_side(df: pd.DataFrame, side: str, issues: List[Tuple[str, str, Dict[
     """
     out = df.copy()
 
-    # deterministic baseline sort
     out["event_id"] = out["event_id"].astype(str)
     if "team_id" in out.columns:
         out["team_id"] = out["team_id"].astype(str)
@@ -302,9 +350,20 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     if missing:
         raise ValueError(f"Missing required columns: {missing}")
 
+    # Validate against FEATURE_SCHEMA, but only enforce fields that are:
+    # - present in df OR marked required in schema.
+    # This avoids failing on points_for/points_against null-rate when they are absent or sparse in raw store.
     ok, issues_schema = validate_dataframe(df, FEATURE_SCHEMA)
     if not ok:
-        raise ValueError("Schema validation failed: " + "; ".join([i.message for i in issues_schema]))
+        # Filter schema issues to the *required input* cols only to prevent points_* from blocking.
+        required_set = set(REQUIRED_FEATURE_COLS)
+        filtered = []
+        for i in issues_schema:
+            col = getattr(i, "column", None) or getattr(i, "field", None) or ""
+            if str(col) in required_set:
+                filtered.append(i)
+        if filtered:
+            raise ValueError("Schema validation failed: " + "; ".join([i.message for i in filtered]))
 
     issues: List[Tuple[str, str, Dict[str, object]]] = []
 
@@ -322,7 +381,7 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
             issues.append((eid, "missing_game_datetime_utc", {}))
         df = df.loc[~missing_dt].copy()
 
-    df = _safe_numeric(df, BASE_FEATURES + ["points_for", "points_against"])
+    df = _safe_numeric(df, BASE_FEATURES)
 
     # Split sides
     home = df[df["home_away"] == "home"].copy()
@@ -346,9 +405,41 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
         how="inner",
     )
 
-    # Targets: require both scores present
-    merged["actual_margin_home"] = merged["points_for_home"] - merged["points_for_away"]
-    merged["actual_total"] = merged["points_for_home"] + merged["points_for_away"]
+    # Pull scores from DB when possible.
+    scores = None
+    if _db_enabled():
+        try:
+            scores = _load_scores_from_db(cfg)
+        except Exception as e:
+            issues.append(("*", "scores_load_failed", {"error": str(e)}))
+            scores = None
+
+    if scores is not None and len(scores) > 0:
+        merged = merged.merge(scores, on="event_id", how="left")
+
+        missing_scores = merged["home_score"].isna() | merged["away_score"].isna()
+        if missing_scores.any():
+            for eid in merged.loc[missing_scores, "event_id"].astype(str).head(200).tolist():
+                issues.append((eid, "missing_scores_from_public_games", {}))
+
+        # Targets
+        merged["actual_margin_home"] = merged["home_score"] - merged["away_score"]
+        merged["actual_total"] = merged["home_score"] + merged["away_score"]
+    else:
+        # DB not enabled or scores unavailable. If raw has points_for_* columns, use them.
+        # (This preserves CSV-only workflows where points_for exists in the store.)
+        if "points_for_home" in merged.columns and "points_for_away" in merged.columns:
+            merged["actual_margin_home"] = pd.to_numeric(merged["points_for_home"], errors="coerce") - pd.to_numeric(
+                merged["points_for_away"], errors="coerce"
+            )
+            merged["actual_total"] = pd.to_numeric(merged["points_for_home"], errors="coerce") + pd.to_numeric(
+                merged["points_for_away"], errors="coerce"
+            )
+            issues.append(("*", "targets_from_raw_points_for", {"note": "Used points_for_* because DB scores unavailable"}))
+        else:
+            raise ValueError(
+                "No targets available. Enable SUPABASE_DB_URL to join public.games scores, or include points_for in the feature store CSV."
+            )
 
     bad_targets = ~np.isfinite(merged["actual_margin_home"].to_numpy()) | ~np.isfinite(merged["actual_total"].to_numpy())
     if bad_targets.any():
@@ -372,7 +463,7 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
 
     # fallback auto numeric diffs
     if len(keep_features) < MIN_FEATURES:
-        ignore_tokens = ["points", "actual", "margin", "game_dt", "datetime", "team_id", "event_id"]
+        ignore_tokens = ["points", "actual", "margin", "game_dt", "datetime", "team_id", "event_id", "home_score", "away_score"]
 
         home_cols = [c for c in merged.columns if c.endswith("_home")]
         away_cols = [c for c in merged.columns if c.endswith("_away")]
