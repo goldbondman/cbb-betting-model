@@ -1052,4 +1052,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-            _info("Normalization completed successfully")
+        
