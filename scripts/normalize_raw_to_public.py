@@ -1016,29 +1016,32 @@ def main() -> None:
                 print(f"[STEP] Seed teams from JSON: {TEAMS_SEED_JSON}")
                 c = seed_teams_from_json(conn, TEAMS_SEED_JSON)
                 print(f"[OK] seed teams: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
+                conn.commit()  # ← ADD THIS
 
             # Upsert teams from raw logs
             print("[STEP] Upsert teams")
             c = upsert_teams(conn)
             print(f"[OK] teams: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
+            conn.commit()  # ← ADD THIS
 
             # Upsert games
             print("[STEP] Upsert games")
             c = upsert_games(conn, teams_pk)
             print(f"[OK] games: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
+            conn.commit()  # ← ADD THIS
 
             # Upsert team boxscores
             print("[STEP] Upsert team_boxscores")
             c = upsert_team_boxscores(conn, teams_pk)
             print(f"[OK] team_boxscores: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
+            conn.commit()  # ← ADD THIS
 
             # Upsert team game features
             print("[STEP] Upsert team_game_features")
             c = upsert_team_game_features(conn, teams_pk)
             print(f"[OK] team_game_features: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
+            conn.commit()  # ← ADD THIS
 
-            # Commit transaction
-            conn.commit()
             _info("Normalization completed successfully")
 
     except psycopg.OperationalError as e:
@@ -1049,3 +1052,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+            _info("Normalization completed successfully")
