@@ -141,9 +141,7 @@ def _has_column(conn: psycopg.Connection, schema: str, table: str, column: str) 
         return False
 
 
-def _pick_existing_column(
-    conn: psycopg.Connection, schema: str, table: str, candidates: Sequence[str]
-) -> Optional[str]:
+def _pick_existing_column(conn: psycopg.Connection, schema: str, table: str, candidates: Sequence[str]) -> Optional[str]:
     """Return the first existing column from candidates, or None."""
     for col in candidates:
         if _has_column(conn, schema, table, col):
@@ -272,12 +270,7 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
 
     teams_uuid_col = _teams_uuid_col(conn)
     if not teams_uuid_col:
-        _insert_dq(
-            conn,
-            "teams",
-            ["public_teams_missing_pk"],
-            {"note": "Expected public.teams to have team_id or id."},
-        )
+        _insert_dq(conn, "teams", ["public_teams_missing_pk"], {"note": "Expected public.teams to have team_id or id."})
         return Counts(rejected=1)
 
     has_conference = _has_column(conn, "public", "teams", "conference")
@@ -743,7 +736,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     - public.team_boxscores.team_id is TEXT. We write source_team_id (raw team_id cast to text) into it.
       We do NOT write the UUID PK from public.teams.
     """
-    if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id"]):
+    if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id", "home_away"]):
         return Counts(rejected=1)
 
     try:
@@ -756,10 +749,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
         return Counts(rejected=1)
 
     pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
-    if pulled_at_col:
-        pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())"
-    else:
-        pulled_at_expr = "now()"
+    pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())" if pulled_at_col else "now()"
 
     def raw_col(name: str) -> str:
         return f"r.{name}" if _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, name) else "null"
@@ -874,6 +864,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           blk = excluded.blk,
           pulled_at = excluded.pulled_at;
         """
+        # FIX: you reference season/source once (games CTE), so 2 params is correct here.
         upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE), "upsert team_boxscores")
         return Counts(pulled=pulled, upserted=upserted, rejected=0)
     except Exception as e:
@@ -897,14 +888,16 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
         return Counts(rejected=1)
 
     if not _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features"):
-        rejected = _insert_dq(conn, "team_game_features", ["missing_features_column"], {"table": f"{RAW_SCHEMA}.{RAW_FEATURES_TABLE}"})
+        rejected = _insert_dq(
+            conn,
+            "team_game_features",
+            ["missing_features_column"],
+            {"table": f"{RAW_SCHEMA}.{RAW_FEATURES_TABLE}"},
+        )
         return Counts(pulled=pulled, rejected=rejected)
 
     pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, ["pulled_at_utc", "pulled_at"])
-    if pulled_at_col:
-        pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())"
-    else:
-        pulled_at_expr = "now()"
+    pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())" if pulled_at_col else "now()"
 
     try:
         sql = f"""
