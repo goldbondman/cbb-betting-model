@@ -7,23 +7,18 @@ Targets:
 - public.games
 - public.team_boxscores
 - public.team_game_features
-- public.dq_audit (for data quality issues)
+- public.dq_audit
 
-Requires:
-- SUPABASE_DB_URL
+Contract notes (based on your indexes):
+- public.games PK: game_id (TEXT), unique: (season, source, external_game_id)
+- public.team_boxscores unique: (game_id, team_id) and (game_id, team)
+- public.team_game_features unique: (game_id, team_id, feature_set)
+- public.teams unique: (season, source_team_id)
 
-Behavior:
-- Idempotent upserts with deterministic conflict keys.
-- Dedupe raw sources BEFORE insert/upsert to avoid Postgres cardinality violations
-  (multiple proposed rows hitting the same ON CONFLICT target in a single INSERT).
-- Optional: seed public.teams from a local JSON file (ex: teams_2026.json)
-
-Future-proofing:
-- Normalize types coming from raw logs (completed, scores) defensively.
-- Support multiple possible datetime column names in raw logs.
-- Normalize source casing consistently to avoid join/filter mismatches.
-- Detect public.games key columns (game_id/id). Populate required UUID keys explicitly.
-- Add DQ checks for common ingestion cracks (missing away row, missing venue, completed but missing scores).
+This script:
+- Dedupe raw rows before inserts to avoid ON CONFLICT cardinality issues.
+- Normalizes types defensively (completed, scores, numeric stats).
+- Populates deterministic TEXT game_id (no DB default required).
 """
 
 from __future__ import annotations
@@ -58,6 +53,7 @@ COMPLETED_TRUE_TOKENS = (
     "completed",
     "complete",
     "finished",
+    "post",
 )
 
 
@@ -83,27 +79,6 @@ def _has_column(conn: psycopg.Connection, schema: str, table: str, column: str) 
     with conn.cursor() as cur:
         cur.execute(q, (schema, table, column))
         return cur.fetchone() is not None
-
-
-def _column_meta(conn: psycopg.Connection, schema: str, table: str, column: str) -> Optional[Tuple[str, str, Optional[str]]]:
-    """
-    Returns (udt_name, is_nullable, column_default) from information_schema, or None.
-    """
-    q = """
-    select udt_name, is_nullable, column_default
-    from information_schema.columns
-    where table_schema = %s and table_name = %s and column_name = %s
-    limit 1
-    """
-    with conn.cursor() as cur:
-        cur.execute(q, (schema, table, column))
-        row = cur.fetchone()
-    if not row:
-        return None
-    udt_name = str(row[0]) if row[0] is not None else ""
-    is_nullable = str(row[1]) if row[1] is not None else "YES"
-    col_default = row[2]  # can be None
-    return (udt_name, is_nullable, str(col_default) if col_default is not None else None)
 
 
 def _pick_existing_column(conn: psycopg.Connection, schema: str, table: str, candidates: Sequence[str]) -> Optional[str]:
@@ -141,14 +116,12 @@ def _insert_dq(conn: psycopg.Connection, entity_type: str, reason_codes: List[st
     values (%s, %s, null, %s, %s, %s::jsonb, now())
     on conflict (id) do nothing
     """
-    severity = "error"
-    return _exec_rowcount(conn, sql, (dqid, entity_type, severity, reason_codes, json_dump(details)))
+    return _exec_rowcount(conn, sql, (dqid, entity_type, "error", reason_codes, json_dump(details)))
 
 
 def _teams_pk_column(conn: psycopg.Connection) -> str:
-    if _has_column(conn, "public", "teams", "team_id"):
-        return "team_id"
-    return "id"
+    # your schema shows teams.team_id exists
+    return "team_id" if _has_column(conn, "public", "teams", "team_id") else "id"
 
 
 def _teams_uuid_col(conn: psycopg.Connection) -> Optional[str]:
@@ -157,55 +130,6 @@ def _teams_uuid_col(conn: psycopg.Connection) -> Optional[str]:
     if _has_column(conn, "public", "teams", "id"):
         return "id"
     return None
-
-
-def _games_join_key(conn: psycopg.Connection) -> str:
-    """
-    Which column to use when referencing public.games rows.
-    Prefer game_id if it exists (very common in your schema), else id.
-    """
-    if _has_column(conn, "public", "games", "game_id"):
-        return "game_id"
-    if _has_column(conn, "public", "games", "id"):
-        return "id"
-    return "game_id"  # fallback name; will fail later with clear error
-
-
-def _games_uuid_keys_to_populate(conn: psycopg.Connection) -> List[str]:
-    """
-    Return a list of games key columns to explicitly populate with gen_random_uuid(),
-    if they are UUID-typed and either:
-      - NOT NULL with no default, OR
-      - present (even if nullable) but you want deterministic creation for inserts
-        (we keep it conservative to avoid messing with sequences).
-
-    Most important: if game_id is NOT NULL and has no default, this MUST be populated.
-    """
-    keys: List[str] = []
-    for col in ("game_id", "id"):
-        if not _has_column(conn, "public", "games", col):
-            continue
-        meta = _column_meta(conn, "public", "games", col)
-        if not meta:
-            continue
-        udt, is_nullable, col_default = meta
-        if udt != "uuid":
-            continue
-
-        must_populate = (is_nullable == "NO" and (col_default is None or col_default.strip() == ""))
-        if must_populate:
-            keys.append(col)
-
-    # If neither was "must", we still prefer populating game_id if it exists and is uuid,
-    # because your downstream tables use game_id. This avoids silent NULLs when DB expects it.
-    if "game_id" not in keys and _has_column(conn, "public", "games", "game_id"):
-        meta = _column_meta(conn, "public", "games", "game_id")
-        if meta and meta[0] == "uuid":
-            # Only add if there is no default (if default exists, DB can handle it)
-            if meta[2] is None or meta[2].strip() == "":
-                keys.append("game_id")
-
-    return keys
 
 
 def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
@@ -218,10 +142,11 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
 
     teams_uuid_col = _teams_uuid_col(conn)
     if not teams_uuid_col:
-        _insert_dq(conn, "teams", ["public_teams_missing_pk"], {"note": "Expected public.teams to have team_id or id PK."})
+        _insert_dq(conn, "teams", ["public_teams_missing_pk"], {"note": "Expected public.teams to have team_id or id."})
         return Counts(rejected=1)
 
     has_conference = _has_column(conn, "public", "teams", "conference")
+    has_short_name = _has_column(conn, "public", "teams", "short_name")
 
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -237,17 +162,49 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
         source_id = row.get("sourceId")
         if source_id is None or str(source_id).strip() == "":
             continue
+
         team_name = row.get("shortDisplayName") or row.get("school") or row.get("displayName")
         if not team_name:
             continue
+
         conf = row.get("conference")
-        seen[str(source_id)] = (str(source_id), str(team_name), (str(conf) if conf is not None else None))
+        short_name = row.get("shortDisplayName") or row.get("school") or None
+        seen[str(source_id)] = (str(source_id), str(team_name), (str(conf) if conf is not None else None), (str(short_name) if short_name else None))
 
     pulled = len(seen)
     if pulled == 0:
         return Counts()
 
-    if has_conference:
+    if has_conference and has_short_name:
+        sql = f"""
+        with src as (
+          select * from unnest(%s::text[], %s::text[], %s::text[], %s::text[])
+            as s(source_team_id, team_name, conference, short_name)
+        )
+        insert into public.teams ({teams_uuid_col}, season, source_team_id, team_name, conference, short_name, created_at, updated_at)
+        select
+          gen_random_uuid(),
+          %s,
+          s.source_team_id,
+          s.team_name,
+          nullif(s.conference,''),
+          nullif(s.short_name,''),
+          now(),
+          now()
+        from src s
+        on conflict (season, source_team_id)
+        do update set
+          team_name = excluded.team_name,
+          conference = excluded.conference,
+          short_name = excluded.short_name,
+          updated_at = now();
+        """
+        source_ids = [t[0] for t in seen.values()]
+        names = [t[1] for t in seen.values()]
+        confs = [t[2] or "" for t in seen.values()]
+        shorts = [t[3] or "" for t in seen.values()]
+        upserted = _exec_rowcount(conn, sql, (source_ids, names, confs, shorts, SEASON))
+    elif has_conference:
         sql = f"""
         with src as (
           select * from unnest(%s::text[], %s::text[], %s::text[])
@@ -255,11 +212,11 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
         )
         insert into public.teams ({teams_uuid_col}, season, source_team_id, team_name, conference, created_at, updated_at)
         select
-          gen_random_uuid() as {teams_uuid_col},
-          %s as season,
+          gen_random_uuid(),
+          %s,
           s.source_team_id,
           s.team_name,
-          nullif(s.conference, '') as conference,
+          nullif(s.conference,''),
           now(),
           now()
         from src s
@@ -281,8 +238,8 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
         )
         insert into public.teams ({teams_uuid_col}, season, source_team_id, team_name, created_at, updated_at)
         select
-          gen_random_uuid() as {teams_uuid_col},
-          %s as season,
+          gen_random_uuid(),
+          %s,
           s.source_team_id,
           s.team_name,
           now(),
@@ -300,7 +257,7 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
     return Counts(pulled=pulled, upserted=upserted, rejected=0)
 
 
-def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Counts:
+def upsert_teams(conn: psycopg.Connection) -> Counts:
     pulled = _count_rows(
         conn,
         f"""
@@ -311,8 +268,46 @@ def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Coun
     )
 
     teams_uuid_col = _teams_uuid_col(conn)
-
     if not teams_uuid_col:
+        _insert_dq(conn, "teams", ["public_teams_missing_pk"], {"note": "Expected public.teams to have team_id or id."})
+        return Counts(pulled=pulled, rejected=1)
+
+    # note: your teams table has unique (season, source_team_id)
+    has_conference = _has_column(conn, "public", "teams", "conference")
+    has_short_name = _has_column(conn, "public", "teams", "short_name")
+
+    if has_conference and has_short_name:
+        sql = f"""
+        with src as (
+          select
+            cast(team_id as text) as source_team_id,
+            max(team) as team_name,
+            null::text as conference,
+            max(team) as short_name
+          from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
+          where team_id is not null and team is not null
+          group by cast(team_id as text)
+        )
+        insert into public.teams ({teams_uuid_col}, season, source_team_id, team_name, conference, short_name, created_at, updated_at)
+        select
+          gen_random_uuid(),
+          %s,
+          s.source_team_id,
+          s.team_name,
+          s.conference,
+          s.short_name,
+          now(),
+          now()
+        from src s
+        on conflict (season, source_team_id)
+        do update set
+          team_name = excluded.team_name,
+          short_name = excluded.short_name,
+          updated_at = now();
+        """
+        upserted = _exec_rowcount(conn, sql, (SEASON,))
+    else:
+        # minimal safe path
         sql = f"""
         with src as (
           select
@@ -322,12 +317,12 @@ def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Coun
           where team_id is not null and team is not null
           group by cast(team_id as text)
         )
-        insert into public.teams (season, source_team_id, team_name, conference, created_at, updated_at)
+        insert into public.teams ({teams_uuid_col}, season, source_team_id, team_name, created_at, updated_at)
         select
-          %s as season,
+          gen_random_uuid(),
+          %s,
           s.source_team_id,
           s.team_name,
-          null as conference,
           now(),
           now()
         from src s
@@ -337,92 +332,57 @@ def upsert_teams(conn: psycopg.Connection, pulled_at_col: Optional[str]) -> Coun
           updated_at = now();
         """
         upserted = _exec_rowcount(conn, sql, (SEASON,))
-        return Counts(pulled=pulled, upserted=upserted)
 
-    sql = f"""
-    with src as (
-      select
-        cast(team_id as text) as source_team_id,
-        max(team) as team_name
-      from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
-      where team_id is not null and team is not null
-      group by cast(team_id as text)
-    )
-    insert into public.teams ({teams_uuid_col}, season, source_team_id, team_name, conference, created_at, updated_at)
-    select
-      gen_random_uuid() as {teams_uuid_col},
-      %s as season,
-      s.source_team_id,
-      s.team_name,
-      null as conference,
-      now(),
-      now()
-    from src s
-    on conflict (season, source_team_id)
-    do update set
-      team_name = excluded.team_name,
-      updated_at = now();
-    """
-    upserted = _exec_rowcount(conn, sql, (SEASON,))
-    return Counts(pulled=pulled, upserted=upserted)
+    return Counts(pulled=pulled, upserted=upserted, rejected=0)
 
 
-def upsert_games(conn: psycopg.Connection, teams_pk: str, pulled_at_col: Optional[str], join_key: str, uuid_keys_to_populate: List[str]) -> Counts:
+def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
     pulled = _count_rows(
         conn,
-        f"""
-        select count(distinct event_id)
-        from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
-        where event_id is not null
-        """,
+        f"select count(distinct event_id) from {RAW_SCHEMA}.{RAW_LOGS_TABLE} where event_id is not null",
     )
 
+    pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
     pulled_at_expr = f"r.{pulled_at_col}" if pulled_at_col else "now()"
 
     game_dt_col = _pick_existing_column(
         conn,
         RAW_SCHEMA,
         RAW_LOGS_TABLE,
-        ["game_datetime_utc", "game_date_utc", "start_time_utc", "game_time_utc"],
+        ["game_datetime_utc", "start_time_utc", "game_date_utc", "game_time_utc"],
     )
     if not game_dt_col:
-        _insert_dq(
-            conn,
-            "games",
-            ["missing_datetime_column"],
-            {"table": f"{RAW_SCHEMA}.{RAW_LOGS_TABLE}", "candidates": ["game_datetime_utc", "game_date_utc", "start_time_utc", "game_time_utc"]},
-        )
+        _insert_dq(conn, "games", ["missing_datetime_column"], {"table": f"{RAW_SCHEMA}.{RAW_LOGS_TABLE}"})
         return Counts(pulled=pulled, rejected=1)
 
     completed_true_list_sql = ", ".join([f"'{t}'" for t in COMPLETED_TRUE_TOKENS])
 
-    # Build dynamic PK insert/select lists (so we can populate game_id even if id also exists)
-    pk_insert_cols = ""
-    pk_select_exprs = ""
-    if uuid_keys_to_populate:
-        pk_insert_cols = ", ".join(uuid_keys_to_populate) + ","
-        pk_select_exprs = ", ".join([f"gen_random_uuid() as {c}" for c in uuid_keys_to_populate]) + ","
-
+    # Deterministic text game_id: md5(season|source|external_game_id)
+    # This satisfies PK(game_id) without DB defaults.
     sql = f"""
     with base as (
       select
-        event_id,
-        cast(team_id as text) as source_team_id,
-        lower(home_away) as home_away,
+        r.event_id,
+        cast(r.team_id as text) as source_team_id,
+        lower(r.home_away) as home_away,
         r.{game_dt_col} as game_datetime_utc,
-        venue,
+        r.venue,
+        max(r.team) over (partition by r.event_id, lower(r.home_away)) as team_name,
+
         case
-          when lower(coalesce(completed::text, '')) in ({completed_true_list_sql}) then true
+          when lower(coalesce(r.completed::text, '')) in ({completed_true_list_sql}) then true
           else false
         end as completed,
-        case when points_for::text ~ '^\\d+$' then points_for::text::int else null end as points_for,
-        case when points_against::text ~ '^\\d+$' then points_against::text::int else null end as points_against,
+
+        case when r.points_for::text ~ '^\\d+$' then r.points_for::text::int else null end as points_for,
+        case when r.points_against::text ~ '^\\d+$' then r.points_against::text::int else null end as points_against,
+
         {pulled_at_expr} as pulled_at
       from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
-      where event_id is not null
-        and team_id is not null
-        and home_away is not null
-        and btrim(home_away) <> ''
+      where r.event_id is not null
+        and r.team_id is not null
+        and r.home_away is not null
+        and btrim(r.home_away) <> ''
     ),
     dedup as (
       select *
@@ -441,6 +401,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str, pulled_at_col: Optiona
       select
         event_id,
         source_team_id as home_source_team_id,
+        team_name as home_team_name,
         game_datetime_utc,
         venue,
         completed,
@@ -452,7 +413,8 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str, pulled_at_col: Optiona
     away as (
       select
         event_id,
-        source_team_id as away_source_team_id
+        source_team_id as away_source_team_id,
+        team_name as away_team_name
       from dedup
       where home_away = 'away'
     ),
@@ -465,38 +427,54 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str, pulled_at_col: Optiona
         h.home_score,
         h.away_score,
         h.home_source_team_id,
-        a.away_source_team_id
+        h.home_team_name,
+        a.away_source_team_id,
+        a.away_team_name
       from home h
-      left join away a on a.event_id = h.event_id
+      join away a on a.event_id = h.event_id
     )
     insert into public.games (
-      {pk_insert_cols}
+      game_id,
       season,
-      game_datetime_utc,
-      home_team_id,
-      away_team_id,
-      home_score,
-      away_score,
-      status,
-      venue,
       source,
       external_game_id,
+      game_datetime_utc,
+      start_time_utc,
+      game_date,
+      game_date_date,
+      home_team_id,
+      away_team_id,
+      home_team,
+      away_team,
+      home_score,
+      away_score,
+      venue,
+      status,
+      status_state,
+      status_detail,
       verification_status,
       created_at,
       updated_at
     )
     select
-      {pk_select_exprs}
+      md5((%s::text) || '|' || lower(%s) || '|' || j.event_id::text) as game_id,
       %s as season,
-      j.game_datetime_utc,
-      ht.{teams_pk} as home_team_id,
-      at.{teams_pk} as away_team_id,
-      case when j.completed then j.home_score else null end as home_score,
-      case when j.completed then j.away_score else null end as away_score,
-      case when j.completed then 'final' else 'scheduled' end as status,
-      j.venue,
       lower(%s) as source,
       j.event_id as external_game_id,
+      j.game_datetime_utc as game_datetime_utc,
+      j.game_datetime_utc as start_time_utc,
+      (j.game_datetime_utc at time zone 'utc')::date as game_date,
+      (j.game_datetime_utc at time zone 'utc')::date as game_date_date,
+      ht.{teams_pk} as home_team_id,
+      at.{teams_pk} as away_team_id,
+      j.home_team_name as home_team,
+      j.away_team_name as away_team,
+      case when j.completed then j.home_score else null end as home_score,
+      case when j.completed then j.away_score else null end as away_score,
+      j.venue,
+      case when j.completed then 'final' else 'scheduled' end as status,
+      case when j.completed then 'post' else 'pre' end as status_state,
+      case when j.completed then 'Final' else 'Scheduled' end as status_detail,
       case
         when j.completed and j.home_score is not null and j.away_score is not null then 'verified'
         else 'partial'
@@ -506,148 +484,105 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str, pulled_at_col: Optiona
     from joined j
     join public.teams ht
       on ht.season = %s and cast(ht.source_team_id as text) = j.home_source_team_id
-    left join public.teams at
+    join public.teams at
       on at.season = %s and cast(at.source_team_id as text) = j.away_source_team_id
-    where j.game_datetime_utc is not null
-      and j.away_source_team_id is not null
-      and at.{teams_pk} is not null
     on conflict (season, source, external_game_id)
     do update set
       game_datetime_utc = excluded.game_datetime_utc,
+      start_time_utc = excluded.start_time_utc,
+      game_date = excluded.game_date,
+      game_date_date = excluded.game_date_date,
       home_team_id = excluded.home_team_id,
       away_team_id = excluded.away_team_id,
+      home_team = excluded.home_team,
+      away_team = excluded.away_team,
       home_score = excluded.home_score,
       away_score = excluded.away_score,
-      status = excluded.status,
       venue = excluded.venue,
+      status = excluded.status,
+      status_state = excluded.status_state,
+      status_detail = excluded.status_detail,
       verification_status = excluded.verification_status,
       updated_at = now();
     """
-    upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, SEASON, SEASON))
+    upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, SEASON, SOURCE, SEASON, SEASON))
 
     rejected = 0
 
-    # DQ: completed but missing scores
-    dq_completed_missing_scores_sql = f"""
+    # DQ: missing away row (should be rare after join, but raw timing can cause it)
+    # We can detect it pre-join by looking for events with home but no away.
+    dq_missing_away_sql = f"""
     with base as (
-      select
-        event_id,
-        lower(home_away) as home_away,
-        case
-          when lower(coalesce(completed::text, '')) in ({completed_true_list_sql}) then true
-          else false
-        end as completed,
-        case when points_for::text ~ '^\\d+$' then points_for::text::int else null end as points_for,
-        case when points_against::text ~ '^\\d+$' then points_against::text::int else null end as points_against,
-        {pulled_at_expr} as pulled_at
+      select event_id, lower(home_away) as ha, {pulled_at_expr} as pulled_at
       from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
       where event_id is not null and team_id is not null and home_away is not null and btrim(home_away) <> ''
     ),
     dedup as (
       select *
       from (
-        select
-          b.*,
-          row_number() over (
-            partition by b.event_id, b.home_away
-            order by b.pulled_at desc nulls last
-          ) as rn
+        select b.*, row_number() over (partition by b.event_id, b.ha order by b.pulled_at desc nulls last) as rn
         from base b
-      ) x
-      where x.rn = 1
+      ) x where rn = 1
     )
-    select event_id, home_away, points_for, points_against
-    from dedup
-    where completed is true
-      and (points_for is null or points_against is null)
-    limit 50;
-    """
-    with conn.cursor() as cur:
-        cur.execute(dq_completed_missing_scores_sql)
-        rows = cur.fetchall()
-    for (event_id, home_away, pf, pa) in rows:
-        rejected += _insert_dq(conn, "games", ["completed_missing_scores"], {"event_id": event_id, "home_away": home_away, "points_for": pf, "points_against": pa})
-
-    # DQ: missing away row
-    dq_missing_away_row_sql = f"""
-    with base as (
-      select event_id, lower(home_away) as home_away, {pulled_at_expr} as pulled_at
-      from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
-      where event_id is not null and team_id is not null and home_away is not null and btrim(home_away) <> ''
-    ),
-    dedup as (
-      select *
-      from (
-        select b.*, row_number() over (partition by b.event_id, b.home_away order by b.pulled_at desc nulls last) as rn
-        from base b
-      ) x
-      where x.rn = 1
-    ),
-    home as (select event_id from dedup where home_away = 'home'),
-    away as (select event_id from dedup where home_away = 'away')
-    select h.event_id
-    from home h
-    left join away a on a.event_id = h.event_id
+    select d.event_id
+    from (select event_id from dedup where ha='home') h
+    left join (select event_id from dedup where ha='away') a using(event_id)
     where a.event_id is null
     limit 50;
     """
     with conn.cursor() as cur:
-        cur.execute(dq_missing_away_row_sql)
-        rows = cur.fetchall()
-    for (event_id,) in rows:
-        rejected += _insert_dq(conn, "games", ["missing_away_row"], {"event_id": event_id})
-
-    # DQ: missing venue
-    dq_missing_venue_sql = f"""
-    with base as (
-      select event_id, lower(home_away) as home_away, venue, {pulled_at_expr} as pulled_at
-      from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
-      where event_id is not null and team_id is not null and home_away is not null and btrim(home_away) <> ''
-    ),
-    dedup as (
-      select *
-      from (
-        select b.*, row_number() over (partition by b.event_id, b.home_away order by b.pulled_at desc nulls last) as rn
-        from base b
-      ) x
-      where x.rn = 1
-    )
-    select event_id, home_away, venue
-    from dedup
-    where venue is null or btrim(venue) = ''
-    limit 50;
-    """
-    with conn.cursor() as cur:
-        cur.execute(dq_missing_venue_sql)
-        rows = cur.fetchall()
-    for (event_id, home_away, venue) in rows:
-        rejected += _insert_dq(conn, "games", ["missing_venue"], {"event_id": event_id, "home_away": home_away, "venue": venue})
+        cur.execute(dq_missing_away_sql)
+        for (event_id,) in cur.fetchall():
+            rejected += _insert_dq(conn, "games", ["missing_away_row"], {"event_id": event_id})
 
     return Counts(pulled=pulled, upserted=upserted, rejected=rejected)
 
 
-def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str], has_data_ok: bool, teams_pk: str, games_join_key: str) -> Counts:
+def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     pulled = _count_rows(
         conn,
-        f"""
-        select count(*)
-        from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
-        where event_id is not null and team_id is not null
-        """,
+        f"select count(*) from {RAW_SCHEMA}.{RAW_LOGS_TABLE} where event_id is not null and team_id is not null",
     )
 
+    pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
     pulled_at_expr = f"r.{pulled_at_col}" if pulled_at_col else "now()"
-    verification_expr = "'partial'"
-    if has_data_ok:
-        verification_expr = "case when r.data_ok then 'verified' else 'partial' end"
+
+    # Helper: only select raw columns if they exist
+    def raw_col(name: str) -> str:
+        return f"r.{name}" if _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, name) else "null"
+
+    # numeric normalization
+    def norm_int(expr: str) -> str:
+        return f"case when ({expr})::text ~ '^\\d+$' then ({expr})::text::int else null end"
+
+    def norm_num(expr: str) -> str:
+        # allows decimals
+        return f"case when ({expr}) is null then null when ({expr})::text ~ '^-?\\d+(\\.\\d+)?$' then ({expr})::text::numeric else null end"
 
     sql = f"""
     with base as (
       select
-        r.*,
-        {pulled_at_expr} as pulled_at,
+        r.event_id,
         cast(r.team_id as text) as source_team_id,
-        lower(r.home_away) as home_away_norm
+        coalesce(r.team, '') as team_name,
+        lower(r.home_away) as home_away_norm,
+        {pulled_at_expr} as pulled_at,
+
+        {norm_int(raw_col("points_for"))} as pts,
+        {norm_int(raw_col("fgm"))} as fgm,
+        {norm_int(raw_col("fga"))} as fga,
+        {norm_int(raw_col("tpm"))} as tpm,
+        {norm_int(raw_col("tpa"))} as tpa,
+        {norm_int(raw_col("ftm"))} as ftm,
+        {norm_int(raw_col("fta"))} as fta,
+        {norm_int(raw_col("oreb"))} as oreb,
+        {norm_int(raw_col("dreb"))} as dreb,
+        {norm_int(raw_col("ast"))} as ast,
+        {norm_int(raw_col("tov"))} as tov,
+        {norm_int(raw_col("stl"))} as stl,
+        {norm_int(raw_col("blk"))} as blk,
+        {norm_num(raw_col("efg"))} as efg,
+        {norm_num(raw_col("tov_pct"))} as tov_pct
       from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
       where r.event_id is not null
         and r.team_id is not null
@@ -665,70 +600,101 @@ def upsert_team_boxscores(conn: psycopg.Connection, pulled_at_col: Optional[str]
           ) as rn
         from base b
       ) x
-      where x.rn = 1
+      where rn = 1
+    ),
+    games as (
+      select
+        game_id,
+        season,
+        source,
+        external_game_id
+      from public.games
+      where season = %s and lower(source) = lower(%s)
     )
     insert into public.team_boxscores (
       game_id,
+      team,
       team_id,
-      home_away,
-      source,
+      is_home,
+      pts,
+      fgm, fga,
+      tpm, tpa,
+      ftm, fta,
+      oreb, dreb,
+      ast, tov, stl, blk,
+      efg,
+      tov_pct,
       pulled_at,
-      stats,
-      verification_status,
-      verification_notes
+      created_at
     )
     select
-      g.{games_join_key} as game_id,
+      g.game_id,
+      d.team_name as team,
       t.{teams_pk} as team_id,
-      d.home_away_norm as home_away,
-      lower(%s) as source,
-      d.pulled_at as pulled_at,
-      to_jsonb(d) as stats,
-      {verification_expr} as verification_status,
-      null as verification_notes
+      (d.home_away_norm = 'home') as is_home,
+      d.pts,
+      d.fgm, d.fga,
+      d.tpm, d.tpa,
+      d.ftm, d.fta,
+      d.oreb, d.dreb,
+      d.ast, d.tov, d.stl, d.blk,
+      d.efg,
+      d.tov_pct,
+      d.pulled_at,
+      now()
     from dedup d
-    join public.games g
-      on g.season = %s and lower(g.source) = lower(%s) and g.external_game_id = d.event_id
+    join games g
+      on g.external_game_id = d.event_id
     join public.teams t
       on t.season = %s and cast(t.source_team_id as text) = d.source_team_id
     on conflict (game_id, team_id)
     do update set
-      home_away = excluded.home_away,
-      pulled_at = excluded.pulled_at,
-      stats = excluded.stats,
-      verification_status = excluded.verification_status,
-      verification_notes = excluded.verification_notes;
+      team = excluded.team,
+      is_home = excluded.is_home,
+      pts = excluded.pts,
+      fgm = excluded.fgm,
+      fga = excluded.fga,
+      tpm = excluded.tpm,
+      tpa = excluded.tpa,
+      ftm = excluded.ftm,
+      fta = excluded.fta,
+      oreb = excluded.oreb,
+      dreb = excluded.dreb,
+      ast = excluded.ast,
+      tov = excluded.tov,
+      stl = excluded.stl,
+      blk = excluded.blk,
+      efg = excluded.efg,
+      tov_pct = excluded.tov_pct,
+      pulled_at = excluded.pulled_at;
     """
-    upserted = _exec_rowcount(conn, sql, (SOURCE, SEASON, SOURCE, SEASON))
+    upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, SEASON))
     return Counts(pulled=pulled, upserted=upserted, rejected=0)
 
 
-def upsert_team_game_features(conn: psycopg.Connection, pulled_at_col: Optional[str], has_features_col: bool, teams_pk: str, games_join_key: str) -> Counts:
+def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts:
     pulled = _count_rows(
         conn,
-        f"""
-        select count(*)
-        from {RAW_SCHEMA}.{RAW_FEATURES_TABLE}
-        where event_id is not null and team_id is not null
-        """,
+        f"select count(*) from {RAW_SCHEMA}.{RAW_FEATURES_TABLE} where event_id is not null and team_id is not null",
     )
 
-    if not has_features_col:
-        rejected = _insert_dq(conn, "team_game_features", ["missing_features_column"], {"table": f"{RAW_SCHEMA}.{RAW_FEATURES_TABLE}", "note": "Expected features jsonb column for normalization."})
-        return Counts(pulled=pulled, upserted=0, rejected=rejected)
+    if not _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features"):
+        rejected = _insert_dq(conn, "team_game_features", ["missing_features_column"], {"table": f"{RAW_SCHEMA}.{RAW_FEATURES_TABLE}"})
+        return Counts(pulled=pulled, rejected=rejected)
 
+    pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, ["pulled_at_utc", "pulled_at"])
     pulled_at_expr = f"r.{pulled_at_col}" if pulled_at_col else "now()"
 
     sql = f"""
     with base as (
       select
-        r.*,
-        {pulled_at_expr} as pulled_at,
+        r.event_id,
         cast(r.team_id as text) as source_team_id,
-        lower(r.home_away) as home_away_norm
+        lower(coalesce(r.home_away,'home')) as home_away_norm,
+        r.features,
+        {pulled_at_expr} as pulled_at
       from {RAW_SCHEMA}.{RAW_FEATURES_TABLE} r
-      where r.event_id is not null
-        and r.team_id is not null
+      where r.event_id is not null and r.team_id is not null
     ),
     dedup as (
       select *
@@ -741,7 +707,12 @@ def upsert_team_game_features(conn: psycopg.Connection, pulled_at_col: Optional[
           ) as rn
         from base b
       ) x
-      where x.rn = 1
+      where rn = 1
+    ),
+    games as (
+      select game_id, external_game_id
+      from public.games
+      where season = %s and lower(source) = lower(%s)
     )
     insert into public.team_game_features (
       game_id,
@@ -753,18 +724,16 @@ def upsert_team_game_features(conn: psycopg.Connection, pulled_at_col: Optional[
       verification_status
     )
     select
-      g.{games_join_key} as game_id,
-      t.{teams_pk} as team_id,
-      d.home_away_norm as home_away,
+      g.game_id,
+      t.{teams_pk},
+      d.home_away_norm,
       %s as feature_set,
-      d.features as features,
-      d.pulled_at as pulled_at,
+      d.features,
+      d.pulled_at,
       'partial' as verification_status
     from dedup d
-    join public.games g
-      on g.season = %s and lower(g.source) = lower(%s) and g.external_game_id = d.event_id
-    join public.teams t
-      on t.season = %s and cast(t.source_team_id as text) = d.source_team_id
+    join games g on g.external_game_id = d.event_id
+    join public.teams t on t.season = %s and cast(t.source_team_id as text) = d.source_team_id
     on conflict (game_id, team_id, feature_set)
     do update set
       home_away = excluded.home_away,
@@ -772,7 +741,7 @@ def upsert_team_game_features(conn: psycopg.Connection, pulled_at_col: Optional[
       pulled_at = excluded.pulled_at,
       verification_status = excluded.verification_status;
     """
-    upserted = _exec_rowcount(conn, sql, (FEATURE_SET, SEASON, SOURCE, SEASON))
+    upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, FEATURE_SET, SEASON))
     return Counts(pulled=pulled, upserted=upserted, rejected=0)
 
 
@@ -781,43 +750,28 @@ def main() -> None:
         _die("SUPABASE_DB_URL is missing/empty.")
 
     with psycopg.connect(SUPABASE_DB_URL) as conn:
-        pulled_at_logs = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
-        pulled_at_features = _pick_existing_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, ["pulled_at_utc", "pulled_at"])
-        has_data_ok = _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, "data_ok")
-        has_features_col = _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features")
         teams_pk = _teams_pk_column(conn)
-
-        games_join_key = _games_join_key(conn)
-        if not _has_column(conn, "public", "games", games_join_key):
-            _die("public.games missing expected key column (game_id or id).")
-
-        uuid_keys_to_populate = _games_uuid_keys_to_populate(conn)
-        if not uuid_keys_to_populate and _has_column(conn, "public", "games", "game_id"):
-            # If game_id exists and is NOT NULL but we didn't detect it, log a DQ and fail fast.
-            meta = _column_meta(conn, "public", "games", "game_id")
-            if meta and meta[1] == "NO":
-                _die("public.games.game_id is NOT NULL but script could not determine how to populate it (check type/default).")
 
         if TEAMS_SEED_JSON:
             print(f"[STEP] Seed teams from JSON: {TEAMS_SEED_JSON}")
-            counts = seed_teams_from_json(conn, TEAMS_SEED_JSON)
-            print(f"[OK] seed teams: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
+            c = seed_teams_from_json(conn, TEAMS_SEED_JSON)
+            print(f"[OK] seed teams: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
 
-        print("[STEP] Upsert teams (deduped from raw logs)")
-        counts = upsert_teams(conn, pulled_at_logs)
-        print(f"[OK] teams: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
+        print("[STEP] Upsert teams")
+        c = upsert_teams(conn)
+        print(f"[OK] teams: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
 
-        print("[STEP] Upsert games (deduped home/away per event)")
-        counts = upsert_games(conn, teams_pk, pulled_at_logs, games_join_key, uuid_keys_to_populate)
-        print(f"[OK] games: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
+        print("[STEP] Upsert games")
+        c = upsert_games(conn, teams_pk)
+        print(f"[OK] games: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
 
-        print("[STEP] Upsert team_boxscores (deduped per event+team)")
-        counts = upsert_team_boxscores(conn, pulled_at_logs, has_data_ok, teams_pk, games_join_key)
-        print(f"[OK] team_boxscores: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
+        print("[STEP] Upsert team_boxscores")
+        c = upsert_team_boxscores(conn, teams_pk)
+        print(f"[OK] team_boxscores: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
 
-        print("[STEP] Upsert team_game_features (deduped per event+team)")
-        counts = upsert_team_game_features(conn, pulled_at_features, has_features_col, teams_pk, games_join_key)
-        print(f"[OK] team_game_features: pulled={counts.pulled} upserted={counts.upserted} rejected={counts.rejected}")
+        print("[STEP] Upsert team_game_features")
+        c = upsert_team_game_features(conn, teams_pk)
+        print(f"[OK] team_game_features: pulled={c.pulled} upserted={c.upserted} rejected={c.rejected}")
 
         conn.commit()
 
