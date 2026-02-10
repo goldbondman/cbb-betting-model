@@ -22,8 +22,9 @@ This script:
 - Includes comprehensive error handling and validation.
 
 NOTE:
-- Some public.team_boxscores columns may be GENERATED ALWAYS (computed). If so, do not insert/update them.
-  This script avoids inserting into generated columns such as efg and tov_pct when present as generated columns.
+- public.team_boxscores has GENERATED ALWAYS columns (efg, tov_pct). We never insert/update them.
+- IMPORTANT: public.team_boxscores.team_id is TEXT in your schema. This script writes SOURCE team_id (raw/team_id)
+  into that TEXT column (not the UUID PK from public.teams).
 """
 
 from __future__ import annotations
@@ -140,7 +141,9 @@ def _has_column(conn: psycopg.Connection, schema: str, table: str, column: str) 
         return False
 
 
-def _pick_existing_column(conn: psycopg.Connection, schema: str, table: str, candidates: Sequence[str]) -> Optional[str]:
+def _pick_existing_column(
+    conn: psycopg.Connection, schema: str, table: str, candidates: Sequence[str]
+) -> Optional[str]:
     """Return the first existing column from candidates, or None."""
     for col in candidates:
         if _has_column(conn, schema, table, col):
@@ -169,7 +172,11 @@ def _exec_rowcount(
         raise
 
 
-def _count_rows(conn: psycopg.Connection, sql: str, params: Optional[Iterable[object]] = None) -> int:
+def _count_rows(
+    conn: psycopg.Connection,
+    sql: str,
+    params: Optional[Iterable[object]] = None,
+) -> int:
     """Execute count query and return integer result."""
     try:
         with conn.cursor() as cur:
@@ -196,7 +203,12 @@ def _dq_id(entity_type: str, reason_codes: List[str], details: dict) -> str:
     return str(uuid.uuid5(uuid.NAMESPACE_URL, payload))
 
 
-def _insert_dq(conn: psycopg.Connection, entity_type: str, reason_codes: List[str], details: dict) -> int:
+def _insert_dq(
+    conn: psycopg.Connection,
+    entity_type: str,
+    reason_codes: List[str],
+    details: dict,
+) -> int:
     """Insert data quality audit record (idempotent via deterministic ID)."""
     try:
         dqid = _dq_id(entity_type, reason_codes, details)
@@ -287,7 +299,7 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
 
     seen: Dict[str, Tuple[str, str, Optional[str], Optional[str]]] = {}
     skipped = 0
-    for row in data:
+    for _, row in enumerate(data):
         if not isinstance(row, dict):
             skipped += 1
             continue
@@ -350,7 +362,10 @@ def seed_teams_from_json(conn: psycopg.Connection, path: str) -> Counts:
             confs = [t[2] or "" for t in seen.values()]
             shorts = [t[3] or "" for t in seen.values()]
             upserted = _exec_rowcount(
-                conn, sql, (source_ids, names, confs, shorts, SEASON), "seed teams with conference and short_name"
+                conn,
+                sql,
+                (source_ids, names, confs, shorts, SEASON),
+                "seed teams with conference and short_name",
             )
         elif has_conference:
             sql = f"""
@@ -536,7 +551,6 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         with base as (
           select
             r.event_id,
-            cast(r.event_id as text) as event_id_text,
             cast(r.team_id as text) as source_team_id,
             lower(r.home_away) as home_away,
             r.{game_dt_col} as game_datetime_utc,
@@ -573,7 +587,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         ),
         home as (
           select
-            event_id_text,
+            event_id,
             source_team_id as home_source_team_id,
             team_name as home_team_name,
             game_datetime_utc,
@@ -586,7 +600,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         ),
         away as (
           select
-            event_id_text,
+            event_id,
             source_team_id as away_source_team_id,
             team_name as away_team_name
           from dedup
@@ -594,7 +608,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         ),
         joined as (
           select
-            h.event_id_text,
+            h.event_id,
             h.game_datetime_utc,
             h.venue,
             h.completed,
@@ -605,7 +619,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
             a.away_source_team_id,
             a.away_team_name
           from home h
-          join away a on a.event_id_text = h.event_id_text
+          join away a on a.event_id = h.event_id
         )
         insert into public.games (
           game_id,
@@ -631,10 +645,10 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           updated_at
         )
         select
-          md5((%s::text) || '|' || lower(%s) || '|' || j.event_id_text) as game_id,
+          md5((%s::text) || '|' || lower(%s) || '|' || j.event_id::text) as game_id,
           %s as season,
           lower(%s) as source,
-          j.event_id_text as external_game_id,
+          j.event_id as external_game_id,
           j.game_datetime_utc as game_datetime_utc,
           j.game_datetime_utc as start_time_utc,
           (j.game_datetime_utc at time zone 'utc')::date as game_date,
@@ -680,6 +694,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           updated_at = now();
         """
         upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, SEASON, SOURCE, SEASON, SEASON), "upsert games")
+
     except Exception as e:
         _warn(f"Error upserting games: {e}")
         traceback.print_exc()
@@ -689,29 +704,29 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
     try:
         dq_missing_away_sql = f"""
         with base as (
-          select cast(event_id as text) as event_id_text, lower(home_away) as ha, {pulled_at_expr} as pulled_at
+          select event_id, lower(home_away) as ha, {pulled_at_expr} as pulled_at
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
           where event_id is not null and team_id is not null and home_away is not null and btrim(home_away) <> ''
         ),
         dedup as (
           select *
           from (
-            select b.*, row_number() over (partition by b.event_id_text, b.ha order by b.pulled_at desc nulls last) as rn
+            select b.*, row_number() over (partition by b.event_id, b.ha order by b.pulled_at desc nulls last) as rn
             from base b
           ) x where rn = 1
         ),
         home_only as (
-          select h.event_id_text
-          from (select event_id_text from dedup where ha='home') h
-          left join (select event_id_text from dedup where ha='away') a using(event_id_text)
-          where a.event_id_text is null
+          select h.event_id
+          from (select event_id from dedup where ha='home') h
+          left join (select event_id from dedup where ha='away') a using(event_id)
+          where a.event_id is null
         )
-        select event_id_text from home_only limit 50;
+        select event_id from home_only limit 50;
         """
         with conn.cursor() as cur:
             cur.execute(dq_missing_away_sql)
-            for (event_id_text,) in cur.fetchall():
-                rejected += _insert_dq(conn, "games", ["missing_away_row"], {"event_id": event_id_text})
+            for (event_id,) in cur.fetchall():
+                rejected += _insert_dq(conn, "games", ["missing_away_row"], {"event_id": event_id})
     except Exception as e:
         _warn(f"Error during DQ audit for missing away rows: {e}")
 
@@ -723,11 +738,10 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     Upsert team boxscores from raw logs table.
 
     IMPORTANT:
-    - public.team_boxscores.efg and public.team_boxscores.tov_pct are GENERATED ALWAYS columns in your schema.
-      Inserting/updating them will fail. This function never inserts/updates those columns.
-
-    Fix included:
-    - Force event_id joins to be TEXT on both sides. A type mismatch here commonly results in 0 inserted rows.
+    - public.team_boxscores.efg and public.team_boxscores.tov_pct are GENERATED ALWAYS in your schema.
+      We do not insert/update them.
+    - public.team_boxscores.team_id is TEXT. We write source_team_id (raw team_id cast to text) into it.
+      We do NOT write the UUID PK from public.teams.
     """
     if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id"]):
         return Counts(rejected=1)
@@ -747,8 +761,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
     else:
         pulled_at_expr = "now()"
 
-    insert_id_col = _has_column(conn, "public", "team_boxscores", "id")
-
     def raw_col(name: str) -> str:
         return f"r.{name}" if _has_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, name) else "null"
 
@@ -765,13 +777,10 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
         """
 
     try:
-        insert_cols_prefix = "id,\n          " if insert_id_col else ""
-        select_cols_prefix = "gen_random_uuid(),\n          " if insert_id_col else ""
-
         sql = f"""
         with base as (
           select
-            cast(r.event_id as text) as event_id_text,
+            cast(r.event_id as text) as event_id,
             cast(r.team_id as text) as source_team_id,
             coalesce(r.team, '') as team_name,
             lower(r.home_away) as home_away_norm,
@@ -802,7 +811,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
             select
               b.*,
               row_number() over (
-                partition by b.event_id_text, b.source_team_id
+                partition by b.event_id, b.source_team_id
                 order by b.pulled_at desc nulls last
               ) as rn
             from base b
@@ -812,12 +821,12 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
         games as (
           select
             game_id,
-            cast(external_game_id as text) as external_game_id_text
+            cast(external_game_id as text) as event_id
           from public.games
           where season = %s and lower(source) = lower(%s)
         )
         insert into public.team_boxscores (
-          {insert_cols_prefix}game_id,
+          game_id,
           team,
           team_id,
           is_home,
@@ -831,9 +840,9 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           created_at
         )
         select
-          {select_cols_prefix}g.game_id,
+          g.game_id,
           d.team_name as team,
-          t.{teams_pk} as team_id,
+          d.source_team_id as team_id,
           (d.home_away_norm = 'home') as is_home,
           d.pts,
           d.fgm, d.fga,
@@ -845,9 +854,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           now()
         from dedup d
         join games g
-          on g.external_game_id_text = d.event_id_text
-        join public.teams t
-          on t.season = %s and cast(t.source_team_id as text) = d.source_team_id
+          on g.event_id = d.event_id
         on conflict (game_id, team_id)
         do update set
           team = excluded.team,
@@ -867,7 +874,7 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
           blk = excluded.blk,
           pulled_at = excluded.pulled_at;
         """
-        upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE, SEASON), "upsert team_boxscores")
+        upserted = _exec_rowcount(conn, sql, (SEASON, SOURCE), "upsert team_boxscores")
         return Counts(pulled=pulled, upserted=upserted, rejected=0)
     except Exception as e:
         _warn(f"Error upserting team boxscores: {e}")
@@ -890,12 +897,7 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
         return Counts(rejected=1)
 
     if not _has_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, "features"):
-        rejected = _insert_dq(
-            conn,
-            "team_game_features",
-            ["missing_features_column"],
-            {"table": f"{RAW_SCHEMA}.{RAW_FEATURES_TABLE}"},
-        )
+        rejected = _insert_dq(conn, "team_game_features", ["missing_features_column"], {"table": f"{RAW_SCHEMA}.{RAW_FEATURES_TABLE}"})
         return Counts(pulled=pulled, rejected=rejected)
 
     pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_FEATURES_TABLE, ["pulled_at_utc", "pulled_at"])
@@ -908,7 +910,7 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
         sql = f"""
         with base as (
           select
-            cast(r.event_id as text) as event_id_text,
+            r.event_id,
             cast(r.team_id as text) as source_team_id,
             lower(coalesce(r.home_away,'home')) as home_away_norm,
             r.features,
@@ -922,7 +924,7 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
             select
               b.*,
               row_number() over (
-                partition by b.event_id_text, b.source_team_id
+                partition by b.event_id, b.source_team_id
                 order by b.pulled_at desc nulls last
               ) as rn
             from base b
@@ -930,7 +932,7 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
           where rn = 1
         ),
         games as (
-          select game_id, cast(external_game_id as text) as external_game_id_text
+          select game_id, external_game_id
           from public.games
           where season = %s and lower(source) = lower(%s)
         )
@@ -952,7 +954,7 @@ def upsert_team_game_features(conn: psycopg.Connection, teams_pk: str) -> Counts
           d.pulled_at,
           'partial' as verification_status
         from dedup d
-        join games g on g.external_game_id_text = d.event_id_text
+        join games g on g.external_game_id = d.event_id
         join public.teams t on t.season = %s and cast(t.source_team_id as text) = d.source_team_id
         on conflict (game_id, team_id, feature_set)
         do update set
@@ -1010,6 +1012,7 @@ def main() -> None:
             conn.commit()
 
             _info("Normalization completed successfully")
+
     except psycopg.OperationalError as e:
         _die(f"Database connection error: {e}")
     except Exception as e:
