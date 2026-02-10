@@ -37,7 +37,6 @@ from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 import psycopg
-from psycopg import sql
 
 SUPABASE_DB_URL = (os.getenv("SUPABASE_DB_URL") or "").strip()
 SEASON = int(os.getenv("SEASON", "2025"))
@@ -544,7 +543,10 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         return Counts(rejected=1)
 
     pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
-    pulled_at_expr = f"r.{pulled_at_col}" if pulled_at_col else "now()"
+    if pulled_at_col:
+        pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())"
+    else:
+        pulled_at_expr = "now()"
 
     game_dt_col = _pick_existing_column(
         conn,
@@ -664,7 +666,7 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           j.game_datetime_utc as game_datetime_utc,
           j.game_datetime_utc as start_time_utc,
           (j.game_datetime_utc at time zone 'utc')::date as game_date,
-          (j.game_datetime_utc at timefTme zone 'utc')::date as game_date_date,
+          (j.game_datetime_utc at time zone 'utc')::date as game_date_date,
           ht.{teams_pk} as home_team_id,
           at.{teams_pk} as away_team_id,
           j.home_team_name as home_team,
@@ -786,9 +788,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
         end
         """
 
-    def norm_num(expr: str) -> str:
-        return f"case when ({expr}) is null then null when ({expr})::text ~ '^-?\\d+(\\.\\d+)?$' then ({expr})::text::numeric else null end"
-
     try:
         sql = f"""
         with base as (
@@ -812,7 +811,6 @@ def upsert_team_boxscores(conn: psycopg.Connection, teams_pk: str) -> Counts:
             {norm_int(raw_col("tov"))} as tov,
             {norm_int(raw_col("stl"))} as stl,
             {norm_int(raw_col("blk"))} as blk
-
             -- Do not compute/insert efg or tov_pct here because these may be generated columns in public.team_boxscores
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
           where r.event_id is not null
