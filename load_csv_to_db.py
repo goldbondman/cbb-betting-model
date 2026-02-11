@@ -27,6 +27,9 @@ DB_SCHEMA = (os.getenv("DB_SCHEMA") or "raw").strip()
 # replace | append | upsert
 LOAD_MODE = (os.getenv("LOAD_MODE") or "replace").strip().lower()
 
+# NEW: parse version default (fixes missing parse_version in upstream CSVs)
+PARSE_VERSION = (os.getenv("PARSE_VERSION") or "v1").strip() or "v1"
+
 # NEW: Auto-add columns policy
 # Only allow automatic schema mutation for very wide, evolving raw feature tables.
 # For all other tables, missing columns should be handled via migrations or upstream CSV fixes.
@@ -44,8 +47,19 @@ PACK_FEATURES_JSON_ALLOWLIST = {
 }
 
 # Base columns kept as normal columns; everything else becomes JSON in "features"
+# IMPORTANT: base cols MUST include the table spec required_cols or packing will break validation.
 PACK_FEATURES_BASE_COLS = {
-    "espn_team_game_features": ["row_hash", "event_id", "team_id", "team", "home_away", "game_datetime_utc"],
+    "espn_team_game_features": [
+        "row_hash",
+        "event_id",
+        "team_id",
+        "team",
+        "home_away",
+        "game_datetime_utc",
+        "pulled_at_utc",
+        "source",
+        "parse_version",
+    ],
     "espn_matchups_model_ready": [
         "row_hash",
         "event_id",
@@ -54,6 +68,9 @@ PACK_FEATURES_BASE_COLS = {
         "home_points",
         "away_points",
         "home_win",
+        "pulled_at_utc",
+        "source",
+        "parse_version",
     ],
 }
 
@@ -145,8 +162,6 @@ TABLE_SPECS = {
             "source",
             "parse_version",
         ],
-        # We will PACK this table, so row_hash_keys are mostly for safety/fill.
-        # row_hash should already exist in the CSV (builder adds it), but we still support deterministic fill.
         "row_hash_keys": ["event_id", "game_datetime_utc"],
         "not_null": ["row_hash", "event_id", "game_datetime_utc", "pulled_at_utc", "source", "parse_version"],
         "dtypes": {"game_datetime_utc": "datetime", "pulled_at_utc": "datetime"},
@@ -410,6 +425,60 @@ def _get_table_spec(table_name: str) -> dict:
     return TABLE_SPECS.get(table_name, {"required_cols": [], "row_hash_keys": [], "not_null": [], "dtypes": {}})
 
 
+def _ensure_parse_version(local_path: Path, table_name: str) -> Path:
+    """
+    Contract fix: ensure parse_version exists and is populated.
+    - If missing from header, add it with default PARSE_VERSION.
+    - If present but blank/'\\N', fill with PARSE_VERSION.
+    Only runs for tables that require parse_version.
+    """
+    spec = _get_table_spec(table_name)
+    if "parse_version" not in spec.get("required_cols", []):
+        return local_path
+
+    cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(cols, local_path)
+
+    tmp = Path(tempfile.mkstemp(prefix=f"loadpv_{table_name}_", suffix=".csv")[1])
+
+    has_pv = "parse_version" in cols
+    idx = {c: i for i, c in enumerate(cols)}
+    pv_i = idx.get("parse_version")
+
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
+        "w", encoding="utf-8", newline=""
+    ) as fout:
+        reader = csv.reader(fin)
+        writer = csv.writer(fout)
+
+        try:
+            header = next(reader)
+        except StopIteration:
+            # empty file
+            tmp.unlink(missing_ok=True)  # type: ignore[attr-defined]
+            return local_path
+
+        if not has_pv:
+            writer.writerow(header + ["parse_version"])
+            for row in reader:
+                if len(row) < len(header):
+                    row = row + [""] * (len(header) - len(row))
+                writer.writerow(row + [PARSE_VERSION])
+            return tmp
+
+        # has parse_version column
+        writer.writerow(header)
+        for row in reader:
+            if len(row) < len(header):
+                row = row + [""] * (len(header) - len(row))
+            raw = (row[pv_i] if pv_i is not None else "").strip()
+            if raw == "" or raw == r"\N":
+                row[pv_i] = PARSE_VERSION
+            writer.writerow(row)
+
+    return tmp
+
+
 def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
     """
     Fix known bad inputs before COPY.
@@ -526,7 +595,6 @@ def _drop_rows_missing_required_values(local_path: Path, table_name: str) -> Pat
         print(f"[WARN] Dropped {dropped} row(s) from {local_path.name} missing required values for {table_name}")
         return tmp
 
-    # no changes, delete tmp and return original
     try:
         tmp.unlink()
     except Exception:
@@ -540,7 +608,6 @@ def _clean_numeric_value(value: str, col_name: str) -> str:
     if not normalized:
         return ""
 
-    # For columns that should be integers, remove .0 suffix
     if col_name in ("home_points", "away_points", "home_win"):
         try:
             num = float(normalized)
@@ -773,6 +840,7 @@ def load_one(local_path: str, table_name: str) -> None:
         tmp_path: Optional[Path] = None
         packed_path: Optional[Path] = None
         cleaned_path: Optional[Path] = None
+        parsever_path: Optional[Path] = None
 
         try:
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
@@ -802,14 +870,17 @@ def load_one(local_path: str, table_name: str) -> None:
                     packed_path = packed if packed != prepared else None
                     prepared = packed
 
-                # NEW: safety net to drop rows missing required values (incl. '\\N')
+                # FIX: ensure parse_version exists + filled before we drop rows / validate required cols
+                pv = _ensure_parse_version(prepared, table_name)
+                parsever_path = pv if pv != prepared else None
+                prepared = pv
+
                 cleaned = _drop_rows_missing_required_values(prepared, table_name)
                 cleaned_path = cleaned if cleaned != prepared else None
                 prepared = cleaned
 
                 validation_result = _preflight_validate_csv(prepared, table_name)
 
-                # Skip empty files
                 if validation_result.get("empty", False):
                     print(f"[SKIP] {local_path} is empty (zero data rows)")
                     return
@@ -858,7 +929,7 @@ def load_one(local_path: str, table_name: str) -> None:
         except Exception as exc:
             last_err = str(exc)
         finally:
-            for p in (tmp_path, packed_path, cleaned_path):
+            for p in (tmp_path, packed_path, parsever_path, cleaned_path):
                 if p and p.exists():
                     try:
                         p.unlink()
