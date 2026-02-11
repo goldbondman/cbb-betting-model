@@ -40,6 +40,10 @@ CRITICAL DATA INTEGRITY FIX (scores being wiped):
 Fixes in this file:
 1) Dedupe for games prefers rows WITH scores, then latest pulled_at.
 2) Upsert for games never overwrites existing non-null scores with nulls.
+
+2026-02-10 FIX:
+- Game-level scores/status MUST come from raw.espn_games (not team logs).
+- Team IDs (home/away) still come from raw.espn_team_game_logs.
 """
 
 from __future__ import annotations
@@ -60,6 +64,7 @@ SOURCE = (os.getenv("SOURCE", "espn").strip().lower() or "espn")
 FEATURE_SET = (os.getenv("FEATURE_SET", "espn_v1").strip() or "espn_v1")
 
 RAW_SCHEMA = (os.getenv("RAW_SCHEMA", "raw").strip() or "raw")
+RAW_GAMES_TABLE = (os.getenv("RAW_GAMES_TABLE", "espn_games").strip() or "espn_games")
 RAW_LOGS_TABLE = (os.getenv("RAW_LOGS_TABLE", "espn_team_game_logs").strip() or "espn_team_game_logs")
 RAW_FEATURES_TABLE = (os.getenv("RAW_FEATURES_TABLE", "espn_team_game_features").strip() or "espn_team_game_features")
 
@@ -542,56 +547,24 @@ def upsert_teams(conn: psycopg.Connection) -> Counts:
 
 
 def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
-    """Upsert games from raw logs table."""
-    if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id", "home_away"]):
-        return Counts(rejected=1)
+    """
+    Upsert games.
 
-    pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
-    if pulled_at_col:
-        pulled_at_expr = f"COALESCE(r.{pulled_at_col}, now())"
-    else:
-        pulled_at_expr = "now()"
-
-    game_dt_col = _pick_existing_column(
+    Authoritative game-level fields (scores, completed, status, datetime) come from raw.espn_games.
+    Team IDs (home/away) come from raw.espn_team_game_logs.
+    """
+    # raw.espn_games is authoritative for scores/status/datetime
+    if not _validate_raw_table(
         conn,
         RAW_SCHEMA,
-        RAW_LOGS_TABLE,
-        ["game_datetime_utc", "start_time_utc", "game_date_utc", "game_time_utc"],
-    )
-    if not game_dt_col:
-        _insert_dq(conn, "games", ["missing_datetime_column"], {"table": f"{RAW_SCHEMA}.{RAW_LOGS_TABLE}"})
+        RAW_GAMES_TABLE,
+        ["game_id", "game_datetime_utc", "home_team", "away_team", "completed", "pulled_at_utc"],
+    ):
         return Counts(rejected=1)
 
-    # Count pulled with season window filter
-    try:
-        if SEASON_END_DATE:
-            pulled = _count_rows(
-                conn,
-                f"""
-                select count(distinct event_id)
-                from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
-                where event_id is not null
-                  and {game_dt_col} >= %s::timestamptz
-                  and {game_dt_col} < (%s::date + interval '1 day')
-                """,
-                (SEASON_START_DATE, SEASON_END_DATE),
-            )
-        else:
-            pulled = _count_rows(
-                conn,
-                f"""
-                select count(distinct event_id)
-                from {RAW_SCHEMA}.{RAW_LOGS_TABLE}
-                where event_id is not null
-                  and {game_dt_col} >= %s::timestamptz
-                """,
-                (SEASON_START_DATE,),
-            )
-    except Exception as e:
-        _warn(f"Error counting games: {e}")
+    # raw logs provide team_id mapping for home/away
+    if not _validate_raw_table(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["event_id", "team_id", "home_away"]):
         return Counts(rejected=1)
-
-    completed_true_list_sql = ", ".join([f"'{t}'" for t in COMPLETED_TRUE_TOKENS])
 
     # Robust numeric->int parsing (handles '79', '79.0', numeric types, text, etc.)
     def sql_int(expr: str, max_val: int = MAX_REASONABLE_SCORE) -> str:
@@ -608,56 +581,112 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         end
         """
 
-    # Date filter clause (parameterized)
+    # Date filter clause (parameterized) based on raw games datetime
     if SEASON_END_DATE:
-        date_filter_sql = f"and r.{game_dt_col} >= %s::timestamptz and r.{game_dt_col} < (%s::date + interval '1 day')"
+        games_date_filter_sql = "and g.game_datetime_utc >= %s::timestamptz and g.game_datetime_utc < (%s::date + interval '1 day')"
         date_params: Tuple[object, ...] = (SEASON_START_DATE, SEASON_END_DATE)
     else:
-        date_filter_sql = f"and r.{game_dt_col} >= %s::timestamptz"
+        games_date_filter_sql = "and g.game_datetime_utc >= %s::timestamptz"
         date_params = (SEASON_START_DATE,)
 
+    # Count pulled distinct games (within window)
     try:
-        pf_expr = sql_int("r.points_for", MAX_REASONABLE_SCORE)
-        pa_expr = sql_int("r.points_against", MAX_REASONABLE_SCORE)
+        pulled = _count_rows(
+            conn,
+            f"""
+            select count(distinct g.game_id)
+            from {RAW_SCHEMA}.{RAW_GAMES_TABLE} g
+            where g.game_id is not null
+              and g.game_datetime_utc is not null
+              {games_date_filter_sql}
+            """,
+            date_params,
+        )
+    except Exception as e:
+        _warn(f"Error counting games: {e}")
+        return Counts(rejected=1)
 
+    # logs pulled_at (for dedup home/away team mapping)
+    logs_pulled_at_col = _pick_existing_column(conn, RAW_SCHEMA, RAW_LOGS_TABLE, ["pulled_at_utc", "pulled_at"])
+    if logs_pulled_at_col:
+        logs_pulled_at_expr = f"COALESCE(r.{logs_pulled_at_col}, now())"
+    else:
+        logs_pulled_at_expr = "now()"
+
+    completed_true_list_sql = ", ".join([f"'{t}'" for t in COMPLETED_TRUE_TOKENS])
+
+    try:
+        hs_expr = sql_int("g.home_score", MAX_REASONABLE_SCORE)
+        as_expr = sql_int("g.away_score", MAX_REASONABLE_SCORE)
+
+        # Prefer rows with scores, then latest pulled_at_utc (prevents score wipe)
         sql = f"""
-        with base as (
+        with games_base as (
+          select
+            cast(g.game_id as text) as event_id,
+            g.game_datetime_utc,
+            g.venue,
+            g.home_team as home_team_name,
+            g.away_team as away_team_name,
+
+            case
+              when g.completed is true then true
+              when lower(coalesce(g.state::text,'')) in ({completed_true_list_sql}) then true
+              when lower(coalesce(g.status_desc::text,'')) in ({completed_true_list_sql}) then true
+              else false
+            end as completed,
+
+            {hs_expr} as home_score,
+            {as_expr} as away_score,
+
+            ({hs_expr} is not null and {as_expr} is not null) as has_scores,
+
+            g.state as raw_state,
+            g.status_desc as raw_status_desc,
+            g.status_detail as raw_status_detail,
+            g.pulled_at_utc as pulled_at
+          from {RAW_SCHEMA}.{RAW_GAMES_TABLE} g
+          where g.game_id is not null
+            and g.game_datetime_utc is not null
+            {games_date_filter_sql}
+        ),
+        games_dedup as (
+          select *
+          from (
+            select
+              gb.*,
+              row_number() over (
+                partition by gb.event_id
+                order by gb.has_scores desc, gb.pulled_at desc nulls last
+              ) as rn
+            from games_base gb
+          ) x
+          where x.rn = 1
+        ),
+
+        logs_base as (
           select
             r.event_id,
             cast(r.team_id as text) as source_team_id,
             lower(r.home_away) as home_away,
-            r.{game_dt_col} as game_datetime_utc,
-            r.venue,
             max(r.team) over (partition by r.event_id, lower(r.home_away)) as team_name,
-
-            case
-              when lower(coalesce(r.completed::text, '')) in ({completed_true_list_sql}) then true
-              else false
-            end as completed,
-
-            {pf_expr} as points_for,
-            {pa_expr} as points_against,
-
-            ({pf_expr} is not null and {pa_expr} is not null) as has_scores,
-
-            {pulled_at_expr} as pulled_at
+            {logs_pulled_at_expr} as pulled_at
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
           where r.event_id is not null
             and r.team_id is not null
             and r.home_away is not null
             and btrim(r.home_away) <> ''
-            {date_filter_sql}
         ),
-        dedup as (
+        logs_dedup as (
           select *
           from (
             select
-              b.*,
+              lb.*,
               row_number() over (
-                partition by b.event_id, b.home_away
-                order by b.has_scores desc, b.pulled_at desc nulls last
+                partition by lb.event_id, lb.home_away
+                order by lb.pulled_at desc nulls last
               ) as rn
-            from base b
+            from logs_base lb
           ) x
           where x.rn = 1
         ),
@@ -665,37 +694,39 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           select
             event_id,
             source_team_id as home_source_team_id,
-            team_name as home_team_name,
-            game_datetime_utc,
-            venue,
-            completed,
-            points_for as home_score,
-            points_against as away_score
-          from dedup
+            team_name as home_team_name_logs
+          from logs_dedup
           where home_away = 'home'
         ),
         away as (
           select
             event_id,
             source_team_id as away_source_team_id,
-            team_name as away_team_name
-          from dedup
+            team_name as away_team_name_logs
+          from logs_dedup
           where home_away = 'away'
         ),
         joined as (
           select
-            h.event_id,
-            h.game_datetime_utc,
-            h.venue,
-            h.completed,
-            h.home_score,
-            h.away_score,
+            g.event_id,
+            g.game_datetime_utc,
+            g.venue,
+            g.completed,
+            g.home_score,
+            g.away_score,
+            g.raw_state,
+            g.raw_status_desc,
+            g.raw_status_detail,
+
             h.home_source_team_id,
-            h.home_team_name,
             a.away_source_team_id,
-            a.away_team_name
-          from home h
-          join away a on a.event_id = h.event_id
+
+            -- Prefer espn_games names, fallback to logs
+            coalesce(nullif(g.home_team_name,''), nullif(h.home_team_name_logs,'')) as home_team_name,
+            coalesce(nullif(g.away_team_name,''), nullif(a.away_team_name_logs,'')) as away_team_name
+          from games_dedup g
+          join home h on h.event_id = g.event_id
+          join away a on a.event_id = g.event_id
         )
         insert into public.games (
           game_id,
@@ -738,9 +769,20 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           case when j.completed then j.away_score else null end as away_score,
 
           j.venue,
-          case when j.completed then 'final' else 'scheduled' end as status,
-          case when j.completed then 'post' else 'pre' end as status_state,
-          case when j.completed then 'Final' else 'Scheduled' end as status_detail,
+
+          -- status fields: prefer raw espn values, else derive
+          case
+            when lower(coalesce(j.raw_status_desc::text,'')) in ({completed_true_list_sql}) then 'final'
+            when j.completed then 'final'
+            else 'scheduled'
+          end as status,
+          case
+            when lower(coalesce(j.raw_state::text,'')) in ({completed_true_list_sql}) then 'post'
+            when j.completed then 'post'
+            else 'pre'
+          end as status_state,
+          coalesce(nullif(j.raw_status_detail::text,''), case when j.completed then 'Final' else 'Scheduled' end) as status_detail,
+
           case
             when j.completed and j.home_score is not null and j.away_score is not null then 'verified'
             else 'partial'
@@ -784,15 +826,15 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
           updated_at = now();
         """
 
-        # psycopg parameter ordering follows appearance in SQL text.
-        # In this SQL, the date filter placeholders appear first (base CTE).
-        # Then md5/season/source placeholders appear in the insert-select.
-        # Then ht/at season placeholders appear at the end.
+        # Params:
+        # 1) date filter params used in games_base
+        # 2) md5/season/source fields
+        # 3) ht/at season match at end
         ordered: List[object] = list(date_params)
         ordered.extend([SEASON, SOURCE, SEASON, SOURCE])
         ordered.extend([SEASON, SEASON])
 
-        upserted = _exec_rowcount(conn, sql, tuple(ordered), "upsert games")
+        upserted = _exec_rowcount(conn, sql, tuple(ordered), "upsert games (espn_games authoritative)")
 
     except Exception as e:
         _warn(f"Error upserting games: {e}")
@@ -801,17 +843,24 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
 
     rejected = 0
 
-    # DQ: missing away row (within season window)
+    # DQ: missing away row (within window) based on logs table
     try:
+        if SEASON_END_DATE:
+            logs_date_filter_sql = "and r.event_id in (select game_id::text from {schema}.{games} g where g.game_datetime_utc >= %s::timestamptz and g.game_datetime_utc < (%s::date + interval '1 day'))"
+            logs_params: Tuple[object, ...] = (SEASON_START_DATE, SEASON_END_DATE)
+        else:
+            logs_date_filter_sql = "and r.event_id in (select game_id::text from {schema}.{games} g where g.game_datetime_utc >= %s::timestamptz)"
+            logs_params = (SEASON_START_DATE,)
+
         dq_sql = f"""
         with base as (
-          select event_id, lower(home_away) as ha, {pulled_at_expr} as pulled_at, r.{game_dt_col} as game_dt
+          select event_id, lower(home_away) as ha, {logs_pulled_at_expr} as pulled_at
           from {RAW_SCHEMA}.{RAW_LOGS_TABLE} r
           where event_id is not null
             and team_id is not null
             and home_away is not null
             and btrim(home_away) <> ''
-            {date_filter_sql}
+            {logs_date_filter_sql.format(schema=RAW_SCHEMA, games=RAW_GAMES_TABLE)}
         ),
         dedup as (
           select *
@@ -829,13 +878,13 @@ def upsert_games(conn: psycopg.Connection, teams_pk: str) -> Counts:
         select event_id from home_only limit 50;
         """
         with conn.cursor() as cur:
-            cur.execute(dq_sql, tuple(date_params))
+            cur.execute(dq_sql, tuple(logs_params))
             for (event_id,) in cur.fetchall():
                 rejected += _insert_dq(conn, "games", ["missing_away_row"], {"event_id": event_id})
     except Exception as e:
         _warn(f"Error during DQ audit for missing away rows: {e}")
 
-    # DQ: completed but missing scores
+    # DQ: completed/final but missing scores
     try:
         dq_scores_sql = """
         select external_game_id
