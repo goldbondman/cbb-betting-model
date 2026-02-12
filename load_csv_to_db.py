@@ -427,6 +427,44 @@ def _get_table_spec(table_name: str) -> dict:
     return TABLE_SPECS.get(table_name, {"required_cols": [], "row_hash_keys": [], "not_null": [], "dtypes": {}})
 
 
+def _ensure_cols_with_defaults(local_path: Path, table_name: str, defaults: dict) -> Path:
+    """
+    Ensure columns exist in the CSV header. If missing, append them and fill every row with defaults.
+    This is used to guarantee required base columns exist BEFORE PACK_FEATURES_JSON runs.
+    """
+    cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(cols, local_path)
+
+    missing = [c for c in defaults.keys() if c not in cols]
+    if not missing:
+        return local_path
+
+    tmp = Path(tempfile.mkstemp(prefix=f"loadcols_{table_name}_", suffix=".csv")[1])
+
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
+        "w", encoding="utf-8", newline=""
+    ) as fout:
+        reader = csv.reader(fin)
+        writer = csv.writer(fout)
+
+        try:
+            header = next(reader)
+        except StopIteration:
+            return local_path
+
+        writer.writerow(header + missing)
+
+        for row in reader:
+            if len(row) < len(header):
+                row = row + [""] * (len(header) - len(row))
+            row_out = row[:]
+            for c in missing:
+                row_out.append(str(defaults[c]))
+            writer.writerow(row_out)
+
+    return tmp
+
+
 def _ensure_parse_version(local_path: Path, table_name: str) -> Path:
     """
     Contract fix: ensure parse_version exists and is populated.
@@ -456,7 +494,6 @@ def _ensure_parse_version(local_path: Path, table_name: str) -> Path:
         try:
             header = next(reader)
         except StopIteration:
-            # empty file
             tmp.unlink(missing_ok=True)  # type: ignore[attr-defined]
             return local_path
 
@@ -468,7 +505,6 @@ def _ensure_parse_version(local_path: Path, table_name: str) -> Path:
                 writer.writerow(row + [PARSE_VERSION])
             return tmp
 
-        # has parse_version column
         writer.writerow(header)
         for row in reader:
             if len(row) < len(header):
@@ -843,6 +879,7 @@ def load_one(local_path: str, table_name: str) -> None:
         packed_path: Optional[Path] = None
         cleaned_path: Optional[Path] = None
         parsever_path: Optional[Path] = None
+        colsdefaults_path: Optional[Path] = None
 
         try:
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
@@ -856,6 +893,21 @@ def load_one(local_path: str, table_name: str) -> None:
 
                 prepared = _prepare_csv_for_load(lp, table_name)
                 tmp_path = prepared if prepared != lp else None
+
+                # PRE-PACK FIX: packed tables require these base columns to exist in the CSV
+                if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
+                    defaults = {
+                        "pulled_at_utc": datetime.now(timezone.utc).isoformat(),
+                        "source": "espn",
+                    }
+                    prepared2 = _ensure_cols_with_defaults(prepared, table_name, defaults)
+                    colsdefaults_path = prepared2 if prepared2 != prepared else None
+                    prepared = prepared2
+
+                # PRE-PACK FIX: ensure parse_version exists before packing
+                pv = _ensure_parse_version(prepared, table_name)
+                parsever_path = pv if pv != prepared else None
+                prepared = pv
 
                 if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
                     base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
@@ -871,11 +923,6 @@ def load_one(local_path: str, table_name: str) -> None:
                     packed = _pack_features_json(prepared, table_name, base_cols)
                     packed_path = packed if packed != prepared else None
                     prepared = packed
-
-                # FIX: ensure parse_version exists + filled before we drop rows / validate required cols
-                pv = _ensure_parse_version(prepared, table_name)
-                parsever_path = pv if pv != prepared else None
-                prepared = pv
 
                 cleaned = _drop_rows_missing_required_values(prepared, table_name)
                 cleaned_path = cleaned if cleaned != prepared else None
@@ -931,7 +978,7 @@ def load_one(local_path: str, table_name: str) -> None:
         except Exception as exc:
             last_err = str(exc)
         finally:
-            for p in (tmp_path, packed_path, parsever_path, cleaned_path):
+            for p in (tmp_path, packed_path, parsever_path, cleaned_path, colsdefaults_path):
                 if p and p.exists():
                     try:
                         p.unlink()
