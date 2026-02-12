@@ -31,7 +31,7 @@ LOAD_MODE = (os.getenv("LOAD_MODE") or "replace").strip().lower()
 PARSE_VERSION = (os.getenv("PARSE_VERSION") or "v1").strip() or "v1"
 
 # defaults for required cols sometimes omitted upstream (common in ML)
-DEFAULT_SOURCE = (os.getenv("DEFAULT_SOURCE") or UPLOAD_GROUP or "ml").strip() or "ml"
+DEFAULT_SOURCE = (os.getenv("DEFAULT_SOURCE") or (UPLOAD_GROUP if UPLOAD_GROUP != "all" else "ml")).strip() or "ml"
 DEFAULT_PULLED_AT_UTC = (os.getenv("DEFAULT_PULLED_AT_UTC") or "").strip()
 
 # Only allow automatic schema mutation for very wide, evolving raw feature tables.
@@ -197,22 +197,6 @@ TABLE_SPECS = {
             "actual_total": "float",
         },
     },
-    # ML DQ audit file coming out of pipeline often uses: table,event_id,severity,reason,details
-    "dq_audit_ml": {
-        "required_cols": [
-            "table_name",
-            "event_id",
-            "level",
-            "code",
-            "details",
-            "pulled_at_utc",
-            "source",
-            "parse_version",
-        ],
-        "row_hash_keys": ["table_name", "event_id", "level", "code", "details"],
-        "not_null": ["row_hash", "pulled_at_utc", "source", "parse_version"],
-        "dtypes": {"pulled_at_utc": "datetime"},
-    },
     "predictions_latest": {
         "required_cols": [
             "event_id",
@@ -252,6 +236,15 @@ TABLE_SPECS = {
             "pred_margin_home": "float",
             "pred_total": "float",
         },
+    },
+    # IMPORTANT: this matches your actual DB schema for raw.dq_audit_ml
+    "dq_audit_ml": {
+        # Keep this loose; we rewrite into the DB schema and guarantee row_hash
+        "required_cols": [],
+        # We will ensure row_hash exists (DB has NOT NULL on row_hash)
+        "row_hash_keys": ["entity_type", "entity_id", "severity", "reason_codes", "details"],
+        "not_null": ["row_hash"],
+        "dtypes": {"pulled_at_utc": "datetime"},
     },
 }
 
@@ -433,89 +426,22 @@ def _get_table_spec(table_name: str) -> dict:
     return TABLE_SPECS.get(table_name, {"required_cols": [], "row_hash_keys": [], "not_null": [], "dtypes": {}})
 
 
-def _header_alias_map_for_table(table_name: str) -> Dict[str, List[str]]:
-    """
-    For upstream CSVs that don't match our canonical column names, provide aliases.
-    """
-    if table_name == "dq_audit_ml":
-        return {
-            "table_name": ["table", "tablename", "dq_table", "source_table"],
-            "event_id": ["event", "eventid", "game_id", "external_game_id"],
-            "level": ["severity", "dq_level", "status", "kind", "type"],
-            "code": ["reason", "rule", "issue", "check", "dq_code"],
-            "details": ["detail", "payload", "meta", "context", "message"],
-        }
-    return {}
-
-
-def _apply_header_aliases(local_path: Path, table_name: str) -> Path:
-    """
-    If required columns are missing but aliases exist, rewrite the CSV header to canonical names.
-    Only renames header labels, does not move column order.
-    """
+def _required_defaults_for_table(table_name: str) -> dict:
     spec = _get_table_spec(table_name)
-    required = list(spec.get("required_cols", []))
+    required = set(spec.get("required_cols", []))
     if not required:
-        return local_path
+        return {}
 
-    cols = _read_csv_header_columns(local_path)
-    _validate_csv_header(cols, local_path)
+    now_utc = datetime.now(timezone.utc).isoformat()
+    pulled_default = DEFAULT_PULLED_AT_UTC or now_utc
+    source_default = DEFAULT_SOURCE or "ml"
 
-    alias_map = _header_alias_map_for_table(table_name)
-    if not alias_map:
-        return local_path
-
-    present = set(cols)
-    missing_required = [c for c in required if c not in present]
-    if not missing_required:
-        return local_path
-
-    # Build rename plan: old_name -> new_name
-    rename: Dict[str, str] = {}
-    lower_to_orig = {c.lower(): c for c in cols}
-
-    for target in missing_required:
-        aliases = alias_map.get(target, [])
-        found_orig: Optional[str] = None
-        for a in aliases:
-            if a in cols:
-                found_orig = a
-                break
-            if a.lower() in lower_to_orig:
-                found_orig = lower_to_orig[a.lower()]
-                break
-        if found_orig:
-            # Avoid collisions if target already exists (shouldn't, since it's missing), but guard anyway
-            if target not in present:
-                rename[found_orig] = target
-
-    if not rename:
-        return local_path
-
-    new_cols = [rename.get(c, c) for c in cols]
-
-    # Re-validate: no duplicates after rename
-    dupes = sorted({c for c in new_cols if new_cols.count(c) > 1})
-    if dupes:
-        raise ValueError(f"{local_path.name}: header aliasing would create duplicate columns: {dupes}")
-
-    tmp = Path(tempfile.mkstemp(prefix=f"loadhdr_{table_name}_", suffix=".csv")[1])
-    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
-        "w", encoding="utf-8", newline=""
-    ) as fout:
-        reader = csv.reader(fin)
-        writer = csv.writer(fout)
-        try:
-            _ = next(reader)
-        except StopIteration:
-            tmp.unlink(missing_ok=True)  # type: ignore[attr-defined]
-            return local_path
-        writer.writerow(new_cols)
-        for row in reader:
-            writer.writerow(row)
-
-    print(f"[INFO] Applied header aliases for {table_name}: {rename}")
-    return tmp
+    defaults = {}
+    if "pulled_at_utc" in required:
+        defaults["pulled_at_utc"] = pulled_default
+    if "source" in required:
+        defaults["source"] = source_default
+    return defaults
 
 
 def _ensure_cols_with_defaults(local_path: Path, table_name: str, defaults: dict) -> Path:
@@ -552,24 +478,6 @@ def _ensure_cols_with_defaults(local_path: Path, table_name: str, defaults: dict
     return tmp
 
 
-def _required_defaults_for_table(table_name: str) -> dict:
-    spec = _get_table_spec(table_name)
-    required = set(spec.get("required_cols", []))
-    if not required:
-        return {}
-
-    now_utc = datetime.now(timezone.utc).isoformat()
-    pulled_default = DEFAULT_PULLED_AT_UTC or now_utc
-    source_default = DEFAULT_SOURCE or "ml"
-
-    defaults = {}
-    if "pulled_at_utc" in required:
-        defaults["pulled_at_utc"] = pulled_default
-    if "source" in required:
-        defaults["source"] = source_default
-    return defaults
-
-
 def _ensure_parse_version(local_path: Path, table_name: str) -> Path:
     spec = _get_table_spec(table_name)
     if "parse_version" not in spec.get("required_cols", []):
@@ -593,7 +501,10 @@ def _ensure_parse_version(local_path: Path, table_name: str) -> Path:
         try:
             header = next(reader)
         except StopIteration:
-            tmp.unlink(missing_ok=True)  # type: ignore[attr-defined]
+            try:
+                tmp.unlink()
+            except Exception:
+                pass
             return local_path
 
         if not has_pv:
@@ -795,6 +706,181 @@ def _pack_features_json(local_path: Path, table_name: str, base_cols: List[str])
     return tmp
 
 
+def _rewrite_dq_audit_ml_csv(local_path: Path) -> Path:
+    """
+    Accepts various dq_audit_ml CSV shapes and rewrites into the DB schema columns:
+      row_hash, pulled_at_utc, source, parse_version, payload, entity_type, entity_id,
+      severity, reason_codes, details
+
+    Common upstream shapes we normalize:
+      table_name,event_id,severity,code,details
+      table_name,event_id,level,code,details
+      entity_type,entity_id,severity,reason_codes,details (already close)
+    """
+    cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(cols, local_path)
+    idx = {c: i for i, c in enumerate(cols)}
+
+    # header aliases (normalize to internal names)
+    aliases = {
+        "level": "severity",
+        "reason_code": "reason_codes",
+        "codes": "reason_codes",
+        "code": "reason_codes",
+        "table": "table_name",
+        "event": "event_id",
+    }
+
+    normalized_cols: List[str] = []
+    for c in cols:
+        normalized_cols.append(aliases.get(c, c))
+
+    # If we changed anything, we need to read using normalized positions
+    # easiest: map original -> normalized, then use original index but reference normalized name
+    orig_to_norm = {cols[i]: normalized_cols[i] for i in range(len(cols))}
+
+    # default meta
+    now_utc = datetime.now(timezone.utc).isoformat()
+    pulled_default = DEFAULT_PULLED_AT_UTC or now_utc
+    source_default = DEFAULT_SOURCE or "ml"
+
+    out_cols = [
+        "row_hash",
+        "pulled_at_utc",
+        "source",
+        "parse_version",
+        "payload",
+        "entity_type",
+        "entity_id",
+        "severity",
+        "reason_codes",
+        "details",
+    ]
+
+    tmp = Path(tempfile.mkstemp(prefix="load_dqml_", suffix=".csv")[1])
+
+    def get_val(row: List[str], name: str) -> str:
+        # find first original col that normalized to name
+        for oc, nc in orig_to_norm.items():
+            if nc == name:
+                i = idx.get(oc)
+                if i is None or i >= len(row):
+                    return ""
+                return row[i]
+        return ""
+
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
+        "w", encoding="utf-8", newline=""
+    ) as fout:
+        reader = csv.reader(fin)
+        writer = csv.writer(fout)
+
+        try:
+            header = next(reader)
+        except StopIteration:
+            # empty file, keep as-is
+            try:
+                tmp.unlink()
+            except Exception:
+                pass
+            return local_path
+
+        writer.writerow(out_cols)
+
+        for row in reader:
+            if len(row) < len(header):
+                row = row + [""] * (len(header) - len(row))
+
+            # entity mapping: prefer entity_type/entity_id if present, else map from table_name/event_id
+            entity_type = _normalize_str(get_val(row, "entity_type")) or _normalize_str(get_val(row, "table_name"))
+            entity_id = _normalize_str(get_val(row, "entity_id")) or _normalize_str(get_val(row, "event_id"))
+
+            severity = _normalize_str(get_val(row, "severity"))
+            reason_codes = _normalize_str(get_val(row, "reason_codes"))
+            details = _normalize_str(get_val(row, "details"))
+
+            pulled_at_utc = _normalize_str(get_val(row, "pulled_at_utc")) or pulled_default
+            source = _normalize_str(get_val(row, "source")) or source_default
+            parse_version = _normalize_str(get_val(row, "parse_version")) or PARSE_VERSION
+
+            # payload: capture any extra fields not used above
+            used_norm = {
+                "row_hash",
+                "pulled_at_utc",
+                "source",
+                "parse_version",
+                "payload",
+                "entity_type",
+                "entity_id",
+                "severity",
+                "reason_codes",
+                "details",
+                "table_name",
+                "event_id",
+            }
+
+            payload_obj: Dict[str, str] = {}
+            for i, oc in enumerate(cols):
+                nc = orig_to_norm.get(oc, oc)
+                if nc in used_norm:
+                    continue
+                if i < len(row) and _normalize_str(row[i]) != "":
+                    payload_obj[nc] = row[i]
+
+            # If upstream provided "payload" column, include it, and merge extras under "_extra" to avoid overwrite
+            raw_payload = _normalize_str(get_val(row, "payload"))
+            payload_text = ""
+            if raw_payload:
+                # keep upstream payload as string; if it's JSON, store as-is
+                payload_text = raw_payload
+                if payload_obj:
+                    try:
+                        base = json.loads(raw_payload)
+                        if isinstance(base, dict):
+                            base["_extra"] = payload_obj
+                            payload_text = json.dumps(base, separators=(",", ":"), ensure_ascii=False)
+                        else:
+                            payload_text = json.dumps({"payload": base, "_extra": payload_obj}, separators=(",", ":"), ensure_ascii=False)
+                    except Exception:
+                        payload_text = json.dumps({"payload": raw_payload, "_extra": payload_obj}, separators=(",", ":"), ensure_ascii=False)
+            else:
+                payload_text = json.dumps(payload_obj, separators=(",", ":"), ensure_ascii=False) if payload_obj else ""
+
+            # row_hash: use upstream if present, else compute stable hash on core identity fields
+            upstream_rh = _normalize_str(get_val(row, "row_hash"))
+            if upstream_rh:
+                row_hash = upstream_rh
+            else:
+                key = "|".join(
+                    [
+                        entity_type,
+                        entity_id,
+                        severity,
+                        reason_codes,
+                        details,
+                    ]
+                )
+                row_hash = _sha256(key)
+
+            writer.writerow(
+                [
+                    row_hash,
+                    pulled_at_utc,
+                    source,
+                    parse_version,
+                    payload_text,
+                    entity_type,
+                    entity_id,
+                    severity,
+                    reason_codes,
+                    details,
+                ]
+            )
+
+    print("[INFO] Rewrote dq_audit_ml into DB schema columns")
+    return tmp
+
+
 def _copy_csv_into_table(conn: psycopg.Connection, qualified_table: str, local_path: Path) -> None:
     cols = _read_csv_header_columns(local_path)
     _validate_csv_header(cols, local_path)
@@ -898,10 +984,6 @@ def _truncate(conn: psycopg.Connection, schema: str, table: str) -> None:
 
 
 def _dedup_select_sql(qtemp: str, qcols: str, pk_cols: List[str], all_cols: List[str]) -> str:
-    """
-    Returns a SELECT that dedupes rows by PK using DISTINCT ON (pk).
-    Prefers latest pulled_at_utc if present.
-    """
     if not pk_cols:
         return f"select {qcols} from {qtemp}"
 
@@ -984,11 +1066,11 @@ def load_one(local_path: str, table_name: str) -> None:
             time.sleep(delay)
 
         tmp_path: Optional[Path] = None
-        hdr_path: Optional[Path] = None
-        requiredcols_path: Optional[Path] = None
-        parsever_path: Optional[Path] = None
         packed_path: Optional[Path] = None
         cleaned_path: Optional[Path] = None
+        parsever_path: Optional[Path] = None
+        requiredcols_path: Optional[Path] = None
+        dqrewrite_path: Optional[Path] = None
 
         try:
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
@@ -1000,28 +1082,27 @@ def load_one(local_path: str, table_name: str) -> None:
 
                 table_cols = _get_table_columns(conn, DB_SCHEMA, table_name)
 
-                # 1) Ensure row_hash exists/filled (uses whatever header we have)
-                prepared = _prepare_csv_for_load(lp, table_name)
-                tmp_path = prepared if prepared != lp else None
+                prepared = lp
 
-                # 2) Canonicalize header names (fixes dq_audit_ml table/event/severity/reason headers)
-                prepared2 = _apply_header_aliases(prepared, table_name)
-                hdr_path = prepared2 if prepared2 != prepared else None
-                prepared = prepared2
+                # 1) DQ audit special handling: rewrite into the DB schema first
+                if table_name == "dq_audit_ml":
+                    rewritten = _rewrite_dq_audit_ml_csv(prepared)
+                    dqrewrite_path = rewritten if rewritten != prepared else None
+                    prepared = rewritten
 
-                # 3) Add required cols that upstream may omit (pulled_at_utc/source)
+                # 2) Ensure required cols that upstream may omit (pulled_at_utc/source) for tables that require them
                 required_defaults = _required_defaults_for_table(table_name)
                 if required_defaults:
-                    prepared3 = _ensure_cols_with_defaults(prepared, table_name, required_defaults)
-                    requiredcols_path = prepared3 if prepared3 != prepared else None
-                    prepared = prepared3
+                    prepared2 = _ensure_cols_with_defaults(prepared, table_name, required_defaults)
+                    requiredcols_path = prepared2 if prepared2 != prepared else None
+                    prepared = prepared2
 
-                # 4) Ensure parse_version exists + filled
+                # 3) Ensure parse_version exists + filled (when required by spec)
                 pv = _ensure_parse_version(prepared, table_name)
                 parsever_path = pv if pv != prepared else None
                 prepared = pv
 
-                # 5) Pack ESPN feature tables (does not apply to ML)
+                # 4) Pack ESPN feature tables (does not apply to ML)
                 if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
                     base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
                     if not base_cols:
@@ -1036,12 +1117,17 @@ def load_one(local_path: str, table_name: str) -> None:
                     packed_path = packed if packed != prepared else None
                     prepared = packed
 
-                # 6) Drop rows that still violate NOT NULL (helps messy upstream)
+                # 5) Ensure row_hash exists (DB requires it for dq_audit_ml, and many others)
+                prepared3 = _prepare_csv_for_load(prepared, table_name)
+                tmp_path = prepared3 if prepared3 != prepared else None
+                prepared = prepared3
+
+                # 6) Drop rows missing required values (only enforced where spec.not_null lists columns)
                 cleaned = _drop_rows_missing_required_values(prepared, table_name)
                 cleaned_path = cleaned if cleaned != prepared else None
                 prepared = cleaned
 
-                # 7) Preflight
+                # 7) Validate
                 validation_result = _preflight_validate_csv(prepared, table_name)
                 if validation_result.get("empty", False):
                     print(f"[SKIP] {local_path} is empty (zero data rows)")
@@ -1096,7 +1182,7 @@ def load_one(local_path: str, table_name: str) -> None:
         except Exception as exc:
             last_err = str(exc)
         finally:
-            for p in (tmp_path, hdr_path, requiredcols_path, parsever_path, packed_path, cleaned_path):
+            for p in (tmp_path, packed_path, parsever_path, requiredcols_path, cleaned_path, dqrewrite_path):
                 if p and p.exists():
                     try:
                         p.unlink()
