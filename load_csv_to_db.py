@@ -34,6 +34,8 @@ PARSE_VERSION = (os.getenv("PARSE_VERSION") or "v1").strip() or "v1"
 # Only allow automatic schema mutation for very wide, evolving raw feature tables.
 # For all other tables, missing columns should be handled via migrations or upstream CSV fixes.
 AUTO_ADD_COLUMN_ALLOWLIST = {
+    ("raw", "espn_games"),
+    ("raw", "espn_team_game_logs"),
     ("raw", "espn_team_game_features"),
     ("raw", "espn_matchups_model_ready"),
 }
