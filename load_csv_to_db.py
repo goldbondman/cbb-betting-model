@@ -197,6 +197,22 @@ TABLE_SPECS = {
             "actual_total": "float",
         },
     },
+    # NEW: fixes dq_audit_ml missing row_hash (and enforces required base cols)
+    "dq_audit_ml": {
+        "required_cols": [
+            "table_name",
+            "event_id",
+            "level",
+            "code",
+            "details",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "row_hash_keys": ["table_name", "event_id", "level", "code", "details"],
+        "not_null": ["row_hash", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"pulled_at_utc": "datetime"},
+    },
     "predictions_latest": {
         "required_cols": [
             "event_id",
@@ -802,7 +818,6 @@ def _dedup_select_sql(qtemp: str, qcols: str, pk_cols: List[str], all_cols: List
     Prefers latest pulled_at_utc if present.
     """
     if not pk_cols:
-        # No PK, nothing to dedupe deterministically
         return f"select {qcols} from {qtemp}"
 
     pk_expr = ", ".join(_quote_ident(c) for c in pk_cols)
@@ -856,7 +871,6 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
 
     _copy_csv_into_table(conn, qs, local_path)
 
-    # IMPORTANT: dedupe by PK inside the staging SELECT to avoid "row a second time" issues
     dedup_select = _dedup_select_sql(qs, qcols, pk_cols, csv_cols)
 
     sql = f"""
@@ -903,19 +917,16 @@ def load_one(local_path: str, table_name: str) -> None:
                 prepared = _prepare_csv_for_load(lp, table_name)
                 tmp_path = prepared if prepared != lp else None
 
-                # Ensure required cols that upstream may omit (ML: pulled_at_utc/source)
                 required_defaults = _required_defaults_for_table(table_name)
                 if required_defaults:
                     prepared2 = _ensure_cols_with_defaults(prepared, table_name, required_defaults)
                     requiredcols_path = prepared2 if prepared2 != prepared else None
                     prepared = prepared2
 
-                # Ensure parse_version exists + filled
                 pv = _ensure_parse_version(prepared, table_name)
                 parsever_path = pv if pv != prepared else None
                 prepared = pv
 
-                # Pack ESPN feature tables (does not apply to ML)
                 if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
                     base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
                     if not base_cols:
@@ -965,7 +976,6 @@ def load_one(local_path: str, table_name: str) -> None:
 
                     _truncate(conn, DB_SCHEMA, table_name)
 
-                    # IMPORTANT: dedupe by PK before inserting into real table
                     dedup_select = _dedup_select_sql(qtemp, qcols, pk_cols, csv_cols)
                     with conn.cursor() as cur:
                         cur.execute(f"insert into {qt} ({qcols}) {dedup_select};")
