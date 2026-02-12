@@ -27,16 +27,14 @@ DB_SCHEMA = (os.getenv("DB_SCHEMA") or "raw").strip()
 # replace | append | upsert
 LOAD_MODE = (os.getenv("LOAD_MODE") or "replace").strip().lower()
 
-# NEW: parse version default (fixes missing parse_version in upstream CSVs)
+# parse version default
 PARSE_VERSION = (os.getenv("PARSE_VERSION") or "v1").strip() or "v1"
 
-# NEW: defaults for required columns that some upstream CSVs omit (common in ML pipeline)
+# defaults for required cols sometimes omitted upstream (common in ML)
 DEFAULT_SOURCE = (os.getenv("DEFAULT_SOURCE") or UPLOAD_GROUP or "ml").strip() or "ml"
 DEFAULT_PULLED_AT_UTC = (os.getenv("DEFAULT_PULLED_AT_UTC") or "").strip()
 
-# NEW: Auto-add columns policy
 # Only allow automatic schema mutation for very wide, evolving raw feature tables.
-# For all other tables, missing columns should be handled via migrations or upstream CSV fixes.
 AUTO_ADD_COLUMN_ALLOWLIST = {
     ("raw", "espn_games"),
     ("raw", "espn_team_game_logs"),
@@ -47,13 +45,10 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
 # Optional: pack wide feature CSVs into a single JSON column to avoid Postgres row-size limits.
 PACK_FEATURES_JSON = (os.getenv("PACK_FEATURES_JSON") or "1").strip().lower() in ("1", "true", "yes")
 
-# FIXED: Consolidated the duplicate/malformed definitions
 PACK_FEATURES_JSON_ALLOWLIST = {
     ("raw", table_name) for table_name in ["espn_team_game_features", "espn_matchups_model_ready"]
 }
 
-# Base columns kept as normal columns; everything else becomes JSON in "features"
-# IMPORTANT: base cols MUST include the table spec required_cols or packing will break validation.
 PACK_FEATURES_BASE_COLS = {
     "espn_team_game_features": [
         "row_hash",
@@ -80,19 +75,17 @@ PACK_FEATURES_BASE_COLS = {
     ],
 }
 
-# Basic retry (helps with transient network issues)
+# Basic retry
 MAX_RETRIES = int(os.getenv("DB_LOAD_MAX_RETRIES", "3"))
 RETRY_INITIAL_DELAY = float(os.getenv("DB_LOAD_RETRY_INITIAL_DELAY", "1.0"))
 RETRY_BACKOFF = float(os.getenv("DB_LOAD_RETRY_BACKOFF", "2.0"))
 
-# File groups (local file -> destination table)
+# File groups
 FILES_ESPN = [
     ("espn_games.csv", "espn_games"),
     ("espn_team_game_logs.csv", "espn_team_game_logs"),
     ("espn_team_game_features.csv", "espn_team_game_features"),
     ("espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
-    # Diagnostic files (espn_feature_diagnostics.csv, espn_dq_audit.csv)
-    # are only for troubleshooting storage uploads, not needed in database
 ]
 
 FILES_TORVIK = [
@@ -399,13 +392,6 @@ def _stable_row_hash(row: List[str], keys: List[str], idx: dict, dtype_map: dict
 
 
 def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, required_cols: List[str]) -> None:
-    """
-    Ensure all required columns exist on schema.table.
-
-    Policy:
-    - Only auto-add missing columns for allowlisted tables (wide, evolving feature stores).
-    - For all other tables, fail fast to prevent silent schema drift and TEXT-typed numerics.
-    """
     existing = set(_get_table_columns(conn, schema, table))
     missing = [c for c in required_cols if c not in existing]
     if not missing:
@@ -432,10 +418,6 @@ def _get_table_spec(table_name: str) -> dict:
 
 
 def _ensure_cols_with_defaults(local_path: Path, table_name: str, defaults: dict) -> Path:
-    """
-    Ensure columns exist in the CSV header. If missing, append them and fill every row with defaults.
-    This is used to guarantee required base columns exist before validation and before PACK_FEATURES_JSON runs.
-    """
     cols = _read_csv_header_columns(local_path)
     _validate_csv_header(cols, local_path)
 
@@ -470,10 +452,6 @@ def _ensure_cols_with_defaults(local_path: Path, table_name: str, defaults: dict
 
 
 def _required_defaults_for_table(table_name: str) -> dict:
-    """
-    Provide safe defaults for required columns that upstream may omit.
-    Only returns keys that are required for the table.
-    """
     spec = _get_table_spec(table_name)
     required = set(spec.get("required_cols", []))
     if not required:
@@ -492,12 +470,6 @@ def _required_defaults_for_table(table_name: str) -> dict:
 
 
 def _ensure_parse_version(local_path: Path, table_name: str) -> Path:
-    """
-    Contract fix: ensure parse_version exists and is populated.
-    - If missing from header, add it with default PARSE_VERSION.
-    - If present but blank/'\\N', fill with PARSE_VERSION.
-    Only runs for tables that require parse_version.
-    """
     spec = _get_table_spec(table_name)
     if "parse_version" not in spec.get("required_cols", []):
         return local_path
@@ -544,10 +516,6 @@ def _ensure_parse_version(local_path: Path, table_name: str) -> Path:
 
 
 def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
-    """
-    Fix known bad inputs before COPY.
-    We deterministically fill missing row_hash using stable columns from the row.
-    """
     spec = _get_table_spec(table_name)
     cols = _read_csv_header_columns(local_path)
     _validate_csv_header(cols, local_path)
@@ -599,10 +567,6 @@ def _prepare_csv_for_load(local_path: Path, table_name: str) -> Path:
 
 
 def _drop_rows_missing_required_values(local_path: Path, table_name: str) -> Path:
-    """
-    Safety net: remove rows missing required value columns (spec.not_null),
-    treating both empty strings and Postgres COPY NULL token '\\N' as missing.
-    """
     spec = _get_table_spec(table_name)
     cols = _read_csv_header_columns(local_path)
     _validate_csv_header(cols, local_path)
@@ -666,7 +630,6 @@ def _drop_rows_missing_required_values(local_path: Path, table_name: str) -> Pat
 
 
 def _clean_numeric_value(value: str, col_name: str) -> str:
-    """Clean numeric values for database insertion (e.g., convert 76.0 to 76 for integer columns)."""
     normalized = _normalize_str(value)
     if not normalized:
         return ""
@@ -833,6 +796,24 @@ def _truncate(conn: psycopg.Connection, schema: str, table: str) -> None:
         cur.execute(f"truncate table {qt};")
 
 
+def _dedup_select_sql(qtemp: str, qcols: str, pk_cols: List[str], all_cols: List[str]) -> str:
+    """
+    Returns a SELECT that dedupes rows by PK using DISTINCT ON (pk).
+    Prefers latest pulled_at_utc if present.
+    """
+    if not pk_cols:
+        # No PK, nothing to dedupe deterministically
+        return f"select {qcols} from {qtemp}"
+
+    pk_expr = ", ".join(_quote_ident(c) for c in pk_cols)
+    order_parts = [pk_expr]
+    if "pulled_at_utc" in all_cols:
+        order_parts.append(f"{_quote_ident('pulled_at_utc')} desc nulls last")
+    order_by = ", ".join(order_parts)
+
+    return f"select distinct on ({pk_expr}) {qcols} from {qtemp} order by {order_by}"
+
+
 def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, local_path: Path) -> None:
     qt = _qualified_table(schema, table)
     staging = f"tmp_{table}_{int(time.time() * 1000)}"
@@ -875,9 +856,12 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
 
     _copy_csv_into_table(conn, qs, local_path)
 
+    # IMPORTANT: dedupe by PK inside the staging SELECT to avoid "row a second time" issues
+    dedup_select = _dedup_select_sql(qs, qcols, pk_cols, csv_cols)
+
     sql = f"""
       insert into {qt} ({qcols})
-      select {qcols} from {qs}
+      {dedup_select}
       {on_conflict};
     """
     with conn.cursor() as cur:
@@ -904,7 +888,6 @@ def load_one(local_path: str, table_name: str) -> None:
         packed_path: Optional[Path] = None
         cleaned_path: Optional[Path] = None
         parsever_path: Optional[Path] = None
-        colsdefaults_path: Optional[Path] = None
         requiredcols_path: Optional[Path] = None
 
         try:
@@ -920,19 +903,19 @@ def load_one(local_path: str, table_name: str) -> None:
                 prepared = _prepare_csv_for_load(lp, table_name)
                 tmp_path = prepared if prepared != lp else None
 
-                # 1) Ensure required base columns exist (ML commonly missing pulled_at_utc/source)
+                # Ensure required cols that upstream may omit (ML: pulled_at_utc/source)
                 required_defaults = _required_defaults_for_table(table_name)
                 if required_defaults:
                     prepared2 = _ensure_cols_with_defaults(prepared, table_name, required_defaults)
                     requiredcols_path = prepared2 if prepared2 != prepared else None
                     prepared = prepared2
 
-                # 2) Ensure parse_version exists before packing and validation
+                # Ensure parse_version exists + filled
                 pv = _ensure_parse_version(prepared, table_name)
                 parsever_path = pv if pv != prepared else None
                 prepared = pv
 
-                # 3) Packing (ESPN feature tables)
+                # Pack ESPN feature tables (does not apply to ML)
                 if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
                     base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
                     if not base_cols:
@@ -941,8 +924,7 @@ def load_one(local_path: str, table_name: str) -> None:
                         )
                     if "features" not in table_cols:
                         raise ValueError(
-                            f"{DB_SCHEMA}.{table_name} is missing a 'features' jsonb column required for "
-                            f"PACK_FEATURES_JSON. Apply the migration and rerun."
+                            f"{DB_SCHEMA}.{table_name} is missing a 'features' jsonb column required for PACK_FEATURES_JSON."
                         )
                     packed = _pack_features_json(prepared, table_name, base_cols)
                     packed_path = packed if packed != prepared else None
@@ -953,17 +935,19 @@ def load_one(local_path: str, table_name: str) -> None:
                 prepared = cleaned
 
                 validation_result = _preflight_validate_csv(prepared, table_name)
-
                 if validation_result.get("empty", False):
                     print(f"[SKIP] {local_path} is empty (zero data rows)")
                     return
+
+                qt = _qualified_table(DB_SCHEMA, table_name)
 
                 if LOAD_MODE == "replace":
                     csv_cols = _read_csv_header_columns(prepared)
                     _validate_csv_header(csv_cols, prepared)
                     _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
 
-                    qt = _qualified_table(DB_SCHEMA, table_name)
+                    pk_cols = _get_primary_key_columns(conn, DB_SCHEMA, table_name)
+
                     temp_name = f"tmp_{table_name}_{int(time.time() * 1000)}"
                     qtemp = _quote_ident(temp_name)
                     qcols = ", ".join(_quote_ident(c) for c in csv_cols)
@@ -980,14 +964,17 @@ def load_one(local_path: str, table_name: str) -> None:
                         raise ValueError(f"{prepared.name}: temp load produced zero rows")
 
                     _truncate(conn, DB_SCHEMA, table_name)
+
+                    # IMPORTANT: dedupe by PK before inserting into real table
+                    dedup_select = _dedup_select_sql(qtemp, qcols, pk_cols, csv_cols)
                     with conn.cursor() as cur:
-                        cur.execute(f"insert into {qt} ({qcols}) select {qcols} from {qtemp};")
+                        cur.execute(f"insert into {qt} ({qcols}) {dedup_select};")
 
                 elif LOAD_MODE == "append":
                     csv_cols = _read_csv_header_columns(prepared)
                     _validate_csv_header(csv_cols, prepared)
                     _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
-                    _copy_csv_into_table(conn, _qualified_table(DB_SCHEMA, table_name), prepared)
+                    _copy_csv_into_table(conn, qt, prepared)
 
                 elif LOAD_MODE == "upsert":
                     _upsert_from_staging(conn, DB_SCHEMA, table_name, prepared)
@@ -1002,7 +989,7 @@ def load_one(local_path: str, table_name: str) -> None:
         except Exception as exc:
             last_err = str(exc)
         finally:
-            for p in (tmp_path, packed_path, parsever_path, requiredcols_path, colsdefaults_path, cleaned_path):
+            for p in (tmp_path, packed_path, parsever_path, requiredcols_path, cleaned_path):
                 if p and p.exists():
                     try:
                         p.unlink()
