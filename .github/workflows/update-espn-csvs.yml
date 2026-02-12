@@ -28,7 +28,7 @@ jobs:
 
       - name: Run ESPN builder (3-day backfill)
         run: |
-          python espn_boxscore_builder.py
+          python espn_boxscore_builder_modular.py
         env:
           DAYS_BACK: "3"
 
