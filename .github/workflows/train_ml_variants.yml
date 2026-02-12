@@ -1,0 +1,48 @@
+name: Train ML Variants
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+
+  # Weekly schedule: Sunday at 02:00 UTC
+  schedule:
+    - cron: "0 2 * * SUN"
+
+jobs:
+  train_variants:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install psycopg[binary]
+
+      - name: Show Python environment
+        run: |
+          python --version
+          pip list
+
+      - name: Train lookback variants and ensembles
+        run: |
+          python ml/train_variants.py
+
+      - name: Show variant artifacts
+        run: |
+          ls -lh ml/variant_results.csv ml/models || true
+
+      - name: Upload summary CSV artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: variant-results
+          path: ml/variant_results.csv
