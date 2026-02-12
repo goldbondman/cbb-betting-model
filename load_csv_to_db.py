@@ -10,7 +10,7 @@ import tempfile
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import psycopg
 
@@ -197,7 +197,7 @@ TABLE_SPECS = {
             "actual_total": "float",
         },
     },
-    # NEW: fixes dq_audit_ml missing row_hash (and enforces required base cols)
+    # ML DQ audit file coming out of pipeline often uses: table,event_id,severity,reason,details
     "dq_audit_ml": {
         "required_cols": [
             "table_name",
@@ -431,6 +431,91 @@ def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, req
 
 def _get_table_spec(table_name: str) -> dict:
     return TABLE_SPECS.get(table_name, {"required_cols": [], "row_hash_keys": [], "not_null": [], "dtypes": {}})
+
+
+def _header_alias_map_for_table(table_name: str) -> Dict[str, List[str]]:
+    """
+    For upstream CSVs that don't match our canonical column names, provide aliases.
+    """
+    if table_name == "dq_audit_ml":
+        return {
+            "table_name": ["table", "tablename", "dq_table", "source_table"],
+            "event_id": ["event", "eventid", "game_id", "external_game_id"],
+            "level": ["severity", "dq_level", "status", "kind", "type"],
+            "code": ["reason", "rule", "issue", "check", "dq_code"],
+            "details": ["detail", "payload", "meta", "context", "message"],
+        }
+    return {}
+
+
+def _apply_header_aliases(local_path: Path, table_name: str) -> Path:
+    """
+    If required columns are missing but aliases exist, rewrite the CSV header to canonical names.
+    Only renames header labels, does not move column order.
+    """
+    spec = _get_table_spec(table_name)
+    required = list(spec.get("required_cols", []))
+    if not required:
+        return local_path
+
+    cols = _read_csv_header_columns(local_path)
+    _validate_csv_header(cols, local_path)
+
+    alias_map = _header_alias_map_for_table(table_name)
+    if not alias_map:
+        return local_path
+
+    present = set(cols)
+    missing_required = [c for c in required if c not in present]
+    if not missing_required:
+        return local_path
+
+    # Build rename plan: old_name -> new_name
+    rename: Dict[str, str] = {}
+    lower_to_orig = {c.lower(): c for c in cols}
+
+    for target in missing_required:
+        aliases = alias_map.get(target, [])
+        found_orig: Optional[str] = None
+        for a in aliases:
+            if a in cols:
+                found_orig = a
+                break
+            if a.lower() in lower_to_orig:
+                found_orig = lower_to_orig[a.lower()]
+                break
+        if found_orig:
+            # Avoid collisions if target already exists (shouldn't, since it's missing), but guard anyway
+            if target not in present:
+                rename[found_orig] = target
+
+    if not rename:
+        return local_path
+
+    new_cols = [rename.get(c, c) for c in cols]
+
+    # Re-validate: no duplicates after rename
+    dupes = sorted({c for c in new_cols if new_cols.count(c) > 1})
+    if dupes:
+        raise ValueError(f"{local_path.name}: header aliasing would create duplicate columns: {dupes}")
+
+    tmp = Path(tempfile.mkstemp(prefix=f"loadhdr_{table_name}_", suffix=".csv")[1])
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as fin, tmp.open(
+        "w", encoding="utf-8", newline=""
+    ) as fout:
+        reader = csv.reader(fin)
+        writer = csv.writer(fout)
+        try:
+            _ = next(reader)
+        except StopIteration:
+            tmp.unlink(missing_ok=True)  # type: ignore[attr-defined]
+            return local_path
+        writer.writerow(new_cols)
+        for row in reader:
+            writer.writerow(row)
+
+    print(f"[INFO] Applied header aliases for {table_name}: {rename}")
+    return tmp
 
 
 def _ensure_cols_with_defaults(local_path: Path, table_name: str, defaults: dict) -> Path:
@@ -899,10 +984,11 @@ def load_one(local_path: str, table_name: str) -> None:
             time.sleep(delay)
 
         tmp_path: Optional[Path] = None
+        hdr_path: Optional[Path] = None
+        requiredcols_path: Optional[Path] = None
+        parsever_path: Optional[Path] = None
         packed_path: Optional[Path] = None
         cleaned_path: Optional[Path] = None
-        parsever_path: Optional[Path] = None
-        requiredcols_path: Optional[Path] = None
 
         try:
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
@@ -914,19 +1000,28 @@ def load_one(local_path: str, table_name: str) -> None:
 
                 table_cols = _get_table_columns(conn, DB_SCHEMA, table_name)
 
+                # 1) Ensure row_hash exists/filled (uses whatever header we have)
                 prepared = _prepare_csv_for_load(lp, table_name)
                 tmp_path = prepared if prepared != lp else None
 
+                # 2) Canonicalize header names (fixes dq_audit_ml table/event/severity/reason headers)
+                prepared2 = _apply_header_aliases(prepared, table_name)
+                hdr_path = prepared2 if prepared2 != prepared else None
+                prepared = prepared2
+
+                # 3) Add required cols that upstream may omit (pulled_at_utc/source)
                 required_defaults = _required_defaults_for_table(table_name)
                 if required_defaults:
-                    prepared2 = _ensure_cols_with_defaults(prepared, table_name, required_defaults)
-                    requiredcols_path = prepared2 if prepared2 != prepared else None
-                    prepared = prepared2
+                    prepared3 = _ensure_cols_with_defaults(prepared, table_name, required_defaults)
+                    requiredcols_path = prepared3 if prepared3 != prepared else None
+                    prepared = prepared3
 
+                # 4) Ensure parse_version exists + filled
                 pv = _ensure_parse_version(prepared, table_name)
                 parsever_path = pv if pv != prepared else None
                 prepared = pv
 
+                # 5) Pack ESPN feature tables (does not apply to ML)
                 if PACK_FEATURES_JSON and (DB_SCHEMA, table_name) in PACK_FEATURES_JSON_ALLOWLIST:
                     base_cols = PACK_FEATURES_BASE_COLS.get(table_name, [])
                     if not base_cols:
@@ -941,10 +1036,12 @@ def load_one(local_path: str, table_name: str) -> None:
                     packed_path = packed if packed != prepared else None
                     prepared = packed
 
+                # 6) Drop rows that still violate NOT NULL (helps messy upstream)
                 cleaned = _drop_rows_missing_required_values(prepared, table_name)
                 cleaned_path = cleaned if cleaned != prepared else None
                 prepared = cleaned
 
+                # 7) Preflight
                 validation_result = _preflight_validate_csv(prepared, table_name)
                 if validation_result.get("empty", False):
                     print(f"[SKIP] {local_path} is empty (zero data rows)")
@@ -999,7 +1096,7 @@ def load_one(local_path: str, table_name: str) -> None:
         except Exception as exc:
             last_err = str(exc)
         finally:
-            for p in (tmp_path, packed_path, parsever_path, requiredcols_path, cleaned_path):
+            for p in (tmp_path, hdr_path, requiredcols_path, parsever_path, packed_path, cleaned_path):
                 if p and p.exists():
                     try:
                         p.unlink()
