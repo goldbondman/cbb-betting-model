@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Matchup Builder
 Build model-ready matchup table with home/away features side-by-side.
@@ -20,20 +21,20 @@ from data_utils import (
 def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
     """
     Build matchup table (one row per game, home/away features side-by-side).
-    
+
     Input: Team-game rows with pregame features
     Output: Matchup rows with h_* and a_* features
-    
+
     Process:
     1. Split into home and away dataframes
     2. Select features (pregame only)
     3. Merge on event_id
     4. Add outcome labels (home_win)
     5. Generate row hash
-    
+
     Args:
         df_features: DataFrame with team-game features
-        
+
     Returns:
         DataFrame with matchup-level features (one row per game)
     """
@@ -58,24 +59,42 @@ def build_matchups_model_ready(df_features: pd.DataFrame) -> pd.DataFrame:
     keep_base = [c for c in keep_base if c in home.columns]
 
     # Feature columns (pregame features only)
-    feat_cols = [c for c in df.columns if (
-        c.endswith("_pre") or 
-        c.endswith("_noblow_pre") or 
-        c.endswith("_eff_pre") or 
-        c in [
-            "days_rest", "days_since_last_game", "games_last_7_days", 
-            "back_to_back", "three_in_six",
-            "avg_opp_netrtg_l7_pre", "avg_opp_ortg_l7_pre", "avg_opp_drtg_l7_pre", 
-            "sos_season_pre",
-            "netrtg_adj_l7", "efg_adj_l7", "tov_adj_l7", "orb_adj_l7", "ftr_adj_l7",
-            "netrtg_adj_season", "efg_adj_season", "tov_adj_season", 
-            "orb_adj_season", "ftr_adj_season",
-            "style_distance_l7", "pace_mismatch_l7", "rim_vs_foul_l7",
-            "blowout",
-            "pulled_at_utc", "parse_version", "source",
-            "opp_join_ok",
-        ]
-    )]
+    # NOTE: This list is used to filter/whitelist features. We explicitly include
+    # new SOS/HCA outputs that do NOT end with "_pre" (e.g., game_quality_score).
+    explicit_allow = {
+        # Time/window features
+        "days_rest", "days_since_last_game", "games_last_7_days",
+        "back_to_back", "three_in_six",
+
+        # Existing opponent averages / legacy fields
+        "avg_opp_netrtg_l7_pre", "avg_opp_ortg_l7_pre", "avg_opp_drtg_l7_pre",
+        "sos_season_pre",
+
+        # Adjusted metrics
+        "netrtg_adj_l7", "efg_adj_l7", "tov_adj_l7", "orb_adj_l7", "ftr_adj_l7",
+        "netrtg_adj_season", "efg_adj_season", "tov_adj_season", "orb_adj_season", "ftr_adj_season",
+
+        # Style / matchup signals
+        "style_distance_l7", "pace_mismatch_l7", "rim_vs_foul_l7",
+
+        # Quality / flags / audit
+        "blowout",
+        "pulled_at_utc", "parse_version", "source",
+        "opp_join_ok",
+
+        # NEW: strength_of_schedule.py per-game score (not rolling, not *_pre)
+        "game_quality_score",
+    }
+
+    feat_cols = [
+        c for c in df.columns
+        if (
+            c.endswith("_pre") or
+            c.endswith("_noblow_pre") or
+            c.endswith("_eff_pre") or
+            c in explicit_allow
+        )
+    ]
     feat_cols = [c for c in dict.fromkeys(feat_cols) if c in df.columns]
 
     # Home columns
