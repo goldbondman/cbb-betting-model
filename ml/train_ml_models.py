@@ -234,6 +234,54 @@ def _fit_model(
     return full_coef, rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean
 
 
+def _build_intercept_only_model(
+    *,
+    y: np.ndarray,
+    feature_cols: List[str],
+    reason: str,
+    rows_train: int,
+    rows_total: int,
+    rows_val: int,
+    cfg: TrainConfig,
+    target: str,
+    train_start_utc,
+    train_end_utc,
+    schema_hash: Optional[str],
+) -> Dict[str, object]:
+    y_num = pd.to_numeric(pd.Series(y), errors="coerce").to_numpy(dtype=np.float64)
+    y_clean = y_num[np.isfinite(y_num)]
+    intercept = float(np.mean(y_clean)) if y_clean.size else 0.0
+    rmse = float(np.sqrt(np.mean((y_clean - intercept) ** 2))) if y_clean.size else float("nan")
+    return {
+        "target": target,
+        "model_version": cfg.model_version,
+        "trained_at_utc": _utc_now_iso(),
+        "feature_schema_hash": schema_hash,
+        "train_start_utc": (train_start_utc.isoformat() if pd.notna(train_start_utc) else None),
+        "train_end_utc": (train_end_utc.isoformat() if pd.notna(train_end_utc) else None),
+        "intercept": intercept,
+        "coefficients": [0.0 for _ in feature_cols],
+        "feature_order": feature_cols,
+        "rmse": rmse,
+        "val_rmse": None,
+        "rows_total": rows_total,
+        "rows_train": rows_train,
+        "rows_train_clean": int(y_clean.size),
+        "rows_val": rows_val,
+        "ridge_lambda": float(cfg.ridge_lambda),
+        "val_split": float(max(0.0, min(0.5, float(cfg.val_split)))),
+        "min_train_rows": int(cfg.min_train_rows),
+        "n_features_total": int(len(feature_cols)),
+        "n_features_used": 0,
+        "dropped_const_features": feature_cols,
+        "feature_medians": {c: 0.0 for c in feature_cols},
+        "split_type": "time_series",
+        "sort_key": "game_datetime_utc",
+        "fallback": "intercept_only",
+        "fallback_reason": reason,
+    }
+
+
 def _rmse_from_coef(
     X: np.ndarray,
     y: np.ndarray,
@@ -329,11 +377,11 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     df = _coerce_and_sort_by_datetime(df)
 
     feature_cols = _select_feature_cols(df)
-    if not feature_cols:
-        raise ValueError("No feature columns available for training.")
-
-    # ✅ NEW: Validate data before training
-    _validate_training_data(df, feature_cols, cfg)
+    if feature_cols:
+        # ✅ NEW: Validate data before training
+        _validate_training_data(df, feature_cols, cfg)
+    else:
+        print("[WARN] No feature columns available. Will emit intercept-only fallback models.", file=sys.stderr)
 
     val_ratio = max(0.0, min(0.5, float(cfg.val_split)))
     split_cfg = SplitConfig(val_ratio=val_ratio, test_ratio=0.0)
@@ -385,14 +433,53 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         print(f"       Target std: {y_std:.2f}")
         
         if y_std < cfg.min_feature_variance:
-            raise ValueError(f"Target {target} has no variance in training set (std={y_std:.4f})")
+            print(f"[WARN] Target {target} has low variance (std={y_std:.4f}); fallback model will be written.")
+            model = _build_intercept_only_model(
+                y=y_train,
+                feature_cols=feature_cols,
+                reason=f"low_target_variance:{y_std:.6f}",
+                rows_train=rows_train,
+                rows_total=rows_total,
+                rows_val=rows_val,
+                cfg=cfg,
+                target=target,
+                train_start_utc=train_start_utc,
+                train_end_utc=train_end_utc,
+                schema_hash=schema_hash,
+            )
+            results[target] = model
+            cfg.out_dir.mkdir(parents=True, exist_ok=True)
+            (cfg.out_dir / fname).write_text(json.dumps(model, indent=2) + "\n")
+            print(f"[INFO] ✅ Fallback model saved to {cfg.out_dir / fname}")
+            continue
 
-        coef, train_rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean = _fit_model(
-            X_train,
-            y_train,
-            ridge_lambda=cfg.ridge_lambda,
-            min_train_rows=cfg.min_train_rows,
-        )
+        try:
+            coef, train_rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean = _fit_model(
+                X_train,
+                y_train,
+                ridge_lambda=cfg.ridge_lambda,
+                min_train_rows=cfg.min_train_rows,
+            )
+        except ValueError as e:
+            print(f"[WARN] {target}: {e}; writing intercept-only fallback model.")
+            model = _build_intercept_only_model(
+                y=y_train,
+                feature_cols=feature_cols,
+                reason=str(e),
+                rows_train=rows_train,
+                rows_total=rows_total,
+                rows_val=rows_val,
+                cfg=cfg,
+                target=target,
+                train_start_utc=train_start_utc,
+                train_end_utc=train_end_utc,
+                schema_hash=schema_hash,
+            )
+            results[target] = model
+            cfg.out_dir.mkdir(parents=True, exist_ok=True)
+            (cfg.out_dir / fname).write_text(json.dumps(model, indent=2) + "\n")
+            print(f"[INFO] ✅ Fallback model saved to {cfg.out_dir / fname}")
+            continue
         
         print(f"[INFO] Model trained:")
         print(f"       RMSE: {train_rmse:.2f}")
@@ -454,6 +541,8 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         
         print(f"[INFO] ✅ Model saved to {cfg.out_dir / fname}")
         print("[INFO] ================================================\n")
+
+    print(f"[INFO] Model artifacts ready: {cfg.out_dir / 'margin_model.json'} ; {cfg.out_dir / 'total_model.json'}")
 
     return results
 
