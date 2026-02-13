@@ -42,11 +42,10 @@ def main() -> None:
 
     for _, game in games.iterrows():
         # Safe access to game_id with fallback
-        if "game_id" in game.index:
-            game_id = game["game_id"]
-        else:
+        if "game_id" not in game.index:
             logger.warning("Game row missing 'game_id' column, skipping")
             continue
+        game_id = game["game_id"]
             
         # Handle potential key mismatch between game_id and event_id
         if not daily_preds.empty:
@@ -90,16 +89,19 @@ def main() -> None:
             logger.warning("Prediction missing 'confidence' key for game_id=%s, using default", game_id)
             pred["confidence"] = 0.6
 
+        # Extract market spread once to avoid duplication
+        market_spread = game["market_spread"] if "market_spread" in game.index else None
+
         ui.render_prediction_card(
             home_team=game["home_team"],
             away_team=game["away_team"],
             prediction=pred,
-            vegas_spread=game["market_spread"] if "market_spread" in game.index else None,
+            vegas_spread=market_spread,
         )
 
         bet = bet_engine.recommend_spread(
             predicted_spread=pred["predicted_spread"],
-            market_spread=game["market_spread"] if "market_spread" in game.index else None,
+            market_spread=market_spread,
             confidence=pred["confidence"],
             home_team=game["home_team"],
             away_team=game["away_team"],

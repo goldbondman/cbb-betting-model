@@ -82,10 +82,12 @@ class TestAppValidation(unittest.TestCase):
         # Call main function
         app.main()
         
-        # Verify that logger.warning was called
-        mock_logger.warning.assert_called_once()
-        args = mock_logger.warning.call_args[0]
-        self.assertIn("Missing team snapshot", args[0])
+        # Verify that logger.warning was called with the specific message
+        mock_logger.warning.assert_any_call(
+            "Missing team snapshot for game: home=%s, away=%s",
+            "Duke",
+            "UNC",
+        )
 
     @patch("app.st")
     @patch("app.DataLoader")
