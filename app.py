@@ -3,6 +3,9 @@
 
 from __future__ import annotations
 
+import logging
+
+import pandas as pd
 import streamlit as st
 
 from core.betting_engine import BettingEngine
@@ -10,6 +13,8 @@ from core.config import APP_CONFIG, STRATEGY_PRESETS
 from core.data_loader import DataLoader
 from core.prediction_engine import PredictionEngine
 from core.ui_components import PredictionUI
+
+logger = logging.getLogger(__name__)
 
 st.set_page_config(page_title="CBB Model", page_icon="🏀", layout="wide")
 
@@ -31,12 +36,27 @@ def main() -> None:
     games = data.load_vegas_lines(date="today")
     daily_preds = data.load_todays_predictions()
 
-    if games.empty:
+    if not isinstance(games, pd.DataFrame) or games.empty:
         st.info("No games today")
         return
 
     for _, game in games.iterrows():
-        existing = daily_preds[daily_preds["event_id"] == game.get("game_id")] if not daily_preds.empty else daily_preds
+        # Safe access to game_id with fallback
+        if "game_id" not in game.index:
+            logger.warning("Game row missing 'game_id' column, skipping")
+            continue
+        game_id = game["game_id"]
+            
+        # Handle potential key mismatch between game_id and event_id
+        if not daily_preds.empty:
+            if "event_id" in daily_preds.columns:
+                existing = daily_preds[daily_preds["event_id"] == game_id]
+            elif "game_id" in daily_preds.columns:
+                existing = daily_preds[daily_preds["game_id"] == game_id]
+            else:
+                existing = pd.DataFrame()
+        else:
+            existing = daily_preds
 
         if not existing.empty:
             pred = existing.iloc[0].to_dict()
@@ -45,22 +65,43 @@ def main() -> None:
             pred.setdefault("confidence", 0.6)
             pred.setdefault("breakdown", {})
         else:
+            # Safe access to team names with validation
+            if "home_team" not in game.index or "away_team" not in game.index:
+                logger.warning("Game row missing team columns, skipping game_id=%s", game_id)
+                continue
+                
             home = data.get_team_snapshot(game["home_team"])
             away = data.get_team_snapshot(game["away_team"])
             if not home or not away:
+                logger.warning(
+                    "Missing team snapshot for game: home=%s, away=%s",
+                    game["home_team"],
+                    game["away_team"],
+                )
                 continue
             pred = pred_engine.predict_spread(home, away)
+
+        # Validate required prediction keys
+        if "predicted_spread" not in pred:
+            logger.error("Prediction missing 'predicted_spread' key for game_id=%s", game_id)
+            continue
+        if "confidence" not in pred:
+            logger.warning("Prediction missing 'confidence' key for game_id=%s, using default", game_id)
+            pred["confidence"] = 0.6
+
+        # Extract market spread once to avoid duplication
+        market_spread = game["market_spread"] if "market_spread" in game.index else None
 
         ui.render_prediction_card(
             home_team=game["home_team"],
             away_team=game["away_team"],
             prediction=pred,
-            vegas_spread=game.get("market_spread"),
+            vegas_spread=market_spread,
         )
 
         bet = bet_engine.recommend_spread(
             predicted_spread=pred["predicted_spread"],
-            market_spread=game.get("market_spread"),
+            market_spread=market_spread,
             confidence=pred["confidence"],
             home_team=game["home_team"],
             away_team=game["away_team"],

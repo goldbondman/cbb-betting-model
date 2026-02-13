@@ -4,7 +4,8 @@ from datetime import datetime, timezone
 
 import pandas as pd
 import streamlit as st
-from supabase import create_client
+
+from core.supabase_utils import get_public_supabase_client
 
 st.set_page_config(page_title="Model Lab", page_icon="🧪", layout="wide")
 
@@ -13,11 +14,7 @@ REGISTRY_SCHEMA = os.getenv("MODEL_REGISTRY_SCHEMA", "public")
 
 
 def _get_supabase_client():
-    url = (os.getenv("SUPABASE_URL") or "").strip()
-    key = (os.getenv("SUPABASE_ANON_KEY") or "").strip()
-    if not url or not key:
-        return None
-    return create_client(url, key)
+    return get_public_supabase_client()
 
 
 def _tbl(client):
@@ -106,7 +103,7 @@ st.caption("Register multiple models and track which are active. Option 2 compat
 
 client_ok = _get_supabase_client() is not None
 if not client_ok:
-    st.warning("Supabase credentials missing (SUPABASE_URL, SUPABASE_ANON_KEY). UI will be read-only.")
+    st.warning("Supabase credentials missing (SUPABASE_URL + SUPABASE_ANON_KEY or SUPABASE_KEY). UI will be read-only.")
 
 registry = _load_registry()
 if registry.empty:

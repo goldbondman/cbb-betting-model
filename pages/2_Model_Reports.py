@@ -5,7 +5,8 @@ from datetime import datetime, timedelta, timezone
 import numpy as np
 import pandas as pd
 import streamlit as st
-from supabase import create_client
+
+from core.supabase_utils import get_public_supabase_client
 
 st.set_page_config(page_title="Model Reports", page_icon="📊", layout="wide")
 
@@ -22,11 +23,7 @@ LOOKBACK_DAYS = int(os.getenv("MODEL_REPORT_LOOKBACK_DAYS") or "30")
 
 
 def _get_supabase_client():
-    url = (os.getenv("SUPABASE_URL") or "").strip()
-    key = (os.getenv("SUPABASE_ANON_KEY") or "").strip()
-    if not url or not key:
-        return None
-    return create_client(url, key)
+    return get_public_supabase_client()
 
 
 def _load_predictions() -> pd.DataFrame:
