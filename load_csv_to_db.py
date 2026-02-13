@@ -40,6 +40,7 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
     ("raw", "espn_team_game_logs"),
     ("raw", "espn_team_game_features"),
     ("raw", "espn_matchups_model_ready"),
+    ("raw", "model_features"),
 }
 
 ALLOW_SCHEMA_MIGRATION = (os.getenv("ALLOW_SCHEMA_MIGRATION") or "0").strip().lower() in ("1", "true", "yes")
