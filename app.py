@@ -41,7 +41,13 @@ def main() -> None:
         return
 
     for _, game in games.iterrows():
-        game_id = game.get("game_id")
+        # Safe access to game_id with fallback
+        if "game_id" in game.index:
+            game_id = game["game_id"]
+        else:
+            logger.warning("Game row missing 'game_id' column, skipping")
+            continue
+            
         # Handle potential key mismatch between game_id and event_id
         if not daily_preds.empty:
             if "event_id" in daily_preds.columns:
@@ -60,13 +66,18 @@ def main() -> None:
             pred.setdefault("confidence", 0.6)
             pred.setdefault("breakdown", {})
         else:
-            home = data.get_team_snapshot(game.get("home_team", ""))
-            away = data.get_team_snapshot(game.get("away_team", ""))
+            # Safe access to team names with validation
+            if "home_team" not in game.index or "away_team" not in game.index:
+                logger.warning("Game row missing team columns, skipping game_id=%s", game_id)
+                continue
+                
+            home = data.get_team_snapshot(game["home_team"])
+            away = data.get_team_snapshot(game["away_team"])
             if not home or not away:
                 logger.warning(
                     "Missing team snapshot for game: home=%s, away=%s",
-                    game.get("home_team"),
-                    game.get("away_team"),
+                    game["home_team"],
+                    game["away_team"],
                 )
                 continue
             pred = pred_engine.predict_spread(home, away)
@@ -83,12 +94,12 @@ def main() -> None:
             home_team=game["home_team"],
             away_team=game["away_team"],
             prediction=pred,
-            vegas_spread=game.get("market_spread"),
+            vegas_spread=game["market_spread"] if "market_spread" in game.index else None,
         )
 
         bet = bet_engine.recommend_spread(
             predicted_spread=pred["predicted_spread"],
-            market_spread=game.get("market_spread"),
+            market_spread=game["market_spread"] if "market_spread" in game.index else None,
             confidence=pred["confidence"],
             home_team=game["home_team"],
             away_team=game["away_team"],
