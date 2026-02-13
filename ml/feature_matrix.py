@@ -3,7 +3,7 @@
 Feature matrix builder for CBB models.
 
 Inputs (preferred order):
-  1) Supabase Postgres table: raw.espn_team_game_features (when SUPABASE_DB_URL is set)
+  1) Supabase Postgres table: raw.espn_team_game_core (when SUPABASE_DB_URL is set)
   2) Local CSV: espn_team_game_features.csv
 
 Targets (scores) source:
@@ -56,7 +56,7 @@ except Exception:
 
 SUPABASE_DB_URL = (os.getenv("SUPABASE_DB_URL") or "").strip()
 DB_SCHEMA = (os.getenv("DB_SCHEMA") or "raw").strip()
-DB_TABLE = (os.getenv("ESPN_FEATURES_TABLE") or "espn_team_game_features").strip()
+DB_TABLE = (os.getenv("ESPN_FEATURES_TABLE") or "espn_team_game_core").strip()
 DB_LIMIT = (os.getenv("ESPN_FEATURES_LIMIT") or "").strip()
 
 # Scores table (targets)
@@ -191,6 +191,7 @@ def _load_features_from_db(schema: str, table: str, limit_str: str) -> pd.DataFr
         df = pd.read_sql(sql, conn)
 
     df = _expand_features_json(df)
+    df = _derive_features_if_needed(df)
     print(f"[INFO] Loaded features from DB: {schema}.{table} rows={len(df)} cols={len(df.columns)}")
     return df
 
@@ -200,8 +201,89 @@ def _load_features_from_csv(path: Path) -> pd.DataFrame:
         raise FileNotFoundError(f"Missing feature store: {path}")
     df = pd.read_csv(path)
     df = _expand_features_json(df)
+    df = _derive_features_if_needed(df)
     print(f"[INFO] Loaded features from CSV: rows={len(df)} cols={len(df.columns)}")
     return df
+
+
+def _safe_div(numer: pd.Series, denom: pd.Series) -> pd.Series:
+    n = pd.to_numeric(numer, errors="coerce")
+    d = pd.to_numeric(denom, errors="coerce")
+    out = n / d.replace(0, np.nan)
+    return out.replace([np.inf, -np.inf], np.nan)
+
+
+def _rolling_pre(df: pd.DataFrame, metric: str) -> pd.DataFrame:
+    out = df.copy()
+    s = pd.to_numeric(out[metric], errors="coerce")
+    for w in LOOKBACK_WINDOWS:
+        col = f"{metric}_{w}_pre"
+        out[col] = (
+            s.groupby(out["team_id"], dropna=False)
+            .transform(lambda g: g.shift(1).rolling(window=int(w[1:]), min_periods=1).mean())
+        )
+    return out
+
+
+def _games_last_days(df: pd.DataFrame, days: int) -> pd.Series:
+    out = pd.Series(np.nan, index=df.index, dtype=float)
+    for _, idx in df.groupby("team_id", dropna=False).groups.items():
+        sub = df.loc[idx].sort_values("game_dt")
+        ts = sub["game_dt"].astype("int64") // 10**9
+        vals = []
+        for i, t in enumerate(ts):
+            low = t - days * 86400
+            c = int(((ts[:i] >= low) & (ts[:i] < t)).sum())
+            vals.append(float(c))
+        out.loc[sub.index] = vals
+    return out
+
+
+def _derive_features_if_needed(df: pd.DataFrame) -> pd.DataFrame:
+    pre_cols = [c for c in df.columns if c.endswith("_l7_pre")]
+    if pre_cols:
+        return df
+
+    required = {"event_id", "team_id", "team", "home_away", "game_datetime_utc"}
+    if not required.issubset(df.columns):
+        return df
+
+    # If no precomputed pre-game features exist, derive from boxscore primitives.
+    out = df.copy()
+    out["game_dt"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce")
+    out = out.sort_values(["team_id", "game_dt", "event_id"], na_position="last").reset_index(drop=True)
+
+    # base rates from raw boxscore primitives
+    out["poss"] = pd.to_numeric(out.get("fga"), errors="coerce") - pd.to_numeric(out.get("orb"), errors="coerce") + pd.to_numeric(out.get("tov"), errors="coerce") + 0.44 * pd.to_numeric(out.get("fta"), errors="coerce")
+    out["efg"] = _safe_div(pd.to_numeric(out.get("fgm"), errors="coerce") + 0.5 * pd.to_numeric(out.get("tpm"), errors="coerce"), out.get("fga"))
+    out["ftr"] = _safe_div(out.get("fta"), out.get("fga"))
+    out["3par"] = _safe_div(out.get("tpa"), out.get("fga"))
+    out["tov_pct"] = _safe_div(out.get("tov"), out.get("poss"))
+    out["pace"] = pd.to_numeric(out.get("poss"), errors="coerce")
+    out["ortg"] = 100.0 * _safe_div(out.get("points_for"), out.get("poss"))
+    out["drtg"] = 100.0 * _safe_div(out.get("points_against"), out.get("poss"))
+    out["netrtg"] = out["ortg"] - out["drtg"]
+
+    # opponent rebound context per game for orb_pct/drb_pct
+    opp = out[["event_id", "team_id", "orb", "drb"]].rename(columns={"team_id": "opp_team_id", "orb": "opp_orb", "drb": "opp_drb"})
+    out = out.merge(opp, on="event_id", how="left")
+    out = out[out["team_id"] != out["opp_team_id"]].copy()
+    out["orb_pct"] = _safe_div(out.get("orb"), pd.to_numeric(out.get("orb"), errors="coerce") + pd.to_numeric(out.get("opp_drb"), errors="coerce"))
+    out["drb_pct"] = _safe_div(out.get("drb"), pd.to_numeric(out.get("drb"), errors="coerce") + pd.to_numeric(out.get("opp_orb"), errors="coerce"))
+
+    metric_candidates = ["ortg", "drtg", "netrtg", "pace", "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par"]
+    for m in metric_candidates:
+        if m in out.columns:
+            out = _rolling_pre(out, m)
+
+    out["games_last_3_days"] = _games_last_days(out, 3)
+    out["games_last_5_days"] = _games_last_days(out, 5)
+    out["games_last_7_days"] = _games_last_days(out, 7)
+    out["games_last_10_days"] = _games_last_days(out, 10)
+    out["exp_margin"] = out.get("netrtg_l7_pre")
+
+    print("[INFO] Derived pre-game rolling features from raw boxscore primitives")
+    return out
 
 
 def _load_features(cfg: BuildConfig) -> pd.DataFrame:

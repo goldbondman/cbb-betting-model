@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from itertools import combinations
 from pathlib import Path
 from typing import Dict, List
+import os
 
 import numpy as np
 import pandas as pd
@@ -35,6 +36,7 @@ from predict_ml import _load_features as _load_pred_features, _score_df, _requir
 WINDOWS = [4, 5, 6, 7, 10, 12]
 SUMMARY_PATH = Path("ml/variant_results.csv")
 MODELS_DIR = Path("ml/models")
+FEATURES_PATH = Path(os.getenv("ML_FEATURES_PATH", "ml/model_features.csv"))
 
 
 @dataclass
@@ -59,7 +61,7 @@ ID_COLS = {"event_id", "game_datetime_utc", "team_id_home", "team_id_away"}
 TARGET_COLS = {"actual_margin_home", "actual_total"}
 
 
-def _pick_features_for_window(df: pd.DataFrame, window: int) -> pd.DataFrame:
+def _pick_features_for_window(df: pd.DataFrame, window: int) -> tuple[pd.DataFrame, List[str]]:
     """
     Keep only:
       - recency features matching *_l{window}_pre
@@ -68,14 +70,15 @@ def _pick_features_for_window(df: pd.DataFrame, window: int) -> pd.DataFrame:
       - id cols (used for joins/sorting only, excluded from X)
     """
     out = df.copy()
+    window_cols = [c for c in out.columns if f"_l{window}_pre" in c]
     cols = [
         c for c in out.columns
-        if (f"_l{window}_pre" in c)
+        if (c in window_cols)
         or ("_season_pre" in c)
         or (c in TARGET_COLS)
         or (c in ID_COLS)
     ]
-    return out[cols]
+    return out[cols], window_cols
 
 
 def _feature_cols_only(df: pd.DataFrame) -> List[str]:
@@ -114,7 +117,8 @@ def _model_filename(variant: str, target_short: str) -> str:
 # ------------------------
 
 def train_and_eval_variants() -> List[VariantResult]:
-    df_raw = pd.read_csv("ml/model_features.csv")
+    print(f"[INFO] Loading features from {FEATURES_PATH}")
+    df_raw = pd.read_csv(FEATURES_PATH)
     df_raw = _coerce_and_sort_by_datetime(df_raw)
 
     results: List[VariantResult] = []
@@ -124,12 +128,16 @@ def train_and_eval_variants() -> List[VariantResult]:
         var_name = f"l{w}_simple"
         print(f"[INFO] Training variant {var_name}")
 
-        df_feat = _pick_features_for_window(df_raw, w)
+        df_feat, window_cols = _pick_features_for_window(df_raw, w)
         df_feat = df_feat.sort_values("game_datetime_utc", kind="mergesort")
+
+        if not window_cols:
+            print(f"[WARN] No window-specific columns found for window {w}. Skipping variant {var_name}.")
+            continue
 
         feat_cols = _feature_cols_only(df_feat)
         if not feat_cols:
-            print(f"[WARN] No feature columns found for window {w}. Skipping.")
+            print(f"[WARN] No feature columns found for window {w}. Skipping variant {var_name}.")
             continue
 
         # Train margin + total
@@ -144,12 +152,16 @@ def train_and_eval_variants() -> List[VariantResult]:
 
             X = Xdf.to_numpy(dtype=np.float64)
 
-            coef, train_rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean = _fit_model(
-                X,
-                y,
-                ridge_lambda=1e-3,
-                min_train_rows=25,
-            )
+            try:
+                coef, train_rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean = _fit_model(
+                    X,
+                    y,
+                    ridge_lambda=1e-3,
+                    min_train_rows=25,
+                )
+            except ValueError as e:
+                print(f"[WARN] Skipping {var_name}/{short}: {e}")
+                continue
 
             # Save JSON model
             model_data = {
@@ -182,7 +194,7 @@ def train_and_eval_variants() -> List[VariantResult]:
 
     # Ensemble evaluation
     print("[INFO] Evaluating ensembles...")
-    pred_df = _load_pred_features(Path("ml/model_features.csv"))
+    pred_df = _load_pred_features(FEATURES_PATH)
 
     # Score all single models
     score_cache: Dict[str, np.ndarray] = {}

@@ -29,16 +29,18 @@ jobs:
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
           DB_SCHEMA: "raw"
-          ESPN_FEATURES_TABLE: "espn_team_game_features"
+          ESPN_FEATURES_TABLE: "espn_team_game_core"
         run: |
+          python scripts/build_espn_team_game_core.py
           python ml/pipeline.py
 
       - name: Generate feature matrix files (DB-backed)
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
           DB_SCHEMA: "raw"
-          ESPN_FEATURES_TABLE: "espn_team_game_features"
+          ESPN_FEATURES_TABLE: "espn_team_game_core"
         run: |
+          python scripts/build_espn_team_game_core.py
           python ml/feature_matrix.py
 
       - name: Verify model_features.csv exists
