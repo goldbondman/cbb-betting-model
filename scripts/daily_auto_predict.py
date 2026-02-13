@@ -183,8 +183,18 @@ def fetch_scoreboard() -> pd.DataFrame:
         dates.append((now + timedelta(days=i)).strftime("%Y%m%d"))
 
     rows: List[Dict[str, object]] = []
+    fetch_fn = None
+    if hasattr(espn, "fetch_scoreboard_games"):
+        fetch_fn = espn.fetch_scoreboard_games
+    elif hasattr(espn, "fetch_scoreboard_games_for_date"):
+        fetch_fn = espn.fetch_scoreboard_games_for_date
+    else:
+        raise AttributeError(
+            "ESPN module must expose fetch_scoreboard_games or fetch_scoreboard_games_for_date"
+        )
+
     for d in dates:
-        rows.extend(espn.fetch_scoreboard_games(d))
+        rows.extend(fetch_fn(d))
     return pd.DataFrame(rows)
 
 
