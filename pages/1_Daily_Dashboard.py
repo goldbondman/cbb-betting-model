@@ -5,7 +5,8 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
-from supabase import create_client
+
+from core.supabase_utils import get_public_supabase_client
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -23,11 +24,7 @@ st.set_page_config(page_title="Daily Dashboard", page_icon="📅", layout="wide"
 
 
 def _get_supabase_client():
-    url = (os.getenv("SUPABASE_URL") or "").strip()
-    key = (os.getenv("SUPABASE_ANON_KEY") or "").strip()
-    if not url or not key:
-        return None
-    return create_client(url, key)
+    return get_public_supabase_client()
 
 
 def _load_predictions() -> pd.DataFrame:
