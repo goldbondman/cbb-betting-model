@@ -6,3 +6,8 @@ espn_matchups_model_ready.csv
 
 # keep data/ CSV fallbacks committed
 !data/*.csv
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
