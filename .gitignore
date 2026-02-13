@@ -3,3 +3,10 @@ espn_games.csv
 espn_team_game_logs.csv
 espn_team_game_features.csv
 espn_matchups_model_ready.csv
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
