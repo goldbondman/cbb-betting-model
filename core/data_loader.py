@@ -28,7 +28,7 @@ class DataLoader:
 
     @staticmethod
     @lru_cache(maxsize=1)
-    def _supabase_client():
+    def _supabase_client() -> "Any | None":
         url = (os.getenv("SUPABASE_URL") or "").strip()
         key = (os.getenv("SUPABASE_ANON_KEY") or "").strip()
         if not url or not key:

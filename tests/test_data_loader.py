@@ -47,7 +47,7 @@ class TestLoadTodaysPredictions:
             result = loader.load_todays_predictions()
 
         assert not result.empty
-        assert str(int(result.iloc[0]["event_id"])) == "100"
+        assert float(result.iloc[0]["event_id"]) == 100.0
 
     def test_returns_empty_when_no_csv_and_no_supabase(self) -> None:
         with mock.patch.dict(os.environ, {"SUPABASE_URL": "", "SUPABASE_ANON_KEY": ""}):

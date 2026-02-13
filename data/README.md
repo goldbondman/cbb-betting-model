@@ -13,12 +13,16 @@ Supabase is unavailable (no credentials, network errors, etc.).
 
 The `core/data_loader.py` module checks these CSV files as a fallback
 when Supabase queries fail or credentials are missing.  The lookup order
-is:
+for predictions is:
 
-1. Supabase table query
-2. `data/<file>.csv` (committed to repo)
+1. Supabase `predictions_latest` table
+2. `data/predictions.csv` (committed to repo)
 3. `ml/predictions_latest.csv` (generated locally)
-4. `ESPN/CSV/<file>.csv` (committed to repo)
+
+For game data the order is:
+
+1. `ESPN/CSV/espn_games.csv` (committed to repo)
+2. `espn_games.csv` (local, gitignored)
 
 ## Refreshing Data
 
