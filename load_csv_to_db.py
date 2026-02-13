@@ -43,6 +43,8 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
     ("raw", "model_features"),
 }
 
+ALLOW_SCHEMA_MIGRATION = (os.getenv("ALLOW_SCHEMA_MIGRATION") or "0").strip().lower() in ("1", "true", "yes")
+
 # Optional: pack wide feature CSVs into a single JSON column to avoid Postgres row-size limits.
 PACK_FEATURES_JSON = (os.getenv("PACK_FEATURES_JSON") or "1").strip().lower() in ("1", "true", "yes")
 
@@ -425,6 +427,131 @@ def _ensure_columns_exist(conn: psycopg.Connection, schema: str, table: str, req
 
 def _get_table_spec(table_name: str) -> dict:
     return TABLE_SPECS.get(table_name, {"required_cols": [], "row_hash_keys": [], "not_null": [], "dtypes": {}})
+
+
+def _is_blank(value: object) -> bool:
+    return _normalize_str(value) == ""
+
+
+def _infer_types_from_csv(local_path: Path, columns: List[str], sample_limit: int = 5000) -> Dict[str, Dict[str, str]]:
+    stats = {c: {"seen": 0, "non_numeric": 0, "has_fractional": 0, "example": ""} for c in columns}
+
+    with local_path.open("r", encoding="utf-8", errors="replace", newline="") as f:
+        reader = csv.DictReader(f)
+        for i, row in enumerate(reader):
+            if i >= sample_limit:
+                break
+            for c in columns:
+                raw = row.get(c, "")
+                if _is_blank(raw):
+                    continue
+
+                stats[c]["seen"] += 1
+                text = _normalize_str(raw)
+                try:
+                    num = Decimal(text)
+                except InvalidOperation:
+                    stats[c]["non_numeric"] += 1
+                    if not stats[c]["example"]:
+                        stats[c]["example"] = text
+                    continue
+
+                if num != num.to_integral_value():
+                    stats[c]["has_fractional"] += 1
+
+    inferred: Dict[str, Dict[str, str]] = {}
+    for c, s in stats.items():
+        if s["seen"] == 0:
+            inferred[c] = {
+                "type": "type ambiguous",
+                "reason": "no non-empty sample values in CSV",
+            }
+            continue
+        if s["non_numeric"] > 0:
+            sample = f" sample_non_numeric='{s['example']}'" if s["example"] else ""
+            inferred[c] = {
+                "type": "type ambiguous",
+                "reason": f"{s['non_numeric']} non-numeric value(s) in sample;{sample}".strip(),
+            }
+            continue
+
+        inferred[c] = {
+            "type": "double precision",
+            "reason": f"{s['seen']} numeric sample value(s), fractional_values={s['has_fractional']}",
+        }
+
+    return inferred
+
+
+def _build_schema_drift_sql(schema: str, table: str, inferred: Dict[str, Dict[str, str]]) -> Tuple[str, List[str]]:
+    sql_lines: List[str] = []
+    ambiguous: List[str] = []
+    for col, meta in inferred.items():
+        inferred_type = meta["type"]
+        if inferred_type == "double precision":
+            sql_lines.append(
+                f"alter table {_qualified_table(schema, table)} add column if not exists {_quote_ident(col)} {inferred_type};"
+            )
+        else:
+            ambiguous.append(col)
+            sql_lines.append(f"-- type ambiguous for {col}: {meta['reason']}")
+
+    banner = (
+        "-- Schema drift fix for CSV -> Postgres load\n"
+        f"-- destination: {schema}.{table}\n"
+        "-- Add only missing columns. Nullable by default.\n"
+    )
+    return banner + "\n".join(sql_lines), ambiguous
+
+
+def _ensure_columns_with_schema_guidance(
+    conn: psycopg.Connection,
+    schema: str,
+    table: str,
+    csv_cols: List[str],
+    local_path: Path,
+) -> None:
+    try:
+        _ensure_columns_exist(conn, schema, table, csv_cols)
+        return
+    except ValueError as exc:
+        msg = str(exc)
+        if "Auto-add is disabled for this table" not in msg:
+            raise
+
+    table_cols = _get_table_columns(conn, schema, table)
+    missing_cols = [c for c in csv_cols if c not in table_cols]
+    inferred = _infer_types_from_csv(local_path, missing_cols)
+    sql_block, ambiguous_cols = _build_schema_drift_sql(schema, table, inferred)
+
+    print(f"[SCHEMA_DRIFT] destination={schema}.{table}")
+    print(f"[SCHEMA_DRIFT] missing_columns={missing_cols}")
+    print("[SCHEMA_DRIFT_SQL_BEGIN]")
+    print(sql_block)
+    print("[SCHEMA_DRIFT_SQL_END]")
+
+    if not ALLOW_SCHEMA_MIGRATION:
+        raise RuntimeError(
+            f"{schema}.{table}: CSV has missing columns and auto-add is disabled. "
+            "Set ALLOW_SCHEMA_MIGRATION=1 to auto-apply inferred ALTER TABLE statements "
+            "(only when all missing columns infer cleanly as numeric)."
+        )
+
+    if ambiguous_cols:
+        raise RuntimeError(
+            f"{schema}.{table}: ALLOW_SCHEMA_MIGRATION=1 but type inference is ambiguous for columns: {ambiguous_cols}. "
+            "Not auto-running ALTER TABLE; apply SQL manually."
+        )
+
+    with conn.cursor() as cur:
+        for col, meta in inferred.items():
+            cur.execute(
+                f"alter table {_qualified_table(schema, table)} "
+                f"add column if not exists {_quote_ident(col)} {meta['type']};"
+            )
+
+    conn.commit()
+    print(f"[INFO] Auto-applied schema migration for {schema}.{table} because ALLOW_SCHEMA_MIGRATION=1")
 
 
 def _required_defaults_for_table(table_name: str) -> dict:
@@ -1013,7 +1140,7 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
     csv_cols = _read_csv_header_columns(local_path)
     _validate_csv_header(csv_cols, local_path)
 
-    _ensure_columns_exist(conn, schema, table, csv_cols)
+    _ensure_columns_with_schema_guidance(conn, schema, table, csv_cols, local_path)
 
     table_cols = _get_table_columns(conn, schema, table)
     missing_in_table = [c for c in csv_cols if c not in table_cols]
@@ -1139,7 +1266,7 @@ def load_one(local_path: str, table_name: str) -> None:
                 if LOAD_MODE == "replace":
                     csv_cols = _read_csv_header_columns(prepared)
                     _validate_csv_header(csv_cols, prepared)
-                    _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
+                    _ensure_columns_with_schema_guidance(conn, DB_SCHEMA, table_name, csv_cols, prepared)
 
                     pk_cols = _get_primary_key_columns(conn, DB_SCHEMA, table_name)
 
@@ -1167,7 +1294,7 @@ def load_one(local_path: str, table_name: str) -> None:
                 elif LOAD_MODE == "append":
                     csv_cols = _read_csv_header_columns(prepared)
                     _validate_csv_header(csv_cols, prepared)
-                    _ensure_columns_exist(conn, DB_SCHEMA, table_name, csv_cols)
+                    _ensure_columns_with_schema_guidance(conn, DB_SCHEMA, table_name, csv_cols, prepared)
                     _copy_csv_into_table(conn, qt, prepared)
 
                 elif LOAD_MODE == "upsert":

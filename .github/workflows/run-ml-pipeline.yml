@@ -32,16 +32,18 @@ jobs:
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
           DB_SCHEMA: "raw"
-          ESPN_FEATURES_TABLE: "espn_team_game_features"
+          ESPN_FEATURES_TABLE: "espn_team_game_core"
         run: |
+          python scripts/build_espn_team_game_core.py
           python ml/pipeline.py
 
       - name: Generate feature matrix files (DB-backed)
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
           DB_SCHEMA: "raw"
-          ESPN_FEATURES_TABLE: "espn_team_game_features"
+          ESPN_FEATURES_TABLE: "espn_team_game_core"
         run: |
+          python scripts/build_espn_team_game_core.py
           python ml/feature_matrix.py
 
       - name: Print ML CSV headers
@@ -62,6 +64,7 @@ jobs:
           ls -lh ml/*.csv ml/*.json ml/*.txt ml/models/*.json || true
 
       - name: Load ML CSV artifacts to Supabase DB (raw schema)
+        id: load_ml_csv
         continue-on-error: true
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
@@ -70,7 +73,19 @@ jobs:
           LOAD_MODE: "replace"
           SKIP_MISSING: "1"
         run: |
-          python load_csv_to_db.py
+          set -o pipefail
+          python load_csv_to_db.py 2>&1 | tee /tmp/load_ml_csv.log
+
+      - name: Report DB load result + schema guidance
+        if: ${{ always() }}
+        run: |
+          echo "DB load step outcome: ${{ steps.load_ml_csv.outcome }}"
+          if [ "${{ steps.load_ml_csv.outcome }}" != "success" ]; then
+            echo "DB load failed. Suggested SQL (if present in logs):"
+            awk '/\[SCHEMA_DRIFT_SQL_BEGIN\]/{flag=1;next}/\[SCHEMA_DRIFT_SQL_END\]/{flag=0}flag' /tmp/load_ml_csv.log || true
+          else
+            echo "DB load succeeded."
+          fi
 
       - name: Train models
         run: python ml/train_ml_models.py
