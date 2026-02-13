@@ -431,6 +431,27 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         print(f"       Features: {len(feature_cols)}")
         print(f"       Target mean: {y_mean:.2f}")
         print(f"       Target std: {y_std:.2f}")
+
+        if not feature_cols:
+            print(f"[WARN] No feature columns for {target}; writing intercept-only fallback model.")
+            model = _build_intercept_only_model(
+                y=y_train,
+                feature_cols=feature_cols,
+                reason="no_feature_columns",
+                rows_train=rows_train,
+                rows_total=rows_total,
+                rows_val=rows_val,
+                cfg=cfg,
+                target=target,
+                train_start_utc=train_start_utc,
+                train_end_utc=train_end_utc,
+                schema_hash=schema_hash,
+            )
+            results[target] = model
+            cfg.out_dir.mkdir(parents=True, exist_ok=True)
+            (cfg.out_dir / fname).write_text(json.dumps(model, indent=2) + "\n")
+            print(f"[INFO] ✅ Fallback model saved to {cfg.out_dir / fname}")
+            continue
         
         if y_std < cfg.min_feature_variance:
             print(f"[WARN] Target {target} has low variance (std={y_std:.4f}); fallback model will be written.")
