@@ -211,7 +211,24 @@ def _emit_prediction_diagnostics(out: pd.DataFrame) -> None:
     print(f"[DIAG] pred_margin_home top5={margin.value_counts(dropna=False).head(5).to_dict()}")
     print(f"[DIAG] pred_total top5={total.value_counts(dropna=False).head(5).to_dict()}")
 
-    if n_rows == 0 or margin_std == 0.0 or total_std == 0.0 or margin_unique <= 1 or total_unique <= 1:
+    if n_rows == 0:
+        raise RuntimeError(
+            "Constant/invalid predictions detected. Inspect model artifacts (missing or fallback intercept-only), "
+            "feature matrix variability, and all-zero/NaN features before prediction."
+        )
+
+    # Single-row outputs are valid by definition (std=0, unique=1); do not fail on that case.
+    if n_rows == 1:
+        margin_ok = np.isfinite(margin.iloc[0])
+        total_ok = np.isfinite(total.iloc[0])
+        if not (margin_ok and total_ok):
+            raise RuntimeError(
+                "Invalid single-row prediction detected (NaN/inf). Inspect model artifacts and input features."
+            )
+        print("[DIAG] Single-row prediction output detected; skipping constant-variance guard.")
+        return
+
+    if margin_std == 0.0 or total_std == 0.0 or margin_unique <= 1 or total_unique <= 1:
         raise RuntimeError(
             "Constant/invalid predictions detected. Inspect model artifacts (missing or fallback intercept-only), "
             "feature matrix variability, and all-zero/NaN features before prediction."
