@@ -2,22 +2,16 @@
 
 from __future__ import annotations
 
-import os
 from datetime import datetime, timezone
 from typing import Any
 
-from supabase import Client, create_client
+from supabase import Client
+
+from core.supabase_utils import get_public_supabase_client
 
 
 def _client() -> Client | None:
-    url = (os.getenv("SUPABASE_URL") or "").strip()
-    key = (os.getenv("SUPABASE_ANON_KEY") or "").strip()
-    if not url or not key:
-        return None
-    try:
-        return create_client(url, key)
-    except Exception:
-        return None
+    return get_public_supabase_client()
 
 
 def get_active_model(model_type: str = "spread") -> dict[str, Any]:

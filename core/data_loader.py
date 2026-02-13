@@ -8,7 +8,9 @@ from functools import lru_cache
 from typing import Any
 
 import pandas as pd
-from supabase import Client, create_client
+from supabase import Client
+
+from core.supabase_utils import get_public_supabase_client
 
 from core.config import APP_CONFIG
 
@@ -24,14 +26,7 @@ class DataLoader:
     @staticmethod
     @lru_cache(maxsize=1)
     def _supabase_client() -> Client | None:
-        url = (os.getenv("SUPABASE_URL") or "").strip()
-        key = (os.getenv("SUPABASE_ANON_KEY") or "").strip()
-        if not url or not key:
-            return None
-        try:
-            return create_client(url, key)
-        except Exception:
-            return None
+        return get_public_supabase_client()
 
     @staticmethod
     @lru_cache(maxsize=8)
