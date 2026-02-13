@@ -209,7 +209,7 @@ def _read_csv_any(paths):
 def load_feature_store():
     # Prefer uploaded paths in this chat, then fall back to repo filenames
     df = _read_csv_any([
-        "/mnt/data/espn_team_game_features (1).csv",
+        "ESPN/CSV/espn_team_game_features.csv",
         "espn_team_game_features.csv",
         "ESPN/CSV/espn_team_game_logs.csv",
     ])
@@ -271,7 +271,6 @@ def load_feature_store():
 @st.cache_data
 def load_torvik():
     df = _read_csv_any([
-        "/mnt/data/barttorvik_team_results.csv",
         "barttorvik_team_results.csv",
         "barttorvik.csv",
     ])
@@ -454,7 +453,7 @@ def _read_csv_any(paths):
 def load_feature_store():
     # Prefer uploaded paths in this chat, then fall back to repo filenames
     df = _read_csv_any([
-        "/mnt/data/espn_team_game_features (1).csv",
+        "ESPN/CSV/espn_team_game_features.csv",
         "espn_team_game_features.csv",
         "ESPN/CSV/espn_team_game_logs.csv",
     ])
@@ -516,7 +515,6 @@ def load_feature_store():
 @st.cache_data
 def load_torvik():
     df = _read_csv_any([
-        "/mnt/data/barttorvik_team_results.csv",
         "barttorvik_team_results.csv",
         "barttorvik.csv",
     ])
@@ -780,7 +778,7 @@ def _read_csv_any(paths):
 def load_feature_store():
     # Prefer uploaded paths in this chat, then fall back to repo filenames
     df = _read_csv_any([
-        "/mnt/data/espn_team_game_features (1).csv",
+        "ESPN/CSV/espn_team_game_features.csv",
         "espn_team_game_features.csv",
         "ESPN/CSV/espn_team_game_logs.csv",
     ])
@@ -839,7 +837,6 @@ def load_feature_store():
 @st.cache_data
 def load_torvik():
     df = _read_csv_any([
-        "/mnt/data/barttorvik_team_results.csv",
         "barttorvik_team_results.csv",
         "barttorvik.csv",
     ])
