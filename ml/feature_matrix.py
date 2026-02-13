@@ -347,15 +347,14 @@ def _leakage_guard(feature_cols: List[str]) -> None:
     if offenders:
         raise ValueError(f"Feature leakage risk, refusing to train with: {offenders}")
 
-
 def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     df = _load_features(cfg)
     df = _alias_team_name_cols(df)
-
+    
     missing = _ensure_required_cols(df)
     if missing:
         raise ValueError(f"Missing required columns: {missing}")
-
+    
     ok, issues_schema = validate_dataframe(df, FEATURE_SCHEMA)
     if not ok:
         required_set = set(REQUIRED_FEATURE_COLS)
@@ -366,45 +365,45 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
                 filtered.append(i)
         if filtered:
             raise ValueError("Schema validation failed: " + "; ".join([i.message for i in filtered]))
-
+    
     issues: List[Tuple[str, str, Dict[str, object]]] = []
-
+    
     df["home_away"] = _normalize_home_away(df["home_away"])
     bad_ha = df["home_away"].isna() | (df["home_away"] == "") | (~df["home_away"].isin(["home", "away"]))
     if bad_ha.any():
         for eid in df.loc[bad_ha, "event_id"].astype(str).head(200).tolist():
             issues.append((eid, "invalid_home_away", {}))
         df = df.loc[~bad_ha].copy()
-
+    
     df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
     missing_dt = df["game_dt"].isna()
     if missing_dt.any():
         for eid in df.loc[missing_dt, "event_id"].astype(str).head(200).tolist():
             issues.append((eid, "missing_game_datetime_utc", {}))
         df = df.loc[~missing_dt].copy()
-
+    
     df = _safe_numeric(df, BASE_FEATURES)
-
+    
     home = df[df["home_away"] == "home"].copy()
     away = df[df["home_away"] == "away"].copy()
-
+    
     home = _dedupe_side(home, "home", issues)
     away = _dedupe_side(away, "away", issues)
-
+    
     home_ids = set(home["event_id"].astype(str).tolist())
     away_ids = set(away["event_id"].astype(str).tolist())
     for eid in sorted(home_ids - away_ids)[:200]:
         issues.append((eid, "missing_away_row", {}))
     for eid in sorted(away_ids - home_ids)[:200]:
         issues.append((eid, "missing_home_row", {}))
-
+    
     merged = home.merge(
         away,
         on=["event_id"],
         suffixes=("_home", "_away"),
         how="inner",
     )
-
+    
     scores = None
     if _db_enabled():
         try:
@@ -412,7 +411,7 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
         except Exception as e:
             issues.append(("*", "scores_load_failed", {"error": str(e)}))
             scores = None
-
+    
     if scores is not None and len(scores) > 0:
         merged = merged.merge(scores, on="event_id", how="left")
         merged["actual_margin_home"] = merged["home_score"] - merged["away_score"]
@@ -428,15 +427,15 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
             issues.append(("*", "targets_from_raw_points_for", {"note": "Used points_for_* because DB scores unavailable"}))
         else:
             raise ValueError("No targets available. Enable SUPABASE_DB_URL or include points_for_* columns.")
-
+    
     bad_targets = ~np.isfinite(merged["actual_margin_home"].to_numpy()) | ~np.isfinite(merged["actual_total"].to_numpy())
     if bad_targets.any():
         for eid in merged.loc[bad_targets, "event_id"].astype(str).head(200).tolist():
             issues.append((eid, "missing_scores_for_targets", {}))
         merged = merged.loc[~bad_targets].copy()
-
+    
     keep_features: List[str] = []
-
+    
     # BASE_FEATURES diffs (home - away)
     for feat in BASE_FEATURES:
         hcol = f"{feat}_home"
@@ -444,47 +443,47 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
         if hcol in merged.columns and acol in merged.columns:
             merged[f"{feat}_diff"] = merged[hcol] - merged[acol]
             keep_features.append(f"{feat}_diff")
-
+    
     merged = add_features_v2(merged)
     keep_features.extend([f for f in FEATURES_V2 if f in merged.columns])
-
+    
     if len(keep_features) < MIN_FEATURES:
         ignore_tokens = ["points", "actual", "margin", "game_dt", "datetime", "team_id", "event_id", "home_score", "away_score"]
-
+        
         home_cols = [c for c in merged.columns if c.endswith("_home")]
         away_cols = [c for c in merged.columns if c.endswith("_away")]
-
+        
         base_home = {c[:-5] for c in home_cols}
         base_away = {c[:-5] for c in away_cols}
         common = base_home.intersection(base_away)
-
+        
         added = 0
         for base in sorted(common):
             if any(tok in base.lower() for tok in ignore_tokens):
                 continue
-
+            
             hcol = f"{base}_home"
             acol = f"{base}_away"
-
+            
             merged[hcol] = pd.to_numeric(merged[hcol], errors="coerce")
             merged[acol] = pd.to_numeric(merged[acol], errors="coerce")
-
+            
             diff_col = f"{base}_diff_auto"
             merged[diff_col] = merged[hcol] - merged[acol]
             if merged[diff_col].notna().any():
                 keep_features.append(diff_col)
                 added += 1
-
+        
         print(f"[INFO] Auto feature fallback added={added}")
-
+    
     if not keep_features:
         raise ValueError("Feature matrix produced zero usable features.")
-
+    
     _leakage_guard(keep_features)
-
+    
     for c in keep_features:
         merged[c] = pd.to_numeric(merged[c], errors="coerce")
-
+    
     output_cols = [
         "event_id",
         "team_id_home",
@@ -495,27 +494,80 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
         "actual_margin_home",
         "actual_total",
     ] + keep_features
-
+    
     out = merged[output_cols].copy()
     out = out.rename(columns={"game_dt_home": "game_datetime_utc"})
-
+    
     out["game_datetime_utc"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce").dt.strftime(
         "%Y-%m-%dT%H:%M:%SZ"
     )
     out = out.sort_values(["game_datetime_utc", "event_id"], ascending=[True, True], na_position="last").reset_index(drop=True)
-
+    
     audit_rows = _build_audit_rows(issues)
     _write_audit(cfg.out_audit_path, audit_rows)
-
+    
     cfg.out_schema_path.parent.mkdir(parents=True, exist_ok=True)
     cfg.out_schema_path.write_text(feature_schema_hash() + "\n")
-
+    
     cfg.out_features_path.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(cfg.out_features_path, index=False)
-
+    
+    # ============================================================================
+    # ✅ VALIDATION: Catch bugs before training
+    # ============================================================================
+    print(f"\n[INFO] ============ FEATURE MATRIX VALIDATION ============")
+    
+    # Validate targets
+    for target in ["actual_margin_home", "actual_total"]:
+        vals = out[target].to_numpy()
+        mean = float(np.nanmean(vals))
+        std = float(np.nanstd(vals))
+        min_val = float(np.nanmin(vals))
+        max_val = float(np.nanmax(vals))
+        
+        print(f"[INFO] {target}:")
+        print(f"       Mean: {mean:.2f}")
+        print(f"       Std:  {std:.2f}")
+        print(f"       Min:  {min_val:.2f}")
+        print(f"       Max:  {max_val:.2f}")
+        
+        if std < 1.0:
+            raise ValueError(f"Target {target} has no variance (std={std:.4f})")
+        
+        if abs(mean - 24.04) < 0.5 and std < 5.0:
+            print(f"[ERROR] Target {target} appears broken: mean={mean:.2f}, std={std:.2f}", file=sys.stderr)
+            print(f"[ERROR] This will cause constant predictions. Check target calculation.", file=sys.stderr)
+            raise ValueError(f"Target {target} validation failed")
+    
+    # Validate features
+    nan_pct = out[keep_features].isnull().mean().mean()
+    print(f"\n[INFO] Features: {len(keep_features)}")
+    print(f"[INFO] Feature NaN%: {nan_pct:.1%}")
+    
+    if nan_pct > 0.80:
+        print(f"[ERROR] >80% features are NaN - training will fail", file=sys.stderr)
+        worst = out[keep_features].isnull().mean().sort_values(ascending=False).head(10)
+        print(f"[ERROR] Worst features:", file=sys.stderr)
+        for col, pct in worst.items():
+            print(f"        {col}: {pct:.1%}", file=sys.stderr)
+        raise ValueError(f"Too many NaN features: {nan_pct:.1%}")
+    
+    if len(keep_features) < 10:
+        print(f"[WARN] Only {len(keep_features)} features - might not be enough for good predictions", file=sys.stderr)
+    
+    # Sample check: ensure features have variance
+    feature_stds = out[keep_features].std()
+    zero_var_features = feature_stds[feature_stds == 0].index.tolist()
+    if zero_var_features:
+        print(f"[WARN] {len(zero_var_features)} features have zero variance:", file=sys.stderr)
+        for feat in zero_var_features[:5]:
+            print(f"        {feat}", file=sys.stderr)
+    
+    print(f"[INFO] ✅ Feature matrix validation passed")
+    print(f"[INFO] ==============================================\n")
+    
     print(f"[INFO] model_features.csv rows={len(out)} cols={len(out.columns)} dq_rows={len(audit_rows)}")
     return out
-
 
 def main() -> None:
     cfg = BuildConfig()
