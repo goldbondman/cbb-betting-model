@@ -1,29 +1,16 @@
 #!/usr/bin/env python3
 """
-Train simple linear models (margin + total) from model_features.csv.
+Train ridge linear models (margin + total) from model_features.csv.
 
 Outputs:
   - ml/models/margin_model.json
   - ml/models/total_model.json
 
 Notes:
-  - Uses numpy least squares (no external ML deps).
-  - Stores coefficients, feature order, and training metadata.
-
-Hardening:
-  - Sanitizes NaN/inf
-  - Drops constant columns to reduce ill-conditioning
-  - Ridge fallback if SVD fails to converge
-  - Keeps coefficient vector aligned to feature_order
-
-Updates in this version:
-  - Explicit sort by game_datetime_utc before time-series split
-  - Correct row counts (total/train/val/clean)
-  - Store feature medians used for imputation (predict should reuse)
-  - Record dropped constant features
-  - Guard against datetime parse failures (still deterministic)
-  - Safer medians serialization (no NaN/inf in JSON)
-  - More robust numeric coercion for X/y (no hard crash on string columns)
+  - Ridge-first for stability (intercept not regularized).
+  - Time-series split after stable sort by game_datetime_utc.
+  - Stores feature medians for predict-time imputation.
+  - Stores dropped constant features + train window metadata.
 """
 
 from __future__ import annotations
@@ -54,8 +41,8 @@ class TrainConfig:
     out_dir: Path = Path("ml/models")
     val_split: float = float(os.getenv("ML_VAL_SPLIT", "0.1"))
     model_version: str = os.getenv("ML_MODEL_VERSION", "ml-linear-v1")
-    ridge_lambda: float = float(os.getenv("ML_RIDGE_LAMBDA", "1e-3"))
-    min_train_rows: int = int(os.getenv("ML_MIN_TRAIN_ROWS", "10"))
+    ridge_lambda: float = float(os.getenv("ML_RIDGE_LAMBDA", "1e-2"))  # a bit stronger default
+    min_train_rows: int = int(os.getenv("ML_MIN_TRAIN_ROWS", "25"))
     debug: bool = os.getenv("ML_DEBUG", "0").strip().lower() in ("1", "true", "yes")
 
 
@@ -70,16 +57,11 @@ def _load_features(path: Path) -> pd.DataFrame:
 
 
 def _coerce_and_sort_by_datetime(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Ensures game_datetime_utc exists and sorts ascending for time-series split.
-    If parse fails, still produces deterministic order via fallback keys.
-    """
     if "game_datetime_utc" not in df.columns:
         raise ValueError("Missing required column: game_datetime_utc")
 
     df = df.copy()
 
-    # Ensure deterministic tie-breaker keys exist
     if "event_id" not in df.columns:
         df["event_id"] = df.index.astype(str)
 
@@ -87,7 +69,6 @@ def _coerce_and_sort_by_datetime(df: pd.DataFrame) -> pd.DataFrame:
     df["_dt_sort"] = dt
     df["_event_sort"] = df["event_id"].astype(str)
 
-    # Stable sort (mergesort) so ordering is deterministic even under ties
     df = df.sort_values(
         ["_dt_sort", "_event_sort"],
         ascending=[True, True],
@@ -113,7 +94,7 @@ def _select_feature_cols(df: pd.DataFrame) -> List[str]:
     }
     cols = [c for c in df.columns if c not in ignore]
 
-    # Leakage guard: drop any accidental target-ish columns
+    # Leakage guard
     suspicious = [c for c in cols if c.lower().startswith("actual_")]
     if suspicious:
         cols = [c for c in cols if c not in suspicious]
@@ -123,17 +104,12 @@ def _select_feature_cols(df: pd.DataFrame) -> List[str]:
 
 
 def _compute_feature_medians(X: np.ndarray) -> np.ndarray:
-    """
-    Column medians over finite values. All-non-finite column -> 0.0.
-    Assumes X already has inf->nan applied.
-    """
     med = np.zeros(X.shape[1], dtype=np.float64)
     if X.shape[1] == 0:
         return med
     col_has_finite = np.isfinite(X).any(axis=0)
     if col_has_finite.any():
         med[col_has_finite] = np.nanmedian(X[:, col_has_finite], axis=0)
-    # JSON-safe
     med[~np.isfinite(med)] = 0.0
     return med
 
@@ -144,10 +120,6 @@ def _sanitize_xy(
     *,
     drop_const_cols: bool = True,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, List[int], int]:
-    """
-    Returns:
-      X_clean, y_clean, keep_cols_mask, medians_full, dropped_const_idx, n_rows_clean
-    """
     X = np.asarray(X, dtype=np.float64)
     y = np.asarray(y, dtype=np.float64).reshape(-1)
 
@@ -157,7 +129,6 @@ def _sanitize_xy(
     row_ok = np.isfinite(y) & np.isfinite(X).any(axis=1)
     X = X[row_ok]
     y = y[row_ok]
-
     n_rows_clean = int(X.shape[0])
 
     if X.size == 0 or y.size == 0:
@@ -182,62 +153,65 @@ def _sanitize_xy(
     return X, y, keep_mask, medians_full, dropped_const_idx, n_rows_clean
 
 
-def _fit_linear(
+def _ridge_fit_intercept_unpenalized(X: np.ndarray, y: np.ndarray, lam: float) -> np.ndarray:
+    """
+    Fit ridge with intercept, intercept not regularized.
+
+    Returns coef vector of length (p+1): [intercept, w...]
+    """
+    X = np.asarray(X, dtype=np.float64)
+    y = np.asarray(y, dtype=np.float64).reshape(-1)
+
+    n, p = X.shape
+    X_aug = np.column_stack([np.ones(n, dtype=np.float64), X])
+
+    reg = lam * np.eye(p + 1, dtype=np.float64)
+    reg[0, 0] = 0.0  # do not penalize intercept
+
+    A = X_aug.T @ X_aug + reg
+    b = X_aug.T @ y
+    return np.linalg.solve(A, b)
+
+
+def _fit_model(
     X: np.ndarray,
     y: np.ndarray,
     *,
-    ridge_lambda: float = 1e-3,
-    min_train_rows: int = 10,
+    ridge_lambda: float,
+    min_train_rows: int,
 ) -> Tuple[np.ndarray, float, np.ndarray, np.ndarray, List[int], int]:
-    """
-    Fits linear regression with intercept.
-    Returns:
-      full_coef (intercept + coef per ORIGINAL X columns),
-      train_rmse,
-      keep_mask,
-      medians_full,
-      dropped_const_idx,
-      n_rows_clean
-    """
-    X_clean, y_clean, keep_mask, medians_full, dropped_const_idx, n_rows_clean = _sanitize_xy(
+    X_clean, y_clean, keep_mask, medians_full, dropped_const_idx, rows_train_clean = _sanitize_xy(
         X, y, drop_const_cols=True
     )
 
     if X_clean.shape[0] < min_train_rows:
         raise ValueError(
-            f"Not enough clean training data after sanitize: rows={X_clean.shape[0]} cols={X_clean.shape[1]}"
+            f"Not enough clean training data: rows={X_clean.shape[0]} cols={X_clean.shape[1]} "
+            f"(min_train_rows={min_train_rows})"
         )
 
+    # Intercept-only fallback
     if X_clean.shape[1] == 0:
-        mean_y = float(np.mean(y_clean)) if y_clean.size > 0 else 0.0
+        mean_y = float(np.mean(y_clean))
         full_coef = np.zeros(X.shape[1] + 1, dtype=np.float64)
         full_coef[0] = mean_y
         rmse = float(np.sqrt(np.mean((y_clean - mean_y) ** 2)))
-        print("[WARN] All features dropped after sanitize; using intercept-only model.", file=sys.stderr)
-        return full_coef, rmse, keep_mask, medians_full, dropped_const_idx, n_rows_clean
+        print("[WARN] All features dropped; using intercept-only model.", file=sys.stderr)
+        return full_coef, rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean
 
-    X_aug = np.column_stack([np.ones(X_clean.shape[0], dtype=np.float64), X_clean])
+    lam = float(max(0.0, ridge_lambda))
+    coef_small = _ridge_fit_intercept_unpenalized(X_clean, y_clean, lam=lam)
 
-    if not np.isfinite(X_aug).all() or not np.isfinite(y_clean).all():
-        raise ValueError("Non-finite values remain after sanitize (unexpected).")
-
-    try:
-        coef_small, *_ = np.linalg.lstsq(X_aug, y_clean, rcond=None)
-    except np.linalg.LinAlgError:
-        lam = float(ridge_lambda)
-        A = X_aug.T @ X_aug + lam * np.eye(X_aug.shape[1], dtype=np.float64)
-        b = X_aug.T @ y_clean
-        coef_small = np.linalg.solve(A, b)
-
-    preds = X_aug @ coef_small
+    preds = np.column_stack([np.ones(X_clean.shape[0]), X_clean]) @ coef_small
     rmse = float(np.sqrt(np.mean((preds - y_clean) ** 2)))
 
+    # Expand back to original feature space
     full_coef = np.zeros(X.shape[1] + 1, dtype=np.float64)
     full_coef[0] = coef_small[0]
     if keep_mask.size > 0 and coef_small.size > 1:
         full_coef[1:][keep_mask] = coef_small[1:]
 
-    return full_coef, rmse, keep_mask, medians_full, dropped_const_idx, n_rows_clean
+    return full_coef, rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean
 
 
 def _rmse_from_coef(
@@ -247,9 +221,6 @@ def _rmse_from_coef(
     *,
     medians_full: Optional[np.ndarray] = None,
 ) -> float:
-    """
-    RMSE under the same sanitation assumptions as training.
-    """
     X = np.asarray(X, dtype=np.float64)
     y = np.asarray(y, dtype=np.float64).reshape(-1)
 
@@ -275,6 +246,14 @@ def _rmse_from_coef(
     return float(np.sqrt(np.mean((preds - y) ** 2)))
 
 
+def _read_feature_schema_hash() -> Optional[str]:
+    p = Path("ml/feature_schema_hash.txt")
+    if not p.exists():
+        return None
+    val = (p.read_text() or "").strip()
+    return val or None
+
+
 def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     df = _load_features(cfg.features_path)
     df = _coerce_and_sort_by_datetime(df)
@@ -287,7 +266,12 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     split_cfg = SplitConfig(val_ratio=val_ratio, test_ratio=0.0)
     train_df, val_df, _ = time_series_split(df, split_cfg)
 
-    # Coerce feature matrix without hard-crashing on strings
+    # Train window metadata
+    train_dt = pd.to_datetime(train_df["game_datetime_utc"], utc=True, errors="coerce")
+    train_start_utc = train_dt.min()
+    train_end_utc = train_dt.max()
+
+    # Coerce feature matrix without crashing on strings
     X_train = train_df[feature_cols].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=np.float64)
     X_val = (
         val_df[feature_cols].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=np.float64)
@@ -304,6 +288,7 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         print(f"[DEBUG] X_train shape={X_train.shape} non_finite={non_finite}")
 
     results: Dict[str, Dict[str, object]] = {}
+    schema_hash = _read_feature_schema_hash()
 
     for target, fname in [
         ("actual_margin_home", "margin_model.json"),
@@ -314,7 +299,7 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
 
         y_train = pd.to_numeric(train_df[target], errors="coerce").to_numpy(dtype=np.float64)
 
-        coef, train_rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean = _fit_linear(
+        coef, train_rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean = _fit_model(
             X_train,
             y_train,
             ridge_lambda=cfg.ridge_lambda,
@@ -328,7 +313,6 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
 
         dropped_const_features = [feature_cols[i] for i in dropped_const_idx] if dropped_const_idx else []
 
-        # JSON-safe medians dict (no NaN/inf)
         feature_medians: Dict[str, float] = {}
         for i, col in enumerate(feature_cols):
             v = float(medians_full[i]) if i < medians_full.shape[0] else 0.0
@@ -340,25 +324,31 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
             "target": target,
             "model_version": cfg.model_version,
             "trained_at_utc": _utc_now_iso(),
+            "feature_schema_hash": schema_hash,
+            "train_start_utc": (train_start_utc.isoformat() if pd.notna(train_start_utc) else None),
+            "train_end_utc": (train_end_utc.isoformat() if pd.notna(train_end_utc) else None),
+
             "intercept": float(coef[0]),
             "coefficients": [float(c) for c in coef[1:]],
             "feature_order": feature_cols,
-            # metrics
+
             "rmse": float(train_rmse),
             "val_rmse": (float(val_rmse) if val_rmse is not None else None),
-            # counts
+
             "rows_total": rows_total,
             "rows_train": rows_train,
             "rows_train_clean": int(rows_train_clean),
             "rows_val": rows_val,
-            # params
+
             "ridge_lambda": float(cfg.ridge_lambda),
             "val_split": float(val_ratio),
             "min_train_rows": int(cfg.min_train_rows),
-            # sanitation metadata for predict to reuse
-            "feature_medians": feature_medians,
+
+            "n_features_total": int(len(feature_cols)),
+            "n_features_used": int(np.sum(keep_mask)) if keep_mask.size else int(len(feature_cols)),
             "dropped_const_features": dropped_const_features,
-            # split assumptions
+
+            "feature_medians": feature_medians,
             "split_type": "time_series",
             "sort_key": "game_datetime_utc",
         }
@@ -366,7 +356,7 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         results[target] = model
 
         cfg.out_dir.mkdir(parents=True, exist_ok=True)
-        (cfg.out_dir / fname).write_text(json.dumps(model, indent=2))
+        (cfg.out_dir / fname).write_text(json.dumps(model, indent=2) + "\n")
 
     return results
 
