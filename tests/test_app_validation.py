@@ -114,6 +114,10 @@ class TestAppValidation(unittest.TestCase):
         pred_engine_instance.active_model = {"model_id": "test"}
         pred_engine_instance.predict_spread.return_value = {}  # Missing keys
         
+        # Mock UI
+        ui_instance = mock_ui.return_value
+        ui_instance.render_prediction_card = MagicMock()
+        
         # Configure streamlit mocks
         mock_st.sidebar.selectbox.return_value = "Conservative"
         
@@ -124,6 +128,9 @@ class TestAppValidation(unittest.TestCase):
         mock_logger.error.assert_called_once()
         args = mock_logger.error.call_args[0]
         self.assertIn("predicted_spread", args[0])
+        
+        # Verify that render_prediction_card was NOT called (game was skipped)
+        ui_instance.render_prediction_card.assert_not_called()
 
     @patch("app.st")
     @patch("app.DataLoader")
