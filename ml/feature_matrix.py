@@ -76,25 +76,35 @@ REQUIRED_FEATURE_COLS = [
     "game_datetime_utc",
 ]
 
-BASE_FEATURES = [
-    "ortg_l7_pre",
-    "drtg_l7_pre",
-    "netrtg_l7_pre",
-    "pace_l7_pre",
-    "efg_l7_pre",
-    "tov_pct_l7_pre",
-    "orb_pct_l7_pre",
-    "drb_pct_l7_pre",
-    "ftr_l7_pre",
-    "3par_l7_pre",
-    "exp_margin",
-    "style_distance_l7",
-    "games_last_3_days",
-    "games_last_5_days",
-    "games_last_7_days",
-    "games_last_10_days",
-]
+# --- multi-window expanded lookback features ---
+LOOKBACK_WINDOWS = ["l3", "l4", "l5", "l6", "l7", "l10", "l12"]
 
+def _make_lookback_cols(metric: str) -> List[str]:
+    """
+    Generate all lookback feature names for a given base metric.
+    """
+    return [f"{metric}_{window}_pre" for window in LOOKBACK_WINDOWS]
+
+BASE_FEATURES = (
+    _make_lookback_cols("ortg")
+  + _make_lookback_cols("drtg")
+  + _make_lookback_cols("netrtg")
+  + _make_lookback_cols("pace")
+  + _make_lookback_cols("efg")
+  + _make_lookback_cols("tov_pct")
+  + _make_lookback_cols("orb_pct")
+  + _make_lookback_cols("drb_pct")
+  + _make_lookback_cols("ftr")
+  + _make_lookback_cols("3par")
+  + _make_lookback_cols("style_distance")
+  + [
+        "exp_margin",
+        "games_last_3_days",
+        "games_last_5_days",
+        "games_last_7_days",
+        "games_last_10_days",
+    ]
+)
 
 @dataclass(frozen=True)
 class BuildConfig:
@@ -236,6 +246,7 @@ def _load_scores_from_db(cfg: BuildConfig) -> pd.DataFrame:
     print(f"[INFO] Loaded scores from DB: {cfg.scores_schema}.{cfg.scores_table} rows={len(scores)}")
     return scores
 
+# ============================================================================
 
 def _ensure_required_cols(df: pd.DataFrame) -> List[str]:
     return [c for c in REQUIRED_FEATURE_COLS if c not in df.columns]
@@ -295,10 +306,6 @@ def _alias_team_name_cols(df: pd.DataFrame) -> pd.DataFrame:
 def _dedupe_side(df: pd.DataFrame, side: str, issues: List[Tuple[str, str, Dict[str, object]]]) -> pd.DataFrame:
     """
     Ensure one row per event_id for each side (home/away).
-
-    Deterministic pick:
-      - if pulled_at_utc/pulled_at exists: keep most recent pulled_at
-      - else: keep last row after deterministic sort
     """
     out = df.copy()
 
@@ -307,9 +314,8 @@ def _dedupe_side(df: pd.DataFrame, side: str, issues: List[Tuple[str, str, Dict[
         out["team_id"] = out["team_id"].astype(str)
 
     sort_cols: List[str] = ["game_dt", "event_id"]
-    for c in ["team_id"]:
-        if c in out.columns:
-            sort_cols.append(c)
+    if "team_id" in out.columns:
+        sort_cols.append("team_id")
 
     pulled_col = None
     for c in ["pulled_at_utc", "pulled_at"]:
@@ -350,12 +356,8 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     if missing:
         raise ValueError(f"Missing required columns: {missing}")
 
-    # Validate against FEATURE_SCHEMA, but only enforce fields that are:
-    # - present in df OR marked required in schema.
-    # This avoids failing on points_for/points_against null-rate when they are absent or sparse in raw store.
     ok, issues_schema = validate_dataframe(df, FEATURE_SCHEMA)
     if not ok:
-        # Filter schema issues to the *required input* cols only to prevent points_* from blocking.
         required_set = set(REQUIRED_FEATURE_COLS)
         filtered = []
         for i in issues_schema:
@@ -368,7 +370,7 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     issues: List[Tuple[str, str, Dict[str, object]]] = []
 
     df["home_away"] = _normalize_home_away(df["home_away"])
-    bad_ha = df["home_away"].isna() | (df["home_away"].str.len() == 0) | (~df["home_away"].isin(["home", "away"]))
+    bad_ha = df["home_away"].isna() | (df["home_away"] == "") | (~df["home_away"].isin(["home", "away"]))
     if bad_ha.any():
         for eid in df.loc[bad_ha, "event_id"].astype(str).head(200).tolist():
             issues.append((eid, "invalid_home_away", {}))
@@ -383,19 +385,17 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
 
     df = _safe_numeric(df, BASE_FEATURES)
 
-    # Split sides
     home = df[df["home_away"] == "home"].copy()
     away = df[df["home_away"] == "away"].copy()
 
     home = _dedupe_side(home, "home", issues)
     away = _dedupe_side(away, "away", issues)
 
-    # Track missing pairs (best-effort, capped)
     home_ids = set(home["event_id"].astype(str).tolist())
     away_ids = set(away["event_id"].astype(str).tolist())
-    for eid in list(sorted(home_ids - away_ids))[:200]:
+    for eid in sorted(home_ids - away_ids)[:200]:
         issues.append((eid, "missing_away_row", {}))
-    for eid in list(sorted(away_ids - home_ids))[:200]:
+    for eid in sorted(away_ids - home_ids)[:200]:
         issues.append((eid, "missing_home_row", {}))
 
     merged = home.merge(
@@ -405,7 +405,6 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
         how="inner",
     )
 
-    # Pull scores from DB when possible.
     scores = None
     if _db_enabled():
         try:
@@ -416,18 +415,9 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
 
     if scores is not None and len(scores) > 0:
         merged = merged.merge(scores, on="event_id", how="left")
-
-        missing_scores = merged["home_score"].isna() | merged["away_score"].isna()
-        if missing_scores.any():
-            for eid in merged.loc[missing_scores, "event_id"].astype(str).head(200).tolist():
-                issues.append((eid, "missing_scores_from_public_games", {}))
-
-        # Targets
         merged["actual_margin_home"] = merged["home_score"] - merged["away_score"]
         merged["actual_total"] = merged["home_score"] + merged["away_score"]
     else:
-        # DB not enabled or scores unavailable. If raw has points_for_* columns, use them.
-        # (This preserves CSV-only workflows where points_for exists in the store.)
         if "points_for_home" in merged.columns and "points_for_away" in merged.columns:
             merged["actual_margin_home"] = pd.to_numeric(merged["points_for_home"], errors="coerce") - pd.to_numeric(
                 merged["points_for_away"], errors="coerce"
@@ -437,9 +427,7 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
             )
             issues.append(("*", "targets_from_raw_points_for", {"note": "Used points_for_* because DB scores unavailable"}))
         else:
-            raise ValueError(
-                "No targets available. Enable SUPABASE_DB_URL to join public.games scores, or include points_for in the feature store CSV."
-            )
+            raise ValueError("No targets available. Enable SUPABASE_DB_URL or include points_for_* columns.")
 
     bad_targets = ~np.isfinite(merged["actual_margin_home"].to_numpy()) | ~np.isfinite(merged["actual_total"].to_numpy())
     if bad_targets.any():
@@ -457,11 +445,9 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
             merged[f"{feat}_diff"] = merged[hcol] - merged[acol]
             keep_features.append(f"{feat}_diff")
 
-    # v2 features
     merged = add_features_v2(merged)
     keep_features.extend([f for f in FEATURES_V2 if f in merged.columns])
 
-    # fallback auto numeric diffs
     if len(keep_features) < MIN_FEATURES:
         ignore_tokens = ["points", "actual", "margin", "game_dt", "datetime", "team_id", "event_id", "home_score", "away_score"]
 
@@ -485,7 +471,6 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
 
             diff_col = f"{base}_diff_auto"
             merged[diff_col] = merged[hcol] - merged[acol]
-
             if merged[diff_col].notna().any():
                 keep_features.append(diff_col)
                 added += 1
@@ -497,7 +482,6 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
 
     _leakage_guard(keep_features)
 
-    # Ensure all keep features are numeric
     for c in keep_features:
         merged[c] = pd.to_numeric(merged[c], errors="coerce")
 
@@ -515,13 +499,10 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     out = merged[output_cols].copy()
     out = out.rename(columns={"game_dt_home": "game_datetime_utc"})
 
-    # deterministic order; keep as ISO string in CSV (train parses)
     out["game_datetime_utc"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce").dt.strftime(
         "%Y-%m-%dT%H:%M:%SZ"
     )
-    out = out.sort_values(["game_datetime_utc", "event_id"], ascending=[True, True], na_position="last").reset_index(
-        drop=True
-    )
+    out = out.sort_values(["game_datetime_utc", "event_id"], ascending=[True, True], na_position="last").reset_index(drop=True)
 
     audit_rows = _build_audit_rows(issues)
     _write_audit(cfg.out_audit_path, audit_rows)
@@ -533,7 +514,6 @@ def build_feature_matrix(cfg: BuildConfig) -> pd.DataFrame:
     out.to_csv(cfg.out_features_path, index=False)
 
     print(f"[INFO] model_features.csv rows={len(out)} cols={len(out.columns)} dq_rows={len(audit_rows)}")
-
     return out
 
 
