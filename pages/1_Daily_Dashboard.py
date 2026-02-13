@@ -1,11 +1,22 @@
 import os
+import sys
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import pandas as pd
 import streamlit as st
 from supabase import create_client
 
-import espn_boxscore_builder as espn
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+ESPN_DIR = REPO_ROOT / "ESPN"
+if str(ESPN_DIR) not in sys.path:
+    sys.path.insert(0, str(ESPN_DIR))
+
+try:
+    import espn_boxscore_builder_modular as espn
+except Exception:
+    import espn_boxscore_builder as espn
 
 
 st.set_page_config(page_title="Daily Dashboard", page_icon="📅", layout="wide")
@@ -47,7 +58,12 @@ def _load_predictions() -> pd.DataFrame:
 
 def _load_scoreboard() -> pd.DataFrame:
     today = datetime.now().strftime("%Y%m%d")
-    rows = espn.fetch_scoreboard_games(today)
+    if hasattr(espn, "fetch_scoreboard_games"):
+        rows = espn.fetch_scoreboard_games(today)
+    elif hasattr(espn, "fetch_scoreboard_games_for_date"):
+        rows = espn.fetch_scoreboard_games_for_date(today)
+    else:
+        rows = []
     return pd.DataFrame(rows)
 
 
