@@ -17,7 +17,9 @@ class DataLoader:
     """Access game, feature, and prediction data with light caching."""
 
     def __init__(self) -> None:
-        self._feature_store_path = str(APP_CONFIG.get("data", {}).get("feature_store_path", "espn_team_game_features.csv"))
+        data_cfg = APP_CONFIG.get("data", {})
+        self._feature_store_path = str(data_cfg.get("feature_store_path", "espn_team_game_features.csv"))
+        self._feature_store_fallback_path = str(data_cfg.get("feature_store_fallback_path", "ESPN/CSV/espn_team_game_logs.csv"))
 
     @staticmethod
     @lru_cache(maxsize=1)
@@ -32,7 +34,7 @@ class DataLoader:
             return None
 
     @staticmethod
-    @lru_cache(maxsize=4)
+    @lru_cache(maxsize=8)
     def _load_csv(path: str) -> pd.DataFrame:
         if not os.path.exists(path):
             return pd.DataFrame()
@@ -42,10 +44,21 @@ class DataLoader:
             return pd.DataFrame()
 
     def load_feature_store(self) -> pd.DataFrame:
-        """Load the feature store CSV with game-date coercion."""
+        """Load feature store from primary CSV, then fallback logs CSV."""
         df = self._load_csv(self._feature_store_path).copy()
+        if df.empty:
+            df = self._load_csv(self._feature_store_fallback_path).copy()
+        if df.empty:
+            return pd.DataFrame()
+
         if "game_date" in df.columns:
             df["game_date"] = pd.to_datetime(df["game_date"], errors="coerce")
+        elif "game_datetime_utc" in df.columns:
+            df["game_date"] = pd.to_datetime(df["game_datetime_utc"], errors="coerce")
+
+        if "event_id" not in df.columns:
+            df["event_id"] = df.index.astype(str)
+
         return df
 
     def get_team_snapshot(self, team_name: str) -> dict[str, Any]:

@@ -211,6 +211,7 @@ def load_feature_store():
     df = _read_csv_any([
         "/mnt/data/espn_team_game_features (1).csv",
         "espn_team_game_features.csv",
+        "ESPN/CSV/espn_team_game_logs.csv",
     ])
     if df is None or len(df) == 0:
         return pd.DataFrame()
@@ -218,11 +219,20 @@ def load_feature_store():
     # enforce types
     df["team_norm"] = df["team"].astype(str).apply(normalize_team_name)
     if "opponent" in df.columns:
-        df["opp_norm"] = df["opponent"].astype(str).apply(normalize_team_name)
+        df["opp_norm"] = df["opponent"].astype(str).apply(normalize_team_name) if "opponent" in df.columns else ""
     else:
         df["opp_norm"] = ""
-    df["game_date"] = df["game_date"].astype(str)
-    df["event_id"] = df["event_id"].astype(str)
+    if "game_date" not in df.columns or df["game_date"].isna().all():
+        if "game_datetime_utc" in df.columns:
+            df["game_date"] = pd.to_datetime(df["game_datetime_utc"], errors="coerce").dt.strftime("%Y-%m-%d")
+        else:
+            df["game_date"] = ""
+    else:
+        df["game_date"] = df["game_date"].astype(str)
+    if "event_id" not in df.columns:
+        df["event_id"] = df.index.astype(str)
+    else:
+        df["event_id"] = df["event_id"].astype(str)
 
     # numeric columns we care about (exist in your feature file)
     base_metrics = ["ortg", "drtg", "netrtg", "pace", "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par"]
@@ -285,19 +295,20 @@ def load_torvik():
 @st.cache_data
 def load_optional_espn_games():
     # If you have this file in your repo, we will use it for backtesting lines.
-    df = _read_csv_any(["espn_games.csv"])
+    df = _read_csv_any(["espn_games.csv", "ESPN/CSV/espn_games.csv"])
     if df is None or len(df) == 0:
         return pd.DataFrame()
     df.columns = [str(c).strip().lower() for c in df.columns]
-    # attempt to standardize ids
     for idcol in ["game_id", "event_id", "id"]:
         if idcol in df.columns:
             df["event_id"] = df[idcol].astype(str)
             break
     if "game_date" in df.columns:
         df["game_date"] = df["game_date"].astype(str)
-    if "date" in df.columns and "game_date" not in df.columns:
+    elif "date" in df.columns:
         df["game_date"] = df["date"].astype(str)
+    elif "game_datetime_utc" in df.columns:
+        df["game_date"] = pd.to_datetime(df["game_datetime_utc"], errors="coerce").dt.strftime("%Y-%m-%d")
     return df
 
 FEATURES = load_feature_store()
@@ -305,7 +316,7 @@ TORVIK = load_torvik()
 ESPN_GAMES_OPT = load_optional_espn_games()
 
 if FEATURES.empty:
-    st.error("Feature store missing. Expected espn_team_game_features.csv (or the uploaded file).")
+    st.error("Feature store missing. Expected espn_team_game_features.csv or ESPN/CSV/espn_team_game_logs.csv (or uploaded file).")
     st.stop()
 
 # ============================================================
@@ -445,6 +456,7 @@ def load_feature_store():
     df = _read_csv_any([
         "/mnt/data/espn_team_game_features (1).csv",
         "espn_team_game_features.csv",
+        "ESPN/CSV/espn_team_game_logs.csv",
     ])
     if df is None or len(df) == 0:
         return pd.DataFrame()
@@ -452,11 +464,20 @@ def load_feature_store():
     # enforce types
     df["team_norm"] = df["team"].astype(str).apply(normalize_team_name)
     if "opponent" in df.columns:
-        df["opp_norm"] = df["opponent"].astype(str).apply(normalize_team_name)
+        df["opp_norm"] = df["opponent"].astype(str).apply(normalize_team_name) if "opponent" in df.columns else ""
     else:
         df["opp_norm"] = ""
-    df["game_date"] = df["game_date"].astype(str)
-    df["event_id"] = df["event_id"].astype(str)
+    if "game_date" not in df.columns or df["game_date"].isna().all():
+        if "game_datetime_utc" in df.columns:
+            df["game_date"] = pd.to_datetime(df["game_datetime_utc"], errors="coerce").dt.strftime("%Y-%m-%d")
+        else:
+            df["game_date"] = ""
+    else:
+        df["game_date"] = df["game_date"].astype(str)
+    if "event_id" not in df.columns:
+        df["event_id"] = df.index.astype(str)
+    else:
+        df["event_id"] = df["event_id"].astype(str)
 
     # numeric columns we care about (exist in your feature file)
     base_metrics = ["ortg", "drtg", "netrtg", "pace", "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par"]
@@ -519,19 +540,20 @@ def load_torvik():
 @st.cache_data
 def load_optional_espn_games():
     # If you have this file in your repo, we will use it for backtesting lines.
-    df = _read_csv_any(["espn_games.csv"])
+    df = _read_csv_any(["espn_games.csv", "ESPN/CSV/espn_games.csv"])
     if df is None or len(df) == 0:
         return pd.DataFrame()
     df.columns = [str(c).strip().lower() for c in df.columns]
-    # attempt to standardize ids
     for idcol in ["game_id", "event_id", "id"]:
         if idcol in df.columns:
             df["event_id"] = df[idcol].astype(str)
             break
     if "game_date" in df.columns:
         df["game_date"] = df["game_date"].astype(str)
-    if "date" in df.columns and "game_date" not in df.columns:
+    elif "date" in df.columns:
         df["game_date"] = df["date"].astype(str)
+    elif "game_datetime_utc" in df.columns:
+        df["game_date"] = pd.to_datetime(df["game_datetime_utc"], errors="coerce").dt.strftime("%Y-%m-%d")
     return df
 
 FEATURES = load_feature_store()
@@ -539,7 +561,7 @@ TORVIK = load_torvik()
 ESPN_GAMES_OPT = load_optional_espn_games()
 
 if FEATURES.empty:
-    st.error("Feature store missing. Expected espn_team_game_features.csv (or the uploaded file).")
+    st.error("Feature store missing. Expected espn_team_game_features.csv or ESPN/CSV/espn_team_game_logs.csv (or uploaded file).")
     st.stop()
 
 # ============================================================
@@ -760,15 +782,25 @@ def load_feature_store():
     df = _read_csv_any([
         "/mnt/data/espn_team_game_features (1).csv",
         "espn_team_game_features.csv",
+        "ESPN/CSV/espn_team_game_logs.csv",
     ])
     if df is None or len(df) == 0:
         return pd.DataFrame()
 
     # enforce types
     df["team_norm"] = df["team"].astype(str).apply(normalize_team_name)
-    df["opp_norm"] = df["opponent"].astype(str).apply(normalize_team_name)
-    df["game_date"] = df["game_date"].astype(str)
-    df["event_id"] = df["event_id"].astype(str)
+    df["opp_norm"] = df["opponent"].astype(str).apply(normalize_team_name) if "opponent" in df.columns else ""
+    if "game_date" not in df.columns or df["game_date"].isna().all():
+        if "game_datetime_utc" in df.columns:
+            df["game_date"] = pd.to_datetime(df["game_datetime_utc"], errors="coerce").dt.strftime("%Y-%m-%d")
+        else:
+            df["game_date"] = ""
+    else:
+        df["game_date"] = df["game_date"].astype(str)
+    if "event_id" not in df.columns:
+        df["event_id"] = df.index.astype(str)
+    else:
+        df["event_id"] = df["event_id"].astype(str)
 
     # numeric columns we care about (exist in your feature file)
     base_metrics = ["ortg", "drtg", "netrtg", "pace", "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par"]
@@ -831,19 +863,20 @@ def load_torvik():
 @st.cache_data
 def load_optional_espn_games():
     # If you have this file in your repo, we will use it for backtesting lines.
-    df = _read_csv_any(["espn_games.csv"])
+    df = _read_csv_any(["espn_games.csv", "ESPN/CSV/espn_games.csv"])
     if df is None or len(df) == 0:
         return pd.DataFrame()
     df.columns = [str(c).strip().lower() for c in df.columns]
-    # attempt to standardize ids
     for idcol in ["game_id", "event_id", "id"]:
         if idcol in df.columns:
             df["event_id"] = df[idcol].astype(str)
             break
     if "game_date" in df.columns:
         df["game_date"] = df["game_date"].astype(str)
-    if "date" in df.columns and "game_date" not in df.columns:
+    elif "date" in df.columns:
         df["game_date"] = df["date"].astype(str)
+    elif "game_datetime_utc" in df.columns:
+        df["game_date"] = pd.to_datetime(df["game_datetime_utc"], errors="coerce").dt.strftime("%Y-%m-%d")
     return df
 
 FEATURES = load_feature_store()
@@ -851,7 +884,7 @@ TORVIK = load_torvik()
 ESPN_GAMES_OPT = load_optional_espn_games()
 
 if FEATURES.empty:
-    st.error("Feature store missing. Expected espn_team_game_features.csv (or the uploaded file).")
+    st.error("Feature store missing. Expected espn_team_game_features.csv or ESPN/CSV/espn_team_game_logs.csv (or uploaded file).")
     st.stop()
 
 # ============================================================

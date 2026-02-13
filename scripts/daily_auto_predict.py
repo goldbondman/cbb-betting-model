@@ -36,7 +36,14 @@ from supabase import create_client
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
-import espn_boxscore_builder as espn  # noqa: E402
+ESPN_DIR = REPO_ROOT / "ESPN"
+if str(ESPN_DIR) not in sys.path:
+    sys.path.insert(0, str(ESPN_DIR))
+
+try:
+    import espn_boxscore_builder_modular as espn  # noqa: E402
+except Exception:
+    import espn_boxscore_builder as espn  # noqa: E402
 
 SOURCE = "ESPN"
 EDGE_MIN = float(os.getenv("EDGE_MIN", "3.0"))
