@@ -64,8 +64,10 @@ def _require_model_fields(model: Dict[str, object], model_path: Path) -> None:
     if missing:
         raise ValueError(f"Model {model_path} missing required fields: {missing}")
 
-    if not isinstance(model["feature_order"], list) or not model["feature_order"]:
-        raise ValueError(f"Model {model_path} has empty/invalid feature_order")
+    if not isinstance(model["feature_order"], list):
+        raise ValueError(f"Model {model_path} has invalid feature_order")
+    if not model["feature_order"] and model.get("fallback") != "intercept_only":
+        raise ValueError(f"Model {model_path} has empty feature_order without intercept-only fallback flag")
 
     if not isinstance(model["coefficients"], list):
         raise ValueError(f"Model {model_path} has invalid coefficients (expected list)")
@@ -192,6 +194,30 @@ def _sort_for_determinism(out: pd.DataFrame) -> pd.DataFrame:
     return df.sort_values(["event_id"], kind="mergesort").reset_index(drop=True)
 
 
+def _emit_prediction_diagnostics(out: pd.DataFrame) -> None:
+    n_rows = int(len(out))
+    margin = pd.to_numeric(out["pred_margin_home"], errors="coerce")
+    total = pd.to_numeric(out["pred_total"], errors="coerce")
+
+    margin_std = float(margin.std(ddof=0)) if n_rows else 0.0
+    total_std = float(total.std(ddof=0)) if n_rows else 0.0
+    margin_unique = int(margin.nunique(dropna=True))
+    total_unique = int(total.nunique(dropna=True))
+
+    print("[DIAG] Prediction diagnostics")
+    print(f"[DIAG] rows={n_rows}")
+    print(f"[DIAG] pred_margin_home std={margin_std:.6f} unique={margin_unique}")
+    print(f"[DIAG] pred_total std={total_std:.6f} unique={total_unique}")
+    print(f"[DIAG] pred_margin_home top5={margin.value_counts(dropna=False).head(5).to_dict()}")
+    print(f"[DIAG] pred_total top5={total.value_counts(dropna=False).head(5).to_dict()}")
+
+    if n_rows == 0 or margin_std == 0.0 or total_std == 0.0 or margin_unique <= 1 or total_unique <= 1:
+        raise RuntimeError(
+            "Constant/invalid predictions detected. Inspect model artifacts (missing or fallback intercept-only), "
+            "feature matrix variability, and all-zero/NaN features before prediction."
+        )
+
+
 def predict(cfg: PredictConfig) -> pd.DataFrame:
     margin_model = _load_model(cfg.margin_model_path)
     total_model = _load_model(cfg.total_model_path)
@@ -243,6 +269,7 @@ def predict(cfg: PredictConfig) -> pd.DataFrame:
 
     cfg.out_path.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(cfg.out_path, index=False)
+    _emit_prediction_diagnostics(out)
     return out
 
 

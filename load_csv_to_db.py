@@ -40,6 +40,7 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
     ("raw", "espn_team_game_logs"),
     ("raw", "espn_team_game_features"),
     ("raw", "espn_matchups_model_ready"),
+    ("raw", "model_features"),
 }
 
 # Optional: pack wide feature CSVs into a single JSON column to avoid Postgres row-size limits.
