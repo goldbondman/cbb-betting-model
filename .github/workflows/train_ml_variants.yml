@@ -1,10 +1,7 @@
 name: Train ML Variants
 
 on:
-  # Manual trigger
   workflow_dispatch:
-
-  # Weekly schedule: Sunday at 02:00 UTC
   schedule:
     - cron: "0 2 * * SUN"
 
@@ -42,7 +39,7 @@ jobs:
           ls -lh ml/variant_results.csv ml/models || true
 
       - name: Upload summary CSV artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: variant-results
           path: ml/variant_results.csv
