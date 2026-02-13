@@ -2,17 +2,17 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from datetime import datetime
 from functools import lru_cache
 from typing import Any
 
 import pandas as pd
-from supabase import Client
-
-from core.supabase_utils import get_public_supabase_client
 
 from core.config import APP_CONFIG
+
+logger = logging.getLogger(__name__)
 
 
 class DataLoader:
@@ -20,13 +20,26 @@ class DataLoader:
 
     def __init__(self) -> None:
         data_cfg = APP_CONFIG.get("data", {})
-        self._feature_store_path = str(data_cfg.get("feature_store_path", "espn_team_game_features.csv"))
+        self._feature_store_path = str(data_cfg.get("feature_store_path", "ESPN/CSV/espn_team_game_features.csv"))
         self._feature_store_fallback_path = str(data_cfg.get("feature_store_fallback_path", "ESPN/CSV/espn_team_game_logs.csv"))
+        self._predictions_csv_paths: list[str] = list(
+            data_cfg.get("predictions_csv_paths", ["data/predictions.csv", "ml/predictions_latest.csv"])
+        )
 
     @staticmethod
     @lru_cache(maxsize=1)
-    def _supabase_client() -> Client | None:
-        return get_public_supabase_client()
+    def _supabase_client() -> "Any | None":
+        url = (os.getenv("SUPABASE_URL") or "").strip()
+        key = (os.getenv("SUPABASE_ANON_KEY") or "").strip()
+        if not url or not key:
+            logger.info("Supabase credentials not set; using CSV fallback.")
+            return None
+        try:
+            from supabase import create_client
+            return create_client(url, key)
+        except Exception as exc:
+            logger.warning("Failed to create Supabase client: %s", exc)
+            return None
 
     @staticmethod
     @lru_cache(maxsize=8)
@@ -70,9 +83,9 @@ class DataLoader:
 
     def load_vegas_lines(self, date: str = "today") -> pd.DataFrame:
         """Load game lines from espn_games.csv, optionally filtered to date."""
-        games_df = self._load_csv("espn_games.csv").copy()
+        games_df = self._load_csv("ESPN/CSV/espn_games.csv").copy()
         if games_df.empty:
-            games_df = self._load_csv("ESPN/CSV/espn_games.csv").copy()
+            games_df = self._load_csv("espn_games.csv").copy()
         if games_df.empty:
             return pd.DataFrame()
         games_df["game_date"] = pd.to_datetime(games_df.get("date"), format="%Y%m%d", errors="coerce")
@@ -81,22 +94,35 @@ class DataLoader:
             return games_df[games_df["game_date"].dt.date == today.date()].copy()
         return games_df
 
+    def _load_predictions_from_csv(self) -> pd.DataFrame:
+        """Try each configured CSV path until one returns data."""
+        for path in self._predictions_csv_paths:
+            df = self._load_csv(path)
+            if not df.empty:
+                logger.info("Loaded predictions from CSV: %s", path)
+                return df.copy()
+        return pd.DataFrame()
+
     def load_todays_predictions(self) -> pd.DataFrame:
-        """Load current predictions_latest rows from Supabase if configured."""
+        """Load predictions from Supabase if configured, else fall back to CSV."""
         client = self._supabase_client()
-        if client is None:
-            return pd.DataFrame()
-        try:
-            response = client.table("predictions_latest").select("*").execute()
-            return pd.DataFrame(response.data or [])
-        except Exception:
-            return pd.DataFrame()
+        if client is not None:
+            try:
+                response = client.table("predictions_latest").select("*").execute()
+                data = pd.DataFrame(response.data or [])
+                if not data.empty:
+                    return data
+                logger.info("Supabase predictions_latest returned no rows; trying CSV fallback.")
+            except Exception as exc:
+                logger.warning("Supabase predictions query failed: %s; trying CSV fallback.", exc)
+
+        return self._load_predictions_from_csv()
 
     def load_historical_games(self, start_date: str, end_date: str) -> pd.DataFrame:
         """Load completed historical games in range with actual margin field."""
-        games_df = self._load_csv("espn_games.csv").copy()
+        games_df = self._load_csv("ESPN/CSV/espn_games.csv").copy()
         if games_df.empty:
-            games_df = self._load_csv("ESPN/CSV/espn_games.csv").copy()
+            games_df = self._load_csv("espn_games.csv").copy()
         if games_df.empty:
             return pd.DataFrame()
 

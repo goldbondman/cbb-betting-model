@@ -1,12 +1,13 @@
-# generated ESPN data
+# generated ESPN data (root-level only; ESPN/CSV/ is committed)
 espn_games.csv
 espn_team_game_logs.csv
 espn_team_game_features.csv
 espn_matchups_model_ready.csv
 
+# keep data/ CSV fallbacks committed
+!data/*.csv
+
 # Python cache
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
+.pytest_cache/

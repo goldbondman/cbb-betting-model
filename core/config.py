@@ -5,7 +5,14 @@ from __future__ import annotations
 APP_CONFIG: dict[str, object] = {
     "version": "v2.1",
     "ui_theme": {"primary_color": "#53D337", "bg_color": "#0E1E25"},
-    "data": {"feature_store_path": "espn_team_game_features.csv", "feature_store_fallback_path": "ESPN/CSV/espn_team_game_logs.csv"},
+    "data": {
+        "feature_store_path": "ESPN/CSV/espn_team_game_features.csv",
+        "feature_store_fallback_path": "ESPN/CSV/espn_team_game_logs.csv",
+        "predictions_csv_paths": [
+            "data/predictions.csv",
+            "ml/predictions_latest.csv",
+        ],
+    },
 }
 
 BETTING_FRAMEWORK: dict[str, float] = {

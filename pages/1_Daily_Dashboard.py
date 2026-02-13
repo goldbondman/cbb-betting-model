@@ -29,10 +29,12 @@ def _get_supabase_client():
 
 def _load_predictions() -> pd.DataFrame:
     client = _get_supabase_client()
+    csv_paths = ["data/predictions.csv", "ml/predictions_latest.csv"]
+
     if client is None:
-        path = "ml/predictions_latest.csv"
-        if os.path.exists(path):
-            return pd.read_csv(path)
+        for path in csv_paths:
+            if os.path.exists(path):
+                return pd.read_csv(path)
         return pd.DataFrame()
 
     start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -45,12 +47,16 @@ def _load_predictions() -> pd.DataFrame:
             .lt("game_datetime_utc", end.isoformat())
             .execute()
         )
-        return pd.DataFrame(resp.data or [])
+        data = pd.DataFrame(resp.data or [])
+        if not data.empty:
+            return data
     except Exception:
-        path = "ml/predictions_latest.csv"
+        pass
+
+    for path in csv_paths:
         if os.path.exists(path):
             return pd.read_csv(path)
-        return pd.DataFrame()
+    return pd.DataFrame()
 
 
 def _load_scoreboard() -> pd.DataFrame:
