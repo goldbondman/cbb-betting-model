@@ -11,6 +11,7 @@ Notes:
   - Time-series split after stable sort by game_datetime_utc.
   - Stores feature medians for predict-time imputation.
   - Stores dropped constant features + train window metadata.
+  - ✅ ADDED: Comprehensive validation to prevent constant predictions
 """
 
 from __future__ import annotations
@@ -41,8 +42,10 @@ class TrainConfig:
     out_dir: Path = Path("ml/models")
     val_split: float = float(os.getenv("ML_VAL_SPLIT", "0.1"))
     model_version: str = os.getenv("ML_MODEL_VERSION", "ml-linear-v1")
-    ridge_lambda: float = float(os.getenv("ML_RIDGE_LAMBDA", "1e-2"))  # a bit stronger default
+    ridge_lambda: float = float(os.getenv("ML_RIDGE_LAMBDA", "1e-2"))
     min_train_rows: int = int(os.getenv("ML_MIN_TRAIN_ROWS", "25"))
+    max_nan_pct: float = float(os.getenv("ML_MAX_NAN_PCT", "0.80"))  # ✅ NEW
+    min_feature_variance: float = float(os.getenv("ML_MIN_FEATURE_VARIANCE", "0.01"))  # ✅ NEW
     debug: bool = os.getenv("ML_DEBUG", "0").strip().lower() in ("1", "true", "yes")
 
 
@@ -91,6 +94,8 @@ def _select_feature_cols(df: pd.DataFrame) -> List[str]:
         "actual_total",
         "row_hash",
         "model_version",
+        "home_score",  # ✅ NEW
+        "away_score",  # ✅ NEW
     }
     cols = [c for c in df.columns if c not in ignore]
 
@@ -119,6 +124,7 @@ def _sanitize_xy(
     y: np.ndarray,
     *,
     drop_const_cols: bool = True,
+    max_row_nan_pct: float = 0.50,  # ✅ NEW: drop rows with >50% NaN
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, List[int], int]:
     X = np.asarray(X, dtype=np.float64)
     y = np.asarray(y, dtype=np.float64).reshape(-1)
@@ -126,10 +132,18 @@ def _sanitize_xy(
     X[~np.isfinite(X)] = np.nan
     y[~np.isfinite(y)] = np.nan
 
-    row_ok = np.isfinite(y) & np.isfinite(X).any(axis=1)
+    # ✅ IMPROVED: Require at least 50% of features to be non-NaN
+    row_ok = np.isfinite(y)
+    features_ok_per_row = np.isfinite(X).sum(axis=1)
+    row_ok = row_ok & (features_ok_per_row >= X.shape[1] * (1 - max_row_nan_pct))
+    
+    rows_before = len(X)
     X = X[row_ok]
     y = y[row_ok]
     n_rows_clean = int(X.shape[0])
+    
+    if n_rows_clean < rows_before:
+        print(f"[INFO] Sanitize: {rows_before} → {n_rows_clean} rows (dropped {rows_before - n_rows_clean} with >{max_row_nan_pct:.0%} NaN)", file=sys.stderr)
 
     if X.size == 0 or y.size == 0:
         keep_mask = np.zeros((X.shape[1],), dtype=bool) if X.ndim == 2 else np.zeros((0,), dtype=bool)
@@ -137,9 +151,13 @@ def _sanitize_xy(
 
     medians_full = _compute_feature_medians(X)
 
+    # ✅ IMPROVED: Report imputation stats
     if np.isnan(X).any():
+        nan_count = np.isnan(X).sum()
+        total_count = X.size
         nan_idx = np.where(np.isnan(X))
         X[nan_idx] = medians_full[nan_idx[1]]
+        print(f"[INFO] Imputed {nan_count}/{total_count} ({nan_count/total_count:.1%}) NaN values with feature medians", file=sys.stderr)
 
     keep_mask = np.ones(X.shape[1], dtype=bool)
     dropped_const_idx: List[int] = []
@@ -148,6 +166,8 @@ def _sanitize_xy(
         std = X.std(axis=0)
         keep_mask = std > 0
         dropped_const_idx = [int(i) for i in np.where(~keep_mask)[0].tolist()]
+        if dropped_const_idx:
+            print(f"[INFO] Dropped {len(dropped_const_idx)} constant features (std=0)", file=sys.stderr)
         X = X[:, keep_mask]
 
     return X, y, keep_mask, medians_full, dropped_const_idx, n_rows_clean
@@ -254,6 +274,56 @@ def _read_feature_schema_hash() -> Optional[str]:
     return val or None
 
 
+def _validate_training_data(df: pd.DataFrame, feature_cols: List[str], cfg: TrainConfig) -> None:
+    """
+    ✅ NEW: Validate training data before attempting to train models.
+    """
+    print("\n[INFO] ============ TRAINING DATA VALIDATION ============")
+    
+    # Check targets exist
+    for target in ["actual_margin_home", "actual_total"]:
+        if target not in df.columns:
+            raise ValueError(f"Missing required target column: {target}")
+    
+    # Check target variance
+    for target in ["actual_margin_home", "actual_total"]:
+        target_vals = pd.to_numeric(df[target], errors="coerce")
+        mean = float(target_vals.mean())
+        std = float(target_vals.std())
+        
+        print(f"[INFO] {target}:")
+        print(f"       Mean: {mean:.2f}")
+        print(f"       Std:  {std:.2f}")
+        print(f"       Min:  {target_vals.min():.2f}")
+        print(f"       Max:  {target_vals.max():.2f}")
+        
+        if std < cfg.min_feature_variance:
+            raise ValueError(f"Target {target} has insufficient variance (std={std:.4f} < {cfg.min_feature_variance})")
+        
+        # ✅ CRITICAL: Check for suspicious constant mean
+        if abs(mean - 24.04) < 0.5 and std < 5.0:
+            print(f"[ERROR] Target {target} mean={mean:.2f} is suspiciously close to 24.04!", file=sys.stderr)
+            print(f"[ERROR] This suggests the model might be predicting constants.", file=sys.stderr)
+            print(f"[ERROR] Check feature_matrix.py for bugs in target calculation.", file=sys.stderr)
+    
+    # Check feature NaN percentage
+    if feature_cols:
+        nan_pct = df[feature_cols].isnull().mean().mean()
+        print(f"\n[INFO] Feature columns: {len(feature_cols)}")
+        print(f"[INFO] Feature NaN%: {nan_pct:.1%}")
+        
+        if nan_pct > cfg.max_nan_pct:
+            print(f"[ERROR] >80% of features are NaN - check feature_matrix.py", file=sys.stderr)
+            print(f"[ERROR] Top 10 worst features:", file=sys.stderr)
+            worst = df[feature_cols].isnull().mean().sort_values(ascending=False).head(10)
+            for col, pct in worst.items():
+                print(f"        {col}: {pct:.1%}", file=sys.stderr)
+            raise ValueError(f"Too many NaN features ({nan_pct:.1%} > {cfg.max_nan_pct:.1%})")
+    
+    print("[INFO] ✅ Training data validation passed")
+    print("[INFO] ================================================\n")
+
+
 def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     df = _load_features(cfg.features_path)
     df = _coerce_and_sort_by_datetime(df)
@@ -261,6 +331,9 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
     feature_cols = _select_feature_cols(df)
     if not feature_cols:
         raise ValueError("No feature columns available for training.")
+
+    # ✅ NEW: Validate data before training
+    _validate_training_data(df, feature_cols, cfg)
 
     val_ratio = max(0.0, min(0.5, float(cfg.val_split)))
     split_cfg = SplitConfig(val_ratio=val_ratio, test_ratio=0.0)
@@ -294,10 +367,25 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
         ("actual_margin_home", "margin_model.json"),
         ("actual_total", "total_model.json"),
     ]:
+        print(f"\n[INFO] ============ TRAINING {target.upper()} ============")
+        
         if target not in train_df.columns:
             raise ValueError(f"Missing required target column: {target}")
 
         y_train = pd.to_numeric(train_df[target], errors="coerce").to_numpy(dtype=np.float64)
+        
+        # ✅ NEW: Per-target validation
+        y_mean = float(np.nanmean(y_train))
+        y_std = float(np.nanstd(y_train))
+        
+        print(f"[INFO] Training set:")
+        print(f"       Rows: {rows_train}")
+        print(f"       Features: {len(feature_cols)}")
+        print(f"       Target mean: {y_mean:.2f}")
+        print(f"       Target std: {y_std:.2f}")
+        
+        if y_std < cfg.min_feature_variance:
+            raise ValueError(f"Target {target} has no variance in training set (std={y_std:.4f})")
 
         coef, train_rmse, keep_mask, medians_full, dropped_const_idx, rows_train_clean = _fit_model(
             X_train,
@@ -305,11 +393,17 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
             ridge_lambda=cfg.ridge_lambda,
             min_train_rows=cfg.min_train_rows,
         )
+        
+        print(f"[INFO] Model trained:")
+        print(f"       RMSE: {train_rmse:.2f}")
+        print(f"       Features used: {int(np.sum(keep_mask))}/{len(feature_cols)}")
+        print(f"       Rows cleaned: {rows_train_clean}/{rows_train}")
 
         val_rmse = None
         if rows_val > 0 and X_val is not None:
             y_val = pd.to_numeric(val_df[target], errors="coerce").to_numpy(dtype=np.float64)
             val_rmse = _rmse_from_coef(X_val, y_val, coef, medians_full=medians_full)
+            print(f"       Val RMSE: {val_rmse:.2f}")
 
         dropped_const_features = [feature_cols[i] for i in dropped_const_idx] if dropped_const_idx else []
 
@@ -357,6 +451,9 @@ def train_models(cfg: TrainConfig) -> Dict[str, Dict[str, object]]:
 
         cfg.out_dir.mkdir(parents=True, exist_ok=True)
         (cfg.out_dir / fname).write_text(json.dumps(model, indent=2) + "\n")
+        
+        print(f"[INFO] ✅ Model saved to {cfg.out_dir / fname}")
+        print("[INFO] ================================================\n")
 
     return results
 
