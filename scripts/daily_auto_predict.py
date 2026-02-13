@@ -386,7 +386,14 @@ def main() -> None:
         model_version = MODEL_VERSION_OVERRIDE or str(row.get("model_version") or "").strip() or "ml-linear-v1"
 
         pred_margin_home = _safe_float(row.get("pred_margin_home"))
+        if pred_margin_home is None:
+            pred_margin_home = _safe_float(row.get("pred_spread"))
+        if pred_margin_home is None:
+            pred_margin_home = _safe_float(row.get("ensemble_prediction"))
+
         pred_total = _safe_float(row.get("pred_total"))
+        if pred_total is None:
+            pred_total = _safe_float(row.get("predicted_total"))
 
         market_spread = _safe_float(row.get("market_spread"))
         market_total = _safe_float(row.get("market_total"))
@@ -411,7 +418,7 @@ def main() -> None:
         prediction_rows.append(
             {
                 # required
-                "id": prediction_key,
+                "id": str(uuid.uuid5(uuid.NAMESPACE_URL, prediction_key)),
                 "prediction_key": prediction_key,
                 "model_version_id": model_version,
                 "game_date": str(row.get("date") or "").strip() or str(row.get("game_date") or "").strip(),
@@ -430,12 +437,22 @@ def main() -> None:
                 },
                 # optional / useful
                 "game_id": event_id,
+                "event_id": event_id,
+                "external_game_id": event_id,
+                "game_datetime_utc": _parse_game_datetime(row.to_dict()),
                 "home_team": (str(row.get("team_home") or row.get("home_team") or "").strip() or None),
                 "away_team": (str(row.get("team_away") or row.get("away_team") or "").strip() or None),
                 "venue": row.get("venue") or None,
                 "vegas_line": market_spread,
                 "vegas_edge": vegas_edge,
                 "vegas_total": market_total,
+                "pred_margin_home": pred_margin_home,
+                "pred_spread": pred_margin_home,
+                "pred_total": pred_total,
+                "market_spread": market_spread,
+                "market_total": market_total,
+                "edge_spread": vegas_edge,
+                "edge_total": total_edge,
                 "odds_provider": (row.get("market_provider") or "espn"),
                 "inputs": {
                     "predictions_latest_row_hash": str(row.get("row_hash") or ""),
@@ -449,13 +466,24 @@ def main() -> None:
     predictions_upserted = 0
     if prediction_rows:
         prediction_rows = [r for r in prediction_rows if r.get("prediction_key") and r.get("id")]
-        predictions_upserted = upsert_rows(
-            sb,
-            "public",
-            "predictions",
-            prediction_rows,
-            on_conflict="prediction_key",
-        )
+        try:
+            predictions_upserted = upsert_rows(
+                sb,
+                "public",
+                "predictions",
+                prediction_rows,
+                on_conflict="prediction_key",
+            )
+        except Exception as exc:
+            if "prediction_key" not in str(exc):
+                raise
+            predictions_upserted = upsert_rows(
+                sb,
+                "public",
+                "predictions",
+                prediction_rows,
+                on_conflict="model_version,external_game_id",
+            )
 
     counts = Counts(
         pulled=len(scoreboard),
