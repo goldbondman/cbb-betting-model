@@ -8,6 +8,9 @@ College basketball prediction system using 4 ensemble models.
 - Alpha signal detection
 - Home court adjustments
 
+## Documentation
+- **[DATA_FLOW.md](DATA_FLOW.md)** - Complete documentation of data ingestion, feature engineering, predictions, and backtesting
+
 ## Data Sources
 - Barttorvik (efficiency metrics)
 - ESPN API (game results)
