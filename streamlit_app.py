@@ -1161,9 +1161,30 @@ def _extract_odds(comp: dict) -> dict:
     total = safe_float(odds.get("overUnder"), None)
     spread = safe_float(odds.get("spread"), None)
 
-    moneyline = odds.get("moneyline") or {}
-    ml_home = ((moneyline.get("home") or {}).get("close") or {}).get("odds")
-    ml_away = ((moneyline.get("away") or {}).get("close") or {}).get("odds")
+    # Extract moneyline odds - ESPN uses various field names
+    ml_home = None
+    for k in ["homeTeamOdds", "homeOdds", "homeMoneyLine", "homeMoneyline"]:
+        v = odds.get(k)
+        if isinstance(v, dict):
+            v = v.get("moneyLine") or v.get("moneyline") or v.get("american") or v.get("value")
+        if v is not None:
+            try:
+                ml_home = int(float(v))
+                break
+            except (ValueError, TypeError):
+                pass
+
+    ml_away = None
+    for k in ["awayTeamOdds", "awayOdds", "awayMoneyLine", "awayMoneyline"]:
+        v = odds.get(k)
+        if isinstance(v, dict):
+            v = v.get("moneyLine") or v.get("moneyline") or v.get("american") or v.get("value")
+        if v is not None:
+            try:
+                ml_away = int(float(v))
+                break
+            except (ValueError, TypeError):
+                pass
 
     return {
         "odds_provider": provider,
