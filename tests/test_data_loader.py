@@ -149,11 +149,11 @@ class TestLoadVegasLines:
         loader = DataLoader()
         stale_games = pd.DataFrame(
             {
-                "date": ["20250201"],
-                "game_id": ["301"],
-                "home_team": ["Arizona"],
-                "away_team": ["UCLA"],
-                "market_spread": [-2.5],
+                "date": ["20250120", "20250201"],
+                "game_id": ["300", "301"],
+                "home_team": ["UCLA", "Arizona"],
+                "away_team": ["USC", "UCLA"],
+                "market_spread": [1.5, -2.5],
             }
         )
 
@@ -162,6 +162,7 @@ class TestLoadVegasLines:
 
         assert not result.empty
         assert str(result.iloc[0]["game_id"]) == "301"
+        assert str(result.iloc[0]["game_date"].date()) == "2025-02-01"
 
     def test_maps_spread_alias_to_market_spread(self) -> None:
         loader = DataLoader()

@@ -22,7 +22,10 @@ def _read_local_models() -> list[dict[str, Any]]:
     if not _LOCAL_REGISTRY_PATH.exists():
         return []
     try:
-        return list(json.loads(_LOCAL_REGISTRY_PATH.read_text(encoding="utf-8")))
+        payload = json.loads(_LOCAL_REGISTRY_PATH.read_text(encoding="utf-8"))
+        if not isinstance(payload, list):
+            return []
+        return [row for row in payload if isinstance(row, dict)]
     except Exception:
         return []
 

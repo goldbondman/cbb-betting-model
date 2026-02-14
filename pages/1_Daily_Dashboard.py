@@ -1,5 +1,6 @@
 import os
 import sys
+import logging
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -22,6 +23,7 @@ except Exception:
 
 
 st.set_page_config(page_title="Daily Dashboard", page_icon="📅", layout="wide")
+logger = logging.getLogger(__name__)
 
 
 def _get_supabase_client():
@@ -68,7 +70,8 @@ def _load_scoreboard() -> pd.DataFrame:
             rows = espn.fetch_scoreboard_games(today)
         elif hasattr(espn, "fetch_scoreboard_games_for_date"):
             rows = espn.fetch_scoreboard_games_for_date(today)
-    except Exception:
+    except Exception as exc:
+        logger.warning("Scoreboard fetch failed; using CSV fallback: %s", exc)
         rows = []
     df = pd.DataFrame(rows)
     if not df.empty:
