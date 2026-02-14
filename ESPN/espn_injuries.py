@@ -26,6 +26,23 @@ from data_utils import _utc_now_iso
 
 logger = logging.getLogger(__name__)
 
+# Column order for injury CSV output
+INJURY_COLUMNS = [
+    "team_id",
+    "team",
+    "athlete_id",
+    "player",
+    "position",
+    "status",
+    "injury_type",
+    "detail",
+    "side",
+    "return_date",
+    "pulled_at_utc",
+    "source",
+    "parse_version",
+]
+
 
 def fetch_team_injuries(team_id: str) -> Dict[str, Any]:
     """
@@ -79,7 +96,7 @@ def parse_injuries_from_team(
         if not isinstance(entry, dict):
             continue
 
-        athlete = entry.get("athlete") or {}
+        athlete = entry.get("athlete")
         if not isinstance(athlete, dict):
             continue
 
@@ -173,21 +190,3 @@ def fetch_injuries_for_teams(
         return pd.DataFrame(columns=INJURY_COLUMNS)
 
     return pd.DataFrame(all_rows, columns=INJURY_COLUMNS)
-
-
-# Column order for injury CSV output
-INJURY_COLUMNS = [
-    "team_id",
-    "team",
-    "athlete_id",
-    "player",
-    "position",
-    "status",
-    "injury_type",
-    "detail",
-    "side",
-    "return_date",
-    "pulled_at_utc",
-    "source",
-    "parse_version",
-]

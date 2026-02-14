@@ -124,11 +124,8 @@ class TestParseInjuriesFromTeam:
             }
         }
         rows = parse_injuries_from_team(json_data, "99")
-        # Entry without athlete key still produces a row with defaults
-        assert len(rows) == 1
-        assert rows[0]["player"] == "Unknown"
-        assert rows[0]["status"] == "Out"
-        assert rows[0]["athlete_id"] == ""
+        # Entry without athlete key is skipped
+        assert rows == []
 
     def test_handles_non_dict_entry(self):
         json_data = {
