@@ -1,14 +1,46 @@
 # Prediction Loading Troubleshooting Guide
 
 ## Problem
-Supabase is connected to Streamlit, but predictions are not loading in the UI.
+Supabase is connected to Streamlit, but predictions are not loading in the UI. The dashboard shows "No predictions found" even when the connection is working.
+
+## Root Cause
+The `daily_auto_predict.py` script was failing with a RuntimeError when `raw.predictions_latest` table was empty. This prevented the workflow from completing successfully, so even games and market data weren't being synced to the public tables.
 
 ## Solution Summary
-This update implements **multiple redundancy layers** to ensure predictions load successfully from various sources, with automatic fallbacks and detailed diagnostics.
+This update fixes the hard failure in `daily_auto_predict.py` and improves error messages in the dashboard. The script now gracefully handles empty predictions and provides better diagnostics about what's missing and how to fix it.
 
 ## What Was Fixed
 
-### 1. Multiple Data Source Redundancies
+### 1. Fixed Hard Failure in Daily Auto Predict (NEW)
+
+**File**: `scripts/daily_auto_predict.py`
+
+The script previously raised a `RuntimeError` when `raw.predictions_latest` was empty, causing the entire workflow to fail. This meant:
+- Games weren't synced to `public.games`
+- Teams weren't synced to `public.teams`
+- Market lines weren't synced to `public.market_lines`
+- No useful diagnostics were provided
+
+**Changes**:
+- Script now logs a warning instead of crashing when predictions are empty
+- Workflow completes successfully, syncing games/teams/markets even without predictions
+- Returns a JSON summary with a warning field indicating no predictions were available
+- Better logging to explain why predictions might be missing
+
+**Impact**: The daily pipeline now runs successfully even when the ML pipeline hasn't generated predictions yet, ensuring game and market data is always available.
+
+### 2. Improved Dashboard Error Messages (NEW)
+
+**File**: `pages/1_Daily_Dashboard.py`
+
+The dashboard now provides more actionable diagnostic information:
+- Checks if `raw.predictions_latest` has any data (not just `public.predictions`)
+- Shows specific status for each data source checked
+- Provides direct links to GitHub Actions workflows
+- Explains the pipeline schedule (9 AM UTC for ML, 3 PM UTC for daily sync)
+- Suggests specific actions to resolve the issue
+
+### 3. Multiple Data Source Redundancies
 
 The application now tries multiple sources in order until predictions are found:
 
@@ -218,12 +250,14 @@ After applying these fixes:
 
 ## Files Changed
 
-1. **pages/1_Daily_Dashboard.py** - Added redundancies and column normalization
-2. **pages/2_Model_Reports.py** - Added redundancies
-3. **core/data_loader.py** - Added redundancies
-4. **supabase/migrations/20260314000000_ensure_predictions_anon_read.sql** - RLS policy fix
-5. **scripts/diagnose_predictions.py** - New diagnostic tool
-6. **TROUBLESHOOTING_PREDICTIONS.md** - This guide
+1. **scripts/daily_auto_predict.py** (NEW) - Fixed hard failure when predictions are empty
+2. **pages/1_Daily_Dashboard.py** (UPDATED) - Improved error diagnostics and messaging
+3. **tests/test_daily_auto_predict_empty_predictions.py** (NEW) - Test coverage for empty predictions
+4. **pages/2_Model_Reports.py** - Added redundancies
+5. **core/data_loader.py** - Added redundancies
+6. **supabase/migrations/20260314000000_ensure_predictions_anon_read.sql** - RLS policy fix
+7. **scripts/diagnose_predictions.py** - Diagnostic tool
+8. **TROUBLESHOOTING_PREDICTIONS.md** - This guide (updated)
 
 ## Support
 

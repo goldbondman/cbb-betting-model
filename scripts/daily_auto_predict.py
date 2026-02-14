@@ -372,7 +372,38 @@ def main() -> None:
     # Pull DB-backed predictions_latest
     preds = fetch_predictions_latest_from_db(sb)
     if preds.empty:
-        raise RuntimeError(f"No rows found in {RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}.")
+        logger.warning(f"No rows found in {RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}.")
+        logger.warning("This is expected if the ML pipeline hasn't run yet or no predictions were generated.")
+        logger.info("Pipeline completed successfully. 0 predictions were upserted.")
+        
+        # Print summary even with no predictions
+        counts = Counts(
+            pulled=len(scoreboard),
+            teams_upserted=teams_upserted,
+            games_upserted=games_upserted,
+            markets_upserted=markets_upserted,
+            predictions_upserted=0,
+            rejected=sum(1 for r in raw_rows if r["verification_status"] == "rejected"),
+        )
+        
+        print(
+            json.dumps(
+                {
+                    "pulled": counts.pulled,
+                    "teams_upserted": counts.teams_upserted,
+                    "games_upserted": counts.games_upserted,
+                    "markets_upserted": counts.markets_upserted,
+                    "predictions_upserted": counts.predictions_upserted,
+                    "rejected": counts.rejected,
+                    "raw_predictions_table": f"{RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}",
+                    "days_back": DAYS_BACK,
+                    "days_ahead": DAYS_AHEAD,
+                    "warning": "No predictions available in raw.predictions_latest table",
+                },
+                indent=2,
+            )
+        )
+        return
 
     logger.info(f"Fetched {len(preds)} predictions from {RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}")
     logger.debug(f"Predictions columns: {list(preds.columns)}")
