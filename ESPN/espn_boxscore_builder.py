@@ -1948,7 +1948,6 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
 
     # PASS 5B: Re-run opponent merge so each row also gets opponent defensive baselines (opp_*_pre)
     df_clean = _merge_opponent_rows(df_clean)
-    
     # Add differential features (team - opponent metrics)
     df_clean = _add_differential_features(df_clean)
 

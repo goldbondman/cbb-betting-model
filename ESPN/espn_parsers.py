@@ -428,7 +428,6 @@ def add_independent_derivatives(row: Dict[str, Any]) -> Dict[str, Any]:
     three_pct = _safe_div(tpm, tpa, np.nan)
     ft_pct = _safe_div(ftm, fta, np.nan)
     poss = _estimate_possessions(fga, fta, tov, orb)
-    
     # True Shooting Percentage: TS% = PTS / (2 * (FGA + 0.44 * FTA))
     pts = _to_int(row.get("points_for"), 0)
     ts_pct = _safe_div(pts, (2 * (fga + 0.44 * fta)), np.nan)

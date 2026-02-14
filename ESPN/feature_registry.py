@@ -163,7 +163,6 @@ ROLL_MEAN_TARGETS = [
 
     # outcome
     "margin",
-    
     # differentials (team - opponent)
     "oreb_diff",
     "dreb_diff",
@@ -190,7 +189,6 @@ ROLL_VOL_TARGETS = [
     # shooting variance (only if computed)
     "3p_pct",
     "ts_pct",
-    
     # differential volatility
     "oreb_diff",
     "dreb_diff",
