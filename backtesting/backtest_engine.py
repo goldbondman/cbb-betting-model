@@ -100,8 +100,36 @@ class BacktestEngine:
         }
 
     def _predict_with_params(self, home: dict[str, Any], away: dict[str, Any], params: dict[str, Any]) -> dict[str, float]:
-        """Generate prediction using explicit params payload."""
+        """Generate prediction using explicit params payload.
+        
+        Supports both legacy (4 features) and enhanced (8 features) models.
+        
+        Legacy features:
+        - torvik_adjem: Adjusted efficiency margin differential
+        - recent_netrtg: Last 7 games net rating differential
+        - four_factors: Composite of eFG%, TOV%, ORB%, FTR
+        - sos_weighted: Strength of schedule (L10) weighted margin
+        
+        Enhanced features (v2):
+        - def_efficiency: Defensive rating differential (lower DRTG is better)
+        - off_efficiency: Offensive rating differential (higher ORTG is better)
+        - tempo_advantage: Pace differential scaled by impact factor
+        - three_rate: 3-point attempt rate differential
+        
+        All features use pre-game stats (L7 or L10) to avoid data leakage.
+        Missing data is handled gracefully with reasonable defaults.
+        
+        Args:
+            home: Team snapshot with pre-game stats
+            away: Team snapshot with pre-game stats
+            params: Model configuration with weights and HCA settings
+            
+        Returns:
+            Dict with predicted_spread key (positive favors home team)
+        """
         weights = params.get("weights", {})
+        
+        # Core metrics
         torv_edge = safe_float(home.get("torvik_adj_em"), 0) - safe_float(away.get("torvik_adj_em"), 0)
         recent_edge = safe_float(home.get("netrtg_l7_pre"), 0) - safe_float(away.get("netrtg_l7_pre"), 0)
 
@@ -120,11 +148,36 @@ class BacktestEngine:
         ff_edge = (h_ff - a_ff) * 10
         sos_edge = (safe_float(home.get("sos_weighted_margin_l10_pre"), 0) - safe_float(away.get("sos_weighted_margin_l10_pre"), 0)) / 10.0
 
+        # Advanced metrics
+        # Defensive efficiency gap: away DRTG minus home DRTG (lower DRTG is better defense)
+        # Positive value favors home team's defense
+        # Default 105.0 represents average D1 defensive efficiency
+        def_eff_edge = (safe_float(away.get("drtg_l7_pre"), 105.0) - safe_float(home.get("drtg_l7_pre"), 105.0))
+        
+        # Offensive efficiency differential: home ORTG minus away ORTG (higher ORTG is better offense)
+        # Positive value favors home team's offense
+        # Default 105.0 represents average D1 offensive efficiency
+        off_eff_edge = (safe_float(home.get("ortg_l7_pre"), 105.0) - safe_float(away.get("ortg_l7_pre"), 105.0))
+        
+        # Tempo advantage: Pace differential scaled by impact factor
+        # Positive value indicates home team plays at faster pace
+        pace_home = safe_float(home.get("pace_l7_pre"), 70)
+        pace_away = safe_float(away.get("pace_l7_pre"), 70)
+        tempo_edge = (pace_home - pace_away) * 0.15  # Scale factor for tempo impact
+        
+        # Three-point rate differential: scaled to approximate point impact
+        # Positive value indicates home team shoots more 3s
+        three_rate_edge = (safe_float(home.get("3par_l7_pre"), 0.35) - safe_float(away.get("3par_l7_pre"), 0.35)) * 20
+
         spread_points = (
             weights.get("torvik_adjem", 0) * torv_edge
             + weights.get("recent_netrtg", 0) * recent_edge
             + weights.get("four_factors", 0) * ff_edge
             + weights.get("sos_weighted", 0) * sos_edge
+            + weights.get("def_efficiency", 0) * def_eff_edge
+            + weights.get("off_efficiency", 0) * off_eff_edge
+            + weights.get("tempo_advantage", 0) * tempo_edge
+            + weights.get("three_rate", 0) * three_rate_edge
         )
 
         if params.get("hca_mode") == "dynamic":
