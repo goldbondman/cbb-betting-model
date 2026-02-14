@@ -249,7 +249,7 @@ This daily automation script:
 
 ## Model Predictions
 
-The system uses **two prediction engines**:
+The system uses **three prediction engines**:
 
 ### 1. Formula-Based Predictions (Default)
 
@@ -277,7 +277,7 @@ The system uses **two prediction engines**:
            weights["sos_weighted"] * sos_edge
        )
        
-       # Home court advantage
+       # Home court advantage (HCA)
        hca = 2.7  # Static or dynamic based on model config
        
        # Pace adjustment
