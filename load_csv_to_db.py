@@ -89,6 +89,7 @@ FILES_ESPN = [
     ("espn_team_game_logs.csv", "espn_team_game_logs"),
     ("espn_team_game_features.csv", "espn_team_game_features"),
     ("espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
+    ("espn_player_boxscores.csv", "espn_player_boxscores"),
 ]
 
 FILES_TORVIK = [

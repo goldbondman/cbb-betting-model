@@ -54,6 +54,10 @@ OUT_DIAGNOSTICS = "espn_feature_diagnostics.csv"
 OUT_DQ_AUDIT = "espn_dq_audit.csv"
 OUT_PLAYER_BOX = "espn_player_boxscores.csv"
 
+# ---------------- Raw JSON Storage ----------------
+JSON_OUTPUT_DIR = os.getenv("ESPN_JSON_DIR", "ESPN/raw_json")
+SAVE_RAW_JSON = os.getenv("SAVE_RAW_JSON", "1").strip().lower() in ("1", "true", "yes")
+
 # ---------------- Feature Flags ----------------
 WRITE_DIAGNOSTICS = os.getenv("WRITE_DIAGNOSTICS", "1").strip() not in ("0", "false", "False", "no", "NO")
 WRITE_DQ_AUDIT = os.getenv("WRITE_DQ_AUDIT", "1").strip() not in ("0", "false", "False", "no", "NO")
