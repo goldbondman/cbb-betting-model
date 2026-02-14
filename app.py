@@ -106,7 +106,7 @@ def main() -> None:
             pred["confidence"] = 0.6
 
         # Extract market spread once to avoid duplication
-        market_spread = game["market_spread"] if "market_spread" in game.index else None
+        market_spread = game["market_spread"] if "market_spread" in game.index and pd.notna(game["market_spread"]) else None
 
         ui.render_prediction_card(
             home_team=game["home_team"],

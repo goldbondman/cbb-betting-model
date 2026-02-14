@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from core.data_loader import DataLoader
 from core.supabase_utils import get_public_supabase_client
 
 
@@ -61,13 +62,18 @@ def _load_predictions() -> pd.DataFrame:
 
 def _load_scoreboard() -> pd.DataFrame:
     today = datetime.now().strftime("%Y%m%d")
-    if hasattr(espn, "fetch_scoreboard_games"):
-        rows = espn.fetch_scoreboard_games(today)
-    elif hasattr(espn, "fetch_scoreboard_games_for_date"):
-        rows = espn.fetch_scoreboard_games_for_date(today)
-    else:
+    rows = []
+    try:
+        if hasattr(espn, "fetch_scoreboard_games"):
+            rows = espn.fetch_scoreboard_games(today)
+        elif hasattr(espn, "fetch_scoreboard_games_for_date"):
+            rows = espn.fetch_scoreboard_games_for_date(today)
+    except Exception:
         rows = []
-    return pd.DataFrame(rows)
+    df = pd.DataFrame(rows)
+    if not df.empty:
+        return df
+    return DataLoader().load_vegas_lines(date="today")
 
 
 st.title("Daily Dashboard")
