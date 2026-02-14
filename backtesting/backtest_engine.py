@@ -102,6 +102,8 @@ class BacktestEngine:
     def _predict_with_params(self, home: dict[str, Any], away: dict[str, Any], params: dict[str, Any]) -> dict[str, float]:
         """Generate prediction using explicit params payload."""
         weights = params.get("weights", {})
+        
+        # Core metrics
         torv_edge = safe_float(home.get("torvik_adj_em"), 0) - safe_float(away.get("torvik_adj_em"), 0)
         recent_edge = safe_float(home.get("netrtg_l7_pre"), 0) - safe_float(away.get("netrtg_l7_pre"), 0)
 
@@ -120,11 +122,30 @@ class BacktestEngine:
         ff_edge = (h_ff - a_ff) * 10
         sos_edge = (safe_float(home.get("sos_weighted_margin_l10_pre"), 0) - safe_float(away.get("sos_weighted_margin_l10_pre"), 0)) / 10.0
 
+        # Advanced metrics
+        # Defensive efficiency: Home DRTG vs Away ORTG (lower DRTG is better)
+        def_eff_edge = (safe_float(away.get("drtg_l7_pre"), 100) - safe_float(home.get("drtg_l7_pre"), 100))
+        
+        # Offensive efficiency: Home ORTG vs Away ORTG (higher ORTG is better)
+        off_eff_edge = (safe_float(home.get("ortg_l7_pre"), 100) - safe_float(away.get("ortg_l7_pre"), 100))
+        
+        # Tempo advantage: Pace differential scaled by impact
+        pace_home = safe_float(home.get("pace_l7_pre"), 70)
+        pace_away = safe_float(away.get("pace_l7_pre"), 70)
+        tempo_edge = (pace_home - pace_away) * 0.15  # Scale factor for tempo impact
+        
+        # Three-point rate differential
+        three_rate_edge = (safe_float(home.get("3par_l7_pre"), 0.35) - safe_float(away.get("3par_l7_pre"), 0.35)) * 20
+
         spread_points = (
             weights.get("torvik_adjem", 0) * torv_edge
             + weights.get("recent_netrtg", 0) * recent_edge
             + weights.get("four_factors", 0) * ff_edge
             + weights.get("sos_weighted", 0) * sos_edge
+            + weights.get("def_efficiency", 0) * def_eff_edge
+            + weights.get("off_efficiency", 0) * off_eff_edge
+            + weights.get("tempo_advantage", 0) * tempo_edge
+            + weights.get("three_rate", 0) * three_rate_edge
         )
 
         if params.get("hca_mode") == "dynamic":

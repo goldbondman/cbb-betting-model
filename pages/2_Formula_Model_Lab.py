@@ -32,20 +32,34 @@ with st.form("create_model"):
         model_type = st.selectbox("Model Type", ["spread", "total"])
 
     st.subheader("Component Weights")
-    c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        w_torvik = st.slider("Torvik AdjEM", 0.0, 1.0, 0.50, 0.05)
-    with c2:
-        w_recent = st.slider("Recent (L7)", 0.0, 1.0, 0.25, 0.05)
-    with c3:
-        w_ff = st.slider("Four Factors", 0.0, 1.0, 0.15, 0.05)
-    with c4:
-        w_sos = st.slider("SOS Weighted", 0.0, 1.0, 0.10, 0.05)
+    st.caption("Configure weights for each feature component. Total will auto-normalize to 1.0.")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("**Core Metrics**")
+        w_torvik = st.slider("Torvik AdjEM", 0.0, 1.0, 0.40, 0.05, help="Adjusted efficiency margin rating")
+        w_recent = st.slider("Recent (L7)", 0.0, 1.0, 0.20, 0.05, help="Last 7 games net rating")
+        w_ff = st.slider("Four Factors", 0.0, 1.0, 0.12, 0.05, help="Composite: eFG%, TOV%, ORB%, FTR")
+        w_sos = st.slider("SOS Weighted", 0.0, 1.0, 0.08, 0.05, help="Strength of schedule (L10)")
+        
+    with col2:
+        st.markdown("**Advanced Metrics**")
+        w_def_eff = st.slider("Defensive Efficiency", 0.0, 1.0, 0.08, 0.05, help="DRTG vs opponent's ORTG")
+        w_off_eff = st.slider("Offensive Efficiency", 0.0, 1.0, 0.06, 0.05, help="ORTG differential")
+        w_tempo = st.slider("Tempo Advantage", 0.0, 1.0, 0.04, 0.05, help="Pace impact on spread")
+        w_three_rate = st.slider("Three-Point Rate", 0.0, 1.0, 0.02, 0.05, help="3-point attempt rate differential")
 
-    total_weight = w_torvik + w_recent + w_ff + w_sos
+    total_weight = w_torvik + w_recent + w_ff + w_sos + w_def_eff + w_off_eff + w_tempo + w_three_rate
     if total_weight > 0:
         st.caption(f"Total weight: {total_weight:.2f} (will auto-normalize to 1.0)")
-        w_torvik, w_recent, w_ff, w_sos = [w / total_weight for w in (w_torvik, w_recent, w_ff, w_sos)]
+        w_torvik = w_torvik / total_weight
+        w_recent = w_recent / total_weight
+        w_ff = w_ff / total_weight
+        w_sos = w_sos / total_weight
+        w_def_eff = w_def_eff / total_weight
+        w_off_eff = w_off_eff / total_weight
+        w_tempo = w_tempo / total_weight
+        w_three_rate = w_three_rate / total_weight
 
     st.subheader("Home Court Advantage")
     hca_mode = st.radio("HCA Mode", ["dynamic", "static"])
@@ -66,6 +80,10 @@ with st.form("create_model"):
                     "recent_netrtg": float(w_recent),
                     "four_factors": float(w_ff),
                     "sos_weighted": float(w_sos),
+                    "def_efficiency": float(w_def_eff),
+                    "off_efficiency": float(w_off_eff),
+                    "tempo_advantage": float(w_tempo),
+                    "three_rate": float(w_three_rate),
                 },
                 "hca_mode": hca_mode,
                 "hca_static_value": float(hca_static),
