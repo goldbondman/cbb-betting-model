@@ -1171,7 +1171,7 @@ def _extract_odds(comp: dict) -> dict:
             try:
                 ml_home = int(float(v))
                 break
-            except Exception:
+            except (ValueError, TypeError):
                 pass
 
     ml_away = None
@@ -1183,7 +1183,7 @@ def _extract_odds(comp: dict) -> dict:
             try:
                 ml_away = int(float(v))
                 break
-            except Exception:
+            except (ValueError, TypeError):
                 pass
 
     return {
