@@ -156,6 +156,9 @@ from rolling_features import RollingConfig, add_unweighted_rollups
 from strength_of_schedule import add_sos_features
 from home_away_analyzer import add_home_away_features, add_matchup_net_hca
 
+# ---- JSON Storage ----
+from json_storage import save_scoreboard_json, save_summary_json, get_json_storage_stats
+
 
 # ============================================================================
 # Scoreboard Functions
@@ -165,6 +168,8 @@ def fetch_scoreboard_games_for_date(date_yyyymmdd: str):
     """Fetch and parse scoreboard for a single date."""
     try:
         data = fetch_scoreboard(date_yyyymmdd)
+        # Save raw JSON to disk
+        save_scoreboard_json(date_yyyymmdd, data)
     except Exception as e:
         log_error("fetch_scoreboard", e, extra={"date": date_yyyymmdd})
         return []
@@ -263,6 +268,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     # ========================================================================
     print("\n=== PASS 1: Fetch Summaries & Compute Metrics ===")
     team_rows = []
+    player_rows = []
     errors = 0
 
     for i, gid in enumerate(game_ids, 1):
@@ -271,10 +277,46 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
 
         try:
             raw = fetch_summary(gid)
+            # Save raw JSON to disk
+            save_summary_json(gid, raw)
             parsed = parse_summary_json(raw, gid)
             hrow, arow = summary_to_team_rows(parsed)
             team_rows.append(hrow)
             team_rows.append(arow)
+            
+            # Extract player box scores
+            players_home = parsed.get("players_home", [])
+            players_away = parsed.get("players_away", [])
+            
+            # Add metadata to player rows
+            game_dt = parsed.get("game_datetime_utc")
+            home_team = parsed["home"].get("team")
+            home_team_id = parsed["home"].get("team_id")
+            away_team = parsed["away"].get("team")
+            away_team_id = parsed["away"].get("team_id")
+            
+            for p in players_home:
+                p["event_id"] = str(gid)
+                p["game_datetime_utc"] = game_dt
+                p["team"] = home_team
+                p["team_id"] = home_team_id
+                p["home_away"] = "home"
+                p["pulled_at_utc"] = _utc_now_iso()
+                p["source"] = SOURCE_NAME
+                p["parse_version"] = PARSE_VERSION
+                player_rows.append(p)
+            
+            for p in players_away:
+                p["event_id"] = str(gid)
+                p["game_datetime_utc"] = game_dt
+                p["team"] = away_team
+                p["team_id"] = away_team_id
+                p["home_away"] = "away"
+                p["pulled_at_utc"] = _utc_now_iso()
+                p["source"] = SOURCE_NAME
+                p["parse_version"] = PARSE_VERSION
+                player_rows.append(p)
+            
             processed.add(str(gid))
         except Exception as e:
             errors += 1
@@ -327,6 +369,51 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
             sort_cols=["pulled_at_utc", "event_id", "team_id"],
         )
         print(f"{OUT_DQ_AUDIT} appended: {len(dq_audit_new)} rows")
+
+    # Write player box scores
+    if player_rows:
+        df_players_new = pd.DataFrame(player_rows)
+        
+        # Normalize column names to match schema
+        # ESPN parser (_extract_players in espn_parsers.py) outputs 'minutes' and 'points'
+        # but our schema expects 'min' and 'pts' for consistency with team stats
+        column_mapping = {
+            "minutes": "min",
+            "points": "pts"
+        }
+        df_players_new = df_players_new.rename(columns=column_mapping)
+        
+        # Add athlete_id and starter columns if missing
+        # ESPN API doesn't consistently provide athlete IDs or starter indicators
+        # in the boxscore.players structure. When missing, we default to None.
+        if "athlete_id" not in df_players_new.columns:
+            df_players_new["athlete_id"] = None
+        if "starter" not in df_players_new.columns:
+            df_players_new["starter"] = None
+        
+        # Ensure we have all required columns for player box scores
+        player_schema_cols = [
+            "event_id", "game_datetime_utc", "team_id", "team", "home_away",
+            "athlete_id", "player", "starter", "min", "pts",
+            "fgm", "fga", "tpm", "tpa", "ftm", "fta",
+            "reb", "orb", "drb", "ast", "tov",
+            "pulled_at_utc", "source", "parse_version"
+        ]
+        
+        # Add missing columns with None/default values
+        for col in player_schema_cols:
+            if col not in df_players_new.columns:
+                df_players_new[col] = None
+        
+        df_players_all = _append_dedupe_write(
+            OUT_PLAYER_BOX,
+            df_players_new,
+            subset_keys=["event_id", "team_id", "player"],
+            sort_cols=["game_datetime_utc", "event_id", "team_id", "player"],
+        )
+        print(f"{OUT_PLAYER_BOX} total rows: {len(df_players_all)} ({len(df_players_new)} new)")
+    else:
+        print(f"{OUT_PLAYER_BOX}: No new player data to write")
 
     # ========================================================================
     # PASS 2: Load Historical Logs
@@ -529,6 +616,16 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     print("\n=== Run Complete ===")
     print(f"Summary parse errors: {errors}")
     write_error_summary()
+    
+    # Print JSON storage statistics
+    json_stats = get_json_storage_stats()
+    print(f"\n=== JSON Storage Statistics ===")
+    print(f"Enabled: {json_stats['enabled']}")
+    print(f"Directory: {json_stats['directory']}")
+    print(f"Scoreboard files: {json_stats['scoreboard_files']}")
+    print(f"Summary files: {json_stats['summary_files']}")
+    print(f"Total files: {json_stats['total_files']}")
+    print(f"Total size: {json_stats['total_size_mb']} MB")
 
 
 def main():
