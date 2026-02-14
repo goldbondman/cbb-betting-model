@@ -17,6 +17,10 @@ from core.ui_components import PredictionUI
 
 logger = logging.getLogger(__name__)
 
+# Column name aliases for prediction spread values
+# Maps from database column names to app internal format
+SPREAD_COLUMN_ALIASES = ["pred_spread", "pred_margin_home", "ensemble_prediction"]
+
 st.set_page_config(page_title="CBB Model", page_icon="🏀", layout="wide")
 
 
@@ -78,10 +82,8 @@ def main() -> None:
         if not existing.empty:
             pred = existing.iloc[0].to_dict()
             # Handle various column name formats for predicted spread
-            # Map from database columns to app internal format
-            spread_column_aliases = ["pred_spread", "pred_margin_home", "ensemble_prediction"]
             if "predicted_spread" not in pred:
-                for alias in spread_column_aliases:
+                for alias in SPREAD_COLUMN_ALIASES:
                     if alias in pred:
                         pred["predicted_spread"] = pred[alias]
                         break
