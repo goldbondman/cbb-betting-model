@@ -26,7 +26,24 @@ from data_utils import _to_int
 
 
 def analyze_team_stats(team_entry: Dict[str, Any]) -> Dict[str, Any]:
-    """Analyze what stats are present in a team entry"""
+    """
+    Analyze what stats are present in a team entry.
+    
+    Args:
+        team_entry: Team dictionary from boxscore.teams array
+        
+    Returns:
+        Dictionary containing:
+            - team_name (str): Team display name
+            - team_id (str): Team identifier
+            - has_teamStats (bool): Whether teamStats field exists
+            - has_statistics (bool): Whether statistics field exists
+            - teamStats_type (str): Type of teamStats field
+            - statistics_type (str): Type of statistics field
+            - available_keys (list): All keys present in team_entry
+            - num_stats (int): Number of stat items if stats list exists
+            - sample_stat_names (list): Sample of stat names from the list
+    """
     t = team_entry.get("team", {}) or {}
     name = t.get("displayName", "Unknown")
     tid = t.get("id", "Unknown")
