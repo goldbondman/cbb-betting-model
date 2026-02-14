@@ -1,0 +1,1 @@
+event_id,team_id,team,home_away,dq_missing_fields,dq_reason_codes,dq_action_plan,dq_repair_success,dq_repair_actions_taken,pulled_at_utc,parse_version
