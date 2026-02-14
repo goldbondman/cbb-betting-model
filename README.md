@@ -22,3 +22,5 @@ streamlit run streamlit_app.py
 1. Push to GitHub
 2. Go to streamlit.io
 3. Deploy from repo
+
+Review/testing app URL (allowlisted): https://cbb-betting-model-ddjun7mby42wjaxbjltebj.streamlit.app/
