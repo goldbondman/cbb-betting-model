@@ -428,12 +428,17 @@ def add_independent_derivatives(row: Dict[str, Any]) -> Dict[str, Any]:
     three_pct = _safe_div(tpm, tpa, np.nan)
     ft_pct = _safe_div(ftm, fta, np.nan)
     poss = _estimate_possessions(fga, fta, tov, orb)
+    
+    # True Shooting Percentage: TS% = PTS / (2 * (FGA + 0.44 * FTA))
+    pts = _to_int(row.get("points_for"), 0)
+    ts_pct = _safe_div(pts, (2 * (fga + 0.44 * fta)), np.nan)
 
     row["efg"] = float(efg) if pd.notna(efg) else np.nan
     row["ftr"] = float(ftr) if pd.notna(ftr) else np.nan
     row["3par"] = float(threepar) if pd.notna(threepar) else np.nan
     row["3p_pct"] = float(three_pct) if pd.notna(three_pct) else np.nan
     row["ft_pct"] = float(ft_pct) if pd.notna(ft_pct) else np.nan
+    row["ts_pct"] = float(ts_pct) if pd.notna(ts_pct) else np.nan
     row["poss"] = float(poss) if pd.notna(poss) else np.nan
     
     # Mark source for audit trail

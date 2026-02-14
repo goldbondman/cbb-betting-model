@@ -233,6 +233,7 @@ def _add_rolling_pack(df: pd.DataFrame, group_cols: tuple, prefix: str) -> pd.Da
         "drb_pct": "drb_pct",
         "ftr": "ftr",
         "3par": "3par",
+        "ts_pct": "ts_pct",
     }
 
     g = out.groupby(list(group_cols), sort=False)

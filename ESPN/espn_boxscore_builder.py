@@ -1350,6 +1350,35 @@ def _flip_home_away(val: Any) -> Optional[str]:
     return None
 
 
+def _add_differential_features(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add differential features (team - opponent) for key metrics.
+    Must be called after opponent merge so opp_* columns exist.
+    
+    Differentials computed:
+    - oreb_diff: orb_pct - opp_orb_pct (offensive rebound differential)
+    - dreb_diff: drb_pct - opp_drb_pct (defensive rebound differential)  
+    - ftr_diff: ftr - opp_ftr (free throw rate differential)
+    - efg_diff: efg - opp_efg (effective field goal % differential)
+    - ts_diff: ts_pct - opp_ts_pct (true shooting % differential)
+    - to_diff: opp_tov_pct - tov_pct (turnover differential - lower is better, so opp - team)
+    
+    All differentials use current game stats (not pregame rolling averages).
+    """
+    out = df.copy()
+    
+    # Calculate differentials (positive = team advantage)
+    out["oreb_diff"] = out.get("orb_pct", np.nan) - out.get("opp_orb_pct", np.nan)
+    out["dreb_diff"] = out.get("drb_pct", np.nan) - out.get("opp_drb_pct", np.nan)
+    out["ftr_diff"] = out.get("ftr", np.nan) - out.get("opp_ftr", np.nan)
+    out["efg_diff"] = out.get("efg", np.nan) - out.get("opp_efg", np.nan)
+    out["ts_diff"] = out.get("ts_pct", np.nan) - out.get("opp_ts_pct", np.nan)
+    # For turnovers, lower is better, so opponent - team gives positive = team advantage
+    out["to_diff"] = out.get("opp_tov_pct", np.nan) - out.get("tov_pct", np.nan)
+    
+    return out
+
+
 def _merge_opponent_rows(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
 
@@ -1919,6 +1948,9 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
 
     # PASS 5B: Re-run opponent merge so each row also gets opponent defensive baselines (opp_*_pre)
     df_clean = _merge_opponent_rows(df_clean)
+    
+    # Add differential features (team - opponent metrics)
+    df_clean = _add_differential_features(df_clean)
 
     # Aliases expected by plus_and_fit.py
     df_clean["opp_efg_allowed_pre"] = df_clean.get("opp_efg_allowed_l7_pre", np.nan)
@@ -1961,8 +1993,15 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
             "drb_pct",
             "ftr",
             "3par",
+            "ts_pct",
             "gps",
             "net_over_exp",
+            "oreb_diff",
+            "dreb_diff",
+            "ftr_diff",
+            "efg_diff",
+            "ts_diff",
+            "to_diff",
         ],
         cfg=rolling_cfg,
     )
