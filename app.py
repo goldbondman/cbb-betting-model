@@ -17,6 +17,10 @@ from core.ui_components import PredictionUI
 
 logger = logging.getLogger(__name__)
 
+# Column name aliases for prediction spread values
+# Maps from database column names to app internal format
+SPREAD_COLUMN_ALIASES = ["pred_spread", "pred_margin_home", "ensemble_prediction"]
+
 st.set_page_config(page_title="CBB Model", page_icon="🏀", layout="wide")
 
 
@@ -41,6 +45,10 @@ def main() -> None:
     games = data.load_vegas_lines(date="today")
     try:
         daily_preds = data.load_todays_predictions()
+        if not daily_preds.empty:
+            logger.info("Loaded %d precomputed predictions", len(daily_preds))
+        else:
+            logger.info("No precomputed predictions available")
     except Exception as exc:
         logger.warning(
             "Failed to load today's predictions: %s; using live per-game predictions.",
@@ -73,8 +81,12 @@ def main() -> None:
 
         if not existing.empty:
             pred = existing.iloc[0].to_dict()
-            if "predicted_spread" not in pred and "pred_spread" in pred:
-                pred["predicted_spread"] = pred["pred_spread"]
+            # Handle various column name formats for predicted spread
+            if "predicted_spread" not in pred:
+                for alias in SPREAD_COLUMN_ALIASES:
+                    if alias in pred:
+                        pred["predicted_spread"] = pred[alias]
+                        break
             pred.setdefault("confidence", 0.6)
             pred.setdefault("breakdown", {})
         else:

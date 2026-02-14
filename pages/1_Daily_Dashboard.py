@@ -35,14 +35,18 @@ def _load_predictions() -> pd.DataFrame:
     csv_paths = ["data/predictions.csv", "ml/predictions_latest.csv"]
 
     if client is None:
+        logger.info("Supabase client unavailable; trying CSV fallback")
         for path in csv_paths:
             if os.path.exists(path):
+                logger.info("Loaded predictions from CSV: %s", path)
                 return pd.read_csv(path)
+        logger.warning("No CSV predictions found")
         return pd.DataFrame()
 
     start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
     end = start + timedelta(days=1)
     try:
+        # Query the predictions table (where daily_auto_predict.py writes)
         resp = (
             client.table("predictions")
             .select("*")
@@ -52,13 +56,17 @@ def _load_predictions() -> pd.DataFrame:
         )
         data = pd.DataFrame(resp.data or [])
         if not data.empty:
+            logger.info("Loaded %d predictions from Supabase for today", len(data))
             return data
-    except Exception:
-        pass
+        logger.info("No predictions found in Supabase for today; trying CSV fallback")
+    except Exception as exc:
+        logger.warning("Supabase predictions query failed: %s; trying CSV fallback", exc)
 
     for path in csv_paths:
         if os.path.exists(path):
+            logger.info("Loaded predictions from CSV: %s", path)
             return pd.read_csv(path)
+    logger.warning("No predictions found in Supabase or CSV")
     return pd.DataFrame()
 
 
@@ -90,7 +98,21 @@ if scoreboard.empty:
     st.stop()
 
 if preds.empty:
-    st.info("No predictions found. Run the pipeline to populate predictions.")
+    st.warning("⚠️ No predictions found")
+    st.info("""
+    **Why are predictions missing?**
+    
+    The predictions may not be loaded yet because:
+    1. The daily prediction pipeline hasn't run yet (runs at 3pm UTC)
+    2. There are no games scheduled for today
+    3. The prediction data hasn't been synced to Supabase yet
+    
+    **What to do:**
+    - Check back after the daily prediction pipeline has run
+    - Verify that games are scheduled for today
+    - Check the GitHub Actions logs for any pipeline errors
+    """)
+    st.stop()
 
 if "pred_margin_home" not in preds.columns and "pred_spread" in preds.columns:
     preds["pred_margin_home"] = preds["pred_spread"]

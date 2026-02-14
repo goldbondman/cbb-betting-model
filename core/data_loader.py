@@ -126,11 +126,13 @@ class DataLoader:
         client = self._supabase_client()
         if client is not None:
             try:
-                response = client.table("predictions_latest").select("*").execute()
+                # Query the predictions table (where daily_auto_predict.py writes)
+                response = client.table("predictions").select("*").execute()
                 data = pd.DataFrame(response.data or [])
                 if not data.empty:
+                    logger.info("Loaded %d predictions from Supabase predictions table", len(data))
                     return data
-                logger.info("Supabase predictions_latest returned no rows; trying CSV fallback.")
+                logger.info("Supabase predictions table returned no rows; trying CSV fallback.")
             except Exception as exc:
                 logger.warning("Supabase predictions query failed: %s; trying CSV fallback.", exc)
 
