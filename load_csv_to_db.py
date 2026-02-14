@@ -85,11 +85,11 @@ RETRY_BACKOFF = float(os.getenv("DB_LOAD_RETRY_BACKOFF", "2.0"))
 
 # File groups
 FILES_ESPN = [
-    ("espn_games.csv", "espn_games"),
-    ("espn_team_game_logs.csv", "espn_team_game_logs"),
-    ("espn_team_game_features.csv", "espn_team_game_features"),
-    ("espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
-    ("espn_player_boxscores.csv", "espn_player_boxscores"),
+    ("CSV/espn_games.csv", "espn_games"),
+    ("CSV/espn_team_game_logs.csv", "espn_team_game_logs"),
+    ("CSV/espn_team_game_features.csv", "espn_team_game_features"),
+    ("CSV/espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
+    ("CSV/espn_player_boxscores.csv", "espn_player_boxscores"),
 ]
 
 FILES_TORVIK = [
