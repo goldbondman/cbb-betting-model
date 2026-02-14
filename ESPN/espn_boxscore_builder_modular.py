@@ -375,13 +375,17 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         df_players_new = pd.DataFrame(player_rows)
         
         # Normalize column names to match schema
+        # ESPN parser (_extract_players in espn_parsers.py) outputs 'minutes' and 'points'
+        # but our schema expects 'min' and 'pts' for consistency with team stats
         column_mapping = {
             "minutes": "min",
             "points": "pts"
         }
         df_players_new = df_players_new.rename(columns=column_mapping)
         
-        # Add athlete_id and starter columns if missing (ESPN doesn't always provide these)
+        # Add athlete_id and starter columns if missing
+        # ESPN API doesn't consistently provide athlete IDs or starter indicators
+        # in the boxscore.players structure. When missing, we default to None.
         if "athlete_id" not in df_players_new.columns:
             df_players_new["athlete_id"] = None
         if "starter" not in df_players_new.columns:
