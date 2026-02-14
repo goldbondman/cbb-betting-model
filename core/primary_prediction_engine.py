@@ -156,7 +156,8 @@ class PrimaryPredictionEngine:
                 self._team_index[str(team_name).lower()] = grp
 
     def _get_opponent_row(self, event_id: str, opponent_name: str) -> Optional[pd.Series]:
-        assert self._game_log_df is not None
+        if self._game_log_df is None:
+            return None
         opp_key = str(opponent_name).lower()
         opp_df = self._team_index.get(opp_key)
         if opp_df is not None:
@@ -233,7 +234,8 @@ class PrimaryPredictionEngine:
             return None
 
     def _build_opponent_history(self, opponent_name: str, before: datetime, n: int = 5) -> List[GameData]:
-        assert self._game_log_df is not None
+        if self._game_log_df is None:
+            return []
         opp_key = opponent_name.lower()
         opp_df = self._team_index.get(opp_key)
         if opp_df is None or opp_df.empty:
