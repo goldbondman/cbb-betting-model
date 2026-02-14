@@ -17,6 +17,53 @@ class TestAppValidation(unittest.TestCase):
     @patch("app.PredictionUI")
     @patch("app.PredictionEngine")
     @patch("app.BettingEngine")
+    def test_prediction_source_failure_falls_back_to_live_model(
+        self, mock_bet_engine, mock_pred_engine, mock_ui, mock_data_loader, mock_st
+    ):
+        """Test that prediction source failures do not crash the app."""
+        data_instance = mock_data_loader.return_value
+        data_instance.load_vegas_lines.return_value = pd.DataFrame(
+            [
+                {
+                    "game_id": "12345",
+                    "home_team": "Duke",
+                    "away_team": "UNC",
+                    "market_spread": -5.5,
+                }
+            ]
+        )
+        data_instance.load_todays_predictions.side_effect = RuntimeError("supabase unavailable")
+        data_instance.get_team_snapshot.side_effect = [{"team": "Duke"}, {"team": "UNC"}]
+
+        pred_engine_instance = mock_pred_engine.return_value
+        pred_engine_instance.active_model = {"model_id": "test"}
+        pred_engine_instance.predict_spread.return_value = {
+            "predicted_spread": -6.0,
+            "confidence": 0.7,
+            "breakdown": {},
+        }
+
+        bet_engine_instance = mock_bet_engine.return_value
+        bet_engine_instance.recommend_spread.return_value = {"action": "pass"}
+
+        ui_instance = mock_ui.return_value
+        ui_instance.render_prediction_card = MagicMock()
+        ui_instance.render_bet_recommendation = MagicMock()
+
+        mock_st.sidebar.selectbox.return_value = "Conservative"
+
+        app.main()
+
+        ui_instance.render_prediction_card.assert_called_once()
+        mock_st.sidebar.info.assert_called_once_with(
+            "Precomputed predictions unavailable; using live model predictions."
+        )
+
+    @patch("app.st")
+    @patch("app.DataLoader")
+    @patch("app.PredictionUI")
+    @patch("app.PredictionEngine")
+    @patch("app.BettingEngine")
     def test_dataframe_type_validation(self, mock_bet_engine, mock_pred_engine, mock_ui, mock_data_loader, mock_st):
         """Test that non-DataFrame return values are handled correctly."""
         # Setup mock that returns None instead of DataFrame

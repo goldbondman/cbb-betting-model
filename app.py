@@ -39,7 +39,15 @@ def main() -> None:
     st.caption(f"Strategy: {strategy} | Active Model: {active_model_id}")
 
     games = data.load_vegas_lines(date="today")
-    daily_preds = data.load_todays_predictions()
+    try:
+        daily_preds = data.load_todays_predictions()
+    except Exception as exc:
+        logger.warning(
+            "Failed to load today's predictions: %s; using live per-game predictions.",
+            exc,
+        )
+        st.sidebar.info("Precomputed predictions unavailable; using live model predictions.")
+        daily_preds = pd.DataFrame()
 
     if not isinstance(games, pd.DataFrame) or games.empty:
         st.info("No games today")
