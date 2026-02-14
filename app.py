@@ -78,13 +78,13 @@ def main() -> None:
         if not existing.empty:
             pred = existing.iloc[0].to_dict()
             # Handle various column name formats for predicted spread
+            # Map from database columns to app internal format
+            spread_column_aliases = ["pred_spread", "pred_margin_home", "ensemble_prediction"]
             if "predicted_spread" not in pred:
-                if "pred_spread" in pred:
-                    pred["predicted_spread"] = pred["pred_spread"]
-                elif "pred_margin_home" in pred:
-                    pred["predicted_spread"] = pred["pred_margin_home"]
-                elif "ensemble_prediction" in pred:
-                    pred["predicted_spread"] = pred["ensemble_prediction"]
+                for alias in spread_column_aliases:
+                    if alias in pred:
+                        pred["predicted_spread"] = pred[alias]
+                        break
             pred.setdefault("confidence", 0.6)
             pred.setdefault("breakdown", {})
         else:
