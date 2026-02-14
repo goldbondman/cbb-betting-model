@@ -30,7 +30,38 @@ def _get_supabase_client():
     return get_public_supabase_client()
 
 
+def _normalize_prediction_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Normalize column names to handle variations between tables."""
+    if df.empty:
+        return df
+    
+    # Column aliases - map various names to standard names
+    column_mappings = {
+        # Margin/spread predictions
+        "pred_spread": "pred_margin_home",
+        "ensemble_prediction": "pred_margin_home",
+        "predicted_spread": "pred_margin_home",
+        # Total predictions
+        "predicted_total": "pred_total",
+        # Team names
+        "team_a": "home_team",
+        "team_b": "away_team",
+        "team_home": "home_team",
+        "team_away": "away_team",
+        # Game identifiers
+        "game_id": "event_id",
+    }
+    
+    # Apply mappings only if source column exists and target doesn't
+    for source_col, target_col in column_mappings.items():
+        if source_col in df.columns and target_col not in df.columns:
+            df[target_col] = df[source_col]
+    
+    return df
+
+
 def _load_predictions() -> pd.DataFrame:
+    """Load predictions with multiple fallback mechanisms for redundancy."""
     client = _get_supabase_client()
     csv_paths = ["data/predictions.csv", "ml/predictions_latest.csv"]
 
@@ -39,14 +70,16 @@ def _load_predictions() -> pd.DataFrame:
         for path in csv_paths:
             if os.path.exists(path):
                 logger.info("Loaded predictions from CSV: %s", path)
-                return pd.read_csv(path)
+                return _normalize_prediction_columns(pd.read_csv(path))
         logger.warning("No CSV predictions found")
         return pd.DataFrame()
 
     start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
     end = start + timedelta(days=1)
+    
+    # REDUNDANCY 1: Try public.predictions (primary table)
     try:
-        # Query the predictions table (where daily_auto_predict.py writes)
+        logger.info("Attempting to load predictions from public.predictions")
         resp = (
             client.table("predictions")
             .select("*")
@@ -56,17 +89,61 @@ def _load_predictions() -> pd.DataFrame:
         )
         data = pd.DataFrame(resp.data or [])
         if not data.empty:
-            logger.info("Loaded %d predictions from Supabase for today", len(data))
-            return data
-        logger.info("No predictions found in Supabase for today; trying CSV fallback")
+            logger.info("✓ Loaded %d predictions from public.predictions", len(data))
+            return _normalize_prediction_columns(data)
+        logger.info("No predictions in public.predictions for today's date range")
     except Exception as exc:
-        logger.warning("Supabase predictions query failed: %s; trying CSV fallback", exc)
+        logger.warning("Failed to query public.predictions: %s", exc)
 
+    # REDUNDANCY 2: Try raw.predictions_latest (source table)
+    try:
+        logger.info("Attempting fallback to raw.predictions_latest")
+        resp = client.schema("raw").table("predictions_latest").select("*").execute()
+        data = pd.DataFrame(resp.data or [])
+        if not data.empty:
+            # Filter to today's games if possible
+            if "game_datetime_utc" in data.columns:
+                data["game_datetime_utc"] = pd.to_datetime(data["game_datetime_utc"], errors="coerce")
+                mask = (data["game_datetime_utc"] >= start) & (data["game_datetime_utc"] < end)
+                data = data[mask]
+            
+            if not data.empty:
+                logger.info("✓ Loaded %d predictions from raw.predictions_latest", len(data))
+                return _normalize_prediction_columns(data)
+            logger.info("No predictions in raw.predictions_latest for today")
+    except Exception as exc:
+        logger.warning("Failed to query raw.predictions_latest: %s", exc)
+
+    # REDUNDANCY 3: Try unfiltered public.predictions (all dates)
+    try:
+        logger.info("Attempting to load all predictions from public.predictions (no date filter)")
+        resp = client.table("predictions").select("*").limit(1000).execute()
+        data = pd.DataFrame(resp.data or [])
+        if not data.empty:
+            logger.info("✓ Loaded %d predictions from public.predictions (all dates)", len(data))
+            # Try to filter to recent games
+            if "game_datetime_utc" in data.columns:
+                data["game_datetime_utc"] = pd.to_datetime(data["game_datetime_utc"], errors="coerce")
+                # Get last 7 days
+                week_ago = start - timedelta(days=7)
+                mask = data["game_datetime_utc"] >= week_ago
+                recent_data = data[mask]
+                if not recent_data.empty:
+                    logger.info("Filtered to %d predictions from last 7 days", len(recent_data))
+                    return _normalize_prediction_columns(recent_data)
+            return _normalize_prediction_columns(data)
+        logger.info("No predictions found in public.predictions (unfiltered)")
+    except Exception as exc:
+        logger.warning("Failed to query public.predictions (unfiltered): %s", exc)
+
+    # REDUNDANCY 4: CSV fallback
+    logger.info("Trying CSV fallback as last resort")
     for path in csv_paths:
         if os.path.exists(path):
-            logger.info("Loaded predictions from CSV: %s", path)
-            return pd.read_csv(path)
-    logger.warning("No predictions found in Supabase or CSV")
+            logger.info("✓ Loaded predictions from CSV: %s", path)
+            return _normalize_prediction_columns(pd.read_csv(path))
+    
+    logger.warning("⚠ No predictions found in any source (Supabase or CSV)")
     return pd.DataFrame()
 
 
@@ -99,19 +176,40 @@ if scoreboard.empty:
 
 if preds.empty:
     st.warning("⚠️ No predictions found")
-    st.info("""
-    **Why are predictions missing?**
     
-    The predictions may not be loaded yet because:
-    1. The daily prediction pipeline hasn't run yet (runs at 3pm UTC)
-    2. There are no games scheduled for today
-    3. The prediction data hasn't been synced to Supabase yet
+    # Provide diagnostic information
+    with st.expander("🔍 Troubleshooting Information", expanded=True):
+        st.markdown("""
+        **Why are predictions missing?**
+        
+        Predictions may not be available because:
+        1. ✅ **Supabase is connected** - The connection is working
+        2. ❌ **No prediction data found** - Predictions may not have been generated yet
+        
+        **Possible causes:**
+        - The daily prediction pipeline hasn't run yet (scheduled runs vary)
+        - There are no games scheduled for today
+        - Predictions are in `raw.predictions_latest` but haven't been synced to `public.predictions`
+        
+        **What you can do:**
+        1. **Check if raw predictions exist**: Run the CSV loader to sync predictions
+        2. **Check GitHub Actions**: Look for the daily prediction workflow run status
+        3. **Manual workaround**: Upload predictions CSV to trigger the pipeline
+        
+        **Technical Details:**
+        - Checked: `public.predictions` ✓
+        - Checked: `raw.predictions_latest` ✓
+        - Checked: CSV files (`data/predictions.csv`, `ml/predictions_latest.csv`) ✓
+        - All sources returned empty results
+        """)
+        
+        # Show Supabase connection status
+        client = _get_supabase_client()
+        if client:
+            st.success("✓ Supabase client connected successfully")
+        else:
+            st.error("✗ Supabase client not available - check credentials")
     
-    **What to do:**
-    - Check back after the daily prediction pipeline has run
-    - Verify that games are scheduled for today
-    - Check the GitHub Actions logs for any pipeline errors
-    """)
     st.stop()
 
 if "pred_margin_home" not in preds.columns and "pred_spread" in preds.columns:

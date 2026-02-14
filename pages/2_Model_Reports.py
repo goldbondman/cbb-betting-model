@@ -29,7 +29,7 @@ def _get_supabase_client():
 def _load_predictions() -> pd.DataFrame:
     """
     Loads predictions from a single reporting view (preferred).
-    Falls back to local CSV if Supabase credentials are missing or query fails.
+    Falls back to predictions table, raw.predictions_latest, then local CSV.
 
     Expected (ideal) columns from the view:
       - model_version_id (or model_version)
@@ -47,19 +47,51 @@ def _load_predictions() -> pd.DataFrame:
 
     start = datetime.now(timezone.utc) - timedelta(days=LOOKBACK_DAYS)
 
+    # REDUNDANCY 1: Try reporting view (primary)
     try:
-        # supabase-py uses .from_() for views
         resp = (
             client.from_(REPORTING_VIEW)
             .select("*")
             .gte("game_datetime_utc", start.isoformat())
             .execute()
         )
-        return pd.DataFrame(resp.data or [])
+        data = pd.DataFrame(resp.data or [])
+        if not data.empty:
+            return data
     except Exception:
-        if os.path.exists(FALLBACK_CSV):
-            return pd.read_csv(FALLBACK_CSV)
-        return pd.DataFrame()
+        pass
+
+    # REDUNDANCY 2: Try public.predictions table
+    try:
+        resp = (
+            client.table("predictions")
+            .select("*")
+            .gte("game_datetime_utc", start.isoformat())
+            .execute()
+        )
+        data = pd.DataFrame(resp.data or [])
+        if not data.empty:
+            return data
+    except Exception:
+        pass
+
+    # REDUNDANCY 3: Try raw.predictions_latest
+    try:
+        resp = client.schema("raw").table("predictions_latest").select("*").execute()
+        data = pd.DataFrame(resp.data or [])
+        if not data.empty:
+            # Filter by date if column exists
+            if "game_datetime_utc" in data.columns:
+                data["game_datetime_utc"] = pd.to_datetime(data["game_datetime_utc"], errors="coerce")
+                data = data[data["game_datetime_utc"] >= start]
+            return data
+    except Exception:
+        pass
+
+    # REDUNDANCY 4: CSV fallback
+    if os.path.exists(FALLBACK_CSV):
+        return pd.read_csv(FALLBACK_CSV)
+    return pd.DataFrame()
 
 
 def _first_present(df: pd.DataFrame, candidates: list[str]) -> str | None:
