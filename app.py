@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Main Streamlit orchestrator for formula-based CBB predictions."""
+"""Main Streamlit orchestrator for CBB predictions."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from core.betting_engine import BettingEngine
 from core.config import APP_CONFIG, STRATEGY_PRESETS
 from core.data_loader import DataLoader
 from core.prediction_engine import PredictionEngine
+from core.primary_prediction_engine import PrimaryPredictionEngine
 from core.recursive_prediction_engine import RecursivePredictionEngine
 from core.ui_components import PredictionUI
 
@@ -23,22 +24,34 @@ SPREAD_COLUMN_ALIASES = ["pred_spread", "pred_margin_home", "ensemble_prediction
 
 st.set_page_config(page_title="CBB Model", page_icon="🏀", layout="wide")
 
+MODEL_OPTIONS = [
+    "Primary (v2.0 Normalized Bidirectional)",
+    "Recursive Bidirectional",
+    "Formula",
+]
+
 
 def main() -> None:
-    """Render main dashboard using active formula model and selected strategy."""
+    """Render main dashboard using active model and selected strategy."""
     data = DataLoader()
     ui = PredictionUI()
 
     strategy = st.sidebar.selectbox("Strategy", list(STRATEGY_PRESETS.keys()), index=1)
     config = STRATEGY_PRESETS[strategy].copy()
 
-    model_choice = st.sidebar.selectbox("Prediction Model", ["Formula", "Recursive Bidirectional"], index=0)
+    model_choice = st.sidebar.selectbox("Prediction Model", MODEL_OPTIONS, index=0)
 
     pred_engine = PredictionEngine(config)
-    rec_engine = RecursivePredictionEngine(data) if model_choice == "Recursive Bidirectional" else None
+    primary_engine = PrimaryPredictionEngine(data) if model_choice == MODEL_OPTIONS[0] else None
+    rec_engine = RecursivePredictionEngine(data) if model_choice == MODEL_OPTIONS[1] else None
     bet_engine = BettingEngine(config["betting"])
 
-    active_model_id = rec_engine.active_model["model_id"] if rec_engine else pred_engine.active_model["model_id"]
+    if primary_engine is not None:
+        active_model_id = primary_engine.active_model["model_id"]
+    elif rec_engine is not None:
+        active_model_id = rec_engine.active_model["model_id"]
+    else:
+        active_model_id = pred_engine.active_model["model_id"]
     st.title(f"🏀 CBB Betting Model {APP_CONFIG['version']}")
     st.caption(f"Strategy: {strategy} | Active Model: {active_model_id}")
 
@@ -97,7 +110,9 @@ def main() -> None:
                 
             home = data.get_team_snapshot(game["home_team"])
             away = data.get_team_snapshot(game["away_team"])
-            if rec_engine is not None:
+            if primary_engine is not None:
+                pred = primary_engine.predict_spread(game["home_team"], game["away_team"])
+            elif rec_engine is not None:
                 pred = rec_engine.predict_spread(game["home_team"], game["away_team"])
             elif not home or not away:
                 logger.warning(

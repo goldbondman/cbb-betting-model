@@ -18,6 +18,9 @@ import streamlit as st
 
 from supabase import create_client, Client
 
+from core.data_loader import DataLoader
+from core.primary_prediction_engine import PrimaryPredictionEngine
+
 # ============================================================
 # STREAMLIT
 # ============================================================
@@ -1286,6 +1289,152 @@ def get_upcoming_games(days_ahead: int = 7):
     return out, errors
 
 # ============================================================
+# PRIMARY PREDICTION MODEL (v2.0 - DEFAULT)
+# ============================================================
+
+@st.cache_resource
+def _get_primary_engine():
+    """Initialize the Primary Prediction Engine (cached across reruns)."""
+    return PrimaryPredictionEngine(DataLoader())
+
+
+def predict_with_primary_model(home_team: str, away_team: str, vegas_spread=None, vegas_total=None, ml_home=None, ml_away=None):
+    """
+    Generate predictions using the Primary v2.0 Normalized Bidirectional Model.
+    Returns the same dict shape as predict_markets() for compatibility.
+    """
+    engine = _get_primary_engine()
+    strat = get_strategy()
+
+    pred = engine.predict_spread(home_team, away_team)
+    spread_model_margin = pred["predicted_spread"]
+    spread_conf = pred["confidence"]
+    pred_total = pred.get("predicted_total")
+
+    v_sp = safe_float(vegas_spread, None)
+    spread_edge = None
+    spread_side = None
+    spread_reco = False
+    spread_units = 0.0
+
+    if v_sp is not None:
+        spread_edge = spread_model_margin - v_sp
+        edge_min = strat["spread"]["edge_min"]
+        conf_min = strat["spread"]["conf_min"]
+
+        if spread_edge >= edge_min:
+            spread_side = f"{home_team} spread"
+        elif spread_edge <= -edge_min:
+            spread_side = f"{away_team} spread"
+
+        if spread_side and spread_conf >= conf_min:
+            spread_reco = True
+            edge_abs = abs(spread_edge)
+            units = 1.0
+            if edge_abs >= edge_min + strat["units"]["tier_2u_edge_bonus"] and spread_conf >= conf_min + strat["units"]["tier_2u_conf_bonus"]:
+                units = 2.0
+            if edge_abs >= edge_min + strat["units"]["tier_3u_edge_bonus"] and spread_conf >= conf_min + strat["units"]["tier_3u_conf_bonus"]:
+                units = 3.0
+            spread_units = units
+
+    # Total
+    total_model = pred_total
+    v_tot = safe_float(vegas_total, None)
+    total_edge = None
+    total_side = None
+    total_reco = False
+    total_units = 0.0
+    total_conf = spread_conf
+
+    if total_model is not None and v_tot is not None:
+        total_edge = total_model - v_tot
+        edge_min = strat["total"]["edge_min"]
+        conf_min = strat["total"]["conf_min"]
+
+        if total_edge >= edge_min:
+            total_side = "Over"
+        elif total_edge <= -edge_min:
+            total_side = "Under"
+
+        if total_side and total_conf >= conf_min:
+            total_reco = True
+            edge_abs = abs(total_edge)
+            units = 1.0
+            if edge_abs >= edge_min + strat["units"]["tier_2u_edge_bonus"] and total_conf >= conf_min + strat["units"]["tier_2u_conf_bonus"]:
+                units = 2.0
+            if edge_abs >= edge_min + strat["units"]["tier_3u_edge_bonus"] and total_conf >= conf_min + strat["units"]["tier_3u_conf_bonus"]:
+                units = 3.0
+            total_units = units
+
+    # Moneyline
+    model_win_prob_home = logistic(spread_model_margin, scale=12.0)
+    imp_home = american_to_implied_prob(ml_home)
+    imp_away = american_to_implied_prob(ml_away)
+    ml_edge = None
+    ml_side = None
+    ml_reco = False
+    ml_units_val = 0.0
+    ml_conf = spread_conf
+
+    if imp_home is not None and imp_away is not None:
+        ml_edge = model_win_prob_home - imp_home
+        edge_min_prob = strat["ml"]["edge_min_prob"]
+        conf_min = strat["ml"]["conf_min"]
+
+        if ml_edge >= edge_min_prob:
+            ml_side = f"{home_team} ML"
+        elif ml_edge <= -edge_min_prob:
+            ml_side = f"{away_team} ML"
+
+        if ml_side and ml_conf >= conf_min:
+            ml_reco = True
+            units = 1.0
+            if "away" in (ml_side or "").lower() and safe_float(ml_away, 0) > 0 and strat["units"]["ml_dog_micro_stakes"]:
+                units = 0.25 if abs(ml_edge) < (edge_min_prob + 0.02) else 0.5
+            elif "home" in (ml_side or "").lower() and safe_float(ml_home, 0) > 0 and strat["units"]["ml_dog_micro_stakes"]:
+                units = 0.25 if abs(ml_edge) < (edge_min_prob + 0.02) else 0.5
+            else:
+                if abs(ml_edge) >= edge_min_prob + 0.02 and ml_conf >= conf_min + 0.03:
+                    units = 2.0
+            ml_units_val = units
+
+    return {
+        "teams": {"home": home_team, "away": away_team},
+        "model_version": pred["model_id"],
+        "spread": {
+            "model_margin_home": float(spread_model_margin),
+            "vegas_spread": v_sp,
+            "edge": spread_edge,
+            "conf": float(spread_conf),
+            "side": spread_side,
+            "recommended": bool(spread_reco),
+            "units": float(spread_units),
+        },
+        "total": {
+            "model_total": float(total_model) if total_model is not None else None,
+            "vegas_total": v_tot,
+            "edge": total_edge,
+            "conf": float(total_conf),
+            "side": total_side,
+            "recommended": bool(total_reco),
+            "units": float(total_units),
+        },
+        "ml": {
+            "model_win_prob_home": float(model_win_prob_home),
+            "ml_home": ml_home,
+            "ml_away": ml_away,
+            "implied_home": imp_home,
+            "edge_home": ml_edge,
+            "conf": float(ml_conf),
+            "side": ml_side,
+            "recommended": bool(ml_reco),
+            "units": float(ml_units_val),
+        }
+    }
+
+
+
+# ============================================================
 # PREDICTION ENGINE (USES MODEL STUDIO CONFIG)
 # ============================================================
 
@@ -1892,6 +2041,12 @@ st.sidebar.caption(f"Updated: {datetime.now(tz=LOCAL_TZ).strftime('%m/%d %I:%M%p
 
 if page == "📅 Slate (Upcoming)":
     st.title("📅 Slate (Upcoming)")
+    _model_choice = st.radio(
+        "Prediction Model",
+        ["🎯 Primary Model (v2.0)", "📊 Formula Model (Studio)"],
+        index=0,
+        horizontal=True,
+    )
     st.caption("Every game. Spread, Total, ML. Ranked. No cap.")
 
     upcoming, errors = get_upcoming_games(days_ahead=7)
@@ -1931,15 +2086,25 @@ if page == "📅 Slate (Upcoming)":
     ledger_rows = []
 
     for _, g in upcoming.iterrows():
-        pred = predict_markets(
-            home_team=g["home_team"],
-            away_team=g["away_team"],
-            venue=g.get("venue") or "Unknown",
-            vegas_spread=g.get("vegas_spread"),
-            vegas_total=g.get("vegas_total"),
-            ml_home=g.get("ml_home"),
-            ml_away=g.get("ml_away"),
-        )
+        if _model_choice == "🎯 Primary Model (v2.0)":
+            pred = predict_with_primary_model(
+                home_team=g["home_team"],
+                away_team=g["away_team"],
+                vegas_spread=g.get("vegas_spread"),
+                vegas_total=g.get("vegas_total"),
+                ml_home=g.get("ml_home"),
+                ml_away=g.get("ml_away"),
+            )
+        else:
+            pred = predict_markets(
+                home_team=g["home_team"],
+                away_team=g["away_team"],
+                venue=g.get("venue") or "Unknown",
+                vegas_spread=g.get("vegas_spread"),
+                vegas_total=g.get("vegas_total"),
+                ml_home=g.get("ml_home"),
+                ml_away=g.get("ml_away"),
+            )
         if pred is None:
             continue
 
@@ -2692,6 +2857,12 @@ st.sidebar.caption(f"Updated: {datetime.now(tz=LOCAL_TZ).strftime('%m/%d %I:%M%p
 
 if page == "📅 Slate (Upcoming)":
     st.title("📅 Slate (Upcoming)")
+    _model_choice = st.radio(
+        "Prediction Model",
+        ["🎯 Primary Model (v2.0)", "📊 Formula Model (Studio)"],
+        index=0,
+        horizontal=True,
+    )
     st.caption("Every game. Spread, Total, ML. Ranked. No cap.")
 
     upcoming, errors = get_upcoming_games(days_ahead=7)
@@ -2731,15 +2902,25 @@ if page == "📅 Slate (Upcoming)":
     ledger_rows = []
 
     for _, g in upcoming.iterrows():
-        pred = predict_markets(
-            home_team=g["home_team"],
-            away_team=g["away_team"],
-            venue=g.get("venue") or "Unknown",
-            vegas_spread=g.get("vegas_spread"),
-            vegas_total=g.get("vegas_total"),
-            ml_home=g.get("ml_home"),
-            ml_away=g.get("ml_away"),
-        )
+        if _model_choice == "🎯 Primary Model (v2.0)":
+            pred = predict_with_primary_model(
+                home_team=g["home_team"],
+                away_team=g["away_team"],
+                vegas_spread=g.get("vegas_spread"),
+                vegas_total=g.get("vegas_total"),
+                ml_home=g.get("ml_home"),
+                ml_away=g.get("ml_away"),
+            )
+        else:
+            pred = predict_markets(
+                home_team=g["home_team"],
+                away_team=g["away_team"],
+                venue=g.get("venue") or "Unknown",
+                vegas_spread=g.get("vegas_spread"),
+                vegas_total=g.get("vegas_total"),
+                ml_home=g.get("ml_home"),
+                ml_away=g.get("ml_away"),
+            )
         if pred is None:
             continue
 
@@ -3105,15 +3286,25 @@ elif page == "🔁 Backtest Lab":
     ledger_rows = []
 
     for _, g in upcoming.iterrows():
-        pred = predict_markets(
-            home_team=g["home_team"],
-            away_team=g["away_team"],
-            venue=g.get("venue") or "Unknown",
-            vegas_spread=g.get("vegas_spread"),
-            vegas_total=g.get("vegas_total"),
-            ml_home=g.get("ml_home"),
-            ml_away=g.get("ml_away"),
-        )
+        if _model_choice == "🎯 Primary Model (v2.0)":
+            pred = predict_with_primary_model(
+                home_team=g["home_team"],
+                away_team=g["away_team"],
+                vegas_spread=g.get("vegas_spread"),
+                vegas_total=g.get("vegas_total"),
+                ml_home=g.get("ml_home"),
+                ml_away=g.get("ml_away"),
+            )
+        else:
+            pred = predict_markets(
+                home_team=g["home_team"],
+                away_team=g["away_team"],
+                venue=g.get("venue") or "Unknown",
+                vegas_spread=g.get("vegas_spread"),
+                vegas_total=g.get("vegas_total"),
+                ml_home=g.get("ml_home"),
+                ml_away=g.get("ml_away"),
+            )
         if pred is None:
             continue
 
