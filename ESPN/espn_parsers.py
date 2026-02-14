@@ -283,6 +283,8 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
             for a in athletes:
                 athlete = a.get("athlete", {}) or {}
                 name = athlete.get("displayName") or athlete.get("shortName") or athlete.get("fullName") or "Unknown"
+                athlete_id = athlete.get("id")
+                starter = a.get("starter")
 
                 stats = a.get("stats", [])
                 if not isinstance(stats, list) or (labels and len(labels) != len(stats)):
@@ -297,6 +299,11 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                     return None
 
                 row = {"player": name}
+                if athlete_id:
+                    row["athlete_id"] = str(athlete_id)
+                if starter is not None:
+                    row["starter"] = int(bool(starter))
+                    
                 row["minutes"] = _to_float(pick("min", "minutes"), np.nan)
                 row["points"] = _to_int(pick("pts", "points"), 0)
 
@@ -308,6 +315,9 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                 dreb = pick("dreb", "def reb", "defensive rebounds")
                 reb = pick("reb", "rebs", "rebounds")
                 ast = pick("ast", "assists")
+                stl = pick("stl", "steals")
+                blk = pick("blk", "blocks")
+                pf = pick("pf", "fouls", "personal fouls")
 
                 fgm, fga = _parse_made_attempt(fg) if isinstance(fg, str) else (0, 0)
                 tpm, tpa = _parse_made_attempt(three) if isinstance(three, str) else (0, 0)
@@ -324,6 +334,9 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                 row["drb"] = _to_int(dreb, 0)
                 row["reb"] = _to_int(reb, row["orb"] + row["drb"])
                 row["ast"] = _to_int(ast, 0)
+                row["stl"] = _to_int(stl, 0)
+                row["blk"] = _to_int(blk, 0)
+                row["pf"] = _to_int(pf, 0)
 
                 row["usage_proxy"] = row["fga"] + 0.44 * row["fta"] + row["tov"]
                 players.append(row)
@@ -551,12 +564,17 @@ def parse_summary_json(summary_json: Dict[str, Any], event_id: str) -> Dict[str,
             return row, False
         totals = _sum_player_totals(players)
         if not totals:
+            # Log when no player totals available for completed game with missing team stats
+            if os.getenv("ESPN_DEBUG_MISSING_STATS") == "1":
+                print(f"[DEBUG] No player totals for team {row.get('team')}, {len(players)} players")
             return row, False
         changed = False
         for k, v in totals.items():
             if _to_int(row.get(k), 0) == 0 and _to_int(v, 0) > 0:
                 row[k] = _to_int(v, 0)
                 changed = True
+        if changed and os.getenv("ESPN_DEBUG_MISSING_STATS") == "1":
+            print(f"[DEBUG] Applied player fallback for team {row.get('team')}: fga={row.get('fga')}")
         return row, changed
 
     home_row, home_fallback_changed = apply_player_fallback(home_row, players_home)

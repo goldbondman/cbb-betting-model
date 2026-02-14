@@ -27,20 +27,24 @@ jobs:
           pip install pandas numpy requests psycopg[binary]
 
       - name: Run ESPN builder (3-day backfill)
+        working-directory: ESPN
         run: |
-          python ESPN/espn_boxscore_builder_modular.py
+          python espn_boxscore_builder_modular.py
         env:
           DAYS_BACK: "3"
 
       - name: Ensure optional artifacts exist
+        working-directory: ESPN
         run: |
           test -f espn_pipeline_errors.json || echo '{"run_ts_utc":"", "total_errors":0, "errors":[]}' > espn_pipeline_errors.json
 
       - name: Show file sizes
+        working-directory: ESPN
         run: |
-          ls -lh *.csv *.json || true
+          ls -lh CSV/*.csv *.json || true
 
       - name: Load outputs to Supabase DB (raw schema)
+        working-directory: ESPN
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
           UPLOAD_GROUP: "espn"
@@ -48,4 +52,4 @@ jobs:
           LOAD_MODE: "upsert"
           SKIP_MISSING: "0"
         run: |
-          python load_csv_to_db.py
+          python ../load_csv_to_db.py
