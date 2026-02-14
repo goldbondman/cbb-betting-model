@@ -27,7 +27,7 @@ ESPN API → CSV Files → Feature Engineering → Predictions → Supabase → 
 ```
 
 **Key Data Sources:**
-- **ESPN API**: Game results, scores, box scores, and market lines
+- **ESPN API**: Game results, scores, box scores, market lines, and **injury reports**
 - **Barttorvik**: Advanced team efficiency metrics (pre-computed)
 - **Supabase Database**: Centralized storage for games, predictions, and market lines
 
@@ -117,6 +117,34 @@ def _atomic_csv_write(df: pd.DataFrame, path: Path):
 - `ESPN/CSV/espn_team_game_features.csv` - Pregame rolling features
 - `ESPN/CSV/espn_matchups_model_ready.csv` - Model-ready matchups (home/away features)
 - `ESPN/CSV/espn_player_boxscores.csv` - Player-level statistics
+- `ESPN/CSV/espn_injuries.csv` - Player injury reports (status, type, return date)
+
+### 4. Injury Reports
+
+**Module:** `ESPN/espn_injuries.py`
+
+Injury data is fetched from the ESPN team API:
+
+```
+https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}
+```
+
+Each team response may contain an `injuries` array with player-level status entries.
+
+**Pipeline:**
+1. Collect team IDs from `ESPN/CSV/espn_team_game_logs.csv`
+2. Fetch each team page from the ESPN API
+3. Extract injury entries (status, type, body part, return date)
+4. Write to `ESPN/CSV/espn_injuries.csv`
+
+**Integration:** Called from `scripts/refresh_sources.py` during daily data refresh.
+
+**Columns:**
+- `team_id`, `team` - Team identifiers
+- `athlete_id`, `player`, `position` - Player identifiers
+- `status` - Injury status (Out, Day-To-Day, Questionable, etc.)
+- `injury_type` - Type of injury (Knee, Ankle, Illness, etc.)
+- `detail`, `side`, `return_date` - Injury details
 
 ---
 
