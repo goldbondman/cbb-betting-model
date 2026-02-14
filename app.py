@@ -12,6 +12,7 @@ from core.betting_engine import BettingEngine
 from core.config import APP_CONFIG, STRATEGY_PRESETS
 from core.data_loader import DataLoader
 from core.prediction_engine import PredictionEngine
+from core.recursive_prediction_engine import RecursivePredictionEngine
 from core.ui_components import PredictionUI
 
 logger = logging.getLogger(__name__)
@@ -27,11 +28,15 @@ def main() -> None:
     strategy = st.sidebar.selectbox("Strategy", list(STRATEGY_PRESETS.keys()), index=1)
     config = STRATEGY_PRESETS[strategy].copy()
 
+    model_choice = st.sidebar.selectbox("Prediction Model", ["Formula", "Recursive Bidirectional"], index=0)
+
     pred_engine = PredictionEngine(config)
+    rec_engine = RecursivePredictionEngine(data) if model_choice == "Recursive Bidirectional" else None
     bet_engine = BettingEngine(config["betting"])
 
+    active_model_id = rec_engine.active_model["model_id"] if rec_engine else pred_engine.active_model["model_id"]
     st.title(f"🏀 CBB Betting Model {APP_CONFIG['version']}")
-    st.caption(f"Strategy: {strategy} | Active Model: {pred_engine.active_model['model_id']}")
+    st.caption(f"Strategy: {strategy} | Active Model: {active_model_id}")
 
     games = data.load_vegas_lines(date="today")
     daily_preds = data.load_todays_predictions()
@@ -72,14 +77,17 @@ def main() -> None:
                 
             home = data.get_team_snapshot(game["home_team"])
             away = data.get_team_snapshot(game["away_team"])
-            if not home or not away:
+            if rec_engine is not None:
+                pred = rec_engine.predict_spread(game["home_team"], game["away_team"])
+            elif not home or not away:
                 logger.warning(
                     "Missing team snapshot for game: home=%s, away=%s",
                     game["home_team"],
                     game["away_team"],
                 )
                 continue
-            pred = pred_engine.predict_spread(home, away)
+            else:
+                pred = pred_engine.predict_spread(home, away)
 
         # Validate required prediction keys
         if "predicted_spread" not in pred:
