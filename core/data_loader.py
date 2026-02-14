@@ -122,19 +122,34 @@ class DataLoader:
         return pd.DataFrame()
 
     def load_todays_predictions(self) -> pd.DataFrame:
-        """Load predictions from Supabase if configured, else fall back to CSV."""
+        """Load predictions from Supabase with multiple fallbacks, else fall back to CSV."""
         client = self._supabase_client()
         if client is not None:
+            # REDUNDANCY 1: Try public.predictions (primary table)
             try:
-                # Query the predictions table (where daily_auto_predict.py writes)
+                logger.info("Attempting to load predictions from public.predictions")
                 response = client.table("predictions").select("*").execute()
                 data = pd.DataFrame(response.data or [])
                 if not data.empty:
-                    logger.info("Loaded %d predictions from Supabase predictions table", len(data))
+                    logger.info("✓ Loaded %d predictions from public.predictions", len(data))
                     return data
-                logger.info("Supabase predictions table returned no rows; trying CSV fallback.")
+                logger.info("No predictions in public.predictions")
             except Exception as exc:
-                logger.warning("Supabase predictions query failed: %s; trying CSV fallback.", exc)
+                logger.warning("Failed to query public.predictions: %s", exc)
+
+            # REDUNDANCY 2: Try raw.predictions_latest (source table)
+            try:
+                logger.info("Attempting fallback to raw.predictions_latest")
+                response = client.schema("raw").table("predictions_latest").select("*").execute()
+                data = pd.DataFrame(response.data or [])
+                if not data.empty:
+                    logger.info("✓ Loaded %d predictions from raw.predictions_latest", len(data))
+                    return data
+                logger.info("No predictions in raw.predictions_latest")
+            except Exception as exc:
+                logger.warning("Failed to query raw.predictions_latest: %s", exc)
+
+            logger.info("All Supabase queries returned empty; trying CSV fallback")
 
         return self._load_predictions_from_csv()
 
