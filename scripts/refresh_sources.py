@@ -58,6 +58,27 @@ def read_csv_bytes(content):
     head = content[:300].decode("utf-8", errors="ignore").lower()
     if "<html" in head or "verifying your browser" in head:
         raise ValueError("Received HTML (likely Cloudflare bot check) instead of CSV")
+    
+    # Check if CSV appears to have a proper header row
+    # If first row looks like data (e.g., player names, team names), it's missing headers
+    lines = content.decode("utf-8", errors="replace").split('\n')
+    if lines:
+        first_line = lines[0].strip()
+        # Check first few fields - if they look like data values (underscores, long names),
+        # then headers are missing
+        parts = first_line.split(',')[:3]
+        if len(parts) >= 2:
+            # Player name + team name pattern: contains underscores/spaces
+            col0_has_underscore_or_space = '_' in parts[0] or ' ' in parts[0]
+            col1_has_underscore_or_space = '_' in parts[1] or ' ' in parts[1]
+            # If both first columns look like identifiers (not clean column names), 
+            # assume headers are missing
+            if col0_has_underscore_or_space and col1_has_underscore_or_space:
+                raise ValueError(
+                    "CSV appears to be missing header row (first row looks like data). "
+                    "Check the upstream API response."
+                )
+    
     return pd.read_csv(io.BytesIO(content))
 
 def canon_team(name):
@@ -136,6 +157,16 @@ def refresh_barttorvik_players(out_path, year, session):
     content = fetch_bytes(url, session)
     df = read_csv_bytes(content)
     df = _clean_columns(df)
+    
+    # Validate that we got meaningful columns (not data values)
+    # If columns look like numeric IDs or player names, something is wrong
+    suspicious_columns = [c for c in df.columns[:5] if c.isdigit() or '_' in c]
+    if len(suspicious_columns) >= 3:
+        raise ValueError(
+            f"Suspicious column names detected: {suspicious_columns}. "
+            "API may have returned malformed data."
+        )
+    
     if {"adjoe", "adjde"} <= set(df.columns) and "adjem" not in df.columns:
         df["adjem"] = df["adjoe"] - df["adjde"]
     df.to_csv(out_path, index=False)
