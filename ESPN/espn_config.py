@@ -46,13 +46,13 @@ CHECKPOINT_EVERY_N_GAMES = int(os.getenv("CHECKPOINT_EVERY_N_GAMES", "50"))
 ERROR_LOG_PATH = os.getenv("ERROR_LOG_PATH", "espn_pipeline_errors.json")
 
 # ---------------- Output File Paths ----------------
-OUT_GAMES = "espn_games.csv"
-OUT_TEAM_LOGS = "espn_team_game_logs.csv"
-OUT_TEAM_FEATURES = "espn_team_game_features.csv"
-OUT_MATCHUPS = "espn_matchups_model_ready.csv"
-OUT_DIAGNOSTICS = "espn_feature_diagnostics.csv"
-OUT_DQ_AUDIT = "espn_dq_audit.csv"
-OUT_PLAYER_BOX = "espn_player_boxscores.csv"
+OUT_GAMES = "CSV/espn_games.csv"
+OUT_TEAM_LOGS = "CSV/espn_team_game_logs.csv"
+OUT_TEAM_FEATURES = "CSV/espn_team_game_features.csv"
+OUT_MATCHUPS = "CSV/espn_matchups_model_ready.csv"
+OUT_DIAGNOSTICS = "CSV/espn_feature_diagnostics.csv"
+OUT_DQ_AUDIT = "CSV/espn_dq_audit.csv"
+OUT_PLAYER_BOX = "CSV/espn_player_boxscores.csv"
 
 # ---------------- Raw JSON Storage ----------------
 JSON_OUTPUT_DIR = os.getenv("ESPN_JSON_DIR", "ESPN/raw_json")

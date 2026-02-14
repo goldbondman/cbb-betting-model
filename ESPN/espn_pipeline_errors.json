@@ -1,0 +1,22 @@
+{
+  "run_ts_utc": "2026-02-14T18:53:58Z",
+  "total_errors": 2,
+  "errors": [
+    {
+      "ts_utc": "2026-02-14T18:53:55Z",
+      "context": "fetch_scoreboard",
+      "event_id": null,
+      "error_type": "RuntimeError",
+      "error_message": "Failed after 3 attempts: https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20260215&groups=50&limit=1000 | last_error=HTTPSConnectionPool(host='site.api.espn.com', port=443): Max retries exceeded with url: /apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20260215&groups=50&limit=1000 (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fdfd5279010>: Failed to resolve 'site.api.espn.com' ([Errno -5] No address associated with hostname)\"))",
+      "date": "20260215"
+    },
+    {
+      "ts_utc": "2026-02-14T18:53:58Z",
+      "context": "fetch_scoreboard",
+      "event_id": null,
+      "error_type": "RuntimeError",
+      "error_message": "Failed after 3 attempts: https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20260214&groups=50&limit=1000 | last_error=HTTPSConnectionPool(host='site.api.espn.com', port=443): Max retries exceeded with url: /apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20260214&groups=50&limit=1000 (Caused by NameResolutionError(\"<urllib3.connection.HTTPSConnection object at 0x7fdfd5278fe0>: Failed to resolve 'site.api.espn.com' ([Errno -5] No address associated with hostname)\"))",
+      "date": "20260214"
+    }
+  ]
+}
