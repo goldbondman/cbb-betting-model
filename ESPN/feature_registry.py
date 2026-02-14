@@ -69,6 +69,7 @@ TEAM_GAME_RATES = [
     # Shooting splits (add if you want, but included here for registry completeness)
     "3p_pct",    # tpm / tpa
     "ft_pct",    # ftm / fta
+    "ts_pct",    # true shooting percentage: PTS / (2 * (FGA + 0.44 * FTA))
 ]
 
 
@@ -124,6 +125,7 @@ CORE_GAME_METRICS = (
         # include if you add them
         "3p_pct",
         "ft_pct",
+        "ts_pct",
     ]
 )
 
@@ -157,9 +159,17 @@ ROLL_MEAN_TARGETS = [
     # shooting splits (only if computed)
     "3p_pct",
     "ft_pct",
+    "ts_pct",
 
     # outcome
     "margin",
+    # differentials (team - opponent)
+    "oreb_diff",
+    "dreb_diff",
+    "ftr_diff",
+    "efg_diff",
+    "ts_diff",
+    "to_diff",
 ]
 
 # Volatility targets: what gets weighted std last10
@@ -176,8 +186,16 @@ ROLL_VOL_TARGETS = [
     "orb_pct",
     "ftr",
 
-    # 3PT variance (only if computed)
+    # shooting variance (only if computed)
     "3p_pct",
+    "ts_pct",
+    # differential volatility
+    "oreb_diff",
+    "dreb_diff",
+    "ftr_diff",
+    "efg_diff",
+    "ts_diff",
+    "to_diff",
 ]
 
 
