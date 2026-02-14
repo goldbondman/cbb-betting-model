@@ -373,9 +373,13 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     # Write player box scores
     if player_rows:
         df_players_new = pd.DataFrame(player_rows)
-        # Rename 'minutes' to 'min' if present for consistency with schema
-        if "minutes" in df_players_new.columns:
-            df_players_new = df_players_new.rename(columns={"minutes": "min"})
+        
+        # Normalize column names to match schema
+        column_mapping = {
+            "minutes": "min",
+            "points": "pts"
+        }
+        df_players_new = df_players_new.rename(columns=column_mapping)
         
         # Add athlete_id and starter columns if missing (ESPN doesn't always provide these)
         if "athlete_id" not in df_players_new.columns:
@@ -386,7 +390,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         # Ensure we have all required columns for player box scores
         player_schema_cols = [
             "event_id", "game_datetime_utc", "team_id", "team", "home_away",
-            "athlete_id", "player", "starter", "min", "points",
+            "athlete_id", "player", "starter", "min", "pts",
             "fgm", "fga", "tpm", "tpa", "ftm", "fta",
             "reb", "orb", "drb", "ast", "tov",
             "pulled_at_utc", "source", "parse_version"
@@ -396,10 +400,6 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         for col in player_schema_cols:
             if col not in df_players_new.columns:
                 df_players_new[col] = None
-        
-        # Rename 'points' to 'pts' if it exists but 'pts' doesn't
-        if "points" in df_players_new.columns and "pts" not in df_players_new.columns:
-            df_players_new = df_players_new.rename(columns={"points": "pts"})
         
         df_players_all = _append_dedupe_write(
             OUT_PLAYER_BOX,
