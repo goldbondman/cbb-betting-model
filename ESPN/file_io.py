@@ -273,6 +273,33 @@ def verify_dataframe_integrity(df: pd.DataFrame, filename: str) -> tuple[bool, L
     return (not hard_fail), issues
 
 
+def _enforce_column_order(df: pd.DataFrame, filename: str) -> pd.DataFrame:
+    """
+    Enforce column order based on OUTPUT_FILE_SCHEMAS.
+    
+    Args:
+        df: DataFrame to reorder
+        filename: Filename to look up schema
+        
+    Returns:
+        DataFrame with columns in schema order (extra columns appended at end)
+    """
+    if filename not in OUTPUT_FILE_SCHEMAS:
+        return df
+    
+    schema_cols = OUTPUT_FILE_SCHEMAS[filename]
+    df_cols = df.columns.tolist()
+    
+    # Start with schema order
+    ordered_cols = [c for c in schema_cols if c in df_cols]
+    
+    # Append any extra columns not in schema
+    extra_cols = [c for c in df_cols if c not in schema_cols]
+    ordered_cols.extend(extra_cols)
+    
+    return df[ordered_cols]
+
+
 def _append_dedupe_write(
     existing_path: str,
     new_df: pd.DataFrame,
@@ -359,6 +386,9 @@ def _append_dedupe_write(
         sort_cols_present = [c for c in sort_cols if c in combined.columns]
         if sort_cols_present:
             combined = combined.sort_values(sort_cols_present)
+
+    # Enforce column order from schema
+    combined = _enforce_column_order(combined, filename)
 
     # Write or dry run
     if DRY_RUN:

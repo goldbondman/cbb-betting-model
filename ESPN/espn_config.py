@@ -95,14 +95,24 @@ CSV_SCHEMAS = {
         "market_home_ml", "market_away_ml",
     ],
     "team_logs": [
-        "event_id", "team_id", "team", "home_away", "game_datetime_utc", "game_date", "game_date_utc", "venue",
+        # Primary identifiers
+        "event_id", "team_id", "team", "opponent", "home_away",
+        # Game date/time - game_date moved to far left per user requirement
+        "game_date", "game_date_utc", "game_datetime_utc", "venue",
+        # Score data
         "points_for", "points_against", "margin",
+        # Box score raw stats
         "fgm", "fga", "tpm", "tpa", "ftm", "fta", "tov", "orb", "drb", "reb",
+        # Derived metrics
         "poss", "efg", "ftr", "3par", "3p_pct", "ft_pct", "tov_pct", "orb_pct", "drb_pct",
         "ortg", "drtg", "netrtg", "pace",
+        # Game metadata
         "neutral_site", "is_ot", "num_ot", "noise_flag",
         "data_ok", "completed", "state", "status_desc", "status_detail",
-        "pulled_at_utc", "source", "parse_version"
+        # Technical metadata
+        "pulled_at_utc", "source", "parse_version",
+        # Additional fields
+        "home_team", "away_team", "blowout", "row_hash"
     ],
     "team_features": [
         "event_id", "team_id", "team", "home_away", "game_datetime_utc"
