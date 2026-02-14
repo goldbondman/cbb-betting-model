@@ -15,6 +15,7 @@ jobs:
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      PYTHONPATH: "${{ github.workspace }}:${{ github.workspace }}/ESPN"
       MODEL_VERSION: ${{ secrets.MODEL_VERSION }}
       EDGE_MIN: "3.0"
       EDGE_TIER2: "6.0"
