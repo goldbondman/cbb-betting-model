@@ -41,6 +41,10 @@ def main() -> None:
     games = data.load_vegas_lines(date="today")
     try:
         daily_preds = data.load_todays_predictions()
+        if not daily_preds.empty:
+            logger.info("Loaded %d precomputed predictions", len(daily_preds))
+        else:
+            logger.info("No precomputed predictions available")
     except Exception as exc:
         logger.warning(
             "Failed to load today's predictions: %s; using live per-game predictions.",
@@ -73,8 +77,14 @@ def main() -> None:
 
         if not existing.empty:
             pred = existing.iloc[0].to_dict()
-            if "predicted_spread" not in pred and "pred_spread" in pred:
-                pred["predicted_spread"] = pred["pred_spread"]
+            # Handle various column name formats for predicted spread
+            if "predicted_spread" not in pred:
+                if "pred_spread" in pred:
+                    pred["predicted_spread"] = pred["pred_spread"]
+                elif "pred_margin_home" in pred:
+                    pred["predicted_spread"] = pred["pred_margin_home"]
+                elif "ensemble_prediction" in pred:
+                    pred["predicted_spread"] = pred["ensemble_prediction"]
             pred.setdefault("confidence", 0.6)
             pred.setdefault("breakdown", {})
         else:
