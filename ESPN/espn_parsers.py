@@ -302,8 +302,8 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                 if athlete_id:
                     row["athlete_id"] = str(athlete_id)
                 if starter is not None:
-                    row["starter"] = int(starter) if starter else 0
-                    
+                    row["starter"] = int(starter or 0)
+
                 row["minutes"] = _to_float(pick("min", "minutes"), np.nan)
                 row["points"] = _to_int(pick("pts", "points"), 0)
 
