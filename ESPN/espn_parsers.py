@@ -302,7 +302,7 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                 if athlete_id:
                     row["athlete_id"] = str(athlete_id)
                 if starter is not None:
-                    row["starter"] = int(bool(starter))
+                    row["starter"] = int(starter) if starter else 0
                     
                 row["minutes"] = _to_float(pick("min", "minutes"), np.nan)
                 row["points"] = _to_int(pick("pts", "points"), 0)
@@ -484,6 +484,8 @@ def parse_summary_json(summary_json: Dict[str, Any], event_id: str) -> Dict[str,
     Raises:
         ValueError: If boxscore structure is unexpected
     """
+    DEBUG_MISSING_STATS = os.getenv("ESPN_DEBUG_MISSING_STATS") == "1"
+    
     header = summary_json.get("header", {}) if isinstance(summary_json, dict) else {}
     competitions = header.get("competitions", []) if isinstance(header, dict) else []
     comp0 = competitions[0] if isinstance(competitions, list) and competitions else {}
@@ -565,7 +567,7 @@ def parse_summary_json(summary_json: Dict[str, Any], event_id: str) -> Dict[str,
         totals = _sum_player_totals(players)
         if not totals:
             # Log when no player totals available for completed game with missing team stats
-            if os.getenv("ESPN_DEBUG_MISSING_STATS") == "1":
+            if DEBUG_MISSING_STATS:
                 print(f"[DEBUG] No player totals for team {row.get('team')}, {len(players)} players")
             return row, False
         changed = False
@@ -573,7 +575,7 @@ def parse_summary_json(summary_json: Dict[str, Any], event_id: str) -> Dict[str,
             if _to_int(row.get(k), 0) == 0 and _to_int(v, 0) > 0:
                 row[k] = _to_int(v, 0)
                 changed = True
-        if changed and os.getenv("ESPN_DEBUG_MISSING_STATS") == "1":
+        if changed and DEBUG_MISSING_STATS:
             print(f"[DEBUG] Applied player fallback for team {row.get('team')}: fga={row.get('fga')}")
         return row, changed
 
@@ -607,7 +609,7 @@ def parse_summary_json(summary_json: Dict[str, Any], event_id: str) -> Dict[str,
     away_row["base_totals_source"] = "player_sum" if (completed and away_fallback_changed) else "team_stats"
 
     # DEBUG: Warn if completed game has zero box scores
-    if os.getenv("ESPN_DEBUG_MISSING_STATS") == "1" and completed:
+    if DEBUG_MISSING_STATS and completed:
         if _to_int(home_row.get("fga"), 0) == 0 or _to_int(away_row.get("fga"), 0) == 0:
             print(f"[WARN] Completed game {event_id} has zero box scores!")
             print(f"  Home FGA: {home_row.get('fga')}, Away FGA: {away_row.get('fga')}")
