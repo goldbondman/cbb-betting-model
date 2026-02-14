@@ -183,32 +183,45 @@ if preds.empty:
         **Why are predictions missing?**
         
         Predictions may not be available because:
-        1. ✅ **Supabase is connected** - The connection is working
-        2. ❌ **No prediction data found** - Predictions may not have been generated yet
-        
-        **Possible causes:**
-        - The daily prediction pipeline hasn't run yet (scheduled runs vary)
-        - There are no games scheduled for today
-        - Predictions are in `raw.predictions_latest` but haven't been synced to `public.predictions`
-        
-        **What you can do:**
-        1. **Check if raw predictions exist**: Run the CSV loader to sync predictions
-        2. **Check GitHub Actions**: Look for the daily prediction workflow run status
-        3. **Manual workaround**: Upload predictions CSV to trigger the pipeline
-        
-        **Technical Details:**
-        - Checked: `public.predictions` ✓
-        - Checked: `raw.predictions_latest` ✓
-        - Checked: CSV files (`data/predictions.csv`, `ml/predictions_latest.csv`) ✓
-        - All sources returned empty results
         """)
         
         # Show Supabase connection status
         client = _get_supabase_client()
         if client:
-            st.success("✓ Supabase client connected successfully")
+            st.success("✅ Supabase is connected - The connection is working")
+            
+            # Check if raw.predictions_latest has any data
+            try:
+                resp = client.schema("raw").table("predictions_latest").select("*").limit(1).execute()
+                if resp.data and len(resp.data) > 0:
+                    st.info("ℹ️ Raw predictions table has data, but none match today's games")
+                else:
+                    st.error("❌ No prediction data found - Predictions may not have been generated yet")
+            except Exception as e:
+                st.warning(f"⚠️ Could not check raw predictions table: {e}")
         else:
             st.error("✗ Supabase client not available - check credentials")
+        
+        st.markdown("""
+        **Possible causes:**
+        - The daily prediction pipeline hasn't run yet (scheduled for 9 AM UTC, then 3 PM UTC)
+        - There are no games scheduled for today
+        - The ML pipeline failed or is still running
+        - Predictions exist in `raw.predictions_latest` but haven't been synced to `public.predictions`
+        
+        **What you can do:**
+        1. **Check GitHub Actions workflows**:
+           - [Run ML Pipeline](https://github.com/goldbondman/cbb-betting-model/actions/workflows/run-ml-pipeline.yml) (should run at 9 AM UTC)
+           - [Daily Auto Predict](https://github.com/goldbondman/cbb-betting-model/actions/workflows/daily_auto_predict.yml) (should run at 3 PM UTC)
+        2. **Manual trigger**: You can manually trigger these workflows from the Actions tab
+        3. **Run diagnostics**: Use `python scripts/diagnose_predictions.py` to get detailed information
+        
+        **Technical Details:**
+        - Checked: `public.predictions` ✓
+        - Checked: `raw.predictions_latest` ✓
+        - Checked: CSV files (`data/predictions.csv`, `ml/predictions_latest.csv`) ✓
+        - All sources returned empty results for today's date range
+        """)
     
     st.stop()
 
