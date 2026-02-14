@@ -400,7 +400,7 @@ def main() -> None:
     skipped_no_teams = 0
     for _, row in merged.iterrows():
         event_id = str(row.get("event_id") or "").strip()
-        # After filtering and inner join, this should always be true, but check defensively
+        # Defensive check: skip if event_id is somehow empty (shouldn't happen after filtering)
         if not event_id:
             continue
 
