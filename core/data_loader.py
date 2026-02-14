@@ -88,10 +88,28 @@ class DataLoader:
             games_df = self._load_csv("espn_games.csv").copy()
         if games_df.empty:
             return pd.DataFrame()
+        if "market_spread" not in games_df.columns:
+            for col in ("vegas_spread", "spread", "spread_home", "closing_spread_home"):
+                if col in games_df.columns:
+                    games_df["market_spread"] = pd.to_numeric(games_df[col], errors="coerce")
+                    break
+        elif games_df["market_spread"].dtype == object:
+            games_df["market_spread"] = pd.to_numeric(games_df["market_spread"], errors="coerce")
+
+        if "market_spread" not in games_df.columns:
+            games_df["market_spread"] = pd.NA
+
         games_df["game_date"] = pd.to_datetime(games_df.get("date"), format="%Y%m%d", errors="coerce")
+        if games_df["game_date"].isna().all() and "game_datetime_utc" in games_df.columns:
+            games_df["game_date"] = pd.to_datetime(games_df["game_datetime_utc"], errors="coerce")
         if date == "today":
             today = pd.Timestamp(datetime.utcnow().date())
-            return games_df[games_df["game_date"].dt.date == today.date()].copy()
+            today_games = games_df[games_df["game_date"].dt.date == today.date()].copy()
+            if not today_games.empty:
+                return today_games
+            latest_date = games_df["game_date"].dropna().max()
+            if pd.notna(latest_date):
+                return games_df[games_df["game_date"].dt.date == latest_date.date()].copy()
         return games_df
 
     def _load_predictions_from_csv(self) -> pd.DataFrame:

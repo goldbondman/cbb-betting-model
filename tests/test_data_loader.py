@@ -1,6 +1,7 @@
 """Tests for core.data_loader CSV fallback and path resolution."""
 
 import os
+from datetime import datetime
 from pathlib import Path
 from unittest import mock
 
@@ -143,3 +144,41 @@ class TestLoadVegasLines:
 
         assert not result.empty
         assert result.iloc[0]["home_team"] == "Kansas"
+
+    def test_falls_back_to_latest_date_when_today_missing(self) -> None:
+        loader = DataLoader()
+        stale_games = pd.DataFrame(
+            {
+                "date": ["20250120", "20250201"],
+                "game_id": ["300", "301"],
+                "home_team": ["UCLA", "Arizona"],
+                "away_team": ["USC", "UCLA"],
+                "market_spread": [1.5, -2.5],
+            }
+        )
+
+        with mock.patch.object(DataLoader, "_load_csv", return_value=stale_games):
+            result = loader.load_vegas_lines(date="today")
+
+        assert not result.empty
+        assert str(result.iloc[0]["game_id"]) == "301"
+        assert str(result.iloc[0]["game_date"].date()) == "2025-02-01"
+
+    def test_maps_spread_alias_to_market_spread(self) -> None:
+        loader = DataLoader()
+        today = datetime.utcnow().strftime("%Y%m%d")
+        games = pd.DataFrame(
+            {
+                "date": [today],
+                "game_id": ["302"],
+                "home_team": ["Purdue"],
+                "away_team": ["Illinois"],
+                "spread": [-4.0],
+            }
+        )
+
+        with mock.patch.object(DataLoader, "_load_csv", return_value=games):
+            result = loader.load_vegas_lines(date="today")
+
+        assert "market_spread" in result.columns
+        assert float(result.iloc[0]["market_spread"]) == -4.0
