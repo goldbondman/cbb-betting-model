@@ -8,6 +8,7 @@ import pandas as pd
 import streamlit as st
 
 from core.data_loader import DataLoader
+from core.primary_prediction_engine import PrimaryPredictionEngine
 from core.supabase_utils import get_public_supabase_client
 
 
@@ -175,55 +176,50 @@ if scoreboard.empty:
     st.stop()
 
 if preds.empty:
-    st.warning("⚠️ No predictions found")
-    
-    # Provide diagnostic information
-    with st.expander("🔍 Troubleshooting Information", expanded=True):
-        st.markdown("""
-        **Why are predictions missing?**
-        
-        Predictions may not be available because:
-        """)
-        
-        # Show Supabase connection status
-        client = _get_supabase_client()
-        if client:
-            st.success("✅ Supabase is connected - The connection is working")
-            
-            # Check if raw.predictions_latest has any data
-            try:
-                resp = client.schema("raw").table("predictions_latest").select("*").limit(1).execute()
-                if resp.data and len(resp.data) > 0:
-                    st.info("ℹ️ Raw predictions table has data, but none match today's games")
-                else:
-                    st.error("❌ No prediction data found - Predictions may not have been generated yet")
-            except Exception as e:
-                st.warning(f"⚠️ Could not check raw predictions table: {e}")
-        else:
-            st.error("✗ Supabase client not available - check credentials")
-        
-        st.markdown("""
-        **Possible causes:**
-        - The daily prediction pipeline hasn't run yet (scheduled for 9 AM UTC, then 3 PM UTC)
-        - There are no games scheduled for today
-        - The ML pipeline failed or is still running
-        - Predictions exist in `raw.predictions_latest` but haven't been synced to `public.predictions`
-        
-        **What you can do:**
-        1. **Check GitHub Actions workflows**:
-           - [Run ML Pipeline](https://github.com/goldbondman/cbb-betting-model/actions/workflows/run-ml-pipeline.yml) (should run at 9 AM UTC)
-           - [Daily Auto Predict](https://github.com/goldbondman/cbb-betting-model/actions/workflows/daily_auto_predict.yml) (should run at 3 PM UTC)
-        2. **Manual trigger**: You can manually trigger these workflows from the Actions tab
-        3. **Run diagnostics**: Use `python scripts/diagnose_predictions.py` to get detailed information
-        
-        **Technical Details:**
-        - Checked: `public.predictions` ✓
-        - Checked: `raw.predictions_latest` ✓
-        - Checked: CSV files (`data/predictions.csv`, `ml/predictions_latest.csv`) ✓
-        - All sources returned empty results for today's date range
-        """)
-    
-    st.stop()
+    st.info("ℹ️ No pre-computed predictions found. Generating live predictions using Primary Model v2.0...")
+
+    # Generate live predictions using the Primary Prediction Model
+    data_loader = DataLoader()
+    primary_engine = PrimaryPredictionEngine(data_loader)
+
+    live_rows = []
+    home_col = None
+    away_col = None
+    for col_pair in [("home_team", "away_team"), ("home_name", "away_name"),
+                     ("home", "away"), ("home_team_name", "away_team_name")]:
+        if col_pair[0] in scoreboard.columns and col_pair[1] in scoreboard.columns:
+            home_col, away_col = col_pair
+            break
+
+    if home_col is None:
+        st.warning("⚠️ Cannot generate predictions: scoreboard missing home/away team columns.")
+        st.stop()
+
+    for _, game in scoreboard.iterrows():
+        home_team = str(game[home_col])
+        away_team = str(game[away_col])
+        game_id = str(game.get("game_id", ""))
+
+        try:
+            pred = primary_engine.predict_spread(home_team, away_team)
+            live_rows.append({
+                "event_id": game_id,
+                "home_team": home_team,
+                "away_team": away_team,
+                "pred_margin_home": pred["predicted_spread"],
+                "pred_total": pred.get("predicted_total"),
+                "confidence": pred["confidence"],
+                "model_id": pred["model_id"],
+            })
+        except Exception as exc:
+            logger.warning("Failed to predict %s vs %s: %s", home_team, away_team, exc)
+
+    if live_rows:
+        preds = _normalize_prediction_columns(pd.DataFrame(live_rows))
+        st.success(f"✅ Generated {len(live_rows)} live predictions using {primary_engine.active_model['model_name']}")
+    else:
+        st.warning("⚠️ Could not generate any predictions for today's games.")
+        st.stop()
 
 if "pred_margin_home" not in preds.columns and "pred_spread" in preds.columns:
     preds["pred_margin_home"] = preds["pred_spread"]
