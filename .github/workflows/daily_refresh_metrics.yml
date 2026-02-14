@@ -35,6 +35,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pandas requests beautifulsoup4 lxml
+          pip install psycopg[binary]
 
       - name: Install Node.js (for cbb-api)
         uses: actions/setup-node@v4
@@ -94,6 +95,7 @@ jobs:
 
       - name: Upload Torvik outputs to Supabase Storage (skip missing)
         env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
