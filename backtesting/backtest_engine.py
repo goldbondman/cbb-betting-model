@@ -100,7 +100,33 @@ class BacktestEngine:
         }
 
     def _predict_with_params(self, home: dict[str, Any], away: dict[str, Any], params: dict[str, Any]) -> dict[str, float]:
-        """Generate prediction using explicit params payload."""
+        """Generate prediction using explicit params payload.
+        
+        Supports both legacy (4 features) and enhanced (8 features) models.
+        
+        Legacy features:
+        - torvik_adjem: Adjusted efficiency margin differential
+        - recent_netrtg: Last 7 games net rating differential
+        - four_factors: Composite of eFG%, TOV%, ORB%, FTR
+        - sos_weighted: Strength of schedule (L10) weighted margin
+        
+        Enhanced features (v2):
+        - def_efficiency: Defensive rating differential (lower DRTG is better)
+        - off_efficiency: Offensive rating differential (higher ORTG is better)
+        - tempo_advantage: Pace differential scaled by impact factor
+        - three_rate: 3-point attempt rate differential
+        
+        All features use pre-game stats (L7 or L10) to avoid data leakage.
+        Missing data is handled gracefully with reasonable defaults.
+        
+        Args:
+            home: Team snapshot with pre-game stats
+            away: Team snapshot with pre-game stats
+            params: Model configuration with weights and HCA settings
+            
+        Returns:
+            Dict with predicted_spread key (positive favors home team)
+        """
         weights = params.get("weights", {})
         
         # Core metrics

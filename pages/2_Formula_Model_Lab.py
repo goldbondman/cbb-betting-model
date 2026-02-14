@@ -1,4 +1,23 @@
-"""Model Lab - Create, edit, backtest, and activate formula models."""
+"""Model Lab - Create, edit, backtest, and activate formula models.
+
+This page allows you to create and test formula-based prediction models with weighted components.
+
+Available Features:
+  Core Metrics (Legacy):
+    - Torvik AdjEM: Adjusted efficiency margin from Barttorvik ratings
+    - Recent (L7): Net rating over last 7 games
+    - Four Factors: Composite of eFG%, TOV%, ORB%, FTR (Dean Oliver's four factors)
+    - SOS Weighted: Strength of schedule adjusted margin (L10)
+    
+  Advanced Metrics (Enhanced):
+    - Defensive Efficiency: DRTG gap (home vs away defense)
+    - Offensive Efficiency: ORTG gap (home vs away offense)
+    - Tempo Advantage: Pace differential impact on spread
+    - Three-Point Rate: 3-point attempt rate differential
+    
+All features use pre-game stats to prevent data leakage.
+Models are backwards compatible - legacy 4-feature models work alongside enhanced 8-feature models.
+"""
 
 from __future__ import annotations
 
