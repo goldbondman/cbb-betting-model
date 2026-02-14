@@ -19,6 +19,7 @@ Verified constraints:
 from __future__ import annotations
 
 import json
+import logging
 import math
 import os
 import sys
@@ -30,6 +31,8 @@ from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 from supabase import create_client
+
+logger = logging.getLogger(__name__)
 
 # Ensure repo root is on sys.path so imports work when running:
 # python scripts/daily_auto_predict.py
@@ -371,14 +374,14 @@ def main() -> None:
     if preds.empty:
         raise RuntimeError(f"No rows found in {RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}.")
 
-    print(f"DEBUG: Fetched {len(preds)} predictions from {RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}")
-    print(f"DEBUG: Predictions columns: {list(preds.columns)}")
+    logger.info(f"Fetched {len(preds)} predictions from {RAW_PREDICTIONS_SCHEMA}.{RAW_PREDICTIONS_TABLE}")
+    logger.debug(f"Predictions columns: {list(preds.columns)}")
     if len(preds) > 0:
-        print(f"DEBUG: Sample event_id from predictions: {preds['event_id'].head(3).tolist()}")
-    print(f"DEBUG: Scoreboard has {len(scoreboard)} games")
+        logger.debug(f"Sample event_id from predictions: {preds['event_id'].head(3).tolist()}")
+    logger.info(f"Scoreboard has {len(scoreboard)} games")
     if len(scoreboard) > 0:
-        print(f"DEBUG: Sample game_id from scoreboard: {scoreboard['game_id'].head(3).tolist()}")
-    print(f"DEBUG: game_id_set size: {len(game_id_set)}")
+        logger.debug(f"Sample game_id from scoreboard: {scoreboard['game_id'].head(3).tolist()}")
+    logger.debug(f"game_id_set size: {len(game_id_set)}")
 
     # Normalize join keys
     preds["event_id"] = preds["event_id"].astype(str)
@@ -386,19 +389,19 @@ def main() -> None:
 
     # Only join predictions that match scoreboard game IDs
     # This filters predictions to only games in the date range we fetched
-    preds_filtered = preds[preds["event_id"].isin(scoreboard["game_id"])]
-    print(f"DEBUG: After filtering to scoreboard games, {len(preds_filtered)} predictions remain")
+    # Use game_id_set for efficient O(1) set membership checking
+    preds_filtered = preds[preds["event_id"].isin(game_id_set)]
+    logger.info(f"After filtering to scoreboard games, {len(preds_filtered)} predictions remain")
 
     merged = preds_filtered.merge(scoreboard, left_on="event_id", right_on="game_id", how="inner", suffixes=("", "_game"))
-    print(f"DEBUG: After inner join, got {len(merged)} rows")
+    logger.info(f"After inner join, got {len(merged)} rows")
 
     prediction_rows: List[Dict[str, object]] = []
-    skipped_no_event_id = 0
     skipped_no_teams = 0
     for _, row in merged.iterrows():
         event_id = str(row.get("event_id") or "").strip()
-        if not event_id or event_id not in game_id_set:
-            skipped_no_event_id += 1
+        # After filtering and inner join, this should always be true, but check defensively
+        if not event_id:
             continue
 
         model_version = MODEL_VERSION_OVERRIDE or str(row.get("model_version") or "").strip() or "ml-linear-v1"
@@ -482,9 +485,8 @@ def main() -> None:
             }
         )
 
-    print(f"DEBUG: Skipped {skipped_no_event_id} rows due to missing/mismatched event_id")
-    print(f"DEBUG: Skipped {skipped_no_teams} rows due to missing team names")
-    print(f"DEBUG: Created {len(prediction_rows)} prediction rows for upsert")
+    logger.info(f"Skipped {skipped_no_teams} rows due to missing team names")
+    logger.info(f"Created {len(prediction_rows)} prediction rows for upsert")
 
     predictions_upserted = 0
     if prediction_rows:
@@ -536,4 +538,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    # Configure logging for standalone execution
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
     main()
