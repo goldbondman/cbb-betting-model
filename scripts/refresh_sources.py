@@ -64,16 +64,17 @@ def read_csv_bytes(content):
     lines = content.decode("utf-8", errors="replace").split('\n')
     if lines:
         first_line = lines[0].strip()
-        # Check first few fields - if they look like data values (underscores, long names),
-        # then headers are missing
-        parts = first_line.split(',')[:3]
+        # Check first few fields - player/team names typically have underscores or spaces
+        # while clean column headers don't
+        HEADER_CHECK_COLUMNS = 3  # Check first 3 columns for data patterns
+        parts = first_line.split(',')[:HEADER_CHECK_COLUMNS]
         if len(parts) >= 2:
             # Player name + team name pattern: contains underscores/spaces
-            col0_has_underscore_or_space = '_' in parts[0] or ' ' in parts[0]
-            col1_has_underscore_or_space = '_' in parts[1] or ' ' in parts[1]
+            col0_looks_like_data = '_' in parts[0] or ' ' in parts[0]
+            col1_looks_like_data = '_' in parts[1] or ' ' in parts[1]
             # If both first columns look like identifiers (not clean column names), 
             # assume headers are missing
-            if col0_has_underscore_or_space and col1_has_underscore_or_space:
+            if col0_looks_like_data and col1_looks_like_data:
                 raise ValueError(
                     "CSV appears to be missing header row (first row looks like data). "
                     "Check the upstream API response."
@@ -160,8 +161,10 @@ def refresh_barttorvik_players(out_path, year, session):
     
     # Validate that we got meaningful columns (not data values)
     # If columns look like numeric IDs or player names, something is wrong
-    suspicious_columns = [c for c in df.columns[:5] if c.isdigit() or '_' in c]
-    if len(suspicious_columns) >= 3:
+    COLUMNS_TO_CHECK = 5  # Check first 5 columns
+    SUSPICIOUS_THRESHOLD = 3  # If 3+ columns are suspicious, likely malformed
+    suspicious_columns = [c for c in df.columns[:COLUMNS_TO_CHECK] if c.isdigit() or '_' in c]
+    if len(suspicious_columns) >= SUSPICIOUS_THRESHOLD:
         raise ValueError(
             f"Suspicious column names detected: {suspicious_columns}. "
             "API may have returned malformed data."
