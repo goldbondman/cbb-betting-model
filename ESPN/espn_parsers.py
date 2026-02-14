@@ -365,7 +365,16 @@ def parse_team_from_summary(team_entry: Dict[str, Any]) -> Dict[str, Any]:
     tid = str(t.get("id", ""))
     name = t.get("displayName") or t.get("shortDisplayName") or t.get("name") or "Unknown"
 
+    # Debug: Check what fields are actually present
     stats_list = team_entry.get("teamStats") or team_entry.get("statistics") or []
+    
+    # DEBUG: Log if stats are missing (can be enabled via env var)
+    import os
+    if os.getenv("ESPN_DEBUG_MISSING_STATS") == "1":
+        if not stats_list:
+            print(f"[DEBUG] No teamStats or statistics found for team {name} (id={tid})")
+            print(f"[DEBUG] Available keys in team_entry: {list(team_entry.keys())}")
+    
     smap = _stat_map(stats_list)
 
     fgm, fga = _parse_made_attempt(smap.get("fieldGoals", ""))
@@ -578,6 +587,15 @@ def parse_summary_json(summary_json: Dict[str, Any], event_id: str) -> Dict[str,
     # Mark base totals source
     home_row["base_totals_source"] = "player_sum" if (completed and home_fallback_changed) else "team_stats"
     away_row["base_totals_source"] = "player_sum" if (completed and away_fallback_changed) else "team_stats"
+
+    # DEBUG: Warn if completed game has zero box scores
+    import os
+    if os.getenv("ESPN_DEBUG_MISSING_STATS") == "1" and completed:
+        if _to_int(home_row.get("fga"), 0) == 0 or _to_int(away_row.get("fga"), 0) == 0:
+            print(f"[WARN] Completed game {event_id} has zero box scores!")
+            print(f"  Home FGA: {home_row.get('fga')}, Away FGA: {away_row.get('fga')}")
+            print(f"  Home players: {len(players_home)}, Away players: {len(players_away)}")
+            print(f"  Fallback used: Home={home_fallback_changed}, Away={away_fallback_changed}")
 
     return {
         "event_id": str(event_id),
