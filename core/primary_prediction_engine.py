@@ -113,6 +113,7 @@ class PrimaryPredictionEngine:
             logger.warning("No game data for either team: %s vs %s", home_team, away_team)
             return {
                 "predicted_spread": -self.config.default_hca if not neutral_site else 0.0,
+                "predicted_total": None,
                 "confidence": 0.50,
                 "model_id": self.MODEL_ID,
                 "breakdown": {},
