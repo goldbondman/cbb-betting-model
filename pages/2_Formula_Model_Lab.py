@@ -63,9 +63,9 @@ with st.form("create_model"):
         
     with col2:
         st.markdown("**Advanced Metrics**")
-        w_def_eff = st.slider("Defensive Efficiency", 0.0, 1.0, 0.08, 0.05, help="DRTG vs opponent's ORTG")
-        w_off_eff = st.slider("Offensive Efficiency", 0.0, 1.0, 0.06, 0.05, help="ORTG differential")
-        w_tempo = st.slider("Tempo Advantage", 0.0, 1.0, 0.04, 0.05, help="Pace impact on spread")
+        w_def_eff = st.slider("Defensive Efficiency", 0.0, 1.0, 0.08, 0.05, help="Defensive rating gap (DRTG)")
+        w_off_eff = st.slider("Offensive Efficiency", 0.0, 1.0, 0.06, 0.05, help="Offensive rating differential (ORTG)")
+        w_tempo = st.slider("Tempo Advantage", 0.0, 1.0, 0.04, 0.05, help="Pace differential impact on spread")
         w_three_rate = st.slider("Three-Point Rate", 0.0, 1.0, 0.02, 0.05, help="3-point attempt rate differential")
 
     total_weight = w_torvik + w_recent + w_ff + w_sos + w_def_eff + w_off_eff + w_tempo + w_three_rate

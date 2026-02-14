@@ -149,18 +149,24 @@ class BacktestEngine:
         sos_edge = (safe_float(home.get("sos_weighted_margin_l10_pre"), 0) - safe_float(away.get("sos_weighted_margin_l10_pre"), 0)) / 10.0
 
         # Advanced metrics
-        # Defensive efficiency: Home DRTG vs Away ORTG (lower DRTG is better)
-        def_eff_edge = (safe_float(away.get("drtg_l7_pre"), 100) - safe_float(home.get("drtg_l7_pre"), 100))
+        # Defensive efficiency gap: away DRTG minus home DRTG (lower DRTG is better defense)
+        # Positive value favors home team's defense
+        # Default 105.0 represents average D1 defensive efficiency
+        def_eff_edge = (safe_float(away.get("drtg_l7_pre"), 105.0) - safe_float(home.get("drtg_l7_pre"), 105.0))
         
-        # Offensive efficiency: Home ORTG vs Away ORTG (higher ORTG is better)
-        off_eff_edge = (safe_float(home.get("ortg_l7_pre"), 100) - safe_float(away.get("ortg_l7_pre"), 100))
+        # Offensive efficiency differential: home ORTG minus away ORTG (higher ORTG is better offense)
+        # Positive value favors home team's offense
+        # Default 105.0 represents average D1 offensive efficiency
+        off_eff_edge = (safe_float(home.get("ortg_l7_pre"), 105.0) - safe_float(away.get("ortg_l7_pre"), 105.0))
         
-        # Tempo advantage: Pace differential scaled by impact
+        # Tempo advantage: Pace differential scaled by impact factor
+        # Positive value indicates home team plays at faster pace
         pace_home = safe_float(home.get("pace_l7_pre"), 70)
         pace_away = safe_float(away.get("pace_l7_pre"), 70)
         tempo_edge = (pace_home - pace_away) * 0.15  # Scale factor for tempo impact
         
-        # Three-point rate differential
+        # Three-point rate differential: scaled to approximate point impact
+        # Positive value indicates home team shoots more 3s
         three_rate_edge = (safe_float(home.get("3par_l7_pre"), 0.35) - safe_float(away.get("3par_l7_pre"), 0.35)) * 20
 
         spread_points = (
