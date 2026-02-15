@@ -51,6 +51,7 @@ ERROR_LOG_PATH = os.getenv("ERROR_LOG_PATH", "espn_pipeline_errors.json")
 
 # ---------------- Output File Paths ----------------
 OUT_GAMES = "CSV/espn_games.csv"
+OUT_TEAMS = "CSV/espn_teams.csv"
 OUT_TEAM_LOGS = "CSV/espn_team_game_logs.csv"
 OUT_TEAM_FEATURES = "CSV/espn_team_game_features.csv"
 OUT_MATCHUPS = "CSV/espn_matchups_model_ready.csv"
