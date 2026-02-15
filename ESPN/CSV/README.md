@@ -82,7 +82,8 @@ Backup files created during updates.
 
 ### Player Box Score Data
 - Player data is extracted from ESPN API `boxscore.players`
-- Fields `athlete_id` and `starter` may be None if ESPN doesn't provide them
+- If ESPN omits `athlete_id`, the pipeline fills a deterministic synthetic ID for import/upsert safety
+- `starter` may be None if ESPN doesn't provide it
 - Player stats are used as fallback to populate team totals when direct team stats are missing
 
 ## Update Process
