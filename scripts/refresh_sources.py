@@ -224,13 +224,27 @@ def _collect_team_ids_from_csv(games_csv_path):
     Returns:
         Sorted list of unique team ID strings
     """
-    if not os.path.exists(games_csv_path):
-        return []
-    try:
-        df = pd.read_csv(games_csv_path, usecols=["team_id"])
-        return sorted(df["team_id"].dropna().astype(str).unique().tolist())
-    except Exception:
-        return []
+    def _read_team_ids(path):
+        """Read unique team IDs from a CSV if the file has a team_id column."""
+        if not os.path.exists(path):
+            return []
+        try:
+            df = pd.read_csv(path, usecols=["team_id"])
+            return sorted(df["team_id"].dropna().astype(str).unique().tolist())
+        except Exception:
+            return []
+
+    team_ids = _read_team_ids(games_csv_path)
+    if team_ids:
+        return team_ids
+
+    parent = os.path.dirname(games_csv_path) or "."
+    for fallback_name in ("espn_player_boxscores.csv", "espn_teams.csv"):
+        fallback_path = os.path.join(parent, fallback_name)
+        team_ids = _read_team_ids(fallback_path)
+        if team_ids:
+            return team_ids
+    return []
 
 
 def main():

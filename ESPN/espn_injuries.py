@@ -88,9 +88,26 @@ def parse_injuries_from_team(
     team_obj = team_json.get("team", {}) if isinstance(team_json, dict) else {}
     team_name = team_obj.get("displayName") or team_obj.get("name") or "Unknown"
 
-    injuries = team_obj.get("injuries") or []
+    injuries = team_obj.get("injuries")
     if not isinstance(injuries, list):
-        return rows
+        injuries = team_json.get("injuries") if isinstance(team_json, dict) else []
+    if not isinstance(injuries, list):
+        injuries = []
+    if not injuries and isinstance(team_json, dict):
+        athletes = team_json.get("athletes") or []
+        if isinstance(athletes, list):
+            for athlete_entry in athletes:
+                if not isinstance(athlete_entry, dict):
+                    continue
+                athlete_obj = athlete_entry.get("athlete") or athlete_entry
+                athlete_injuries = athlete_entry.get("injuries") or []
+                if not isinstance(athlete_injuries, list):
+                    continue
+                for injury_entry in athlete_injuries:
+                    if isinstance(injury_entry, dict):
+                        merged = dict(injury_entry)
+                        merged.setdefault("athlete", athlete_obj)
+                        injuries.append(merged)
 
     for entry in injuries:
         if not isinstance(entry, dict):

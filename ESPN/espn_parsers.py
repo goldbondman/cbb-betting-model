@@ -38,10 +38,14 @@ def _stat_map(team_stats_list: List[Dict[str, Any]]) -> Dict[str, Any]:
     for item in team_stats_list:
         if not isinstance(item, dict):
             continue
-        name = item.get("name")
         dv = item.get("displayValue")
-        if name:
-            out[str(name)] = dv
+        if dv is None:
+            dv = item.get("value")
+
+        for k in ("name", "abbreviation", "shortDisplayName", "displayName", "label"):
+            name = item.get(k)
+            if name:
+                out[str(name)] = dv
     return out
 
 
@@ -279,6 +283,9 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
             labels = table.get("labels", [])
             if not isinstance(labels, list):
                 labels = []
+            keys = table.get("keys", [])
+            if not isinstance(keys, list):
+                keys = []
 
             for a in athletes:
                 athlete = a.get("athlete", {}) or {}
@@ -287,10 +294,11 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                 starter = a.get("starter")
 
                 stats = a.get("stats", [])
-                if not isinstance(stats, list) or (labels and len(labels) != len(stats)):
+                if not isinstance(stats, list):
                     continue
 
-                lmap = {str(labels[i]).lower(): stats[i] for i in range(len(labels))} if labels else {}
+                headers = labels if len(labels) == len(stats) else (keys if len(keys) == len(stats) else [])
+                lmap = {str(headers[i]).lower(): stats[i] for i in range(len(headers))} if headers else {}
 
                 def pick(*keys):
                     for k in keys:
@@ -389,29 +397,45 @@ def parse_team_from_summary(team_entry: Dict[str, Any]) -> Dict[str, Any]:
             print(f"[DEBUG] Available keys in team_entry: {list(team_entry.keys())}")
     
     smap = _stat_map(stats_list)
+    normalized_smap = {
+        str(k).lower().replace(" ", "").replace("_", "").replace("-", ""): v
+        for k, v in smap.items()
+    }
 
-    fgm, fga = _parse_made_attempt(smap.get("fieldGoals", ""))
+    def pick(*keys: str) -> Any:
+        """Return first matching stat value for any provided key alias."""
+        for k in keys:
+            if k in smap:
+                return smap.get(k)
+            lk = str(k).lower().replace(" ", "").replace("_", "").replace("-", "")
+            if lk in normalized_smap:
+                return normalized_smap.get(lk)
+        return None
+
+    fgm, fga = _parse_made_attempt(pick("fieldGoals", "fg", "fieldgoals", "field goals", "fgm-a") or "")
     if fga == 0:
-        fga = _to_int(smap.get("fieldGoalsAttempted"), 0)
+        fga = _to_int(pick("fieldGoalsAttempted", "fga"), 0)
     if fgm == 0:
-        fgm = _to_int(smap.get("fieldGoalsMade"), 0)
+        fgm = _to_int(pick("fieldGoalsMade", "fgm"), 0)
 
-    tpm, tpa = _parse_made_attempt(smap.get("threePointFieldGoals", ""))
+    tpm, tpa = _parse_made_attempt(
+        pick("threePointFieldGoals", "3pt", "3ptfg", "threepointfieldgoals", "3fg", "3pm-a") or ""
+    )
     if tpa == 0:
-        tpa = _to_int(smap.get("threePointFieldGoalsAttempted"), 0)
+        tpa = _to_int(pick("threePointFieldGoalsAttempted", "3pta", "tpa"), 0)
     if tpm == 0:
-        tpm = _to_int(smap.get("threePointFieldGoalsMade"), 0)
+        tpm = _to_int(pick("threePointFieldGoalsMade", "3ptm", "tpm"), 0)
 
-    ftm, fta = _parse_made_attempt(smap.get("freeThrows", ""))
+    ftm, fta = _parse_made_attempt(pick("freeThrows", "ft", "freethrows", "ftm-a") or "")
     if fta == 0:
-        fta = _to_int(smap.get("freeThrowsAttempted"), 0)
+        fta = _to_int(pick("freeThrowsAttempted", "fta"), 0)
     if ftm == 0:
-        ftm = _to_int(smap.get("freeThrowsMade"), 0)
+        ftm = _to_int(pick("freeThrowsMade", "ftm"), 0)
 
-    tov = _to_int(smap.get("turnovers"), 0)
-    orb = _to_int(smap.get("reboundsOffensive"), 0)
-    drb = _to_int(smap.get("reboundsDefensive"), 0)
-    reb = _to_int(smap.get("rebounds"), orb + drb)
+    tov = _to_int(pick("turnovers", "to", "tov"), 0)
+    orb = _to_int(pick("reboundsOffensive", "offensiveRebounds", "oreb", "offreb"), 0)
+    drb = _to_int(pick("reboundsDefensive", "defensiveRebounds", "dreb", "defreb"), 0)
+    reb = _to_int(pick("rebounds", "reb", "totalRebounds"), orb + drb)
 
     return {
         "team_id": tid,
