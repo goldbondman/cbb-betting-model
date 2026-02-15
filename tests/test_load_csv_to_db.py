@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 
-from load_csv_to_db import _prepare_csv_for_load, _preflight_validate_csv
+from load_csv_to_db import _missing_table_migration_path, _prepare_csv_for_load, _preflight_validate_csv
 
 
 def test_predictions_latest_row_hash_generated(tmp_path: Path) -> None:
@@ -124,3 +124,9 @@ def test_espn_player_boxscores_row_hash_generated(tmp_path: Path) -> None:
 
     assert header[0] == "row_hash"
     assert row[0] != ""
+
+
+def test_missing_table_migration_path_for_espn_player_boxscores() -> None:
+    migration = _missing_table_migration_path("raw", "espn_player_boxscores")
+    assert migration is not None
+    assert migration.name == "20260315000000_create_raw_espn_player_boxscores.sql"

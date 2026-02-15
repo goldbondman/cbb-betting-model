@@ -46,6 +46,10 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
 
 ALLOW_SCHEMA_MIGRATION = (os.getenv("ALLOW_SCHEMA_MIGRATION") or "0").strip().lower() in ("1", "true", "yes")
 
+MISSING_TABLE_MIGRATIONS = {
+    ("raw", "espn_player_boxscores"): Path("supabase/migrations/20260315000000_create_raw_espn_player_boxscores.sql"),
+}
+
 # Optional: pack wide feature CSVs into a single JSON column to avoid Postgres row-size limits.
 PACK_FEATURES_JSON = (os.getenv("PACK_FEATURES_JSON") or "1").strip().lower() in ("1", "true", "yes")
 
@@ -317,6 +321,32 @@ def _quote_ident(ident: str) -> str:
 
 def _qualified_table(schema: str, table: str) -> str:
     return f"{_quote_ident(schema)}.{_quote_ident(table)}"
+
+
+def _missing_table_migration_path(schema: str, table: str) -> Optional[Path]:
+    path = MISSING_TABLE_MIGRATIONS.get((schema, table))
+    if path is None:
+        return None
+    if not path.exists():
+        return None
+    return path
+
+
+def _create_missing_table_from_repo_migration(conn: psycopg.Connection, schema: str, table: str) -> bool:
+    migration_path = _missing_table_migration_path(schema, table)
+    if migration_path is None:
+        return False
+
+    sql = migration_path.read_text(encoding="utf-8")
+    if not sql.strip():
+        return False
+
+    with conn.cursor() as cur:
+        cur.execute(sql)
+
+    conn.commit()
+    print(f"[INFO] Created missing table {schema}.{table} using migration {migration_path}")
+    return True
 
 
 def _check_table_exists(conn: psycopg.Connection, schema: str, table: str) -> bool:
@@ -1231,6 +1261,19 @@ def load_one(local_path: str, table_name: str) -> None:
 
         try:
             with psycopg.connect(SUPABASE_DB_URL, autocommit=False) as conn:
+                if not _check_table_exists(conn, DB_SCHEMA, table_name):
+                    if ALLOW_SCHEMA_MIGRATION and _create_missing_table_from_repo_migration(conn, DB_SCHEMA, table_name):
+                        pass
+                    else:
+                        migration_path = _missing_table_migration_path(DB_SCHEMA, table_name)
+                        migration_note = (
+                            f"\nSuggested migration: {migration_path}" if migration_path else ""
+                        )
+                        _die(
+                            f"Destination table missing: {DB_SCHEMA}.{table_name}\n"
+                            f"Create it in Supabase first (SQL Editor).{migration_note}"
+                        )
+
                 if not _check_table_exists(conn, DB_SCHEMA, table_name):
                     _die(
                         f"Destination table missing: {DB_SCHEMA}.{table_name}\n"
