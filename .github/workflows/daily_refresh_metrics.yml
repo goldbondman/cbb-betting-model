@@ -111,7 +111,7 @@ jobs:
         if: ${{ always() }}
         run: |
           echo "DB load step outcome: ${{ steps.load_torvik_csv.outcome }}"
-          if [ "${{ steps.load_torvik_csv.outcome }}" != "success" ]; then
+          if [ "${{ steps.load_torvik_csv.outcome }}" = "failure" ]; then
             echo "DB load failed. Suggested SQL (if present in logs):"
             awk '/\[SCHEMA_DRIFT_SQL_BEGIN\]/{flag=1;next}/\[SCHEMA_DRIFT_SQL_END\]/{flag=0}flag' /tmp/load_torvik_csv.log || true
           else
