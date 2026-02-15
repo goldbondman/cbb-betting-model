@@ -44,6 +44,8 @@ jobs:
           ls -lh CSV/*.csv *.json || true
 
       - name: Load outputs to Supabase DB (raw schema)
+        id: load_espn_csv
+        continue-on-error: true
         working-directory: ESPN
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
@@ -52,4 +54,16 @@ jobs:
           LOAD_MODE: "upsert"
           SKIP_MISSING: "0"
         run: |
-          python ../load_csv_to_db.py
+          set -o pipefail
+          python ../load_csv_to_db.py 2>&1 | tee /tmp/load_espn_csv.log
+
+      - name: Report DB load result + schema guidance
+        if: ${{ always() }}
+        run: |
+          echo "DB load step outcome: ${{ steps.load_espn_csv.outcome }}"
+          if [ "${{ steps.load_espn_csv.outcome }}" != "success" ]; then
+            echo "DB load failed. Suggested SQL (if present in logs):"
+            awk '/\[SCHEMA_DRIFT_SQL_BEGIN\]/{flag=1;next}/\[SCHEMA_DRIFT_SQL_END\]/{flag=0}flag' /tmp/load_espn_csv.log || true
+          else
+            echo "DB load succeeded."
+          fi
