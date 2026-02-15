@@ -30,16 +30,70 @@ MODEL_OPTIONS = [
     "Formula",
 ]
 
+# Initialize session state for new features
+if "bet_history" not in st.session_state:
+    st.session_state.bet_history = []
+if "bankroll" not in st.session_state:
+    st.session_state.bankroll = 10000.0  # Default starting bankroll
+if "show_analytics" not in st.session_state:
+    st.session_state.show_analytics = False
+
 
 def main() -> None:
     """Render main dashboard using active model and selected strategy."""
     data = DataLoader()
     ui = PredictionUI()
 
+    # Sidebar configuration
+    st.sidebar.title("⚙️ Configuration")
+    
     strategy = st.sidebar.selectbox("Strategy", list(STRATEGY_PRESETS.keys()), index=1)
     config = STRATEGY_PRESETS[strategy].copy()
 
     model_choice = st.sidebar.selectbox("Prediction Model", MODEL_OPTIONS, index=0)
+    
+    # New: Bankroll Management Section
+    st.sidebar.divider()
+    st.sidebar.subheader("💰 Bankroll")
+    
+    col1, col2 = st.sidebar.columns(2)
+    with col1:
+        current_bankroll = st.number_input(
+            "Current", 
+            min_value=0.0, 
+            value=st.session_state.bankroll,
+            step=100.0,
+            key="bankroll_input"
+        )
+        st.session_state.bankroll = current_bankroll
+    
+    with col2:
+        unit_size = st.number_input(
+            "Unit Size",
+            min_value=1.0,
+            value=current_bankroll / 100,
+            step=10.0
+        )
+    
+    # Show bankroll analytics
+    if st.session_state.bet_history:
+        total_wagered = sum(b.get("stake", 0) for b in st.session_state.bet_history)
+        total_profit = sum(b.get("profit", 0) for b in st.session_state.bet_history)
+        roi = (total_profit / total_wagered * 100) if total_wagered > 0 else 0
+        
+        st.sidebar.metric("Total P&L", f"${total_profit:+,.0f}", f"{roi:+.1f}% ROI")
+    
+    # New: Quick Stats Toggle
+    st.sidebar.divider()
+    show_analytics = st.sidebar.checkbox("Show Performance Analytics", value=st.session_state.show_analytics)
+    st.session_state.show_analytics = show_analytics
+    
+    if show_analytics and st.session_state.bet_history:
+        st.sidebar.subheader("📊 Quick Stats")
+        wins = sum(1 for b in st.session_state.bet_history if b.get("result") == "win")
+        total = len(st.session_state.bet_history)
+        win_rate = wins / total if total > 0 else 0
+        st.sidebar.metric("Win Rate", f"{win_rate:.1%}", f"{wins}/{total}")
 
     pred_engine = PredictionEngine(config)
     primary_engine = PrimaryPredictionEngine(data) if model_choice == MODEL_OPTIONS[0] else None
@@ -54,6 +108,34 @@ def main() -> None:
         active_model_id = pred_engine.active_model["model_id"]
     st.title(f"🏀 CBB Betting Model {APP_CONFIG['version']}")
     st.caption(f"Strategy: {strategy} | Active Model: {active_model_id}")
+    
+    # New: Performance Analytics Dashboard
+    if show_analytics and st.session_state.bet_history:
+        with st.expander("📊 Performance Analytics", expanded=False):
+            col1, col2, col3, col4, col5 = st.columns(5)
+            
+            total_bets = len(st.session_state.bet_history)
+            wins = sum(1 for b in st.session_state.bet_history if b.get("result") == "win")
+            losses = sum(1 for b in st.session_state.bet_history if b.get("result") == "loss")
+            total_wagered = sum(b.get("stake", 0) for b in st.session_state.bet_history)
+            total_profit = sum(b.get("profit", 0) for b in st.session_state.bet_history)
+            
+            col1.metric("Total Bets", total_bets)
+            col2.metric("Record", f"{wins}-{losses}")
+            col3.metric("Win Rate", f"{wins/total_bets:.1%}" if total_bets > 0 else "N/A")
+            col4.metric("Total Wagered", f"${total_wagered:,.0f}")
+            col5.metric("Net P&L", f"${total_profit:+,.0f}")
+            
+            # Recent bet history
+            if st.session_state.bet_history:
+                st.subheader("Recent Bets")
+                recent = st.session_state.bet_history[-10:]  # Last 10 bets
+                df = pd.DataFrame(recent)
+                st.dataframe(df, use_container_width=True)
+                
+                if st.button("Clear Bet History"):
+                    st.session_state.bet_history = []
+                    st.rerun()
 
     games = data.load_vegas_lines(date="today")
     try:
@@ -156,6 +238,35 @@ def main() -> None:
                 "away": game["away_team"],
             },
         )
+        
+        # New: Track Bet Button
+        if bet.should_bet:
+            col1, col2, col3 = st.columns([2, 1, 1])
+            with col1:
+                st.write("")  # Spacer
+            with col2:
+                stake_amount = st.number_input(
+                    "Stake ($)", 
+                    min_value=0.0, 
+                    value=bet.kelly_units * unit_size,
+                    step=10.0,
+                    key=f"stake_{game_id}"
+                )
+            with col3:
+                if st.button("📝 Track Bet", key=f"track_{game_id}"):
+                    bet_record = {
+                        "game": f"{game['away_team']} @ {game['home_team']}",
+                        "side": f"{game['home_team'] if bet.side == 'home' else game['away_team']} {market_spread:+.1f}" if market_spread else bet.side,
+                        "stake": stake_amount,
+                        "edge": bet.edge,
+                        "confidence": bet.confidence,
+                        "ev": bet.ev,
+                        "result": None,  # To be filled in later
+                        "profit": 0.0,  # To be filled in later
+                    }
+                    st.session_state.bet_history.append(bet_record)
+                    st.success(f"✅ Bet tracked: ${stake_amount:.0f} on {bet_record['side']}")
+        
         st.divider()
 
 
