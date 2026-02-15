@@ -925,15 +925,19 @@ def fetch_and_parse_espn_summary(event_id: str, timeout: int = REQUEST_TIMEOUT):
 
         stats_list = team_entry.get("teamStats") or team_entry.get("statistics") or []
         smap = _stat_map(stats_list)
+        normalized_smap = {
+            str(k).lower().replace(" ", "").replace("_", "").replace("-", ""): v
+            for k, v in smap.items()
+        }
 
         def pick(*keys):
+            """Return first matching stat value for any provided key alias."""
             for k in keys:
                 if k in smap:
                     return smap.get(k)
-                lk = str(k).lower()
-                for mk, mv in smap.items():
-                    if str(mk).lower().replace(" ", "").replace("_", "").replace("-", "") == lk:
-                        return mv
+                lk = str(k).lower().replace(" ", "").replace("_", "").replace("-", "")
+                if lk in normalized_smap:
+                    return normalized_smap.get(lk)
             return None
 
         fgm, fga = _parse_made_attempt(pick("fieldGoals", "fg", "fieldgoals", "field goals", "fgm-a") or "")

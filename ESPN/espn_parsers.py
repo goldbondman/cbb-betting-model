@@ -397,15 +397,19 @@ def parse_team_from_summary(team_entry: Dict[str, Any]) -> Dict[str, Any]:
             print(f"[DEBUG] Available keys in team_entry: {list(team_entry.keys())}")
     
     smap = _stat_map(stats_list)
+    normalized_smap = {
+        str(k).lower().replace(" ", "").replace("_", "").replace("-", ""): v
+        for k, v in smap.items()
+    }
 
     def pick(*keys: str) -> Any:
+        """Return first matching stat value for any provided key alias."""
         for k in keys:
             if k in smap:
                 return smap.get(k)
-            lk = str(k).lower()
-            for mk, mv in smap.items():
-                if str(mk).lower().replace(" ", "").replace("_", "").replace("-", "") == lk:
-                    return mv
+            lk = str(k).lower().replace(" ", "").replace("_", "").replace("-", "")
+            if lk in normalized_smap:
+                return normalized_smap.get(lk)
         return None
 
     fgm, fga = _parse_made_attempt(pick("fieldGoals", "fg", "fieldgoals", "field goals", "fgm-a") or "")

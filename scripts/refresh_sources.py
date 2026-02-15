@@ -225,6 +225,7 @@ def _collect_team_ids_from_csv(games_csv_path):
         Sorted list of unique team ID strings
     """
     def _read_team_ids(path):
+        """Read unique team IDs from a CSV if the file has a team_id column."""
         if not os.path.exists(path):
             return []
         try:
