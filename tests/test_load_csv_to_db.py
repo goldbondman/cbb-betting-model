@@ -45,3 +45,82 @@ def test_predictions_latest_row_hash_generated(tmp_path: Path) -> None:
 
     assert header[0] == "row_hash"
     assert row[0] != ""
+
+
+def test_espn_player_boxscores_row_hash_generated(tmp_path: Path) -> None:
+    path = tmp_path / "espn_player_boxscores.csv"
+    with path.open("w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(
+            [
+                "event_id",
+                "game_datetime_utc",
+                "team_id",
+                "team",
+                "home_away",
+                "athlete_id",
+                "player",
+                "starter",
+                "min",
+                "pts",
+                "fgm",
+                "fga",
+                "tpm",
+                "tpa",
+                "ftm",
+                "fta",
+                "reb",
+                "orb",
+                "drb",
+                "ast",
+                "stl",
+                "blk",
+                "tov",
+                "pf",
+                "pulled_at_utc",
+                "source",
+                "parse_version",
+            ]
+        )
+        writer.writerow(
+            [
+                "401813366",
+                "2026-02-03 23:30:00+00:00",
+                "315",
+                "Niagara Purple Eagles",
+                "home",
+                "4433120",
+                "John Doe",
+                "1",
+                "32",
+                "18",
+                "7",
+                "14",
+                "2",
+                "5",
+                "2",
+                "3",
+                "6",
+                "2",
+                "4",
+                "3",
+                "1",
+                "1",
+                "2",
+                "3",
+                "2026-02-04 01:00:00+00:00",
+                "espn",
+                "v1.4.2",
+            ]
+        )
+
+    prepared = _prepare_csv_for_load(path, "espn_player_boxscores")
+    _preflight_validate_csv(prepared, "espn_player_boxscores")
+
+    with prepared.open("r", newline="") as f:
+        reader = csv.reader(f)
+        header = next(reader)
+        row = next(reader)
+
+    assert header[0] == "row_hash"
+    assert row[0] != ""

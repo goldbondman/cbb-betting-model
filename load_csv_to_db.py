@@ -40,6 +40,7 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
     ("raw", "espn_team_game_logs"),
     ("raw", "espn_team_game_features"),
     ("raw", "espn_matchups_model_ready"),
+    ("raw", "espn_player_boxscores"),
     ("raw", "model_features"),
 }
 
@@ -240,6 +241,33 @@ TABLE_SPECS = {
             "pred_margin_home": "float",
             "pred_total": "float",
         },
+    },
+    "espn_player_boxscores": {
+        "required_cols": [
+            "event_id",
+            "game_datetime_utc",
+            "team_id",
+            "team",
+            "home_away",
+            "athlete_id",
+            "player",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "row_hash_keys": ["event_id", "team_id", "athlete_id"],
+        "not_null": [
+            "row_hash",
+            "event_id",
+            "team_id",
+            "athlete_id",
+            "home_away",
+            "game_datetime_utc",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "dtypes": {"game_datetime_utc": "datetime", "pulled_at_utc": "datetime"},
     },
     # IMPORTANT: this matches your actual DB schema for raw.dq_audit_ml
     "dq_audit_ml": {
