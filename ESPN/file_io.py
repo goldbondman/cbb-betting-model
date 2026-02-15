@@ -243,6 +243,7 @@ def verify_dataframe_integrity(df: pd.DataFrame, filename: str) -> tuple[bool, L
         "espn_team_game_logs.csv": ["event_id", "team_id", "team", "home_away", "game_datetime_utc"],
         "espn_team_game_features.csv": ["event_id", "team_id", "game_datetime_utc"],
         "espn_matchups_model_ready.csv": ["event_id"],
+        "espn_player_boxscores.csv": ["event_id", "team_id", "athlete_id", "player", "game_datetime_utc", "row_hash"],
     }
 
     if filename in required_cols:

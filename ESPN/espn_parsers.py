@@ -6,6 +6,7 @@ Pure transformation logic - no I/O or side effects.
 
 import re
 import os
+import json
 from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
@@ -284,13 +285,23 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                 athlete = a.get("athlete", {}) or {}
                 name = athlete.get("displayName") or athlete.get("shortName") or athlete.get("fullName") or "Unknown"
                 athlete_id = athlete.get("id")
+                if athlete_id in (None, ""):
+                    athlete_uid = athlete.get("uid")
+                    # ESPN uid often looks like "s:40~l:41~a:12345"
+                    if athlete_uid and isinstance(athlete_uid, str) and "a:" in athlete_uid:
+                        athlete_id = athlete_uid.split("a:")[-1]
+                if athlete_id in (None, ""):
+                    athlete_id = a.get("id")
                 starter = a.get("starter")
 
                 stats = a.get("stats", [])
-                if not isinstance(stats, list) or (labels and len(labels) != len(stats)):
+                if not isinstance(stats, list):
                     continue
 
-                lmap = {str(labels[i]).lower(): stats[i] for i in range(len(labels))} if labels else {}
+                # Do not drop the row if labels/stats lengths differ; keep what we can map.
+                # This prevents silent data loss when ESPN returns partial tables.
+                pair_n = min(len(labels), len(stats))
+                lmap = {str(labels[i]).lower(): stats[i] for i in range(pair_n)} if labels else {}
 
                 def pick(*keys):
                     for k in keys:
@@ -339,6 +350,9 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                 row["pf"] = _to_int(pf, 0)
 
                 row["usage_proxy"] = row["fga"] + 0.44 * row["fta"] + row["tov"]
+                # Keep full raw stat vectors to avoid dropping fields not yet modeled.
+                row["raw_stat_labels"] = json.dumps(labels)
+                row["raw_stat_values"] = json.dumps(stats)
                 players.append(row)
 
     return players

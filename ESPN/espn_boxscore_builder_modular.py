@@ -373,43 +373,72 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     # Write player box scores
     if player_rows:
         df_players_new = pd.DataFrame(player_rows)
-        
+
         # Normalize column names to match schema
-        # ESPN parser (_extract_players in espn_parsers.py) outputs 'minutes' and 'points'
-        # but our schema expects 'min' and 'pts' for consistency with team stats
         column_mapping = {
             "minutes": "min",
-            "points": "pts"
+            "points": "pts",
         }
         df_players_new = df_players_new.rename(columns=column_mapping)
-        
-        # Add athlete_id and starter columns if missing
-        # ESPN API doesn't consistently provide athlete IDs or starter indicators
-        # in the boxscore.players structure. When missing, we default to None.
-        if "athlete_id" not in df_players_new.columns:
-            df_players_new["athlete_id"] = None
-        if "starter" not in df_players_new.columns:
-            df_players_new["starter"] = None
-        
-        # Ensure we have all required columns for player box scores
+
+        # Ensure columns needed for DB import exist
         player_schema_cols = [
             "event_id", "game_datetime_utc", "team_id", "team", "home_away",
             "athlete_id", "player", "starter", "min", "pts",
             "fgm", "fga", "tpm", "tpa", "ftm", "fta",
-            "reb", "orb", "drb", "ast", "tov",
-            "pulled_at_utc", "source", "parse_version"
+            "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf",
+            "raw_stat_labels", "raw_stat_values",
+            "row_hash",
+            "pulled_at_utc", "source", "parse_version",
         ]
-        
-        # Add missing columns with None/default values
         for col in player_schema_cols:
             if col not in df_players_new.columns:
                 df_players_new[col] = None
-        
+
+        # Normalize IDs and fill missing athlete_id deterministically.
+        df_players_new["event_id"] = _normalize_id_series(df_players_new["event_id"])
+        df_players_new["team_id"] = _normalize_id_series(df_players_new["team_id"])
+        df_players_new["home_away"] = _normalize_home_away_series(df_players_new["home_away"])
+        df_players_new["athlete_id"] = _normalize_id_series(df_players_new["athlete_id"])
+
+        missing_athlete_mask = df_players_new["athlete_id"].isna() | (df_players_new["athlete_id"] == "")
+        missing_athlete_count = int(missing_athlete_mask.sum())
+        if missing_athlete_count:
+            df_players_new.loc[missing_athlete_mask, "athlete_id"] = df_players_new.loc[missing_athlete_mask].apply(
+                lambda r: f"missing:{r.get('event_id','')}:{r.get('team_id','')}:{str(r.get('player','unknown')).strip().lower()}",
+                axis=1,
+            )
+            print(f"[WARN] player_boxscores missing athlete_id fallback applied: {missing_athlete_count} rows")
+
+        # Build deterministic row_hash (required by raw.espn_player_boxscores).
+        df_players_new["row_hash"] = df_players_new.apply(
+            lambda r: _stable_row_hash(
+                {
+                    "event_id": str(r.get("event_id") or ""),
+                    "team_id": str(r.get("team_id") or ""),
+                    "athlete_id": str(r.get("athlete_id") or ""),
+                    "game_datetime_utc": str(r.get("game_datetime_utc") or ""),
+                },
+                keys=["event_id", "team_id", "athlete_id", "game_datetime_utc"],
+            ),
+            axis=1,
+        )
+
+        # Last integrity gate: skip rows missing mandatory keys (never silent)
+        mandatory = ["event_id", "team_id", "athlete_id", "game_datetime_utc"]
+        invalid_mask = pd.Series(False, index=df_players_new.index)
+        for col in mandatory:
+            invalid_mask = invalid_mask | df_players_new[col].isna() | (df_players_new[col].astype(str).str.strip() == "")
+        invalid_count = int(invalid_mask.sum())
+        if invalid_count:
+            print(f"[WARN] player_boxscores skipped due to missing mandatory keys: {invalid_count} rows")
+            df_players_new = df_players_new.loc[~invalid_mask].copy()
+
         df_players_all = _append_dedupe_write(
             OUT_PLAYER_BOX,
             df_players_new,
-            subset_keys=["event_id", "team_id", "player"],
-            sort_cols=["game_datetime_utc", "event_id", "team_id", "player"],
+            subset_keys=["event_id", "team_id", "athlete_id"],
+            sort_cols=["game_datetime_utc", "event_id", "team_id", "athlete_id"],
         )
         print(f"{OUT_PLAYER_BOX} total rows: {len(df_players_all)} ({len(df_players_new)} new)")
     else:
