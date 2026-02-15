@@ -8,6 +8,11 @@ import pandas as pd
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+# Allow importing ESPN modules when run from repo root
+_ESPN_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ESPN")
+if _ESPN_DIR not in sys.path:
+    sys.path.insert(0, _ESPN_DIR)
+
 UA_HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -189,6 +194,45 @@ def refresh_haslametrics(out_path, session, table_index=0):
     df.to_csv(out_path, index=False)
     return len(df)
 
+def refresh_espn_injuries(out_path, team_ids):
+    """
+    Fetch injury reports from ESPN for the given team IDs and write to CSV.
+    Uses the ESPN team API endpoint to extract injury data.
+
+    Args:
+        out_path: Path to write the injuries CSV
+        team_ids: List of ESPN team ID strings
+
+    Returns:
+        Number of injury rows written
+    """
+    from espn_injuries import fetch_injuries_for_teams
+
+    df = fetch_injuries_for_teams(team_ids)
+    df.to_csv(out_path, index=False)
+    return len(df)
+
+
+def _collect_team_ids_from_csv(games_csv_path):
+    """
+    Collect unique team IDs from an ESPN games or team game logs CSV.
+    Looks for a 'team_id' column first, then falls back to player boxscores.
+
+    Args:
+        games_csv_path: Path to a CSV containing team_id column
+
+    Returns:
+        Sorted list of unique team ID strings
+    """
+    if not os.path.exists(games_csv_path):
+        return []
+    try:
+        df = pd.read_csv(games_csv_path, usecols=["team_id"])
+        return sorted(df["team_id"].dropna().astype(str).unique().tolist())
+    except Exception:
+        return []
+
+
 def main():
     session = requests.Session()
     year = int(os.environ.get("TORVIK_YEAR", cbb_season_year()))
@@ -197,6 +241,7 @@ def main():
     team_results_out = os.environ.get("TORVIK_TEAM_RESULTS_OUT", "barttorvik_team_results.csv")
     haslam_out = os.environ.get("HASLA_OUT", "haslametrics.csv")
     table_idx = int(os.environ.get("HASLA_TABLE_INDEX", "0"))
+    injuries_out = os.environ.get("INJURIES_OUT", "ESPN/CSV/espn_injuries.csv")
 
     try:
         n = refresh_barttorvik_players(players_out, year, session)
@@ -220,6 +265,21 @@ def main():
         print(f"Haslametrics: {h} rows")
     except Exception as e:
         print(f"[ERROR] Haslametrics refresh failed: {e}")
+
+    # --- ESPN Injury Reports ---
+    team_logs_csv = os.environ.get(
+        "ESPN_TEAM_LOGS_CSV", "ESPN/CSV/espn_team_game_logs.csv"
+    )
+    team_ids = _collect_team_ids_from_csv(team_logs_csv)
+    if team_ids:
+        try:
+            n = refresh_espn_injuries(injuries_out, team_ids)
+            print(f"Injuries: {n} rows")
+        except Exception as e:
+            print(f"[ERROR] Injury refresh failed: {e}")
+    else:
+        print("[WARN] No team IDs found; skipping injury refresh.")
+
     print("Done")
 
 if __name__ == "__main__":

@@ -16,6 +16,10 @@ ESPN_SCOREBOARD_URL = (
     "?dates={date}&groups=50&limit=1000"
 )
 
+ESPN_INJURIES_URL = (
+    "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}"
+)
+
 # ---------------- HTTP Configuration ----------------
 DEFAULT_HEADERS = {
     "User-Agent": "Mozilla/5.0",
@@ -53,6 +57,7 @@ OUT_MATCHUPS = "CSV/espn_matchups_model_ready.csv"
 OUT_DIAGNOSTICS = "CSV/espn_feature_diagnostics.csv"
 OUT_DQ_AUDIT = "CSV/espn_dq_audit.csv"
 OUT_PLAYER_BOX = "CSV/espn_player_boxscores.csv"
+OUT_INJURIES = "CSV/espn_injuries.csv"
 
 # ---------------- Raw JSON Storage ----------------
 JSON_OUTPUT_DIR = os.getenv("ESPN_JSON_DIR", "ESPN/raw_json")
@@ -135,6 +140,11 @@ CSV_SCHEMAS = {
         "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf",
         "pulled_at_utc", "source", "parse_version"
     ],
+    "injuries": [
+        "team_id", "team", "athlete_id", "player", "position",
+        "status", "injury_type", "detail", "side", "return_date",
+        "pulled_at_utc", "source", "parse_version"
+    ],
 }
 
 # Map output file paths to their schemas
@@ -146,4 +156,5 @@ OUTPUT_FILE_SCHEMAS = {
     OUT_DIAGNOSTICS: CSV_SCHEMAS["diagnostics"],
     OUT_DQ_AUDIT: CSV_SCHEMAS["dq_audit"],
     OUT_PLAYER_BOX: CSV_SCHEMAS["player_box"],
+    OUT_INJURIES: CSV_SCHEMAS["injuries"],
 }
