@@ -297,13 +297,15 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                 if not isinstance(stats, list):
                     continue
 
-                headers = labels if len(labels) == len(stats) else (keys if len(keys) == len(stats) else [])
-                lmap = {str(headers[i]).lower(): stats[i] for i in range(len(headers))} if headers else {}
+                headers = labels if labels else keys
+                n = min(len(headers), len(stats))
+                lmap = {str(headers[i]).lower().strip(): stats[i] for i in range(n)} if n > 0 else {}
 
                 def pick(*keys):
                     for k in keys:
-                        if k in lmap:
-                            return lmap[k]
+                        kk = str(k).lower().strip()
+                        if kk in lmap:
+                            return lmap[kk]
                     return None
 
                 row = {"player": name}
@@ -316,16 +318,16 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
                 row["points"] = _to_int(pick("pts", "points"), 0)
 
                 fg = pick("fg", "field goals")
-                three = pick("3pt", "3p", "3fg", "3-point fg")
+                three = pick("3pt", "3p", "3fg", "3-point fg", "3pt fg")
                 ft = pick("ft", "free throws")
                 to = pick("to", "tov", "turnovers")
-                oreb = pick("oreb", "off reb", "offensive rebounds")
-                dreb = pick("dreb", "def reb", "defensive rebounds")
-                reb = pick("reb", "rebs", "rebounds")
+                oreb = pick("oreb", "off reb", "offensive rebounds", "offensive reb")
+                dreb = pick("dreb", "def reb", "defensive rebounds", "defensive reb")
+                reb = pick("reb", "rebs", "rebounds", "total rebounds")
                 ast = pick("ast", "assists")
                 stl = pick("stl", "steals")
                 blk = pick("blk", "blocks")
-                pf = pick("pf", "fouls", "personal fouls")
+                pf = pick("pf", "fouls", "personal fouls", "personal")
 
                 fgm, fga = _parse_made_attempt(fg) if isinstance(fg, str) else (0, 0)
                 tpm, tpa = _parse_made_attempt(three) if isinstance(three, str) else (0, 0)

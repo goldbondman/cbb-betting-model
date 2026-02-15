@@ -70,3 +70,36 @@ def test_extract_players_supports_keys_when_labels_missing():
     assert players[0]["points"] == 19
     assert players[0]["fgm"] == 7
     assert players[0]["fga"] == 14
+
+
+def test_extract_players_uses_partial_header_mapping_when_lengths_mismatch():
+    summary_json = {
+        "boxscore": {
+            "players": [
+                {
+                    "team": {"id": "1"},
+                    "statistics": [
+                        {
+                            "labels": ["MIN", "FG", "3PT", "FT", "REB", "AST", "STL", "BLK", "TO", "PF", "EXTRA"],
+                            "athletes": [
+                                {
+                                    "athlete": {"displayName": "Player Two", "id": "100"},
+                                    "stats": ["30", "6-12", "1-4", "2-2", "7", "4", "2", "1", "3", "2"],
+                                }
+                            ],
+                        }
+                    ],
+                }
+            ]
+        }
+    }
+
+    players = _extract_players(summary_json, "1")
+
+    assert len(players) == 1
+    assert players[0]["athlete_id"] == "100"
+    assert players[0]["fgm"] == 6
+    assert players[0]["fga"] == 12
+    assert players[0]["stl"] == 2
+    assert players[0]["blk"] == 1
+    assert players[0]["pf"] == 2

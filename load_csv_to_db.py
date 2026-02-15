@@ -1153,6 +1153,30 @@ def _dedup_select_sql(qtemp: str, qcols: str, pk_cols: List[str], all_cols: List
     return f"select distinct on ({pk_expr}) {qcols} from {qtemp} order by {order_by}"
 
 
+def _resolve_upsert_conflict_columns(
+    table_name: str,
+    pk_cols: List[str],
+    csv_cols: List[str],
+    table_cols: List[str],
+) -> List[str]:
+    if pk_cols:
+        return pk_cols
+
+    spec = TABLE_SPECS.get(table_name, {})
+    fallback = spec.get("row_hash_keys", []) if isinstance(spec, dict) else []
+    if isinstance(fallback, list) and fallback:
+        if all(c in csv_cols and c in table_cols for c in fallback):
+            _warn(
+                f"Using row_hash_keys fallback for upsert conflict target on {table_name}: {fallback}"
+            )
+            return list(fallback)
+
+    _die(
+        f"LOAD_MODE=upsert requires a PRIMARY KEY or usable unique conflict columns on {DB_SCHEMA}.{table_name}.\n"
+        "Add a PK/UNIQUE constraint and rerun."
+    )
+
+
 def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, local_path: Path) -> None:
     qt = _qualified_table(schema, table)
     staging = f"tmp_{table}_{int(time.time() * 1000)}"
@@ -1161,10 +1185,6 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
     table_cols = _get_table_columns(conn, schema, table)
     if not table_cols:
         _die(f"Could not read columns for {schema}.{table} (table exists but no columns?)")
-
-    pk_cols = _get_primary_key_columns(conn, schema, table)
-    if not pk_cols:
-        _die(f"LOAD_MODE=upsert requires a PRIMARY KEY on {schema}.{table}.\nAdd a PK and rerun.")
 
     csv_cols = _read_csv_header_columns(local_path)
     _validate_csv_header(csv_cols, local_path)
@@ -1179,6 +1199,9 @@ def _upsert_from_staging(conn: psycopg.Connection, schema: str, table: str, loca
             f"{missing_in_table}\n"
             f"Fix: investigate permissions or invalid identifiers."
         )
+
+    pk_cols = _get_primary_key_columns(conn, schema, table)
+    pk_cols = _resolve_upsert_conflict_columns(table, pk_cols, csv_cols, table_cols)
 
     qcols = ", ".join(_quote_ident(c) for c in csv_cols)
     conflict = ", ".join(_quote_ident(c) for c in pk_cols)

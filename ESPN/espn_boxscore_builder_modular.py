@@ -396,7 +396,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
             "event_id", "game_datetime_utc", "team_id", "team", "home_away",
             "athlete_id", "player", "starter", "min", "pts",
             "fgm", "fga", "tpm", "tpa", "ftm", "fta",
-            "reb", "orb", "drb", "ast", "tov",
+            "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf",
             "pulled_at_utc", "source", "parse_version"
         ]
         
@@ -404,12 +404,43 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         for col in player_schema_cols:
             if col not in df_players_new.columns:
                 df_players_new[col] = None
-        
+
+        # Ensure athlete_id is always non-null/non-empty for PK/unique-key upsert safety.
+        missing_athlete = (
+            df_players_new["athlete_id"].isna()
+            | (df_players_new["athlete_id"].astype(str).str.strip() == "")
+        )
+        if missing_athlete.any():
+            fallback_base = (
+                df_players_new.loc[missing_athlete, "player"]
+                .fillna("unknown_player")
+                .astype(str)
+                .str.replace(r"\s+", "_", regex=True)
+                .str.lower()
+            )
+            fallback_suffix = (
+                df_players_new.loc[missing_athlete]
+                .groupby(["event_id", "team_id", "player"], dropna=False)
+                .cumcount()
+                .astype(str)
+            )
+            df_players_new.loc[missing_athlete, "athlete_id"] = (
+                "missing_"
+                + df_players_new.loc[missing_athlete, "event_id"].astype(str)
+                + "_"
+                + df_players_new.loc[missing_athlete, "team_id"].astype(str)
+                + "_"
+                + fallback_base
+                + "_"
+                + fallback_suffix
+            )
+            print(f"[WARN] Filled synthetic athlete_id for {int(missing_athlete.sum())} player row(s)")
+
         df_players_all = _append_dedupe_write(
             OUT_PLAYER_BOX,
             df_players_new,
-            subset_keys=["event_id", "team_id", "player"],
-            sort_cols=["game_datetime_utc", "event_id", "team_id", "player"],
+            subset_keys=["event_id", "team_id", "athlete_id"],
+            sort_cols=["game_datetime_utc", "event_id", "team_id", "athlete_id"],
         )
         print(f"{OUT_PLAYER_BOX} total rows: {len(df_players_all)} ({len(df_players_new)} new)")
     else:
