@@ -424,12 +424,13 @@ with tab4:
             # Mock results
             results = []
             for val in test_values:
+                mock_sharpe = np.clip(0.8 + val + np.random.randn() * 0.1, -1.0, 3.0)
                 results.append({
                     param_to_test: f"{val:.3f}",
                     "Accuracy": f"{0.52 + np.random.randn() * 0.02:.1%}",
                     "ROI": f"{(val * 10 + np.random.randn() * 2):+.1f}%",
                     "Bets": int(100 - val * 50 + np.random.randint(-10, 10)),
-                    "Sharpe": f"{0.8 + val + np.random.randn() * 0.1:.2f}"
+                    "Sharpe": f"{mock_sharpe:.2f}"
                 })
             
             df_results = pd.DataFrame(results)
@@ -439,9 +440,13 @@ with tab4:
             st.subheader("Batch Test Results")
             st.dataframe(df_results, use_container_width=True)
             
-            # Find optimal
+            # Find actual optimal based on ROI
+            roi_values = [float(r["ROI"].rstrip('%')) for r in results]
+            optimal_idx = roi_values.index(max(roi_values))
+            optimal_value = test_values[optimal_idx]
+            
             st.subheader("📈 Optimal Configuration")
-            st.info(f"**Best ROI:** {param_to_test} = {test_values[len(test_values)//2]:.3f}")
+            st.info(f"**Best ROI:** {param_to_test} = {optimal_value:.3f} (ROI: {results[optimal_idx]['ROI']})")
             
             # Plot results
             st.subheader("Performance by Parameter Value")

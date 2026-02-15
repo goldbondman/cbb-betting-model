@@ -320,7 +320,7 @@ if st.button("🎲 Run Simulation", type="primary"):
         
         # Show individual simulation details
         with st.expander("📋 Individual Simulation Details"):
-            for i, result in enumerate(all_results[:5]):  # Show first 5
+            for i, result in enumerate(all_results[:5]):  # Show up to 5
                 st.write(f"**Simulation {i+1}:**")
                 col1, col2, col3 = st.columns(3)
                 col1.write(f"Final: ${result['final_bankroll']:,.2f}")
@@ -428,7 +428,8 @@ with col2:
             total_return = sum(results)
             avg_return = np.mean(results)
             std_return = np.std(results)
-            sharpe = sharpe_ratio(results) * np.sqrt(len(results))  # Annualized approximation
+            # Note: Simple scaling approximation assuming equal time periods
+            sharpe = sharpe_ratio(results) * np.sqrt(len(results)) if len(results) > 1 else 0
             
             # Cumulative bankroll
             cumulative = [1000 + sum(results[:i+1]) for i in range(len(results))]
