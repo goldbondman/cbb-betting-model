@@ -254,9 +254,9 @@ def main() -> None:
                 )
             with col3:
                 if st.button("📝 Track Bet", key=f"track_{game_id}"):
-                    # Format bet side display string
+                    # Format bet side display string (handles 0 spread for pick'em games)
                     team = game['home_team'] if bet.side == 'home' else game['away_team']
-                    spread_str = f"{market_spread:+.1f}" if market_spread else ""
+                    spread_str = f"{market_spread:+.1f}" if market_spread is not None else ""
                     side_display = f"{team} {spread_str}" if spread_str else bet.side
                     
                     bet_record = {

@@ -428,7 +428,8 @@ with col2:
             total_return = sum(results)
             avg_return = np.mean(results)
             std_return = np.std(results)
-            # Note: Simple scaling approximation assuming equal time periods
+            # Annualization factor: assumes each result represents an equal time period (e.g., daily)
+            # and returns are independent. This is a common approximation for Sharpe ratio scaling.
             sharpe = sharpe_ratio(results) * np.sqrt(len(results)) if len(results) > 1 else 0
             
             # Cumulative bankroll

@@ -421,10 +421,16 @@ with tab4:
             # Generate test values
             test_values = np.linspace(test_range_min, test_range_max, test_steps)
             
+            # Mock Sharpe ratio bounds for demonstration
+            MOCK_SHARPE_BASELINE = 0.8  # Typical baseline for sports betting strategies
+            MOCK_SHARPE_MIN = -1.0  # Minimum reasonable Sharpe ratio
+            MOCK_SHARPE_MAX = 3.0   # Maximum reasonable Sharpe ratio (excellent performance)
+            
             # Mock results
             results = []
             for val in test_values:
-                mock_sharpe = np.clip(0.8 + val + np.random.randn() * 0.1, -1.0, 3.0)
+                mock_sharpe = np.clip(MOCK_SHARPE_BASELINE + val + np.random.randn() * 0.1, 
+                                      MOCK_SHARPE_MIN, MOCK_SHARPE_MAX)
                 results.append({
                     param_to_test: f"{val:.3f}",
                     "Accuracy": f"{0.52 + np.random.randn() * 0.02:.1%}",
@@ -440,9 +446,8 @@ with tab4:
             st.subheader("Batch Test Results")
             st.dataframe(df_results, use_container_width=True)
             
-            # Find actual optimal based on ROI
-            roi_values = [float(r["ROI"].rstrip('%')) for r in results]
-            optimal_idx = roi_values.index(max(roi_values))
+            # Find actual optimal based on ROI (single pass)
+            optimal_idx = max(range(len(results)), key=lambda i: float(results[i]['ROI'].rstrip('%')))
             optimal_value = test_values[optimal_idx]
             
             st.subheader("📈 Optimal Configuration")
