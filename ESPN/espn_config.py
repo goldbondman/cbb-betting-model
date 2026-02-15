@@ -138,6 +138,8 @@ CSV_SCHEMAS = {
         "min", "pts",
         "fgm", "fga", "tpm", "tpa", "ftm", "fta",
         "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf",
+        "raw_stat_labels", "raw_stat_values",
+        "row_hash",
         "pulled_at_utc", "source", "parse_version"
     ],
     "injuries": [
