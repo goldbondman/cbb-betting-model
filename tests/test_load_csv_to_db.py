@@ -1,7 +1,11 @@
 import csv
 from pathlib import Path
 
-from load_csv_to_db import _prepare_csv_for_load, _preflight_validate_csv
+from load_csv_to_db import (
+    _prepare_csv_for_load,
+    _preflight_validate_csv,
+    _resolve_upsert_conflict_columns,
+)
 
 
 def test_predictions_latest_row_hash_generated(tmp_path: Path) -> None:
@@ -124,3 +128,13 @@ def test_espn_player_boxscores_row_hash_generated(tmp_path: Path) -> None:
 
     assert header[0] == "row_hash"
     assert row[0] != ""
+
+
+def test_resolve_upsert_conflict_columns_falls_back_to_row_hash_keys() -> None:
+    cols = _resolve_upsert_conflict_columns(
+        "espn_player_boxscores",
+        pk_cols=[],
+        csv_cols=["event_id", "team_id", "athlete_id", "player"],
+        table_cols=["event_id", "team_id", "athlete_id", "player", "row_hash"],
+    )
+    assert cols == ["event_id", "team_id", "athlete_id"]
