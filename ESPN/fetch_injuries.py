@@ -43,7 +43,7 @@ def main():
         logger.error(f"Expected 'espn_id' column not found in {OUT_TEAMS}")
         sys.exit(1)
     
-    team_ids = teams_df["espn_id"].astype(str).unique().tolist()
+    team_ids = teams_df["espn_id"].unique().astype(str).tolist()
     logger.info(f"Found {len(team_ids)} teams to fetch injuries for")
     
     # Fetch injuries for all teams
@@ -60,12 +60,12 @@ def main():
     
     # Print summary statistics
     if len(injuries_df) > 0:
-        logger.info("\n=== Injury Summary ===")
+        logger.info("=== Injury Summary ===")
         logger.info(f"Total injuries: {len(injuries_df)}")
         logger.info(f"Unique teams with injuries: {injuries_df['team_id'].nunique()}")
         
         status_counts = injuries_df['status'].value_counts()
-        logger.info("\nInjury status breakdown:")
+        logger.info("Injury status breakdown:")
         for status, count in status_counts.items():
             logger.info(f"  {status}: {count}")
 
