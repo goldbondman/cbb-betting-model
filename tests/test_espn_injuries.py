@@ -184,6 +184,35 @@ class TestParseInjuriesFromTeam:
         rows = parse_injuries_from_team(json_data, "50")
         assert rows[0]["position"] == "C"
 
+    def test_reads_top_level_injuries_fallback(self):
+        json_data = {
+            "team": {"id": "50", "displayName": "Team A"},
+            "injuries": [
+                {
+                    "athlete": {"id": "1", "displayName": "Player Top"},
+                    "status": "Out",
+                }
+            ],
+        }
+        rows = parse_injuries_from_team(json_data, "50")
+        assert len(rows) == 1
+        assert rows[0]["player"] == "Player Top"
+
+    def test_reads_athlete_nested_injuries_fallback(self):
+        json_data = {
+            "team": {"id": "50", "displayName": "Team A"},
+            "athletes": [
+                {
+                    "athlete": {"id": "1", "displayName": "Player Nested"},
+                    "injuries": [{"status": "Questionable", "type": "Ankle"}],
+                }
+            ],
+        }
+        rows = parse_injuries_from_team(json_data, "50")
+        assert len(rows) == 1
+        assert rows[0]["player"] == "Player Nested"
+        assert rows[0]["status"] == "Questionable"
+
 
 # ---- Tests for fetch_injuries_for_teams ----
 
@@ -271,3 +300,21 @@ class TestRefreshSourcesIntegration:
         from refresh_sources import _collect_team_ids_from_csv
 
         assert _collect_team_ids_from_csv("/nonexistent/path.csv") == []
+
+    def test_collect_team_ids_fallback_to_player_boxscores(self, tmp_path):
+        logs_path = tmp_path / "espn_team_game_logs.csv"
+        pd.DataFrame({"event_id": ["1"]}).to_csv(logs_path, index=False)
+        pd.DataFrame({"team_id": ["12", "2"]}).to_csv(
+            tmp_path / "espn_player_boxscores.csv", index=False
+        )
+
+        sys.path.insert(
+            0,
+            os.path.join(
+                os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                "scripts",
+            ),
+        )
+        from refresh_sources import _collect_team_ids_from_csv
+
+        assert _collect_team_ids_from_csv(str(logs_path)) == ["12", "2"]
