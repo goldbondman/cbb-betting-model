@@ -39,6 +39,31 @@ def test_parse_team_from_summary_supports_abbreviation_stat_names():
     assert row["reb"] == 32
 
 
+def test_parse_team_from_summary_supports_labels_stats_table_shape():
+    team_entry = {
+        "team": {"id": "1", "displayName": "Team A"},
+        "statistics": [
+            {
+                "labels": ["FG", "3PT", "FT", "TO", "OREB", "DREB", "REB"],
+                "stats": ["25-58", "9-25", "15-20", "11", "8", "24", "32"],
+            }
+        ],
+    }
+
+    row = parse_team_from_summary(team_entry)
+
+    assert row["fgm"] == 25
+    assert row["fga"] == 58
+    assert row["tpm"] == 9
+    assert row["tpa"] == 25
+    assert row["ftm"] == 15
+    assert row["fta"] == 20
+    assert row["tov"] == 11
+    assert row["orb"] == 8
+    assert row["drb"] == 24
+    assert row["reb"] == 32
+
+
 def test_extract_players_supports_keys_when_labels_missing():
     summary_json = {
         "boxscore": {
