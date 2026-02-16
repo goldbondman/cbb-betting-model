@@ -11,5 +11,5 @@ if _ESPN_DIR not in sys.path:
 import espn_boxscore_builder
 
 
-def test_legacy_builder_player_boxscore_output_path_uses_csv_subdir():
+def test_player_boxscore_path_includes_csv_subdir():
     assert espn_boxscore_builder.OUT_PLAYER_BOX == "CSV/espn_player_boxscores.csv"
