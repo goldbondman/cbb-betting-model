@@ -6,6 +6,10 @@ All constants, environment variables, and configuration settings for the ESPN pi
 import os
 from zoneinfo import ZoneInfo
 
+# Base directory for ESPN pipeline files (stable regardless of current working directory)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_DIR = os.path.join(BASE_DIR, "CSV")
+
 # ---------------- API Endpoints ----------------
 ESPN_SUMMARY_URL = (
     "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event={event_id}"
@@ -50,15 +54,15 @@ CHECKPOINT_EVERY_N_GAMES = int(os.getenv("CHECKPOINT_EVERY_N_GAMES", "50"))
 ERROR_LOG_PATH = os.getenv("ERROR_LOG_PATH", "espn_pipeline_errors.json")
 
 # ---------------- Output File Paths ----------------
-OUT_GAMES = "CSV/espn_games.csv"
-OUT_TEAMS = "CSV/espn_teams.csv"
-OUT_TEAM_LOGS = "CSV/espn_team_game_logs.csv"
-OUT_TEAM_FEATURES = "CSV/espn_team_game_features.csv"
-OUT_MATCHUPS = "CSV/espn_matchups_model_ready.csv"
-OUT_DIAGNOSTICS = "CSV/espn_feature_diagnostics.csv"
-OUT_DQ_AUDIT = "CSV/espn_dq_audit.csv"
-OUT_PLAYER_BOX = "CSV/espn_player_boxscores.csv"
-OUT_INJURIES = "CSV/espn_injuries.csv"
+OUT_GAMES = os.path.join(CSV_DIR, "espn_games.csv")
+OUT_TEAMS = os.path.join(CSV_DIR, "espn_teams.csv")
+OUT_TEAM_LOGS = os.path.join(CSV_DIR, "espn_team_game_logs.csv")
+OUT_TEAM_FEATURES = os.path.join(CSV_DIR, "espn_team_game_features.csv")
+OUT_MATCHUPS = os.path.join(CSV_DIR, "espn_matchups_model_ready.csv")
+OUT_DIAGNOSTICS = os.path.join(CSV_DIR, "espn_feature_diagnostics.csv")
+OUT_DQ_AUDIT = os.path.join(CSV_DIR, "espn_dq_audit.csv")
+OUT_PLAYER_BOX = os.path.join(CSV_DIR, "espn_player_boxscores.csv")
+OUT_INJURIES = os.path.join(CSV_DIR, "espn_injuries.csv")
 
 # ---------------- Raw JSON Storage ----------------
 JSON_OUTPUT_DIR = os.getenv("ESPN_JSON_DIR", "ESPN/raw_json")
