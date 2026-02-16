@@ -93,7 +93,7 @@ OUT_TEAM_FEATURES = "espn_team_game_features.csv"
 OUT_MATCHUPS = "espn_matchups_model_ready.csv"
 OUT_DIAGNOSTICS = "espn_feature_diagnostics.csv"
 OUT_DQ_AUDIT = "espn_dq_audit.csv"
-OUT_PLAYER_BOX = "espn_player_boxscores.csv"
+OUT_PLAYER_BOX = "CSV/espn_player_boxscores.csv"
 
 WRITE_DIAGNOSTICS = os.getenv("WRITE_DIAGNOSTICS", "1").strip() not in ("0", "false", "False", "no", "NO")
 WRITE_DQ_AUDIT = os.getenv("WRITE_DQ_AUDIT", "1").strip() not in ("0", "false", "False", "no", "NO")
