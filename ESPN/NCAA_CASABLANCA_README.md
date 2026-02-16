@@ -78,6 +78,7 @@ Team-level statistics with two rows per game (home and away):
 - Score: `points_for`, `points_against`, `margin`
 - Shooting: `fgm`, `fga`, `fg_pct`, `tpm`, `tpa`, `tp_pct`, `ftm`, `fta`, `ft_pct`
 - Other stats: `reb`, `orb`, `drb`, `ast`, `stl`, `blk`, `tov`, `pf`
+- Repository note: this file is committed as a header-only schema artifact; rows are populated when the NCAA builder workflow/script runs.
 
 #### `ncaa_player_boxscores.csv`
 Player-level statistics with one row per player per game:
