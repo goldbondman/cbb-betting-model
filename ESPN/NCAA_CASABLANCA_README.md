@@ -12,13 +12,13 @@ The NCAA Casablanca API provides:
 
 ### Scoreboard
 ```
-https://data.ncaa.com/casablanca/scoreboard/basketball-men/d1/YYYY/MM/DD/scoreboard.json
+https://ncaa-api.henrygd.me/casablanca/scoreboard/basketball-men/d1/YYYY/MM/DD/scoreboard.json
 ```
 Returns all Division I men's basketball games for a specific date.
 
 ### Box Score
 ```
-https://data.ncaa.com/casablanca/game/<gameId>/boxscore.json
+https://ncaa-api.henrygd.me/casablanca/game/<gameId>/boxscore.json
 ```
 Returns detailed team and player statistics for a specific game.
 
@@ -182,6 +182,7 @@ The builder includes rate limiting (0.5s delay between requests) to avoid overwh
 
 Environment variables (optional):
 - `DAYS_BACK`: Number of days to fetch (default: 3)
+- `NCAA_API_BASE_URL`: NCAA API base URL (default: `https://ncaa-api.henrygd.me`)
 - `NCAA_TIMEOUT`: Request timeout in seconds (default: 30)
 - `NCAA_MAX_RETRIES`: Maximum retry attempts (default: 3)
 - `NCAA_RETRY_INITIAL_DELAY`: Initial retry delay in seconds (default: 1.0)

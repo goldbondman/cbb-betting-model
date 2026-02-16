@@ -6,16 +6,16 @@ Configuration for NCAA's unofficial but widely used Casablanca JSON API.
 import os
 
 # ---------------- API Endpoints ----------------
-# NCAA Casablanca JSON feeds
-# Scoreboard: https://data.ncaa.com/casablanca/scoreboard/basketball-men/d1/YYYY/MM/DD/scoreboard.json
-# Box score: https://data.ncaa.com/casablanca/game/<gameId>/boxscore.json
+# NCAA API proxy (https://ncaa-api.henrygd.me/openapi)
+# Uses the same path as ncaa.com URLs.
+NCAA_API_BASE_URL = os.getenv("NCAA_API_BASE_URL", "https://ncaa-api.henrygd.me").rstrip("/")
 
 NCAA_SCOREBOARD_URL = (
-    "https://data.ncaa.com/casablanca/scoreboard/basketball-men/d1/{year}/{month}/{day}/scoreboard.json"
+    f"{NCAA_API_BASE_URL}/casablanca/scoreboard/basketball-men/d1/{{year}}/{{month}}/{{day}}/scoreboard.json"
 )
 
 NCAA_BOXSCORE_URL = (
-    "https://data.ncaa.com/casablanca/game/{game_id}/boxscore.json"
+    f"{NCAA_API_BASE_URL}/casablanca/game/{{game_id}}/boxscore.json"
 )
 
 # ---------------- HTTP Configuration ----------------
