@@ -1,0 +1,62 @@
+name: Update NCAA Casablanca CSVs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 10 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas requests
+
+      - name: Restore first-run marker cache
+        id: first_run_cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/ncaa-casablanca-first-run.marker
+          key: ncaa-casablanca-first-run-v1
+
+      - name: Decide DAYS_BACK
+        id: days_back
+        run: |
+          if [ "${{ steps.first_run_cache.outputs.cache-hit }}" = "true" ]; then
+            echo "days_back=3" >> "$GITHUB_OUTPUT"
+          else
+            echo "days_back=100" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run NCAA Casablanca builder
+        working-directory: ESPN
+        env:
+          DAYS_BACK: ${{ steps.days_back.outputs.days_back }}
+        run: |
+          echo "Running NCAA Casablanca pull with DAYS_BACK=${DAYS_BACK}"
+          python ncaa_casablanca_builder.py
+
+      - name: Persist first-run marker
+        if: ${{ steps.first_run_cache.outputs.cache-hit != 'true' }}
+        run: |
+          mkdir -p .cache
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > .cache/ncaa-casablanca-first-run.marker
+
+      - name: Show generated NCAA CSVs
+        working-directory: ESPN
+        run: |
+          ls -lh CSV/ncaa_games.csv CSV/ncaa_team_game_logs.csv CSV/ncaa_player_boxscores.csv || true
