@@ -42,6 +42,7 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
     ("raw", "espn_matchups_model_ready"),
     ("raw", "espn_player_boxscores"),
     ("raw", "model_features"),
+    ("raw", "haslametrics"),
 }
 
 ALLOW_SCHEMA_MIGRATION = (os.getenv("ALLOW_SCHEMA_MIGRATION") or "0").strip().lower() in ("1", "true", "yes")
@@ -91,11 +92,19 @@ FILES_ESPN = [
     ("CSV/espn_team_game_features.csv", "espn_team_game_features"),
     ("CSV/espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
     ("CSV/espn_player_boxscores.csv", "espn_player_boxscores"),
+    ("CSV/espn_teams.csv", "espn_teams"),
+    ("CSV/espn_injuries.csv", "espn_injuries"),
+    ("CSV/espn_dq_audit.csv", "espn_dq_audit"),
+    ("CSV/espn_feature_diagnostics.csv", "espn_feature_diagnostics"),
+    ("CSV/ncaa_team_game_logs.csv", "ncaa_team_game_logs"),
+    ("CSV/ncaa_games.csv", "ncaa_games"),
+    ("CSV/ncaa_player_boxscores.csv", "ncaa_player_boxscores"),
 ]
 
 FILES_TORVIK = [
     ("barttorvik.csv", "barttorvik"),
     ("barttorvik_team_results.csv", "barttorvik_team_results"),
+    ("haslametrics.csv", "haslametrics"),
 ]
 
 FILES_ML = [
@@ -268,6 +277,103 @@ TABLE_SPECS = {
             "parse_version",
         ],
         "dtypes": {"game_datetime_utc": "datetime", "pulled_at_utc": "datetime"},
+    },
+    "espn_teams": {
+        "required_cols": ["espn_id", "name", "pulled_at_utc", "source", "parse_version"],
+        "row_hash_keys": ["espn_id"],
+        "not_null": ["row_hash", "espn_id", "name", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"pulled_at_utc": "datetime"},
+    },
+    "espn_injuries": {
+        "required_cols": [
+            "team_id",
+            "athlete_id",
+            "status",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "row_hash_keys": ["team_id", "athlete_id", "status", "return_date", "pulled_at_utc"],
+        "not_null": ["row_hash", "team_id", "athlete_id", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"pulled_at_utc": "datetime"},
+    },
+    "espn_dq_audit": {
+        "required_cols": ["event_id", "team_id", "pulled_at_utc", "source", "parse_version"],
+        "row_hash_keys": ["event_id", "team_id", "home_away", "pulled_at_utc"],
+        "not_null": ["row_hash", "event_id", "team_id", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"pulled_at_utc": "datetime"},
+    },
+    "espn_feature_diagnostics": {
+        "required_cols": ["event_id", "team_id", "diagnostic_reason", "pulled_at_utc", "source", "parse_version"],
+        "row_hash_keys": ["event_id", "team_id", "diagnostic_reason"],
+        "not_null": ["row_hash", "event_id", "team_id", "diagnostic_reason", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"pulled_at_utc": "datetime"},
+    },
+    "ncaa_team_game_logs": {
+        "required_cols": [
+            "game_id",
+            "team",
+            "opponent",
+            "home_away",
+            "game_datetime",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "row_hash_keys": ["game_id", "team", "home_away"],
+        "not_null": ["row_hash", "game_id", "team", "home_away", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"game_datetime": "datetime", "pulled_at_utc": "datetime"},
+    },
+    "ncaa_games": {
+        "required_cols": [
+            "game_id",
+            "date",
+            "game_datetime",
+            "home_team",
+            "away_team",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "row_hash_keys": ["game_id", "game_datetime"],
+        "not_null": [
+            "row_hash",
+            "game_id",
+            "game_datetime",
+            "home_team",
+            "away_team",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "dtypes": {"game_datetime": "datetime", "pulled_at_utc": "datetime"},
+    },
+    "ncaa_player_boxscores": {
+        "required_cols": [
+            "game_id",
+            "team",
+            "player_name",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "row_hash_keys": ["game_id", "team", "player_name", "player_id"],
+        "not_null": [
+            "row_hash",
+            "game_id",
+            "team",
+            "player_name",
+            "pulled_at_utc",
+            "source",
+            "parse_version",
+        ],
+        "dtypes": {"pulled_at_utc": "datetime"},
+    },
+    "haslametrics": {
+        "required_cols": ["pulled_at_utc", "source", "parse_version"],
+        "row_hash_keys": [],
+        "not_null": ["row_hash", "pulled_at_utc", "source", "parse_version"],
+        "dtypes": {"pulled_at_utc": "datetime"},
     },
     # IMPORTANT: this matches your actual DB schema for raw.dq_audit_ml
     "dq_audit_ml": {

@@ -34,13 +34,16 @@ RETRY_BACKOFF = float(os.getenv("SUPABASE_UPLOAD_RETRY_BACKOFF", "2.0"))
 
 # File groups
 FILES_ESPN = [
-    ("espn_games.csv", "espn/latest/espn_games.csv"),
-    ("espn_team_game_logs.csv", "espn/latest/espn_team_game_logs.csv"),
-    ("espn_team_game_features.csv", "espn/latest/espn_team_game_features.csv"),
-    ("espn_matchups_model_ready.csv", "espn/latest/espn_matchups_model_ready.csv"),
-    ("espn_feature_diagnostics.csv", "espn/latest/espn_feature_diagnostics.csv"),
-    ("espn_dq_audit.csv", "espn/latest/espn_dq_audit.csv"),
-    ("espn_pipeline_errors.json", "espn/latest/espn_pipeline_errors.json"),
+    ("ESPN/CSV/espn_games.csv", "espn/latest/espn_games.csv"),
+    ("ESPN/CSV/espn_team_game_logs.csv", "espn/latest/espn_team_game_logs.csv"),
+    ("ESPN/CSV/espn_team_game_features.csv", "espn/latest/espn_team_game_features.csv"),
+    ("ESPN/CSV/espn_matchups_model_ready.csv", "espn/latest/espn_matchups_model_ready.csv"),
+    ("ESPN/CSV/espn_feature_diagnostics.csv", "espn/latest/espn_feature_diagnostics.csv"),
+    ("ESPN/CSV/espn_dq_audit.csv", "espn/latest/espn_dq_audit.csv"),
+    ("ESPN/CSV/ncaa_games.csv", "espn/latest/ncaa_games.csv"),
+    ("ESPN/CSV/ncaa_team_game_logs.csv", "espn/latest/ncaa_team_game_logs.csv"),
+    ("ESPN/CSV/ncaa_player_boxscores.csv", "espn/latest/ncaa_player_boxscores.csv"),
+    ("ESPN/espn_pipeline_errors.json", "espn/latest/espn_pipeline_errors.json"),
 ]
 
 FILES_TORVIK = [
@@ -145,6 +148,10 @@ def _upload_file(local_path: Path, remote_path: str) -> requests.Response:
 
 def upload(local_path: str, remote_path: str):
     lp = Path(local_path)
+    if not lp.exists() and not lp.is_absolute():
+        fallback = Path(local_path.replace("ESPN/CSV/", "", 1))
+        if fallback.exists():
+            lp = fallback
 
     if not lp.exists():
         if SKIP_MISSING:
