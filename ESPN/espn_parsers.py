@@ -50,6 +50,38 @@ def _stat_map(team_stats_list: List[Dict[str, Any]]) -> Dict[str, Any]:
     return out
 
 
+def _expand_stats_table(stats_list: Any) -> List[Dict[str, Any]]:
+    """
+    Normalize ESPN stats payloads into a flat list of stat dicts.
+
+    Supports both:
+    - list[{"name"/"abbreviation"/..., "displayValue"/"value"}]
+    - list[{"labels"/"keys": [...], "stats": [...]}]
+    """
+    if not isinstance(stats_list, list):
+        return []
+
+    expanded: List[Dict[str, Any]] = []
+    for item in stats_list:
+        if not isinstance(item, dict):
+            continue
+
+        labels = item.get("labels")
+        if not isinstance(labels, list) or not labels:
+            labels = item.get("keys")
+        values = item.get("stats")
+
+        if isinstance(labels, list) and labels and isinstance(values, list) and values:
+            pair_n = min(len(labels), len(values))
+            for i in range(pair_n):
+                expanded.append({"name": labels[i], "displayValue": values[i]})
+            continue
+
+        expanded.append(item)
+
+    return expanded
+
+
 def _extract_odds_from_comp(comp: dict) -> dict:
     """
     Best-effort extraction of market lines from ESPN scoreboard competition payload.
@@ -281,12 +313,13 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
             if not isinstance(athletes, list):
                 continue
 
-            labels = table.get("labels", [])
-            if not isinstance(labels, list):
-                labels = []
             keys = table.get("keys", [])
             if not isinstance(keys, list):
                 keys = []
+            labels = table.get("labels", [])
+            if not isinstance(labels, list):
+                labels = []
+            headers = labels if labels else keys
 
             for a in athletes:
                 athlete = a.get("athlete", {}) or {}
@@ -307,8 +340,8 @@ def _extract_players(summary_json: Dict[str, Any], team_id: str) -> List[Dict[st
 
                 # Do not drop the row if labels/stats lengths differ; keep what we can map.
                 # This prevents silent data loss when ESPN returns partial tables.
-                pair_n = min(len(labels), len(stats))
-                lmap = {str(labels[i]).lower(): stats[i] for i in range(pair_n)} if labels else {}
+                pair_n = min(len(headers), len(stats))
+                lmap = {str(headers[i]).lower(): stats[i] for i in range(pair_n)} if headers else {}
 
                 def pick(*keys):
                     for k in keys:
@@ -410,7 +443,7 @@ def parse_team_from_summary(team_entry: Dict[str, Any]) -> Dict[str, Any]:
             print(f"[DEBUG] No teamStats or statistics found for team {name} (id={tid})")
             print(f"[DEBUG] Available keys in team_entry: {list(team_entry.keys())}")
     
-    smap = _stat_map(stats_list)
+    smap = _stat_map(_expand_stats_table(stats_list))
     normalized_smap = {
         str(k).lower().replace(" ", "").replace("_", "").replace("-", ""): v
         for k, v in smap.items()
