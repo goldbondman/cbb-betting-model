@@ -30,7 +30,7 @@ jobs:
         id: first_run_cache
         uses: actions/cache@v4
         with:
-          path: /tmp/ncaa-casablanca-first-run.marker
+          path: .cache/ncaa-casablanca-first-run.marker
           key: ncaa-casablanca-first-run-v1
 
       - name: Decide DAYS_BACK
@@ -53,7 +53,8 @@ jobs:
       - name: Persist first-run marker
         if: ${{ steps.first_run_cache.outputs.cache-hit != 'true' }}
         run: |
-          date -u +"%Y-%m-%dT%H:%M:%SZ" > /tmp/ncaa-casablanca-first-run.marker
+          mkdir -p .cache
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > .cache/ncaa-casablanca-first-run.marker
 
       - name: Show generated NCAA CSVs
         working-directory: ESPN
