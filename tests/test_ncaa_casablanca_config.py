@@ -12,19 +12,25 @@ if _ESPN_DIR not in sys.path:
 
 def test_ncaa_api_default_base_url(monkeypatch):
     monkeypatch.delenv("NCAA_API_BASE_URL", raising=False)
-    import ncaa_casablanca_config
+    sys.modules.pop("ncaa_casablanca_config", None)
+    ncaa_casablanca_config = importlib.import_module("ncaa_casablanca_config")
 
-    importlib.reload(ncaa_casablanca_config)
-
-    assert ncaa_casablanca_config.NCAA_SCOREBOARD_URL.startswith("https://ncaa-api.henrygd.me/casablanca/")
-    assert ncaa_casablanca_config.NCAA_BOXSCORE_URL.startswith("https://ncaa-api.henrygd.me/casablanca/")
+    assert ncaa_casablanca_config.NCAA_SCOREBOARD_URL == (
+        "https://ncaa-api.henrygd.me/casablanca/scoreboard/basketball-men/d1/{year}/{month}/{day}/scoreboard.json"
+    )
+    assert ncaa_casablanca_config.NCAA_BOXSCORE_URL == (
+        "https://ncaa-api.henrygd.me/casablanca/game/{game_id}/boxscore.json"
+    )
 
 
 def test_ncaa_api_base_url_override(monkeypatch):
     monkeypatch.setenv("NCAA_API_BASE_URL", "https://example.com/")
-    import ncaa_casablanca_config
+    sys.modules.pop("ncaa_casablanca_config", None)
+    ncaa_casablanca_config = importlib.import_module("ncaa_casablanca_config")
 
-    importlib.reload(ncaa_casablanca_config)
-
-    assert ncaa_casablanca_config.NCAA_SCOREBOARD_URL.startswith("https://example.com/casablanca/")
-    assert ncaa_casablanca_config.NCAA_BOXSCORE_URL.startswith("https://example.com/casablanca/")
+    assert ncaa_casablanca_config.NCAA_SCOREBOARD_URL == (
+        "https://example.com/casablanca/scoreboard/basketball-men/d1/{year}/{month}/{day}/scoreboard.json"
+    )
+    assert ncaa_casablanca_config.NCAA_BOXSCORE_URL == (
+        "https://example.com/casablanca/game/{game_id}/boxscore.json"
+    )
