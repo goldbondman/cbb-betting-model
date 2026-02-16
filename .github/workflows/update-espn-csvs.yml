@@ -33,6 +33,11 @@ jobs:
         env:
           DAYS_BACK: "3"
 
+      - name: Fetch ESPN injuries (NCAA APIs)
+        working-directory: ESPN
+        run: |
+          python fetch_injuries.py
+
       - name: Ensure optional artifacts exist
         working-directory: ESPN
         run: |
