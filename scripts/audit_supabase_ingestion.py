@@ -26,6 +26,9 @@ RAW_TABLES = [
     ("raw", "espn_team_game_logs"),
     ("raw", "espn_team_game_features"),
     ("raw", "espn_matchups_model_ready"),
+    ("raw", "ncaa_games"),
+    ("raw", "ncaa_team_game_logs"),
+    ("raw", "ncaa_player_boxscores"),
     ("raw", "predictions_latest"),
 ]
 
@@ -38,6 +41,7 @@ PUBLIC_TABLES = [
 PAIR_CHECKS = [
     (("raw", "espn_team_game_features"), ("public", "team_game_features")),
     (("raw", "espn_team_game_logs"), ("public", "team_boxscores")),
+    (("raw", "ncaa_team_game_logs"), ("public", "team_boxscores")),
 ]
 
 
