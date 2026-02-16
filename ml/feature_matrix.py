@@ -213,21 +213,40 @@ def _safe_div(numer: pd.Series, denom: pd.Series) -> pd.Series:
     return out.replace([np.inf, -np.inf], np.nan)
 
 
-def _rolling_pre(df: pd.DataFrame, metric: str) -> pd.DataFrame:
+def _team_group_key(df: pd.DataFrame) -> pd.Series:
+    """
+    Choose a stable grouping key for team-history rollups.
+    Prefer team_id, but fall back to normalized team name when ids are unstable.
+    """
+    if "team_id" in df.columns:
+        tid = df["team_id"].astype("string")
+        valid = tid.notna() & (tid.str.strip() != "")
+        n_valid = int(valid.sum())
+        if n_valid > 0:
+            uniq_ratio = float(tid[valid].nunique(dropna=True)) / float(n_valid)
+            if uniq_ratio < 0.98:
+                return tid
+    if "team" in df.columns:
+        print("[WARN] team_id appears unstable; deriving rollups by normalized team name")
+        return df["team"].astype("string").str.strip().str.lower()
+    return df.get("team_id", pd.Series(index=df.index, dtype="string")).astype("string")
+
+
+def _rolling_pre(df: pd.DataFrame, metric: str, group_key: pd.Series) -> pd.DataFrame:
     out = df.copy()
     s = pd.to_numeric(out[metric], errors="coerce")
     for w in LOOKBACK_WINDOWS:
         col = f"{metric}_{w}_pre"
         out[col] = (
-            s.groupby(out["team_id"], dropna=False)
+            s.groupby(group_key, dropna=False)
             .transform(lambda g: g.shift(1).rolling(window=int(w[1:]), min_periods=1).mean())
         )
     return out
 
 
-def _games_last_days(df: pd.DataFrame, days: int) -> pd.Series:
+def _games_last_days(df: pd.DataFrame, days: int, group_key: pd.Series) -> pd.Series:
     out = pd.Series(np.nan, index=df.index, dtype=float)
-    for _, idx in df.groupby("team_id", dropna=False).groups.items():
+    for _, idx in df.groupby(group_key, dropna=False).groups.items():
         sub = df.loc[idx].sort_values("game_dt")
         ts = sub["game_dt"].astype("int64") // 10**9
         vals = []
@@ -251,7 +270,8 @@ def _derive_features_if_needed(df: pd.DataFrame) -> pd.DataFrame:
     # If no precomputed pre-game features exist, derive from boxscore primitives.
     out = df.copy()
     out["game_dt"] = pd.to_datetime(out["game_datetime_utc"], utc=True, errors="coerce")
-    out = out.sort_values(["team_id", "game_dt", "event_id"], na_position="last").reset_index(drop=True)
+    out["_team_group_key"] = _team_group_key(out)
+    out = out.sort_values(["_team_group_key", "game_dt", "event_id"], na_position="last").reset_index(drop=True)
 
     # base rates from raw boxscore primitives
     out["poss"] = pd.to_numeric(out.get("fga"), errors="coerce") - pd.to_numeric(out.get("orb"), errors="coerce") + pd.to_numeric(out.get("tov"), errors="coerce") + 0.44 * pd.to_numeric(out.get("fta"), errors="coerce")
@@ -274,13 +294,14 @@ def _derive_features_if_needed(df: pd.DataFrame) -> pd.DataFrame:
     metric_candidates = ["ortg", "drtg", "netrtg", "pace", "efg", "tov_pct", "orb_pct", "drb_pct", "ftr", "3par"]
     for m in metric_candidates:
         if m in out.columns:
-            out = _rolling_pre(out, m)
+            out = _rolling_pre(out, m, out["_team_group_key"])
 
-    out["games_last_3_days"] = _games_last_days(out, 3)
-    out["games_last_5_days"] = _games_last_days(out, 5)
-    out["games_last_7_days"] = _games_last_days(out, 7)
-    out["games_last_10_days"] = _games_last_days(out, 10)
+    out["games_last_3_days"] = _games_last_days(out, 3, out["_team_group_key"])
+    out["games_last_5_days"] = _games_last_days(out, 5, out["_team_group_key"])
+    out["games_last_7_days"] = _games_last_days(out, 7, out["_team_group_key"])
+    out["games_last_10_days"] = _games_last_days(out, 10, out["_team_group_key"])
     out["exp_margin"] = out.get("netrtg_l7_pre")
+    out = out.drop(columns=["_team_group_key"], errors="ignore")
 
     print("[INFO] Derived pre-game rolling features from raw boxscore primitives")
     return out
