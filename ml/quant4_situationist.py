@@ -26,6 +26,11 @@ def _clip(v: float, lo: float, hi: float) -> float:
     return max(lo, min(hi, float(v)))
 
 
+def program_tier_disappointment_multiplier(team_row: Mapping[str, Any]) -> float:
+    tier = str(team_row.get("program_tier", "")).lower()
+    return 1.2 if tier in {"blue_blood", "power"} else 0.8
+
+
 def situational_edge(
     team_row: Mapping[str, Any],
     opponent_row: Mapping[str, Any],
@@ -35,6 +40,8 @@ def situational_edge(
     senior_farewell = 1.0 if _i(team_row, "seniors_rotation_count", 0) >= 3 else 0.0
     auto_bid_relief = _clip((_f(team_row, "conference_tourney_margin", 0.0) + 8.0) / 16.0, 0.0, 1.0) if _i(team_row, "auto_bid", 0) == 1 else 0.0
     nit_demoralization = _clip((_f(team_row, "projected_in_ncaa_days", 0.0) - 20.0) / 35.0, 0.0, 1.0) if _i(game_context, "is_nit", 0) == 1 else 0.0
+    if _i(game_context, "is_nit", 0) == 1:
+        nit_demoralization = _clip(nit_demoralization * program_tier_disappointment_multiplier(team_row), 0.0, 1.0)
     revenge = 1.0 if _i(game_context, "rematch_controversial_flag", 0) == 1 and _i(team_row, "lost_prior_meeting_flag", 0) == 1 else 0.0
 
     travel_burden = _clip((_f(team_row, "travel_miles", 0.0) / 2200.0) + (_f(team_row, "timezone_changes", 0.0) * 0.15), 0.0, 1.0)
@@ -44,9 +51,22 @@ def situational_edge(
     officiating_mismatch = _clip(abs(_f(team_row, "physicality_index", 0.5) - _f(game_context, "crew_whistle_rate", 0.5)), 0.0, 1.0)
     crowd_comp = _clip((_f(game_context, "crowd_support_pct", 0.50) - 0.50) / 0.20, -1.0, 1.0)
     media_overload = _clip((_f(team_row, "media_obligations_per_day", 0.0) - 8.0) / 10.0, 0.0, 1.0)
+    first_four_short_rest = _clip((_f(team_row, "hours_since_first_four", 72.0) - 36.0) / -24.0, 0.0, 1.0) if _i(game_context, "is_first_four_followup", 0) == 1 else 0.0
+    campus_site_hostile = _clip((_f(game_context, "campus_site_home_edge", 0.0)) / 3.0, 0.0, 1.0) if _i(game_context, "campus_site_flag", 0) == 1 else 0.0
 
     positive = (proving_ground + senior_farewell + auto_bid_relief + revenge + max(crowd_comp, 0.0)) / 5.0
-    negative = (nit_demoralization + travel_burden + altitude_adj + b2b_fatigue + tip_mismatch + officiating_mismatch + media_overload + max(-crowd_comp, 0.0)) / 8.0
+    negative = (
+        nit_demoralization
+        + travel_burden
+        + altitude_adj
+        + b2b_fatigue
+        + tip_mismatch
+        + officiating_mismatch
+        + media_overload
+        + max(-crowd_comp, 0.0)
+        + first_four_short_rest
+        + campus_site_hostile
+    ) / 10.0
     situational_edge_score = _clip(positive - negative, -1.0, 1.0)
     situational_adjustment_points = round(situational_edge_score * 2.5, 2)
 
@@ -65,6 +85,10 @@ def situational_edge(
         risk_flags.append("OFFICIATING_STYLE_MISMATCH")
     if media_overload > 0.45:
         risk_flags.append("MEDIA_PRESSURE_OVERLOAD")
+    if first_four_short_rest > 0.45:
+        risk_flags.append("FIRST_FOUR_SHORT_REST")
+    if campus_site_hostile > 0.45:
+        risk_flags.append("CAMPUS_SITE_HOSTILE_ENVIRONMENT")
 
     return {
         "situational_edge_score": situational_edge_score,
