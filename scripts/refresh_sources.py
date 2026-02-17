@@ -247,6 +247,80 @@ def _collect_team_ids_from_csv(games_csv_path):
     return []
 
 
+def refresh_multi_source_games(date_str=None, days_back=7, output_path="ESPN/CSV/espn_games_merged.csv"):
+    """
+    Fetch games using multi-source integration (ESPN + NCAA + Henry API).
+    
+    Args:
+        date_str: Date string in YYYY-MM-DD format (None = today)
+        days_back: Number of days to fetch back from date
+        output_path: Path to save merged games CSV
+        
+    Returns:
+        Number of games fetched, or 0 if failed
+    """
+    try:
+        # Import multi-source fetcher
+        import sys
+        _CORE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "core")
+        if _CORE_DIR not in sys.path:
+            sys.path.insert(0, _CORE_DIR)
+        
+        from multi_source_fetcher import MultiSourceFetcher
+        
+        # Initialize fetcher
+        fetcher = MultiSourceFetcher(
+            enable_espn=True,
+            enable_ncaa=True,
+            enable_henry=True
+        )
+        
+        # Determine date
+        if date_str:
+            from datetime import datetime
+            date = datetime.strptime(date_str, "%Y-%m-%d")
+        else:
+            from datetime import datetime
+            from zoneinfo import ZoneInfo
+            date = datetime.now(ZoneInfo("America/Los_Angeles"))
+        
+        # Fetch date range
+        dates = []
+        for i in range(days_back):
+            from datetime import timedelta
+            d = (date - timedelta(days=i)).strftime("%Y-%m-%d")
+            dates.append(d)
+        
+        # Fetch all dates
+        all_games = []
+        total_conflicts = 0
+        
+        for d in dates:
+            try:
+                games, report = fetcher.fetch_date(d, allow_partial=True)
+                all_games.extend(games)
+                total_conflicts += report.total_conflicts
+                
+                if report.failed_sources:
+                    print(f"[WARN] {d}: Failed sources: {', '.join(report.failed_sources)}")
+            except Exception as e:
+                print(f"[ERROR] Failed to fetch {d}: {e}")
+                continue
+        
+        if all_games:
+            # Save to CSV
+            fetcher.save_to_csv(all_games, output_path, include_metadata=True)
+            print(f"Multi-source games: {len(all_games)} games ({total_conflicts} conflicts)")
+            return len(all_games)
+        else:
+            print("[WARN] No games fetched from multi-source system")
+            return 0
+            
+    except Exception as e:
+        print(f"[ERROR] Multi-source refresh failed: {e}")
+        return 0
+
+
 def main():
     session = requests.Session()
     year = int(os.environ.get("TORVIK_YEAR", cbb_season_year()))
@@ -293,6 +367,27 @@ def main():
             print(f"[ERROR] Injury refresh failed: {e}")
     else:
         print("[WARN] No team IDs found; skipping injury refresh.")
+
+    # --- Multi-Source Game Data Integration (NEW) ---
+    enable_multi_source = os.environ.get("ENABLE_MULTI_SOURCE", "false").lower() == "true"
+    if enable_multi_source:
+        print("\n--- Multi-Source Game Data Integration ---")
+        multi_source_days = int(os.environ.get("MULTI_SOURCE_DAYS_BACK", "7"))
+        multi_source_out = os.environ.get("MULTI_SOURCE_OUT", "ESPN/CSV/espn_games_merged.csv")
+        try:
+            n_games = refresh_multi_source_games(
+                date_str=None,  # Use today
+                days_back=multi_source_days,
+                output_path=multi_source_out
+            )
+            if n_games > 0:
+                print(f"Multi-source integration: {n_games} games saved to {multi_source_out}")
+            else:
+                print("Multi-source integration: No games fetched")
+        except Exception as e:
+            print(f"[ERROR] Multi-source integration failed: {e}")
+    else:
+        print("\n[INFO] Multi-source integration disabled (set ENABLE_MULTI_SOURCE=true to enable)")
 
     print("Done")
 
