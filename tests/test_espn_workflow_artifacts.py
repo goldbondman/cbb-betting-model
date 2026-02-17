@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import yaml
+
 
 def test_update_espn_workflow_uploads_csv_artifacts():
     workflow_path = (
@@ -8,8 +10,14 @@ def test_update_espn_workflow_uploads_csv_artifacts():
         / "workflows"
         / "update-espn-csvs.yml"
     )
-    workflow_text = workflow_path.read_text(encoding="utf-8")
+    workflow = yaml.safe_load(workflow_path.read_text(encoding="utf-8"))
+    steps = workflow["jobs"]["update"]["steps"]
+    artifact_step = next(
+        (step for step in steps if step.get("name") == "Upload ESPN CSV artifacts"),
+        None,
+    )
+    assert artifact_step is not None
 
-    assert "actions/upload-artifact@v4" in workflow_text
-    assert "name: espn-csvs" in workflow_text
-    assert "path: ESPN/CSV/*.csv" in workflow_text
+    assert artifact_step["uses"] == "actions/upload-artifact@v4"
+    assert artifact_step["with"]["name"] == "espn-csvs"
+    assert artifact_step["with"]["path"] == "ESPN/CSV/*.csv"
