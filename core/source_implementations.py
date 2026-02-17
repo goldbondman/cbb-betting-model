@@ -5,7 +5,7 @@ Implementations of data sources: ESPN, NCAA Casablanca, and Henry API
 import sys
 import os
 from typing import List
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 
 # Add ESPN directory to path
@@ -86,7 +86,7 @@ class ESPNDataSource(DataSource):
             market_home_ml=parsed.get("market_home_ml"),
             market_away_ml=parsed.get("market_away_ml"),
             source="espn",
-            pulled_at=datetime.utcnow().isoformat(),
+            pulled_at=datetime.now(timezone.utc).isoformat(),
             raw_data=parsed
         )
 
@@ -161,7 +161,7 @@ class NCAADataSource(DataSource):
             venue=parsed.get("venue"),
             game_datetime=parsed.get("game_datetime"),
             source="ncaa_casablanca",
-            pulled_at=datetime.utcnow().isoformat(),
+            pulled_at=datetime.now(timezone.utc).isoformat(),
             raw_data=parsed
         )
 
@@ -234,6 +234,6 @@ class HenryAPIDataSource(DataSource):
             venue=parsed.get("venue"),
             game_datetime=parsed.get("game_datetime"),
             source="henry_api",
-            pulled_at=datetime.utcnow().isoformat(),
+            pulled_at=datetime.now(timezone.utc).isoformat(),
             raw_data=parsed
         )

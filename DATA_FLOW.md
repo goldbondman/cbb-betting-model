@@ -18,18 +18,24 @@ This document explains how data flows through the CBB betting model system, from
 
 ## Overview
 
-The CBB betting model uses a multi-stage data pipeline:
+The CBB betting model uses a multi-stage data pipeline with **multi-source data integration**:
 
 ```
-ESPN API → CSV Files → Feature Engineering → Predictions → Supabase → app.py
-                 ↓                                ↓
-           Raw Games                        Backtesting
+Multi-Source (ESPN + NCAA + Henry API) → Integrity Merge → CSV Files → 
+    Feature Engineering → Predictions → Supabase → app.py
+            ↓                                ↓
+      Raw Games                        Backtesting
 ```
 
 **Key Data Sources:**
+- **Multi-Source Integration (NEW)**: Fetches from ESPN, NCAA Casablanca, and Henry API with integrity checks
 - **ESPN API**: Game results, scores, box scores, market lines, and **injury reports**
+- **NCAA Casablanca**: Official NCAA game data
+- **Henry API**: NCAA data proxy endpoint
 - **Barttorvik**: Advanced team efficiency metrics (pre-computed)
 - **Supabase Database**: Centralized storage for games, predictions, and market lines
+
+See [MULTI_SOURCE_INTEGRATION.md](MULTI_SOURCE_INTEGRATION.md) for details on the multi-source system.
 
 ---
 

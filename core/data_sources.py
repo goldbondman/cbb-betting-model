@@ -6,7 +6,7 @@ Fetches data from ESPN, NCAA Casablanca, and Henry API with integrity checks.
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 import logging
 
@@ -141,5 +141,5 @@ class DataSource(ABC):
             success=success,
             games=games or [],
             error=error,
-            fetch_time=datetime.utcnow()
+            fetch_time=datetime.now(timezone.utc)
         )
