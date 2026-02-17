@@ -150,6 +150,12 @@ if models:
                 st.subheader("Edge Distribution")
                 st.bar_chart(results["edge_distribution"])
 
+                value_scan = results.get("value_scan", {})
+                if value_scan:
+                    st.subheader("Value Scan (ROI by minimum edge)")
+                    st.caption(f"Best edge threshold: {results.get('best_value_threshold')}")
+                    st.dataframe(pd.DataFrame(value_scan).T, use_container_width=True)
+
                 with st.expander("Game-by-game Results"):
                     st.dataframe(results["details"], use_container_width=True)
 

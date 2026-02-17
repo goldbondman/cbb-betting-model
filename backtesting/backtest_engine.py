@@ -16,6 +16,8 @@ class BacktestEngine:
 
     def __init__(self) -> None:
         self.data_loader = DataLoader()
+        self.value_scan_thresholds = (0, 1, 2, 3, 4, 5)
+        self.min_value_scan_games = 3
 
     def backtest_model(self, model: dict[str, Any], days_back: int = 30) -> dict[str, Any]:
         """Backtest model on completed games and return summary metrics."""
@@ -86,9 +88,25 @@ class BacktestEngine:
                 "6-9": int(((ats_games["edge"] >= 6) & (ats_games["edge"] < 9)).sum()),
                 "9+": int((ats_games["edge"] >= 9).sum()),
             }
+            value_scan = {}
+            for threshold in self.value_scan_thresholds:
+                subset = ats_games[ats_games["edge"] >= threshold]
+                if len(subset) < self.min_value_scan_games:
+                    continue
+                subset_wins = int((subset["ats_result"] == 1.0).sum())
+                subset_losses = int((subset["ats_result"] == 0.0).sum())
+                subset_roi = (subset_wins * 0.91 - subset_losses) / len(subset)
+                value_scan[f"{threshold}+"] = {
+                    "games": int(len(subset)),
+                    "win_pct": float((subset["ats_result"] == 1.0).mean()),
+                    "roi": float(subset_roi),
+                }
+            best_value_threshold = max(value_scan.items(), key=lambda item: item[1]["roi"])[0] if value_scan else None
         else:
             roi = 0.0
             edge_dist = {}
+            value_scan = {}
+            best_value_threshold = None
 
         return {
             "mae": mae,
@@ -96,6 +114,8 @@ class BacktestEngine:
             "roi": float(roi),
             "total_games": len(df),
             "edge_distribution": edge_dist,
+            "value_scan": value_scan,
+            "best_value_threshold": best_value_threshold,
             "details": df,
         }
 
@@ -215,5 +235,7 @@ class BacktestEngine:
             "roi": 0.0,
             "total_games": 0,
             "edge_distribution": {},
+            "value_scan": {},
+            "best_value_threshold": None,
             "details": pd.DataFrame(),
         }
