@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Mapping, Optional
 POWER_6 = {"acc", "big ten", "big 12", "sec", "big east", "pac-12"}
 HIGH_MAJOR_MID = {"a-10", "mwc", "wcc"}
 TRUE_MID = {"mvc", "caa", "mac"}
+KELLY_DIVISOR = 70.0
 
 
 @dataclass(frozen=True)
@@ -41,6 +42,10 @@ def _clv_gate(value: float, clv_validation_years: int) -> float:
     return float(value) if int(clv_validation_years) >= 5 else 0.0
 
 
+def _format_spread_for_side(market_spread: float, side: str) -> str:
+    return f"{(-market_spread if side == 'team_b' else market_spread):+g}"
+
+
 def build_conf_tourney_composite_edge(
     *,
     archetype_alignment_conf: float,
@@ -64,6 +69,8 @@ def build_conf_tourney_composite_edge(
     w = dict(weights or default_weights)
 
     clv_years = int(clv_validation_years)
+    if clv_years < 5:
+        return 0.0
     w_sum = sum(w.values()) or 1.0
     normalized = {k: v / w_sum for k, v in w.items()}
 
@@ -184,7 +191,7 @@ def build_conf_fragility_view(team: Mapping[str, Any], game: Mapping[str, Any]) 
         d
         for d, on in {
             "LOAD_MANAGEMENT_EXPOSURE": load_mgmt >= 0.5,
-            "THIRD-GAME-IN-FOUR-DAYS_WALL": game3_wall >= 0.5,
+            "THIRD_GAME_IN_FOUR_DAYS_WALL": game3_wall >= 0.5,
             "KEY_PLAYER_DEPENDENCY": dependency >= 0.5,
             "BRACKET_KNOWLEDGE_TRAP": bracket_motivation <= 0.4,
         }.items()
@@ -257,8 +264,11 @@ def build_conf_bet_card(game: Mapping[str, Any], rules: ConfTourneyBetRules = Co
     }[tier]
 
     recommended_bet = game.get("default_recommended_bet", "pass")
+    market_spread = float(game.get("market_spread", 0.0))
     if composite_edge >= min_edge:
-        recommended_bet = f"{team_b.get('team', 'Team B')} +{game.get('market_spread', 0)}"
+        recommended_bet = f"{team_b.get('team', 'Team B')} {_format_spread_for_side(market_spread, 'team_b')}"
+    elif composite_edge <= -min_edge:
+        recommended_bet = f"{team_a.get('team', 'Team A')} {_format_spread_for_side(market_spread, 'team_a')}"
 
     round_name = (game.get("tournament_round") or "").lower()
     max_bet = rules.max_bet_early_rounds
@@ -301,7 +311,7 @@ def build_conf_bet_card(game: Mapping[str, Any], rules: ConfTourneyBetRules = Co
         "q5_final": {
             "composite_edge": round(composite_edge, 3),
             "recommended_bet": recommended_bet,
-            "kelly_recommended": round(max(0.0, composite_edge / 70.0), 4),
+            "kelly_recommended": round(max(0.0, composite_edge / KELLY_DIVISOR), 4),
             "confidence_tier": "A" if composite_edge >= min_edge + 1 else "B" if composite_edge >= min_edge else "C",
             "timing": f"bet now — {timing}",
             "best_book": game.get("best_book", "DraftKings"),

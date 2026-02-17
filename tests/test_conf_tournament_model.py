@@ -11,6 +11,7 @@ from ml.conf_tournament_model import (
 class TestConfTournamentModel(unittest.TestCase):
     def test_conference_tier_mapping(self):
         self.assertEqual(conference_tier("Big Ten"), "power6")
+        self.assertEqual(conference_tier(" big ten "), "power6")
         self.assertEqual(conference_tier("A-10"), "high_major_mid_major")
         self.assertEqual(conference_tier("MVC"), "true_mid_major")
         self.assertEqual(conference_tier("Big Sky"), "low_major")
@@ -26,7 +27,7 @@ class TestConfTournamentModel(unittest.TestCase):
             market_implied_edge=0.5,
             clv_validation_years=4,
         )
-        self.assertEqual(edge, -0.5)
+        self.assertEqual(edge, 0.0)
 
     def test_build_conf_bet_card_contract(self):
         game = {
@@ -55,6 +56,7 @@ class TestConfTournamentModel(unittest.TestCase):
             "third_meeting_adjustment": 0.4,
             "fatigue_differential": 0.6,
             "market_implied_edge": 0.2,
+            "market_spread": -6.5,
             "situational_adjustment_points": 2.4,
             "motivation_asymmetry": "HIGH",
             "crowd_advantage_label": "team_b +1.8pts",
@@ -62,7 +64,7 @@ class TestConfTournamentModel(unittest.TestCase):
             "correlation_group": "Big_Ten_Top_Half",
         }
 
-        card = build_conf_bet_card(game, rules=ConfTourneyBetRules())
+        card = build_conf_bet_card(game, rules=ConfTourneyBetRules(min_edge_power6=0.1))
         self.assertEqual(card["game_id"], "g-1")
         self.assertIn("q1_archetypes", card)
         self.assertIn("q2_upset", card)
@@ -71,6 +73,7 @@ class TestConfTournamentModel(unittest.TestCase):
         self.assertIn("q5_final", card)
         self.assertIn("composite_edge", card["q5_final"])
         self.assertEqual(card["q5_final"]["best_book"], "DraftKings")
+        self.assertEqual(card["q5_final"]["recommended_bet"], "Team B +6.5")
 
 
 if __name__ == "__main__":
