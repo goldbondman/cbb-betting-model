@@ -31,6 +31,11 @@ class TournamentGame:
     q3_fragility: Dict[str, Any] = field(default_factory=dict)
     q4_situational: Dict[str, Any] = field(default_factory=dict)
     q5_final: Dict[str, Any] = field(default_factory=dict)
+    tournament_structure: Dict[str, Any] = field(default_factory=dict)
+    selection_committee: Dict[str, Any] = field(default_factory=dict)
+    seed_historical_angles: Dict[str, Any] = field(default_factory=dict)
+    geography_region: Dict[str, Any] = field(default_factory=dict)
+    round_1_style_clash: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         out = asdict(self)

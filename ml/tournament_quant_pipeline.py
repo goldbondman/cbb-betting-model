@@ -13,6 +13,35 @@ from ml.quant5_mathematician import build_tournament_bet_card_row, composite_edg
 from ml.tournament_contract import build_tournament_game
 
 
+def _f(row: Mapping[str, Any], key: str, default: float = 0.0) -> float:
+    try:
+        return float(row.get(key, default))
+    except Exception:
+        return float(default)
+
+
+def _i(row: Mapping[str, Any], key: str, default: int = 0) -> int:
+    try:
+        return int(row.get(key, default))
+    except Exception:
+        return int(default)
+
+
+def _clip(v: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, float(v)))
+
+
+def _style_clash_label(team_x: Mapping[str, Any], team_y: Mapping[str, Any]) -> str:
+    pace_gap = abs(_i(team_x, "pace_rank", 175) - _i(team_y, "pace_rank", 175))
+    if pace_gap >= 120:
+        return "SLOW_VS_TRANSITION"
+    if _i(team_x, "princeton_offense_flag", 0) == 1 or _i(team_y, "princeton_offense_flag", 0) == 1:
+        return "PRINCETON_SYSTEM_CLASH"
+    if _i(team_x, "pack_line_defense_flag", 0) == 1 or _i(team_y, "pack_line_defense_flag", 0) == 1:
+        return "PACK_LINE_CLASH"
+    return "STYLE_BALANCED"
+
+
 def run_team_execution_order(
     game_id: str,
     team_a: Mapping[str, Any],
@@ -80,5 +109,56 @@ def run_team_execution_order(
         "timing": q5_row["timing"],
         "best_book": q5_row["best_book"],
         "correlation_group": q5_row["correlation_group"],
+    }
+    round_name = str(base_model_output.get("round", "NCAA_R64"))
+    is_first_four = _i(base_model_output, "is_first_four", 0) == 1 or "FIRST_FOUR" in round_name
+    team_b_byes = _i(team_b, "conference_tournament_bye_rounds", 0)
+    team_a_byes = _i(team_a, "conference_tournament_bye_rounds", 0)
+    bye_rest_advantage = _clip((team_b_byes - team_a_byes) * 0.4, -1.5, 1.5)
+    rhythm_penalty = _clip((_f(team_b, "days_since_last_game", 2.0) - 4.0) * 0.35, 0.0, 1.2)
+    shared["tournament_structure"] = {
+        "bye_rest_advantage_points": round(bye_rest_advantage - rhythm_penalty, 3),
+        "site_type": str(base_model_output.get("site_type", "neutral")),
+        "campus_site_flag": _i(base_model_output, "campus_site_flag", 0),
+        "first_four_short_rest_flag": int(is_first_four and _i(team_b, "played_first_four", 0) == 1),
+        "nit_demoralization_score": round(
+            _clip(
+                _f(team_b, "nit_rejection_disappointment", 0.0)
+                * (1.2 if str(team_b.get("program_tier", "")).lower() in {"blue_blood", "power"} else 0.8),
+                0.0,
+                1.0,
+            ),
+            3,
+        ),
+    }
+    seed_gap = _i(underdog, "seed", 16) - _i(favorite, "seed", 1)
+    shared["selection_committee"] = {
+        "conference_seed_bias": round(_f(underdog, "conference_seed_bias_10y", 0.0), 3),
+        "recent_form_seed_delta": round(_f(underdog, "recent_form_seed_delta", 0.0), 3),
+        "brand_protection_flag": _i(base_model_output, "brand_protection_flag", 0),
+        "defense_undervalued_flag": int(_i(underdog, "adj_def_rank", 999) <= 30 and _i(underdog, "seed", 16) >= 8),
+    }
+    shared["seed_historical_angles"] = {
+        "seed_matchup": f"{_i(favorite, 'seed', 1)}v{_i(underdog, 'seed', 16)}",
+        "rolling_12v5_clv_delta": round(_f(base_model_output, "rolling_12v5_clv_delta", 0.0), 3),
+        "eleven_seed_type": str(underdog.get("seed_entry_type", "unknown")),
+        "seed_vs_efficiency_gap": _i(underdog, "seed", 16) - _i(underdog, "kenpom_equivalent_seed", _i(underdog, "seed", 16)),
+        "r1_one_seed_cover_base_rate": round(_f(base_model_output, "r1_one_seed_cover_base_rate", 0.0), 3),
+        "upset_probability_cap_triggered": int(seed_gap >= 12 and _i(underdog, "auto_bid", 0) == 1 and _i(favorite, "power_program_flag", 0) == 1),
+    }
+    proximity_edge = _clip((_f(team_a, "distance_to_site_miles", 500.0) - _f(team_b, "distance_to_site_miles", 500.0)) / 350.0, -2.0, 2.0)
+    shared["geography_region"] = {
+        "team_b_proximity_score": round(_clip(1.0 - _f(team_b, "distance_to_site_miles", 500.0) / 1200.0, 0.0, 1.0), 3),
+        "crowd_advantage_points": round(proximity_edge, 3),
+        "venue_upset_rate_10y": round(_f(base_model_output, "venue_upset_rate_10y", 0.0), 3),
+        "weather_region_mismatch_flag": _i(base_model_output, "weather_region_mismatch_flag", 0),
+    }
+    shared["round_1_style_clash"] = {
+        "style_clash_tag": _style_clash_label(favorite, underdog),
+        "slow_vs_fast_conference_flag": int(
+            abs(_i(favorite, "pace_rank", 175) - _i(underdog, "pace_rank", 175)) >= 100
+            and str(round_name).startswith("NCAA_R")
+        ),
+        "round_1_style_clash_database_tag": str(base_model_output.get("round_1_style_clash_database_tag", "")),
     }
     return shared

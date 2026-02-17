@@ -10,6 +10,7 @@ import pandas as pd
 ROUND_ADJUSTMENTS = {
     "NCAA_R64": 1.00,
     "NCAA_R32": 0.94,
+    "NCAA_FIRST_FOUR": 0.97,
     "CONF_QF": 1.03,
     "CONF_SF": 1.00,
     "CONF_F": 0.96,
@@ -95,6 +96,10 @@ def upset_probability_model(
     base_upset = _clip01(0.15 + min(spread_abs, 14.0) * 0.015)
     round_adj = ROUND_ADJUSTMENTS.get(round_name, 1.0)
     upset_probability = _clip01(base_upset * (0.75 + dog_dna_score) * round_adj)
+    probability_cap_triggered = False
+    if _i(underdog_row, "auto_bid", 0) == 1 and _i(favorite_row, "power_program_flag", 0) == 1 and (_i(underdog_row, "seed", 16) - _i(favorite_row, "seed", 1)) >= 12:
+        upset_probability = min(upset_probability, 0.30)
+        probability_cap_triggered = True
 
     drivers: List[str] = [k for k, v in parts.items() if v >= 0.6]
     market_edge_vs_spread = float((upset_probability - base_upset) * spread_abs)
@@ -105,6 +110,7 @@ def upset_probability_model(
         "key_upset_drivers": drivers,
         "market_edge_vs_spread": market_edge_vs_spread,
         "round": round_name,
+        "upset_probability_cap_triggered": probability_cap_triggered,
     }
 
 
