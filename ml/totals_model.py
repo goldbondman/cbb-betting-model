@@ -37,6 +37,9 @@ _ROUND_DEFLATOR = {
 }
 
 _TIER_DEFLATOR = {"power": -0.01, "mid_major": -0.015, "group_of_5": -0.02}
+GAME_SECONDS = 2400.0
+MIN_SECONDS_PER_POSSESSION = 30.0
+CONFIDENCE_INTERVAL_HALF_WIDTH = 6.0
 
 
 def tournament_deflator(round_name: str, conference_tier: str) -> float:
@@ -99,7 +102,10 @@ def project_totals_contract(game: Dict[str, float | str]) -> Dict[str, object]:
     full_projection = (team_a_ppp + team_b_ppp) * poss + venue_adj
     first_half_projection = full_projection * 0.485 + float(game.get("first_half_nerves_discount", -1.0))
     second_half_projection = full_projection - first_half_projection + float(game.get("halftime_lead_pace_modifier", 0.0))
-    confidence_interval = [int(round(full_projection - 6.0)), int(round(full_projection + 6.0))]
+    confidence_interval = [
+        int(round(full_projection - CONFIDENCE_INTERVAL_HALF_WIDTH)),
+        int(round(full_projection + CONFIDENCE_INTERVAL_HALF_WIDTH)),
+    ]
 
     return {
         "q2_possessions": {
@@ -108,7 +114,10 @@ def project_totals_contract(game: Dict[str, float | str]) -> Dict[str, object]:
             "pace_battle_winner": team_a if float(game.get("team_a_pace_control_rate", 0.5)) >= 0.5 else team_b,
             "overtime_probability": round(float(game.get("overtime_probability", 0.06)), 3),
             "fatigue_pace_adjustment": float(game.get("fatigue_pace_adjustment", 0.0)),
-            "shot_clock_utilization_projection": round(2400.0 / max(30.0, (2400.0 / poss)), 1),
+            "shot_clock_utilization_projection": round(
+                GAME_SECONDS / max(MIN_SECONDS_PER_POSSESSION, (GAME_SECONDS / poss)),
+                1,
+            ),
         },
         "q3_efficiency": {
             "team_a_ppp": round(team_a_ppp, 3),
