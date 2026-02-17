@@ -6,9 +6,9 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 from ml.quant1_archeologist import team_archetype_profile
-from ml.quant2_upset_hunter import upset_probability_model
+from ml.quant2_upset_hunter import is_auto_bid_power_mismatch, upset_probability_model
 from ml.quant3_executioner import favorite_fragility_index
-from ml.quant4_situationist import situational_edge
+from ml.quant4_situationist import program_tier_disappointment_multiplier, situational_edge
 from ml.quant5_mathematician import build_tournament_bet_card_row, composite_edge_score
 from ml.tournament_contract import build_tournament_game
 
@@ -111,7 +111,7 @@ def run_team_execution_order(
         "correlation_group": q5_row["correlation_group"],
     }
     round_name = str(base_model_output.get("round", "NCAA_R64"))
-    is_first_four = _i(base_model_output, "is_first_four", 0) == 1 or "FIRST_FOUR" in round_name
+    is_first_four = _i(base_model_output, "is_first_four", 0) == 1 or round_name == "NCAA_FIRST_FOUR"
     team_b_byes = _i(team_b, "conference_tournament_bye_rounds", 0)
     team_a_byes = _i(team_a, "conference_tournament_bye_rounds", 0)
     bye_rest_advantage = _clip((team_b_byes - team_a_byes) * 0.4, -1.5, 1.5)
@@ -124,14 +124,13 @@ def run_team_execution_order(
         "nit_demoralization_score": round(
             _clip(
                 _f(team_b, "nit_rejection_disappointment", 0.0)
-                * (1.2 if str(team_b.get("program_tier", "")).lower() in {"blue_blood", "power"} else 0.8),
+                * program_tier_disappointment_multiplier(team_b),
                 0.0,
                 1.0,
             ),
             3,
         ),
     }
-    seed_gap = _i(underdog, "seed", 16) - _i(favorite, "seed", 1)
     shared["selection_committee"] = {
         "conference_seed_bias": round(_f(underdog, "conference_seed_bias_10y", 0.0), 3),
         "recent_form_seed_delta": round(_f(underdog, "recent_form_seed_delta", 0.0), 3),
@@ -144,7 +143,7 @@ def run_team_execution_order(
         "eleven_seed_type": str(underdog.get("seed_entry_type", "unknown")),
         "seed_vs_efficiency_gap": _i(underdog, "seed", 16) - _i(underdog, "kenpom_equivalent_seed", _i(underdog, "seed", 16)),
         "r1_one_seed_cover_base_rate": round(_f(base_model_output, "r1_one_seed_cover_base_rate", 0.0), 3),
-        "upset_probability_cap_triggered": int(seed_gap >= 12 and _i(underdog, "auto_bid", 0) == 1 and _i(favorite, "power_program_flag", 0) == 1),
+        "upset_probability_cap_triggered": int(is_auto_bid_power_mismatch(underdog, favorite)),
     }
     proximity_edge = _clip((_f(team_a, "distance_to_site_miles", 500.0) - _f(team_b, "distance_to_site_miles", 500.0)) / 350.0, -2.0, 2.0)
     shared["geography_region"] = {

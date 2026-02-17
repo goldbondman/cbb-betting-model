@@ -56,7 +56,12 @@ def test_quant_modules_return_required_fields():
     assert "winning_archetypes" in q1 and "failure_archetypes" in q1
 
     q2 = upset_probability_model(dog, favorite, spread=8.5)
-    assert {"dog_dna_score", "upset_probability", "key_upset_drivers", "upset_probability_cap_triggered"}.issubset(q2.keys())
+    assert {
+        "dog_dna_score",
+        "upset_probability",
+        "key_upset_drivers",
+        "upset_probability_cap_triggered",
+    }.issubset(q2.keys())
 
     q3 = favorite_fragility_index(favorite, dog)
     assert {"fragility_index", "early_exit_probability", "recommended_action"}.issubset(q3.keys())

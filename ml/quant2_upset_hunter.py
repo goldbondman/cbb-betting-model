@@ -50,6 +50,14 @@ def _upset_label(prob: float) -> str:
     return "LONGSHOT_DOG"
 
 
+def is_auto_bid_power_mismatch(underdog_row: Mapping[str, Any], favorite_row: Mapping[str, Any]) -> bool:
+    dog_seed = _i(underdog_row, "seed", 0)
+    fav_seed = _i(favorite_row, "seed", 0)
+    if dog_seed <= 0 or fav_seed <= 0:
+        return False
+    return _i(underdog_row, "auto_bid", 0) == 1 and _i(favorite_row, "power_program_flag", 0) == 1 and dog_seed >= 13 and fav_seed <= 4 and (dog_seed - fav_seed) >= 12
+
+
 def upset_probability_model(
     underdog_row: Mapping[str, Any],
     favorite_row: Mapping[str, Any],
@@ -97,7 +105,7 @@ def upset_probability_model(
     round_adj = ROUND_ADJUSTMENTS.get(round_name, 1.0)
     upset_probability = _clip01(base_upset * (0.75 + dog_dna_score) * round_adj)
     probability_cap_triggered = False
-    if _i(underdog_row, "auto_bid", 0) == 1 and _i(favorite_row, "power_program_flag", 0) == 1 and (_i(underdog_row, "seed", 16) - _i(favorite_row, "seed", 1)) >= 12:
+    if is_auto_bid_power_mismatch(underdog_row, favorite_row):
         upset_probability = min(upset_probability, 0.30)
         probability_cap_triggered = True
 

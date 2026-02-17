@@ -26,6 +26,11 @@ def _clip(v: float, lo: float, hi: float) -> float:
     return max(lo, min(hi, float(v)))
 
 
+def program_tier_disappointment_multiplier(team_row: Mapping[str, Any]) -> float:
+    tier = str(team_row.get("program_tier", "")).lower()
+    return 1.2 if tier in {"blue_blood", "power"} else 0.8
+
+
 def situational_edge(
     team_row: Mapping[str, Any],
     opponent_row: Mapping[str, Any],
@@ -36,8 +41,7 @@ def situational_edge(
     auto_bid_relief = _clip((_f(team_row, "conference_tourney_margin", 0.0) + 8.0) / 16.0, 0.0, 1.0) if _i(team_row, "auto_bid", 0) == 1 else 0.0
     nit_demoralization = _clip((_f(team_row, "projected_in_ncaa_days", 0.0) - 20.0) / 35.0, 0.0, 1.0) if _i(game_context, "is_nit", 0) == 1 else 0.0
     if _i(game_context, "is_nit", 0) == 1:
-        tier = str(team_row.get("program_tier", "")).lower()
-        nit_demoralization = _clip(nit_demoralization * (1.2 if tier in {"blue_blood", "power"} else 0.8), 0.0, 1.0)
+        nit_demoralization = _clip(nit_demoralization * program_tier_disappointment_multiplier(team_row), 0.0, 1.0)
     revenge = 1.0 if _i(game_context, "rematch_controversial_flag", 0) == 1 and _i(team_row, "lost_prior_meeting_flag", 0) == 1 else 0.0
 
     travel_burden = _clip((_f(team_row, "travel_miles", 0.0) / 2200.0) + (_f(team_row, "timezone_changes", 0.0) * 0.15), 0.0, 1.0)
