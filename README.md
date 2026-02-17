@@ -47,8 +47,16 @@ College basketball prediction system using 4 ensemble models with advanced quant
 - **[SPORTS_BETTING_QUANT_DOCS.md](SPORTS_BETTING_QUANT_DOCS.md)** - Comprehensive guide to new quantitative betting features
 
 ## Data Sources
+
+**Multi-Source Integration** (NEW): The system fetches data from multiple sources with automatic integrity checks and conflict resolution:
+- **ESPN API** (game results, scores, market lines)
+- **NCAA Casablanca API** (official NCAA data)
+- **Henry API** (NCAA data proxy)
+
+The multi-source system provides redundancy and data quality assurance. See [MULTI_SOURCE_INTEGRATION.md](MULTI_SOURCE_INTEGRATION.md) for details.
+
+**Additional Sources**:
 - Barttorvik (efficiency metrics)
-- ESPN API (game results)
 
 ## Run Locally
 ```bash
