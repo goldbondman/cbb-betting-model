@@ -13,6 +13,10 @@ from ml.calibration import ece, platt_apply, platt_fit
 from ml.edge import american_to_prob
 from ml.staking import kelly_fraction
 
+BET_NOW_EDGE_THRESHOLD = 1.5
+BET_NOW_LINE_SHOP_THRESHOLD = 0.25
+WAIT_EDGE_THRESHOLD = 1.0
+
 
 @dataclass(frozen=True)
 class TournamentBet:
@@ -91,9 +95,9 @@ def build_tournament_bet_card_row(
     line_shopping_value: float,
 ) -> Dict[str, Any]:
     k_full = float(kelly_fraction(fair_prob, market_odds))
-    rec = float(max(0.0, min(0.25 * k_full, 0.05)))
+    rec = float(max(0.0, min(0.25 * k_full, 0.05))) if k_full > 0 else 0.0
     tier = "A" if composite_edge >= 2.0 else ("B" if composite_edge >= 1.0 else "C")
-    timing = "bet now" if composite_edge >= 1.5 and line_shopping_value >= 0.25 else ("wait for sharp action" if composite_edge >= 1.0 else "avoid late")
+    timing = "bet now" if composite_edge >= BET_NOW_EDGE_THRESHOLD and line_shopping_value >= BET_NOW_LINE_SHOP_THRESHOLD else ("wait for sharp action" if composite_edge >= WAIT_EDGE_THRESHOLD else "avoid late")
     bet = TournamentBet(
         edge=float(composite_edge),
         kelly_full=k_full,

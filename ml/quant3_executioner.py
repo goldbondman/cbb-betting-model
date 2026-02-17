@@ -7,6 +7,8 @@ from typing import Any, Dict, Iterable, List, Mapping
 
 import pandas as pd
 
+BRAND_TEAMS = {"duke", "kentucky", "kansas", "north carolina", "gonzaga"}
+
 
 def _f(row: Mapping[str, Any], key: str, default: float = 0.0) -> float:
     try:
@@ -53,8 +55,7 @@ def favorite_fragility_index(favorite_row: Mapping[str, Any], underdog_row: Mapp
     first_round_exit_probability = _clip01(0.08 + fragility_index * 0.55 + fatigue_multiplier * 0.08 + hangover * 0.04)
     second_round_exit_probability = _clip01(0.14 + fragility_index * 0.45 + fatigue_multiplier * 0.05)
 
-    brand_teams = {"duke", "kentucky", "kansas", "north carolina", "gonzaga"}
-    brand_premium = 1.25 if str(favorite_row.get("team", "")).strip().lower() in brand_teams else 0.0
+    brand_premium = 1.25 if str(favorite_row.get("team", "")).strip().lower() in BRAND_TEAMS else 0.0
     recommended_action = "fade" if fragility_index >= 0.55 else ("monitor" if fragility_index >= 0.35 else "avoid")
     drivers: List[str] = [k for k, v in parts.items() if v >= 0.55]
 

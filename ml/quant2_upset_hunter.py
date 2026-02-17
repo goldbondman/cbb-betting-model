@@ -7,6 +7,16 @@ from typing import Any, Dict, Iterable, List, Mapping
 
 import pandas as pd
 
+ROUND_ADJUSTMENTS = {
+    "NCAA_R64": 1.00,
+    "NCAA_R32": 0.94,
+    "CONF_QF": 1.03,
+    "CONF_SF": 1.00,
+    "CONF_F": 0.96,
+    "NIT_R1": 1.04,
+    "NIT_R2": 1.01,
+}
+
 
 def _f(row: Mapping[str, Any], key: str, default: float = 0.0) -> float:
     try:
@@ -83,7 +93,7 @@ def upset_probability_model(
     dog_dna_score = _clip01(_weighted_mean(parts, weights))
     spread_abs = abs(float(spread))
     base_upset = _clip01(0.15 + min(spread_abs, 14.0) * 0.015)
-    round_adj = {"NCAA_R64": 1.00, "NCAA_R32": 0.94, "CONF_QF": 1.03, "CONF_SF": 1.00, "CONF_F": 0.96, "NIT_R1": 1.04, "NIT_R2": 1.01}.get(round_name, 1.0)
+    round_adj = ROUND_ADJUSTMENTS.get(round_name, 1.0)
     upset_probability = _clip01(base_upset * (0.75 + dog_dna_score) * round_adj)
 
     drivers: List[str] = [k for k, v in parts.items() if v >= 0.6]

@@ -30,6 +30,7 @@ def run_team_execution_order(
     # Quant 2 (assume team_b is underdog if spread negative for team_a)
     spread = float(base_model_output.get("spread", 0.0))
     underdog, favorite = (team_b, team_a) if spread < 0 else (team_a, team_b)
+    underdog_line = abs(spread)
     q2 = upset_probability_model(underdog, favorite, spread=spread, round_name=str(base_model_output.get("round", "NCAA_R64")))
     shared["q2_upset"] = {
         "dog_dna_score": q2["dog_dna_score"],
@@ -63,7 +64,7 @@ def run_team_execution_order(
         weights=w,
     )
     q5_row = build_tournament_bet_card_row(
-        game={"game_id": game_id, "recommended_bet": f"{underdog.get('name', 'Underdog')} +{abs(spread):.1f}"},
+        game={"game_id": game_id, "recommended_bet": f"{underdog.get('name', 'Underdog')} +{underdog_line:.1f}"},
         composite_edge=comp_edge,
         fair_prob=max(0.01, min(0.99, 1 - float(base_model_output.get("win_prob_a", 0.5)))),
         market_odds=float(base_model_output.get("market_odds", -110)),
