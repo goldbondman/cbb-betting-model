@@ -3,7 +3,7 @@ Integrity Merge Logic
 Combines data from multiple sources with conflict detection and resolution.
 """
 
-from typing import List, Dict, Optional, Set, Tuple
+from typing import List, Dict, Optional, Set, Tuple, Any
 from dataclasses import dataclass, field
 from collections import defaultdict
 import logging
@@ -18,8 +18,8 @@ class GameConflict:
     """Represents a conflict between sources for a specific field"""
     game_id: str
     field_name: str
-    values: Dict[str, any]  # source -> value mapping
-    resolved_value: Optional[any] = None
+    values: Dict[str, Any]  # source -> value mapping
+    resolved_value: Optional[Any] = None
     resolution_method: Optional[str] = None
 
 
@@ -334,7 +334,7 @@ class IntegrityMerger:
         self, 
         conflict: GameConflict, 
         games_by_source: Dict[str, GameData]
-    ) -> any:
+    ) -> Any:
         """
         Resolve a single field conflict.
         

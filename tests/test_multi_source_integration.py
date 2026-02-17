@@ -64,6 +64,8 @@ def test_game_data_completeness():
 
 def test_source_result_quality():
     """Test SourceResult quality assessment"""
+    from datetime import timezone
+    
     # High quality result (need all fields for 80%+ completeness)
     high_quality_games = [
         GameData(
@@ -89,7 +91,7 @@ def test_source_result_quality():
         source=SourceType.ESPN,
         success=True,
         games=high_quality_games,
-        fetch_time=datetime.now(datetime.UTC) if hasattr(datetime, 'UTC') else datetime.utcnow()
+        fetch_time=datetime.now(timezone.utc)
     )
     
     assert high_result.quality == DataQuality.HIGH, "Complete games should be high quality"
@@ -109,7 +111,7 @@ def test_source_result_quality():
         source=SourceType.NCAA_CASABLANCA,
         success=True,
         games=low_quality_games,
-        fetch_time=datetime.now(datetime.UTC) if hasattr(datetime, 'UTC') else datetime.utcnow()
+        fetch_time=datetime.now(timezone.utc)
     )
     
     assert low_result.quality in [DataQuality.LOW, DataQuality.MEDIUM], "Minimal games should be low/medium quality"
@@ -119,7 +121,7 @@ def test_source_result_quality():
         source=SourceType.HENRY_API,
         success=False,
         error="Connection timeout",
-        fetch_time=datetime.now(datetime.UTC) if hasattr(datetime, 'UTC') else datetime.utcnow()
+        fetch_time=datetime.now(timezone.utc)
     )
     
     assert failed_result.quality == DataQuality.FAILED, "Failed fetch should be FAILED quality"

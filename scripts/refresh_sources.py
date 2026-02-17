@@ -5,13 +5,18 @@ import time
 import sys
 import requests
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 # Allow importing ESPN modules when run from repo root
 _ESPN_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ESPN")
 if _ESPN_DIR not in sys.path:
     sys.path.insert(0, _ESPN_DIR)
+
+# Allow importing core modules
+_CORE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "core")
+if _CORE_DIR not in sys.path:
+    sys.path.insert(0, _CORE_DIR)
 
 UA_HEADERS = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
@@ -260,12 +265,7 @@ def refresh_multi_source_games(date_str=None, days_back=7, output_path="ESPN/CSV
         Number of games fetched, or 0 if failed
     """
     try:
-        # Import multi-source fetcher
-        import sys
-        _CORE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "core")
-        if _CORE_DIR not in sys.path:
-            sys.path.insert(0, _CORE_DIR)
-        
+        # Import multi-source fetcher (core already in sys.path)
         from multi_source_fetcher import MultiSourceFetcher
         
         # Initialize fetcher
@@ -277,17 +277,13 @@ def refresh_multi_source_games(date_str=None, days_back=7, output_path="ESPN/CSV
         
         # Determine date
         if date_str:
-            from datetime import datetime
             date = datetime.strptime(date_str, "%Y-%m-%d")
         else:
-            from datetime import datetime
-            from zoneinfo import ZoneInfo
             date = datetime.now(ZoneInfo("America/Los_Angeles"))
         
         # Fetch date range
         dates = []
         for i in range(days_back):
-            from datetime import timedelta
             d = (date - timedelta(days=i)).strftime("%Y-%m-%d")
             dates.append(d)
         
