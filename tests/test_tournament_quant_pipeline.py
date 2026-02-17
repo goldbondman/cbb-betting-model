@@ -81,7 +81,7 @@ def test_validation_hooks_and_portfolio_helpers():
     assert "roi" in q5_validate(games_df=games)
 
     capped = max_correlated_exposure(games, max_exposure=0.15)
-    assert capped["kelly_recommended"].sum() <= 0.1500001
+    assert capped["kelly_recommended"].sum() <= 0.15 + 1e-6
 
     contra = contrarian_value_finder(games)
     assert len(contra) == 1

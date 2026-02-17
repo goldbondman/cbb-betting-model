@@ -16,6 +16,8 @@ from ml.staking import kelly_fraction
 BET_NOW_EDGE_THRESHOLD = 1.5
 BET_NOW_LINE_SHOP_THRESHOLD = 0.25
 WAIT_EDGE_THRESHOLD = 1.0
+KELLY_FRACTION_MULTIPLIER = 0.25
+MAX_KELLY_RECOMMENDATION = 0.05
 
 
 @dataclass(frozen=True)
@@ -95,7 +97,7 @@ def build_tournament_bet_card_row(
     line_shopping_value: float,
 ) -> Dict[str, Any]:
     k_full = float(kelly_fraction(fair_prob, market_odds))
-    rec = float(max(0.0, min(0.25 * k_full, 0.05))) if k_full > 0 else 0.0
+    rec = float(max(0.0, min(KELLY_FRACTION_MULTIPLIER * k_full, MAX_KELLY_RECOMMENDATION))) if k_full > 0 else 0.0
     tier = "A" if composite_edge >= 2.0 else ("B" if composite_edge >= 1.0 else "C")
     timing = "bet now" if composite_edge >= BET_NOW_EDGE_THRESHOLD and line_shopping_value >= BET_NOW_LINE_SHOP_THRESHOLD else ("wait for sharp action" if composite_edge >= WAIT_EDGE_THRESHOLD else "avoid late")
     bet = TournamentBet(
