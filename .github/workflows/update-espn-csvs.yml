@@ -48,6 +48,14 @@ jobs:
         run: |
           ls -lh CSV/*.csv *.json || true
 
+      - name: Upload ESPN CSV artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: espn-csvs
+          path: ESPN/CSV/*.csv
+          if-no-files-found: warn
+
       - name: Load outputs to Supabase DB (raw schema)
         id: load_espn_csv
         continue-on-error: true
