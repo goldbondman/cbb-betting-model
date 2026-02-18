@@ -439,7 +439,10 @@ def add_weighted_rollups(
     out = out.drop(columns=["_ord"], errors="ignore")
     # Defragment after column-by-column additions to silence PerformanceWarning
     out = out.copy()
-    return out# ----------------------------
+    return out
+
+
+# ----------------------------
 # Convenience: floors/ceilings (percentiles) from existing columns
 # ----------------------------
 
