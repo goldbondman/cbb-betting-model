@@ -69,6 +69,12 @@ from espn_config import (
 
     # Validation
     VALID_HOME_AWAY,
+
+    # Reconciliation
+    RECONCILIATION_MAX_RETRIES,
+    RECONCILIATION_RETRY_DELAY,
+    RECONCILIATION_MIN_COMPLETION_RATE,
+    RECONCILIATION_FAIL_ON_INCOMPLETE,
 )
 
 # ---- Data Utilities ----
@@ -176,6 +182,7 @@ def fetch_scoreboard_games_for_date(date_yyyymmdd: str):
 
     events = data.get("events") or []
     rows = []
+    skipped = 0
     for e in events:
         parsed = parse_scoreboard_event(e)
         if parsed:
@@ -183,6 +190,15 @@ def fetch_scoreboard_games_for_date(date_yyyymmdd: str):
             parsed["pulled_at_utc"] = _utc_now_iso()
             parsed["source"] = SOURCE_NAME
             rows.append(parsed)
+        else:
+            skipped += 1
+            eid = e.get("id", "?")
+            log_error("scoreboard_event_skipped",
+                      ValueError(f"Event {eid} could not be parsed from scoreboard"),
+                      event_id=str(eid),
+                      extra={"date": date_yyyymmdd})
+    if skipped:
+        print(f"[WARN] {date_yyyymmdd}: {skipped} scoreboard event(s) could not be parsed")
     return rows
 
 
@@ -270,56 +286,60 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     team_rows = []
     player_rows = []
     errors = 0
+    failed_game_ids: list[str] = []
+
+    def _process_game(gid, team_rows, player_rows):
+        """Fetch summary, parse, and append team + player rows. Returns True on success."""
+        raw = fetch_summary(gid)
+        save_summary_json(gid, raw)
+        parsed = parse_summary_json(raw, gid)
+        hrow, arow = summary_to_team_rows(parsed)
+        team_rows.append(hrow)
+        team_rows.append(arow)
+
+        # Extract player box scores
+        players_home = parsed.get("players_home", [])
+        players_away = parsed.get("players_away", [])
+
+        game_dt = parsed.get("game_datetime_utc")
+        home_team = parsed["home"].get("team")
+        home_team_id = parsed["home"].get("team_id")
+        away_team = parsed["away"].get("team")
+        away_team_id = parsed["away"].get("team_id")
+
+        for p in players_home:
+            p["event_id"] = str(gid)
+            p["game_datetime_utc"] = game_dt
+            p["team"] = home_team
+            p["team_id"] = home_team_id
+            p["home_away"] = "home"
+            p["pulled_at_utc"] = _utc_now_iso()
+            p["source"] = SOURCE_NAME
+            p["parse_version"] = PARSE_VERSION
+            player_rows.append(p)
+
+        for p in players_away:
+            p["event_id"] = str(gid)
+            p["game_datetime_utc"] = game_dt
+            p["team"] = away_team
+            p["team_id"] = away_team_id
+            p["home_away"] = "away"
+            p["pulled_at_utc"] = _utc_now_iso()
+            p["source"] = SOURCE_NAME
+            p["parse_version"] = PARSE_VERSION
+            player_rows.append(p)
+        return True
 
     for i, gid in enumerate(game_ids, 1):
         if str(gid) in processed:
             continue
 
         try:
-            raw = fetch_summary(gid)
-            # Save raw JSON to disk
-            save_summary_json(gid, raw)
-            parsed = parse_summary_json(raw, gid)
-            hrow, arow = summary_to_team_rows(parsed)
-            team_rows.append(hrow)
-            team_rows.append(arow)
-            
-            # Extract player box scores
-            players_home = parsed.get("players_home", [])
-            players_away = parsed.get("players_away", [])
-            
-            # Add metadata to player rows
-            game_dt = parsed.get("game_datetime_utc")
-            home_team = parsed["home"].get("team")
-            home_team_id = parsed["home"].get("team_id")
-            away_team = parsed["away"].get("team")
-            away_team_id = parsed["away"].get("team_id")
-            
-            for p in players_home:
-                p["event_id"] = str(gid)
-                p["game_datetime_utc"] = game_dt
-                p["team"] = home_team
-                p["team_id"] = home_team_id
-                p["home_away"] = "home"
-                p["pulled_at_utc"] = _utc_now_iso()
-                p["source"] = SOURCE_NAME
-                p["parse_version"] = PARSE_VERSION
-                player_rows.append(p)
-            
-            for p in players_away:
-                p["event_id"] = str(gid)
-                p["game_datetime_utc"] = game_dt
-                p["team"] = away_team
-                p["team_id"] = away_team_id
-                p["home_away"] = "away"
-                p["pulled_at_utc"] = _utc_now_iso()
-                p["source"] = SOURCE_NAME
-                p["parse_version"] = PARSE_VERSION
-                player_rows.append(p)
-            
+            _process_game(gid, team_rows, player_rows)
             processed.add(str(gid))
         except Exception as e:
             errors += 1
+            failed_game_ids.append(str(gid))
             log_error("summary_parse", e, event_id=str(gid))
             if errors <= 10:
                 print(f"[WARN] summary parse failed for event {gid}: {e}")
@@ -336,6 +356,66 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         # Rate limiting for large historical pulls
         if days_back >= 30:
             time.sleep(0.15)
+
+    # ========================================================================
+    # PASS 1b: Retry failed games with backoff
+    # ========================================================================
+    if failed_game_ids and RECONCILIATION_MAX_RETRIES > 0:
+        print(f"\n=== PASS 1b: Retrying {len(failed_game_ids)} failed games ===")
+        still_failed: list[str] = []
+        for attempt in range(1, RECONCILIATION_MAX_RETRIES + 1):
+            retry_list = failed_game_ids if attempt == 1 else still_failed
+            if not retry_list:
+                break
+            still_failed = []
+            delay = RECONCILIATION_RETRY_DELAY * attempt
+            print(f"Retry attempt {attempt}/{RECONCILIATION_MAX_RETRIES} for {len(retry_list)} games (delay={delay:.1f}s)...")
+            time.sleep(delay)
+            for gid in retry_list:
+                if str(gid) in processed:
+                    continue
+                try:
+                    _process_game(gid, team_rows, player_rows)
+                    processed.add(str(gid))
+                    print(f"  [OK] Retry succeeded for event {gid}")
+                except Exception as e:
+                    still_failed.append(str(gid))
+                    log_error("summary_parse_retry", e, event_id=str(gid),
+                              extra={"attempt": attempt})
+                time.sleep(0.25)
+        failed_game_ids = still_failed
+
+    # ========================================================================
+    # Reconciliation Report
+    # ========================================================================
+    expected_count = len([gid for gid in game_ids if str(gid) not in set(map(str, checkpoint.get("processed_game_ids", [])))])
+    processed_count = len(processed) - len(set(map(str, checkpoint.get("processed_game_ids", []))))
+    still_missing = [gid for gid in game_ids if str(gid) not in processed]
+
+    print(f"\n=== Reconciliation Report ===")
+    print(f"Expected games (from scoreboard): {len(game_ids)}")
+    print(f"Already processed (checkpoint):   {len(set(map(str, checkpoint.get('processed_game_ids', []))))}")
+    print(f"Newly processed this run:         {processed_count}")
+    print(f"Failed after retries:             {len(failed_game_ids)}")
+    print(f"Still missing (no data):          {len(still_missing)}")
+
+    if still_missing:
+        print(f"[WARN] Missing game IDs: {still_missing[:20]}")
+        if len(still_missing) > 20:
+            print(f"  ... and {len(still_missing) - 20} more")
+
+    completion_rate = len(processed) / max(1, len(game_ids))
+    print(f"Completion rate: {completion_rate*100:.1f}%")
+
+    if completion_rate < RECONCILIATION_MIN_COMPLETION_RATE:
+        msg = (
+            f"[WARN] Completion rate {completion_rate*100:.1f}% is below "
+            f"threshold {RECONCILIATION_MIN_COMPLETION_RATE*100:.1f}%"
+        )
+        print(msg)
+        if RECONCILIATION_FAIL_ON_INCOMPLETE:
+            write_error_summary()
+            raise RuntimeError(msg)
 
     if not team_rows:
         print("No team rows parsed. Exiting.")
@@ -643,8 +723,26 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
                 print(f"{OUT_DIAGNOSTICS} written: {len(df_diag)} rows")
 
     print("\n=== Run Complete ===")
-    print(f"Summary parse errors: {errors}")
+    print(f"Summary parse errors (initial): {errors}")
+    print(f"Games still missing after retries: {len(failed_game_ids)}")
+    if failed_game_ids:
+        print(f"  Missing game IDs: {failed_game_ids[:20]}")
     write_error_summary()
+
+    # Final data completeness check against team logs
+    unique_events_in_logs = set(
+        df_logs_all["event_id"].astype(str).unique()
+    ) if "event_id" in df_logs_all.columns else set()
+    games_in_scoreboard = set(map(str, game_ids))
+    missing_from_logs = games_in_scoreboard - unique_events_in_logs
+    if missing_from_logs:
+        print(f"\n[WARN] {len(missing_from_logs)} scoreboard game(s) have no team log rows:")
+        for mid in sorted(missing_from_logs)[:20]:
+            print(f"  event_id={mid}")
+        if len(missing_from_logs) > 20:
+            print(f"  ... and {len(missing_from_logs) - 20} more")
+    else:
+        print("\n[OK] All scoreboard games have corresponding team log rows.")
     
     # Print JSON storage statistics
     json_stats = get_json_storage_stats()
