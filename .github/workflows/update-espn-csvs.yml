@@ -26,6 +26,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas numpy requests psycopg[binary] cbbpy
 
+      - name: Remove stale checkpoint (fresh checkout = no CSVs, so checkpoint is invalid)
+        working-directory: ESPN
+        run: rm -f espn_pipeline_checkpoint.json
+
       - name: Run ESPN builder (110-day backfill)
         working-directory: ESPN
         run: |
