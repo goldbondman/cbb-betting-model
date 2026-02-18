@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
 ESPN CBB Boxscore + Feature Builder (Season-to-date, append forever)
-Modular architecture - orchestration layer only.
+Modular architecture, orchestration layer only.
 
 Outputs:
 - espn_games.csv                     (scoreboard snapshot, one row per game, append+dedupe)
 - espn_team_game_logs.csv            (team-game rows + per-game metrics + audit, append+dedupe)
 - espn_team_game_features.csv        (core pregame rolling features + opponent joins + rest, append+dedupe)
-- espn_team_game_extras.csv          (weights, plus metrics, composites, rf10 trends – split from features for size, append+dedupe)
+- espn_team_game_extras.csv          (weights, plus metrics, composites, rf10 trends, split from features for size, append+dedupe)
 - espn_matchups_model_ready.csv      (one row per game, home/away pregame features + labels, rebuild each run)
 - espn_feature_diagnostics.csv       (row-level diagnostics for sparse/NaN fields)
 - espn_dq_audit.csv                  (Data Quality Repair Gate audit, per-row reasons + actions)
@@ -198,10 +198,12 @@ def fetch_scoreboard_games_for_date(date_yyyymmdd: str):
         else:
             skipped += 1
             eid = e.get("id", "?")
-            log_error("scoreboard_event_skipped",
-                      ValueError(f"Event {eid} could not be parsed from scoreboard"),
-                      event_id=str(eid),
-                      extra={"date": date_yyyymmdd})
+            log_error(
+                "scoreboard_event_skipped",
+                ValueError(f"Event {eid} could not be parsed from scoreboard"),
+                event_id=str(eid),
+                extra={"date": date_yyyymmdd},
+            )
     if skipped:
         print(f"[WARN] {date_yyyymmdd}: {skipped} scoreboard event(s) could not be parsed")
     return rows
@@ -255,7 +257,7 @@ def build_espn_games_csv(days_back=DEFAULT_DAYS_BACK, out_csv=OUT_GAMES, verbose
 def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     """
     Main pipeline orchestrator.
-    All business logic is in dedicated modules - this is just coordination.
+    All business logic is in dedicated modules, this is just coordination.
     """
     pulled_at = _utc_now_iso()
     print(f"Run started: {pulled_at} | DAYS_BACK={days_back} | PARSE_VERSION={PARSE_VERSION}")
@@ -276,6 +278,9 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     # Determine run window
     now_pst = datetime.now(TZ_PST)
     window_dates = {(now_pst - timedelta(days=i)).strftime("%Y%m%d") for i in range(days_back)}
+    window_dates.add(now_pst.strftime("%Y%m%d"))
+    window_dates.add((now_pst + timedelta(days=1)).strftime("%Y%m%d"))
+
     run_window = games_df[games_df["date"].astype(str).isin(window_dates)].copy()
     game_ids = run_window["game_id"].astype(str).unique().tolist()
     print(f"Scoreboard game_ids in run window: {len(game_ids)}")
@@ -373,7 +378,10 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
                 break
             still_failed = []
             delay = RECONCILIATION_RETRY_DELAY * attempt
-            print(f"Retry attempt {attempt}/{RECONCILIATION_MAX_RETRIES} for {len(retry_list)} games (delay={delay:.1f}s)...")
+            print(
+                f"Retry attempt {attempt}/{RECONCILIATION_MAX_RETRIES} for "
+                f"{len(retry_list)} games (delay={delay:.1f}s)..."
+            )
             time.sleep(delay)
             for gid in retry_list:
                 if str(gid) in processed:
@@ -384,8 +392,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
                     print(f"  [OK] Retry succeeded for event {gid}")
                 except Exception as e:
                     still_failed.append(str(gid))
-                    log_error("summary_parse_retry", e, event_id=str(gid),
-                              extra={"attempt": attempt})
+                    log_error("summary_parse_retry", e, event_id=str(gid), extra={"attempt": attempt})
                 time.sleep(0.25)
         failed_game_ids = still_failed
 
@@ -393,14 +400,12 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     # Reconciliation Report
     # ========================================================================
     checkpoint_ids = set(map(str, checkpoint.get("processed_game_ids", [])))
-    expected_count = len([gid for gid in game_ids if str(gid) not in checkpoint_ids])
-    processed_count = len(processed) - len(checkpoint_ids)
     still_missing = [gid for gid in game_ids if str(gid) not in processed]
 
     print(f"\n=== Reconciliation Report ===")
     print(f"Expected games (from scoreboard): {len(game_ids)}")
     print(f"Already processed (checkpoint):   {len(checkpoint_ids)}")
-    print(f"Newly processed this run:         {processed_count}")
+    print(f"Newly processed this run:         {max(0, len(processed) - len(checkpoint_ids))}")
     print(f"Failed after retries:             {len(failed_game_ids)}")
     print(f"Still missing (no data):          {len(still_missing)}")
 
@@ -433,14 +438,14 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     df_logs_new = pd.DataFrame(team_rows)
     df_logs_new = _compute_per_game_advanced_metrics(df_logs_new)
     df_logs_new, dq_audit_new = _dqrg_repair_in_place(df_logs_new)
-    df_logs_new = _dedupe_by_completeness(df_logs_new, keys=["event_id", "team_id"], label="PASS1 logs_new")
+    df_logs_new = _dedupe_by_completeness(df_logs_new, keys=["event_id", "team_id", "home_away"], label="PASS1 logs_new")
     df_logs_new = _drop_bad_event_ids_keep_good(df_logs_new, label="PASS1 logs_new symmetry")
 
     # Write team logs
     df_logs_all = _append_dedupe_write(
         OUT_TEAM_LOGS,
         df_logs_new.drop(columns=["game_dt"], errors="ignore"),
-        subset_keys=["event_id", "team_id"],
+        subset_keys=["event_id", "team_id", "home_away"],
         sort_cols=["game_datetime_utc", "event_id", "team_id", "home_away"],
     )
     print(f"{OUT_TEAM_LOGS} total rows: {len(df_logs_all)}")
@@ -450,8 +455,8 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         _append_dedupe_write(
             OUT_DQ_AUDIT,
             dq_audit_new,
-            subset_keys=["event_id", "team_id"],
-            sort_cols=["pulled_at_utc", "event_id", "team_id"],
+            subset_keys=["event_id", "team_id", "home_away"],
+            sort_cols=["pulled_at_utc", "event_id", "team_id", "home_away"],
         )
         print(f"{OUT_DQ_AUDIT} appended: {len(dq_audit_new)} rows")
 
@@ -489,9 +494,15 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         missing_athlete_mask = df_players_new["athlete_id"].isna() | (df_players_new["athlete_id"] == "")
         missing_athlete_count = int(missing_athlete_mask.sum())
         if missing_athlete_count:
-            df_players_new.loc[missing_athlete_mask, "athlete_id"] = df_players_new.loc[missing_athlete_mask].apply(
-                lambda r: f"missing:{r.get('event_id','')}:{r.get('team_id','')}:{str(r.get('player','unknown')).strip().lower()}",
-                axis=1,
+            # Vectorized fallback id to avoid expensive row-wise apply
+            player_norm = df_players_new.loc[missing_athlete_mask, "player"].astype(str).str.strip().str.lower()
+            df_players_new.loc[missing_athlete_mask, "athlete_id"] = (
+                "missing:"
+                + df_players_new.loc[missing_athlete_mask, "event_id"].astype(str)
+                + ":"
+                + df_players_new.loc[missing_athlete_mask, "team_id"].astype(str)
+                + ":"
+                + player_norm
             )
             print(f"[WARN] player_boxscores missing athlete_id fallback applied: {missing_athlete_count} rows")
 
@@ -510,7 +521,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         )
 
         # Last integrity gate: skip rows missing mandatory keys (never silent)
-        mandatory = ["event_id", "team_id", "athlete_id", "game_datetime_utc"]
+        mandatory = ["event_id", "team_id", "athlete_id", "game_datetime_utc", "row_hash"]
         invalid_mask = pd.Series(False, index=df_players_new.index)
         for col in mandatory:
             invalid_mask = invalid_mask | df_players_new[col].isna() | (df_players_new[col].astype(str).str.strip() == "")
@@ -522,7 +533,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         df_players_all = _append_dedupe_write(
             OUT_PLAYER_BOX,
             df_players_new,
-            subset_keys=["event_id", "team_id", "athlete_id"],
+            subset_keys=["row_hash"],
             sort_cols=["game_datetime_utc", "event_id", "team_id", "athlete_id"],
         )
         print(f"{OUT_PLAYER_BOX} total rows: {len(df_players_all)} ({len(df_players_new)} new)")
@@ -540,10 +551,14 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         df["home_away"] = _normalize_home_away_series(df["home_away"])
     df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
 
-    # NEW: game_date string for leak-free feature modules (SOS/HCA)
+    # game_date string for leak-free feature modules (SOS/HCA)
     df["game_date"] = df["game_dt"].dt.date.astype(str)
 
     df = df.sort_values(["team_id", "game_dt", "event_id", "home_away"])
+
+    if "data_ok" not in df.columns:
+        print("[WARN] data_ok missing, defaulting all rows to data_ok=True")
+        df["data_ok"] = True
 
     df_clean = df[df["data_ok"] == True].copy()
     print(f"PASS2: {len(df_clean)}/{len(df)} rows with data_ok=True")
@@ -573,15 +588,11 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     # Opponent merge (first pass)
     df_clean = _merge_opponent_rows(df_clean)
 
-    # PPP columns (for plus metrics)
-    df_clean["off_ppp"] = df_clean.apply(
-        lambda r: _safe_div(r.get("points_for", np.nan), r.get("poss", np.nan), np.nan),
-        axis=1
-    )
-    df_clean["def_ppp"] = df_clean.apply(
-        lambda r: _safe_div(r.get("points_against", np.nan), r.get("poss", np.nan), np.nan),
-        axis=1
-    )
+    # PPP columns (for plus metrics), vectorized
+    df_clean["off_ppp"] = df_clean["points_for"] / df_clean["poss"]
+    df_clean["def_ppp"] = df_clean["points_against"] / df_clean["poss"]
+    for col in ["off_ppp", "def_ppp"]:
+        df_clean.loc[~np.isfinite(df_clean[col].astype(float)), col] = np.nan
 
     # Defensive allowed/forced signals
     df_clean["efg_allowed_game"] = df_clean.get("opp_efg", np.nan)
@@ -600,7 +611,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     # Aliases for plus metrics
     df_clean["opp_efg_allowed_pre"] = df_clean.get("opp_efg_allowed_l7_pre", np.nan)
     df_clean["opp_ftr_allowed_pre"] = df_clean.get("opp_ftr_allowed_l7_pre", np.nan)
-    df_clean["opp_orb_allowed_pre"] = df_clean.get("opp_orb_allowed_l7_pre", np.nan)
+    df_clean["opp_orb_allowed_pre"] = df_clean.get("opp_orb_pct_allowed_l7_pre", np.nan)
     df_clean["opp_tov_forced_pre"] = df_clean.get("opp_tov_forced_l7_pre", np.nan)
     df_clean["opp_def_ppp_allowed_pre"] = df_clean.get("opp_def_ppp_allowed_l7_pre", np.nan)
 
@@ -634,8 +645,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         cfg=rolling_cfg,
     )
 
-    # NEW: SOS + Home/Away dynamic HCA features (leak-free, uses prior games only)
-    # Requirements: game_date, margin, ortg, drtg, home_away, neutral_site, opp_netrtg_l7_pre
+    # SOS + Home/Away dynamic HCA features (leak-free, uses prior games only)
     if "game_date" not in df_clean.columns:
         df_clean["game_date"] = pd.to_datetime(df_clean["game_datetime_utc"], utc=True, errors="coerce").dt.date.astype(str)
 
@@ -647,7 +657,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     print(f"PASS5: Opponent merge complete. Join rate: {opp_diagnostics['join_rate']*100:.2f}%")
 
     # Gate checks
-    if opp_diagnostics['join_rate'] < GATE_MIN_OPP_JOIN_RATE_FINAL:
+    if opp_diagnostics["join_rate"] < GATE_MIN_OPP_JOIN_RATE_FINAL:
         print(
             f"[WARN] Opponent join rate {opp_diagnostics['join_rate']*100:.2f}% "
             f"below gate {GATE_MIN_OPP_JOIN_RATE_FINAL*100:.2f}%"
@@ -664,7 +674,11 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         c for c in ["ortg", "drtg", "netrtg", "ortg_l7_pre", "drtg_l7_pre", "netrtg_l7_pre"]
         if c in df_clean.columns
     ]
-    expected_present = df_clean[expected_cols].notna().all(axis=1).mean() if expected_cols and len(df_clean) else 0.0
+    expected_present = (
+        df_clean[expected_cols].notna().all(axis=1).mean()
+        if expected_cols and len(df_clean)
+        else 0.0
+    )
     if expected_cols and expected_present < GATE_MIN_EXPECTED_PRESENT_FINAL:
         print(
             f"[WARN] Expected present rate {expected_present*100:.2f}% "
@@ -679,19 +693,19 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     df_features = _append_dedupe_write(
         OUT_TEAM_FEATURES,
         df_all[core_cols],
-        subset_keys=["event_id", "team_id"],
+        subset_keys=["event_id", "team_id", "home_away"],
         sort_cols=["game_datetime_utc", "event_id", "team_id", "home_away"],
     )
     print(f"{OUT_TEAM_FEATURES} total rows: {len(df_features)} cols: {len(core_cols)}")
 
     # Write extras CSV (weights, plus metrics, composites, rf10 trends, etc.)
     if extras_cols:
-        extras_keep = ["event_id", "team_id"] + extras_cols
+        extras_keep = ["event_id", "team_id", "home_away"] + extras_cols
         _append_dedupe_write(
             OUT_TEAM_EXTRAS,
             df_all[extras_keep],
-            subset_keys=["event_id", "team_id"],
-            sort_cols=["event_id", "team_id"],
+            subset_keys=["event_id", "team_id", "home_away"],
+            sort_cols=["event_id", "team_id", "home_away"],
         )
         print(f"{OUT_TEAM_EXTRAS} written: {len(extras_cols)} extra columns")
 
@@ -750,9 +764,11 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     write_error_summary()
 
     # Final data completeness check against team logs
-    unique_events_in_logs = set(
-        df_logs_all["event_id"].astype(str).unique()
-    ) if "event_id" in df_logs_all.columns else set()
+    unique_events_in_logs = (
+        set(df_logs_all["event_id"].astype(str).unique())
+        if "event_id" in df_logs_all.columns
+        else set()
+    )
     games_in_scoreboard = set(map(str, game_ids))
     missing_from_logs = games_in_scoreboard - unique_events_in_logs
     if missing_from_logs:
@@ -763,7 +779,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
             print(f"  ... and {len(missing_from_logs) - 20} more")
     else:
         print("\n[OK] All scoreboard games have corresponding team log rows.")
-    
+
     # Print JSON storage statistics
     json_stats = get_json_storage_stats()
     print(f"\n=== JSON Storage Statistics ===")
