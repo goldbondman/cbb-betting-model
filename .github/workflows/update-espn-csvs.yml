@@ -2,6 +2,11 @@ name: Update ESPN CSVs
 
 on:
   workflow_dispatch:
+    inputs:
+      days_back:
+        description: "Days of scoreboard history to process (use 120 for one-time backfill)"
+        required: false
+        default: "3"
   schedule:
     - cron: "0 10 * * *"
 
@@ -16,6 +21,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Download previous ESPN CSVs
+        uses: actions/download-artifact@v4
+        with:
+          name: espn-csvs
+          path: ESPN/CSV/
+        continue-on-error: true
+
+      - name: Clear legacy repo-local checkpoint files
+        run: |
+          rm -f ESPN/espn_pipeline_checkpoint.json
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -26,12 +42,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas numpy requests psycopg[binary] cbbpy
 
-      - name: Run ESPN builder (110-day backfill)
+      - name: Run ESPN builder (configurable window)
         working-directory: ESPN
         run: |
           python espn_boxscore_builder_modular.py
         env:
-          DAYS_BACK: "110"
+          DAYS_BACK: ${{ inputs.days_back || '3' }}
+          CHECKPOINT_FILE: "/tmp/espn_pipeline_checkpoint.json"
           RECONCILIATION_MAX_RETRIES: "2"
           RECONCILIATION_RETRY_DELAY: "3.0"
           RECONCILIATION_MIN_COMPLETION_RATE: "0.95"
