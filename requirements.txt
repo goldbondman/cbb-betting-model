@@ -10,4 +10,4 @@ supabase
 psycopg
 python-dotenv
 python-dateutil
-cbbpy
+cbbpy>=2.1.0

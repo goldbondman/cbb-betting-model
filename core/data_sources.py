@@ -18,6 +18,7 @@ class SourceType(Enum):
     ESPN = "espn"
     NCAA_CASABLANCA = "ncaa_casablanca"
     HENRY_API = "henry_api"
+    CBBPY = "cbbpy"
 
 
 class DataQuality(Enum):
