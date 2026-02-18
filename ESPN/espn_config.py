@@ -37,6 +37,12 @@ MAX_RETRIES = int(os.getenv("ESPN_MAX_RETRIES", "3"))
 RETRY_INITIAL_DELAY = float(os.getenv("ESPN_RETRY_INITIAL_DELAY", "1.0"))
 RETRY_BACKOFF = float(os.getenv("ESPN_RETRY_BACKOFF", "2.0"))
 
+# ---------------- CBBpy Integration ----------------
+# Enable CBBpy library for data fetching (provides better resilience)
+ENABLE_CBBPY = os.getenv("ENABLE_CBBPY", "1").strip().lower() in ("1", "true", "yes")
+# Fallback to direct ESPN API if CBBpy fails
+CBBPY_FALLBACK_TO_ESPN = os.getenv("CBBPY_FALLBACK_TO_ESPN", "1").strip().lower() in ("1", "true", "yes")
+
 # ---------------- Pipeline Metadata ----------------
 PARSE_VERSION = "v1.4.2"
 SOURCE_NAME = "espn"
