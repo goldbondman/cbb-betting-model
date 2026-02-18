@@ -2067,7 +2067,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
         extras_keep = ["event_id", "team_id"] + extras_cols
         _append_dedupe_write(
             OUT_TEAM_EXTRAS,
-            df_all[[c for c in extras_keep if c in df_all.columns]],
+            df_all[extras_keep],
             subset_keys=["event_id", "team_id"],
             sort_cols=["event_id", "team_id"],
         )
