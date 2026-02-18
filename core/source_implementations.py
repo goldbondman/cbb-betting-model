@@ -317,3 +317,64 @@ class CBBpyDataSource(DataSource):
             pulled_at=datetime.now(timezone.utc).isoformat(),
             raw_data=row.to_dict() if hasattr(row, 'to_dict') else None
         )
+
+
+class CBBDDataSource(DataSource):
+    """CBBD (College Basketball Data) API – parallel test data source"""
+
+    def get_source_type(self) -> SourceType:
+        return SourceType.CBBD
+
+    def fetch_games(self, date: str) -> SourceResult:
+        """
+        Fetch games from the CBBD API for a specific date.
+
+        Args:
+            date: Date in YYYY-MM-DD format
+
+        Returns:
+            SourceResult with CBBD game data
+        """
+        try:
+            from cbbd_client import fetch_games_for_date
+
+            raw_games = fetch_games_for_date(date)
+            if raw_games is None:
+                return self._create_result(False, error="CBBD fetch returned None (disabled or no token)")
+            if not raw_games:
+                return self._create_result(False, error=f"No games returned from CBBD for {date}")
+
+            games = []
+            for g in raw_games:
+                game_data = self._convert_to_game_data(g, date)
+                if game_data.is_complete_basic():
+                    games.append(game_data)
+
+            if not games:
+                return self._create_result(False, error="No valid games parsed from CBBD")
+
+            return self._create_result(True, games=games)
+
+        except ImportError:
+            logger.error("cbbd package or cbbd_client module not available")
+            return self._create_result(False, error="cbbd not installed")
+        except Exception as e:
+            logger.error(f"CBBD fetch failed: {e}")
+            return self._create_result(False, error=str(e))
+
+    def _convert_to_game_data(self, parsed: dict, date: str) -> GameData:
+        """Convert CBBD normalised dict to standardised GameData"""
+        return GameData(
+            game_id=str(parsed.get("game_id", "")),
+            date=date,
+            home_team=parsed.get("home_team", ""),
+            away_team=parsed.get("away_team", ""),
+            home_score=parsed.get("home_score"),
+            away_score=parsed.get("away_score"),
+            status=parsed.get("status"),
+            venue=parsed.get("venue"),
+            game_datetime=parsed.get("game_datetime"),
+            source="cbbd",
+            pulled_at=datetime.now(timezone.utc).isoformat(),
+            raw_data=parsed,
+        )

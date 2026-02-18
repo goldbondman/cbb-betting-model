@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 
 from data_sources import SourceType, GameData
-from source_implementations import ESPNDataSource, NCAADataSource, HenryAPIDataSource, CBBpyDataSource
+from source_implementations import ESPNDataSource, NCAADataSource, HenryAPIDataSource, CBBpyDataSource, CBBDDataSource
 from integrity_merger import IntegrityMerger, MergedGame, IntegrityReport
 
 logger = logging.getLogger(__name__)
@@ -40,6 +40,7 @@ class MultiSourceFetcher:
         enable_ncaa: bool = True,
         enable_henry: bool = True,
         enable_cbbpy: bool = True,
+        enable_cbbd: bool = False,
         source_priority: List[SourceType] = None
     ):
         """
@@ -50,6 +51,7 @@ class MultiSourceFetcher:
             enable_ncaa: Enable NCAA Casablanca data source
             enable_henry: Enable Henry API data source
             enable_cbbpy: Enable CBBpy data source
+            enable_cbbd: Enable CBBD (College Basketball Data) test source
             source_priority: Source priority for conflict resolution
         """
         self.sources = []
@@ -62,6 +64,8 @@ class MultiSourceFetcher:
             self.sources.append(HenryAPIDataSource())
         if enable_cbbpy:
             self.sources.append(CBBpyDataSource())
+        if enable_cbbd:
+            self.sources.append(CBBDDataSource())
         
         if not self.sources:
             raise ValueError("At least one data source must be enabled")
@@ -230,6 +234,7 @@ def main():
     parser.add_argument('--disable-ncaa', action='store_true', help='Disable NCAA source')
     parser.add_argument('--disable-henry', action='store_true', help='Disable Henry API source')
     parser.add_argument('--disable-cbbpy', action='store_true', help='Disable CBBpy source')
+    parser.add_argument('--enable-cbbd', action='store_true', help='Enable CBBD test source')
     parser.add_argument('--verbose', action='store_true', help='Enable verbose logging')
     
     args = parser.parse_args()
@@ -245,7 +250,8 @@ def main():
         enable_espn=not args.disable_espn,
         enable_ncaa=not args.disable_ncaa,
         enable_henry=not args.disable_henry,
-        enable_cbbpy=not args.disable_cbbpy
+        enable_cbbpy=not args.disable_cbbpy,
+        enable_cbbd=args.enable_cbbd
     )
     
     # Determine date(s) to fetch
