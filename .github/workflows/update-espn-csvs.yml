@@ -48,6 +48,26 @@ jobs:
         run: |
           ls -lh CSV/*.csv *.json || true
 
+      - name: Audit ESPN CSV output
+        id: csv_audit
+        continue-on-error: true
+        run: |
+          python scripts/audit_espn_csv_output.py --csv-dir ESPN/CSV
+
+      - name: Recover missing CSVs from Supabase Storage
+        if: ${{ steps.csv_audit.outcome == 'failure' }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
+        run: |
+          python scripts/recover_espn_csvs_from_storage.py --csv-dir ESPN/CSV
+
+      - name: Re-audit after recovery
+        if: ${{ steps.csv_audit.outcome == 'failure' }}
+        run: |
+          python scripts/audit_espn_csv_output.py --csv-dir ESPN/CSV
+
       - name: Upload ESPN CSV artifacts
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
