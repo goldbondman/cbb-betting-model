@@ -1,14 +1,24 @@
 streamlit
-pandas
-numpy
-pandas==2.2.3
-lxml==5.3.0
 html5lib==1.1
-beautifulsoup4==4.12.3
-requests
 supabase
 psycopg
 python-dotenv
-python-dateutil
-cbbpy>=2.1.0
 pyyaml
+
+# CBBpy runtime requirements (explicit)
+pandas>=2.0.0
+numpy>=2.0.0
+python-dateutil>=2.4.0
+pytz>=2022.1
+tqdm>=4.63.0
+lxml>=4.9.0
+joblib>=1.0.0
+beautifulsoup4>=4.11.0
+requests>=2.27.0
+rapidfuzz>=3.9.0
+platformdirs>=4.0.0
+cbbpy>=2.1.0
+
+# Project pin retained for compatibility
+pandas==2.2.3
+lxml==5.3.0

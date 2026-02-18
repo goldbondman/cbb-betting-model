@@ -47,7 +47,7 @@ def test_cbbpy_convert_df_to_game_data():
         "game_time": "06:20 PM PDT",
     }])
 
-    game_data = source._convert_df_to_game_data(info_df, "2023-04-03")
+    game_data = source._convert_df_to_game_data(info_df, None, "2023-04-03")
 
     assert game_data.game_id == "401522202"
     assert game_data.home_team == "UConn Huskies"
@@ -78,7 +78,7 @@ def test_cbbpy_convert_df_minimal():
         "game_time": "",
     }])
 
-    game_data = source._convert_df_to_game_data(info_df, "2023-03-15")
+    game_data = source._convert_df_to_game_data(info_df, None, "2023-03-15")
 
     assert game_data.game_id == "401522203"
     assert game_data.home_team == "Duke Blue Devils"
@@ -88,6 +88,33 @@ def test_cbbpy_convert_df_minimal():
     assert game_data.status is None  # home_win is None
     assert game_data.is_complete_basic()
     print("✓ test_cbbpy_convert_df_minimal passed")
+
+
+def test_cbbpy_convert_df_uses_boxscore_when_info_scores_missing():
+    """Scores should be filled from boxscore PTS totals when game_info scores are missing."""
+    source = CBBpyDataSource()
+
+    info_df = pd.DataFrame([{
+        "game_id": "401522204",
+        "home_team": "Duke Blue Devils",
+        "away_team": "UNC Tar Heels",
+        "home_score": None,
+        "away_score": None,
+        "home_win": True,
+    }])
+
+    boxscore_df = pd.DataFrame([
+        {"team": "UNC Tar Heels", "PTS": 75},
+        {"team": "Duke Blue Devils", "PTS": 80},
+    ])
+
+    game_data = source._convert_df_to_game_data(info_df, boxscore_df, "2023-03-15")
+
+    assert game_data.home_score == 80
+    assert game_data.away_score == 75
+    assert game_data.raw_data is not None
+    assert game_data.raw_data.get("boxscore") is not None
+    print("✓ test_cbbpy_convert_df_uses_boxscore_when_info_scores_missing passed")
 
 
 @patch("source_implementations.CBBpyDataSource.fetch_games")
@@ -234,7 +261,7 @@ def test_cbbpy_date_conversion():
         "game_time": "07:00 PM EST",
     }])
 
-    game_data = source._convert_df_to_game_data(info_df, "2024-01-15")
+    game_data = source._convert_df_to_game_data(info_df, None, "2024-01-15")
     assert game_data.date == "2024-01-15"
     assert game_data.game_datetime == "January 15, 2024 07:00 PM EST"
     print("✓ test_cbbpy_date_conversion passed")
