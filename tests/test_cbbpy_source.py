@@ -288,3 +288,17 @@ def run_all_tests():
 
 if __name__ == "__main__":
     run_all_tests()
+
+
+def test_cbbpy_normalize_game_ids_handles_series_like():
+    """Normalize pandas-like outputs from get_game_ids safely."""
+    source = CBBpyDataSource()
+
+    class _SeriesLike:
+        def tolist(self):
+            return [["401000001"], ["401000002"]]
+
+    assert source._normalize_game_ids(_SeriesLike()) == ["401000001", "401000002"]
+    assert source._normalize_game_ids([{"game_id": "401000003"}]) == ["401000003"]
+    assert source._normalize_game_ids([]) == []
+    assert source._normalize_game_ids(None) == []

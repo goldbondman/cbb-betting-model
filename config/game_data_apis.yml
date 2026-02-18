@@ -1,0 +1,20 @@
+# Unified API test matrix for game data sources.
+# Run with:
+#   python scripts/run_game_api_probe.py --config config/game_data_apis.yml
+
+dates:
+  - "2026-02-18"
+
+sources:
+  - cbbpy
+  - espn
+  - ncaa_casablanca
+  - henry_api
+  - cbbd
+
+options:
+  continue_on_error: true
+
+output:
+  artifact_dir: "artifacts"
+  basename: "game_api_probe"

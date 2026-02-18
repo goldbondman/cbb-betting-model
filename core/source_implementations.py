@@ -7,6 +7,7 @@ import os
 from typing import List
 from datetime import datetime, timezone
 import logging
+import re
 import requests
 
 # Add ESPN directory to path
@@ -246,6 +247,45 @@ class CBBpyDataSource(DataSource):
     def get_source_type(self) -> SourceType:
         return SourceType.CBBPY
 
+
+    @staticmethod
+    def _normalize_game_ids(game_ids):
+        """Normalize CBBpy get_game_ids output into a list of IDs."""
+        if game_ids is None:
+            return []
+
+        def _flatten(values):
+            out = []
+            for value in values:
+                if value is None:
+                    continue
+                if isinstance(value, (list, tuple, set)):
+                    out.extend(_flatten(value))
+                    continue
+                if isinstance(value, dict):
+                    for key in ("id", "game_id", "gameId"):
+                        if key in value and value[key] not in (None, ""):
+                            out.append(str(value[key]).strip())
+                    continue
+                text = str(value).strip()
+                if text and text.lower() != "nan":
+                    out.append(text)
+            return out
+
+        if isinstance(game_ids, (list, tuple, set)):
+            values = list(game_ids)
+        elif hasattr(game_ids, "tolist"):
+            try:
+                values = game_ids.tolist()
+            except Exception:
+                values = []
+        else:
+            values = [game_ids]
+
+        normalized = _flatten(values if isinstance(values, list) else [values])
+        # CBBpy game IDs are ESPN event IDs, numeric strings in practice.
+        return [gid for gid in normalized if re.fullmatch(r"\d{5,}", gid)]
+
     def fetch_games(self, date: str) -> SourceResult:
         """
         Fetch games from CBBpy for a specific date.
@@ -263,7 +303,8 @@ class CBBpyDataSource(DataSource):
             dt = datetime.strptime(date, "%Y-%m-%d")
             cbbpy_date = dt.strftime("%m-%d-%Y")
 
-            game_ids = scraper.get_game_ids(cbbpy_date)
+            game_ids_raw = scraper.get_game_ids(cbbpy_date)
+            game_ids = self._normalize_game_ids(game_ids_raw)
             if not game_ids:
                 return self._create_result(False, error=f"No game IDs returned from CBBpy for {date}")
 
