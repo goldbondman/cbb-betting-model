@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -26,7 +29,7 @@ jobs:
         run: python -m pytest tests --junitxml=pytest-results.xml
 
       - name: Upload test artifact
-        if: ${{ always() }}
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pytest-results
