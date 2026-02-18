@@ -23,6 +23,9 @@ def test_predictions_latest_row_hash_generated(tmp_path: Path) -> None:
                 "pred_margin_home",
                 "pred_total",
                 "model_version",
+                "pulled_at_utc",
+                "source",
+                "parse_version",
             ]
         )
         writer.writerow(
@@ -36,6 +39,9 @@ def test_predictions_latest_row_hash_generated(tmp_path: Path) -> None:
                 "9.0",
                 "121.0",
                 "ml-linear-v1",
+                "2026-02-04 01:00:00+00:00",
+                "model",
+                "v1.0.0",
             ]
         )
 
