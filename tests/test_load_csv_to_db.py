@@ -138,3 +138,14 @@ def test_resolve_upsert_conflict_columns_falls_back_to_row_hash_keys() -> None:
         table_cols=["event_id", "team_id", "athlete_id", "player", "row_hash"],
     )
     assert cols == ["event_id", "team_id", "athlete_id"]
+
+
+def test_resolve_upsert_conflict_columns_prefers_natural_key_over_row_hash_pk() -> None:
+    """When PK is row_hash (synthetic), use the natural key from row_hash_keys."""
+    cols = _resolve_upsert_conflict_columns(
+        "espn_teams",
+        pk_cols=["row_hash"],
+        csv_cols=["row_hash", "espn_id", "name", "abbreviation", "logo", "pulled_at_utc", "source", "parse_version"],
+        table_cols=["row_hash", "espn_id", "name", "abbreviation", "logo", "pulled_at_utc", "source", "parse_version"],
+    )
+    assert cols == ["espn_id"]

@@ -1265,17 +1265,25 @@ def _resolve_upsert_conflict_columns(
     csv_cols: List[str],
     table_cols: List[str],
 ) -> List[str]:
+    spec = TABLE_SPECS.get(table_name, {})
+    rh_keys = spec.get("row_hash_keys", []) if isinstance(spec, dict) else []
+
+    # When PK is only "row_hash" (synthetic), prefer the natural key from
+    # row_hash_keys so ON CONFLICT targets the real unique constraint and
+    # avoids violating separate UNIQUE indexes on the natural-key columns.
+    if pk_cols == ["row_hash"] and isinstance(rh_keys, list) and rh_keys:
+        if all(c in csv_cols and c in table_cols for c in rh_keys):
+            return list(rh_keys)
+
     if pk_cols:
         return pk_cols
 
-    spec = TABLE_SPECS.get(table_name, {})
-    fallback = spec.get("row_hash_keys", []) if isinstance(spec, dict) else []
-    if isinstance(fallback, list) and fallback:
-        if all(c in csv_cols and c in table_cols for c in fallback):
+    if isinstance(rh_keys, list) and rh_keys:
+        if all(c in csv_cols and c in table_cols for c in rh_keys):
             _warn(
-                f"Using row_hash_keys fallback for upsert conflict target on {table_name}: {fallback}"
+                f"Using row_hash_keys fallback for upsert conflict target on {table_name}: {rh_keys}"
             )
-            return list(fallback)
+            return list(rh_keys)
 
     _die(
         f"LOAD_MODE=upsert requires a PRIMARY KEY or usable unique conflict columns on {DB_SCHEMA}.{table_name}.\n"
