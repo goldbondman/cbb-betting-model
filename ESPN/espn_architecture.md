@@ -389,7 +389,8 @@ Each file has one clear job. If there's a bug in parsing, check `espn_parsers.py
 |------|-------------|-------------|
 | `espn_games.csv` | Scoreboard snapshot (one row per game) | `game_id`, `home_team`, `away_team`, `completed`, `market_spread` |
 | `espn_team_game_logs.csv` | Team-game rows with per-game metrics | `event_id`, `team_id`, `home_away`, `ortg`, `drtg`, `poss` |
-| `espn_team_game_features.csv` | Pregame rolling features + opponent joins | `event_id`, `team_id`, `ortg_l7_pre`, `opp_drtg_l7_pre` |
+| `espn_team_game_features.csv` | Core pregame rolling features + opponent joins | `event_id`, `team_id`, `ortg_l7_pre`, `opp_drtg_l7_pre` |
+| `espn_team_game_extras.csv` | Supplementary analytics (weights, composites, rf10) | `event_id`, `team_id`, `w_g`, `pwr`, `gps`, `rf10_*` |
 | `espn_matchups_model_ready.csv` | Model inputs (one row per game, home/away features) | `event_id`, `h_ortg_l7_pre`, `a_drtg_l7_pre`, `home_win` |
 | `espn_feature_diagnostics.csv` | Row-level diagnostics for sparse/NaN fields | `event_id`, `team_id`, `diagnostic_reason` |
 | `espn_dq_audit.csv` | Data Quality Repair Gate audit trail | `event_id`, `dq_missing_fields`, `dq_repair_success` |

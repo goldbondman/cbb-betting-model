@@ -38,6 +38,7 @@ FILES_ESPN = [
     ("ESPN/CSV/espn_teams.csv", "espn/latest/espn_teams.csv"),
     ("ESPN/CSV/espn_team_game_logs.csv", "espn/latest/espn_team_game_logs.csv"),
     ("ESPN/CSV/espn_team_game_features.csv", "espn/latest/espn_team_game_features.csv"),
+    ("ESPN/CSV/espn_team_game_extras.csv", "espn/latest/espn_team_game_extras.csv"),
     ("ESPN/CSV/espn_matchups_model_ready.csv", "espn/latest/espn_matchups_model_ready.csv"),
     ("ESPN/CSV/espn_feature_diagnostics.csv", "espn/latest/espn_feature_diagnostics.csv"),
     ("ESPN/CSV/espn_dq_audit.csv", "espn/latest/espn_dq_audit.csv"),

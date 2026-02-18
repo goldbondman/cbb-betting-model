@@ -2,6 +2,7 @@
 
 ## Why this exists
 Your largest tables (`raw.espn_matchups_model_ready`, `public.team_game_features`, `raw.espn_team_game_features`) are feature-heavy and can grow fast.
+Supplementary analytics are stored separately in `raw.espn_team_game_extras` (joined via `event_id` + `team_id`).
 This playbook gives safe SQL checks before dropping/migrating anything.
 
 ## 1) Confirm what is actually large (table vs indexes vs TOAST)

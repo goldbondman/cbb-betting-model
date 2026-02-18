@@ -25,6 +25,7 @@ RAW_TABLES = [
     ("raw", "espn_games"),
     ("raw", "espn_team_game_logs"),
     ("raw", "espn_team_game_features"),
+    ("raw", "espn_team_game_extras"),
     ("raw", "espn_matchups_model_ready"),
     ("raw", "ncaa_games"),
     ("raw", "ncaa_team_game_logs"),
