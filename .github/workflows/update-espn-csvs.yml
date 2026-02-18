@@ -40,13 +40,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy requests psycopg[binary] cbbpy
+          pip install pandas numpy requests psycopg[binary]
 
       - name: Run ESPN builder (configurable window)
         working-directory: ESPN
         run: |
           python espn_boxscore_builder_modular.py
         env:
+          ENABLE_CBBPY: "0"
           DAYS_BACK: ${{ inputs.days_back || '3' }}
           CHECKPOINT_FILE: "/tmp/espn_pipeline_checkpoint.json"
           RECONCILIATION_MAX_RETRIES: "2"
