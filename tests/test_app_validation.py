@@ -12,6 +12,14 @@ import app
 class TestAppValidation(unittest.TestCase):
     """Test validation and error handling in app.py."""
 
+    @staticmethod
+    def _configure_sidebar_mock(mock_st):
+        """Configure mock_st for the bankroll sidebar widgets added to main()."""
+        mock_st.sidebar.columns.return_value = [MagicMock(), MagicMock()]
+        mock_st.session_state.bet_history = []
+        mock_st.session_state.bankroll = 10000.0
+        mock_st.session_state.show_analytics = False
+
     @patch("app.st")
     @patch("app.DataLoader")
     @patch("app.PredictionUI")
@@ -21,10 +29,7 @@ class TestAppValidation(unittest.TestCase):
         self, mock_bet_engine, mock_pred_engine, mock_ui, mock_data_loader, mock_st
     ):
         """Test that prediction source failures do not crash the app."""
-        mock_st.sidebar.columns.return_value = [MagicMock(), MagicMock()]
-        mock_st.session_state.bet_history = []
-        mock_st.session_state.bankroll = 10000.0
-        mock_st.session_state.show_analytics = False
+        self._configure_sidebar_mock(mock_st)
 
         data_instance = mock_data_loader.return_value
         data_instance.load_vegas_lines.return_value = pd.DataFrame(
@@ -71,10 +76,7 @@ class TestAppValidation(unittest.TestCase):
     @patch("app.BettingEngine")
     def test_dataframe_type_validation(self, mock_bet_engine, mock_pred_engine, mock_ui, mock_data_loader, mock_st):
         """Test that non-DataFrame return values are handled correctly."""
-        mock_st.sidebar.columns.return_value = [MagicMock(), MagicMock()]
-        mock_st.session_state.bet_history = []
-        mock_st.session_state.bankroll = 10000.0
-        mock_st.session_state.show_analytics = False
+        self._configure_sidebar_mock(mock_st)
 
         # Setup mock that returns None instead of DataFrame
         data_instance = mock_data_loader.return_value
@@ -98,10 +100,7 @@ class TestAppValidation(unittest.TestCase):
     @patch("app.BettingEngine")
     def test_empty_dataframe_handling(self, mock_bet_engine, mock_pred_engine, mock_ui, mock_data_loader, mock_st):
         """Test that empty DataFrames are handled correctly."""
-        mock_st.sidebar.columns.return_value = [MagicMock(), MagicMock()]
-        mock_st.session_state.bet_history = []
-        mock_st.session_state.bankroll = 10000.0
-        mock_st.session_state.show_analytics = False
+        self._configure_sidebar_mock(mock_st)
 
         # Setup mock with empty DataFrame
         data_instance = mock_data_loader.return_value
@@ -126,10 +125,7 @@ class TestAppValidation(unittest.TestCase):
     @patch("app.logger")
     def test_missing_team_snapshot_logging(self, mock_logger, mock_bet_engine, mock_pred_engine, mock_ui, mock_data_loader, mock_st):
         """Test that missing team snapshots are logged as warnings."""
-        mock_st.sidebar.columns.return_value = [MagicMock(), MagicMock()]
-        mock_st.session_state.bet_history = []
-        mock_st.session_state.bankroll = 10000.0
-        mock_st.session_state.show_analytics = False
+        self._configure_sidebar_mock(mock_st)
 
         # Setup mock data
         data_instance = mock_data_loader.return_value
@@ -164,10 +160,7 @@ class TestAppValidation(unittest.TestCase):
     @patch("app.logger")
     def test_prediction_key_validation(self, mock_logger, mock_bet_engine, mock_pred_engine, mock_ui, mock_data_loader, mock_st):
         """Test that missing prediction keys are validated and logged."""
-        mock_st.sidebar.columns.return_value = [MagicMock(), MagicMock()]
-        mock_st.session_state.bet_history = []
-        mock_st.session_state.bankroll = 10000.0
-        mock_st.session_state.show_analytics = False
+        self._configure_sidebar_mock(mock_st)
 
         # Setup mock data
         data_instance = mock_data_loader.return_value
@@ -211,10 +204,7 @@ class TestAppValidation(unittest.TestCase):
     @patch("app.BettingEngine")
     def test_event_id_game_id_mismatch_handling(self, mock_bet_engine, mock_pred_engine, mock_ui, mock_data_loader, mock_st):
         """Test that event_id vs game_id column mismatch is handled correctly."""
-        mock_st.sidebar.columns.return_value = [MagicMock(), MagicMock()]
-        mock_st.session_state.bet_history = []
-        mock_st.session_state.bankroll = 10000.0
-        mock_st.session_state.show_analytics = False
+        self._configure_sidebar_mock(mock_st)
 
         # Setup mock data
         data_instance = mock_data_loader.return_value
