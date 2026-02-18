@@ -29,6 +29,7 @@ from ncaa_casablanca_config import (
     OUT_NCAA_TEAM_LOGS,
     OUT_NCAA_PLAYER_BOX,
     CSV_SCHEMAS,
+    COMPLETED_GAME_STATUSES,
 )
 
 from ncaa_casablanca_http_client import (
@@ -286,10 +287,9 @@ def run_pipeline(days_back: int = 3, verbose: bool = True) -> None:
     # Filter to only completed games – boxscore API returns no team data
     # for scheduled/in-progress games, so fetching them wastes time and
     # produces no team log rows.
-    status_col = "status"
-    if status_col in games_df.columns:
-        completed_mask = games_df[status_col].astype(str).str.strip().str.lower().isin(
-            {"final", "f", "final/ot", "completed"}
+    if "status" in games_df.columns:
+        completed_mask = games_df["status"].astype(str).str.strip().str.lower().isin(
+            COMPLETED_GAME_STATUSES
         )
         completed_df = games_df[completed_mask]
         game_ids = completed_df["game_id"].unique().tolist()

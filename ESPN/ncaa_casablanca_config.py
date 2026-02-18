@@ -39,6 +39,11 @@ RETRY_BACKOFF = float(os.getenv("NCAA_RETRY_BACKOFF", "2.0"))
 PARSE_VERSION = "v1.0.0"
 SOURCE_NAME = "ncaa_casablanca"
 
+# ---------------- Game Status Classification ----------------
+# Lowercase status strings that indicate a completed game (used to filter
+# which games should have their boxscores fetched).
+COMPLETED_GAME_STATUSES = frozenset({"final", "f", "final/ot", "completed"})
+
 # ---------------- Output File Paths ----------------
 # Store CSVs in the ESPN folder as requested
 OUT_NCAA_GAMES = os.path.join(CSV_DIR, "ncaa_games.csv")
