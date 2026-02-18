@@ -1,0 +1,96 @@
+name: Update CBBpy CSVs
+
+on:
+  workflow_dispatch:
+    inputs:
+      days_back:
+        description: "Days of scoreboard history to process"
+        required: false
+        default: "3"
+  # Daily run to monitor CBBpy reliability while troubleshooting
+  schedule:
+    - cron: "0 11 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install cbbpy
+
+      - name: Run CBBpy client smoke test
+        working-directory: ESPN
+        run: |
+          python -c "
+          import cbbpy.mens_scraper as scraper
+          print('CBBpy version loaded successfully')
+          from datetime import datetime, timedelta
+          yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+          print(f'Attempting to fetch game IDs for {yesterday}...')
+          try:
+              ids = scraper.get_game_ids(yesterday)
+              print(f'Game IDs returned: {len(ids) if ids is not None else 0}')
+              if ids is not None and len(ids) > 0:
+                  print(f'Sample IDs: {list(ids)[:5]}')
+                  # Try fetching info for the first game
+                  first_id = str(ids[0])
+                  print(f'Fetching game info for {first_id}...')
+                  info = scraper.get_game_info(first_id)
+                  print(f'Game info shape: {info.shape if info is not None else None}')
+                  print(f'Game info columns: {list(info.columns) if info is not None else None}')
+              else:
+                  print('[WARN] No game IDs returned for yesterday')
+          except Exception as e:
+              print(f'[ERROR] CBBpy fetch failed: {e}')
+              import traceback
+              traceback.print_exc()
+          "
+
+      - name: Run CBBpy boxscore fetch test
+        working-directory: ESPN
+        continue-on-error: true
+        run: |
+          python -c "
+          import cbbpy.mens_scraper as scraper
+          from datetime import datetime, timedelta
+          yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+          print(f'Fetching game IDs for {yesterday}...')
+          ids = scraper.get_game_ids(yesterday)
+          if ids is not None and len(ids) > 0:
+              first_id = str(ids[0])
+              print(f'Fetching boxscore for game {first_id}...')
+              try:
+                  box = scraper.get_game_boxscore(first_id)
+                  print(f'Boxscore shape: {box.shape if box is not None else None}')
+                  if box is not None and not box.empty:
+                      print(f'Columns: {list(box.columns)}')
+                      print(box.head())
+                  else:
+                      print('[WARN] Boxscore is empty')
+              except Exception as e:
+                  print(f'[ERROR] Boxscore fetch failed: {e}')
+                  import traceback
+                  traceback.print_exc()
+          else:
+              print('[WARN] No game IDs to test boxscore fetch')
+          "
+
+      - name: Report results
+        if: ${{ always() }}
+        run: |
+          echo "CBBpy troubleshooting workflow complete."
+          echo "Review the logs above for any errors or warnings."
