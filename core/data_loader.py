@@ -4,13 +4,19 @@ from __future__ import annotations
 
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from functools import lru_cache
 from typing import Any
 
 import pandas as pd
 
 from core.config import APP_CONFIG
+from core.supabase_schema import (
+    MARKET_SPREAD_ALIASES,
+    RAW_PREDICTIONS_SCHEMA,
+    RAW_PREDICTIONS_TABLE,
+)
+from core.supabase_utils import get_public_supabase_client
 
 logger = logging.getLogger(__name__)
 
@@ -29,17 +35,10 @@ class DataLoader:
     @staticmethod
     @lru_cache(maxsize=1)
     def _supabase_client() -> "Any | None":
-        url = (os.getenv("SUPABASE_URL") or "").strip()
-        key = (os.getenv("SUPABASE_ANON_KEY") or "").strip()
-        if not url or not key:
+        client = get_public_supabase_client()
+        if client is None:
             logger.info("Supabase credentials not set; using CSV fallback.")
-            return None
-        try:
-            from supabase import create_client
-            return create_client(url, key)
-        except Exception as exc:
-            logger.warning("Failed to create Supabase client: %s", exc)
-            return None
+        return client
 
     @staticmethod
     @lru_cache(maxsize=8)
@@ -89,7 +88,7 @@ class DataLoader:
         if games_df.empty:
             return pd.DataFrame()
         if "market_spread" not in games_df.columns:
-            for col in ("vegas_spread", "spread", "spread_home", "closing_spread_home"):
+            for col in MARKET_SPREAD_ALIASES:
                 if col in games_df.columns:
                     games_df["market_spread"] = pd.to_numeric(games_df[col], errors="coerce")
                     break
@@ -103,7 +102,7 @@ class DataLoader:
         if games_df["game_date"].isna().all() and "game_datetime_utc" in games_df.columns:
             games_df["game_date"] = pd.to_datetime(games_df["game_datetime_utc"], errors="coerce")
         if date == "today":
-            today = pd.Timestamp(datetime.utcnow().date())
+            today = pd.Timestamp(datetime.now(timezone.utc).date())
             today_games = games_df[games_df["game_date"].dt.date == today.date()].copy()
             if not today_games.empty:
                 return today_games
@@ -139,8 +138,8 @@ class DataLoader:
 
             # REDUNDANCY 2: Try raw.predictions_latest (source table)
             try:
-                logger.info("Attempting fallback to raw.predictions_latest")
-                response = client.schema("raw").table("predictions_latest").select("*").execute()
+                logger.info("Attempting fallback to %s.%s", RAW_PREDICTIONS_SCHEMA, RAW_PREDICTIONS_TABLE)
+                response = client.schema(RAW_PREDICTIONS_SCHEMA).table(RAW_PREDICTIONS_TABLE).select("*").execute()
                 data = pd.DataFrame(response.data or [])
                 if not data.empty:
                     logger.info("✓ Loaded %d predictions from raw.predictions_latest", len(data))

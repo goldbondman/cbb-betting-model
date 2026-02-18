@@ -30,7 +30,6 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
-from supabase import create_client
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +41,17 @@ sys.path.insert(0, str(REPO_ROOT))
 ESPN_DIR = REPO_ROOT / "ESPN"
 if str(ESPN_DIR) not in sys.path:
     sys.path.insert(0, str(ESPN_DIR))
+
+from core.db_utils import has_text, resolve_first, safe_float, sanitize_nan_dict  # noqa: E402
+from core.supabase_schema import (  # noqa: E402
+    PREDICTION_MARGIN_ALIASES,
+    PREDICTION_TOTAL_ALIASES,
+    RAW_PREDICTIONS_LIMIT as _DEFAULT_RAW_PREDICTIONS_LIMIT,
+    RAW_PREDICTIONS_SCHEMA as _DEFAULT_RAW_PREDICTIONS_SCHEMA,
+    RAW_PREDICTIONS_TABLE as _DEFAULT_RAW_PREDICTIONS_TABLE,
+    RAW_SCHEMA as _DEFAULT_RAW_SCHEMA,
+)
+from core.supabase_utils import get_service_role_client, upsert_rows  # noqa: E402
 
 try:
     import espn_boxscore_builder_modular as espn  # noqa: E402
@@ -60,11 +70,11 @@ DAYS_BACK = int(os.getenv("DAYS_BACK", "0"))
 
 SEASON = int(os.getenv("SEASON", datetime.now().year + (1 if datetime.now().month >= 7 else 0)))
 
-RAW_SCHEMA = (os.getenv("RAW_SCHEMA") or "raw").strip()
+RAW_SCHEMA = _DEFAULT_RAW_SCHEMA
 
-RAW_PREDICTIONS_SCHEMA = (os.getenv("RAW_PREDICTIONS_SCHEMA") or "raw").strip()
-RAW_PREDICTIONS_TABLE = (os.getenv("RAW_PREDICTIONS_TABLE") or "predictions_latest").strip()
-RAW_PREDICTIONS_LIMIT = int(os.getenv("RAW_PREDICTIONS_LIMIT", "10000"))
+RAW_PREDICTIONS_SCHEMA = _DEFAULT_RAW_PREDICTIONS_SCHEMA
+RAW_PREDICTIONS_TABLE = _DEFAULT_RAW_PREDICTIONS_TABLE
+RAW_PREDICTIONS_LIMIT = int(os.getenv("RAW_PREDICTIONS_LIMIT", str(_DEFAULT_RAW_PREDICTIONS_LIMIT)))
 
 
 def _utc_now() -> datetime:
@@ -75,36 +85,10 @@ def _iso(dt: datetime) -> str:
     return dt.astimezone(timezone.utc).isoformat()
 
 
-def _safe_float(value: object) -> Optional[float]:
-    if value is None:
-        return None
-    if isinstance(value, float) and math.isnan(value):
-        return None
-    s = str(value).strip()
-    if not s:
-        return None
-    try:
-        return float(s)
-    except ValueError:
-        return None
-
-
-def _has_text(value: object) -> bool:
-    if value is None:
-        return False
-    if isinstance(value, float) and math.isnan(value):
-        return False
-    return bool(str(value).strip())
-
-
-def _sanitize_payload(payload: Dict[str, object]) -> Dict[str, object]:
-    cleaned: Dict[str, object] = {}
-    for key, value in payload.items():
-        if isinstance(value, float) and math.isnan(value):
-            cleaned[key] = None
-        else:
-            cleaned[key] = value
-    return cleaned
+# Aliases kept for backward-compatible internal references.
+_safe_float = safe_float
+_has_text = has_text
+_sanitize_payload = sanitize_nan_dict
 
 
 def _parse_game_datetime(row: Dict[str, object]) -> Optional[str]:
@@ -147,11 +131,7 @@ def _validate_game(row: Dict[str, object]) -> Tuple[str, List[str]]:
 
 
 def _load_supabase():
-    url = (os.getenv("SUPABASE_URL") or "").strip()
-    key = (os.getenv("SUPABASE_SERVICE_ROLE_KEY") or "").strip()
-    if not url or not key:
-        raise RuntimeError("SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY missing.")
-    return create_client(url, key)
+    return get_service_role_client()
 
 
 @dataclass(frozen=True)
@@ -200,27 +180,6 @@ def fetch_scoreboard() -> pd.DataFrame:
         rows.extend(fetch_fn(d))
     return pd.DataFrame(rows)
 
-
-def upsert_rows(
-    client,
-    schema: str,
-    table: str,
-    rows: List[Dict[str, object]],
-    on_conflict: Optional[str] = None,
-) -> int:
-    if not rows:
-        return 0
-
-    payload = rows if len(rows) > 1 else rows[0]
-    req = client.schema(schema).table(table)
-
-    if on_conflict:
-        resp = req.upsert(payload, on_conflict=on_conflict).execute()
-    else:
-        resp = req.upsert(payload).execute()
-
-    data = resp.data or []
-    return len(data) if isinstance(data, list) else 1
 
 
 def fetch_predictions_latest_from_db(sb) -> pd.DataFrame:
@@ -437,15 +396,9 @@ def main() -> None:
 
         model_version = MODEL_VERSION_OVERRIDE or str(row.get("model_version") or "").strip() or "ml-linear-v1"
 
-        pred_margin_home = _safe_float(row.get("pred_margin_home"))
-        if pred_margin_home is None:
-            pred_margin_home = _safe_float(row.get("pred_spread"))
-        if pred_margin_home is None:
-            pred_margin_home = _safe_float(row.get("ensemble_prediction"))
+        pred_margin_home = resolve_first(row.to_dict(), PREDICTION_MARGIN_ALIASES)
 
-        pred_total = _safe_float(row.get("pred_total"))
-        if pred_total is None:
-            pred_total = _safe_float(row.get("predicted_total"))
+        pred_total = resolve_first(row.to_dict(), PREDICTION_TOTAL_ALIASES)
 
         market_spread = _safe_float(row.get("market_spread"))
         market_total = _safe_float(row.get("market_total"))
