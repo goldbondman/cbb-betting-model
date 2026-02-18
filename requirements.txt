@@ -19,4 +19,5 @@ psycopg
 
 # App lib
 cbbpy>=2.1.0
+cbbd==1.23.0
 

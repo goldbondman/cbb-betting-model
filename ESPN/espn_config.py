@@ -43,6 +43,14 @@ ENABLE_CBBPY = os.getenv("ENABLE_CBBPY", "1").strip().lower() in ("1", "true", "
 # Fallback to direct ESPN API if CBBpy fails
 CBBPY_FALLBACK_TO_ESPN = os.getenv("CBBPY_FALLBACK_TO_ESPN", "1").strip().lower() in ("1", "true", "yes")
 
+# ---------------- CBBD Integration ----------------
+# Enable CBBD (College Basketball Data) as a parallel test data source
+ENABLE_CBBD = os.getenv("ENABLE_CBBD", "0").strip().lower() in ("1", "true", "yes")
+# Bearer token for CBBD API authentication
+CBBD_API_TOKEN = os.getenv("CBBD_API_TOKEN", "")
+# CBBD API base URL
+CBBD_BASE_URL = "https://api.collegebasketballdata.com"
+
 # ---------------- Pipeline Metadata ----------------
 PARSE_VERSION = "v1.4.2"
 SOURCE_NAME = "espn"

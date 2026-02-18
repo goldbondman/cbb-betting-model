@@ -92,6 +92,7 @@ class IntegrityMerger:
             SourceType.ESPN,
             SourceType.NCAA_CASABLANCA,
             SourceType.CBBPY,
+            SourceType.CBBD,
             SourceType.HENRY_API
         ]
     
