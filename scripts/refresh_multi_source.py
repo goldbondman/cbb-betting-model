@@ -76,6 +76,11 @@ def main():
         help='Disable CBBpy source'
     )
     parser.add_argument(
+        '--enable-cbbd',
+        action='store_true',
+        help='Enable CBBD source (requires CBBD_API_KEY)'
+    )
+    parser.add_argument(
         '--verbose',
         action='store_true',
         help='Enable verbose logging'
@@ -98,7 +103,8 @@ def main():
             enable_espn=not args.disable_espn,
             enable_ncaa=not args.disable_ncaa,
             enable_henry=not args.disable_henry,
-            enable_cbbpy=not args.disable_cbbpy
+            enable_cbbpy=not args.disable_cbbpy,
+            enable_cbbd=args.enable_cbbd
         )
     except ValueError as e:
         logger.error(f"Configuration error: {e}")

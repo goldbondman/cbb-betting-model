@@ -7,6 +7,7 @@ import os
 from typing import List
 from datetime import datetime, timezone
 import logging
+import requests
 
 # Add ESPN directory to path
 _ESPN_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ESPN")
@@ -362,4 +363,96 @@ class CBBpyDataSource(DataSource):
             source="cbbpy",
             pulled_at=datetime.now(timezone.utc).isoformat(),
             raw_data=raw_data,
+        )
+
+
+class CBBDDataSource(DataSource):
+    """CollegeBasketballData API source."""
+
+    BASE_URL = os.getenv("CBBD_BASE_URL", "https://api.collegebasketballdata.com")
+
+    def get_source_type(self) -> SourceType:
+        return SourceType.CBBD
+
+    def fetch_games(self, date: str) -> SourceResult:
+        """Fetch games from CollegeBasketballData API for a specific date."""
+        api_key = (os.getenv("CBBD_API_KEY") or "").strip()
+        if not api_key:
+            return self._create_result(False, error="CBBD_API_KEY not set")
+
+        start_iso = f"{date}T00:00:00Z"
+        end_iso = f"{date}T23:59:59Z"
+        params = {
+            "startDateRange": start_iso,
+            "endDateRange": end_iso,
+        }
+        headers = {"Authorization": f"Bearer {api_key}"}
+
+        try:
+            resp = requests.get(f"{self.BASE_URL}/games", params=params, headers=headers, timeout=30)
+            resp.raise_for_status()
+            payload = resp.json()
+
+            games_payload = payload if isinstance(payload, list) else payload.get("games", [])
+            if not isinstance(games_payload, list) or not games_payload:
+                return self._create_result(False, error=f"No games in CBBD response for {date}")
+
+            games = []
+            for item in games_payload:
+                game = self._convert_to_game_data(item, date)
+                if game and game.is_complete_basic():
+                    games.append(game)
+
+            if not games:
+                return self._create_result(False, error=f"No valid CBBD games parsed for {date}")
+
+            return self._create_result(True, games=games)
+
+        except Exception as exc:
+            logger.error(f"CBBD fetch failed: {exc}")
+            return self._create_result(False, error=str(exc))
+
+    @staticmethod
+    def _safe_int(value):
+        if value is None:
+            return None
+        try:
+            return int(float(str(value).strip()))
+        except Exception:
+            return None
+
+    @staticmethod
+    def _first_nonempty(payload: dict, keys: List[str]):
+        for key in keys:
+            val = payload.get(key)
+            if val not in (None, ""):
+                return val
+        return None
+
+    def _convert_to_game_data(self, payload: dict, date: str):
+        if not isinstance(payload, dict):
+            return None
+
+        game_id = self._first_nonempty(payload, ["id", "gameId", "game_id", "espnGameId", "espn_game_id"])
+        if game_id is None:
+            return None
+
+        home_team = self._first_nonempty(payload, ["homeTeam", "home_team", "homeTeamName", "home_team_name"])
+        away_team = self._first_nonempty(payload, ["awayTeam", "away_team", "awayTeamName", "away_team_name"])
+        if not home_team or not away_team:
+            return None
+
+        return GameData(
+            game_id=str(game_id),
+            date=date,
+            home_team=str(home_team),
+            away_team=str(away_team),
+            home_score=self._safe_int(self._first_nonempty(payload, ["homeScore", "home_score", "homePoints", "home_points"])),
+            away_score=self._safe_int(self._first_nonempty(payload, ["awayScore", "away_score", "awayPoints", "away_points"])),
+            status=str(self._first_nonempty(payload, ["status", "gameStatus", "game_status"]) or "").lower() or None,
+            venue=self._first_nonempty(payload, ["venue", "location", "arena"]),
+            game_datetime=self._first_nonempty(payload, ["startDate", "start_date", "startTime", "start_time"]),
+            source="cbbd",
+            pulled_at=datetime.now(timezone.utc).isoformat(),
+            raw_data=payload,
         )

@@ -272,7 +272,8 @@ def refresh_multi_source_games(date_str=None, days_back=7, output_path="ESPN/CSV
         fetcher = MultiSourceFetcher(
             enable_espn=True,
             enable_ncaa=True,
-            enable_henry=True
+            enable_henry=True,
+            enable_cbbd=os.environ.get("ENABLE_CBBD", "false").lower() == "true"
         )
         
         # Determine date
