@@ -70,3 +70,51 @@ def test_convert_cbbpy_boxscore_handles_empty_dataframe():
     result = cbbpy_client._convert_cbbpy_boxscore_to_espn_format(empty_df, '401479097')
     
     assert result is None
+
+
+def test_fetch_scoreboard_cbbpy_returns_none():
+    """CBBpy scoreboard cannot produce ESPN-compatible events, must return None
+    so the caller falls back to the direct ESPN API."""
+    import cbbpy_client
+    result = cbbpy_client.fetch_scoreboard_cbbpy("20260115")
+    assert result is None
+
+
+def test_is_valid_espn_summary_rejects_incomplete():
+    """Validate that _is_valid_espn_summary rejects cbbpy-style incomplete data."""
+    import cbbpy_client
+
+    # Empty competitors list (the old cbbpy bug)
+    bad = {
+        "header": {"competitions": [{"competitors": [], "status": {"type": {"completed": True}}}]},
+        "boxscore": {"teams": [{"team": {"id": "1"}}, {"team": {"id": "2"}}]}
+    }
+    assert cbbpy_client._is_valid_espn_summary(bad) is False
+
+    # Missing boxscore teams
+    bad2 = {
+        "header": {"competitions": [{"competitors": [{"homeAway": "home"}, {"homeAway": "away"}]}]},
+        "boxscore": {"teams": []}
+    }
+    assert cbbpy_client._is_valid_espn_summary(bad2) is False
+
+
+def test_is_valid_espn_summary_accepts_complete():
+    """Validate that _is_valid_espn_summary accepts well-formed ESPN data."""
+    import cbbpy_client
+
+    good = {
+        "header": {"competitions": [{
+            "date": "2026-01-15T00:00Z",
+            "competitors": [
+                {"homeAway": "home", "team": {"id": "1"}, "score": "80"},
+                {"homeAway": "away", "team": {"id": "2"}, "score": "70"},
+            ],
+            "status": {"type": {"completed": True}},
+        }]},
+        "boxscore": {"teams": [
+            {"team": {"id": "1", "displayName": "A"}, "statistics": []},
+            {"team": {"id": "2", "displayName": "B"}, "statistics": []},
+        ]}
+    }
+    assert cbbpy_client._is_valid_espn_summary(good) is True
