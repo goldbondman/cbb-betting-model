@@ -70,3 +70,19 @@ def test_convert_cbbpy_boxscore_handles_empty_dataframe():
     result = cbbpy_client._convert_cbbpy_boxscore_to_espn_format(empty_df, '401479097')
     
     assert result is None
+
+
+def test_fetch_scoreboard_cbbpy_returns_none():
+    """
+    CBBpy get_game_ids() only returns game IDs, not the full event structure
+    (competitions, competitors, scores, status) that parse_scoreboard_event()
+    requires. fetch_scoreboard_cbbpy() must return None so the caller falls
+    back to the direct ESPN API.
+    """
+    import cbbpy_client
+
+    result = cbbpy_client.fetch_scoreboard_cbbpy("20260218")
+    assert result is None, (
+        "fetch_scoreboard_cbbpy must return None to trigger fallback to "
+        "the direct ESPN API, which provides complete scoreboard events"
+    )

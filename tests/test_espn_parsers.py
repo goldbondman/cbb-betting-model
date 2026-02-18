@@ -8,7 +8,7 @@ _ESPN_DIR = os.path.join(
 if _ESPN_DIR not in sys.path:
     sys.path.insert(0, _ESPN_DIR)
 
-from espn_parsers import parse_team_from_summary, _extract_players
+from espn_parsers import parse_team_from_summary, _extract_players, parse_scoreboard_event
 
 
 def test_parse_team_from_summary_supports_abbreviation_stat_names():
@@ -128,3 +128,54 @@ def test_extract_players_uses_partial_header_mapping_when_lengths_mismatch():
     assert players[0]["stl"] == 2
     assert players[0]["blk"] == 1
     assert players[0]["pf"] == 2
+
+
+def test_parse_scoreboard_event_rejects_minimal_cbbpy_format():
+    """Events with only id/date (no competitions) must return None."""
+    event = {"id": "401829197", "date": "02-18-2026"}
+    result = parse_scoreboard_event(event)
+    assert result is None
+
+
+def test_parse_scoreboard_event_accepts_full_espn_format():
+    """Full ESPN scoreboard events with competitions/competitors must parse."""
+    event = {
+        "id": "401829197",
+        "date": "2026-02-18T00:00Z",
+        "competitions": [
+            {
+                "date": "2026-02-18T00:00Z",
+                "venue": {"fullName": "Test Arena"},
+                "competitors": [
+                    {
+                        "homeAway": "home",
+                        "score": "75",
+                        "winner": True,
+                        "team": {"displayName": "Home Team"},
+                    },
+                    {
+                        "homeAway": "away",
+                        "score": "68",
+                        "winner": False,
+                        "team": {"displayName": "Away Team"},
+                    },
+                ],
+                "status": {
+                    "type": {
+                        "completed": True,
+                        "state": "post",
+                        "detail": "Final",
+                        "description": "Final",
+                    }
+                },
+            }
+        ],
+    }
+    result = parse_scoreboard_event(event)
+    assert result is not None
+    assert result["game_id"] == "401829197"
+    assert result["home_team"] == "Home Team"
+    assert result["away_team"] == "Away Team"
+    assert result["home_score"] == 75
+    assert result["away_score"] == 68
+    assert result["completed"] is True
