@@ -11,3 +11,4 @@ psycopg
 python-dotenv
 python-dateutil
 cbbpy>=2.1.0
+pyyaml

@@ -17,3 +17,4 @@ season_collection.log
 __pycache__/
 *.pyc
 .pytest_cache/
+pytest-results.xml
