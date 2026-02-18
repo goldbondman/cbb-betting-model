@@ -43,6 +43,10 @@ ESPN_DIR = REPO_ROOT / "ESPN"
 if str(ESPN_DIR) not in sys.path:
     sys.path.insert(0, str(ESPN_DIR))
 
+CORE_DIR = REPO_ROOT / "core"
+if str(CORE_DIR) not in sys.path:
+    sys.path.insert(0, str(CORE_DIR))
+
 try:
     import espn_boxscore_builder_modular as espn  # noqa: E402
 except Exception:
@@ -197,8 +201,72 @@ def fetch_scoreboard() -> pd.DataFrame:
         )
 
     for d in dates:
-        rows.extend(fetch_fn(d))
+        cbbpy_rows = _fetch_scoreboard_from_cbbpy(d)
+        if cbbpy_rows:
+            rows.extend(cbbpy_rows)
+            logger.info("Fetched %s scoreboard rows from CBBpy for %s", len(cbbpy_rows), d)
+            continue
+
+        espn_rows = fetch_fn(d)
+        if espn_rows:
+            rows.extend(espn_rows)
+            logger.warning(
+                "CBBpy unavailable for %s; fell back to ESPN with %s rows",
+                d,
+                len(espn_rows),
+            )
+        else:
+            logger.warning("No scoreboard rows available for %s (CBBpy and ESPN unavailable)", d)
+
     return pd.DataFrame(rows)
+
+
+def _fetch_scoreboard_from_cbbpy(date_yyyymmdd: str) -> List[Dict[str, object]]:
+    """Fallback scoreboard pull using CBBpy when ESPN scoreboard is empty/unavailable."""
+    try:
+        from source_implementations import CBBpyDataSource
+    except Exception as exc:
+        logger.warning("CBBpy fallback import failed: %s", exc)
+        return []
+
+    try:
+        date_iso = datetime.strptime(date_yyyymmdd, "%Y%m%d").strftime("%Y-%m-%d")
+    except ValueError:
+        logger.warning("Invalid date for CBBpy fallback: %s", date_yyyymmdd)
+        return []
+
+    result = CBBpyDataSource().fetch_games(date_iso)
+    if not result.success or not result.games:
+        logger.warning("CBBpy fallback failed for %s: %s", date_yyyymmdd, result.error)
+        return []
+
+    pulled_at = _iso(_utc_now())
+    output_rows: List[Dict[str, object]] = []
+    for game in result.games:
+        status = str(game.status or "").strip().lower()
+        output_rows.append(
+            {
+                "game_id": str(game.game_id),
+                "date": date_yyyymmdd,
+                "home_team": game.home_team,
+                "away_team": game.away_team,
+                "home_score": game.home_score,
+                "away_score": game.away_score,
+                "venue": game.venue,
+                "game_datetime_utc": game.game_datetime,
+                "market_provider": "cbbpy",
+                "market_spread": None,
+                "market_total": None,
+                "market_home_ml": None,
+                "market_away_ml": None,
+                "completed": status in {"final", "post", "completed", "complete", "finished"},
+                "source": "cbbpy",
+                "pulled_at_utc": pulled_at,
+                "source_payload": getattr(game, "raw_data", None),
+            }
+        )
+
+    return output_rows
 
 
 def upsert_rows(
@@ -270,6 +338,7 @@ def main() -> None:
         if not external_game_id:
             continue
 
+        source_name = str(row.get("source") or SOURCE).strip().lower() or SOURCE.lower()
         status, reasons = _validate_game(row.to_dict())
 
         if status != "verified":
@@ -289,7 +358,7 @@ def main() -> None:
             {
                 "id": str(uuid.uuid4()),
                 "season": SEASON,
-                "source": SOURCE,
+                "source": source_name,
                 "external_game_id": external_game_id,
                 "payload": _sanitize_payload(row.to_dict()),
                 "pulled_at": _iso(pulled_at),
@@ -303,8 +372,8 @@ def main() -> None:
         if not home_team or not away_team:
             continue
 
-        home_team_id = f"{SOURCE}:{str(home_team).strip()}"
-        away_team_id = f"{SOURCE}:{str(away_team).strip()}"
+        home_team_id = f"{source_name}:{str(home_team).strip()}"
+        away_team_id = f"{source_name}:{str(away_team).strip()}"
 
         team_rows[home_team_id] = {
             "team_id": home_team_id,
@@ -335,7 +404,7 @@ def main() -> None:
                 else None,
                 "venue": row.get("venue"),
                 "status": "final" if bool(row.get("completed")) else "scheduled",
-                "source": SOURCE,
+                "source": source_name,
                 "season": SEASON,
                 "external_game_id": external_game_id,
                 "game_datetime_utc": game_datetime,
@@ -347,7 +416,7 @@ def main() -> None:
         market_rows.append(
             {
                 "game_id": external_game_id,
-                "book": row.get("market_provider") or "espn",
+                "book": row.get("market_provider") or source_name,
                 "pulled_at": _iso(pulled_at),
                 "spread_home": _safe_float(row.get("market_spread")),
                 "total": _safe_float(row.get("market_total")),

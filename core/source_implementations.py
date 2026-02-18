@@ -262,21 +262,27 @@ class CBBpyDataSource(DataSource):
             dt = datetime.strptime(date, "%Y-%m-%d")
             cbbpy_date = dt.strftime("%m-%d-%Y")
 
-            # Get game IDs for the date
             game_ids = scraper.get_game_ids(cbbpy_date)
-
             if not game_ids:
                 return self._create_result(False, error=f"No game IDs returned from CBBpy for {date}")
 
-            # Fetch game info for each game
             games = []
             for game_id in game_ids:
                 try:
                     info_df = scraper.get_game_info(game_id)
-                    if info_df is not None and not info_df.empty:
-                        game_data = self._convert_df_to_game_data(info_df, date)
-                        if game_data and game_data.is_complete_basic():
-                            games.append(game_data)
+                    if info_df is None or info_df.empty:
+                        logger.warning(f"CBBpy game info empty for game {game_id}")
+                        continue
+
+                    boxscore_df = None
+                    try:
+                        boxscore_df = scraper.get_game_boxscore(game_id)
+                    except Exception as box_err:
+                        logger.warning(f"CBBpy boxscore unavailable for game {game_id}: {box_err}")
+
+                    game_data = self._convert_df_to_game_data(info_df, boxscore_df, date)
+                    if game_data and game_data.is_complete_basic():
+                        games.append(game_data)
                 except Exception as e:
                     logger.warning(f"Failed to fetch CBBpy game {game_id}: {e}")
                     continue
@@ -296,24 +302,64 @@ class CBBpyDataSource(DataSource):
             logger.error(f"CBBpy fetch failed: {e}")
             return self._create_result(False, error=str(e))
 
-    def _convert_df_to_game_data(self, info_df, date: str) -> GameData:
-        """Convert CBBpy game info DataFrame to standardized GameData"""
+    @staticmethod
+    def _to_int_or_none(value):
+        """Safely parse an integer-like value."""
+        if value is None:
+            return None
+        try:
+            text = str(value).strip()
+            if not text:
+                return None
+            return int(float(text))
+        except (ValueError, TypeError):
+            return None
+
+    def _extract_scores_from_boxscore(self, boxscore_df, home_team: str, away_team: str):
+        """Extract team scores from CBBpy game boxscore DataFrame when available."""
+        if boxscore_df is None or getattr(boxscore_df, "empty", True):
+            return None, None
+        if "team" not in boxscore_df.columns or "PTS" not in boxscore_df.columns:
+            return None, None
+
+        team_points = boxscore_df.groupby("team", dropna=True)["PTS"].sum(min_count=1).to_dict()
+        if len(team_points) < 2:
+            return None, None
+
+        home_score = self._to_int_or_none(team_points.get(home_team))
+        away_score = self._to_int_or_none(team_points.get(away_team))
+        return home_score, away_score
+
+    def _convert_df_to_game_data(self, info_df, boxscore_df, date: str) -> GameData:
+        """Convert CBBpy game info/boxscore to standardized GameData."""
         row = info_df.iloc[0]
 
-        home_score = row.get("home_score")
-        away_score = row.get("away_score")
+        home_score = self._to_int_or_none(row.get("home_score"))
+        away_score = self._to_int_or_none(row.get("away_score"))
+
+        if home_score is None or away_score is None:
+            bs_home, bs_away = self._extract_scores_from_boxscore(
+                boxscore_df, str(row.get("home_team", "")), str(row.get("away_team", ""))
+            )
+            home_score = home_score if home_score is not None else bs_home
+            away_score = away_score if away_score is not None else bs_away
+
+        raw_data = {
+            "game_info": row.to_dict() if hasattr(row, "to_dict") else None,
+            "boxscore": boxscore_df.to_dict(orient="records") if boxscore_df is not None and not boxscore_df.empty else None,
+        }
 
         return GameData(
             game_id=str(row.get("game_id", "")),
             date=date,
             home_team=str(row.get("home_team", "")),
             away_team=str(row.get("away_team", "")),
-            home_score=int(home_score) if home_score is not None and str(home_score).isdigit() else None,
-            away_score=int(away_score) if away_score is not None and str(away_score).isdigit() else None,
+            home_score=home_score,
+            away_score=away_score,
             status="final" if row.get("home_win") is not None else None,
             venue=str(row.get("arena", "")) if row.get("arena") else None,
             game_datetime=f"{row.get('game_day', '')} {row.get('game_time', '')}".strip() or None,
             source="cbbpy",
             pulled_at=datetime.now(timezone.utc).isoformat(),
-            raw_data=row.to_dict() if hasattr(row, 'to_dict') else None
+            raw_data=raw_data,
         )
