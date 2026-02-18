@@ -289,7 +289,7 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     failed_game_ids: list[str] = []
 
     def _process_game(gid, team_rows, player_rows):
-        """Fetch summary, parse, and append team + player rows. Returns True on success."""
+        """Fetch summary, parse, and append team + player rows."""
         raw = fetch_summary(gid)
         save_summary_json(gid, raw)
         parsed = parse_summary_json(raw, gid)
@@ -328,7 +328,6 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
             p["source"] = SOURCE_NAME
             p["parse_version"] = PARSE_VERSION
             player_rows.append(p)
-        return True
 
     for i, gid in enumerate(game_ids, 1):
         if str(gid) in processed:
@@ -388,13 +387,14 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     # ========================================================================
     # Reconciliation Report
     # ========================================================================
-    expected_count = len([gid for gid in game_ids if str(gid) not in set(map(str, checkpoint.get("processed_game_ids", [])))])
-    processed_count = len(processed) - len(set(map(str, checkpoint.get("processed_game_ids", []))))
+    checkpoint_ids = set(map(str, checkpoint.get("processed_game_ids", [])))
+    expected_count = len([gid for gid in game_ids if str(gid) not in checkpoint_ids])
+    processed_count = len(processed) - len(checkpoint_ids)
     still_missing = [gid for gid in game_ids if str(gid) not in processed]
 
     print(f"\n=== Reconciliation Report ===")
     print(f"Expected games (from scoreboard): {len(game_ids)}")
-    print(f"Already processed (checkpoint):   {len(set(map(str, checkpoint.get('processed_game_ids', []))))}")
+    print(f"Already processed (checkpoint):   {len(checkpoint_ids)}")
     print(f"Newly processed this run:         {processed_count}")
     print(f"Failed after retries:             {len(failed_game_ids)}")
     print(f"Still missing (no data):          {len(still_missing)}")

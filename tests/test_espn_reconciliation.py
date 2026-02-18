@@ -10,7 +10,7 @@ Validates that:
 
 import os
 import sys
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 import pytest
 
@@ -80,11 +80,8 @@ def test_scoreboard_event_skip_is_logged(capsys):
 def test_retry_recovers_failed_game():
     """
     Simulate a game that fails on first attempt but succeeds on retry.
-    Uses the _process_game helper directly.
+    Verifies the retry concept works at the unit level.
     """
-    from espn_boxscore_builder_modular import _utc_now_iso
-
-    call_count = {"n": 0}
     fake_parsed = {
         "event_id": "401700099",
         "game_datetime_utc": "2025-01-15T00:00Z",
@@ -118,20 +115,6 @@ def test_retry_recovers_failed_game():
         "players_away": [],
     }
 
-    def mock_fetch_summary(gid):
-        call_count["n"] += 1
-        if call_count["n"] <= 1:
-            raise RuntimeError("Simulated API failure")
-        return {"boxscore": {"teams": []}}
-
-    def mock_parse_summary_json(raw, gid):
-        return fake_parsed
-
-    def mock_summary_to_team_rows(parsed):
-        return (parsed["home"].copy(), parsed["away"].copy())
-
-    # The retry mechanism should handle this - just test the concept
-    # On first call, fetch_summary raises. On second call, it succeeds.
     team_rows = []
     player_rows = []
     processed = set()
@@ -140,7 +123,7 @@ def test_retry_recovers_failed_game():
     # First attempt fails
     with patch("espn_boxscore_builder_modular.fetch_summary", side_effect=RuntimeError("fail")):
         try:
-            from espn_boxscore_builder_modular import fetch_summary, parse_summary_json, summary_to_team_rows, save_summary_json
+            from espn_boxscore_builder_modular import fetch_summary
             fetch_summary(gid)
             assert False, "Should have raised"
         except RuntimeError:
@@ -154,9 +137,7 @@ def test_retry_recovers_failed_game():
          patch("espn_boxscore_builder_modular.save_summary_json"), \
          patch("espn_boxscore_builder_modular.parse_summary_json", return_value=fake_parsed), \
          patch("espn_boxscore_builder_modular.summary_to_team_rows", return_value=(fake_parsed["home"].copy(), fake_parsed["away"].copy())):
-        from espn_boxscore_builder_modular import _utc_now_iso as utc_now
-        raw = MagicMock()
-        # Simulating what _process_game does
+        # Simulating what _process_game does on successful retry
         processed.add(str(gid))
 
     assert str(gid) in processed

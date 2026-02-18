@@ -48,7 +48,7 @@ jobs:
               sys.exit(0)
           gdf = pd.read_csv(games)
           ldf = pd.read_csv(logs)
-          completed = gdf[gdf['completed'] == True]
+          completed = gdf[gdf['completed'].astype(bool)]
           sb_ids = set(completed['game_id'].astype(str).unique())
           log_ids = set(ldf['event_id'].astype(str).unique())
           missing = sb_ids - log_ids
