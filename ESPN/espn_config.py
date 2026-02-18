@@ -55,15 +55,9 @@ DEFAULT_DAYS_BACK = int(os.getenv("DAYS_BACK", "3"))
 DRY_RUN = os.getenv("DRY_RUN", "0").strip().lower() in ("1", "true", "yes")
 
 # ---------------- Checkpointing & Logging ----------------
-CHECKPOINT_FILE = os.getenv(
-    "CHECKPOINT_FILE",
-    os.path.join(BASE_DIR, "espn_pipeline_checkpoint.json"),
-)
+CHECKPOINT_FILE = os.getenv("CHECKPOINT_FILE", "/tmp/espn_pipeline_checkpoint.json")
 CHECKPOINT_EVERY_N_GAMES = int(os.getenv("CHECKPOINT_EVERY_N_GAMES", "50"))
-ERROR_LOG_PATH = os.getenv(
-    "ERROR_LOG_PATH",
-    os.path.join(BASE_DIR, "espn_pipeline_errors.json"),
-)
+ERROR_LOG_PATH = os.getenv("ERROR_LOG_PATH", os.path.join(BASE_DIR, "espn_pipeline_errors.json"))
 
 # ---------------- Output File Paths ----------------
 OUT_GAMES = os.path.join(CSV_DIR, "espn_games.csv")

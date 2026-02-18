@@ -22,3 +22,7 @@ __pycache__/
 *.pyc
 .pytest_cache/
 pytest-results.xml
+
+# ESPN pipeline runtime state
+ESPN/espn_pipeline_checkpoint.json
+ESPN/espn_pipeline_errors.json
