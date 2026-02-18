@@ -13,6 +13,10 @@
 data/season_boxscores/
 season_collection.log
 
+# ESPN pipeline runtime artifacts (never commit; stale checkpoints poison runs)
+ESPN/espn_pipeline_checkpoint.json
+ESPN/espn_pipeline_errors.json
+
 # Python cache
 __pycache__/
 *.pyc

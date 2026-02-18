@@ -82,9 +82,16 @@ RETRY_INITIAL_DELAY = float(os.getenv("ESPN_RETRY_INITIAL_DELAY", "1.0"))
 RETRY_BACKOFF = float(os.getenv("ESPN_RETRY_BACKOFF", "2.0"))
 
 # Checkpointing + logging
-CHECKPOINT_FILE = os.getenv("CHECKPOINT_FILE", "espn_pipeline_checkpoint.json")
+_BUILDER_DIR = os.path.dirname(os.path.abspath(__file__))
+CHECKPOINT_FILE = os.getenv(
+    "CHECKPOINT_FILE",
+    os.path.join(_BUILDER_DIR, "espn_pipeline_checkpoint.json"),
+)
 CHECKPOINT_EVERY_N_GAMES = int(os.getenv("CHECKPOINT_EVERY_N_GAMES", "50"))
-ERROR_LOG_PATH = os.getenv("ERROR_LOG_PATH", "espn_pipeline_errors.json")
+ERROR_LOG_PATH = os.getenv(
+    "ERROR_LOG_PATH",
+    os.path.join(_BUILDER_DIR, "espn_pipeline_errors.json"),
+)
 ERROR_LOG: List[Dict[str, Any]] = []
 
 DRY_RUN = os.getenv("DRY_RUN", "0").strip().lower() in ("1", "true", "yes")
