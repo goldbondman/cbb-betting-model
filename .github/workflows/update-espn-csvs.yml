@@ -32,6 +32,40 @@ jobs:
           python espn_boxscore_builder_modular.py
         env:
           DAYS_BACK: "110"
+          RECONCILIATION_MAX_RETRIES: "2"
+          RECONCILIATION_RETRY_DELAY: "3.0"
+          RECONCILIATION_MIN_COMPLETION_RATE: "0.95"
+
+      - name: Validate data completeness
+        working-directory: ESPN
+        run: |
+          python -c "
+          import pandas as pd, sys, os
+          games = os.path.join('CSV', 'espn_games.csv')
+          logs  = os.path.join('CSV', 'espn_team_game_logs.csv')
+          if not os.path.exists(games) or not os.path.exists(logs):
+              print('[WARN] CSV files missing, skipping validation')
+              sys.exit(0)
+          gdf = pd.read_csv(games)
+          ldf = pd.read_csv(logs)
+          completed = gdf[gdf['completed'].astype(bool)]
+          sb_ids = set(completed['game_id'].astype(str).unique())
+          log_ids = set(ldf['event_id'].astype(str).unique())
+          missing = sb_ids - log_ids
+          print(f'Completed games in scoreboard: {len(sb_ids)}')
+          print(f'Games in team logs:            {len(log_ids)}')
+          print(f'Missing from logs:             {len(missing)}')
+          if missing:
+              for m in sorted(missing)[:30]:
+                  print(f'  MISSING: {m}')
+              rate = 1 - len(missing)/max(1,len(sb_ids))
+              print(f'Completion rate: {rate*100:.1f}%')
+              if rate < 0.95:
+                  print('[FAIL] Completion rate below 95%')
+                  sys.exit(1)
+          else:
+              print('[OK] All completed scoreboard games have team log rows')
+          "
 
       - name: Fetch ESPN injuries (NCAA APIs)
         working-directory: ESPN
