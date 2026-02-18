@@ -35,11 +35,14 @@ RETRY_BACKOFF = float(os.getenv("SUPABASE_UPLOAD_RETRY_BACKOFF", "2.0"))
 # File groups
 FILES_ESPN = [
     ("ESPN/CSV/espn_games.csv", "espn/latest/espn_games.csv"),
+    ("ESPN/CSV/espn_teams.csv", "espn/latest/espn_teams.csv"),
     ("ESPN/CSV/espn_team_game_logs.csv", "espn/latest/espn_team_game_logs.csv"),
     ("ESPN/CSV/espn_team_game_features.csv", "espn/latest/espn_team_game_features.csv"),
     ("ESPN/CSV/espn_matchups_model_ready.csv", "espn/latest/espn_matchups_model_ready.csv"),
     ("ESPN/CSV/espn_feature_diagnostics.csv", "espn/latest/espn_feature_diagnostics.csv"),
     ("ESPN/CSV/espn_dq_audit.csv", "espn/latest/espn_dq_audit.csv"),
+    ("ESPN/CSV/espn_player_boxscores.csv", "espn/latest/espn_player_boxscores.csv"),
+    ("ESPN/CSV/espn_injuries.csv", "espn/latest/espn_injuries.csv"),
     ("ESPN/CSV/ncaa_games.csv", "espn/latest/ncaa_games.csv"),
     ("ESPN/CSV/ncaa_team_game_logs.csv", "espn/latest/ncaa_team_game_logs.csv"),
     ("ESPN/CSV/ncaa_player_boxscores.csv", "espn/latest/ncaa_player_boxscores.csv"),
