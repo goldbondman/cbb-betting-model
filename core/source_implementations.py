@@ -266,7 +266,7 @@ class CBBpyDataSource(DataSource):
             game_ids = scraper.get_game_ids(cbbpy_date)
 
             if not game_ids:
-                return self._create_result(False, error="No game IDs returned from CBBpy")
+                return self._create_result(False, error=f"No game IDs returned from CBBpy for {date}")
 
             # Fetch game info for each game
             games = []
@@ -282,7 +282,10 @@ class CBBpyDataSource(DataSource):
                     continue
 
             if not games:
-                return self._create_result(False, error="No valid games parsed from CBBpy")
+                return self._create_result(
+                    False,
+                    error=f"No valid games parsed from CBBpy (attempted {len(game_ids)} games)"
+                )
 
             return self._create_result(True, games=games)
 

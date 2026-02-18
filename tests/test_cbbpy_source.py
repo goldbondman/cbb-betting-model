@@ -129,7 +129,7 @@ def test_cbbpy_fetch_import_error():
 
     assert not result.success
     assert result.source == SourceType.CBBPY
-    assert "not installed" in result.error or "No module" in result.error or result.error is not None
+    assert result.error is not None
     print("✓ test_cbbpy_fetch_import_error passed")
 
 
