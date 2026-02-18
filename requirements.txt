@@ -10,3 +10,4 @@ supabase
 psycopg
 python-dotenv
 python-dateutil
+cbbpy
