@@ -224,7 +224,7 @@ def fetch_scoreboard_cbbpy(date_yyyymmdd: str) -> Optional[Dict[str, Any]]:
         date_yyyymmdd: Date in YYYYMMDD format
         
     Returns:
-        None – CBBpy cannot produce ESPN-compatible scoreboard events
+        None - CBBpy cannot produce ESPN-compatible scoreboard events
     """
     # CBBpy's get_game_ids() only returns event IDs, not full ESPN-format
     # scoreboard events.  parse_scoreboard_event() requires competitions,
