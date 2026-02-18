@@ -237,3 +237,80 @@ class HenryAPIDataSource(DataSource):
             pulled_at=datetime.now(timezone.utc).isoformat(),
             raw_data=parsed
         )
+
+
+class CBBpyDataSource(DataSource):
+    """CBBpy data source - Python-based NCAA basketball web scraper"""
+
+    def get_source_type(self) -> SourceType:
+        return SourceType.CBBPY
+
+    def fetch_games(self, date: str) -> SourceResult:
+        """
+        Fetch games from CBBpy for a specific date.
+
+        Args:
+            date: Date in YYYY-MM-DD format
+
+        Returns:
+            SourceResult with CBBpy game data
+        """
+        try:
+            import cbbpy.mens_scraper as scraper
+
+            # Convert YYYY-MM-DD to MM-DD-YYYY for cbbpy
+            dt = datetime.strptime(date, "%Y-%m-%d")
+            cbbpy_date = dt.strftime("%m-%d-%Y")
+
+            # Get game IDs for the date
+            game_ids = scraper.get_game_ids(cbbpy_date)
+
+            if not game_ids:
+                return self._create_result(False, error="No game IDs returned from CBBpy")
+
+            # Fetch game info for each game
+            games = []
+            for game_id in game_ids:
+                try:
+                    info_df = scraper.get_game_info(game_id)
+                    if info_df is not None and not info_df.empty:
+                        game_data = self._convert_df_to_game_data(info_df, date)
+                        if game_data and game_data.is_complete_basic():
+                            games.append(game_data)
+                except Exception as e:
+                    logger.warning(f"Failed to fetch CBBpy game {game_id}: {e}")
+                    continue
+
+            if not games:
+                return self._create_result(False, error="No valid games parsed from CBBpy")
+
+            return self._create_result(True, games=games)
+
+        except ImportError:
+            logger.error("cbbpy package is not installed")
+            return self._create_result(False, error="cbbpy package not installed")
+        except Exception as e:
+            logger.error(f"CBBpy fetch failed: {e}")
+            return self._create_result(False, error=str(e))
+
+    def _convert_df_to_game_data(self, info_df, date: str) -> GameData:
+        """Convert CBBpy game info DataFrame to standardized GameData"""
+        row = info_df.iloc[0]
+
+        home_score = row.get("home_score")
+        away_score = row.get("away_score")
+
+        return GameData(
+            game_id=str(row.get("game_id", "")),
+            date=date,
+            home_team=str(row.get("home_team", "")),
+            away_team=str(row.get("away_team", "")),
+            home_score=int(home_score) if home_score is not None and str(home_score).isdigit() else None,
+            away_score=int(away_score) if away_score is not None and str(away_score).isdigit() else None,
+            status="final" if row.get("home_win") is not None else None,
+            venue=str(row.get("arena", "")) if row.get("arena") else None,
+            game_datetime=f"{row.get('game_day', '')} {row.get('game_time', '')}".strip() or None,
+            source="cbbpy",
+            pulled_at=datetime.now(timezone.utc).isoformat(),
+            raw_data=row.to_dict() if hasattr(row, 'to_dict') else None
+        )

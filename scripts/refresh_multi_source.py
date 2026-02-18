@@ -71,6 +71,11 @@ def main():
         help='Disable Henry API source'
     )
     parser.add_argument(
+        '--disable-cbbpy',
+        action='store_true',
+        help='Disable CBBpy source'
+    )
+    parser.add_argument(
         '--verbose',
         action='store_true',
         help='Enable verbose logging'
@@ -92,7 +97,8 @@ def main():
         fetcher = MultiSourceFetcher(
             enable_espn=not args.disable_espn,
             enable_ncaa=not args.disable_ncaa,
-            enable_henry=not args.disable_henry
+            enable_henry=not args.disable_henry,
+            enable_cbbpy=not args.disable_cbbpy
         )
     except ValueError as e:
         logger.error(f"Configuration error: {e}")

@@ -91,6 +91,7 @@ class IntegrityMerger:
         self.source_priority = source_priority or [
             SourceType.ESPN,
             SourceType.NCAA_CASABLANCA,
+            SourceType.CBBPY,
             SourceType.HENRY_API
         ]
     
