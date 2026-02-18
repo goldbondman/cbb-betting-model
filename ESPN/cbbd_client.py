@@ -124,6 +124,7 @@ def _convert_game(game) -> Optional[Dict[str, Any]]:
         status = getattr(game, "status", None) or ""
         completed = str(status).lower() in ("final", "completed", "complete")
 
+        # Normalize to "final" for consistency with ESPN/CBBpy/NCAA pipelines
         return {
             "game_id": game_id,
             "home_team": str(home_team),

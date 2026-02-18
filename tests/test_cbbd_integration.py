@@ -53,7 +53,7 @@ def test_fetch_games_returns_none_when_disabled():
 
 
 def test_convert_game_extracts_fields():
-    """_convert_game correctly normalises a mock CBBD game object"""
+    """_convert_game correctly normalizes a mock CBBD game object"""
     import cbbd_client
 
     mock_game = SimpleNamespace(
