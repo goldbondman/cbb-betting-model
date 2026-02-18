@@ -37,6 +37,12 @@ MAX_RETRIES = int(os.getenv("ESPN_MAX_RETRIES", "3"))
 RETRY_INITIAL_DELAY = float(os.getenv("ESPN_RETRY_INITIAL_DELAY", "1.0"))
 RETRY_BACKOFF = float(os.getenv("ESPN_RETRY_BACKOFF", "2.0"))
 
+# ---------------- CBBpy Integration ----------------
+# Enable CBBpy library for data fetching (provides better resilience)
+ENABLE_CBBPY = os.getenv("ENABLE_CBBPY", "1").strip().lower() in ("1", "true", "yes")
+# Fallback to direct ESPN API if CBBpy fails
+CBBPY_FALLBACK_TO_ESPN = os.getenv("CBBPY_FALLBACK_TO_ESPN", "1").strip().lower() in ("1", "true", "yes")
+
 # ---------------- Pipeline Metadata ----------------
 PARSE_VERSION = "v1.4.2"
 SOURCE_NAME = "espn"
@@ -83,6 +89,15 @@ GATE_MIN_EXPECTED_PRESENT_FINAL = float(os.getenv("GATE_MIN_EXPECTED_PRESENT_FIN
 RETRY_SUMMARY_ON_BASE_MISS = int(os.getenv("RETRY_SUMMARY_ON_BASE_MISS", "1"))
 MAX_SUMMARY_RETRIES = int(os.getenv("MAX_SUMMARY_RETRIES", "1"))
 SUMMARY_RETRY_SLEEP_SEC = float(os.getenv("SUMMARY_RETRY_SLEEP_SEC", "0.35"))
+
+# ---------------- Reconciliation & Retry Configuration ----------------
+# After PASS 1, retry failed games up to this many times with backoff
+RECONCILIATION_MAX_RETRIES = int(os.getenv("RECONCILIATION_MAX_RETRIES", "2"))
+RECONCILIATION_RETRY_DELAY = float(os.getenv("RECONCILIATION_RETRY_DELAY", "2.0"))
+# Minimum ratio of successfully processed games to total expected (0.0–1.0)
+RECONCILIATION_MIN_COMPLETION_RATE = float(os.getenv("RECONCILIATION_MIN_COMPLETION_RATE", "0.95"))
+# Set to "1" to exit non-zero if completion rate is below threshold
+RECONCILIATION_FAIL_ON_INCOMPLETE = os.getenv("RECONCILIATION_FAIL_ON_INCOMPLETE", "0").strip().lower() in ("1", "true", "yes")
 
 # ---------------- Data Quality Repair Gate (DQRG) Configuration ----------------
 DQRG_ENABLE = os.getenv("DQRG_ENABLE", "1").strip().lower() in ("1", "true", "yes")

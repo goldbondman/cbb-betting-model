@@ -44,16 +44,19 @@ College basketball prediction system using 4 ensemble models with advanced quant
 
 ## Documentation
 - **[DATA_FLOW.md](DATA_FLOW.md)** - Complete documentation of data ingestion, feature engineering, predictions, and backtesting
+- **[CBBPY_INTEGRATION.md](CBBPY_INTEGRATION.md)** - Guide to CBBpy library integration for ESPN data fetching
 - **[SPORTS_BETTING_QUANT_DOCS.md](SPORTS_BETTING_QUANT_DOCS.md)** - Comprehensive guide to new quantitative betting features
 
 ## Data Sources
 
 **Multi-Source Integration** (NEW): The system fetches data from multiple sources with automatic integrity checks and conflict resolution:
-- **ESPN API** (game results, scores, market lines)
+- **ESPN API** (game results, scores, market lines) - Now powered by **CBBpy library** for improved resilience
 - **NCAA Casablanca API** (official NCAA data)
 - **Henry API** (NCAA data proxy)
 
 The multi-source system provides redundancy and data quality assurance. See [MULTI_SOURCE_INTEGRATION.md](MULTI_SOURCE_INTEGRATION.md) for details.
+
+**CBBpy Integration**: ESPN data fetching now uses the [CBBpy library](https://github.com/dcstats/CBBpy) as the primary source with automatic fallback to direct ESPN API. This provides better resilience to ESPN API changes and reduces data gaps. See [CBBPY_INTEGRATION.md](CBBPY_INTEGRATION.md) for details.
 
 **Additional Sources**:
 - Barttorvik (efficiency metrics)

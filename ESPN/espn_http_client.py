@@ -1,8 +1,10 @@
 """
 ESPN HTTP Client
 Handles all ESPN API interactions with robust retry logic and error handling.
+Optionally uses CBBpy library for improved resilience.
 """
 
+import os
 import time
 from typing import Dict, Any, Optional
 
@@ -16,6 +18,8 @@ from espn_config import (
     MAX_RETRIES,
     RETRY_INITIAL_DELAY,
     RETRY_BACKOFF,
+    ENABLE_CBBPY,
+    CBBPY_FALLBACK_TO_ESPN,
 )
 
 
@@ -96,6 +100,7 @@ def fetch_with_retry(
 def fetch_scoreboard(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT) -> Dict[str, Any]:
     """
     Fetch scoreboard data for a specific date.
+    Uses CBBpy library if enabled, otherwise direct ESPN API.
     
     Args:
         date_yyyymmdd: Date in YYYYMMDD format (e.g., "20240115")
@@ -107,6 +112,15 @@ def fetch_scoreboard(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT) -> Dict
     Raises:
         RuntimeError: If fetch fails after retries
     """
+    # Try CBBpy first if enabled
+    if ENABLE_CBBPY:
+        try:
+            from cbbpy_client import fetch_scoreboard_with_cbbpy_fallback
+            return fetch_scoreboard_with_cbbpy_fallback(date_yyyymmdd, timeout)
+        except ImportError:
+            pass  # CBBpy not available, fall through to direct API
+    
+    # Direct ESPN API
     url = ESPN_SCOREBOARD_URL.format(date=date_yyyymmdd)
     return fetch_with_retry(url, headers=DEFAULT_HEADERS, timeout=timeout)
 
@@ -114,6 +128,7 @@ def fetch_scoreboard(date_yyyymmdd: str, timeout: int = REQUEST_TIMEOUT) -> Dict
 def fetch_summary(event_id: str, timeout: int = REQUEST_TIMEOUT) -> Dict[str, Any]:
     """
     Fetch game summary/boxscore data for a specific event.
+    Uses CBBpy library if enabled, otherwise direct ESPN API.
     
     Args:
         event_id: ESPN event ID
@@ -125,5 +140,14 @@ def fetch_summary(event_id: str, timeout: int = REQUEST_TIMEOUT) -> Dict[str, An
     Raises:
         RuntimeError: If fetch fails after retries
     """
+    # Try CBBpy first if enabled
+    if ENABLE_CBBPY:
+        try:
+            from cbbpy_client import fetch_summary_with_cbbpy_fallback
+            return fetch_summary_with_cbbpy_fallback(event_id, timeout)
+        except ImportError:
+            pass  # CBBpy not available, fall through to direct API
+    
+    # Direct ESPN API
     url = ESPN_SUMMARY_URL.format(event_id=event_id)
     return fetch_with_retry(url, headers=DEFAULT_HEADERS, timeout=timeout)
