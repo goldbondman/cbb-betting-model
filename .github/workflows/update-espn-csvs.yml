@@ -80,3 +80,20 @@ jobs:
           else
             echo "DB load succeeded."
           fi
+
+      - name: Upload ESPN CSVs to Supabase Storage
+        id: upload_espn_storage
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
+          UPLOAD_GROUP: "espn"
+          SKIP_MISSING: "1"
+        run: |
+          python upload_to_supabase_storage.py
+
+      - name: Report Storage upload result
+        if: ${{ always() }}
+        run: |
+          echo "Storage upload step outcome: ${{ steps.upload_espn_storage.outcome }}"

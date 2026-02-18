@@ -60,3 +60,49 @@ jobs:
         working-directory: ESPN
         run: |
           ls -lh CSV/ncaa_games.csv CSV/ncaa_team_game_logs.csv CSV/ncaa_player_boxscores.csv || true
+
+      - name: Install psycopg for DB operations
+        run: |
+          pip install psycopg[binary]
+
+      - name: Load NCAA CSVs to Supabase DB (raw schema)
+        id: load_ncaa_csv
+        continue-on-error: true
+        working-directory: ESPN
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          UPLOAD_GROUP: "espn"
+          DB_SCHEMA: "raw"
+          LOAD_MODE: "upsert"
+          SKIP_MISSING: "1"
+        run: |
+          set -o pipefail
+          python ../load_csv_to_db.py 2>&1 | tee /tmp/load_ncaa_csv.log
+
+      - name: Report DB load result + schema guidance
+        if: ${{ always() }}
+        run: |
+          echo "DB load step outcome: ${{ steps.load_ncaa_csv.outcome }}"
+          if [ "${{ steps.load_ncaa_csv.outcome }}" = "failure" ]; then
+            echo "DB load failed. Suggested SQL (if present in logs):"
+            awk '/\[SCHEMA_DRIFT_SQL_BEGIN\]/{flag=1;next}/\[SCHEMA_DRIFT_SQL_END\]/{flag=0}flag' /tmp/load_ncaa_csv.log || true
+          else
+            echo "DB load succeeded."
+          fi
+
+      - name: Upload NCAA CSVs to Supabase Storage
+        id: upload_ncaa_storage
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
+          UPLOAD_GROUP: "espn"
+          SKIP_MISSING: "1"
+        run: |
+          python upload_to_supabase_storage.py
+
+      - name: Report Storage upload result
+        if: ${{ always() }}
+        run: |
+          echo "Storage upload step outcome: ${{ steps.upload_ncaa_storage.outcome }}"
