@@ -20,12 +20,6 @@ def test_cbbpy_client_imports_without_cbbpy_installed():
     assert True
 
 
-def test_cbbpy_client_imports_without_cbbpy_installed():
-    """Test that cbbpy_client can be imported even if cbbpy is not installed"""
-    import cbbpy_client
-    assert True
-
-
 def test_configuration_values():
     """Test that CBBpy configuration values are read correctly"""
     import cbbpy_client
