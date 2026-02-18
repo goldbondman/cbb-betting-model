@@ -1944,8 +1944,27 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
     df["game_dt"] = pd.to_datetime(df["game_datetime_utc"], utc=True, errors="coerce")
     df = df.sort_values(["team_id", "game_dt", "event_id", "home_away"])
 
-    df_clean = df[df["data_ok"] == True].copy()
+    # Normalize data_ok to robust boolean (handles string "True"/"False", 1/0, NaN from CSV round-trip)
+    if "data_ok" not in df.columns:
+        print("[WARN] data_ok missing, defaulting all rows to data_ok=True")
+        df["data_ok"] = True
+    else:
+        df["data_ok"] = (
+            df["data_ok"]
+            .astype(str)
+            .str.strip()
+            .str.lower()
+            .map({"true": True, "false": False, "1": True, "0": False, "1.0": True, "0.0": False, "nan": False})
+            .fillna(False)
+        )
+
+    df_clean = df[df["data_ok"]].copy()
     print(f"PASS2: {len(df_clean)}/{len(df)} rows with data_ok=True")
+
+    if df_clean.empty:
+        print("[WARN] No data_ok rows available yet (likely no completed games). Exiting cleanly.")
+        write_error_summary()
+        return
 
     # PASS 3: Rolling features (all games, home/away splits)
     df_clean = _add_rolling_pack(df_clean, group_cols=["team_id"], prefix="")
