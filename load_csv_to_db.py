@@ -39,6 +39,7 @@ AUTO_ADD_COLUMN_ALLOWLIST = {
     ("raw", "espn_games"),
     ("raw", "espn_team_game_logs"),
     ("raw", "espn_team_game_features"),
+    ("raw", "espn_team_game_extras"),
     ("raw", "espn_matchups_model_ready"),
     ("raw", "espn_player_boxscores"),
     ("raw", "model_features"),
@@ -51,7 +52,7 @@ ALLOW_SCHEMA_MIGRATION = (os.getenv("ALLOW_SCHEMA_MIGRATION") or "0").strip().lo
 PACK_FEATURES_JSON = (os.getenv("PACK_FEATURES_JSON") or "1").strip().lower() in ("1", "true", "yes")
 
 PACK_FEATURES_JSON_ALLOWLIST = {
-    ("raw", table_name) for table_name in ["espn_team_game_features", "espn_matchups_model_ready"]
+    ("raw", table_name) for table_name in ["espn_team_game_features", "espn_team_game_extras", "espn_matchups_model_ready"]
 }
 
 PACK_FEATURES_BASE_COLS = {
@@ -65,6 +66,11 @@ PACK_FEATURES_BASE_COLS = {
         "pulled_at_utc",
         "source",
         "parse_version",
+    ],
+    "espn_team_game_extras": [
+        "row_hash",
+        "event_id",
+        "team_id",
     ],
     "espn_matchups_model_ready": [
         "row_hash",
@@ -90,6 +96,7 @@ FILES_ESPN = [
     ("CSV/espn_games.csv", "espn_games"),
     ("CSV/espn_team_game_logs.csv", "espn_team_game_logs"),
     ("CSV/espn_team_game_features.csv", "espn_team_game_features"),
+    ("CSV/espn_team_game_extras.csv", "espn_team_game_extras"),
     ("CSV/espn_matchups_model_ready.csv", "espn_matchups_model_ready"),
     ("CSV/espn_player_boxscores.csv", "espn_player_boxscores"),
     ("CSV/espn_teams.csv", "espn_teams"),
@@ -166,6 +173,15 @@ TABLE_SPECS = {
         "row_hash_keys": ["event_id", "team_id", "game_datetime_utc"],
         "not_null": ["row_hash", "event_id", "team_id", "game_datetime_utc", "pulled_at_utc", "source", "parse_version"],
         "dtypes": {"game_datetime_utc": "datetime", "pulled_at_utc": "datetime"},
+    },
+    "espn_team_game_extras": {
+        "required_cols": [
+            "event_id",
+            "team_id",
+        ],
+        "row_hash_keys": ["event_id", "team_id"],
+        "not_null": ["row_hash", "event_id", "team_id"],
+        "dtypes": {},
     },
     "espn_matchups_model_ready": {
         "required_cols": [

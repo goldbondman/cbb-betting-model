@@ -6,7 +6,8 @@ Modular architecture - orchestration layer only.
 Outputs:
 - espn_games.csv                     (scoreboard snapshot, one row per game, append+dedupe)
 - espn_team_game_logs.csv            (team-game rows + per-game metrics + audit, append+dedupe)
-- espn_team_game_features.csv        (pregame rolling features + opponent joins + rest/volatility/style, append+dedupe)
+- espn_team_game_features.csv        (core pregame rolling features + opponent joins + rest, append+dedupe)
+- espn_team_game_extras.csv          (weights, plus metrics, composites, rf10 trends – split from features for size, append+dedupe)
 - espn_matchups_model_ready.csv      (one row per game, home/away pregame features + labels, rebuild each run)
 - espn_feature_diagnostics.csv       (row-level diagnostics for sparse/NaN fields)
 - espn_dq_audit.csv                  (Data Quality Repair Gate audit, per-row reasons + actions)
@@ -48,6 +49,7 @@ from espn_config import (
     OUT_GAMES,
     OUT_TEAM_LOGS,
     OUT_TEAM_FEATURES,
+    OUT_TEAM_EXTRAS,
     OUT_MATCHUPS,
     OUT_DIAGNOSTICS,
     OUT_DQ_AUDIT,
@@ -75,6 +77,9 @@ from espn_config import (
     RECONCILIATION_RETRY_DELAY,
     RECONCILIATION_MIN_COMPLETION_RATE,
     RECONCILIATION_FAIL_ON_INCOMPLETE,
+
+    # Extras column classification
+    is_extras_column,
 )
 
 # ---- Data Utilities ----
@@ -666,14 +671,29 @@ def run_pipeline(days_back: int = DEFAULT_DAYS_BACK):
             f"below gate {GATE_MIN_EXPECTED_PRESENT_FINAL*100:.2f}%"
         )
 
-    # Write features CSV
+    # Write features CSV (split core vs extras)
+    df_all = df_clean.drop(columns=["game_dt"], errors="ignore")
+    extras_cols = [c for c in df_all.columns if is_extras_column(c)]
+    core_cols = [c for c in df_all.columns if c not in extras_cols]
+
     df_features = _append_dedupe_write(
         OUT_TEAM_FEATURES,
-        df_clean.drop(columns=["game_dt"], errors="ignore"),
+        df_all[core_cols],
         subset_keys=["event_id", "team_id"],
         sort_cols=["game_datetime_utc", "event_id", "team_id", "home_away"],
     )
-    print(f"{OUT_TEAM_FEATURES} total rows: {len(df_features)}")
+    print(f"{OUT_TEAM_FEATURES} total rows: {len(df_features)} cols: {len(core_cols)}")
+
+    # Write extras CSV (weights, plus metrics, composites, rf10 trends, etc.)
+    if extras_cols:
+        extras_keep = ["event_id", "team_id"] + extras_cols
+        _append_dedupe_write(
+            OUT_TEAM_EXTRAS,
+            df_all[[c for c in extras_keep if c in df_all.columns]],
+            subset_keys=["event_id", "team_id"],
+            sort_cols=["event_id", "team_id"],
+        )
+        print(f"{OUT_TEAM_EXTRAS} written: {len(extras_cols)} extra columns")
 
     # ========================================================================
     # Building Matchups

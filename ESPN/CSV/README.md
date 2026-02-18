@@ -39,10 +39,16 @@ Player-level box score data for each game.
 ### Feature Files
 
 #### `espn_team_game_features.csv`
-Pregame rolling features for prediction models.
+Pregame rolling features for prediction models (core columns only).
 - **Source**: Computed from espn_team_game_logs.csv
 - **Purpose**: Leak-free features for model training
-- **Features include**: Rolling averages, opponent-adjusted stats, rest days, volatility metrics
+- **Features include**: Rolling averages (l3/l7/season), opponent-adjusted stats, rest days, differentials, defensive allowed/forced, expected margin, style distance
+
+#### `espn_team_game_extras.csv`
+Supplementary analytics columns split out from the features CSV to reduce file size.
+- **Source**: Computed alongside espn_team_game_features.csv
+- **Join keys**: event_id, team_id (join back to features CSV when needed)
+- **Columns include**: Game weights (w_*), plus metrics, composite ratings (pwr, triangle, moi), vs-expectation scores (gps, net_over_exp), volatility composites, edge metrics, rf10 rolling trend signals
 
 #### `espn_matchups_model_ready.csv`
 Model-ready matchup data with home/away features.

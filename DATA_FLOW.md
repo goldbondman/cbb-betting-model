@@ -120,7 +120,8 @@ def _atomic_csv_write(df: pd.DataFrame, path: Path):
 **Output Files:**
 - `ESPN/CSV/espn_games.csv` - Game-level data with market lines
 - `ESPN/CSV/espn_team_game_logs.csv` - Team box scores and per-game metrics
-- `ESPN/CSV/espn_team_game_features.csv` - Pregame rolling features
+- `ESPN/CSV/espn_team_game_features.csv` - Core pregame rolling features (model inputs)
+- `ESPN/CSV/espn_team_game_extras.csv` - Supplementary analytics (weights, composites, rf10 trends)
 - `ESPN/CSV/espn_matchups_model_ready.csv` - Model-ready matchups (home/away features)
 - `ESPN/CSV/espn_player_boxscores.csv` - Player-level statistics
 - `ESPN/CSV/espn_injuries.csv` - Player injury reports (status, type, return date)
@@ -839,7 +840,7 @@ CREATE TABLE dq_audit (
    ↓ (scripts/refresh_sources.py or espn_boxscore_builder_modular.py)
 2. CSV Files (ESPN/CSV/*.csv)
    ↓ (Feature engineering passes)
-3. Feature Store (espn_team_game_features.csv)
+3. Feature Store (espn_team_game_features.csv + espn_team_game_extras.csv)
    ↓ (ml/train_ml_models.py - periodic)
 4. Trained Models (ml/models/*.json)
    ↓ (ml/predict_ml.py)
