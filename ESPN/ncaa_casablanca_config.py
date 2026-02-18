@@ -5,6 +5,10 @@ Configuration for NCAA's unofficial but widely used Casablanca JSON API.
 
 import os
 
+# Base directory for NCAA pipeline files (stable regardless of current working directory)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_DIR = os.path.join(BASE_DIR, "CSV")
+
 # ---------------- API Endpoints ----------------
 # NCAA API proxy (https://ncaa-api.henrygd.me/openapi)
 # Uses the same path as ncaa.com URLs.
@@ -37,9 +41,9 @@ SOURCE_NAME = "ncaa_casablanca"
 
 # ---------------- Output File Paths ----------------
 # Store CSVs in the ESPN folder as requested
-OUT_NCAA_GAMES = "CSV/ncaa_games.csv"
-OUT_NCAA_TEAM_LOGS = "CSV/ncaa_team_game_logs.csv"
-OUT_NCAA_PLAYER_BOX = "CSV/ncaa_player_boxscores.csv"
+OUT_NCAA_GAMES = os.path.join(CSV_DIR, "ncaa_games.csv")
+OUT_NCAA_TEAM_LOGS = os.path.join(CSV_DIR, "ncaa_team_game_logs.csv")
+OUT_NCAA_PLAYER_BOX = os.path.join(CSV_DIR, "ncaa_player_boxscores.csv")
 
 # ---------------- CSV Column Definitions ----------------
 CSV_SCHEMAS = {

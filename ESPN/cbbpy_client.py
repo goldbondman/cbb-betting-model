@@ -215,52 +215,25 @@ def fetch_scoreboard_cbbpy(date_yyyymmdd: str) -> Optional[Dict[str, Any]]:
     """
     Fetch scoreboard data using CBBpy library.
     
+    Note: CBBpy scoreboard scraping returns only game IDs, not the full
+    competition/status/score data that the ESPN API provides. The downstream
+    parser (parse_scoreboard_event) requires the full ESPN API format,
+    so CBBpy should NOT be used for scoreboard fetches. Always return None
+    to fall through to the direct ESPN API.
+    
     Args:
         date_yyyymmdd: Date in YYYYMMDD format
         
     Returns:
-        ESPN-compatible scoreboard data or None if fetch fails
+        None – always defers to the direct ESPN API for scoreboard data
     """
-    if not ENABLE_CBBPY:
-        return None
-    
-    try:
-        import cbbpy.mens_scraper as scraper
-        
-        # Convert YYYYMMDD to MM-DD-YYYY for CBBpy
-        year = date_yyyymmdd[:4]
-        month = date_yyyymmdd[4:6]
-        day = date_yyyymmdd[6:8]
-        date_cbbpy = f"{month}-{day}-{year}"
-        
-        logger.info(f"Fetching scoreboard for {date_cbbpy} via CBBpy")
-        
-        # Get game IDs for the date
-        game_ids = scraper.get_game_ids(date_cbbpy)
-        
-        if not game_ids:
-            logger.info(f"No games found for {date_cbbpy} via CBBpy")
-            return {"events": []}
-        
-        logger.info(f"Found {len(game_ids)} games for {date_cbbpy} via CBBpy")
-        
-        # For scoreboard, we just need the game IDs
-        # The actual game details will be fetched via fetch_summary
-        events = []
-        for game_id in game_ids:
-            events.append({
-                "id": str(game_id),
-                "date": date_cbbpy
-            })
-        
-        return {"events": events}
-        
-    except ImportError:
-        logger.warning("CBBpy not installed, falling back to direct ESPN API")
-        return None
-    except Exception as e:
-        logger.error(f"CBBpy scoreboard fetch failed for {date_yyyymmdd}: {e}")
-        return None
+    # CBBpy's scoreboard scraper (get_game_ids) only returns game IDs via
+    # HTML scraping with a fixed seasontype=2 URL.  The minimal event dicts
+    # it produces ({id, date}) lack the competitions/status/score structure
+    # that parse_scoreboard_event() requires, so every event silently fails
+    # to parse.  Returning None here ensures the caller falls back to the
+    # direct ESPN JSON API which returns the full payload.
+    return None
 
 
 def fetch_summary_with_cbbpy_fallback(event_id: str, timeout: int = 25) -> Dict[str, Any]:
@@ -286,10 +259,14 @@ def fetch_summary_with_cbbpy_fallback(event_id: str, timeout: int = 25) -> Dict[
         if not CBBPY_FALLBACK_TO_ESPN:
             raise RuntimeError(f"CBBpy fetch failed for game {event_id} and fallback is disabled")
     
-    # Fall back to direct ESPN API
+    # Fall back to direct ESPN API (call fetch_with_retry directly to
+    # avoid infinite recursion through espn_http_client.fetch_summary
+    # which would re-enter this function when ENABLE_CBBPY is True).
     logger.info(f"Falling back to direct ESPN API for game {event_id}")
-    from espn_http_client import fetch_summary
-    return fetch_summary(event_id, timeout)
+    from espn_config import ESPN_SUMMARY_URL, DEFAULT_HEADERS as ESPN_HEADERS
+    from espn_http_client import fetch_with_retry
+    url = ESPN_SUMMARY_URL.format(event_id=event_id)
+    return fetch_with_retry(url, headers=ESPN_HEADERS, timeout=timeout)
 
 
 def fetch_scoreboard_with_cbbpy_fallback(date_yyyymmdd: str, timeout: int = 25) -> Dict[str, Any]:
@@ -315,7 +292,11 @@ def fetch_scoreboard_with_cbbpy_fallback(date_yyyymmdd: str, timeout: int = 25) 
         if not CBBPY_FALLBACK_TO_ESPN:
             raise RuntimeError(f"CBBpy scoreboard fetch failed for {date_yyyymmdd} and fallback is disabled")
     
-    # Fall back to direct ESPN API
+    # Fall back to direct ESPN API (call fetch_with_retry directly to
+    # avoid infinite recursion through espn_http_client.fetch_scoreboard
+    # which would re-enter this function when ENABLE_CBBPY is True).
     logger.info(f"Falling back to direct ESPN API for scoreboard {date_yyyymmdd}")
-    from espn_http_client import fetch_scoreboard
-    return fetch_scoreboard(date_yyyymmdd, timeout)
+    from espn_config import ESPN_SCOREBOARD_URL, DEFAULT_HEADERS as ESPN_HEADERS
+    from espn_http_client import fetch_with_retry
+    url = ESPN_SCOREBOARD_URL.format(date=date_yyyymmdd)
+    return fetch_with_retry(url, headers=ESPN_HEADERS, timeout=timeout)
