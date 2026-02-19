@@ -43,6 +43,7 @@ College basketball prediction system using 4 ensemble models with advanced quant
 - Educational content and best practices
 
 ## Documentation
+- **[MODEL_DETAILS.md](MODEL_DETAILS.md)** - Full details on every model in the system (algorithms, features, parameters, outputs)
 - **[DATA_FLOW.md](DATA_FLOW.md)** - Complete documentation of data ingestion, feature engineering, predictions, and backtesting
 - **[CBBPY_INTEGRATION.md](CBBPY_INTEGRATION.md)** - Guide to CBBpy library integration for ESPN data fetching
 - **[SPORTS_BETTING_QUANT_DOCS.md](SPORTS_BETTING_QUANT_DOCS.md)** - Comprehensive guide to new quantitative betting features
