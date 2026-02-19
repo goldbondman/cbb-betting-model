@@ -241,6 +241,8 @@ def add_unweighted_rollups(
         out = pd.concat([out, pd.DataFrame(new_cols, index=out.index)], axis=1)
 
     out = out.drop(columns=["_ord"], errors="ignore")
+    # Defragment after column-by-column additions to silence PerformanceWarning
+    out = out.copy()
     return out
 
 
@@ -449,6 +451,8 @@ def add_weighted_rollups(
         out = pd.concat([out, pd.DataFrame(new_cols, index=out.index)], axis=1)
 
     out = out.drop(columns=["_ord"], errors="ignore")
+    # Defragment after column-by-column additions to silence PerformanceWarning
+    out = out.copy()
     return out
 
 
