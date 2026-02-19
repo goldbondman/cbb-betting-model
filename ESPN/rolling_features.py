@@ -115,31 +115,34 @@ def add_unweighted_rollups(
     out = out.sort_values(list(cfg.group_cols) + ["_ord"])
     g = out.groupby(list(cfg.group_cols), sort=False)
 
+    # Collect all new columns in a dict to avoid DataFrame fragmentation
+    new_cols: Dict[str, pd.Series] = {}
+
     # base mean/std
     for m in metrics:
-        out[f"{cfg.prefix}{m}_pre"] = (
+        new_cols[f"{cfg.prefix}{m}_pre"] = (
             g[m]
             .apply(lambda x: x.shift(cfg.shift).rolling(cfg.window, min_periods=cfg.min_periods_mean).mean())
             .reset_index(level=list(cfg.group_cols), drop=True)
         )
-        out[f"{cfg.prefix}{m}_std_pre"] = (
+        new_cols[f"{cfg.prefix}{m}_std_pre"] = (
             g[m]
             .apply(lambda x: x.shift(cfg.shift).rolling(cfg.window, min_periods=cfg.min_periods_std).std(ddof=cfg.ddof))
             .reset_index(level=list(cfg.group_cols), drop=True)
         )
 
         if include_minmax:
-            out[f"{cfg.prefix}{m}_min_pre"] = (
+            new_cols[f"{cfg.prefix}{m}_min_pre"] = (
                 g[m]
                 .apply(lambda x: x.shift(cfg.shift).rolling(cfg.window, min_periods=cfg.min_periods_mean).min())
                 .reset_index(level=list(cfg.group_cols), drop=True)
             )
-            out[f"{cfg.prefix}{m}_max_pre"] = (
+            new_cols[f"{cfg.prefix}{m}_max_pre"] = (
                 g[m]
                 .apply(lambda x: x.shift(cfg.shift).rolling(cfg.window, min_periods=cfg.min_periods_mean).max())
                 .reset_index(level=list(cfg.group_cols), drop=True)
             )
-            out[f"{cfg.prefix}{m}_range_pre"] = out[f"{cfg.prefix}{m}_max_pre"] - out[f"{cfg.prefix}{m}_min_pre"]
+            new_cols[f"{cfg.prefix}{m}_range_pre"] = new_cols[f"{cfg.prefix}{m}_max_pre"] - new_cols[f"{cfg.prefix}{m}_min_pre"]
 
         if include_iqr:
             def _iqr(x: pd.Series) -> float:
@@ -148,7 +151,7 @@ def add_unweighted_rollups(
                     return np.nan
                 return float(np.nanpercentile(arr, 75) - np.nanpercentile(arr, 25))
 
-            out[f"{cfg.prefix}{m}_iqr_pre"] = (
+            new_cols[f"{cfg.prefix}{m}_iqr_pre"] = (
                 g[m]
                 .apply(
                     lambda x: x.shift(cfg.shift)
@@ -166,7 +169,7 @@ def add_unweighted_rollups(
                     if arr.size == 0:
                         return np.nan
                     return float(np.nanpercentile(arr, q * 100))
-                out[f"{cfg.prefix}{m}_p{qn}_pre"] = (
+                new_cols[f"{cfg.prefix}{m}_p{qn}_pre"] = (
                     g[m]
                     .apply(
                         lambda x: x.shift(cfg.shift)
@@ -190,7 +193,7 @@ def add_unweighted_rollups(
                     return np.nan
                 return float(np.sum(t * y) / denom)
 
-            out[f"{cfg.prefix}{m}_slope_pre"] = (
+            new_cols[f"{cfg.prefix}{m}_slope_pre"] = (
                 g[m]
                 .apply(
                     lambda x: x.shift(cfg.shift)
@@ -223,7 +226,7 @@ def add_unweighted_rollups(
                     return np.nan
                 return float(np.nanmean(last) - np.nanmean(prev))
 
-            out[f"{cfg.prefix}{m}_shift_pre"] = (
+            new_cols[f"{cfg.prefix}{m}_shift_pre"] = (
                 g[m]
                 .apply(
                     lambda x: x.shift(cfg.shift)
@@ -232,6 +235,10 @@ def add_unweighted_rollups(
                 )
                 .reset_index(level=list(cfg.group_cols), drop=True)
             )
+
+    # Add all new columns at once to avoid DataFrame fragmentation
+    if new_cols:
+        out = pd.concat([out, pd.DataFrame(new_cols, index=out.index)], axis=1)
 
     out = out.drop(columns=["_ord"], errors="ignore")
     return out
@@ -344,21 +351,24 @@ def add_weighted_rollups(
             return np.nan
         return xs.rolling(cfg.window, min_periods=cfg.min_periods_mean).apply(_f, raw=False)
 
+    # Collect all new columns in a dict to avoid DataFrame fragmentation
+    new_cols: Dict[str, pd.Series] = {}
+
     for m in metrics:
         s = g[m]
         w = g[weight_col]
 
-        out[f"{cfg.prefix}{m}_wmean_pre"] = (
+        new_cols[f"{cfg.prefix}{m}_wmean_pre"] = (
             pd.concat([_roll_apply_weighted_std(s.get_group(k), w.get_group(k), "mean") for k in s.groups], axis=0)
             .reindex(out.index)
         )
 
-        out[f"{cfg.prefix}{m}_wstd_pre"] = (
+        new_cols[f"{cfg.prefix}{m}_wstd_pre"] = (
             pd.concat([_roll_apply_weighted_std(s.get_group(k), w.get_group(k), "std") for k in s.groups], axis=0)
             .reindex(out.index)
         )
 
-        out[f"{cfg.prefix}{m}_neff_pre"] = (
+        new_cols[f"{cfg.prefix}{m}_neff_pre"] = (
             pd.concat([_roll_apply_weighted_std(s.get_group(k), w.get_group(k), "neff") for k in s.groups], axis=0)
             .reindex(out.index)
         )
@@ -370,7 +380,7 @@ def add_weighted_rollups(
                 def _qfunc(v, ww, q=q):
                     return _weighted_percentile(v, ww, q)
 
-                out[f"{cfg.prefix}{m}_wp{qn}_pre"] = (
+                new_cols[f"{cfg.prefix}{m}_wp{qn}_pre"] = (
                     pd.concat([
                         _roll_apply_weighted(s.get_group(k), w.get_group(k), lambda v, ww, q=q: _weighted_percentile(v, ww, q))
                         for k in s.groups
@@ -397,7 +407,7 @@ def add_weighted_rollups(
                     return np.nan
                 return float(cov / var)
 
-            out[f"{cfg.prefix}{m}_wslope_pre"] = (
+            new_cols[f"{cfg.prefix}{m}_wslope_pre"] = (
                 pd.concat([
                     _roll_apply_weighted(s.get_group(k), w.get_group(k), _wslope)
                     for k in s.groups
@@ -427,12 +437,16 @@ def add_weighted_rollups(
                 last_mu, _, _ = _weighted_mean_std(last_y, last_w)
                 return float(last_mu - prev_mu)
 
-            out[f"{cfg.prefix}{m}_wshift_pre"] = (
+            new_cols[f"{cfg.prefix}{m}_wshift_pre"] = (
                 pd.concat([
                     _roll_apply_weighted(s.get_group(k), w.get_group(k), _wshift)
                     for k in s.groups
                 ], axis=0).reindex(out.index)
             )
+
+    # Add all new columns at once to avoid DataFrame fragmentation
+    if new_cols:
+        out = pd.concat([out, pd.DataFrame(new_cols, index=out.index)], axis=1)
 
     out = out.drop(columns=["_ord"], errors="ignore")
     return out
