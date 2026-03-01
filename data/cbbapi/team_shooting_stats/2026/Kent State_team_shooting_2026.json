@@ -4,53 +4,53 @@
     "teamId": 134,
     "team": "Kent State",
     "conference": "MAC",
-    "trackedShots": 1376,
+    "trackedShots": 1781,
     "freeThrowRate": 42.7,
-    "assistedPct": 27.1,
+    "assistedPct": 26.3,
     "dunks": {
-      "attempted": 50,
-      "made": 44,
-      "pct": 88,
-      "assisted": 37,
-      "assistedPct": 84.1
+      "attempted": 58,
+      "made": 50,
+      "pct": 86.2,
+      "assisted": 41,
+      "assistedPct": 82
     },
     "layups": {
-      "attempted": 445,
-      "made": 270,
-      "pct": 60.7,
-      "assisted": 138,
-      "assistedPct": 51.1
+      "attempted": 573,
+      "made": 329,
+      "pct": 57.4,
+      "assisted": 165,
+      "assistedPct": 50.2
     },
     "tipIns": {
-      "attempted": 44,
-      "made": 30,
-      "pct": 68.2
+      "attempted": 53,
+      "made": 37,
+      "pct": 69.8
     },
     "twoPointJumpers": {
-      "attempted": 232,
-      "made": 81,
-      "pct": 34.9,
-      "assisted": 15,
-      "assistedPct": 18.5
+      "attempted": 302,
+      "made": 113,
+      "pct": 37.4,
+      "assisted": 24,
+      "assistedPct": 21.2
     },
     "threePointJumpers": {
-      "attempted": 605,
-      "made": 212,
-      "pct": 35,
-      "assisted": 183,
-      "assistedPct": 86.3
+      "attempted": 795,
+      "made": 282,
+      "pct": 35.5,
+      "assisted": 238,
+      "assistedPct": 84.4
     },
     "freeThrows": {
-      "attempted": 587,
-      "made": 439,
-      "pct": 74.8
+      "attempted": 761,
+      "made": 562,
+      "pct": 73.9
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 32.3,
-      "tipIns": 3.2,
-      "twoPointJumpers": 16.9,
-      "threePointJumpers": 44
+      "dunks": 3.3,
+      "layups": 32.2,
+      "tipIns": 3,
+      "twoPointJumpers": 17,
+      "threePointJumpers": 44.6
     }
   }
 ]

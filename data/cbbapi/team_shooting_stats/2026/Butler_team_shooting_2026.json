@@ -4,53 +4,53 @@
     "teamId": 34,
     "team": "Butler",
     "conference": "Big East",
-    "trackedShots": 1329,
-    "freeThrowRate": 43.6,
-    "assistedPct": 25.5,
+    "trackedShots": 1739,
+    "freeThrowRate": 43.1,
+    "assistedPct": 25.1,
     "dunks": {
-      "attempted": 108,
-      "made": 95,
-      "pct": 88,
-      "assisted": 75,
-      "assistedPct": 78.9
+      "attempted": 137,
+      "made": 122,
+      "pct": 89.1,
+      "assisted": 97,
+      "assistedPct": 79.5
     },
     "layups": {
-      "attempted": 465,
-      "made": 242,
-      "pct": 52,
-      "assisted": 88,
-      "assistedPct": 36.4
+      "attempted": 616,
+      "made": 313,
+      "pct": 50.8,
+      "assisted": 119,
+      "assistedPct": 38
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 19,
-      "pct": 63.3
+      "attempted": 42,
+      "made": 23,
+      "pct": 54.8
     },
     "twoPointJumpers": {
-      "attempted": 239,
-      "made": 91,
-      "pct": 38.1,
-      "assisted": 27,
-      "assistedPct": 29.7
+      "attempted": 331,
+      "made": 127,
+      "pct": 38.4,
+      "assisted": 41,
+      "assistedPct": 32.3
     },
     "threePointJumpers": {
-      "attempted": 487,
-      "made": 167,
-      "pct": 34.3,
-      "assisted": 149,
-      "assistedPct": 89.2
+      "attempted": 613,
+      "made": 205,
+      "pct": 33.4,
+      "assisted": 179,
+      "assistedPct": 87.3
     },
     "freeThrows": {
-      "attempted": 579,
-      "made": 410,
-      "pct": 70.8
+      "attempted": 750,
+      "made": 534,
+      "pct": 71.2
     },
     "attemptsBreakdown": {
-      "dunks": 8.1,
-      "layups": 35,
-      "tipIns": 2.3,
-      "twoPointJumpers": 18,
-      "threePointJumpers": 36.6
+      "dunks": 7.9,
+      "layups": 35.4,
+      "tipIns": 2.4,
+      "twoPointJumpers": 19,
+      "threePointJumpers": 35.3
     }
   }
 ]

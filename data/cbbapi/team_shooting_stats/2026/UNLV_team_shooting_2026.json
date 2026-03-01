@@ -4,53 +4,53 @@
     "teamId": 322,
     "team": "UNLV",
     "conference": "Mountain West",
-    "trackedShots": 1240,
-    "freeThrowRate": 42.7,
-    "assistedPct": 23.7,
+    "trackedShots": 1720,
+    "freeThrowRate": 41.3,
+    "assistedPct": 23.5,
     "dunks": {
-      "attempted": 87,
-      "made": 80,
-      "pct": 92,
-      "assisted": 64,
-      "assistedPct": 80
+      "attempted": 113,
+      "made": 99,
+      "pct": 87.6,
+      "assisted": 81,
+      "assistedPct": 81.8
     },
     "layups": {
-      "attempted": 417,
-      "made": 222,
-      "pct": 53.2,
-      "assisted": 83,
-      "assistedPct": 37.4
+      "attempted": 565,
+      "made": 306,
+      "pct": 54.2,
+      "assisted": 111,
+      "assistedPct": 36.3
     },
     "tipIns": {
-      "attempted": 43,
-      "made": 26,
-      "pct": 60.5
+      "attempted": 54,
+      "made": 32,
+      "pct": 59.3
     },
     "twoPointJumpers": {
-      "attempted": 259,
-      "made": 102,
-      "pct": 39.4,
-      "assisted": 27,
-      "assistedPct": 26.5
+      "attempted": 383,
+      "made": 162,
+      "pct": 42.3,
+      "assisted": 36,
+      "assistedPct": 22.2
     },
     "threePointJumpers": {
-      "attempted": 434,
-      "made": 138,
-      "pct": 31.8,
-      "assisted": 120,
-      "assistedPct": 87
+      "attempted": 605,
+      "made": 207,
+      "pct": 34.2,
+      "assisted": 176,
+      "assistedPct": 85
     },
     "freeThrows": {
-      "attempted": 529,
-      "made": 362,
-      "pct": 68.4
+      "attempted": 711,
+      "made": 490,
+      "pct": 68.9
     },
     "attemptsBreakdown": {
-      "dunks": 7,
-      "layups": 33.6,
-      "tipIns": 3.5,
-      "twoPointJumpers": 20.9,
-      "threePointJumpers": 35
+      "dunks": 6.6,
+      "layups": 32.8,
+      "tipIns": 3.1,
+      "twoPointJumpers": 22.3,
+      "threePointJumpers": 35.2
     }
   }
 ]

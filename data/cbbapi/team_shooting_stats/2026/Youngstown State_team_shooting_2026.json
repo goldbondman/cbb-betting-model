@@ -4,53 +4,53 @@
     "teamId": 361,
     "team": "Youngstown State",
     "conference": "Horizon",
-    "trackedShots": 1374,
-    "freeThrowRate": 32.6,
-    "assistedPct": 24,
+    "trackedShots": 1823,
+    "freeThrowRate": 31.8,
+    "assistedPct": 25.1,
     "dunks": {
-      "attempted": 66,
-      "made": 59,
-      "pct": 89.4,
-      "assisted": 41,
-      "assistedPct": 69.5
+      "attempted": 92,
+      "made": 82,
+      "pct": 89.1,
+      "assisted": 61,
+      "assistedPct": 74.4
     },
     "layups": {
-      "attempted": 419,
-      "made": 251,
-      "pct": 59.9,
-      "assisted": 73,
-      "assistedPct": 29.1
+      "attempted": 584,
+      "made": 353,
+      "pct": 60.4,
+      "assisted": 109,
+      "assistedPct": 30.9
     },
     "tipIns": {
-      "attempted": 51,
-      "made": 28,
-      "pct": 54.9
+      "attempted": 58,
+      "made": 34,
+      "pct": 58.6
     },
     "twoPointJumpers": {
-      "attempted": 148,
-      "made": 53,
-      "pct": 35.8,
-      "assisted": 11,
-      "assistedPct": 20.8
+      "attempted": 197,
+      "made": 70,
+      "pct": 35.5,
+      "assisted": 17,
+      "assistedPct": 24.3
     },
     "threePointJumpers": {
-      "attempted": 690,
-      "made": 240,
-      "pct": 34.8,
-      "assisted": 205,
-      "assistedPct": 85.4
+      "attempted": 892,
+      "made": 312,
+      "pct": 35,
+      "assisted": 271,
+      "assistedPct": 86.9
     },
     "freeThrows": {
-      "attempted": 448,
-      "made": 330,
-      "pct": 73.7
+      "attempted": 580,
+      "made": 428,
+      "pct": 73.8
     },
     "attemptsBreakdown": {
-      "dunks": 4.8,
-      "layups": 30.5,
-      "tipIns": 3.7,
+      "dunks": 5,
+      "layups": 32,
+      "tipIns": 3.2,
       "twoPointJumpers": 10.8,
-      "threePointJumpers": 50.2
+      "threePointJumpers": 48.9
     }
   }
 ]

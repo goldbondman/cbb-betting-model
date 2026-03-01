@@ -4,53 +4,53 @@
     "teamId": 194,
     "team": "Niagara",
     "conference": "MAAC",
-    "trackedShots": 1192,
-    "freeThrowRate": 24.7,
-    "assistedPct": 25,
+    "trackedShots": 1545,
+    "freeThrowRate": 25.6,
+    "assistedPct": 26.1,
     "dunks": {
-      "attempted": 31,
-      "made": 24,
-      "pct": 77.4,
-      "assisted": 20,
-      "assistedPct": 83.3
+      "attempted": 52,
+      "made": 43,
+      "pct": 82.7,
+      "assisted": 37,
+      "assistedPct": 86
     },
     "layups": {
-      "attempted": 485,
-      "made": 252,
-      "pct": 52,
-      "assisted": 119,
-      "assistedPct": 47.2
+      "attempted": 603,
+      "made": 320,
+      "pct": 53.1,
+      "assisted": 157,
+      "assistedPct": 49.1
     },
     "tipIns": {
-      "attempted": 20,
-      "made": 14,
-      "pct": 70
+      "attempted": 24,
+      "made": 16,
+      "pct": 66.7
     },
     "twoPointJumpers": {
-      "attempted": 184,
-      "made": 66,
-      "pct": 35.9,
-      "assisted": 23,
-      "assistedPct": 34.8
+      "attempted": 246,
+      "made": 95,
+      "pct": 38.6,
+      "assisted": 29,
+      "assistedPct": 30.5
     },
     "threePointJumpers": {
-      "attempted": 472,
-      "made": 156,
-      "pct": 33.1,
-      "assisted": 136,
-      "assistedPct": 87.2
+      "attempted": 620,
+      "made": 206,
+      "pct": 33.2,
+      "assisted": 181,
+      "assistedPct": 87.9
     },
     "freeThrows": {
-      "attempted": 295,
-      "made": 208,
-      "pct": 70.5
+      "attempted": 396,
+      "made": 284,
+      "pct": 71.7
     },
     "attemptsBreakdown": {
-      "dunks": 2.6,
-      "layups": 40.7,
-      "tipIns": 1.7,
-      "twoPointJumpers": 15.4,
-      "threePointJumpers": 39.6
+      "dunks": 3.4,
+      "layups": 39,
+      "tipIns": 1.6,
+      "twoPointJumpers": 15.9,
+      "threePointJumpers": 40.1
     }
   }
 ]

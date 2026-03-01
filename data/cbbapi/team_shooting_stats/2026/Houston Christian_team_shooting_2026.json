@@ -4,53 +4,53 @@
     "teamId": 112,
     "team": "Houston Christian",
     "conference": "Southland",
-    "trackedShots": 1239,
-    "freeThrowRate": 37.7,
-    "assistedPct": 26.7,
+    "trackedShots": 1620,
+    "freeThrowRate": 36,
+    "assistedPct": 25.6,
     "dunks": {
-      "attempted": 60,
-      "made": 51,
-      "pct": 85,
-      "assisted": 38,
-      "assistedPct": 74.5
+      "attempted": 78,
+      "made": 64,
+      "pct": 82.1,
+      "assisted": 50,
+      "assistedPct": 78.1
     },
     "layups": {
-      "attempted": 455,
-      "made": 253,
-      "pct": 55.6,
-      "assisted": 129,
-      "assistedPct": 51
+      "attempted": 573,
+      "made": 310,
+      "pct": 54.1,
+      "assisted": 167,
+      "assistedPct": 53.9
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 17,
-      "pct": 53.1
+      "attempted": 56,
+      "made": 36,
+      "pct": 64.3
     },
     "twoPointJumpers": {
-      "attempted": 229,
-      "made": 79,
-      "pct": 34.5,
-      "assisted": 30,
-      "assistedPct": 38
+      "attempted": 326,
+      "made": 119,
+      "pct": 36.5,
+      "assisted": 42,
+      "assistedPct": 35.3
     },
     "threePointJumpers": {
-      "attempted": 463,
-      "made": 154,
-      "pct": 33.3,
-      "assisted": 134,
-      "assistedPct": 87
+      "attempted": 587,
+      "made": 182,
+      "pct": 31,
+      "assisted": 156,
+      "assistedPct": 85.7
     },
     "freeThrows": {
-      "attempted": 467,
-      "made": 323,
-      "pct": 69.2
+      "attempted": 583,
+      "made": 408,
+      "pct": 70
     },
     "attemptsBreakdown": {
       "dunks": 4.8,
-      "layups": 36.7,
-      "tipIns": 2.6,
-      "twoPointJumpers": 18.5,
-      "threePointJumpers": 37.4
+      "layups": 35.4,
+      "tipIns": 3.5,
+      "twoPointJumpers": 20.1,
+      "threePointJumpers": 36.2
     }
   }
 ]

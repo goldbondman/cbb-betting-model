@@ -4,53 +4,53 @@
     "teamId": 100,
     "team": "Georgia State",
     "conference": "Sun Belt",
-    "trackedShots": 1356,
-    "freeThrowRate": 36,
-    "assistedPct": 20.1,
+    "trackedShots": 1837,
+    "freeThrowRate": 36.5,
+    "assistedPct": 19.5,
     "dunks": {
-      "attempted": 30,
-      "made": 20,
-      "pct": 66.7,
-      "assisted": 9,
-      "assistedPct": 45
+      "attempted": 43,
+      "made": 32,
+      "pct": 74.4,
+      "assisted": 18,
+      "assistedPct": 56.3
     },
     "layups": {
-      "attempted": 299,
-      "made": 147,
-      "pct": 49.2,
-      "assisted": 41,
-      "assistedPct": 27.9
+      "attempted": 423,
+      "made": 203,
+      "pct": 48,
+      "assisted": 60,
+      "assistedPct": 29.6
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 23,
-      "pct": 71.9
+      "attempted": 50,
+      "made": 29,
+      "pct": 58
     },
     "twoPointJumpers": {
-      "attempted": 353,
-      "made": 119,
-      "pct": 33.7,
-      "assisted": 46,
-      "assistedPct": 38.7
+      "attempted": 521,
+      "made": 180,
+      "pct": 34.5,
+      "assisted": 63,
+      "assistedPct": 35
     },
     "threePointJumpers": {
-      "attempted": 642,
-      "made": 209,
-      "pct": 32.6,
-      "assisted": 176,
-      "assistedPct": 84.2
+      "attempted": 800,
+      "made": 255,
+      "pct": 31.9,
+      "assisted": 217,
+      "assistedPct": 85.1
     },
     "freeThrows": {
-      "attempted": 488,
-      "made": 387,
-      "pct": 79.3
+      "attempted": 670,
+      "made": 525,
+      "pct": 78.4
     },
     "attemptsBreakdown": {
-      "dunks": 2.2,
-      "layups": 22.1,
-      "tipIns": 2.4,
-      "twoPointJumpers": 26,
-      "threePointJumpers": 47.3
+      "dunks": 2.3,
+      "layups": 23,
+      "tipIns": 2.7,
+      "twoPointJumpers": 28.4,
+      "threePointJumpers": 43.5
     }
   }
 ]

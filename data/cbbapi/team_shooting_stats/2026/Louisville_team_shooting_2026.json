@@ -4,53 +4,53 @@
     "teamId": 150,
     "team": "Louisville",
     "conference": "ACC",
-    "trackedShots": 1256,
-    "freeThrowRate": 33.8,
-    "assistedPct": 27.1,
+    "trackedShots": 1737,
+    "freeThrowRate": 33.3,
+    "assistedPct": 27.2,
     "dunks": {
-      "attempted": 79,
-      "made": 69,
-      "pct": 87.3,
-      "assisted": 50,
-      "assistedPct": 72.5
+      "attempted": 107,
+      "made": 93,
+      "pct": 86.9,
+      "assisted": 72,
+      "assistedPct": 77.4
     },
     "layups": {
-      "attempted": 360,
-      "made": 218,
-      "pct": 60.6,
-      "assisted": 95,
-      "assistedPct": 43.6
+      "attempted": 508,
+      "made": 303,
+      "pct": 59.6,
+      "assisted": 129,
+      "assistedPct": 42.6
     },
     "tipIns": {
-      "attempted": 26,
-      "made": 18,
-      "pct": 69.2
+      "attempted": 35,
+      "made": 25,
+      "pct": 71.4
     },
     "twoPointJumpers": {
-      "attempted": 110,
-      "made": 42,
-      "pct": 38.2,
-      "assisted": 6,
-      "assistedPct": 14.3
+      "attempted": 162,
+      "made": 66,
+      "pct": 40.7,
+      "assisted": 14,
+      "assistedPct": 21.2
     },
     "threePointJumpers": {
-      "attempted": 681,
-      "made": 235,
-      "pct": 34.5,
-      "assisted": 190,
-      "assistedPct": 80.9
+      "attempted": 925,
+      "made": 329,
+      "pct": 35.6,
+      "assisted": 257,
+      "assistedPct": 78.1
     },
     "freeThrows": {
-      "attempted": 424,
-      "made": 322,
-      "pct": 75.9
+      "attempted": 578,
+      "made": 445,
+      "pct": 77
     },
     "attemptsBreakdown": {
-      "dunks": 6.3,
-      "layups": 28.7,
-      "tipIns": 2.1,
-      "twoPointJumpers": 8.8,
-      "threePointJumpers": 54.2
+      "dunks": 6.2,
+      "layups": 29.2,
+      "tipIns": 2,
+      "twoPointJumpers": 9.3,
+      "threePointJumpers": 53.3
     }
   }
 ]

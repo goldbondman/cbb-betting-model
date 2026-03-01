@@ -4,53 +4,53 @@
     "teamId": 81,
     "team": "Elon",
     "conference": "CAA",
-    "trackedShots": 1421,
-    "freeThrowRate": 33.2,
-    "assistedPct": 25.5,
+    "trackedShots": 1827,
+    "freeThrowRate": 33.6,
+    "assistedPct": 24.5,
     "dunks": {
-      "attempted": 36,
-      "made": 32,
-      "pct": 88.9,
-      "assisted": 21,
-      "assistedPct": 65.6
+      "attempted": 46,
+      "made": 42,
+      "pct": 91.3,
+      "assisted": 26,
+      "assistedPct": 61.9
     },
     "layups": {
-      "attempted": 585,
-      "made": 348,
-      "pct": 59.5,
-      "assisted": 134,
-      "assistedPct": 38.5
+      "attempted": 735,
+      "made": 425,
+      "pct": 57.8,
+      "assisted": 163,
+      "assistedPct": 38.4
     },
     "tipIns": {
-      "attempted": 39,
-      "made": 20,
-      "pct": 51.3
+      "attempted": 44,
+      "made": 25,
+      "pct": 56.8
     },
     "twoPointJumpers": {
-      "attempted": 154,
-      "made": 56,
-      "pct": 36.4,
-      "assisted": 12,
-      "assistedPct": 21.4
+      "attempted": 224,
+      "made": 73,
+      "pct": 32.6,
+      "assisted": 16,
+      "assistedPct": 21.9
     },
     "threePointJumpers": {
-      "attempted": 607,
-      "made": 216,
-      "pct": 35.6,
-      "assisted": 195,
-      "assistedPct": 90.3
+      "attempted": 778,
+      "made": 271,
+      "pct": 34.8,
+      "assisted": 242,
+      "assistedPct": 89.3
     },
     "freeThrows": {
-      "attempted": 472,
-      "made": 337,
-      "pct": 71.4
+      "attempted": 614,
+      "made": 440,
+      "pct": 71.7
     },
     "attemptsBreakdown": {
       "dunks": 2.5,
-      "layups": 41.2,
-      "tipIns": 2.7,
-      "twoPointJumpers": 10.8,
-      "threePointJumpers": 42.7
+      "layups": 40.2,
+      "tipIns": 2.4,
+      "twoPointJumpers": 12.3,
+      "threePointJumpers": 42.6
     }
   }
 ]

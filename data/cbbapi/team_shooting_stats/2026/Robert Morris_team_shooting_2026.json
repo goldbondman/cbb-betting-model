@@ -4,53 +4,53 @@
     "teamId": 244,
     "team": "Robert Morris",
     "conference": "Horizon",
-    "trackedShots": 1396,
-    "freeThrowRate": 29.2,
-    "assistedPct": 28.8,
+    "trackedShots": 1815,
+    "freeThrowRate": 27.8,
+    "assistedPct": 29.3,
     "dunks": {
-      "attempted": 18,
-      "made": 13,
-      "pct": 72.2,
-      "assisted": 11,
-      "assistedPct": 84.6
+      "attempted": 30,
+      "made": 25,
+      "pct": 83.3,
+      "assisted": 21,
+      "assistedPct": 84
     },
     "layups": {
-      "attempted": 472,
-      "made": 275,
-      "pct": 58.3,
-      "assisted": 157,
-      "assistedPct": 57.1
+      "attempted": 603,
+      "made": 360,
+      "pct": 59.7,
+      "assisted": 204,
+      "assistedPct": 56.7
     },
     "tipIns": {
-      "attempted": 49,
-      "made": 33,
-      "pct": 67.3
+      "attempted": 60,
+      "made": 41,
+      "pct": 68.3
     },
     "twoPointJumpers": {
-      "attempted": 303,
-      "made": 124,
-      "pct": 40.9,
-      "assisted": 43,
-      "assistedPct": 34.7
+      "attempted": 394,
+      "made": 158,
+      "pct": 40.1,
+      "assisted": 54,
+      "assistedPct": 34.2
     },
     "threePointJumpers": {
-      "attempted": 554,
-      "made": 204,
-      "pct": 36.8,
-      "assisted": 191,
-      "assistedPct": 93.6
+      "attempted": 728,
+      "made": 274,
+      "pct": 37.6,
+      "assisted": 253,
+      "assistedPct": 92.3
     },
     "freeThrows": {
-      "attempted": 407,
-      "made": 282,
-      "pct": 69.3
+      "attempted": 505,
+      "made": 353,
+      "pct": 69.9
     },
     "attemptsBreakdown": {
-      "dunks": 1.3,
-      "layups": 33.8,
-      "tipIns": 3.5,
+      "dunks": 1.7,
+      "layups": 33.2,
+      "tipIns": 3.3,
       "twoPointJumpers": 21.7,
-      "threePointJumpers": 39.7
+      "threePointJumpers": 40.1
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 211,
     "team": "Northwestern State",
     "conference": "Southland",
-    "trackedShots": 1129,
-    "freeThrowRate": 41.6,
-    "assistedPct": 22.6,
+    "trackedShots": 1543,
+    "freeThrowRate": 40.5,
+    "assistedPct": 22.1,
     "dunks": {
-      "attempted": 34,
-      "made": 27,
-      "pct": 79.4,
-      "assisted": 21,
-      "assistedPct": 77.8
+      "attempted": 40,
+      "made": 33,
+      "pct": 82.5,
+      "assisted": 26,
+      "assistedPct": 78.8
     },
     "layups": {
-      "attempted": 369,
-      "made": 197,
-      "pct": 53.4,
-      "assisted": 87,
-      "assistedPct": 44.2
+      "attempted": 509,
+      "made": 267,
+      "pct": 52.5,
+      "assisted": 123,
+      "assistedPct": 46.1
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 17,
-      "pct": 63
+      "attempted": 37,
+      "made": 26,
+      "pct": 70.3
     },
     "twoPointJumpers": {
-      "attempted": 301,
-      "made": 135,
-      "pct": 44.9,
-      "assisted": 37,
-      "assistedPct": 27.4
+      "attempted": 435,
+      "made": 183,
+      "pct": 42.1,
+      "assisted": 46,
+      "assistedPct": 25.1
     },
     "threePointJumpers": {
-      "attempted": 398,
-      "made": 134,
-      "pct": 33.7,
-      "assisted": 110,
-      "assistedPct": 82.1
+      "attempted": 522,
+      "made": 174,
+      "pct": 33.3,
+      "assisted": 146,
+      "assistedPct": 83.9
     },
     "freeThrows": {
-      "attempted": 470,
-      "made": 351,
-      "pct": 74.7
+      "attempted": 625,
+      "made": 468,
+      "pct": 74.9
     },
     "attemptsBreakdown": {
-      "dunks": 3,
-      "layups": 32.7,
+      "dunks": 2.6,
+      "layups": 33,
       "tipIns": 2.4,
-      "twoPointJumpers": 26.7,
-      "threePointJumpers": 35.3
+      "twoPointJumpers": 28.2,
+      "threePointJumpers": 33.8
     }
   }
 ]

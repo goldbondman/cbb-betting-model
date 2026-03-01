@@ -4,53 +4,53 @@
     "teamId": 250,
     "team": "Sacred Heart",
     "conference": "MAAC",
-    "trackedShots": 1415,
-    "freeThrowRate": 29.2,
-    "assistedPct": 25.7,
+    "trackedShots": 1826,
+    "freeThrowRate": 30.2,
+    "assistedPct": 24.7,
     "dunks": {
-      "attempted": 39,
-      "made": 31,
-      "pct": 79.5,
-      "assisted": 24,
-      "assistedPct": 77.4
+      "attempted": 48,
+      "made": 40,
+      "pct": 83.3,
+      "assisted": 32,
+      "assistedPct": 80
     },
     "layups": {
-      "attempted": 399,
-      "made": 219,
-      "pct": 54.9,
-      "assisted": 89,
-      "assistedPct": 40.6
+      "attempted": 510,
+      "made": 276,
+      "pct": 54.1,
+      "assisted": 109,
+      "assistedPct": 39.5
     },
     "tipIns": {
-      "attempted": 41,
-      "made": 24,
-      "pct": 58.5
+      "attempted": 58,
+      "made": 36,
+      "pct": 62.1
     },
     "twoPointJumpers": {
-      "attempted": 229,
-      "made": 87,
-      "pct": 38,
-      "assisted": 29,
-      "assistedPct": 33.3
+      "attempted": 294,
+      "made": 110,
+      "pct": 37.4,
+      "assisted": 33,
+      "assistedPct": 30
     },
     "threePointJumpers": {
-      "attempted": 707,
-      "made": 258,
-      "pct": 36.5,
-      "assisted": 221,
-      "assistedPct": 85.7
+      "attempted": 916,
+      "made": 331,
+      "pct": 36.1,
+      "assisted": 277,
+      "assistedPct": 83.7
     },
     "freeThrows": {
-      "attempted": 413,
-      "made": 320,
-      "pct": 77.5
+      "attempted": 551,
+      "made": 426,
+      "pct": 77.3
     },
     "attemptsBreakdown": {
-      "dunks": 2.8,
-      "layups": 28.2,
-      "tipIns": 2.9,
-      "twoPointJumpers": 16.2,
-      "threePointJumpers": 50
+      "dunks": 2.6,
+      "layups": 27.9,
+      "tipIns": 3.2,
+      "twoPointJumpers": 16.1,
+      "threePointJumpers": 50.2
     }
   }
 ]

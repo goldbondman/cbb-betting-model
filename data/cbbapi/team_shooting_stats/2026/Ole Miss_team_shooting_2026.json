@@ -4,53 +4,53 @@
     "teamId": 220,
     "team": "Ole Miss",
     "conference": "SEC",
-    "trackedShots": 1193,
-    "freeThrowRate": 33.3,
-    "assistedPct": 22.3,
+    "trackedShots": 1690,
+    "freeThrowRate": 32.9,
+    "assistedPct": 22.6,
     "dunks": {
-      "attempted": 61,
-      "made": 54,
-      "pct": 88.5,
-      "assisted": 42,
-      "assistedPct": 77.8
+      "attempted": 86,
+      "made": 78,
+      "pct": 90.7,
+      "assisted": 62,
+      "assistedPct": 79.5
     },
     "layups": {
-      "attempted": 259,
-      "made": 149,
-      "pct": 57.5,
-      "assisted": 62,
-      "assistedPct": 41.6
+      "attempted": 365,
+      "made": 216,
+      "pct": 59.2,
+      "assisted": 94,
+      "assistedPct": 43.5
     },
     "tipIns": {
-      "attempted": 25,
-      "made": 17,
-      "pct": 68
+      "attempted": 31,
+      "made": 21,
+      "pct": 67.7
     },
     "twoPointJumpers": {
-      "attempted": 401,
-      "made": 152,
-      "pct": 37.9,
-      "assisted": 45,
-      "assistedPct": 29.6
+      "attempted": 582,
+      "made": 224,
+      "pct": 38.5,
+      "assisted": 69,
+      "assistedPct": 30.8
     },
     "threePointJumpers": {
-      "attempted": 447,
-      "made": 153,
-      "pct": 34.2,
-      "assisted": 117,
-      "assistedPct": 76.5
+      "attempted": 626,
+      "made": 209,
+      "pct": 33.4,
+      "assisted": 157,
+      "assistedPct": 75.1
     },
     "freeThrows": {
-      "attempted": 397,
-      "made": 294,
-      "pct": 74.1
+      "attempted": 556,
+      "made": 414,
+      "pct": 74.5
     },
     "attemptsBreakdown": {
       "dunks": 5.1,
-      "layups": 21.7,
-      "tipIns": 2.1,
-      "twoPointJumpers": 33.6,
-      "threePointJumpers": 37.5
+      "layups": 21.6,
+      "tipIns": 1.8,
+      "twoPointJumpers": 34.4,
+      "threePointJumpers": 37
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 28,
     "team": "Bowling Green",
     "conference": "MAC",
-    "trackedShots": 1360,
+    "trackedShots": 1812,
     "freeThrowRate": 37.8,
-    "assistedPct": 24.2,
+    "assistedPct": 23,
     "dunks": {
-      "attempted": 76,
-      "made": 62,
-      "pct": 81.6,
-      "assisted": 43,
-      "assistedPct": 69.4
+      "attempted": 93,
+      "made": 77,
+      "pct": 82.8,
+      "assisted": 53,
+      "assistedPct": 68.8
     },
     "layups": {
-      "attempted": 572,
-      "made": 325,
-      "pct": 56.8,
-      "assisted": 120,
-      "assistedPct": 36.9
+      "attempted": 741,
+      "made": 418,
+      "pct": 56.4,
+      "assisted": 143,
+      "assistedPct": 34.2
     },
     "tipIns": {
-      "attempted": 64,
-      "made": 38,
-      "pct": 59.4
+      "attempted": 80,
+      "made": 48,
+      "pct": 60
     },
     "twoPointJumpers": {
-      "attempted": 193,
-      "made": 82,
-      "pct": 42.5,
-      "assisted": 31,
-      "assistedPct": 37.8
+      "attempted": 276,
+      "made": 107,
+      "pct": 38.8,
+      "assisted": 37,
+      "assistedPct": 34.6
     },
     "threePointJumpers": {
-      "attempted": 455,
-      "made": 157,
-      "pct": 34.5,
-      "assisted": 135,
-      "assistedPct": 86
+      "attempted": 622,
+      "made": 215,
+      "pct": 34.6,
+      "assisted": 183,
+      "assistedPct": 85.1
     },
     "freeThrows": {
-      "attempted": 514,
-      "made": 377,
-      "pct": 73.3
+      "attempted": 685,
+      "made": 504,
+      "pct": 73.6
     },
     "attemptsBreakdown": {
-      "dunks": 5.6,
-      "layups": 42.1,
-      "tipIns": 4.7,
-      "twoPointJumpers": 14.2,
-      "threePointJumpers": 33.5
+      "dunks": 5.1,
+      "layups": 40.9,
+      "tipIns": 4.4,
+      "twoPointJumpers": 15.2,
+      "threePointJumpers": 34.3
     }
   }
 ]

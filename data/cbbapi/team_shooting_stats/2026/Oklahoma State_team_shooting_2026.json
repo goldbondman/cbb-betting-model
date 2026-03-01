@@ -4,53 +4,53 @@
     "teamId": 218,
     "team": "Oklahoma State",
     "conference": "Big 12",
-    "trackedShots": 1255,
-    "freeThrowRate": 39.3,
-    "assistedPct": 24.5,
+    "trackedShots": 1745,
+    "freeThrowRate": 39.7,
+    "assistedPct": 23.7,
     "dunks": {
-      "attempted": 48,
-      "made": 43,
-      "pct": 89.6,
-      "assisted": 35,
-      "assistedPct": 81.4
+      "attempted": 63,
+      "made": 57,
+      "pct": 90.5,
+      "assisted": 47,
+      "assistedPct": 82.5
     },
     "layups": {
-      "attempted": 544,
-      "made": 304,
-      "pct": 55.9,
-      "assisted": 143,
-      "assistedPct": 47
+      "attempted": 733,
+      "made": 402,
+      "pct": 54.8,
+      "assisted": 186,
+      "assistedPct": 46.3
     },
     "tipIns": {
-      "attempted": 47,
-      "made": 33,
-      "pct": 70.2
+      "attempted": 62,
+      "made": 43,
+      "pct": 69.4
     },
     "twoPointJumpers": {
-      "attempted": 178,
-      "made": 67,
-      "pct": 37.6,
-      "assisted": 16,
-      "assistedPct": 23.9
+      "attempted": 259,
+      "made": 91,
+      "pct": 35.1,
+      "assisted": 23,
+      "assistedPct": 25.3
     },
     "threePointJumpers": {
-      "attempted": 438,
-      "made": 155,
-      "pct": 35.4,
-      "assisted": 114,
+      "attempted": 628,
+      "made": 215,
+      "pct": 34.2,
+      "assisted": 158,
       "assistedPct": 73.5
     },
     "freeThrows": {
-      "attempted": 493,
-      "made": 369,
-      "pct": 74.8
+      "attempted": 693,
+      "made": 508,
+      "pct": 73.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.8,
-      "layups": 43.3,
-      "tipIns": 3.7,
-      "twoPointJumpers": 14.2,
-      "threePointJumpers": 34.9
+      "dunks": 3.6,
+      "layups": 42,
+      "tipIns": 3.6,
+      "twoPointJumpers": 14.8,
+      "threePointJumpers": 36
     }
   }
 ]

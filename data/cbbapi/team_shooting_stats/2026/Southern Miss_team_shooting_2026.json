@@ -4,53 +4,53 @@
     "teamId": 275,
     "team": "Southern Miss",
     "conference": "Sun Belt",
-    "trackedShots": 1293,
-    "freeThrowRate": 42.2,
-    "assistedPct": 20,
+    "trackedShots": 1694,
+    "freeThrowRate": 42.1,
+    "assistedPct": 20.1,
     "dunks": {
-      "attempted": 44,
-      "made": 37,
-      "pct": 84.1,
-      "assisted": 23,
-      "assistedPct": 62.2
+      "attempted": 54,
+      "made": 45,
+      "pct": 83.3,
+      "assisted": 29,
+      "assistedPct": 64.4
     },
     "layups": {
-      "attempted": 438,
-      "made": 257,
-      "pct": 58.7,
-      "assisted": 116,
-      "assistedPct": 45.1
+      "attempted": 601,
+      "made": 345,
+      "pct": 57.4,
+      "assisted": 152,
+      "assistedPct": 44.1
     },
     "tipIns": {
-      "attempted": 40,
-      "made": 30,
-      "pct": 75
+      "attempted": 55,
+      "made": 43,
+      "pct": 78.2
     },
     "twoPointJumpers": {
-      "attempted": 389,
-      "made": 151,
-      "pct": 38.8,
-      "assisted": 29,
-      "assistedPct": 19.2
+      "attempted": 472,
+      "made": 177,
+      "pct": 37.5,
+      "assisted": 32,
+      "assistedPct": 18.1
     },
     "threePointJumpers": {
-      "attempted": 382,
-      "made": 106,
-      "pct": 27.7,
-      "assisted": 90,
-      "assistedPct": 84.9
+      "attempted": 512,
+      "made": 152,
+      "pct": 29.7,
+      "assisted": 128,
+      "assistedPct": 84.2
     },
     "freeThrows": {
-      "attempted": 546,
-      "made": 403,
-      "pct": 73.8
+      "attempted": 713,
+      "made": 523,
+      "pct": 73.4
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 33.9,
-      "tipIns": 3.1,
-      "twoPointJumpers": 30.1,
-      "threePointJumpers": 29.5
+      "dunks": 3.2,
+      "layups": 35.5,
+      "tipIns": 3.2,
+      "twoPointJumpers": 27.9,
+      "threePointJumpers": 30.2
     }
   }
 ]

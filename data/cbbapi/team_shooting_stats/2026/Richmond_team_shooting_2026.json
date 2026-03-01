@@ -4,53 +4,53 @@
     "teamId": 242,
     "team": "Richmond",
     "conference": "A-10",
-    "trackedShots": 1344,
-    "freeThrowRate": 37.4,
-    "assistedPct": 24.1,
+    "trackedShots": 1685,
+    "freeThrowRate": 37.9,
+    "assistedPct": 24.2,
     "dunks": {
-      "attempted": 33,
-      "made": 32,
-      "pct": 97,
-      "assisted": 21,
-      "assistedPct": 65.6
+      "attempted": 40,
+      "made": 39,
+      "pct": 97.5,
+      "assisted": 26,
+      "assistedPct": 66.7
     },
     "layups": {
-      "attempted": 362,
-      "made": 213,
-      "pct": 58.8,
-      "assisted": 94,
-      "assistedPct": 44.1
+      "attempted": 446,
+      "made": 263,
+      "pct": 59,
+      "assisted": 114,
+      "assistedPct": 43.3
     },
     "tipIns": {
-      "attempted": 17,
+      "attempted": 18,
       "made": 7,
-      "pct": 41.2
+      "pct": 38.9
     },
     "twoPointJumpers": {
-      "attempted": 382,
-      "made": 153,
-      "pct": 40.1,
-      "assisted": 36,
-      "assistedPct": 23.5
+      "attempted": 464,
+      "made": 180,
+      "pct": 38.8,
+      "assisted": 41,
+      "assistedPct": 22.8
     },
     "threePointJumpers": {
-      "attempted": 550,
-      "made": 203,
-      "pct": 36.9,
-      "assisted": 173,
-      "assistedPct": 85.2
+      "attempted": 717,
+      "made": 263,
+      "pct": 36.7,
+      "assisted": 226,
+      "assistedPct": 85.9
     },
     "freeThrows": {
-      "attempted": 503,
-      "made": 378,
-      "pct": 75.1
+      "attempted": 639,
+      "made": 484,
+      "pct": 75.7
     },
     "attemptsBreakdown": {
-      "dunks": 2.5,
-      "layups": 26.9,
-      "tipIns": 1.3,
-      "twoPointJumpers": 28.4,
-      "threePointJumpers": 40.9
+      "dunks": 2.4,
+      "layups": 26.5,
+      "tipIns": 1.1,
+      "twoPointJumpers": 27.5,
+      "threePointJumpers": 42.6
     }
   }
 ]

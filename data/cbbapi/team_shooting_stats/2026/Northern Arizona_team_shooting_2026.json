@@ -4,53 +4,53 @@
     "teamId": 206,
     "team": "Northern Arizona",
     "conference": "Big Sky",
-    "trackedShots": 1296,
-    "freeThrowRate": 32.9,
-    "assistedPct": 24.2,
+    "trackedShots": 1657,
+    "freeThrowRate": 33.6,
+    "assistedPct": 23.6,
     "dunks": {
-      "attempted": 34,
-      "made": 32,
-      "pct": 94.1,
-      "assisted": 22,
-      "assistedPct": 68.8
+      "attempted": 47,
+      "made": 45,
+      "pct": 95.7,
+      "assisted": 30,
+      "assistedPct": 66.7
     },
     "layups": {
-      "attempted": 474,
-      "made": 265,
-      "pct": 55.9,
-      "assisted": 112,
-      "assistedPct": 42.3
+      "attempted": 585,
+      "made": 323,
+      "pct": 55.2,
+      "assisted": 133,
+      "assistedPct": 41.2
     },
     "tipIns": {
-      "attempted": 13,
-      "made": 6,
-      "pct": 46.2
+      "attempted": 16,
+      "made": 8,
+      "pct": 50
     },
     "twoPointJumpers": {
-      "attempted": 321,
-      "made": 135,
-      "pct": 42.1,
-      "assisted": 28,
-      "assistedPct": 20.7
+      "attempted": 399,
+      "made": 169,
+      "pct": 42.4,
+      "assisted": 33,
+      "assistedPct": 19.5
     },
     "threePointJumpers": {
-      "attempted": 454,
-      "made": 172,
-      "pct": 37.9,
-      "assisted": 152,
-      "assistedPct": 88.4
+      "attempted": 610,
+      "made": 228,
+      "pct": 37.4,
+      "assisted": 195,
+      "assistedPct": 85.5
     },
     "freeThrows": {
-      "attempted": 426,
-      "made": 289,
-      "pct": 67.8
+      "attempted": 557,
+      "made": 378,
+      "pct": 67.9
     },
     "attemptsBreakdown": {
-      "dunks": 2.6,
-      "layups": 36.6,
+      "dunks": 2.8,
+      "layups": 35.3,
       "tipIns": 1,
-      "twoPointJumpers": 24.8,
-      "threePointJumpers": 35
+      "twoPointJumpers": 24.1,
+      "threePointJumpers": 36.8
     }
   }
 ]

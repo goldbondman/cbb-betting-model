@@ -4,53 +4,53 @@
     "teamId": 52,
     "team": "Clemson",
     "conference": "ACC",
-    "trackedShots": 1249,
-    "freeThrowRate": 37.8,
-    "assistedPct": 23.3,
+    "trackedShots": 1617,
+    "freeThrowRate": 38,
+    "assistedPct": 22.5,
     "dunks": {
-      "attempted": 70,
-      "made": 63,
-      "pct": 90,
-      "assisted": 49,
-      "assistedPct": 77.8
+      "attempted": 85,
+      "made": 75,
+      "pct": 88.2,
+      "assisted": 56,
+      "assistedPct": 74.7
     },
     "layups": {
-      "attempted": 390,
-      "made": 217,
-      "pct": 55.6,
-      "assisted": 76,
-      "assistedPct": 35
+      "attempted": 506,
+      "made": 277,
+      "pct": 54.7,
+      "assisted": 93,
+      "assistedPct": 33.6
     },
     "tipIns": {
-      "attempted": 29,
-      "made": 15,
-      "pct": 51.7
+      "attempted": 33,
+      "made": 18,
+      "pct": 54.5
     },
     "twoPointJumpers": {
-      "attempted": 226,
-      "made": 102,
-      "pct": 45.1,
-      "assisted": 16,
-      "assistedPct": 15.7
+      "attempted": 296,
+      "made": 135,
+      "pct": 45.6,
+      "assisted": 20,
+      "assistedPct": 14.8
     },
     "threePointJumpers": {
-      "attempted": 534,
-      "made": 181,
-      "pct": 33.9,
-      "assisted": 150,
-      "assistedPct": 82.9
+      "attempted": 697,
+      "made": 237,
+      "pct": 34,
+      "assisted": 195,
+      "assistedPct": 82.3
     },
     "freeThrows": {
-      "attempted": 472,
-      "made": 345,
-      "pct": 73.1
+      "attempted": 615,
+      "made": 446,
+      "pct": 72.5
     },
     "attemptsBreakdown": {
-      "dunks": 5.6,
-      "layups": 31.2,
-      "tipIns": 2.3,
-      "twoPointJumpers": 18.1,
-      "threePointJumpers": 42.8
+      "dunks": 5.3,
+      "layups": 31.3,
+      "tipIns": 2,
+      "twoPointJumpers": 18.3,
+      "threePointJumpers": 43.1
     }
   }
 ]

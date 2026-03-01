@@ -4,53 +4,53 @@
     "teamId": 92,
     "team": "Fresno State",
     "conference": "Mountain West",
-    "trackedShots": 1175,
-    "freeThrowRate": 34.8,
-    "assistedPct": 23.7,
+    "trackedShots": 1631,
+    "freeThrowRate": 35.3,
+    "assistedPct": 22.8,
     "dunks": {
-      "attempted": 33,
-      "made": 30,
-      "pct": 90.9,
-      "assisted": 24,
-      "assistedPct": 80
+      "attempted": 42,
+      "made": 37,
+      "pct": 88.1,
+      "assisted": 29,
+      "assistedPct": 78.4
     },
     "layups": {
-      "attempted": 425,
-      "made": 239,
-      "pct": 56.2,
-      "assisted": 105,
-      "assistedPct": 43.9
+      "attempted": 551,
+      "made": 321,
+      "pct": 58.3,
+      "assisted": 136,
+      "assistedPct": 42.4
     },
     "tipIns": {
-      "attempted": 16,
-      "made": 12,
-      "pct": 75
+      "attempted": 23,
+      "made": 18,
+      "pct": 78.3
     },
     "twoPointJumpers": {
-      "attempted": 209,
-      "made": 78,
-      "pct": 37.3,
-      "assisted": 18,
-      "assistedPct": 23.1
+      "attempted": 350,
+      "made": 143,
+      "pct": 40.9,
+      "assisted": 31,
+      "assistedPct": 21.7
     },
     "threePointJumpers": {
-      "attempted": 492,
-      "made": 158,
-      "pct": 32.1,
-      "assisted": 131,
-      "assistedPct": 82.9
+      "attempted": 665,
+      "made": 215,
+      "pct": 32.3,
+      "assisted": 176,
+      "assistedPct": 81.9
     },
     "freeThrows": {
-      "attempted": 409,
-      "made": 305,
-      "pct": 74.6
+      "attempted": 576,
+      "made": 425,
+      "pct": 73.8
     },
     "attemptsBreakdown": {
-      "dunks": 2.8,
-      "layups": 36.2,
+      "dunks": 2.6,
+      "layups": 33.8,
       "tipIns": 1.4,
-      "twoPointJumpers": 17.8,
-      "threePointJumpers": 41.9
+      "twoPointJumpers": 21.5,
+      "threePointJumpers": 40.8
     }
   }
 ]

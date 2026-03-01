@@ -4,53 +4,53 @@
     "teamId": 154,
     "team": "Maine",
     "conference": "Am. East",
-    "trackedShots": 1168,
-    "freeThrowRate": 34.6,
-    "assistedPct": 22.6,
+    "trackedShots": 1505,
+    "freeThrowRate": 37.1,
+    "assistedPct": 23.8,
     "dunks": {
-      "attempted": 44,
-      "made": 40,
-      "pct": 90.9,
-      "assisted": 31,
-      "assistedPct": 77.5
+      "attempted": 56,
+      "made": 51,
+      "pct": 91.1,
+      "assisted": 40,
+      "assistedPct": 78.4
     },
     "layups": {
-      "attempted": 424,
-      "made": 234,
-      "pct": 55.2,
-      "assisted": 86,
-      "assistedPct": 36.8
+      "attempted": 542,
+      "made": 295,
+      "pct": 54.4,
+      "assisted": 113,
+      "assistedPct": 38.3
     },
     "tipIns": {
-      "attempted": 24,
-      "made": 18,
+      "attempted": 28,
+      "made": 21,
       "pct": 75
     },
     "twoPointJumpers": {
-      "attempted": 256,
-      "made": 95,
-      "pct": 37.1,
-      "assisted": 29,
-      "assistedPct": 30.5
+      "attempted": 310,
+      "made": 123,
+      "pct": 39.7,
+      "assisted": 40,
+      "assistedPct": 32.5
     },
     "threePointJumpers": {
-      "attempted": 420,
-      "made": 130,
-      "pct": 31,
-      "assisted": 118,
-      "assistedPct": 90.8
+      "attempted": 569,
+      "made": 182,
+      "pct": 32,
+      "assisted": 165,
+      "assistedPct": 90.7
     },
     "freeThrows": {
-      "attempted": 404,
-      "made": 262,
-      "pct": 64.9
+      "attempted": 558,
+      "made": 361,
+      "pct": 64.7
     },
     "attemptsBreakdown": {
-      "dunks": 3.8,
-      "layups": 36.3,
-      "tipIns": 2.1,
-      "twoPointJumpers": 21.9,
-      "threePointJumpers": 36
+      "dunks": 3.7,
+      "layups": 36,
+      "tipIns": 1.9,
+      "twoPointJumpers": 20.6,
+      "threePointJumpers": 37.8
     }
   }
 ]

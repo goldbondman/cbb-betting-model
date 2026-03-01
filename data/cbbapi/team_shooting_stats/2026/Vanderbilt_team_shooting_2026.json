@@ -4,53 +4,53 @@
     "teamId": 336,
     "team": "Vanderbilt",
     "conference": "SEC",
-    "trackedShots": 1201,
-    "freeThrowRate": 35.7,
-    "assistedPct": 27.7,
+    "trackedShots": 1606,
+    "freeThrowRate": 36.7,
+    "assistedPct": 26.6,
     "dunks": {
-      "attempted": 76,
-      "made": 70,
-      "pct": 92.1,
-      "assisted": 55,
-      "assistedPct": 78.6
+      "attempted": 90,
+      "made": 82,
+      "pct": 91.1,
+      "assisted": 65,
+      "assistedPct": 79.3
     },
     "layups": {
-      "attempted": 336,
-      "made": 206,
-      "pct": 61.3,
-      "assisted": 90,
-      "assistedPct": 43.7
+      "attempted": 454,
+      "made": 275,
+      "pct": 60.6,
+      "assisted": 119,
+      "assistedPct": 43.3
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 20,
-      "pct": 74.1
+      "attempted": 39,
+      "made": 31,
+      "pct": 79.5
     },
     "twoPointJumpers": {
-      "attempted": 220,
-      "made": 95,
-      "pct": 43.2,
-      "assisted": 17,
-      "assistedPct": 17.9
+      "attempted": 303,
+      "made": 129,
+      "pct": 42.6,
+      "assisted": 22,
+      "assistedPct": 17.1
     },
     "threePointJumpers": {
-      "attempted": 542,
-      "made": 196,
-      "pct": 36.2,
-      "assisted": 171,
-      "assistedPct": 87.2
+      "attempted": 720,
+      "made": 257,
+      "pct": 35.7,
+      "assisted": 221,
+      "assistedPct": 86
     },
     "freeThrows": {
-      "attempted": 429,
-      "made": 333,
-      "pct": 77.6
+      "attempted": 590,
+      "made": 465,
+      "pct": 78.8
     },
     "attemptsBreakdown": {
-      "dunks": 6.3,
-      "layups": 28,
-      "tipIns": 2.2,
-      "twoPointJumpers": 18.3,
-      "threePointJumpers": 45.1
+      "dunks": 5.6,
+      "layups": 28.3,
+      "tipIns": 2.4,
+      "twoPointJumpers": 18.9,
+      "threePointJumpers": 44.8
     }
   }
 ]

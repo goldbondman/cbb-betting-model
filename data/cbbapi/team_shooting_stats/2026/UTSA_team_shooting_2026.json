@@ -4,53 +4,53 @@
     "teamId": 328,
     "team": "UTSA",
     "conference": "American",
-    "trackedShots": 1305,
-    "freeThrowRate": 29.4,
-    "assistedPct": 17.2,
+    "trackedShots": 1732,
+    "freeThrowRate": 28.3,
+    "assistedPct": 17.8,
     "dunks": {
-      "attempted": 44,
-      "made": 40,
-      "pct": 90.9,
-      "assisted": 25,
-      "assistedPct": 62.5
+      "attempted": 64,
+      "made": 56,
+      "pct": 87.5,
+      "assisted": 37,
+      "assistedPct": 66.1
     },
     "layups": {
-      "attempted": 375,
-      "made": 176,
-      "pct": 46.9,
-      "assisted": 60,
-      "assistedPct": 34.1
+      "attempted": 507,
+      "made": 243,
+      "pct": 47.9,
+      "assisted": 74,
+      "assistedPct": 30.5
     },
     "tipIns": {
-      "attempted": 70,
-      "made": 41,
-      "pct": 58.6
+      "attempted": 88,
+      "made": 54,
+      "pct": 61.4
     },
     "twoPointJumpers": {
-      "attempted": 267,
-      "made": 96,
-      "pct": 36,
-      "assisted": 17,
-      "assistedPct": 17.7
+      "attempted": 361,
+      "made": 131,
+      "pct": 36.3,
+      "assisted": 28,
+      "assistedPct": 21.4
     },
     "threePointJumpers": {
-      "attempted": 549,
-      "made": 154,
-      "pct": 28.1,
-      "assisted": 123,
-      "assistedPct": 79.9
+      "attempted": 712,
+      "made": 213,
+      "pct": 29.9,
+      "assisted": 170,
+      "assistedPct": 79.8
     },
     "freeThrows": {
-      "attempted": 384,
-      "made": 265,
-      "pct": 69
+      "attempted": 491,
+      "made": 340,
+      "pct": 69.2
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 28.7,
-      "tipIns": 5.4,
-      "twoPointJumpers": 20.5,
-      "threePointJumpers": 42.1
+      "dunks": 3.7,
+      "layups": 29.3,
+      "tipIns": 5.1,
+      "twoPointJumpers": 20.8,
+      "threePointJumpers": 41.1
     }
   }
 ]

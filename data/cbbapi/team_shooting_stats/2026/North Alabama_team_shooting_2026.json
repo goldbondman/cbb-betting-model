@@ -4,53 +4,53 @@
     "teamId": 197,
     "team": "North Alabama",
     "conference": "ASUN",
-    "trackedShots": 1139,
-    "freeThrowRate": 38.1,
-    "assistedPct": 18.2,
+    "trackedShots": 1634,
+    "freeThrowRate": 38.6,
+    "assistedPct": 17.6,
     "dunks": {
-      "attempted": 30,
-      "made": 24,
-      "pct": 80,
-      "assisted": 20,
-      "assistedPct": 83.3
+      "attempted": 42,
+      "made": 34,
+      "pct": 81,
+      "assisted": 29,
+      "assistedPct": 85.3
     },
     "layups": {
-      "attempted": 418,
-      "made": 223,
-      "pct": 53.3,
-      "assisted": 64,
-      "assistedPct": 28.7
+      "attempted": 637,
+      "made": 333,
+      "pct": 52.3,
+      "assisted": 96,
+      "assistedPct": 28.8
     },
     "tipIns": {
-      "attempted": 61,
-      "made": 44,
-      "pct": 72.1
+      "attempted": 89,
+      "made": 62,
+      "pct": 69.7
     },
     "twoPointJumpers": {
-      "attempted": 230,
-      "made": 82,
-      "pct": 35.7,
-      "assisted": 21,
-      "assistedPct": 25.6
+      "attempted": 315,
+      "made": 113,
+      "pct": 35.9,
+      "assisted": 22,
+      "assistedPct": 19.5
     },
     "threePointJumpers": {
-      "attempted": 400,
-      "made": 123,
-      "pct": 30.8,
-      "assisted": 102,
-      "assistedPct": 82.9
+      "attempted": 551,
+      "made": 169,
+      "pct": 30.7,
+      "assisted": 140,
+      "assistedPct": 82.8
     },
     "freeThrows": {
-      "attempted": 434,
-      "made": 300,
-      "pct": 69.1
+      "attempted": 630,
+      "made": 433,
+      "pct": 68.7
     },
     "attemptsBreakdown": {
       "dunks": 2.6,
-      "layups": 36.7,
+      "layups": 39,
       "tipIns": 5.4,
-      "twoPointJumpers": 20.2,
-      "threePointJumpers": 35.1
+      "twoPointJumpers": 19.3,
+      "threePointJumpers": 33.7
     }
   }
 ]

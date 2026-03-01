@@ -4,53 +4,53 @@
     "teamId": 252,
     "team": "Saint Louis",
     "conference": "A-10",
-    "trackedShots": 1362,
-    "freeThrowRate": 34,
-    "assistedPct": 30.8,
+    "trackedShots": 1764,
+    "freeThrowRate": 34.2,
+    "assistedPct": 30.4,
     "dunks": {
-      "attempted": 53,
-      "made": 49,
-      "pct": 92.5,
-      "assisted": 36,
-      "assistedPct": 73.5
+      "attempted": 63,
+      "made": 58,
+      "pct": 92.1,
+      "assisted": 44,
+      "assistedPct": 75.9
     },
     "layups": {
-      "attempted": 559,
-      "made": 349,
-      "pct": 62.4,
-      "assisted": 153,
-      "assistedPct": 43.8
+      "attempted": 721,
+      "made": 439,
+      "pct": 60.9,
+      "assisted": 190,
+      "assistedPct": 43.3
     },
     "tipIns": {
-      "attempted": 42,
-      "made": 28,
-      "pct": 66.7
+      "attempted": 50,
+      "made": 35,
+      "pct": 70
     },
     "twoPointJumpers": {
-      "attempted": 93,
-      "made": 35,
-      "pct": 37.6,
-      "assisted": 11,
-      "assistedPct": 31.4
+      "attempted": 131,
+      "made": 48,
+      "pct": 36.6,
+      "assisted": 13,
+      "assistedPct": 27.1
     },
     "threePointJumpers": {
-      "attempted": 615,
-      "made": 249,
-      "pct": 40.5,
-      "assisted": 220,
+      "attempted": 799,
+      "made": 327,
+      "pct": 40.9,
+      "assisted": 289,
       "assistedPct": 88.4
     },
     "freeThrows": {
-      "attempted": 463,
-      "made": 341,
-      "pct": 73.7
+      "attempted": 603,
+      "made": 445,
+      "pct": 73.8
     },
     "attemptsBreakdown": {
-      "dunks": 3.9,
-      "layups": 41,
-      "tipIns": 3.1,
-      "twoPointJumpers": 6.8,
-      "threePointJumpers": 45.2
+      "dunks": 3.6,
+      "layups": 40.9,
+      "tipIns": 2.8,
+      "twoPointJumpers": 7.4,
+      "threePointJumpers": 45.3
     }
   }
 ]

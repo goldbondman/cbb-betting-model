@@ -4,53 +4,53 @@
     "teamId": 44,
     "team": "Central Connecticut",
     "conference": "NEC",
-    "trackedShots": 1223,
-    "freeThrowRate": 28.5,
-    "assistedPct": 24.2,
+    "trackedShots": 1646,
+    "freeThrowRate": 29.9,
+    "assistedPct": 24.1,
     "dunks": {
-      "attempted": 77,
-      "made": 67,
-      "pct": 87,
-      "assisted": 57,
-      "assistedPct": 85.1
+      "attempted": 100,
+      "made": 88,
+      "pct": 88,
+      "assisted": 75,
+      "assistedPct": 85.2
     },
     "layups": {
-      "attempted": 354,
-      "made": 202,
-      "pct": 57.1,
-      "assisted": 76,
-      "assistedPct": 37.6
+      "attempted": 462,
+      "made": 267,
+      "pct": 57.8,
+      "assisted": 101,
+      "assistedPct": 37.8
     },
     "tipIns": {
-      "attempted": 37,
-      "made": 18,
-      "pct": 48.6
+      "attempted": 41,
+      "made": 22,
+      "pct": 53.7
     },
     "twoPointJumpers": {
-      "attempted": 328,
-      "made": 128,
-      "pct": 39,
-      "assisted": 32,
-      "assistedPct": 25
+      "attempted": 465,
+      "made": 191,
+      "pct": 41.1,
+      "assisted": 46,
+      "assistedPct": 24.1
     },
     "threePointJumpers": {
-      "attempted": 427,
-      "made": 159,
-      "pct": 37.2,
-      "assisted": 131,
-      "assistedPct": 82.4
+      "attempted": 578,
+      "made": 213,
+      "pct": 36.9,
+      "assisted": 175,
+      "assistedPct": 82.2
     },
     "freeThrows": {
-      "attempted": 348,
-      "made": 264,
-      "pct": 75.9
+      "attempted": 492,
+      "made": 380,
+      "pct": 77.2
     },
     "attemptsBreakdown": {
-      "dunks": 6.3,
-      "layups": 28.9,
-      "tipIns": 3,
-      "twoPointJumpers": 26.8,
-      "threePointJumpers": 34.9
+      "dunks": 6.1,
+      "layups": 28.1,
+      "tipIns": 2.5,
+      "twoPointJumpers": 28.3,
+      "threePointJumpers": 35.1
     }
   }
 ]

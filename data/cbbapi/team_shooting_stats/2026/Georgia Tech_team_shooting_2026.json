@@ -4,53 +4,53 @@
     "teamId": 101,
     "team": "Georgia Tech",
     "conference": "ACC",
-    "trackedShots": 1241,
-    "freeThrowRate": 36.5,
-    "assistedPct": 27.6,
+    "trackedShots": 1683,
+    "freeThrowRate": 33.1,
+    "assistedPct": 26.1,
     "dunks": {
-      "attempted": 83,
-      "made": 69,
-      "pct": 83.1,
-      "assisted": 59,
-      "assistedPct": 85.5
+      "attempted": 102,
+      "made": 86,
+      "pct": 84.3,
+      "assisted": 69,
+      "assistedPct": 80.2
     },
     "layups": {
-      "attempted": 362,
-      "made": 189,
-      "pct": 52.2,
-      "assisted": 108,
-      "assistedPct": 57.1
+      "attempted": 494,
+      "made": 255,
+      "pct": 51.6,
+      "assisted": 133,
+      "assistedPct": 52.2
     },
     "tipIns": {
-      "attempted": 63,
-      "made": 35,
-      "pct": 55.6
+      "attempted": 76,
+      "made": 44,
+      "pct": 57.9
     },
     "twoPointJumpers": {
-      "attempted": 347,
-      "made": 122,
-      "pct": 35.2,
-      "assisted": 48,
-      "assistedPct": 39.3
+      "attempted": 456,
+      "made": 161,
+      "pct": 35.3,
+      "assisted": 60,
+      "assistedPct": 37.3
     },
     "threePointJumpers": {
-      "attempted": 386,
-      "made": 145,
-      "pct": 37.6,
-      "assisted": 127,
-      "assistedPct": 87.6
+      "attempted": 555,
+      "made": 201,
+      "pct": 36.2,
+      "assisted": 177,
+      "assistedPct": 88.1
     },
     "freeThrows": {
-      "attempted": 453,
-      "made": 313,
-      "pct": 69.1
+      "attempted": 557,
+      "made": 390,
+      "pct": 70
     },
     "attemptsBreakdown": {
-      "dunks": 6.7,
-      "layups": 29.2,
-      "tipIns": 5.1,
-      "twoPointJumpers": 28,
-      "threePointJumpers": 31.1
+      "dunks": 6.1,
+      "layups": 29.4,
+      "tipIns": 4.5,
+      "twoPointJumpers": 27.1,
+      "threePointJumpers": 33
     }
   }
 ]

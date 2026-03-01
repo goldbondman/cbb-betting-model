@@ -4,53 +4,53 @@
     "teamId": 356,
     "team": "Wofford",
     "conference": "SoCon",
-    "trackedShots": 1376,
-    "freeThrowRate": 37.1,
-    "assistedPct": 23.4,
+    "trackedShots": 1849,
+    "freeThrowRate": 36.6,
+    "assistedPct": 23.3,
     "dunks": {
-      "attempted": 46,
-      "made": 39,
-      "pct": 84.8,
-      "assisted": 26,
-      "assistedPct": 66.7
+      "attempted": 54,
+      "made": 45,
+      "pct": 83.3,
+      "assisted": 32,
+      "assistedPct": 71.1
     },
     "layups": {
-      "attempted": 515,
-      "made": 269,
-      "pct": 52.2,
-      "assisted": 118,
-      "assistedPct": 43.9
+      "attempted": 685,
+      "made": 378,
+      "pct": 55.2,
+      "assisted": 155,
+      "assistedPct": 41
     },
     "tipIns": {
-      "attempted": 51,
-      "made": 34,
-      "pct": 66.7
+      "attempted": 56,
+      "made": 39,
+      "pct": 69.6
     },
     "twoPointJumpers": {
-      "attempted": 167,
-      "made": 65,
-      "pct": 38.9,
-      "assisted": 8,
-      "assistedPct": 12.3
+      "attempted": 241,
+      "made": 96,
+      "pct": 39.8,
+      "assisted": 19,
+      "assistedPct": 19.8
     },
     "threePointJumpers": {
-      "attempted": 597,
-      "made": 210,
-      "pct": 35.2,
-      "assisted": 170,
-      "assistedPct": 81
+      "attempted": 813,
+      "made": 283,
+      "pct": 34.8,
+      "assisted": 225,
+      "assistedPct": 79.5
     },
     "freeThrows": {
-      "attempted": 510,
-      "made": 366,
-      "pct": 71.8
+      "attempted": 676,
+      "made": 483,
+      "pct": 71.4
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
-      "layups": 37.4,
-      "tipIns": 3.7,
-      "twoPointJumpers": 12.1,
-      "threePointJumpers": 43.4
+      "dunks": 2.9,
+      "layups": 37,
+      "tipIns": 3,
+      "twoPointJumpers": 13,
+      "threePointJumpers": 44
     }
   }
 ]

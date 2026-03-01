@@ -4,53 +4,53 @@
     "teamId": 226,
     "team": "Penn State",
     "conference": "Big Ten",
-    "trackedShots": 1279,
-    "freeThrowRate": 32.5,
-    "assistedPct": 22.9,
+    "trackedShots": 1649,
+    "freeThrowRate": 33.2,
+    "assistedPct": 21.9,
     "dunks": {
-      "attempted": 22,
-      "made": 19,
-      "pct": 86.4,
-      "assisted": 16,
-      "assistedPct": 84.2
+      "attempted": 29,
+      "made": 24,
+      "pct": 82.8,
+      "assisted": 21,
+      "assistedPct": 87.5
     },
     "layups": {
-      "attempted": 456,
-      "made": 267,
-      "pct": 58.6,
-      "assisted": 116,
-      "assistedPct": 43.4
+      "attempted": 582,
+      "made": 348,
+      "pct": 59.8,
+      "assisted": 150,
+      "assistedPct": 43.1
     },
     "tipIns": {
-      "attempted": 46,
-      "made": 37,
+      "attempted": 51,
+      "made": 41,
       "pct": 80.4
     },
     "twoPointJumpers": {
-      "attempted": 253,
-      "made": 111,
-      "pct": 43.9,
-      "assisted": 19,
-      "assistedPct": 17.1
+      "attempted": 361,
+      "made": 162,
+      "pct": 44.9,
+      "assisted": 23,
+      "assistedPct": 14.2
     },
     "threePointJumpers": {
-      "attempted": 502,
-      "made": 168,
-      "pct": 33.5,
-      "assisted": 142,
-      "assistedPct": 84.5
+      "attempted": 626,
+      "made": 203,
+      "pct": 32.4,
+      "assisted": 167,
+      "assistedPct": 82.3
     },
     "freeThrows": {
-      "attempted": 416,
-      "made": 312,
-      "pct": 75
+      "attempted": 547,
+      "made": 411,
+      "pct": 75.1
     },
     "attemptsBreakdown": {
-      "dunks": 1.7,
-      "layups": 35.7,
-      "tipIns": 3.6,
-      "twoPointJumpers": 19.8,
-      "threePointJumpers": 39.2
+      "dunks": 1.8,
+      "layups": 35.3,
+      "tipIns": 3.1,
+      "twoPointJumpers": 21.9,
+      "threePointJumpers": 38
     }
   }
 ]

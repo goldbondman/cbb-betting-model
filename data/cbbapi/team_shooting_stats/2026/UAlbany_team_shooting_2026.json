@@ -4,53 +4,53 @@
     "teamId": 306,
     "team": "UAlbany",
     "conference": "Am. East",
-    "trackedShots": 1381,
-    "freeThrowRate": 24.5,
-    "assistedPct": 23,
+    "trackedShots": 1763,
+    "freeThrowRate": 25.2,
+    "assistedPct": 23.2,
     "dunks": {
-      "attempted": 97,
-      "made": 89,
-      "pct": 91.8,
-      "assisted": 63,
-      "assistedPct": 70.8
+      "attempted": 122,
+      "made": 111,
+      "pct": 91,
+      "assisted": 79,
+      "assistedPct": 71.2
     },
     "layups": {
-      "attempted": 461,
-      "made": 251,
-      "pct": 54.4,
-      "assisted": 83,
-      "assistedPct": 33.1
+      "attempted": 609,
+      "made": 332,
+      "pct": 54.5,
+      "assisted": 105,
+      "assistedPct": 31.6
     },
     "tipIns": {
-      "attempted": 36,
-      "made": 21,
-      "pct": 58.3
+      "attempted": 47,
+      "made": 27,
+      "pct": 57.4
     },
     "twoPointJumpers": {
-      "attempted": 267,
-      "made": 110,
-      "pct": 41.2,
-      "assisted": 31,
-      "assistedPct": 28.2
+      "attempted": 333,
+      "made": 141,
+      "pct": 42.3,
+      "assisted": 38,
+      "assistedPct": 27
     },
     "threePointJumpers": {
-      "attempted": 520,
-      "made": 167,
-      "pct": 32.1,
-      "assisted": 140,
-      "assistedPct": 83.8
+      "attempted": 652,
+      "made": 218,
+      "pct": 33.4,
+      "assisted": 187,
+      "assistedPct": 85.8
     },
     "freeThrows": {
-      "attempted": 339,
-      "made": 221,
-      "pct": 65.2
+      "attempted": 445,
+      "made": 295,
+      "pct": 66.3
     },
     "attemptsBreakdown": {
-      "dunks": 7,
-      "layups": 33.4,
-      "tipIns": 2.6,
-      "twoPointJumpers": 19.3,
-      "threePointJumpers": 37.7
+      "dunks": 6.9,
+      "layups": 34.5,
+      "tipIns": 2.7,
+      "twoPointJumpers": 18.9,
+      "threePointJumpers": 37
     }
   }
 ]

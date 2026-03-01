@@ -4,53 +4,53 @@
     "teamId": 230,
     "team": "Portland",
     "conference": "WCC",
-    "trackedShots": 1412,
-    "freeThrowRate": 36.7,
-    "assistedPct": 28.2,
+    "trackedShots": 1776,
+    "freeThrowRate": 36,
+    "assistedPct": 28.5,
     "dunks": {
-      "attempted": 78,
-      "made": 72,
-      "pct": 92.3,
-      "assisted": 67,
-      "assistedPct": 93.1
+      "attempted": 94,
+      "made": 87,
+      "pct": 92.6,
+      "assisted": 79,
+      "assistedPct": 90.8
     },
     "layups": {
-      "attempted": 494,
-      "made": 279,
-      "pct": 56.5,
-      "assisted": 160,
-      "assistedPct": 57.3
+      "attempted": 618,
+      "made": 358,
+      "pct": 57.9,
+      "assisted": 213,
+      "assistedPct": 59.5
     },
     "tipIns": {
-      "attempted": 50,
-      "made": 36,
-      "pct": 72
+      "attempted": 55,
+      "made": 39,
+      "pct": 70.9
     },
     "twoPointJumpers": {
-      "attempted": 292,
-      "made": 114,
-      "pct": 39,
-      "assisted": 39,
-      "assistedPct": 34.2
+      "attempted": 381,
+      "made": 151,
+      "pct": 39.6,
+      "assisted": 53,
+      "assistedPct": 35.1
     },
     "threePointJumpers": {
-      "attempted": 498,
-      "made": 152,
-      "pct": 30.5,
-      "assisted": 132,
-      "assistedPct": 86.8
+      "attempted": 628,
+      "made": 190,
+      "pct": 30.3,
+      "assisted": 162,
+      "assistedPct": 85.3
     },
     "freeThrows": {
-      "attempted": 518,
-      "made": 376,
-      "pct": 72.6
+      "attempted": 640,
+      "made": 474,
+      "pct": 74.1
     },
     "attemptsBreakdown": {
-      "dunks": 5.5,
-      "layups": 35,
-      "tipIns": 3.5,
-      "twoPointJumpers": 20.7,
-      "threePointJumpers": 35.3
+      "dunks": 5.3,
+      "layups": 34.8,
+      "tipIns": 3.1,
+      "twoPointJumpers": 21.5,
+      "threePointJumpers": 35.4
     }
   }
 ]

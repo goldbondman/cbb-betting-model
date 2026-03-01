@@ -4,53 +4,53 @@
     "teamId": 222,
     "team": "Oral Roberts",
     "conference": "Summit",
-    "trackedShots": 1366,
-    "freeThrowRate": 37.9,
-    "assistedPct": 19.8,
+    "trackedShots": 1784,
+    "freeThrowRate": 37,
+    "assistedPct": 20,
     "dunks": {
-      "attempted": 38,
-      "made": 33,
-      "pct": 86.8,
-      "assisted": 18,
-      "assistedPct": 54.5
+      "attempted": 59,
+      "made": 49,
+      "pct": 83.1,
+      "assisted": 27,
+      "assistedPct": 55.1
     },
     "layups": {
-      "attempted": 474,
-      "made": 246,
-      "pct": 51.9,
-      "assisted": 87,
-      "assistedPct": 35.4
+      "attempted": 610,
+      "made": 322,
+      "pct": 52.8,
+      "assisted": 113,
+      "assistedPct": 35.1
     },
     "tipIns": {
-      "attempted": 24,
-      "made": 16,
-      "pct": 66.7
+      "attempted": 31,
+      "made": 20,
+      "pct": 64.5
     },
     "twoPointJumpers": {
-      "attempted": 198,
-      "made": 77,
-      "pct": 38.9,
-      "assisted": 15,
-      "assistedPct": 19.5
+      "attempted": 272,
+      "made": 114,
+      "pct": 41.9,
+      "assisted": 20,
+      "assistedPct": 17.5
     },
     "threePointJumpers": {
-      "attempted": 632,
-      "made": 199,
+      "attempted": 812,
+      "made": 256,
       "pct": 31.5,
-      "assisted": 150,
-      "assistedPct": 75.4
+      "assisted": 197,
+      "assistedPct": 77
     },
     "freeThrows": {
-      "attempted": 518,
-      "made": 383,
-      "pct": 73.9
+      "attempted": 660,
+      "made": 493,
+      "pct": 74.7
     },
     "attemptsBreakdown": {
-      "dunks": 2.8,
-      "layups": 34.7,
-      "tipIns": 1.8,
-      "twoPointJumpers": 14.5,
-      "threePointJumpers": 46.3
+      "dunks": 3.3,
+      "layups": 34.2,
+      "tipIns": 1.7,
+      "twoPointJumpers": 15.2,
+      "threePointJumpers": 45.5
     }
   }
 ]

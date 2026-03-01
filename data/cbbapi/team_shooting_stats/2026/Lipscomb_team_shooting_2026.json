@@ -4,53 +4,53 @@
     "teamId": 143,
     "team": "Lipscomb",
     "conference": "ASUN",
-    "trackedShots": 1442,
-    "freeThrowRate": 26.7,
-    "assistedPct": 28.9,
+    "trackedShots": 1923,
+    "freeThrowRate": 25.8,
+    "assistedPct": 28.8,
     "dunks": {
-      "attempted": 42,
-      "made": 37,
-      "pct": 88.1,
-      "assisted": 31,
-      "assistedPct": 83.8
+      "attempted": 54,
+      "made": 46,
+      "pct": 85.2,
+      "assisted": 38,
+      "assistedPct": 82.6
     },
     "layups": {
-      "attempted": 513,
-      "made": 303,
-      "pct": 59.1,
-      "assisted": 139,
-      "assistedPct": 45.9
+      "attempted": 673,
+      "made": 405,
+      "pct": 60.2,
+      "assisted": 185,
+      "assistedPct": 45.7
     },
     "tipIns": {
-      "attempted": 35,
-      "made": 21,
-      "pct": 60
+      "attempted": 43,
+      "made": 27,
+      "pct": 62.8
     },
     "twoPointJumpers": {
-      "attempted": 176,
-      "made": 55,
-      "pct": 31.3,
-      "assisted": 14,
-      "assistedPct": 25.5
+      "attempted": 232,
+      "made": 78,
+      "pct": 33.6,
+      "assisted": 19,
+      "assistedPct": 24.4
     },
     "threePointJumpers": {
-      "attempted": 676,
-      "made": 251,
-      "pct": 37.1,
-      "assisted": 233,
-      "assistedPct": 92.8
+      "attempted": 921,
+      "made": 336,
+      "pct": 36.5,
+      "assisted": 311,
+      "assistedPct": 92.6
     },
     "freeThrows": {
-      "attempted": 385,
-      "made": 295,
-      "pct": 76.6
+      "attempted": 496,
+      "made": 375,
+      "pct": 75.6
     },
     "attemptsBreakdown": {
-      "dunks": 2.9,
-      "layups": 35.6,
-      "tipIns": 2.4,
-      "twoPointJumpers": 12.2,
-      "threePointJumpers": 46.9
+      "dunks": 2.8,
+      "layups": 35,
+      "tipIns": 2.2,
+      "twoPointJumpers": 12.1,
+      "threePointJumpers": 47.9
     }
   }
 ]

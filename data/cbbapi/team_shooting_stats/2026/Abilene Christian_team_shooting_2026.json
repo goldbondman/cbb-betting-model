@@ -4,53 +4,53 @@
     "teamId": 1,
     "team": "Abilene Christian",
     "conference": "WAC",
-    "trackedShots": 1200,
-    "freeThrowRate": 35.9,
-    "assistedPct": 23.7,
+    "trackedShots": 1642,
+    "freeThrowRate": 38.1,
+    "assistedPct": 23.1,
     "dunks": {
-      "attempted": 54,
-      "made": 48,
-      "pct": 88.9,
-      "assisted": 30,
-      "assistedPct": 62.5
+      "attempted": 67,
+      "made": 58,
+      "pct": 86.6,
+      "assisted": 37,
+      "assistedPct": 63.8
     },
     "layups": {
-      "attempted": 430,
-      "made": 224,
-      "pct": 52.1,
-      "assisted": 101,
-      "assistedPct": 45.1
+      "attempted": 591,
+      "made": 314,
+      "pct": 53.1,
+      "assisted": 141,
+      "assistedPct": 44.9
     },
     "tipIns": {
-      "attempted": 45,
-      "made": 29,
-      "pct": 64.4
+      "attempted": 56,
+      "made": 32,
+      "pct": 57.1
     },
     "twoPointJumpers": {
-      "attempted": 288,
-      "made": 108,
-      "pct": 37.5,
-      "assisted": 49,
-      "assistedPct": 45.4
+      "attempted": 391,
+      "made": 143,
+      "pct": 36.6,
+      "assisted": 61,
+      "assistedPct": 42.7
     },
     "threePointJumpers": {
-      "attempted": 383,
-      "made": 127,
-      "pct": 33.2,
-      "assisted": 104,
-      "assistedPct": 81.9
+      "attempted": 537,
+      "made": 173,
+      "pct": 32.2,
+      "assisted": 141,
+      "assistedPct": 81.5
     },
     "freeThrows": {
-      "attempted": 431,
-      "made": 304,
-      "pct": 70.5
+      "attempted": 626,
+      "made": 445,
+      "pct": 71.1
     },
     "attemptsBreakdown": {
-      "dunks": 4.5,
-      "layups": 35.8,
-      "tipIns": 3.8,
-      "twoPointJumpers": 24,
-      "threePointJumpers": 31.9
+      "dunks": 4.1,
+      "layups": 36,
+      "tipIns": 3.4,
+      "twoPointJumpers": 23.8,
+      "threePointJumpers": 32.7
     }
   }
 ]

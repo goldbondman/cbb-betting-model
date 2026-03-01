@@ -4,53 +4,53 @@
     "teamId": 57,
     "team": "Colorado State",
     "conference": "Mountain West",
-    "trackedShots": 1099,
-    "freeThrowRate": 36.8,
-    "assistedPct": 29,
+    "trackedShots": 1446,
+    "freeThrowRate": 40.6,
+    "assistedPct": 29.9,
     "dunks": {
-      "attempted": 29,
-      "made": 27,
-      "pct": 93.1,
-      "assisted": 19,
-      "assistedPct": 70.4
+      "attempted": 38,
+      "made": 35,
+      "pct": 92.1,
+      "assisted": 25,
+      "assistedPct": 71.4
     },
     "layups": {
-      "attempted": 321,
-      "made": 207,
-      "pct": 64.5,
-      "assisted": 98,
-      "assistedPct": 47.3
+      "attempted": 423,
+      "made": 284,
+      "pct": 67.1,
+      "assisted": 146,
+      "assistedPct": 51.4
     },
     "tipIns": {
-      "attempted": 10,
-      "made": 10,
+      "attempted": 16,
+      "made": 16,
       "pct": 100
     },
     "twoPointJumpers": {
-      "attempted": 199,
-      "made": 82,
-      "pct": 41.2,
-      "assisted": 20,
-      "assistedPct": 24.4
+      "attempted": 266,
+      "made": 106,
+      "pct": 39.8,
+      "assisted": 25,
+      "assistedPct": 23.6
     },
     "threePointJumpers": {
-      "attempted": 540,
-      "made": 206,
-      "pct": 38.1,
-      "assisted": 182,
-      "assistedPct": 88.3
+      "attempted": 703,
+      "made": 270,
+      "pct": 38.4,
+      "assisted": 237,
+      "assistedPct": 87.8
     },
     "freeThrows": {
-      "attempted": 404,
-      "made": 311,
-      "pct": 77
+      "attempted": 587,
+      "made": 457,
+      "pct": 77.9
     },
     "attemptsBreakdown": {
       "dunks": 2.6,
-      "layups": 29.2,
-      "tipIns": 0.9,
-      "twoPointJumpers": 18.1,
-      "threePointJumpers": 49.1
+      "layups": 29.3,
+      "tipIns": 1.1,
+      "twoPointJumpers": 18.4,
+      "threePointJumpers": 48.6
     }
   }
 ]

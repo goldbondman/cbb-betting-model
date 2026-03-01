@@ -4,53 +4,53 @@
     "teamId": 77,
     "team": "Eastern Illinois",
     "conference": "OVC",
-    "trackedShots": 1282,
-    "freeThrowRate": 33.3,
-    "assistedPct": 22.5,
+    "trackedShots": 1736,
+    "freeThrowRate": 33.8,
+    "assistedPct": 21.5,
     "dunks": {
-      "attempted": 38,
-      "made": 35,
-      "pct": 92.1,
-      "assisted": 29,
-      "assistedPct": 82.9
+      "attempted": 54,
+      "made": 45,
+      "pct": 83.3,
+      "assisted": 34,
+      "assistedPct": 75.6
     },
     "layups": {
-      "attempted": 450,
-      "made": 247,
-      "pct": 54.9,
-      "assisted": 111,
-      "assistedPct": 44.9
+      "attempted": 607,
+      "made": 323,
+      "pct": 53.2,
+      "assisted": 143,
+      "assistedPct": 44.3
     },
     "tipIns": {
-      "attempted": 34,
-      "made": 25,
-      "pct": 73.5
+      "attempted": 53,
+      "made": 38,
+      "pct": 71.7
     },
     "twoPointJumpers": {
-      "attempted": 357,
-      "made": 110,
-      "pct": 30.8,
-      "assisted": 33,
-      "assistedPct": 30
+      "attempted": 497,
+      "made": 163,
+      "pct": 32.8,
+      "assisted": 50,
+      "assistedPct": 30.7
     },
     "threePointJumpers": {
-      "attempted": 403,
-      "made": 130,
-      "pct": 32.3,
-      "assisted": 115,
-      "assistedPct": 88.5
+      "attempted": 525,
+      "made": 168,
+      "pct": 32,
+      "assisted": 147,
+      "assistedPct": 87.5
     },
     "freeThrows": {
-      "attempted": 427,
-      "made": 315,
-      "pct": 73.8
+      "attempted": 586,
+      "made": 432,
+      "pct": 73.7
     },
     "attemptsBreakdown": {
-      "dunks": 3,
-      "layups": 35.1,
-      "tipIns": 2.7,
-      "twoPointJumpers": 27.8,
-      "threePointJumpers": 31.4
+      "dunks": 3.1,
+      "layups": 35,
+      "tipIns": 3.1,
+      "twoPointJumpers": 28.6,
+      "threePointJumpers": 30.2
     }
   }
 ]

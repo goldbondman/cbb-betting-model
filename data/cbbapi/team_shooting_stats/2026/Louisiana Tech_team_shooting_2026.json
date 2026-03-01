@@ -4,53 +4,53 @@
     "teamId": 149,
     "team": "Louisiana Tech",
     "conference": "CUSA",
-    "trackedShots": 1208,
-    "freeThrowRate": 33.2,
-    "assistedPct": 20.2,
+    "trackedShots": 1672,
+    "freeThrowRate": 34.7,
+    "assistedPct": 21.1,
     "dunks": {
-      "attempted": 89,
-      "made": 71,
-      "pct": 79.8,
-      "assisted": 60,
-      "assistedPct": 84.5
+      "attempted": 127,
+      "made": 106,
+      "pct": 83.5,
+      "assisted": 90,
+      "assistedPct": 84.9
     },
     "layups": {
-      "attempted": 439,
-      "made": 211,
-      "pct": 48.1,
-      "assisted": 68,
-      "assistedPct": 32.2
+      "attempted": 577,
+      "made": 289,
+      "pct": 50.1,
+      "assisted": 99,
+      "assistedPct": 34.3
     },
     "tipIns": {
-      "attempted": 42,
-      "made": 31,
-      "pct": 73.8
+      "attempted": 50,
+      "made": 33,
+      "pct": 66
     },
     "twoPointJumpers": {
-      "attempted": 248,
-      "made": 97,
-      "pct": 39.1,
-      "assisted": 19,
-      "assistedPct": 19.6
+      "attempted": 362,
+      "made": 138,
+      "pct": 38.1,
+      "assisted": 26,
+      "assistedPct": 18.8
     },
     "threePointJumpers": {
-      "attempted": 390,
-      "made": 119,
-      "pct": 30.5,
-      "assisted": 97,
-      "assistedPct": 81.5
+      "attempted": 556,
+      "made": 166,
+      "pct": 29.9,
+      "assisted": 137,
+      "assistedPct": 82.5
     },
     "freeThrows": {
-      "attempted": 401,
-      "made": 259,
-      "pct": 64.6
+      "attempted": 581,
+      "made": 379,
+      "pct": 65.2
     },
     "attemptsBreakdown": {
-      "dunks": 7.4,
-      "layups": 36.3,
-      "tipIns": 3.5,
-      "twoPointJumpers": 20.5,
-      "threePointJumpers": 32.3
+      "dunks": 7.6,
+      "layups": 34.5,
+      "tipIns": 3,
+      "twoPointJumpers": 21.7,
+      "threePointJumpers": 33.3
     }
   }
 ]

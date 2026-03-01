@@ -4,53 +4,53 @@
     "teamId": 121,
     "team": "Indiana",
     "conference": "Big Ten",
-    "trackedShots": 1203,
-    "freeThrowRate": 37.3,
-    "assistedPct": 29.8,
+    "trackedShots": 1524,
+    "freeThrowRate": 35.6,
+    "assistedPct": 29.7,
     "dunks": {
-      "attempted": 84,
-      "made": 77,
-      "pct": 91.7,
-      "assisted": 67,
-      "assistedPct": 87
+      "attempted": 104,
+      "made": 96,
+      "pct": 92.3,
+      "assisted": 81,
+      "assistedPct": 84.4
     },
     "layups": {
-      "attempted": 328,
-      "made": 200,
-      "pct": 61,
-      "assisted": 91,
-      "assistedPct": 45.5
+      "attempted": 412,
+      "made": 249,
+      "pct": 60.4,
+      "assisted": 116,
+      "assistedPct": 46.6
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 12,
-      "pct": 44.4
+      "attempted": 30,
+      "made": 14,
+      "pct": 46.7
     },
     "twoPointJumpers": {
-      "attempted": 142,
-      "made": 57,
-      "pct": 40.1,
-      "assisted": 15,
-      "assistedPct": 26.3
+      "attempted": 200,
+      "made": 91,
+      "pct": 45.5,
+      "assisted": 28,
+      "assistedPct": 30.8
     },
     "threePointJumpers": {
-      "attempted": 622,
-      "made": 223,
-      "pct": 35.9,
-      "assisted": 185,
-      "assistedPct": 83
+      "attempted": 778,
+      "made": 272,
+      "pct": 35,
+      "assisted": 228,
+      "assistedPct": 83.8
     },
     "freeThrows": {
-      "attempted": 449,
-      "made": 354,
+      "attempted": 542,
+      "made": 427,
       "pct": 78.8
     },
     "attemptsBreakdown": {
-      "dunks": 7,
-      "layups": 27.3,
-      "tipIns": 2.2,
-      "twoPointJumpers": 11.8,
-      "threePointJumpers": 51.7
+      "dunks": 6.8,
+      "layups": 27,
+      "tipIns": 2,
+      "twoPointJumpers": 13.1,
+      "threePointJumpers": 51
     }
   }
 ]

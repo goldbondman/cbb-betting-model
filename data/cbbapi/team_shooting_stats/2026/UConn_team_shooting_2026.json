@@ -4,53 +4,53 @@
     "teamId": 314,
     "team": "UConn",
     "conference": "Big East",
-    "trackedShots": 1244,
-    "freeThrowRate": 31.9,
-    "assistedPct": 29.7,
+    "trackedShots": 1696,
+    "freeThrowRate": 31.4,
+    "assistedPct": 31,
     "dunks": {
-      "attempted": 69,
-      "made": 64,
-      "pct": 92.8,
-      "assisted": 53,
-      "assistedPct": 82.8
+      "attempted": 94,
+      "made": 87,
+      "pct": 92.6,
+      "assisted": 70,
+      "assistedPct": 80.5
     },
     "layups": {
-      "attempted": 386,
-      "made": 231,
+      "attempted": 515,
+      "made": 308,
       "pct": 59.8,
-      "assisted": 125,
-      "assistedPct": 54.1
+      "assisted": 175,
+      "assistedPct": 56.8
     },
     "tipIns": {
-      "attempted": 47,
-      "made": 30,
-      "pct": 63.8
+      "attempted": 58,
+      "made": 38,
+      "pct": 65.5
     },
     "twoPointJumpers": {
-      "attempted": 272,
-      "made": 111,
-      "pct": 40.8,
-      "assisted": 49,
-      "assistedPct": 44.1
+      "attempted": 353,
+      "made": 153,
+      "pct": 43.3,
+      "assisted": 68,
+      "assistedPct": 44.4
     },
     "threePointJumpers": {
-      "attempted": 470,
-      "made": 171,
-      "pct": 36.4,
-      "assisted": 143,
-      "assistedPct": 83.6
+      "attempted": 676,
+      "made": 247,
+      "pct": 36.5,
+      "assisted": 213,
+      "assistedPct": 86.2
     },
     "freeThrows": {
-      "attempted": 397,
-      "made": 279,
+      "attempted": 532,
+      "made": 374,
       "pct": 70.3
     },
     "attemptsBreakdown": {
       "dunks": 5.5,
-      "layups": 31,
-      "tipIns": 3.8,
-      "twoPointJumpers": 21.9,
-      "threePointJumpers": 37.8
+      "layups": 30.4,
+      "tipIns": 3.4,
+      "twoPointJumpers": 20.8,
+      "threePointJumpers": 39.9
     }
   }
 ]

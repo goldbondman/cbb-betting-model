@@ -4,53 +4,53 @@
     "teamId": 317,
     "team": "UMBC",
     "conference": "Am. East",
-    "trackedShots": 1190,
+    "trackedShots": 1597,
     "freeThrowRate": 32.4,
-    "assistedPct": 22,
+    "assistedPct": 21.1,
     "dunks": {
-      "attempted": 39,
-      "made": 31,
-      "pct": 79.5,
-      "assisted": 18,
-      "assistedPct": 58.1
+      "attempted": 49,
+      "made": 41,
+      "pct": 83.7,
+      "assisted": 26,
+      "assistedPct": 63.4
     },
     "layups": {
-      "attempted": 414,
-      "made": 251,
-      "pct": 60.6,
-      "assisted": 89,
-      "assistedPct": 35.5
+      "attempted": 565,
+      "made": 339,
+      "pct": 60,
+      "assisted": 114,
+      "assistedPct": 33.6
     },
     "tipIns": {
-      "attempted": 9,
-      "made": 5,
-      "pct": 55.6
+      "attempted": 12,
+      "made": 6,
+      "pct": 50
     },
     "twoPointJumpers": {
-      "attempted": 255,
-      "made": 102,
-      "pct": 40,
-      "assisted": 20,
-      "assistedPct": 19.6
+      "attempted": 355,
+      "made": 146,
+      "pct": 41.1,
+      "assisted": 25,
+      "assistedPct": 17.1
     },
     "threePointJumpers": {
-      "attempted": 473,
-      "made": 167,
-      "pct": 35.3,
-      "assisted": 135,
-      "assistedPct": 80.8
+      "attempted": 616,
+      "made": 215,
+      "pct": 34.9,
+      "assisted": 172,
+      "assistedPct": 80
     },
     "freeThrows": {
-      "attempted": 385,
-      "made": 283,
-      "pct": 73.5
+      "attempted": 518,
+      "made": 390,
+      "pct": 75.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
-      "layups": 34.8,
+      "dunks": 3.1,
+      "layups": 35.4,
       "tipIns": 0.8,
-      "twoPointJumpers": 21.4,
-      "threePointJumpers": 39.7
+      "twoPointJumpers": 22.2,
+      "threePointJumpers": 38.6
     }
   }
 ]

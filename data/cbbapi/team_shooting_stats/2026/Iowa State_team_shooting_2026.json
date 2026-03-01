@@ -4,53 +4,53 @@
     "teamId": 125,
     "team": "Iowa State",
     "conference": "Big 12",
-    "trackedShots": 1333,
-    "freeThrowRate": 36.3,
-    "assistedPct": 29.9,
+    "trackedShots": 1729,
+    "freeThrowRate": 35.5,
+    "assistedPct": 28.9,
     "dunks": {
-      "attempted": 82,
-      "made": 74,
-      "pct": 90.2,
-      "assisted": 50,
-      "assistedPct": 67.6
+      "attempted": 99,
+      "made": 91,
+      "pct": 91.9,
+      "assisted": 63,
+      "assistedPct": 69.2
     },
     "layups": {
-      "attempted": 411,
-      "made": 258,
-      "pct": 62.8,
-      "assisted": 136,
-      "assistedPct": 52.7
+      "attempted": 523,
+      "made": 323,
+      "pct": 61.8,
+      "assisted": 173,
+      "assistedPct": 53.6
     },
     "tipIns": {
-      "attempted": 39,
-      "made": 27,
-      "pct": 69.2
+      "attempted": 48,
+      "made": 35,
+      "pct": 72.9
     },
     "twoPointJumpers": {
-      "attempted": 306,
-      "made": 121,
-      "pct": 39.5,
-      "assisted": 33,
-      "assistedPct": 27.3
+      "attempted": 397,
+      "made": 154,
+      "pct": 38.8,
+      "assisted": 39,
+      "assistedPct": 25.3
     },
     "threePointJumpers": {
-      "attempted": 495,
-      "made": 204,
-      "pct": 41.2,
-      "assisted": 179,
-      "assistedPct": 87.7
+      "attempted": 662,
+      "made": 258,
+      "pct": 39,
+      "assisted": 224,
+      "assistedPct": 86.8
     },
     "freeThrows": {
-      "attempted": 484,
-      "made": 332,
-      "pct": 68.6
+      "attempted": 614,
+      "made": 412,
+      "pct": 67.1
     },
     "attemptsBreakdown": {
-      "dunks": 6.2,
-      "layups": 30.8,
-      "tipIns": 2.9,
+      "dunks": 5.7,
+      "layups": 30.2,
+      "tipIns": 2.8,
       "twoPointJumpers": 23,
-      "threePointJumpers": 37.1
+      "threePointJumpers": 38.3
     }
   }
 ]

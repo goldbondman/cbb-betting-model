@@ -4,53 +4,53 @@
     "teamId": 241,
     "team": "Rice",
     "conference": "American",
-    "trackedShots": 1303,
-    "freeThrowRate": 36.7,
-    "assistedPct": 20.5,
+    "trackedShots": 1678,
+    "freeThrowRate": 35,
+    "assistedPct": 20.3,
     "dunks": {
-      "attempted": 38,
-      "made": 32,
-      "pct": 84.2,
-      "assisted": 21,
-      "assistedPct": 65.6
+      "attempted": 45,
+      "made": 39,
+      "pct": 86.7,
+      "assisted": 26,
+      "assistedPct": 66.7
     },
     "layups": {
-      "attempted": 343,
-      "made": 175,
-      "pct": 51,
-      "assisted": 64,
-      "assistedPct": 36.6
+      "attempted": 424,
+      "made": 225,
+      "pct": 53.1,
+      "assisted": 82,
+      "assistedPct": 36.4
     },
     "tipIns": {
-      "attempted": 35,
-      "made": 18,
-      "pct": 51.4
+      "attempted": 38,
+      "made": 21,
+      "pct": 55.3
     },
     "twoPointJumpers": {
-      "attempted": 342,
-      "made": 129,
-      "pct": 37.7,
-      "assisted": 17,
-      "assistedPct": 13.2
+      "attempted": 452,
+      "made": 164,
+      "pct": 36.3,
+      "assisted": 20,
+      "assistedPct": 12.2
     },
     "threePointJumpers": {
-      "attempted": 545,
-      "made": 199,
-      "pct": 36.5,
-      "assisted": 165,
-      "assistedPct": 82.9
+      "attempted": 719,
+      "made": 256,
+      "pct": 35.6,
+      "assisted": 213,
+      "assistedPct": 83.2
     },
     "freeThrows": {
-      "attempted": 478,
-      "made": 330,
-      "pct": 69
+      "attempted": 587,
+      "made": 407,
+      "pct": 69.3
     },
     "attemptsBreakdown": {
-      "dunks": 2.9,
-      "layups": 26.3,
-      "tipIns": 2.7,
-      "twoPointJumpers": 26.2,
-      "threePointJumpers": 41.8
+      "dunks": 2.7,
+      "layups": 25.3,
+      "tipIns": 2.3,
+      "twoPointJumpers": 26.9,
+      "threePointJumpers": 42.8
     }
   }
 ]

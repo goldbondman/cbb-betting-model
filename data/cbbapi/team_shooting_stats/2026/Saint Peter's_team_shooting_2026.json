@@ -4,53 +4,53 @@
     "teamId": 254,
     "team": "Saint Peter's",
     "conference": "MAAC",
-    "trackedShots": 1192,
-    "freeThrowRate": 35.3,
-    "assistedPct": 21.2,
+    "trackedShots": 1601,
+    "freeThrowRate": 35.2,
+    "assistedPct": 21.3,
     "dunks": {
-      "attempted": 50,
-      "made": 46,
-      "pct": 92,
-      "assisted": 36,
-      "assistedPct": 78.3
+      "attempted": 66,
+      "made": 61,
+      "pct": 92.4,
+      "assisted": 49,
+      "assistedPct": 80.3
     },
     "layups": {
-      "attempted": 386,
-      "made": 180,
-      "pct": 46.6,
-      "assisted": 55,
-      "assistedPct": 30.6
+      "attempted": 507,
+      "made": 240,
+      "pct": 47.3,
+      "assisted": 77,
+      "assistedPct": 32.1
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 17,
-      "pct": 53.1
+      "attempted": 61,
+      "made": 30,
+      "pct": 49.2
     },
     "twoPointJumpers": {
-      "attempted": 237,
-      "made": 88,
-      "pct": 37.1,
-      "assisted": 30,
+      "attempted": 335,
+      "made": 126,
+      "pct": 37.6,
+      "assisted": 43,
       "assistedPct": 34.1
     },
     "threePointJumpers": {
-      "attempted": 487,
-      "made": 151,
-      "pct": 31,
-      "assisted": 132,
-      "assistedPct": 87.4
+      "attempted": 632,
+      "made": 201,
+      "pct": 31.8,
+      "assisted": 172,
+      "assistedPct": 85.6
     },
     "freeThrows": {
-      "attempted": 421,
-      "made": 315,
-      "pct": 74.8
+      "attempted": 563,
+      "made": 419,
+      "pct": 74.4
     },
     "attemptsBreakdown": {
-      "dunks": 4.2,
-      "layups": 32.4,
-      "tipIns": 2.7,
-      "twoPointJumpers": 19.9,
-      "threePointJumpers": 40.9
+      "dunks": 4.1,
+      "layups": 31.7,
+      "tipIns": 3.8,
+      "twoPointJumpers": 20.9,
+      "threePointJumpers": 39.5
     }
   }
 ]

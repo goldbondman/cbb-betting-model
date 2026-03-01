@@ -4,53 +4,53 @@
     "teamId": 285,
     "team": "Stony Brook",
     "conference": "CAA",
-    "trackedShots": 1369,
+    "trackedShots": 1772,
     "freeThrowRate": 28.6,
-    "assistedPct": 23,
+    "assistedPct": 22.2,
     "dunks": {
-      "attempted": 47,
-      "made": 40,
-      "pct": 85.1,
-      "assisted": 26,
-      "assistedPct": 65
+      "attempted": 58,
+      "made": 51,
+      "pct": 87.9,
+      "assisted": 34,
+      "assistedPct": 66.7
     },
     "layups": {
-      "attempted": 394,
-      "made": 193,
-      "pct": 49,
-      "assisted": 71,
-      "assistedPct": 36.8
+      "attempted": 513,
+      "made": 259,
+      "pct": 50.5,
+      "assisted": 91,
+      "assistedPct": 35.1
     },
     "tipIns": {
-      "attempted": 33,
+      "attempted": 37,
       "made": 19,
-      "pct": 57.6
+      "pct": 51.4
     },
     "twoPointJumpers": {
-      "attempted": 275,
-      "made": 109,
+      "attempted": 346,
+      "made": 137,
       "pct": 39.6,
-      "assisted": 22,
-      "assistedPct": 20.2
+      "assisted": 27,
+      "assistedPct": 19.7
     },
     "threePointJumpers": {
-      "attempted": 620,
-      "made": 224,
-      "pct": 36.1,
-      "assisted": 196,
-      "assistedPct": 87.5
+      "attempted": 818,
+      "made": 285,
+      "pct": 34.8,
+      "assisted": 241,
+      "assistedPct": 84.6
     },
     "freeThrows": {
-      "attempted": 391,
-      "made": 276,
-      "pct": 70.6
+      "attempted": 506,
+      "made": 362,
+      "pct": 71.5
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 28.8,
-      "tipIns": 2.4,
-      "twoPointJumpers": 20.1,
-      "threePointJumpers": 45.3
+      "dunks": 3.3,
+      "layups": 29,
+      "tipIns": 2.1,
+      "twoPointJumpers": 19.5,
+      "threePointJumpers": 46.2
     }
   }
 ]

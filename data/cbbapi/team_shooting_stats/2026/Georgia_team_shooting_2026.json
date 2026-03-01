@@ -4,53 +4,53 @@
     "teamId": 98,
     "team": "Georgia",
     "conference": "SEC",
-    "trackedShots": 1480,
-    "freeThrowRate": 39.3,
-    "assistedPct": 21.8,
+    "trackedShots": 1902,
+    "freeThrowRate": 37.1,
+    "assistedPct": 22.5,
     "dunks": {
-      "attempted": 140,
-      "made": 126,
-      "pct": 90,
-      "assisted": 96,
-      "assistedPct": 76.2
+      "attempted": 182,
+      "made": 162,
+      "pct": 89,
+      "assisted": 122,
+      "assistedPct": 75.3
     },
     "layups": {
-      "attempted": 430,
-      "made": 239,
-      "pct": 55.6,
-      "assisted": 60,
-      "assistedPct": 25.1
+      "attempted": 554,
+      "made": 309,
+      "pct": 55.8,
+      "assisted": 79,
+      "assistedPct": 25.6
     },
     "tipIns": {
-      "attempted": 59,
-      "made": 36,
-      "pct": 61
+      "attempted": 68,
+      "made": 42,
+      "pct": 61.8
     },
     "twoPointJumpers": {
-      "attempted": 213,
-      "made": 91,
-      "pct": 42.7,
-      "assisted": 13,
-      "assistedPct": 14.3
+      "attempted": 273,
+      "made": 110,
+      "pct": 40.3,
+      "assisted": 17,
+      "assistedPct": 15.5
     },
     "threePointJumpers": {
-      "attempted": 638,
-      "made": 202,
-      "pct": 31.7,
-      "assisted": 154,
-      "assistedPct": 76.2
+      "attempted": 825,
+      "made": 275,
+      "pct": 33.3,
+      "assisted": 210,
+      "assistedPct": 76.4
     },
     "freeThrows": {
-      "attempted": 581,
-      "made": 439,
-      "pct": 75.6
+      "attempted": 705,
+      "made": 529,
+      "pct": 75
     },
     "attemptsBreakdown": {
-      "dunks": 9.5,
+      "dunks": 9.6,
       "layups": 29.1,
-      "tipIns": 4,
+      "tipIns": 3.6,
       "twoPointJumpers": 14.4,
-      "threePointJumpers": 43.1
+      "threePointJumpers": 43.4
     }
   }
 ]

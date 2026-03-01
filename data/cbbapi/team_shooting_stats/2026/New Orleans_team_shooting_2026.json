@@ -4,53 +4,53 @@
     "teamId": 193,
     "team": "New Orleans",
     "conference": "Southland",
-    "trackedShots": 1362,
-    "freeThrowRate": 43.6,
-    "assistedPct": 23.5,
+    "trackedShots": 1738,
+    "freeThrowRate": 46.4,
+    "assistedPct": 23.4,
     "dunks": {
-      "attempted": 81,
-      "made": 70,
-      "pct": 86.4,
-      "assisted": 55,
-      "assistedPct": 78.6
+      "attempted": 105,
+      "made": 93,
+      "pct": 88.6,
+      "assisted": 75,
+      "assistedPct": 80.6
     },
     "layups": {
-      "attempted": 439,
-      "made": 220,
-      "pct": 50.1,
-      "assisted": 96,
-      "assistedPct": 43.6
+      "attempted": 563,
+      "made": 285,
+      "pct": 50.6,
+      "assisted": 125,
+      "assistedPct": 43.9
     },
     "tipIns": {
-      "attempted": 46,
-      "made": 35,
-      "pct": 76.1
+      "attempted": 64,
+      "made": 48,
+      "pct": 75
     },
     "twoPointJumpers": {
-      "attempted": 308,
-      "made": 119,
-      "pct": 38.6,
-      "assisted": 31,
-      "assistedPct": 26.1
+      "attempted": 405,
+      "made": 157,
+      "pct": 38.8,
+      "assisted": 46,
+      "assistedPct": 29.3
     },
     "threePointJumpers": {
-      "attempted": 488,
-      "made": 172,
-      "pct": 35.2,
-      "assisted": 138,
-      "assistedPct": 80.2
+      "attempted": 601,
+      "made": 198,
+      "pct": 32.9,
+      "assisted": 161,
+      "assistedPct": 81.3
     },
     "freeThrows": {
-      "attempted": 594,
-      "made": 443,
+      "attempted": 807,
+      "made": 602,
       "pct": 74.6
     },
     "attemptsBreakdown": {
-      "dunks": 5.9,
-      "layups": 32.2,
-      "tipIns": 3.4,
-      "twoPointJumpers": 22.6,
-      "threePointJumpers": 35.8
+      "dunks": 6,
+      "layups": 32.4,
+      "tipIns": 3.7,
+      "twoPointJumpers": 23.3,
+      "threePointJumpers": 34.6
     }
   }
 ]

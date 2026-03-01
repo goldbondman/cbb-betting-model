@@ -4,53 +4,53 @@
     "teamId": 133,
     "team": "Kennesaw State",
     "conference": "CUSA",
-    "trackedShots": 1338,
-    "freeThrowRate": 42.9,
-    "assistedPct": 22.6,
+    "trackedShots": 1740,
+    "freeThrowRate": 41.7,
+    "assistedPct": 23.1,
     "dunks": {
-      "attempted": 41,
-      "made": 38,
-      "pct": 92.7,
-      "assisted": 25,
-      "assistedPct": 65.8
+      "attempted": 64,
+      "made": 60,
+      "pct": 93.8,
+      "assisted": 43,
+      "assistedPct": 71.7
     },
     "layups": {
-      "attempted": 461,
-      "made": 252,
-      "pct": 54.7,
-      "assisted": 78,
-      "assistedPct": 31
+      "attempted": 576,
+      "made": 312,
+      "pct": 54.2,
+      "assisted": 94,
+      "assistedPct": 30.1
     },
     "tipIns": {
-      "attempted": 64,
-      "made": 42,
-      "pct": 65.6
+      "attempted": 74,
+      "made": 50,
+      "pct": 67.6
     },
     "twoPointJumpers": {
-      "attempted": 187,
-      "made": 61,
-      "pct": 32.6,
-      "assisted": 14,
-      "assistedPct": 23
+      "attempted": 255,
+      "made": 83,
+      "pct": 32.5,
+      "assisted": 19,
+      "assistedPct": 22.9
     },
     "threePointJumpers": {
-      "attempted": 585,
-      "made": 207,
-      "pct": 35.4,
-      "assisted": 186,
-      "assistedPct": 89.9
+      "attempted": 771,
+      "made": 278,
+      "pct": 36.1,
+      "assisted": 246,
+      "assistedPct": 88.5
     },
     "freeThrows": {
-      "attempted": 574,
-      "made": 395,
-      "pct": 68.8
+      "attempted": 725,
+      "made": 495,
+      "pct": 68.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.1,
-      "layups": 34.5,
-      "tipIns": 4.8,
-      "twoPointJumpers": 14,
-      "threePointJumpers": 43.7
+      "dunks": 3.7,
+      "layups": 33.1,
+      "tipIns": 4.3,
+      "twoPointJumpers": 14.7,
+      "threePointJumpers": 44.3
     }
   }
 ]

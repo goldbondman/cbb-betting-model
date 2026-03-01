@@ -4,53 +4,53 @@
     "teamId": 320,
     "team": "UNC Greensboro",
     "conference": "SoCon",
-    "trackedShots": 1300,
-    "freeThrowRate": 41.2,
-    "assistedPct": 21.7,
+    "trackedShots": 1760,
+    "freeThrowRate": 40.9,
+    "assistedPct": 22,
     "dunks": {
-      "attempted": 35,
-      "made": 31,
-      "pct": 88.6,
-      "assisted": 21,
-      "assistedPct": 67.7
+      "attempted": 45,
+      "made": 40,
+      "pct": 88.9,
+      "assisted": 27,
+      "assistedPct": 67.5
     },
     "layups": {
-      "attempted": 433,
-      "made": 260,
-      "pct": 60,
-      "assisted": 99,
-      "assistedPct": 38.1
+      "attempted": 577,
+      "made": 332,
+      "pct": 57.5,
+      "assisted": 115,
+      "assistedPct": 34.6
     },
     "tipIns": {
-      "attempted": 22,
-      "made": 14,
-      "pct": 63.6
+      "attempted": 31,
+      "made": 18,
+      "pct": 58.1
     },
     "twoPointJumpers": {
-      "attempted": 303,
-      "made": 104,
-      "pct": 34.3,
-      "assisted": 25,
-      "assistedPct": 24
+      "attempted": 412,
+      "made": 158,
+      "pct": 38.3,
+      "assisted": 43,
+      "assistedPct": 27.2
     },
     "threePointJumpers": {
-      "attempted": 507,
-      "made": 177,
-      "pct": 34.9,
-      "assisted": 137,
-      "assistedPct": 77.4
+      "attempted": 695,
+      "made": 256,
+      "pct": 36.8,
+      "assisted": 202,
+      "assistedPct": 78.9
     },
     "freeThrows": {
-      "attempted": 535,
-      "made": 365,
-      "pct": 68.2
+      "attempted": 720,
+      "made": 504,
+      "pct": 70
     },
     "attemptsBreakdown": {
-      "dunks": 2.7,
-      "layups": 33.3,
-      "tipIns": 1.7,
-      "twoPointJumpers": 23.3,
-      "threePointJumpers": 39
+      "dunks": 2.6,
+      "layups": 32.8,
+      "tipIns": 1.8,
+      "twoPointJumpers": 23.4,
+      "threePointJumpers": 39.5
     }
   }
 ]

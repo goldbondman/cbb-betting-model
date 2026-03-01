@@ -4,53 +4,53 @@
     "teamId": 3,
     "team": "Akron",
     "conference": "MAC",
-    "trackedShots": 1442,
-    "freeThrowRate": 26.1,
-    "assistedPct": 29.4,
+    "trackedShots": 1862,
+    "freeThrowRate": 28.1,
+    "assistedPct": 28.9,
     "dunks": {
-      "attempted": 67,
-      "made": 64,
-      "pct": 95.5,
-      "assisted": 47,
-      "assistedPct": 73.4
+      "attempted": 81,
+      "made": 76,
+      "pct": 93.8,
+      "assisted": 55,
+      "assistedPct": 72.4
     },
     "layups": {
-      "attempted": 506,
-      "made": 320,
+      "attempted": 647,
+      "made": 409,
       "pct": 63.2,
-      "assisted": 169,
-      "assistedPct": 52.8
+      "assisted": 210,
+      "assistedPct": 51.3
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 23,
-      "pct": 76.7
+      "attempted": 34,
+      "made": 26,
+      "pct": 76.5
     },
     "twoPointJumpers": {
-      "attempted": 202,
-      "made": 91,
-      "pct": 45,
-      "assisted": 13,
-      "assistedPct": 14.3
+      "attempted": 263,
+      "made": 114,
+      "pct": 43.3,
+      "assisted": 20,
+      "assistedPct": 17.5
     },
     "threePointJumpers": {
-      "attempted": 637,
-      "made": 243,
-      "pct": 38.1,
-      "assisted": 195,
-      "assistedPct": 80.2
+      "attempted": 837,
+      "made": 316,
+      "pct": 37.8,
+      "assisted": 254,
+      "assistedPct": 80.4
     },
     "freeThrows": {
-      "attempted": 377,
-      "made": 288,
-      "pct": 76.4
+      "attempted": 524,
+      "made": 408,
+      "pct": 77.9
     },
     "attemptsBreakdown": {
-      "dunks": 4.6,
-      "layups": 35.1,
-      "tipIns": 2.1,
-      "twoPointJumpers": 14,
-      "threePointJumpers": 44.2
+      "dunks": 4.4,
+      "layups": 34.7,
+      "tipIns": 1.8,
+      "twoPointJumpers": 14.1,
+      "threePointJumpers": 45
     }
   }
 ]

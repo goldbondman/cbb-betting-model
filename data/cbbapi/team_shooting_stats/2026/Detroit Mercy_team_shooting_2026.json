@@ -4,53 +4,53 @@
     "teamId": 69,
     "team": "Detroit Mercy",
     "conference": "Horizon",
-    "trackedShots": 1322,
-    "freeThrowRate": 34.8,
-    "assistedPct": 20.7,
+    "trackedShots": 1784,
+    "freeThrowRate": 34.2,
+    "assistedPct": 21.2,
     "dunks": {
-      "attempted": 14,
-      "made": 12,
-      "pct": 85.7,
-      "assisted": 8,
-      "assistedPct": 66.7
+      "attempted": 18,
+      "made": 16,
+      "pct": 88.9,
+      "assisted": 12,
+      "assistedPct": 75
     },
     "layups": {
-      "attempted": 391,
-      "made": 216,
-      "pct": 55.2,
-      "assisted": 90,
-      "assistedPct": 41.7
+      "attempted": 543,
+      "made": 302,
+      "pct": 55.6,
+      "assisted": 123,
+      "assistedPct": 40.7
     },
     "tipIns": {
-      "attempted": 50,
-      "made": 28,
-      "pct": 56
+      "attempted": 57,
+      "made": 33,
+      "pct": 57.9
     },
     "twoPointJumpers": {
-      "attempted": 432,
-      "made": 174,
-      "pct": 40.3,
-      "assisted": 52,
-      "assistedPct": 29.9
+      "attempted": 606,
+      "made": 250,
+      "pct": 41.3,
+      "assisted": 76,
+      "assistedPct": 30.4
     },
     "threePointJumpers": {
-      "attempted": 435,
-      "made": 145,
-      "pct": 33.3,
-      "assisted": 123,
-      "assistedPct": 84.8
+      "attempted": 560,
+      "made": 194,
+      "pct": 34.6,
+      "assisted": 168,
+      "assistedPct": 86.6
     },
     "freeThrows": {
-      "attempted": 460,
-      "made": 345,
-      "pct": 75
+      "attempted": 611,
+      "made": 470,
+      "pct": 76.9
     },
     "attemptsBreakdown": {
-      "dunks": 1.1,
-      "layups": 29.6,
-      "tipIns": 3.8,
-      "twoPointJumpers": 32.7,
-      "threePointJumpers": 32.9
+      "dunks": 1,
+      "layups": 30.4,
+      "tipIns": 3.2,
+      "twoPointJumpers": 34,
+      "threePointJumpers": 31.4
     }
   }
 ]

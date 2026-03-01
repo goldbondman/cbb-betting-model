@@ -4,53 +4,53 @@
     "teamId": 161,
     "team": "Massachusetts",
     "conference": "MAC",
-    "trackedShots": 1400,
-    "freeThrowRate": 38,
-    "assistedPct": 28.2,
+    "trackedShots": 1840,
+    "freeThrowRate": 36.3,
+    "assistedPct": 27.9,
     "dunks": {
-      "attempted": 23,
-      "made": 21,
-      "pct": 91.3,
-      "assisted": 20,
-      "assistedPct": 95.2
+      "attempted": 26,
+      "made": 24,
+      "pct": 92.3,
+      "assisted": 22,
+      "assistedPct": 91.7
     },
     "layups": {
-      "attempted": 526,
-      "made": 306,
-      "pct": 58.2,
-      "assisted": 171,
-      "assistedPct": 55.9
+      "attempted": 684,
+      "made": 395,
+      "pct": 57.7,
+      "assisted": 219,
+      "assistedPct": 55.4
     },
     "tipIns": {
-      "attempted": 19,
-      "made": 16,
-      "pct": 84.2
+      "attempted": 22,
+      "made": 19,
+      "pct": 86.4
     },
     "twoPointJumpers": {
-      "attempted": 341,
-      "made": 137,
-      "pct": 40.2,
-      "assisted": 57,
-      "assistedPct": 41.6
+      "attempted": 450,
+      "made": 188,
+      "pct": 41.8,
+      "assisted": 74,
+      "assistedPct": 39.4
     },
     "threePointJumpers": {
-      "attempted": 491,
-      "made": 169,
-      "pct": 34.4,
-      "assisted": 147,
-      "assistedPct": 87
+      "attempted": 658,
+      "made": 234,
+      "pct": 35.6,
+      "assisted": 198,
+      "assistedPct": 84.6
     },
     "freeThrows": {
-      "attempted": 532,
-      "made": 361,
-      "pct": 67.9
+      "attempted": 667,
+      "made": 446,
+      "pct": 66.9
     },
     "attemptsBreakdown": {
-      "dunks": 1.6,
-      "layups": 37.6,
-      "tipIns": 1.4,
-      "twoPointJumpers": 24.4,
-      "threePointJumpers": 35.1
+      "dunks": 1.4,
+      "layups": 37.2,
+      "tipIns": 1.2,
+      "twoPointJumpers": 24.5,
+      "threePointJumpers": 35.8
     }
   }
 ]

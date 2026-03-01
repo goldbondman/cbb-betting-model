@@ -4,53 +4,53 @@
     "teamId": 265,
     "team": "South Alabama",
     "conference": "Sun Belt",
-    "trackedShots": 1185,
-    "freeThrowRate": 39.8,
-    "assistedPct": 19.9,
+    "trackedShots": 1693,
+    "freeThrowRate": 39.2,
+    "assistedPct": 20.7,
     "dunks": {
-      "attempted": 45,
-      "made": 38,
-      "pct": 84.4,
-      "assisted": 23,
-      "assistedPct": 60.5
+      "attempted": 55,
+      "made": 47,
+      "pct": 85.5,
+      "assisted": 30,
+      "assistedPct": 63.8
     },
     "layups": {
-      "attempted": 525,
-      "made": 289,
-      "pct": 55,
-      "assisted": 76,
-      "assistedPct": 26.3
+      "attempted": 705,
+      "made": 401,
+      "pct": 56.9,
+      "assisted": 105,
+      "assistedPct": 26.2
     },
     "tipIns": {
-      "attempted": 16,
-      "made": 12,
-      "pct": 75
+      "attempted": 21,
+      "made": 17,
+      "pct": 81
     },
     "twoPointJumpers": {
-      "attempted": 197,
-      "made": 81,
-      "pct": 41.1,
-      "assisted": 19,
-      "assistedPct": 23.5
+      "attempted": 288,
+      "made": 110,
+      "pct": 38.2,
+      "assisted": 25,
+      "assistedPct": 22.7
     },
     "threePointJumpers": {
-      "attempted": 402,
-      "made": 133,
-      "pct": 33.1,
-      "assisted": 118,
-      "assistedPct": 88.7
+      "attempted": 624,
+      "made": 216,
+      "pct": 34.6,
+      "assisted": 191,
+      "assistedPct": 88.4
     },
     "freeThrows": {
-      "attempted": 472,
-      "made": 313,
-      "pct": 66.3
+      "attempted": 663,
+      "made": 439,
+      "pct": 66.2
     },
     "attemptsBreakdown": {
-      "dunks": 3.8,
-      "layups": 44.3,
-      "tipIns": 1.4,
-      "twoPointJumpers": 16.6,
-      "threePointJumpers": 33.9
+      "dunks": 3.2,
+      "layups": 41.6,
+      "tipIns": 1.2,
+      "twoPointJumpers": 17,
+      "threePointJumpers": 36.9
     }
   }
 ]

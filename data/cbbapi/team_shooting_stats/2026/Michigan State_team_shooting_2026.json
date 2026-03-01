@@ -4,53 +4,53 @@
     "teamId": 169,
     "team": "Michigan State",
     "conference": "Big Ten",
-    "trackedShots": 1227,
-    "freeThrowRate": 38.4,
-    "assistedPct": 31.5,
+    "trackedShots": 1583,
+    "freeThrowRate": 36.6,
+    "assistedPct": 30.8,
     "dunks": {
-      "attempted": 97,
-      "made": 89,
-      "pct": 91.8,
-      "assisted": 82,
-      "assistedPct": 92.1
+      "attempted": 123,
+      "made": 111,
+      "pct": 90.2,
+      "assisted": 103,
+      "assistedPct": 92.8
     },
     "layups": {
-      "attempted": 297,
-      "made": 180,
-      "pct": 60.6,
-      "assisted": 90,
-      "assistedPct": 50
+      "attempted": 355,
+      "made": 207,
+      "pct": 58.3,
+      "assisted": 104,
+      "assistedPct": 50.2
     },
     "tipIns": {
-      "attempted": 19,
-      "made": 14,
-      "pct": 73.7
+      "attempted": 26,
+      "made": 20,
+      "pct": 76.9
     },
     "twoPointJumpers": {
-      "attempted": 355,
-      "made": 137,
-      "pct": 38.6,
-      "assisted": 64,
-      "assistedPct": 46.7
+      "attempted": 484,
+      "made": 193,
+      "pct": 39.9,
+      "assisted": 88,
+      "assistedPct": 45.6
     },
     "threePointJumpers": {
-      "attempted": 459,
-      "made": 159,
-      "pct": 34.6,
-      "assisted": 150,
-      "assistedPct": 94.3
+      "attempted": 595,
+      "made": 207,
+      "pct": 34.8,
+      "assisted": 193,
+      "assistedPct": 93.2
     },
     "freeThrows": {
-      "attempted": 471,
-      "made": 350,
-      "pct": 74.3
+      "attempted": 579,
+      "made": 437,
+      "pct": 75.5
     },
     "attemptsBreakdown": {
-      "dunks": 7.9,
-      "layups": 24.2,
-      "tipIns": 1.5,
-      "twoPointJumpers": 28.9,
-      "threePointJumpers": 37.4
+      "dunks": 7.8,
+      "layups": 22.4,
+      "tipIns": 1.6,
+      "twoPointJumpers": 30.6,
+      "threePointJumpers": 37.6
     }
   }
 ]

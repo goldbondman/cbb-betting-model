@@ -4,53 +4,53 @@
     "teamId": 6,
     "team": "Alabama State",
     "conference": "SWAC",
-    "trackedShots": 1283,
-    "freeThrowRate": 35.9,
-    "assistedPct": 19.7,
+    "trackedShots": 1767,
+    "freeThrowRate": 35.6,
+    "assistedPct": 20.1,
     "dunks": {
-      "attempted": 59,
-      "made": 52,
-      "pct": 88.1,
-      "assisted": 39,
-      "assistedPct": 75
+      "attempted": 77,
+      "made": 67,
+      "pct": 87,
+      "assisted": 50,
+      "assistedPct": 74.6
     },
     "layups": {
-      "attempted": 397,
-      "made": 204,
-      "pct": 51.4,
-      "assisted": 73,
-      "assistedPct": 35.8
+      "attempted": 553,
+      "made": 277,
+      "pct": 50.1,
+      "assisted": 102,
+      "assistedPct": 36.8
     },
     "tipIns": {
-      "attempted": 63,
-      "made": 41,
-      "pct": 65.1
+      "attempted": 85,
+      "made": 55,
+      "pct": 64.7
     },
     "twoPointJumpers": {
-      "attempted": 284,
-      "made": 89,
-      "pct": 31.3,
-      "assisted": 24,
+      "attempted": 386,
+      "made": 126,
+      "pct": 32.6,
+      "assisted": 34,
       "assistedPct": 27
     },
     "threePointJumpers": {
-      "attempted": 480,
-      "made": 157,
-      "pct": 32.7,
-      "assisted": 117,
-      "assistedPct": 74.5
+      "attempted": 666,
+      "made": 220,
+      "pct": 33,
+      "assisted": 169,
+      "assistedPct": 76.8
     },
     "freeThrows": {
-      "attempted": 460,
-      "made": 318,
-      "pct": 69.1
+      "attempted": 629,
+      "made": 439,
+      "pct": 69.8
     },
     "attemptsBreakdown": {
-      "dunks": 4.6,
-      "layups": 30.9,
-      "tipIns": 4.9,
-      "twoPointJumpers": 22.1,
-      "threePointJumpers": 37.4
+      "dunks": 4.4,
+      "layups": 31.3,
+      "tipIns": 4.8,
+      "twoPointJumpers": 21.8,
+      "threePointJumpers": 37.7
     }
   }
 ]

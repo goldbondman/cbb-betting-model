@@ -4,53 +4,53 @@
     "teamId": 115,
     "team": "IU Indianapolis",
     "conference": "Horizon",
-    "trackedShots": 1680,
-    "freeThrowRate": 20.7,
+    "trackedShots": 2131,
+    "freeThrowRate": 21,
     "assistedPct": 29,
     "dunks": {
-      "attempted": 53,
-      "made": 47,
-      "pct": 88.7,
-      "assisted": 35,
-      "assistedPct": 74.5
+      "attempted": 65,
+      "made": 57,
+      "pct": 87.7,
+      "assisted": 42,
+      "assistedPct": 73.7
     },
     "layups": {
-      "attempted": 468,
-      "made": 292,
-      "pct": 62.4,
-      "assisted": 159,
-      "assistedPct": 54.5
+      "attempted": 621,
+      "made": 382,
+      "pct": 61.5,
+      "assisted": 212,
+      "assistedPct": 55.5
     },
     "tipIns": {
-      "attempted": 44,
-      "made": 27,
-      "pct": 61.4
+      "attempted": 58,
+      "made": 38,
+      "pct": 65.5
     },
     "twoPointJumpers": {
-      "attempted": 375,
-      "made": 164,
-      "pct": 43.7,
-      "assisted": 75,
-      "assistedPct": 45.7
+      "attempted": 465,
+      "made": 202,
+      "pct": 43.4,
+      "assisted": 89,
+      "assistedPct": 44.1
     },
     "threePointJumpers": {
-      "attempted": 740,
-      "made": 237,
-      "pct": 32,
-      "assisted": 218,
+      "attempted": 922,
+      "made": 299,
+      "pct": 32.4,
+      "assisted": 275,
       "assistedPct": 92
     },
     "freeThrows": {
-      "attempted": 347,
-      "made": 252,
-      "pct": 72.6
+      "attempted": 447,
+      "made": 325,
+      "pct": 72.7
     },
     "attemptsBreakdown": {
-      "dunks": 3.2,
-      "layups": 27.9,
-      "tipIns": 2.6,
-      "twoPointJumpers": 22.3,
-      "threePointJumpers": 44
+      "dunks": 3.1,
+      "layups": 29.1,
+      "tipIns": 2.7,
+      "twoPointJumpers": 21.8,
+      "threePointJumpers": 43.3
     }
   }
 ]

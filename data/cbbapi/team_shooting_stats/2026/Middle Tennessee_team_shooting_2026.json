@@ -4,53 +4,53 @@
     "teamId": 171,
     "team": "Middle Tennessee",
     "conference": "CUSA",
-    "trackedShots": 1250,
-    "freeThrowRate": 29.1,
-    "assistedPct": 23,
+    "trackedShots": 1740,
+    "freeThrowRate": 31,
+    "assistedPct": 23.3,
     "dunks": {
-      "attempted": 52,
-      "made": 43,
-      "pct": 82.7,
-      "assisted": 31,
-      "assistedPct": 72.1
+      "attempted": 84,
+      "made": 72,
+      "pct": 85.7,
+      "assisted": 54,
+      "assistedPct": 75
     },
     "layups": {
-      "attempted": 319,
-      "made": 185,
-      "pct": 58,
-      "assisted": 72,
-      "assistedPct": 38.9
+      "attempted": 421,
+      "made": 248,
+      "pct": 58.9,
+      "assisted": 97,
+      "assistedPct": 39.1
     },
     "tipIns": {
-      "attempted": 17,
-      "made": 12,
-      "pct": 70.6
+      "attempted": 25,
+      "made": 19,
+      "pct": 76
     },
     "twoPointJumpers": {
-      "attempted": 293,
-      "made": 111,
-      "pct": 37.9,
-      "assisted": 21,
-      "assistedPct": 18.9
+      "attempted": 415,
+      "made": 171,
+      "pct": 41.2,
+      "assisted": 33,
+      "assistedPct": 19.3
     },
     "threePointJumpers": {
-      "attempted": 569,
-      "made": 199,
-      "pct": 35,
-      "assisted": 164,
-      "assistedPct": 82.4
+      "attempted": 795,
+      "made": 267,
+      "pct": 33.6,
+      "assisted": 222,
+      "assistedPct": 83.1
     },
     "freeThrows": {
-      "attempted": 364,
-      "made": 245,
-      "pct": 67.3
+      "attempted": 540,
+      "made": 376,
+      "pct": 69.6
     },
     "attemptsBreakdown": {
-      "dunks": 4.2,
-      "layups": 25.5,
+      "dunks": 4.8,
+      "layups": 24.2,
       "tipIns": 1.4,
-      "twoPointJumpers": 23.4,
-      "threePointJumpers": 45.5
+      "twoPointJumpers": 23.9,
+      "threePointJumpers": 45.7
     }
   }
 ]

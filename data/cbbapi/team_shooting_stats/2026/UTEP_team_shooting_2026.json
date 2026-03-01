@@ -4,53 +4,53 @@
     "teamId": 327,
     "team": "UTEP",
     "conference": "CUSA",
-    "trackedShots": 1257,
-    "freeThrowRate": 33.4,
-    "assistedPct": 21.8,
+    "trackedShots": 1643,
+    "freeThrowRate": 34.1,
+    "assistedPct": 20.7,
     "dunks": {
-      "attempted": 52,
-      "made": 47,
-      "pct": 90.4,
-      "assisted": 37,
-      "assistedPct": 78.7
+      "attempted": 62,
+      "made": 57,
+      "pct": 91.9,
+      "assisted": 41,
+      "assistedPct": 71.9
     },
     "layups": {
-      "attempted": 321,
-      "made": 190,
-      "pct": 59.2,
-      "assisted": 58,
-      "assistedPct": 30.5
+      "attempted": 411,
+      "made": 240,
+      "pct": 58.4,
+      "assisted": 65,
+      "assistedPct": 27.1
     },
     "tipIns": {
-      "attempted": 20,
-      "made": 15,
-      "pct": 75
+      "attempted": 29,
+      "made": 20,
+      "pct": 69
     },
     "twoPointJumpers": {
-      "attempted": 401,
-      "made": 131,
-      "pct": 32.7,
-      "assisted": 44,
-      "assistedPct": 33.6
+      "attempted": 505,
+      "made": 170,
+      "pct": 33.7,
+      "assisted": 52,
+      "assistedPct": 30.6
     },
     "threePointJumpers": {
-      "attempted": 463,
-      "made": 156,
-      "pct": 33.7,
-      "assisted": 135,
-      "assistedPct": 86.5
+      "attempted": 636,
+      "made": 215,
+      "pct": 33.8,
+      "assisted": 182,
+      "assistedPct": 84.7
     },
     "freeThrows": {
-      "attempted": 420,
-      "made": 291,
-      "pct": 69.3
+      "attempted": 561,
+      "made": 391,
+      "pct": 69.7
     },
     "attemptsBreakdown": {
-      "dunks": 4.1,
-      "layups": 25.5,
-      "tipIns": 1.6,
-      "twoPointJumpers": 31.9,
-      "threePointJumpers": 36.8
+      "dunks": 3.8,
+      "layups": 25,
+      "tipIns": 1.8,
+      "twoPointJumpers": 30.7,
+      "threePointJumpers": 38.7
     }
   }
 ]

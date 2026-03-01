@@ -4,53 +4,53 @@
     "teamId": 107,
     "team": "Harvard",
     "conference": "Ivy",
-    "trackedShots": 1143,
-    "freeThrowRate": 27.9,
+    "trackedShots": 1478,
+    "freeThrowRate": 27.2,
     "assistedPct": 24.8,
     "dunks": {
-      "attempted": 23,
-      "made": 20,
-      "pct": 87,
-      "assisted": 12,
-      "assistedPct": 60
+      "attempted": 27,
+      "made": 23,
+      "pct": 85.2,
+      "assisted": 14,
+      "assistedPct": 60.9
     },
     "layups": {
-      "attempted": 439,
-      "made": 252,
-      "pct": 57.4,
-      "assisted": 97,
-      "assistedPct": 38.5
+      "attempted": 544,
+      "made": 322,
+      "pct": 59.2,
+      "assisted": 133,
+      "assistedPct": 41.3
     },
     "tipIns": {
-      "attempted": 12,
-      "made": 7,
-      "pct": 58.3
+      "attempted": 15,
+      "made": 8,
+      "pct": 53.3
     },
     "twoPointJumpers": {
-      "attempted": 235,
-      "made": 98,
-      "pct": 41.7,
-      "assisted": 29,
-      "assistedPct": 29.6
+      "attempted": 308,
+      "made": 128,
+      "pct": 41.6,
+      "assisted": 35,
+      "assistedPct": 27.3
     },
     "threePointJumpers": {
-      "attempted": 434,
-      "made": 162,
-      "pct": 37.3,
-      "assisted": 146,
-      "assistedPct": 90.1
+      "attempted": 584,
+      "made": 203,
+      "pct": 34.8,
+      "assisted": 185,
+      "assistedPct": 91.1
     },
     "freeThrows": {
-      "attempted": 319,
-      "made": 257,
-      "pct": 80.6
+      "attempted": 402,
+      "made": 320,
+      "pct": 79.6
     },
     "attemptsBreakdown": {
-      "dunks": 2,
-      "layups": 38.4,
+      "dunks": 1.8,
+      "layups": 36.8,
       "tipIns": 1,
-      "twoPointJumpers": 20.6,
-      "threePointJumpers": 38
+      "twoPointJumpers": 20.8,
+      "threePointJumpers": 39.5
     }
   }
 ]

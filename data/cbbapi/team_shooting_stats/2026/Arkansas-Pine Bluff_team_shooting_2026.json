@@ -4,53 +4,53 @@
     "teamId": 14,
     "team": "Arkansas-Pine Bluff",
     "conference": "SWAC",
-    "trackedShots": 1289,
-    "freeThrowRate": 34.5,
-    "assistedPct": 24.6,
+    "trackedShots": 1722,
+    "freeThrowRate": 36.4,
+    "assistedPct": 25.1,
     "dunks": {
-      "attempted": 40,
-      "made": 37,
-      "pct": 92.5,
-      "assisted": 29,
-      "assistedPct": 78.4
+      "attempted": 53,
+      "made": 48,
+      "pct": 90.6,
+      "assisted": 37,
+      "assistedPct": 77.1
     },
     "layups": {
-      "attempted": 445,
-      "made": 257,
-      "pct": 57.8,
-      "assisted": 113,
-      "assistedPct": 44
+      "attempted": 589,
+      "made": 339,
+      "pct": 57.6,
+      "assisted": 153,
+      "assistedPct": 45.1
     },
     "tipIns": {
-      "attempted": 24,
-      "made": 17,
-      "pct": 70.8
+      "attempted": 33,
+      "made": 23,
+      "pct": 69.7
     },
     "twoPointJumpers": {
-      "attempted": 296,
-      "made": 98,
-      "pct": 33.1,
-      "assisted": 32,
-      "assistedPct": 32.7
+      "attempted": 393,
+      "made": 136,
+      "pct": 34.6,
+      "assisted": 47,
+      "assistedPct": 34.6
     },
     "threePointJumpers": {
-      "attempted": 484,
-      "made": 164,
-      "pct": 33.9,
-      "assisted": 143,
-      "assistedPct": 87.2
+      "attempted": 654,
+      "made": 223,
+      "pct": 34.1,
+      "assisted": 195,
+      "assistedPct": 87.4
     },
     "freeThrows": {
-      "attempted": 445,
-      "made": 337,
-      "pct": 75.7
+      "attempted": 626,
+      "made": 469,
+      "pct": 74.9
     },
     "attemptsBreakdown": {
       "dunks": 3.1,
-      "layups": 34.5,
+      "layups": 34.2,
       "tipIns": 1.9,
-      "twoPointJumpers": 23,
-      "threePointJumpers": 37.5
+      "twoPointJumpers": 22.8,
+      "threePointJumpers": 38
     }
   }
 ]

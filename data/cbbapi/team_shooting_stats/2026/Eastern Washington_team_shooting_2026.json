@@ -4,53 +4,53 @@
     "teamId": 80,
     "team": "Eastern Washington",
     "conference": "Big Sky",
-    "trackedShots": 1310,
-    "freeThrowRate": 33.1,
-    "assistedPct": 20.5,
+    "trackedShots": 1752,
+    "freeThrowRate": 34.2,
+    "assistedPct": 22.5,
     "dunks": {
-      "attempted": 20,
-      "made": 15,
-      "pct": 75,
-      "assisted": 14,
-      "assistedPct": 93.3
+      "attempted": 30,
+      "made": 25,
+      "pct": 83.3,
+      "assisted": 22,
+      "assistedPct": 88
     },
     "layups": {
-      "attempted": 461,
-      "made": 260,
-      "pct": 56.4,
-      "assisted": 104,
-      "assistedPct": 40
+      "attempted": 661,
+      "made": 387,
+      "pct": 58.5,
+      "assisted": 165,
+      "assistedPct": 42.6
     },
     "tipIns": {
-      "attempted": 31,
-      "made": 23,
-      "pct": 74.2
+      "attempted": 35,
+      "made": 26,
+      "pct": 74.3
     },
     "twoPointJumpers": {
-      "attempted": 336,
-      "made": 135,
-      "pct": 40.2,
-      "assisted": 33,
-      "assistedPct": 24.4
+      "attempted": 419,
+      "made": 177,
+      "pct": 42.2,
+      "assisted": 47,
+      "assistedPct": 26.6
     },
     "threePointJumpers": {
-      "attempted": 462,
-      "made": 162,
-      "pct": 35.1,
-      "assisted": 118,
-      "assistedPct": 72.8
+      "attempted": 607,
+      "made": 221,
+      "pct": 36.4,
+      "assisted": 161,
+      "assistedPct": 72.9
     },
     "freeThrows": {
-      "attempted": 434,
-      "made": 326,
-      "pct": 75.1
+      "attempted": 600,
+      "made": 450,
+      "pct": 75
     },
     "attemptsBreakdown": {
-      "dunks": 1.5,
-      "layups": 35.2,
-      "tipIns": 2.4,
-      "twoPointJumpers": 25.6,
-      "threePointJumpers": 35.3
+      "dunks": 1.7,
+      "layups": 37.7,
+      "tipIns": 2,
+      "twoPointJumpers": 23.9,
+      "threePointJumpers": 34.6
     }
   }
 ]

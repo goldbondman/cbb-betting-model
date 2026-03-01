@@ -4,53 +4,53 @@
     "teamId": 345,
     "team": "Weber State",
     "conference": "Big Sky",
-    "trackedShots": 1361,
-    "freeThrowRate": 38,
-    "assistedPct": 23.1,
+    "trackedShots": 1841,
+    "freeThrowRate": 37.6,
+    "assistedPct": 22.2,
     "dunks": {
-      "attempted": 42,
-      "made": 39,
-      "pct": 92.9,
-      "assisted": 32,
-      "assistedPct": 82.1
+      "attempted": 60,
+      "made": 54,
+      "pct": 90,
+      "assisted": 43,
+      "assistedPct": 79.6
     },
     "layups": {
-      "attempted": 593,
-      "made": 328,
-      "pct": 55.3,
-      "assisted": 132,
-      "assistedPct": 40.2
+      "attempted": 793,
+      "made": 438,
+      "pct": 55.2,
+      "assisted": 172,
+      "assistedPct": 39.3
     },
     "tipIns": {
-      "attempted": 68,
-      "made": 43,
-      "pct": 63.2
+      "attempted": 84,
+      "made": 52,
+      "pct": 61.9
     },
     "twoPointJumpers": {
-      "attempted": 196,
-      "made": 61,
-      "pct": 31.1,
-      "assisted": 11,
-      "assistedPct": 18
+      "attempted": 291,
+      "made": 105,
+      "pct": 36.1,
+      "assisted": 17,
+      "assistedPct": 16.2
     },
     "threePointJumpers": {
-      "attempted": 462,
-      "made": 169,
-      "pct": 36.6,
-      "assisted": 139,
-      "assistedPct": 82.2
+      "attempted": 613,
+      "made": 218,
+      "pct": 35.6,
+      "assisted": 177,
+      "assistedPct": 81.2
     },
     "freeThrows": {
-      "attempted": 517,
-      "made": 368,
-      "pct": 71.2
+      "attempted": 693,
+      "made": 507,
+      "pct": 73.2
     },
     "attemptsBreakdown": {
-      "dunks": 3.1,
-      "layups": 43.6,
-      "tipIns": 5,
-      "twoPointJumpers": 14.4,
-      "threePointJumpers": 33.9
+      "dunks": 3.3,
+      "layups": 43.1,
+      "tipIns": 4.6,
+      "twoPointJumpers": 15.8,
+      "threePointJumpers": 33.3
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 202,
     "team": "North Dakota State",
     "conference": "Summit",
-    "trackedShots": 1487,
+    "trackedShots": 1909,
     "freeThrowRate": 30.6,
-    "assistedPct": 24.1,
+    "assistedPct": 24.9,
     "dunks": {
-      "attempted": 57,
-      "made": 51,
-      "pct": 89.5,
-      "assisted": 34,
-      "assistedPct": 66.7
+      "attempted": 80,
+      "made": 74,
+      "pct": 92.5,
+      "assisted": 53,
+      "assistedPct": 71.6
     },
     "layups": {
-      "attempted": 438,
-      "made": 251,
+      "attempted": 571,
+      "made": 327,
       "pct": 57.3,
-      "assisted": 99,
-      "assistedPct": 39.4
+      "assisted": 130,
+      "assistedPct": 39.8
     },
     "tipIns": {
-      "attempted": 49,
-      "made": 30,
-      "pct": 61.2
+      "attempted": 66,
+      "made": 41,
+      "pct": 62.1
     },
     "twoPointJumpers": {
-      "attempted": 329,
-      "made": 144,
-      "pct": 43.8,
-      "assisted": 25,
-      "assistedPct": 17.4
+      "attempted": 394,
+      "made": 165,
+      "pct": 41.9,
+      "assisted": 31,
+      "assistedPct": 18.8
     },
     "threePointJumpers": {
-      "attempted": 614,
-      "made": 223,
-      "pct": 36.3,
-      "assisted": 200,
-      "assistedPct": 89.7
+      "attempted": 798,
+      "made": 294,
+      "pct": 36.8,
+      "assisted": 262,
+      "assistedPct": 89.1
     },
     "freeThrows": {
-      "attempted": 455,
-      "made": 331,
-      "pct": 72.7
+      "attempted": 585,
+      "made": 429,
+      "pct": 73.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.8,
-      "layups": 29.5,
-      "tipIns": 3.3,
-      "twoPointJumpers": 22.1,
-      "threePointJumpers": 41.3
+      "dunks": 4.2,
+      "layups": 29.9,
+      "tipIns": 3.5,
+      "twoPointJumpers": 20.6,
+      "threePointJumpers": 41.8
     }
   }
 ]

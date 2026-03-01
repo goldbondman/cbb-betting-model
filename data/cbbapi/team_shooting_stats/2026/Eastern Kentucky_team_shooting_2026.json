@@ -4,53 +4,53 @@
     "teamId": 78,
     "team": "Eastern Kentucky",
     "conference": "ASUN",
-    "trackedShots": 1461,
-    "freeThrowRate": 29.9,
-    "assistedPct": 21.8,
+    "trackedShots": 1954,
+    "freeThrowRate": 31.3,
+    "assistedPct": 22.8,
     "dunks": {
-      "attempted": 59,
-      "made": 54,
-      "pct": 91.5,
-      "assisted": 39,
-      "assistedPct": 72.2
+      "attempted": 84,
+      "made": 76,
+      "pct": 90.5,
+      "assisted": 56,
+      "assistedPct": 73.7
     },
     "layups": {
-      "attempted": 298,
-      "made": 164,
-      "pct": 55,
-      "assisted": 51,
-      "assistedPct": 31.1
+      "attempted": 404,
+      "made": 221,
+      "pct": 54.7,
+      "assisted": 76,
+      "assistedPct": 34.4
     },
     "tipIns": {
-      "attempted": 49,
-      "made": 28,
-      "pct": 57.1
+      "attempted": 63,
+      "made": 37,
+      "pct": 58.7
     },
     "twoPointJumpers": {
-      "attempted": 312,
-      "made": 126,
-      "pct": 40.4,
-      "assisted": 34,
-      "assistedPct": 27
+      "attempted": 412,
+      "made": 169,
+      "pct": 41,
+      "assisted": 49,
+      "assistedPct": 29
     },
     "threePointJumpers": {
-      "attempted": 743,
-      "made": 262,
-      "pct": 35.3,
-      "assisted": 195,
-      "assistedPct": 74.4
+      "attempted": 991,
+      "made": 348,
+      "pct": 35.1,
+      "assisted": 264,
+      "assistedPct": 75.9
     },
     "freeThrows": {
-      "attempted": 437,
-      "made": 315,
-      "pct": 72.1
+      "attempted": 611,
+      "made": 442,
+      "pct": 72.3
     },
     "attemptsBreakdown": {
-      "dunks": 4,
-      "layups": 20.4,
-      "tipIns": 3.4,
-      "twoPointJumpers": 21.4,
-      "threePointJumpers": 50.9
+      "dunks": 4.3,
+      "layups": 20.7,
+      "tipIns": 3.2,
+      "twoPointJumpers": 21.1,
+      "threePointJumpers": 50.7
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 366,
     "team": "Lindenwood",
     "conference": "OVC",
-    "trackedShots": 1425,
-    "freeThrowRate": 38.1,
-    "assistedPct": 24.5,
+    "trackedShots": 1923,
+    "freeThrowRate": 35.6,
+    "assistedPct": 23.2,
     "dunks": {
-      "attempted": 60,
-      "made": 56,
-      "pct": 93.3,
-      "assisted": 43,
-      "assistedPct": 76.8
+      "attempted": 74,
+      "made": 68,
+      "pct": 91.9,
+      "assisted": 51,
+      "assistedPct": 75
     },
     "layups": {
-      "attempted": 559,
-      "made": 327,
-      "pct": 58.5,
-      "assisted": 149,
-      "assistedPct": 45.6
+      "attempted": 753,
+      "made": 433,
+      "pct": 57.5,
+      "assisted": 188,
+      "assistedPct": 43.4
     },
     "tipIns": {
-      "attempted": 42,
-      "made": 34,
-      "pct": 81
+      "attempted": 58,
+      "made": 43,
+      "pct": 74.1
     },
     "twoPointJumpers": {
-      "attempted": 316,
-      "made": 112,
-      "pct": 35.4,
-      "assisted": 37,
-      "assistedPct": 33
+      "attempted": 437,
+      "made": 153,
+      "pct": 35,
+      "assisted": 46,
+      "assistedPct": 30.1
     },
     "threePointJumpers": {
-      "attempted": 448,
-      "made": 138,
-      "pct": 30.8,
-      "assisted": 120,
-      "assistedPct": 87
+      "attempted": 601,
+      "made": 189,
+      "pct": 31.4,
+      "assisted": 162,
+      "assistedPct": 85.7
     },
     "freeThrows": {
-      "attempted": 543,
-      "made": 374,
-      "pct": 68.9
+      "attempted": 684,
+      "made": 467,
+      "pct": 68.3
     },
     "attemptsBreakdown": {
-      "dunks": 4.2,
+      "dunks": 3.8,
       "layups": 39.2,
-      "tipIns": 2.9,
-      "twoPointJumpers": 22.2,
-      "threePointJumpers": 31.4
+      "tipIns": 3,
+      "twoPointJumpers": 22.7,
+      "threePointJumpers": 31.3
     }
   }
 ]

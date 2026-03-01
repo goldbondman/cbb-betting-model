@@ -4,52 +4,52 @@
     "teamId": 144,
     "team": "Little Rock",
     "conference": "OVC",
-    "trackedShots": 1283,
-    "freeThrowRate": 29.7,
-    "assistedPct": 23.4,
+    "trackedShots": 1825,
+    "freeThrowRate": 28.1,
+    "assistedPct": 23,
     "dunks": {
-      "attempted": 94,
-      "made": 85,
-      "pct": 90.4,
-      "assisted": 59,
-      "assistedPct": 69.4
+      "attempted": 128,
+      "made": 114,
+      "pct": 89.1,
+      "assisted": 82,
+      "assistedPct": 71.9
     },
     "layups": {
-      "attempted": 376,
-      "made": 210,
-      "pct": 55.9,
-      "assisted": 88,
-      "assistedPct": 41.9
+      "attempted": 502,
+      "made": 283,
+      "pct": 56.4,
+      "assisted": 119,
+      "assistedPct": 42
     },
     "tipIns": {
-      "attempted": 48,
-      "made": 36,
-      "pct": 75
+      "attempted": 65,
+      "made": 48,
+      "pct": 73.8
     },
     "twoPointJumpers": {
-      "attempted": 364,
-      "made": 106,
-      "pct": 29.1,
-      "assisted": 38,
-      "assistedPct": 35.8
+      "attempted": 559,
+      "made": 169,
+      "pct": 30.2,
+      "assisted": 51,
+      "assistedPct": 30.2
     },
     "threePointJumpers": {
-      "attempted": 401,
-      "made": 145,
-      "pct": 36.2,
-      "assisted": 115,
-      "assistedPct": 79.3
+      "attempted": 571,
+      "made": 206,
+      "pct": 36.1,
+      "assisted": 167,
+      "assistedPct": 81.1
     },
     "freeThrows": {
-      "attempted": 381,
-      "made": 259,
+      "attempted": 513,
+      "made": 349,
       "pct": 68
     },
     "attemptsBreakdown": {
-      "dunks": 7.3,
-      "layups": 29.3,
-      "tipIns": 3.7,
-      "twoPointJumpers": 28.4,
+      "dunks": 7,
+      "layups": 27.5,
+      "tipIns": 3.6,
+      "twoPointJumpers": 30.6,
       "threePointJumpers": 31.3
     }
   }

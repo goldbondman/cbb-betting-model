@@ -4,53 +4,53 @@
     "teamId": 288,
     "team": "Tarleton State",
     "conference": "WAC",
-    "trackedShots": 1307,
-    "freeThrowRate": 42.1,
-    "assistedPct": 19.1,
+    "trackedShots": 1751,
+    "freeThrowRate": 39.6,
+    "assistedPct": 18.4,
     "dunks": {
-      "attempted": 53,
-      "made": 41,
-      "pct": 77.4,
-      "assisted": 30,
-      "assistedPct": 73.2
+      "attempted": 66,
+      "made": 52,
+      "pct": 78.8,
+      "assisted": 38,
+      "assistedPct": 73.1
     },
     "layups": {
-      "attempted": 523,
-      "made": 279,
-      "pct": 53.3,
-      "assisted": 88,
-      "assistedPct": 31.5
+      "attempted": 702,
+      "made": 373,
+      "pct": 53.1,
+      "assisted": 110,
+      "assistedPct": 29.5
     },
     "tipIns": {
-      "attempted": 24,
-      "made": 17,
-      "pct": 70.8
+      "attempted": 40,
+      "made": 27,
+      "pct": 67.5
     },
     "twoPointJumpers": {
-      "attempted": 370,
-      "made": 148,
-      "pct": 40,
-      "assisted": 43,
-      "assistedPct": 29.1
+      "attempted": 511,
+      "made": 202,
+      "pct": 39.5,
+      "assisted": 61,
+      "assistedPct": 30.2
     },
     "threePointJumpers": {
-      "attempted": 337,
-      "made": 109,
-      "pct": 32.3,
-      "assisted": 88,
-      "assistedPct": 80.7
+      "attempted": 432,
+      "made": 139,
+      "pct": 32.2,
+      "assisted": 113,
+      "assistedPct": 81.3
     },
     "freeThrows": {
-      "attempted": 550,
-      "made": 420,
-      "pct": 76.4
+      "attempted": 694,
+      "made": 522,
+      "pct": 75.2
     },
     "attemptsBreakdown": {
-      "dunks": 4.1,
-      "layups": 40,
-      "tipIns": 1.8,
-      "twoPointJumpers": 28.3,
-      "threePointJumpers": 25.8
+      "dunks": 3.8,
+      "layups": 40.1,
+      "tipIns": 2.3,
+      "twoPointJumpers": 29.2,
+      "threePointJumpers": 24.7
     }
   }
 ]

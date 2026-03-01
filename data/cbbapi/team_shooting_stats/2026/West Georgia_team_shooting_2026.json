@@ -4,53 +4,53 @@
     "teamId": 346,
     "team": "West Georgia",
     "conference": "ASUN",
-    "trackedShots": 1382,
-    "freeThrowRate": 29.4,
+    "trackedShots": 1892,
+    "freeThrowRate": 29.3,
     "assistedPct": 20.4,
     "dunks": {
-      "attempted": 38,
-      "made": 31,
-      "pct": 81.6,
-      "assisted": 25,
-      "assistedPct": 80.6
+      "attempted": 51,
+      "made": 44,
+      "pct": 86.3,
+      "assisted": 38,
+      "assistedPct": 86.4
     },
     "layups": {
-      "attempted": 372,
-      "made": 194,
-      "pct": 52.2,
-      "assisted": 84,
-      "assistedPct": 43.3
+      "attempted": 522,
+      "made": 276,
+      "pct": 52.9,
+      "assisted": 118,
+      "assistedPct": 42.8
     },
     "tipIns": {
-      "attempted": 69,
-      "made": 43,
-      "pct": 62.3
+      "attempted": 98,
+      "made": 63,
+      "pct": 64.3
     },
     "twoPointJumpers": {
-      "attempted": 436,
-      "made": 176,
-      "pct": 40.4,
-      "assisted": 47,
-      "assistedPct": 26.7
+      "attempted": 593,
+      "made": 250,
+      "pct": 42.2,
+      "assisted": 66,
+      "assistedPct": 26.4
     },
     "threePointJumpers": {
-      "attempted": 467,
-      "made": 164,
-      "pct": 35.1,
-      "assisted": 126,
-      "assistedPct": 76.8
+      "attempted": 628,
+      "made": 214,
+      "pct": 34.1,
+      "assisted": 164,
+      "assistedPct": 76.6
     },
     "freeThrows": {
-      "attempted": 406,
-      "made": 287,
-      "pct": 70.7
+      "attempted": 555,
+      "made": 386,
+      "pct": 69.5
     },
     "attemptsBreakdown": {
       "dunks": 2.7,
-      "layups": 26.9,
-      "tipIns": 5,
-      "twoPointJumpers": 31.5,
-      "threePointJumpers": 33.8
+      "layups": 27.6,
+      "tipIns": 5.2,
+      "twoPointJumpers": 31.3,
+      "threePointJumpers": 33.2
     }
   }
 ]

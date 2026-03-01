@@ -4,53 +4,53 @@
     "teamId": 65,
     "team": "DePaul",
     "conference": "Big East",
-    "trackedShots": 1127,
-    "freeThrowRate": 38,
-    "assistedPct": 27.6,
+    "trackedShots": 1476,
+    "freeThrowRate": 36.1,
+    "assistedPct": 26.5,
     "dunks": {
-      "attempted": 93,
-      "made": 88,
-      "pct": 94.6,
-      "assisted": 74,
-      "assistedPct": 84.1
+      "attempted": 119,
+      "made": 109,
+      "pct": 91.6,
+      "assisted": 92,
+      "assistedPct": 84.4
     },
     "layups": {
-      "attempted": 299,
-      "made": 131,
-      "pct": 43.8,
-      "assisted": 61,
-      "assistedPct": 46.6
+      "attempted": 406,
+      "made": 185,
+      "pct": 45.6,
+      "assisted": 84,
+      "assistedPct": 45.4
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 26,
-      "pct": 81.3
+      "attempted": 41,
+      "made": 32,
+      "pct": 78
     },
     "twoPointJumpers": {
-      "attempted": 254,
-      "made": 100,
-      "pct": 39.4,
-      "assisted": 38,
-      "assistedPct": 38
+      "attempted": 333,
+      "made": 133,
+      "pct": 39.9,
+      "assisted": 46,
+      "assistedPct": 34.6
     },
     "threePointJumpers": {
-      "attempted": 449,
-      "made": 155,
-      "pct": 34.5,
-      "assisted": 138,
-      "assistedPct": 89
+      "attempted": 577,
+      "made": 192,
+      "pct": 33.3,
+      "assisted": 169,
+      "assistedPct": 88
     },
     "freeThrows": {
-      "attempted": 428,
-      "made": 300,
-      "pct": 70.1
+      "attempted": 533,
+      "made": 370,
+      "pct": 69.4
     },
     "attemptsBreakdown": {
-      "dunks": 8.3,
-      "layups": 26.5,
+      "dunks": 8.1,
+      "layups": 27.5,
       "tipIns": 2.8,
-      "twoPointJumpers": 22.5,
-      "threePointJumpers": 39.8
+      "twoPointJumpers": 22.6,
+      "threePointJumpers": 39.1
     }
   }
 ]

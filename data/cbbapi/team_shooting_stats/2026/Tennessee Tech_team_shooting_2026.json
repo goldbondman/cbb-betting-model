@@ -4,53 +4,53 @@
     "teamId": 291,
     "team": "Tennessee Tech",
     "conference": "OVC",
-    "trackedShots": 1347,
-    "freeThrowRate": 35.2,
-    "assistedPct": 21.9,
+    "trackedShots": 1779,
+    "freeThrowRate": 35.9,
+    "assistedPct": 21,
     "dunks": {
-      "attempted": 61,
-      "made": 54,
-      "pct": 88.5,
-      "assisted": 39,
-      "assistedPct": 72.2
+      "attempted": 82,
+      "made": 75,
+      "pct": 91.5,
+      "assisted": 54,
+      "assistedPct": 72
     },
     "layups": {
-      "attempted": 480,
-      "made": 267,
-      "pct": 55.6,
-      "assisted": 103,
-      "assistedPct": 38.6
+      "attempted": 622,
+      "made": 338,
+      "pct": 54.3,
+      "assisted": 126,
+      "assistedPct": 37.3
     },
     "tipIns": {
-      "attempted": 44,
-      "made": 26,
-      "pct": 59.1
+      "attempted": 57,
+      "made": 35,
+      "pct": 61.4
     },
     "twoPointJumpers": {
-      "attempted": 255,
-      "made": 92,
-      "pct": 36.1,
-      "assisted": 14,
-      "assistedPct": 15.2
+      "attempted": 348,
+      "made": 129,
+      "pct": 37.1,
+      "assisted": 19,
+      "assistedPct": 14.7
     },
     "threePointJumpers": {
-      "attempted": 507,
-      "made": 163,
-      "pct": 32.1,
-      "assisted": 139,
-      "assistedPct": 85.3
+      "attempted": 670,
+      "made": 211,
+      "pct": 31.5,
+      "assisted": 175,
+      "assistedPct": 82.9
     },
     "freeThrows": {
-      "attempted": 474,
-      "made": 350,
-      "pct": 73.8
+      "attempted": 639,
+      "made": 485,
+      "pct": 75.9
     },
     "attemptsBreakdown": {
-      "dunks": 4.5,
-      "layups": 35.6,
-      "tipIns": 3.3,
-      "twoPointJumpers": 18.9,
-      "threePointJumpers": 37.6
+      "dunks": 4.6,
+      "layups": 35,
+      "tipIns": 3.2,
+      "twoPointJumpers": 19.6,
+      "threePointJumpers": 37.7
     }
   }
 ]

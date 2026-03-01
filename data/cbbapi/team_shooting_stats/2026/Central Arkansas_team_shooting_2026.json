@@ -4,53 +4,53 @@
     "teamId": 43,
     "team": "Central Arkansas",
     "conference": "ASUN",
-    "trackedShots": 1384,
-    "freeThrowRate": 29.3,
-    "assistedPct": 26,
+    "trackedShots": 1927,
+    "freeThrowRate": 30.2,
+    "assistedPct": 25.7,
     "dunks": {
-      "attempted": 25,
-      "made": 19,
-      "pct": 76,
-      "assisted": 19,
-      "assistedPct": 100
+      "attempted": 35,
+      "made": 28,
+      "pct": 80,
+      "assisted": 26,
+      "assistedPct": 92.9
     },
     "layups": {
-      "attempted": 439,
-      "made": 283,
-      "pct": 64.5,
-      "assisted": 129,
-      "assistedPct": 45.6
+      "attempted": 625,
+      "made": 396,
+      "pct": 63.4,
+      "assisted": 172,
+      "assistedPct": 43.4
     },
     "tipIns": {
-      "attempted": 39,
-      "made": 28,
-      "pct": 71.8
+      "attempted": 51,
+      "made": 38,
+      "pct": 74.5
     },
     "twoPointJumpers": {
-      "attempted": 187,
-      "made": 63,
-      "pct": 33.7,
-      "assisted": 16,
-      "assistedPct": 25.4
+      "attempted": 263,
+      "made": 88,
+      "pct": 33.5,
+      "assisted": 21,
+      "assistedPct": 23.9
     },
     "threePointJumpers": {
-      "attempted": 694,
-      "made": 232,
-      "pct": 33.4,
-      "assisted": 196,
+      "attempted": 953,
+      "made": 328,
+      "pct": 34.4,
+      "assisted": 277,
       "assistedPct": 84.5
     },
     "freeThrows": {
-      "attempted": 405,
-      "made": 277,
-      "pct": 68.4
+      "attempted": 581,
+      "made": 413,
+      "pct": 71.1
     },
     "attemptsBreakdown": {
       "dunks": 1.8,
-      "layups": 31.7,
-      "tipIns": 2.8,
-      "twoPointJumpers": 13.5,
-      "threePointJumpers": 50.1
+      "layups": 32.4,
+      "tipIns": 2.6,
+      "twoPointJumpers": 13.6,
+      "threePointJumpers": 49.5
     }
   }
 ]

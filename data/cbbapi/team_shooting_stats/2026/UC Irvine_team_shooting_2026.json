@@ -4,53 +4,53 @@
     "teamId": 308,
     "team": "UC Irvine",
     "conference": "Big West",
-    "trackedShots": 1337,
-    "freeThrowRate": 37.2,
-    "assistedPct": 26.4,
+    "trackedShots": 1830,
+    "freeThrowRate": 34.8,
+    "assistedPct": 26.2,
     "dunks": {
-      "attempted": 48,
-      "made": 43,
-      "pct": 89.6,
-      "assisted": 38,
-      "assistedPct": 88.4
-    },
-    "layups": {
-      "attempted": 505,
-      "made": 275,
-      "pct": 54.5,
-      "assisted": 150,
-      "assistedPct": 54.5
-    },
-    "tipIns": {
-      "attempted": 50,
-      "made": 31,
-      "pct": 62
-    },
-    "twoPointJumpers": {
-      "attempted": 362,
-      "made": 148,
-      "pct": 40.9,
-      "assisted": 59,
-      "assistedPct": 39.9
-    },
-    "threePointJumpers": {
-      "attempted": 372,
-      "made": 123,
-      "pct": 33.1,
-      "assisted": 106,
+      "attempted": 68,
+      "made": 58,
+      "pct": 85.3,
+      "assisted": 50,
       "assistedPct": 86.2
     },
+    "layups": {
+      "attempted": 702,
+      "made": 377,
+      "pct": 53.7,
+      "assisted": 197,
+      "assistedPct": 52.3
+    },
+    "tipIns": {
+      "attempted": 58,
+      "made": 35,
+      "pct": 60.3
+    },
+    "twoPointJumpers": {
+      "attempted": 495,
+      "made": 204,
+      "pct": 41.2,
+      "assisted": 83,
+      "assistedPct": 40.7
+    },
+    "threePointJumpers": {
+      "attempted": 507,
+      "made": 169,
+      "pct": 33.3,
+      "assisted": 149,
+      "assistedPct": 88.2
+    },
     "freeThrows": {
-      "attempted": 498,
-      "made": 340,
-      "pct": 68.3
+      "attempted": 637,
+      "made": 434,
+      "pct": 68.1
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 37.8,
-      "tipIns": 3.7,
-      "twoPointJumpers": 27.1,
-      "threePointJumpers": 27.8
+      "dunks": 3.7,
+      "layups": 38.4,
+      "tipIns": 3.2,
+      "twoPointJumpers": 27,
+      "threePointJumpers": 27.7
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 71,
     "team": "Drexel",
     "conference": "CAA",
-    "trackedShots": 1307,
-    "freeThrowRate": 29.4,
-    "assistedPct": 23.9,
+    "trackedShots": 1683,
+    "freeThrowRate": 30.5,
+    "assistedPct": 23.5,
     "dunks": {
-      "attempted": 29,
-      "made": 26,
-      "pct": 89.7,
-      "assisted": 17,
-      "assistedPct": 65.4
+      "attempted": 36,
+      "made": 32,
+      "pct": 88.9,
+      "assisted": 22,
+      "assistedPct": 68.8
     },
     "layups": {
-      "attempted": 425,
-      "made": 232,
-      "pct": 54.6,
-      "assisted": 97,
-      "assistedPct": 41.8
+      "attempted": 546,
+      "made": 311,
+      "pct": 57,
+      "assisted": 127,
+      "assistedPct": 40.8
     },
     "tipIns": {
-      "attempted": 31,
-      "made": 23,
-      "pct": 74.2
+      "attempted": 41,
+      "made": 29,
+      "pct": 70.7
     },
     "twoPointJumpers": {
-      "attempted": 291,
-      "made": 101,
-      "pct": 34.7,
-      "assisted": 29,
-      "assistedPct": 28.7
+      "attempted": 389,
+      "made": 141,
+      "pct": 36.2,
+      "assisted": 34,
+      "assistedPct": 24.1
     },
     "threePointJumpers": {
-      "attempted": 531,
-      "made": 186,
-      "pct": 35,
-      "assisted": 169,
-      "assistedPct": 90.9
+      "attempted": 671,
+      "made": 231,
+      "pct": 34.4,
+      "assisted": 213,
+      "assistedPct": 92.2
     },
     "freeThrows": {
-      "attempted": 384,
-      "made": 246,
-      "pct": 64.1
+      "attempted": 513,
+      "made": 336,
+      "pct": 65.5
     },
     "attemptsBreakdown": {
-      "dunks": 2.2,
-      "layups": 32.5,
+      "dunks": 2.1,
+      "layups": 32.4,
       "tipIns": 2.4,
-      "twoPointJumpers": 22.3,
-      "threePointJumpers": 40.6
+      "twoPointJumpers": 23.1,
+      "threePointJumpers": 39.9
     }
   }
 ]

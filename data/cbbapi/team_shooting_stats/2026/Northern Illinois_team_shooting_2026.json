@@ -4,53 +4,53 @@
     "teamId": 208,
     "team": "Northern Illinois",
     "conference": "MAC",
-    "trackedShots": 1223,
-    "freeThrowRate": 38.5,
-    "assistedPct": 22.1,
+    "trackedShots": 1591,
+    "freeThrowRate": 37.8,
+    "assistedPct": 22.4,
     "dunks": {
-      "attempted": 36,
-      "made": 28,
-      "pct": 77.8,
-      "assisted": 23,
-      "assistedPct": 82.1
+      "attempted": 44,
+      "made": 36,
+      "pct": 81.8,
+      "assisted": 30,
+      "assistedPct": 83.3
     },
     "layups": {
-      "attempted": 452,
-      "made": 236,
-      "pct": 52.2,
-      "assisted": 77,
-      "assistedPct": 32.6
+      "attempted": 596,
+      "made": 301,
+      "pct": 50.5,
+      "assisted": 105,
+      "assistedPct": 34.9
     },
     "tipIns": {
-      "attempted": 38,
-      "made": 32,
-      "pct": 84.2
+      "attempted": 43,
+      "made": 36,
+      "pct": 83.7
     },
     "twoPointJumpers": {
-      "attempted": 138,
-      "made": 45,
-      "pct": 32.6,
-      "assisted": 11,
-      "assistedPct": 24.4
+      "attempted": 194,
+      "made": 63,
+      "pct": 32.5,
+      "assisted": 18,
+      "assistedPct": 28.6
     },
     "threePointJumpers": {
-      "attempted": 559,
-      "made": 178,
-      "pct": 31.8,
-      "assisted": 159,
-      "assistedPct": 89.3
+      "attempted": 714,
+      "made": 228,
+      "pct": 31.9,
+      "assisted": 203,
+      "assistedPct": 89
     },
     "freeThrows": {
-      "attempted": 471,
-      "made": 316,
-      "pct": 67.1
+      "attempted": 601,
+      "made": 399,
+      "pct": 66.4
     },
     "attemptsBreakdown": {
-      "dunks": 2.9,
-      "layups": 37,
-      "tipIns": 3.1,
-      "twoPointJumpers": 11.3,
-      "threePointJumpers": 45.7
+      "dunks": 2.8,
+      "layups": 37.5,
+      "tipIns": 2.7,
+      "twoPointJumpers": 12.2,
+      "threePointJumpers": 44.9
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 311,
     "team": "UC Santa Barbara",
     "conference": "Big West",
-    "trackedShots": 1234,
-    "freeThrowRate": 37.8,
-    "assistedPct": 27.1,
+    "trackedShots": 1684,
+    "freeThrowRate": 38.1,
+    "assistedPct": 25.8,
     "dunks": {
-      "attempted": 26,
-      "made": 21,
-      "pct": 80.8,
-      "assisted": 20,
-      "assistedPct": 95.2
+      "attempted": 31,
+      "made": 26,
+      "pct": 83.9,
+      "assisted": 24,
+      "assistedPct": 92.3
     },
     "layups": {
-      "attempted": 460,
-      "made": 281,
-      "pct": 61.1,
-      "assisted": 108,
-      "assistedPct": 38.4
+      "attempted": 615,
+      "made": 360,
+      "pct": 58.5,
+      "assisted": 133,
+      "assistedPct": 36.9
     },
     "tipIns": {
-      "attempted": 20,
-      "made": 12,
-      "pct": 60
+      "attempted": 25,
+      "made": 17,
+      "pct": 68
     },
     "twoPointJumpers": {
-      "attempted": 204,
-      "made": 77,
-      "pct": 37.7,
-      "assisted": 25,
-      "assistedPct": 32.5
+      "attempted": 291,
+      "made": 116,
+      "pct": 39.9,
+      "assisted": 35,
+      "assistedPct": 30.2
     },
     "threePointJumpers": {
-      "attempted": 524,
-      "made": 203,
-      "pct": 38.7,
-      "assisted": 181,
-      "assistedPct": 89.2
+      "attempted": 722,
+      "made": 274,
+      "pct": 38,
+      "assisted": 242,
+      "assistedPct": 88.3
     },
     "freeThrows": {
-      "attempted": 466,
-      "made": 354,
-      "pct": 76
+      "attempted": 642,
+      "made": 487,
+      "pct": 75.9
     },
     "attemptsBreakdown": {
-      "dunks": 2.1,
-      "layups": 37.3,
-      "tipIns": 1.6,
-      "twoPointJumpers": 16.5,
-      "threePointJumpers": 42.5
+      "dunks": 1.8,
+      "layups": 36.5,
+      "tipIns": 1.5,
+      "twoPointJumpers": 17.3,
+      "threePointJumpers": 42.9
     }
   }
 ]

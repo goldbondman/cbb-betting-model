@@ -4,53 +4,53 @@
     "teamId": 55,
     "team": "Colgate",
     "conference": "Patriot",
-    "trackedShots": 1356,
-    "freeThrowRate": 27.5,
-    "assistedPct": 24.9,
+    "trackedShots": 1823,
+    "freeThrowRate": 28.9,
+    "assistedPct": 24.3,
     "dunks": {
-      "attempted": 26,
-      "made": 26,
-      "pct": 100,
-      "assisted": 23,
-      "assistedPct": 88.5
+      "attempted": 30,
+      "made": 29,
+      "pct": 96.7,
+      "assisted": 24,
+      "assistedPct": 82.8
     },
     "layups": {
-      "attempted": 467,
-      "made": 283,
-      "pct": 60.6,
-      "assisted": 122,
-      "assistedPct": 43.1
+      "attempted": 624,
+      "made": 366,
+      "pct": 58.7,
+      "assisted": 151,
+      "assistedPct": 41.3
     },
     "tipIns": {
-      "attempted": 19,
-      "made": 12,
-      "pct": 63.2
+      "attempted": 29,
+      "made": 21,
+      "pct": 72.4
     },
     "twoPointJumpers": {
-      "attempted": 384,
-      "made": 176,
-      "pct": 45.8,
-      "assisted": 43,
-      "assistedPct": 24.4
+      "attempted": 506,
+      "made": 224,
+      "pct": 44.3,
+      "assisted": 59,
+      "assistedPct": 26.3
     },
     "threePointJumpers": {
-      "attempted": 460,
-      "made": 166,
-      "pct": 36.1,
-      "assisted": 149,
-      "assistedPct": 89.8
+      "attempted": 634,
+      "made": 230,
+      "pct": 36.3,
+      "assisted": 209,
+      "assistedPct": 90.9
     },
     "freeThrows": {
-      "attempted": 373,
-      "made": 273,
-      "pct": 73.2
+      "attempted": 527,
+      "made": 393,
+      "pct": 74.6
     },
     "attemptsBreakdown": {
-      "dunks": 1.9,
-      "layups": 34.4,
-      "tipIns": 1.4,
-      "twoPointJumpers": 28.3,
-      "threePointJumpers": 33.9
+      "dunks": 1.6,
+      "layups": 34.2,
+      "tipIns": 1.6,
+      "twoPointJumpers": 27.8,
+      "threePointJumpers": 34.8
     }
   }
 ]

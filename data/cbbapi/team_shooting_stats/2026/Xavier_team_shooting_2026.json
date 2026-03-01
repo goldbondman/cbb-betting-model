@@ -4,53 +4,53 @@
     "teamId": 359,
     "team": "Xavier",
     "conference": "Big East",
-    "trackedShots": 1397,
-    "freeThrowRate": 27.1,
-    "assistedPct": 26.3,
+    "trackedShots": 1844,
+    "freeThrowRate": 27.6,
+    "assistedPct": 25.2,
     "dunks": {
-      "attempted": 40,
-      "made": 32,
-      "pct": 80,
-      "assisted": 14,
-      "assistedPct": 43.8
+      "attempted": 48,
+      "made": 40,
+      "pct": 83.3,
+      "assisted": 19,
+      "assistedPct": 47.5
     },
     "layups": {
-      "attempted": 387,
-      "made": 220,
-      "pct": 56.8,
-      "assisted": 122,
-      "assistedPct": 55.5
+      "attempted": 515,
+      "made": 291,
+      "pct": 56.5,
+      "assisted": 147,
+      "assistedPct": 50.5
     },
     "tipIns": {
-      "attempted": 24,
-      "made": 12,
-      "pct": 50
+      "attempted": 31,
+      "made": 17,
+      "pct": 54.8
     },
     "twoPointJumpers": {
-      "attempted": 364,
-      "made": 138,
-      "pct": 37.9,
-      "assisted": 49,
-      "assistedPct": 35.5
+      "attempted": 503,
+      "made": 200,
+      "pct": 39.8,
+      "assisted": 63,
+      "assistedPct": 31.5
     },
     "threePointJumpers": {
-      "attempted": 582,
-      "made": 211,
-      "pct": 36.3,
-      "assisted": 183,
-      "assistedPct": 86.7
+      "attempted": 747,
+      "made": 273,
+      "pct": 36.5,
+      "assisted": 235,
+      "assistedPct": 86.1
     },
     "freeThrows": {
-      "attempted": 378,
-      "made": 269,
-      "pct": 71.2
+      "attempted": 509,
+      "made": 368,
+      "pct": 72.3
     },
     "attemptsBreakdown": {
-      "dunks": 2.9,
-      "layups": 27.7,
+      "dunks": 2.6,
+      "layups": 27.9,
       "tipIns": 1.7,
-      "twoPointJumpers": 26.1,
-      "threePointJumpers": 41.7
+      "twoPointJumpers": 27.3,
+      "threePointJumpers": 40.5
     }
   }
 ]

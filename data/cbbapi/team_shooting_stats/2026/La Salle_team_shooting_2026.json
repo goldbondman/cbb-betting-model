@@ -4,53 +4,53 @@
     "teamId": 137,
     "team": "La Salle",
     "conference": "A-10",
-    "trackedShots": 1229,
-    "freeThrowRate": 36,
-    "assistedPct": 23.5,
+    "trackedShots": 1571,
+    "freeThrowRate": 36.5,
+    "assistedPct": 22.8,
     "dunks": {
-      "attempted": 26,
-      "made": 24,
-      "pct": 92.3,
-      "assisted": 21,
-      "assistedPct": 87.5
+      "attempted": 32,
+      "made": 30,
+      "pct": 93.8,
+      "assisted": 26,
+      "assistedPct": 86.7
     },
     "layups": {
-      "attempted": 401,
-      "made": 211,
-      "pct": 52.6,
-      "assisted": 108,
-      "assistedPct": 51.2
+      "attempted": 526,
+      "made": 265,
+      "pct": 50.4,
+      "assisted": 128,
+      "assistedPct": 48.3
     },
     "tipIns": {
-      "attempted": 52,
-      "made": 30,
-      "pct": 57.7
+      "attempted": 65,
+      "made": 37,
+      "pct": 56.9
     },
     "twoPointJumpers": {
-      "attempted": 374,
-      "made": 138,
-      "pct": 36.9,
-      "assisted": 62,
-      "assistedPct": 44.9
+      "attempted": 456,
+      "made": 163,
+      "pct": 35.7,
+      "assisted": 76,
+      "assistedPct": 46.6
     },
     "threePointJumpers": {
-      "attempted": 376,
-      "made": 112,
-      "pct": 29.8,
-      "assisted": 98,
-      "assistedPct": 87.5
+      "attempted": 492,
+      "made": 148,
+      "pct": 30.1,
+      "assisted": 128,
+      "assistedPct": 86.5
     },
     "freeThrows": {
-      "attempted": 442,
-      "made": 315,
-      "pct": 71.3
+      "attempted": 574,
+      "made": 407,
+      "pct": 70.9
     },
     "attemptsBreakdown": {
-      "dunks": 2.1,
-      "layups": 32.6,
-      "tipIns": 4.2,
-      "twoPointJumpers": 30.4,
-      "threePointJumpers": 30.6
+      "dunks": 2,
+      "layups": 33.5,
+      "tipIns": 4.1,
+      "twoPointJumpers": 29,
+      "threePointJumpers": 31.3
     }
   }
 ]

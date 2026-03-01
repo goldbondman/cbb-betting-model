@@ -4,53 +4,53 @@
     "teamId": 24,
     "team": "Binghamton",
     "conference": "Am. East",
-    "trackedShots": 1173,
-    "freeThrowRate": 43.6,
-    "assistedPct": 22.5,
+    "trackedShots": 1580,
+    "freeThrowRate": 41.7,
+    "assistedPct": 22.7,
     "dunks": {
-      "attempted": 91,
-      "made": 83,
-      "pct": 91.2,
-      "assisted": 60,
-      "assistedPct": 72.3
+      "attempted": 115,
+      "made": 104,
+      "pct": 90.4,
+      "assisted": 77,
+      "assistedPct": 74
     },
     "layups": {
-      "attempted": 443,
-      "made": 228,
-      "pct": 51.5,
-      "assisted": 85,
-      "assistedPct": 37.3
+      "attempted": 580,
+      "made": 299,
+      "pct": 51.6,
+      "assisted": 110,
+      "assistedPct": 36.8
     },
     "tipIns": {
-      "attempted": 15,
-      "made": 11,
-      "pct": 73.3
+      "attempted": 18,
+      "made": 14,
+      "pct": 77.8
     },
     "twoPointJumpers": {
-      "attempted": 248,
-      "made": 88,
-      "pct": 35.5,
-      "assisted": 16,
-      "assistedPct": 18.2
+      "attempted": 365,
+      "made": 144,
+      "pct": 39.5,
+      "assisted": 24,
+      "assistedPct": 16.7
     },
     "threePointJumpers": {
-      "attempted": 376,
-      "made": 114,
-      "pct": 30.3,
-      "assisted": 103,
-      "assistedPct": 90.4
+      "attempted": 502,
+      "made": 164,
+      "pct": 32.7,
+      "assisted": 147,
+      "assistedPct": 89.6
     },
     "freeThrows": {
-      "attempted": 511,
-      "made": 381,
-      "pct": 74.6
+      "attempted": 659,
+      "made": 491,
+      "pct": 74.5
     },
     "attemptsBreakdown": {
-      "dunks": 7.8,
-      "layups": 37.8,
-      "tipIns": 1.3,
-      "twoPointJumpers": 21.1,
-      "threePointJumpers": 32.1
+      "dunks": 7.3,
+      "layups": 36.7,
+      "tipIns": 1.1,
+      "twoPointJumpers": 23.1,
+      "threePointJumpers": 31.8
     }
   }
 ]

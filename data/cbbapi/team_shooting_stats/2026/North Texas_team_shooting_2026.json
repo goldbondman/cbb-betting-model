@@ -4,53 +4,53 @@
     "teamId": 204,
     "team": "North Texas",
     "conference": "American",
-    "trackedShots": 1240,
-    "freeThrowRate": 38.9,
-    "assistedPct": 21.5,
+    "trackedShots": 1661,
+    "freeThrowRate": 39.9,
+    "assistedPct": 20.9,
     "dunks": {
-      "attempted": 42,
-      "made": 38,
-      "pct": 90.5,
-      "assisted": 24,
-      "assistedPct": 63.2
+      "attempted": 57,
+      "made": 51,
+      "pct": 89.5,
+      "assisted": 32,
+      "assistedPct": 62.7
     },
     "layups": {
-      "attempted": 450,
-      "made": 250,
-      "pct": 55.6,
-      "assisted": 116,
-      "assistedPct": 46.4
+      "attempted": 596,
+      "made": 333,
+      "pct": 55.9,
+      "assisted": 152,
+      "assistedPct": 45.6
     },
     "tipIns": {
-      "attempted": 46,
-      "made": 27,
-      "pct": 58.7
+      "attempted": 60,
+      "made": 39,
+      "pct": 65
     },
     "twoPointJumpers": {
-      "attempted": 275,
-      "made": 85,
-      "pct": 30.9,
-      "assisted": 23,
-      "assistedPct": 27.1
+      "attempted": 402,
+      "made": 127,
+      "pct": 31.6,
+      "assisted": 32,
+      "assistedPct": 25.2
     },
     "threePointJumpers": {
-      "attempted": 427,
-      "made": 133,
-      "pct": 31.1,
-      "assisted": 104,
-      "assistedPct": 78.2
+      "attempted": 546,
+      "made": 165,
+      "pct": 30.2,
+      "assisted": 131,
+      "assistedPct": 79.4
     },
     "freeThrows": {
-      "attempted": 482,
-      "made": 332,
-      "pct": 68.9
+      "attempted": 662,
+      "made": 464,
+      "pct": 70.1
     },
     "attemptsBreakdown": {
       "dunks": 3.4,
-      "layups": 36.3,
-      "tipIns": 3.7,
-      "twoPointJumpers": 22.2,
-      "threePointJumpers": 34.4
+      "layups": 35.9,
+      "tipIns": 3.6,
+      "twoPointJumpers": 24.2,
+      "threePointJumpers": 32.9
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 109,
     "team": "High Point",
     "conference": "Big South",
-    "trackedShots": 1479,
-    "freeThrowRate": 44,
-    "assistedPct": 27,
+    "trackedShots": 1921,
+    "freeThrowRate": 43.4,
+    "assistedPct": 26.2,
     "dunks": {
-      "attempted": 80,
-      "made": 69,
-      "pct": 86.3,
-      "assisted": 54,
-      "assistedPct": 78.3
+      "attempted": 93,
+      "made": 78,
+      "pct": 83.9,
+      "assisted": 60,
+      "assistedPct": 76.9
     },
     "layups": {
-      "attempted": 572,
-      "made": 363,
-      "pct": 63.5,
-      "assisted": 141,
-      "assistedPct": 38.8
+      "attempted": 747,
+      "made": 464,
+      "pct": 62.1,
+      "assisted": 175,
+      "assistedPct": 37.7
     },
     "tipIns": {
-      "attempted": 43,
-      "made": 29,
-      "pct": 67.4
+      "attempted": 60,
+      "made": 43,
+      "pct": 71.7
     },
     "twoPointJumpers": {
-      "attempted": 177,
-      "made": 66,
-      "pct": 37.3,
-      "assisted": 5,
+      "attempted": 213,
+      "made": 79,
+      "pct": 37.1,
+      "assisted": 6,
       "assistedPct": 7.6
     },
     "threePointJumpers": {
-      "attempted": 607,
-      "made": 222,
-      "pct": 36.6,
-      "assisted": 200,
-      "assistedPct": 90.1
+      "attempted": 808,
+      "made": 288,
+      "pct": 35.6,
+      "assisted": 263,
+      "assistedPct": 91.3
     },
     "freeThrows": {
-      "attempted": 651,
-      "made": 477,
-      "pct": 73.3
+      "attempted": 833,
+      "made": 620,
+      "pct": 74.4
     },
     "attemptsBreakdown": {
-      "dunks": 5.4,
-      "layups": 38.7,
-      "tipIns": 2.9,
-      "twoPointJumpers": 12,
-      "threePointJumpers": 41
+      "dunks": 4.8,
+      "layups": 38.9,
+      "tipIns": 3.1,
+      "twoPointJumpers": 11.1,
+      "threePointJumpers": 42.1
     }
   }
 ]

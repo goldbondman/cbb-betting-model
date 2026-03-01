@@ -4,53 +4,53 @@
     "teamId": 176,
     "team": "Missouri State",
     "conference": "CUSA",
-    "trackedShots": 1253,
-    "freeThrowRate": 42.6,
-    "assistedPct": 24,
+    "trackedShots": 1670,
+    "freeThrowRate": 42.5,
+    "assistedPct": 24.1,
     "dunks": {
-      "attempted": 13,
-      "made": 12,
-      "pct": 92.3,
-      "assisted": 11,
-      "assistedPct": 91.7
+      "attempted": 17,
+      "made": 15,
+      "pct": 88.2,
+      "assisted": 13,
+      "assistedPct": 86.7
     },
     "layups": {
-      "attempted": 381,
-      "made": 267,
-      "pct": 70.1,
-      "assisted": 115,
-      "assistedPct": 43.1
+      "attempted": 511,
+      "made": 337,
+      "pct": 65.9,
+      "assisted": 143,
+      "assistedPct": 42.4
     },
     "tipIns": {
-      "attempted": 12,
-      "made": 8,
-      "pct": 66.7
+      "attempted": 16,
+      "made": 11,
+      "pct": 68.8
     },
     "twoPointJumpers": {
-      "attempted": 331,
-      "made": 116,
-      "pct": 35,
-      "assisted": 29,
-      "assistedPct": 25
+      "attempted": 448,
+      "made": 159,
+      "pct": 35.5,
+      "assisted": 49,
+      "assistedPct": 30.8
     },
     "threePointJumpers": {
-      "attempted": 516,
-      "made": 163,
-      "pct": 31.6,
-      "assisted": 146,
-      "assistedPct": 89.6
+      "attempted": 678,
+      "made": 219,
+      "pct": 32.3,
+      "assisted": 197,
+      "assistedPct": 90
     },
     "freeThrows": {
-      "attempted": 534,
-      "made": 362,
-      "pct": 67.8
+      "attempted": 709,
+      "made": 482,
+      "pct": 68
     },
     "attemptsBreakdown": {
       "dunks": 1,
-      "layups": 30.4,
+      "layups": 30.6,
       "tipIns": 1,
-      "twoPointJumpers": 26.4,
-      "threePointJumpers": 41.2
+      "twoPointJumpers": 26.8,
+      "threePointJumpers": 40.6
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 31,
     "team": "Bryant",
     "conference": "Am. East",
-    "trackedShots": 1222,
-    "freeThrowRate": 30.2,
-    "assistedPct": 21.5,
+    "trackedShots": 1597,
+    "freeThrowRate": 29.8,
+    "assistedPct": 21.6,
     "dunks": {
-      "attempted": 55,
-      "made": 48,
+      "attempted": 63,
+      "made": 55,
       "pct": 87.3,
-      "assisted": 35,
-      "assistedPct": 72.9
+      "assisted": 41,
+      "assistedPct": 74.5
     },
     "layups": {
-      "attempted": 371,
-      "made": 190,
-      "pct": 51.2,
-      "assisted": 83,
-      "assistedPct": 43.7
+      "attempted": 501,
+      "made": 260,
+      "pct": 51.9,
+      "assisted": 114,
+      "assistedPct": 43.8
     },
     "tipIns": {
-      "attempted": 34,
-      "made": 23,
-      "pct": 67.6
+      "attempted": 46,
+      "made": 32,
+      "pct": 69.6
     },
     "twoPointJumpers": {
-      "attempted": 171,
-      "made": 52,
-      "pct": 30.4,
+      "attempted": 216,
+      "made": 64,
+      "pct": 29.6,
       "assisted": 10,
-      "assistedPct": 19.2
+      "assistedPct": 15.6
     },
     "threePointJumpers": {
-      "attempted": 591,
-      "made": 170,
-      "pct": 28.8,
-      "assisted": 135,
-      "assistedPct": 79.4
+      "attempted": 771,
+      "made": 231,
+      "pct": 30,
+      "assisted": 180,
+      "assistedPct": 77.9
     },
     "freeThrows": {
-      "attempted": 369,
-      "made": 272,
-      "pct": 73.7
+      "attempted": 476,
+      "made": 355,
+      "pct": 74.6
     },
     "attemptsBreakdown": {
-      "dunks": 4.5,
-      "layups": 30.4,
-      "tipIns": 2.8,
-      "twoPointJumpers": 14,
-      "threePointJumpers": 48.4
+      "dunks": 3.9,
+      "layups": 31.4,
+      "tipIns": 2.9,
+      "twoPointJumpers": 13.5,
+      "threePointJumpers": 48.3
     }
   }
 ]

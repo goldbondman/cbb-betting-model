@@ -4,53 +4,53 @@
     "teamId": 141,
     "team": "Lehigh",
     "conference": "Patriot",
-    "trackedShots": 1308,
-    "freeThrowRate": 32,
-    "assistedPct": 23.3,
+    "trackedShots": 1749,
+    "freeThrowRate": 31.9,
+    "assistedPct": 25.4,
     "dunks": {
-      "attempted": 37,
-      "made": 33,
-      "pct": 89.2,
-      "assisted": 27,
-      "assistedPct": 81.8
+      "attempted": 49,
+      "made": 43,
+      "pct": 87.8,
+      "assisted": 37,
+      "assistedPct": 86
     },
     "layups": {
-      "attempted": 385,
-      "made": 219,
-      "pct": 56.9,
-      "assisted": 83,
-      "assistedPct": 37.9
+      "attempted": 517,
+      "made": 313,
+      "pct": 60.5,
+      "assisted": 142,
+      "assistedPct": 45.4
     },
     "tipIns": {
-      "attempted": 25,
-      "made": 18,
-      "pct": 72
+      "attempted": 29,
+      "made": 22,
+      "pct": 75.9
     },
     "twoPointJumpers": {
-      "attempted": 332,
-      "made": 133,
-      "pct": 40.1,
-      "assisted": 35,
-      "assistedPct": 26.3
+      "attempted": 459,
+      "made": 185,
+      "pct": 40.3,
+      "assisted": 47,
+      "assistedPct": 25.4
     },
     "threePointJumpers": {
-      "attempted": 529,
-      "made": 184,
-      "pct": 34.8,
-      "assisted": 160,
-      "assistedPct": 87
+      "attempted": 695,
+      "made": 245,
+      "pct": 35.3,
+      "assisted": 219,
+      "assistedPct": 89.4
     },
     "freeThrows": {
-      "attempted": 418,
-      "made": 308,
-      "pct": 73.7
+      "attempted": 558,
+      "made": 410,
+      "pct": 73.5
     },
     "attemptsBreakdown": {
       "dunks": 2.8,
-      "layups": 29.4,
-      "tipIns": 1.9,
-      "twoPointJumpers": 25.4,
-      "threePointJumpers": 40.4
+      "layups": 29.6,
+      "tipIns": 1.7,
+      "twoPointJumpers": 26.2,
+      "threePointJumpers": 39.7
     }
   }
 ]

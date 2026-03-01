@@ -4,53 +4,53 @@
     "teamId": 324,
     "team": "UT Arlington",
     "conference": "WAC",
-    "trackedShots": 1222,
-    "freeThrowRate": 40.7,
-    "assistedPct": 22.5,
+    "trackedShots": 1606,
+    "freeThrowRate": 40.2,
+    "assistedPct": 21.5,
     "dunks": {
-      "attempted": 59,
-      "made": 46,
-      "pct": 78,
-      "assisted": 33,
-      "assistedPct": 71.7
+      "attempted": 83,
+      "made": 67,
+      "pct": 80.7,
+      "assisted": 50,
+      "assistedPct": 74.6
     },
     "layups": {
-      "attempted": 459,
-      "made": 246,
-      "pct": 53.6,
-      "assisted": 106,
-      "assistedPct": 43.1
+      "attempted": 614,
+      "made": 322,
+      "pct": 52.4,
+      "assisted": 128,
+      "assistedPct": 39.8
     },
     "tipIns": {
-      "attempted": 63,
-      "made": 39,
-      "pct": 61.9
+      "attempted": 75,
+      "made": 45,
+      "pct": 60
     },
     "twoPointJumpers": {
-      "attempted": 244,
-      "made": 91,
-      "pct": 37.3,
-      "assisted": 26,
-      "assistedPct": 28.6
+      "attempted": 331,
+      "made": 129,
+      "pct": 39,
+      "assisted": 40,
+      "assistedPct": 31
     },
     "threePointJumpers": {
-      "attempted": 397,
-      "made": 121,
-      "pct": 30.5,
-      "assisted": 110,
-      "assistedPct": 90.9
+      "attempted": 503,
+      "made": 146,
+      "pct": 29,
+      "assisted": 128,
+      "assistedPct": 87.7
     },
     "freeThrows": {
-      "attempted": 497,
-      "made": 361,
-      "pct": 72.6
+      "attempted": 645,
+      "made": 457,
+      "pct": 70.9
     },
     "attemptsBreakdown": {
-      "dunks": 4.8,
-      "layups": 37.6,
-      "tipIns": 5.2,
-      "twoPointJumpers": 20,
-      "threePointJumpers": 32.5
+      "dunks": 5.2,
+      "layups": 38.2,
+      "tipIns": 4.7,
+      "twoPointJumpers": 20.6,
+      "threePointJumpers": 31.3
     }
   }
 ]

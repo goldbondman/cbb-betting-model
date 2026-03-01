@@ -4,22 +4,22 @@
     "teamId": 84,
     "team": "Fairleigh Dickinson",
     "conference": "NEC",
-    "trackedShots": 1334,
-    "freeThrowRate": 31.1,
-    "assistedPct": 21.3,
+    "trackedShots": 1749,
+    "freeThrowRate": 31.8,
+    "assistedPct": 21,
     "dunks": {
-      "attempted": 18,
-      "made": 18,
+      "attempted": 21,
+      "made": 21,
       "pct": 100,
-      "assisted": 11,
-      "assistedPct": 61.1
+      "assisted": 14,
+      "assistedPct": 66.7
     },
     "layups": {
-      "attempted": 457,
-      "made": 247,
-      "pct": 54,
-      "assisted": 97,
-      "assistedPct": 39.3
+      "attempted": 610,
+      "made": 341,
+      "pct": 55.9,
+      "assisted": 133,
+      "assistedPct": 39
     },
     "tipIns": {
       "attempted": 11,
@@ -27,30 +27,30 @@
       "pct": 54.5
     },
     "twoPointJumpers": {
-      "attempted": 217,
-      "made": 77,
-      "pct": 35.5,
-      "assisted": 17,
-      "assistedPct": 22.1
+      "attempted": 310,
+      "made": 106,
+      "pct": 34.2,
+      "assisted": 21,
+      "assistedPct": 19.8
     },
     "threePointJumpers": {
-      "attempted": 631,
-      "made": 198,
-      "pct": 31.4,
-      "assisted": 159,
-      "assistedPct": 80.3
+      "attempted": 797,
+      "made": 249,
+      "pct": 31.2,
+      "assisted": 199,
+      "assistedPct": 79.9
     },
     "freeThrows": {
-      "attempted": 415,
-      "made": 291,
-      "pct": 70.1
+      "attempted": 557,
+      "made": 394,
+      "pct": 70.7
     },
     "attemptsBreakdown": {
-      "dunks": 1.3,
-      "layups": 34.3,
-      "tipIns": 0.8,
-      "twoPointJumpers": 16.3,
-      "threePointJumpers": 47.3
+      "dunks": 1.2,
+      "layups": 34.9,
+      "tipIns": 0.6,
+      "twoPointJumpers": 17.7,
+      "threePointJumpers": 45.6
     }
   }
 ]

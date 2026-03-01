@@ -4,53 +4,53 @@
     "teamId": 156,
     "team": "Marist",
     "conference": "MAAC",
-    "trackedShots": 1275,
-    "freeThrowRate": 26.3,
-    "assistedPct": 26.5,
+    "trackedShots": 1627,
+    "freeThrowRate": 25.4,
+    "assistedPct": 26.3,
     "dunks": {
-      "attempted": 23,
-      "made": 21,
-      "pct": 91.3,
-      "assisted": 16,
-      "assistedPct": 76.2
+      "attempted": 30,
+      "made": 27,
+      "pct": 90,
+      "assisted": 21,
+      "assistedPct": 77.8
     },
     "layups": {
-      "attempted": 403,
-      "made": 241,
-      "pct": 59.8,
-      "assisted": 137,
-      "assistedPct": 56.8
+      "attempted": 516,
+      "made": 298,
+      "pct": 57.8,
+      "assisted": 172,
+      "assistedPct": 57.7
     },
     "tipIns": {
-      "attempted": 20,
-      "made": 14,
-      "pct": 70
+      "attempted": 29,
+      "made": 21,
+      "pct": 72.4
     },
     "twoPointJumpers": {
-      "attempted": 377,
-      "made": 158,
-      "pct": 41.9,
-      "assisted": 59,
-      "assistedPct": 37.3
+      "attempted": 470,
+      "made": 192,
+      "pct": 40.9,
+      "assisted": 69,
+      "assistedPct": 35.9
     },
     "threePointJumpers": {
-      "attempted": 452,
-      "made": 143,
-      "pct": 31.6,
-      "assisted": 126,
-      "assistedPct": 88.1
+      "attempted": 582,
+      "made": 189,
+      "pct": 32.5,
+      "assisted": 166,
+      "assistedPct": 87.8
     },
     "freeThrows": {
-      "attempted": 335,
-      "made": 266,
-      "pct": 79.4
+      "attempted": 414,
+      "made": 329,
+      "pct": 79.5
     },
     "attemptsBreakdown": {
       "dunks": 1.8,
-      "layups": 31.6,
-      "tipIns": 1.6,
-      "twoPointJumpers": 29.6,
-      "threePointJumpers": 35.5
+      "layups": 31.7,
+      "tipIns": 1.8,
+      "twoPointJumpers": 28.9,
+      "threePointJumpers": 35.8
     }
   }
 ]

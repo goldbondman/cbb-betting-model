@@ -4,53 +4,53 @@
     "teamId": 40,
     "team": "California",
     "conference": "ACC",
-    "trackedShots": 1272,
-    "freeThrowRate": 38.4,
-    "assistedPct": 20.8,
+    "trackedShots": 1687,
+    "freeThrowRate": 37.3,
+    "assistedPct": 20.2,
     "dunks": {
-      "attempted": 63,
-      "made": 54,
-      "pct": 85.7,
-      "assisted": 19,
-      "assistedPct": 35.2
+      "attempted": 75,
+      "made": 61,
+      "pct": 81.3,
+      "assisted": 22,
+      "assistedPct": 36.1
     },
     "layups": {
-      "attempted": 355,
-      "made": 191,
-      "pct": 53.8,
-      "assisted": 75,
-      "assistedPct": 39.3
+      "attempted": 472,
+      "made": 256,
+      "pct": 54.2,
+      "assisted": 99,
+      "assistedPct": 38.7
     },
     "tipIns": {
-      "attempted": 15,
-      "made": 10,
-      "pct": 66.7
+      "attempted": 19,
+      "made": 14,
+      "pct": 73.7
     },
     "twoPointJumpers": {
-      "attempted": 298,
-      "made": 115,
-      "pct": 38.6,
-      "assisted": 20,
-      "assistedPct": 17.4
+      "attempted": 405,
+      "made": 155,
+      "pct": 38.3,
+      "assisted": 25,
+      "assistedPct": 16.1
     },
     "threePointJumpers": {
-      "attempted": 541,
-      "made": 199,
-      "pct": 36.8,
-      "assisted": 150,
-      "assistedPct": 75.4
+      "attempted": 716,
+      "made": 263,
+      "pct": 36.7,
+      "assisted": 195,
+      "assistedPct": 74.1
     },
     "freeThrows": {
-      "attempted": 489,
-      "made": 385,
-      "pct": 78.7
+      "attempted": 629,
+      "made": 493,
+      "pct": 78.4
     },
     "attemptsBreakdown": {
-      "dunks": 5,
-      "layups": 27.9,
-      "tipIns": 1.2,
-      "twoPointJumpers": 23.4,
-      "threePointJumpers": 42.5
+      "dunks": 4.4,
+      "layups": 28,
+      "tipIns": 1.1,
+      "twoPointJumpers": 24,
+      "threePointJumpers": 42.4
     }
   }
 ]

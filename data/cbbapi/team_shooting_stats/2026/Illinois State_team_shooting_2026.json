@@ -4,53 +4,53 @@
     "teamId": 119,
     "team": "Illinois State",
     "conference": "MVC",
-    "trackedShots": 1283,
-    "freeThrowRate": 33.6,
-    "assistedPct": 22.6,
+    "trackedShots": 1745,
+    "freeThrowRate": 30.4,
+    "assistedPct": 23,
     "dunks": {
-      "attempted": 34,
-      "made": 30,
-      "pct": 88.2,
-      "assisted": 17,
-      "assistedPct": 56.7
+      "attempted": 47,
+      "made": 39,
+      "pct": 83,
+      "assisted": 23,
+      "assistedPct": 59
     },
     "layups": {
-      "attempted": 388,
-      "made": 252,
-      "pct": 64.9,
-      "assisted": 89,
-      "assistedPct": 35.3
+      "attempted": 521,
+      "made": 341,
+      "pct": 65.5,
+      "assisted": 117,
+      "assistedPct": 34.3
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 18,
-      "pct": 66.7
+      "attempted": 34,
+      "made": 22,
+      "pct": 64.7
     },
     "twoPointJumpers": {
-      "attempted": 309,
-      "made": 126,
-      "pct": 40.8,
-      "assisted": 27,
-      "assistedPct": 21.4
+      "attempted": 409,
+      "made": 159,
+      "pct": 38.9,
+      "assisted": 39,
+      "assistedPct": 24.5
     },
     "threePointJumpers": {
-      "attempted": 525,
-      "made": 185,
-      "pct": 35.2,
-      "assisted": 157,
-      "assistedPct": 84.9
+      "attempted": 734,
+      "made": 260,
+      "pct": 35.4,
+      "assisted": 222,
+      "assistedPct": 85.4
     },
     "freeThrows": {
-      "attempted": 431,
-      "made": 297,
-      "pct": 68.9
+      "attempted": 531,
+      "made": 369,
+      "pct": 69.5
     },
     "attemptsBreakdown": {
       "dunks": 2.7,
-      "layups": 30.2,
-      "tipIns": 2.1,
-      "twoPointJumpers": 24.1,
-      "threePointJumpers": 40.9
+      "layups": 29.9,
+      "tipIns": 1.9,
+      "twoPointJumpers": 23.4,
+      "threePointJumpers": 42.1
     }
   }
 ]

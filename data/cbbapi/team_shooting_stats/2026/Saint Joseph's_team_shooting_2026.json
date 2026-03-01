@@ -4,53 +4,53 @@
     "teamId": 251,
     "team": "Saint Joseph's",
     "conference": "A-10",
-    "trackedShots": 1331,
-    "freeThrowRate": 32.3,
-    "assistedPct": 25.5,
+    "trackedShots": 1752,
+    "freeThrowRate": 30,
+    "assistedPct": 25.7,
     "dunks": {
-      "attempted": 80,
-      "made": 72,
-      "pct": 90,
-      "assisted": 60,
-      "assistedPct": 83.3
+      "attempted": 108,
+      "made": 97,
+      "pct": 89.8,
+      "assisted": 77,
+      "assistedPct": 79.4
     },
     "layups": {
-      "attempted": 391,
-      "made": 214,
-      "pct": 54.7,
-      "assisted": 114,
-      "assistedPct": 53.3
+      "attempted": 516,
+      "made": 279,
+      "pct": 54.1,
+      "assisted": 155,
+      "assistedPct": 55.6
     },
     "tipIns": {
-      "attempted": 59,
-      "made": 38,
-      "pct": 64.4
+      "attempted": 64,
+      "made": 42,
+      "pct": 65.6
     },
     "twoPointJumpers": {
-      "attempted": 214,
-      "made": 71,
-      "pct": 33.2,
-      "assisted": 18,
-      "assistedPct": 25.4
+      "attempted": 271,
+      "made": 91,
+      "pct": 33.6,
+      "assisted": 19,
+      "assistedPct": 20.9
     },
     "threePointJumpers": {
-      "attempted": 587,
-      "made": 177,
-      "pct": 30.2,
-      "assisted": 148,
-      "assistedPct": 83.6
+      "attempted": 793,
+      "made": 239,
+      "pct": 30.1,
+      "assisted": 200,
+      "assistedPct": 83.7
     },
     "freeThrows": {
-      "attempted": 430,
-      "made": 326,
-      "pct": 75.8
+      "attempted": 526,
+      "made": 392,
+      "pct": 74.5
     },
     "attemptsBreakdown": {
-      "dunks": 6,
-      "layups": 29.4,
-      "tipIns": 4.4,
-      "twoPointJumpers": 16.1,
-      "threePointJumpers": 44.1
+      "dunks": 6.2,
+      "layups": 29.5,
+      "tipIns": 3.7,
+      "twoPointJumpers": 15.5,
+      "threePointJumpers": 45.3
     }
   }
 ]

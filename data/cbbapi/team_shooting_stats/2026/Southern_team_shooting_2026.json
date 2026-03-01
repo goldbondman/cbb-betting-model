@@ -4,53 +4,53 @@
     "teamId": 274,
     "team": "Southern",
     "conference": "SWAC",
-    "trackedShots": 1310,
-    "freeThrowRate": 38.7,
-    "assistedPct": 22.1,
+    "trackedShots": 1794,
+    "freeThrowRate": 39.5,
+    "assistedPct": 23.5,
     "dunks": {
-      "attempted": 62,
-      "made": 56,
-      "pct": 90.3,
-      "assisted": 39,
-      "assistedPct": 69.6
+      "attempted": 87,
+      "made": 79,
+      "pct": 90.8,
+      "assisted": 60,
+      "assistedPct": 75.9
     },
     "layups": {
-      "attempted": 421,
-      "made": 239,
-      "pct": 56.8,
-      "assisted": 103,
-      "assistedPct": 43.1
+      "attempted": 584,
+      "made": 322,
+      "pct": 55.1,
+      "assisted": 139,
+      "assistedPct": 43.2
     },
     "tipIns": {
-      "attempted": 41,
-      "made": 30,
-      "pct": 73.2
+      "attempted": 61,
+      "made": 44,
+      "pct": 72.1
     },
     "twoPointJumpers": {
-      "attempted": 354,
-      "made": 126,
-      "pct": 35.6,
-      "assisted": 38,
-      "assistedPct": 30.2
+      "attempted": 466,
+      "made": 165,
+      "pct": 35.4,
+      "assisted": 59,
+      "assistedPct": 35.8
     },
     "threePointJumpers": {
-      "attempted": 432,
-      "made": 143,
-      "pct": 33.1,
-      "assisted": 109,
-      "assistedPct": 76.2
+      "attempted": 596,
+      "made": 204,
+      "pct": 34.2,
+      "assisted": 164,
+      "assistedPct": 80.4
     },
     "freeThrows": {
-      "attempted": 507,
-      "made": 351,
-      "pct": 69.2
+      "attempted": 709,
+      "made": 493,
+      "pct": 69.5
     },
     "attemptsBreakdown": {
-      "dunks": 4.7,
-      "layups": 32.1,
-      "tipIns": 3.1,
-      "twoPointJumpers": 27,
-      "threePointJumpers": 33
+      "dunks": 4.8,
+      "layups": 32.6,
+      "tipIns": 3.4,
+      "twoPointJumpers": 26,
+      "threePointJumpers": 33.2
     }
   }
 ]

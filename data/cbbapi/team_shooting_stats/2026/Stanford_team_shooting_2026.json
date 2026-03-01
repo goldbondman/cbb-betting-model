@@ -4,53 +4,53 @@
     "teamId": 281,
     "team": "Stanford",
     "conference": "ACC",
-    "trackedShots": 1302,
-    "freeThrowRate": 39.4,
-    "assistedPct": 20.1,
+    "trackedShots": 1701,
+    "freeThrowRate": 37.4,
+    "assistedPct": 19.9,
     "dunks": {
-      "attempted": 32,
-      "made": 28,
-      "pct": 87.5,
-      "assisted": 21,
-      "assistedPct": 75
+      "attempted": 43,
+      "made": 37,
+      "pct": 86,
+      "assisted": 26,
+      "assistedPct": 70.3
     },
     "layups": {
-      "attempted": 453,
-      "made": 222,
-      "pct": 49,
-      "assisted": 59,
-      "assistedPct": 26.6
+      "attempted": 583,
+      "made": 295,
+      "pct": 50.6,
+      "assisted": 78,
+      "assistedPct": 26.4
     },
     "tipIns": {
-      "attempted": 40,
-      "made": 26,
-      "pct": 65
+      "attempted": 47,
+      "made": 33,
+      "pct": 70.2
     },
     "twoPointJumpers": {
-      "attempted": 208,
-      "made": 83,
-      "pct": 39.9,
-      "assisted": 25,
-      "assistedPct": 30.1
+      "attempted": 270,
+      "made": 104,
+      "pct": 38.5,
+      "assisted": 28,
+      "assistedPct": 26.9
     },
     "threePointJumpers": {
-      "attempted": 569,
-      "made": 194,
-      "pct": 34.1,
-      "assisted": 157,
-      "assistedPct": 80.9
+      "attempted": 758,
+      "made": 264,
+      "pct": 34.8,
+      "assisted": 206,
+      "assistedPct": 78
     },
     "freeThrows": {
-      "attempted": 513,
-      "made": 369,
-      "pct": 71.9
+      "attempted": 637,
+      "made": 467,
+      "pct": 73.3
     },
     "attemptsBreakdown": {
       "dunks": 2.5,
-      "layups": 34.8,
-      "tipIns": 3.1,
-      "twoPointJumpers": 16,
-      "threePointJumpers": 43.7
+      "layups": 34.3,
+      "tipIns": 2.8,
+      "twoPointJumpers": 15.9,
+      "threePointJumpers": 44.6
     }
   }
 ]

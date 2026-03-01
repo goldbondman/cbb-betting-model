@@ -4,53 +4,53 @@
     "teamId": 79,
     "team": "Eastern Michigan",
     "conference": "MAC",
-    "trackedShots": 1284,
-    "freeThrowRate": 31.4,
-    "assistedPct": 22,
+    "trackedShots": 1698,
+    "freeThrowRate": 29.4,
+    "assistedPct": 21.5,
     "dunks": {
-      "attempted": 63,
-      "made": 56,
-      "pct": 88.9,
-      "assisted": 48,
-      "assistedPct": 85.7
+      "attempted": 81,
+      "made": 73,
+      "pct": 90.1,
+      "assisted": 61,
+      "assistedPct": 83.6
     },
     "layups": {
-      "attempted": 444,
-      "made": 239,
-      "pct": 53.8,
-      "assisted": 94,
-      "assistedPct": 39.3
+      "attempted": 554,
+      "made": 309,
+      "pct": 55.8,
+      "assisted": 118,
+      "assistedPct": 38.2
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 27,
-      "pct": 84.4
+      "attempted": 39,
+      "made": 31,
+      "pct": 79.5
     },
     "twoPointJumpers": {
-      "attempted": 331,
-      "made": 117,
-      "pct": 35.3,
-      "assisted": 26,
+      "attempted": 474,
+      "made": 162,
+      "pct": 34.2,
+      "assisted": 36,
       "assistedPct": 22.2
     },
     "threePointJumpers": {
-      "attempted": 414,
-      "made": 134,
-      "pct": 32.4,
-      "assisted": 114,
-      "assistedPct": 85.1
+      "attempted": 550,
+      "made": 181,
+      "pct": 32.9,
+      "assisted": 150,
+      "assistedPct": 82.9
     },
     "freeThrows": {
-      "attempted": 403,
-      "made": 293,
-      "pct": 72.7
+      "attempted": 499,
+      "made": 362,
+      "pct": 72.5
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 34.6,
-      "tipIns": 2.5,
-      "twoPointJumpers": 25.8,
-      "threePointJumpers": 32.2
+      "dunks": 4.8,
+      "layups": 32.6,
+      "tipIns": 2.3,
+      "twoPointJumpers": 27.9,
+      "threePointJumpers": 32.4
     }
   }
 ]

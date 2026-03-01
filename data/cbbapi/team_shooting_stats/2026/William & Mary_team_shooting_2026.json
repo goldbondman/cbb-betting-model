@@ -4,53 +4,53 @@
     "teamId": 353,
     "team": "William & Mary",
     "conference": "CAA",
-    "trackedShots": 1315,
-    "freeThrowRate": 39.2,
-    "assistedPct": 30.6,
+    "trackedShots": 1717,
+    "freeThrowRate": 41.6,
+    "assistedPct": 30.4,
     "dunks": {
-      "attempted": 39,
-      "made": 35,
-      "pct": 89.7,
-      "assisted": 28,
-      "assistedPct": 80
+      "attempted": 56,
+      "made": 52,
+      "pct": 92.9,
+      "assisted": 42,
+      "assistedPct": 80.8
     },
     "layups": {
-      "attempted": 498,
-      "made": 317,
-      "pct": 63.7,
-      "assisted": 172,
-      "assistedPct": 54.3
+      "attempted": 664,
+      "made": 420,
+      "pct": 63.3,
+      "assisted": 229,
+      "assistedPct": 54.5
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 19,
-      "pct": 59.4
+      "attempted": 40,
+      "made": 26,
+      "pct": 65
     },
     "twoPointJumpers": {
-      "attempted": 163,
-      "made": 63,
-      "pct": 38.7,
-      "assisted": 23,
-      "assistedPct": 36.5
+      "attempted": 221,
+      "made": 87,
+      "pct": 39.4,
+      "assisted": 28,
+      "assistedPct": 32.2
     },
     "threePointJumpers": {
-      "attempted": 583,
-      "made": 197,
-      "pct": 33.8,
-      "assisted": 180,
+      "attempted": 736,
+      "made": 244,
+      "pct": 33.2,
+      "assisted": 223,
       "assistedPct": 91.4
     },
     "freeThrows": {
-      "attempted": 516,
-      "made": 385,
-      "pct": 74.6
+      "attempted": 714,
+      "made": 531,
+      "pct": 74.4
     },
     "attemptsBreakdown": {
-      "dunks": 3,
-      "layups": 37.9,
-      "tipIns": 2.4,
-      "twoPointJumpers": 12.4,
-      "threePointJumpers": 44.3
+      "dunks": 3.3,
+      "layups": 38.7,
+      "tipIns": 2.3,
+      "twoPointJumpers": 12.9,
+      "threePointJumpers": 42.9
     }
   }
 ]
