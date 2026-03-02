@@ -4,53 +4,53 @@
     "teamId": 48,
     "team": "Charlotte",
     "conference": "American",
-    "trackedShots": 1529,
-    "freeThrowRate": 37.5,
+    "trackedShots": 1591,
+    "freeThrowRate": 37.3,
     "assistedPct": 22.8,
     "dunks": {
-      "attempted": 95,
-      "made": 86,
-      "pct": 90.5,
-      "assisted": 67,
-      "assistedPct": 77.9
+      "attempted": 98,
+      "made": 89,
+      "pct": 90.8,
+      "assisted": 70,
+      "assistedPct": 78.7
     },
     "layups": {
-      "attempted": 427,
-      "made": 241,
+      "attempted": 447,
+      "made": 252,
       "pct": 56.4,
-      "assisted": 69,
-      "assistedPct": 28.6
+      "assisted": 73,
+      "assistedPct": 29
     },
     "tipIns": {
-      "attempted": 64,
-      "made": 35,
-      "pct": 54.7
+      "attempted": 65,
+      "made": 36,
+      "pct": 55.4
     },
     "twoPointJumpers": {
-      "attempted": 271,
-      "made": 105,
-      "pct": 38.7,
+      "attempted": 278,
+      "made": 108,
+      "pct": 38.8,
       "assisted": 18,
-      "assistedPct": 17.1
+      "assistedPct": 16.7
     },
     "threePointJumpers": {
-      "attempted": 672,
-      "made": 239,
-      "pct": 35.6,
-      "assisted": 194,
-      "assistedPct": 81.2
+      "attempted": 703,
+      "made": 247,
+      "pct": 35.1,
+      "assisted": 201,
+      "assistedPct": 81.4
     },
     "freeThrows": {
-      "attempted": 574,
-      "made": 410,
-      "pct": 71.4
+      "attempted": 593,
+      "made": 426,
+      "pct": 71.8
     },
     "attemptsBreakdown": {
       "dunks": 6.2,
-      "layups": 27.9,
-      "tipIns": 4.2,
-      "twoPointJumpers": 17.7,
-      "threePointJumpers": 44
+      "layups": 28.1,
+      "tipIns": 4.1,
+      "twoPointJumpers": 17.5,
+      "threePointJumpers": 44.2
     }
   }
 ]

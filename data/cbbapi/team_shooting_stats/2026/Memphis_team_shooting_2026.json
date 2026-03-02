@@ -4,53 +4,53 @@
     "teamId": 163,
     "team": "Memphis",
     "conference": "American",
-    "trackedShots": 1706,
-    "freeThrowRate": 33.6,
-    "assistedPct": 21.4,
+    "trackedShots": 1773,
+    "freeThrowRate": 33.4,
+    "assistedPct": 21.3,
     "dunks": {
-      "attempted": 68,
+      "attempted": 69,
       "made": 51,
-      "pct": 75,
+      "pct": 73.9,
       "assisted": 38,
       "assistedPct": 74.5
     },
     "layups": {
-      "attempted": 509,
-      "made": 285,
-      "pct": 56,
-      "assisted": 127,
-      "assistedPct": 44.6
+      "attempted": 531,
+      "made": 298,
+      "pct": 56.1,
+      "assisted": 132,
+      "assistedPct": 44.3
     },
     "tipIns": {
-      "attempted": 68,
-      "made": 41,
-      "pct": 60.3
+      "attempted": 69,
+      "made": 42,
+      "pct": 60.9
     },
     "twoPointJumpers": {
-      "attempted": 472,
-      "made": 176,
-      "pct": 37.3,
-      "assisted": 46,
-      "assistedPct": 26.1
+      "attempted": 499,
+      "made": 182,
+      "pct": 36.5,
+      "assisted": 50,
+      "assistedPct": 27.5
     },
     "threePointJumpers": {
-      "attempted": 589,
-      "made": 188,
+      "attempted": 605,
+      "made": 193,
       "pct": 31.9,
-      "assisted": 154,
+      "assisted": 158,
       "assistedPct": 81.9
     },
     "freeThrows": {
-      "attempted": 573,
-      "made": 415,
-      "pct": 72.4
+      "attempted": 593,
+      "made": 428,
+      "pct": 72.2
     },
     "attemptsBreakdown": {
-      "dunks": 4,
-      "layups": 29.8,
-      "tipIns": 4,
-      "twoPointJumpers": 27.7,
-      "threePointJumpers": 34.5
+      "dunks": 3.9,
+      "layups": 29.9,
+      "tipIns": 3.9,
+      "twoPointJumpers": 28.1,
+      "threePointJumpers": 34.1
     }
   }
 ]

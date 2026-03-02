@@ -4,53 +4,53 @@
     "teamId": 310,
     "team": "UC San Diego",
     "conference": "Big West",
-    "trackedShots": 1710,
-    "freeThrowRate": 33.3,
-    "assistedPct": 25,
+    "trackedShots": 1777,
+    "freeThrowRate": 33,
+    "assistedPct": 24.9,
     "dunks": {
-      "attempted": 46,
-      "made": 38,
-      "pct": 82.6,
-      "assisted": 24,
-      "assistedPct": 63.2
+      "attempted": 50,
+      "made": 42,
+      "pct": 84,
+      "assisted": 26,
+      "assistedPct": 61.9
     },
     "layups": {
-      "attempted": 654,
-      "made": 379,
-      "pct": 58,
-      "assisted": 149,
-      "assistedPct": 39.3
+      "attempted": 678,
+      "made": 394,
+      "pct": 58.1,
+      "assisted": 154,
+      "assistedPct": 39.1
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 20,
-      "pct": 66.7
+      "attempted": 31,
+      "made": 21,
+      "pct": 67.7
     },
     "twoPointJumpers": {
-      "attempted": 239,
-      "made": 96,
-      "pct": 40.2,
-      "assisted": 27,
-      "assistedPct": 28.1
+      "attempted": 253,
+      "made": 99,
+      "pct": 39.1,
+      "assisted": 29,
+      "assistedPct": 29.3
     },
     "threePointJumpers": {
-      "attempted": 741,
-      "made": 252,
+      "attempted": 765,
+      "made": 260,
       "pct": 34,
-      "assisted": 227,
-      "assistedPct": 90.1
+      "assisted": 234,
+      "assistedPct": 90
     },
     "freeThrows": {
-      "attempted": 570,
-      "made": 394,
-      "pct": 69.1
+      "attempted": 586,
+      "made": 404,
+      "pct": 68.9
     },
     "attemptsBreakdown": {
-      "dunks": 2.7,
+      "dunks": 2.8,
       "layups": 38.2,
-      "tipIns": 1.8,
-      "twoPointJumpers": 14,
-      "threePointJumpers": 43.3
+      "tipIns": 1.7,
+      "twoPointJumpers": 14.2,
+      "threePointJumpers": 43.1
     }
   }
 ]

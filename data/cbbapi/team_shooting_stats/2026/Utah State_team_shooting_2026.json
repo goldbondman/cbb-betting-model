@@ -4,52 +4,52 @@
     "teamId": 329,
     "team": "Utah State",
     "conference": "Mountain West",
-    "trackedShots": 1643,
-    "freeThrowRate": 36.9,
-    "assistedPct": 29.7,
+    "trackedShots": 1697,
+    "freeThrowRate": 36.8,
+    "assistedPct": 29.8,
     "dunks": {
-      "attempted": 103,
-      "made": 90,
-      "pct": 87.4,
-      "assisted": 62,
-      "assistedPct": 68.9
+      "attempted": 109,
+      "made": 94,
+      "pct": 86.2,
+      "assisted": 65,
+      "assistedPct": 69.1
     },
     "layups": {
-      "attempted": 563,
-      "made": 337,
-      "pct": 59.9,
-      "assisted": 171,
+      "attempted": 577,
+      "made": 347,
+      "pct": 60.1,
+      "assisted": 176,
       "assistedPct": 50.7
     },
     "tipIns": {
-      "attempted": 71,
-      "made": 59,
-      "pct": 83.1
+      "attempted": 73,
+      "made": 60,
+      "pct": 82.2
     },
     "twoPointJumpers": {
-      "attempted": 228,
+      "attempted": 237,
       "made": 97,
-      "pct": 42.5,
+      "pct": 40.9,
       "assisted": 32,
       "assistedPct": 33
     },
     "threePointJumpers": {
-      "attempted": 678,
-      "made": 249,
-      "pct": 36.7,
-      "assisted": 223,
+      "attempted": 701,
+      "made": 260,
+      "pct": 37.1,
+      "assisted": 233,
       "assistedPct": 89.6
     },
     "freeThrows": {
-      "attempted": 606,
-      "made": 428,
-      "pct": 70.6
+      "attempted": 625,
+      "made": 439,
+      "pct": 70.2
     },
     "attemptsBreakdown": {
-      "dunks": 6.3,
-      "layups": 34.3,
+      "dunks": 6.4,
+      "layups": 34,
       "tipIns": 4.3,
-      "twoPointJumpers": 13.9,
+      "twoPointJumpers": 14,
       "threePointJumpers": 41.3
     }
   }

@@ -4,9 +4,9 @@
     "teamId": 83,
     "team": "Fairfield",
     "conference": "MAAC",
-    "trackedShots": 1894,
-    "freeThrowRate": 27.9,
-    "assistedPct": 18.8,
+    "trackedShots": 1948,
+    "freeThrowRate": 28.3,
+    "assistedPct": 18.6,
     "dunks": {
       "attempted": 48,
       "made": 43,
@@ -15,35 +15,35 @@
       "assistedPct": 76.7
     },
     "layups": {
-      "attempted": 681,
-      "made": 343,
-      "pct": 50.4,
-      "assisted": 121,
-      "assistedPct": 35.3
+      "attempted": 701,
+      "made": 348,
+      "pct": 49.6,
+      "assisted": 124,
+      "assistedPct": 35.6
     },
     "tipIns": {
-      "attempted": 74,
+      "attempted": 76,
       "made": 49,
-      "pct": 66.2
+      "pct": 64.5
     },
     "twoPointJumpers": {
-      "attempted": 411,
-      "made": 169,
-      "pct": 41.1,
+      "attempted": 423,
+      "made": 172,
+      "pct": 40.7,
       "assisted": 32,
-      "assistedPct": 18.9
+      "assistedPct": 18.6
     },
     "threePointJumpers": {
-      "attempted": 680,
-      "made": 230,
-      "pct": 33.8,
-      "assisted": 171,
-      "assistedPct": 74.3
+      "attempted": 700,
+      "made": 235,
+      "pct": 33.6,
+      "assisted": 174,
+      "assistedPct": 74
     },
     "freeThrows": {
-      "attempted": 529,
-      "made": 377,
-      "pct": 71.3
+      "attempted": 552,
+      "made": 393,
+      "pct": 71.2
     },
     "attemptsBreakdown": {
       "dunks": 2.5,

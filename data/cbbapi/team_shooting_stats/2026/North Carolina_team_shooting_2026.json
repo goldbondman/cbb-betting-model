@@ -6,13 +6,13 @@
     "conference": "ACC",
     "trackedShots": 1605,
     "freeThrowRate": 40.1,
-    "assistedPct": 26.7,
+    "assistedPct": 26.6,
     "dunks": {
       "attempted": 136,
       "made": 119,
       "pct": 87.5,
-      "assisted": 83,
-      "assistedPct": 69.7
+      "assisted": 82,
+      "assistedPct": 68.9
     },
     "layups": {
       "attempted": 409,

@@ -4,22 +4,22 @@
     "teamId": 289,
     "team": "Temple",
     "conference": "American",
-    "trackedShots": 1565,
-    "freeThrowRate": 41.9,
-    "assistedPct": 22.3,
+    "trackedShots": 1615,
+    "freeThrowRate": 42.2,
+    "assistedPct": 22.2,
     "dunks": {
-      "attempted": 65,
-      "made": 54,
-      "pct": 83.1,
+      "attempted": 66,
+      "made": 55,
+      "pct": 83.3,
       "assisted": 44,
-      "assistedPct": 81.5
+      "assistedPct": 80
     },
     "layups": {
-      "attempted": 519,
-      "made": 282,
-      "pct": 54.3,
-      "assisted": 102,
-      "assistedPct": 36.2
+      "attempted": 533,
+      "made": 291,
+      "pct": 54.6,
+      "assisted": 106,
+      "assistedPct": 36.4
     },
     "tipIns": {
       "attempted": 50,
@@ -27,30 +27,30 @@
       "pct": 60
     },
     "twoPointJumpers": {
-      "attempted": 363,
-      "made": 137,
-      "pct": 37.7,
-      "assisted": 34,
-      "assistedPct": 24.8
+      "attempted": 381,
+      "made": 147,
+      "pct": 38.6,
+      "assisted": 35,
+      "assistedPct": 23.8
     },
     "threePointJumpers": {
-      "attempted": 568,
-      "made": 192,
-      "pct": 33.8,
-      "assisted": 169,
-      "assistedPct": 88
+      "attempted": 585,
+      "made": 197,
+      "pct": 33.7,
+      "assisted": 174,
+      "assistedPct": 88.3
     },
     "freeThrows": {
-      "attempted": 655,
-      "made": 486,
+      "attempted": 681,
+      "made": 505,
       "pct": 74.2
     },
     "attemptsBreakdown": {
-      "dunks": 4.2,
-      "layups": 33.2,
-      "tipIns": 3.2,
-      "twoPointJumpers": 23.2,
-      "threePointJumpers": 36.3
+      "dunks": 4.1,
+      "layups": 33,
+      "tipIns": 3.1,
+      "twoPointJumpers": 23.6,
+      "threePointJumpers": 36.2
     }
   }
 ]

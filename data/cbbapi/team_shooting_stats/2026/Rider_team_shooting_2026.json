@@ -4,8 +4,8 @@
     "teamId": 243,
     "team": "Rider",
     "conference": "MAAC",
-    "trackedShots": 1644,
-    "freeThrowRate": 31.4,
+    "trackedShots": 1704,
+    "freeThrowRate": 30.8,
     "assistedPct": 17.5,
     "dunks": {
       "attempted": 39,
@@ -15,42 +15,42 @@
       "assistedPct": 87.9
     },
     "layups": {
-      "attempted": 547,
-      "made": 264,
-      "pct": 48.3,
-      "assisted": 101,
-      "assistedPct": 38.3
+      "attempted": 565,
+      "made": 272,
+      "pct": 48.1,
+      "assisted": 104,
+      "assistedPct": 38.2
     },
     "tipIns": {
-      "attempted": 38,
-      "made": 24,
-      "pct": 63.2
+      "attempted": 39,
+      "made": 25,
+      "pct": 64.1
     },
     "twoPointJumpers": {
-      "attempted": 572,
-      "made": 205,
-      "pct": 35.8,
-      "assisted": 58,
-      "assistedPct": 28.3
+      "attempted": 591,
+      "made": 214,
+      "pct": 36.2,
+      "assisted": 61,
+      "assistedPct": 28.5
     },
     "threePointJumpers": {
-      "attempted": 448,
-      "made": 123,
-      "pct": 27.5,
-      "assisted": 99,
-      "assistedPct": 80.5
+      "attempted": 470,
+      "made": 129,
+      "pct": 27.4,
+      "assisted": 104,
+      "assistedPct": 80.6
     },
     "freeThrows": {
-      "attempted": 516,
-      "made": 358,
-      "pct": 69.4
+      "attempted": 525,
+      "made": 365,
+      "pct": 69.5
     },
     "attemptsBreakdown": {
-      "dunks": 2.4,
-      "layups": 33.3,
+      "dunks": 2.3,
+      "layups": 33.2,
       "tipIns": 2.3,
-      "twoPointJumpers": 34.8,
-      "threePointJumpers": 27.3
+      "twoPointJumpers": 34.7,
+      "threePointJumpers": 27.6
     }
   }
 ]

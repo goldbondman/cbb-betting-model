@@ -4,9 +4,9 @@
     "teamId": 155,
     "team": "Manhattan",
     "conference": "MAAC",
-    "trackedShots": 1783,
-    "freeThrowRate": 34.9,
-    "assistedPct": 21.4,
+    "trackedShots": 1847,
+    "freeThrowRate": 34.7,
+    "assistedPct": 21.3,
     "dunks": {
       "attempted": 26,
       "made": 24,
@@ -15,42 +15,42 @@
       "assistedPct": 70.8
     },
     "layups": {
-      "attempted": 613,
-      "made": 306,
-      "pct": 49.9,
-      "assisted": 135,
-      "assistedPct": 44.1
+      "attempted": 635,
+      "made": 315,
+      "pct": 49.6,
+      "assisted": 140,
+      "assistedPct": 44.4
     },
     "tipIns": {
-      "attempted": 58,
+      "attempted": 59,
       "made": 33,
-      "pct": 56.9
+      "pct": 55.9
     },
     "twoPointJumpers": {
-      "attempted": 420,
-      "made": 184,
-      "pct": 43.8,
-      "assisted": 57,
-      "assistedPct": 31
+      "attempted": 435,
+      "made": 189,
+      "pct": 43.4,
+      "assisted": 58,
+      "assistedPct": 30.7
     },
     "threePointJumpers": {
-      "attempted": 666,
-      "made": 219,
-      "pct": 32.9,
-      "assisted": 172,
-      "assistedPct": 78.5
+      "attempted": 692,
+      "made": 226,
+      "pct": 32.7,
+      "assisted": 179,
+      "assistedPct": 79.2
     },
     "freeThrows": {
-      "attempted": 622,
-      "made": 493,
-      "pct": 79.3
+      "attempted": 641,
+      "made": 509,
+      "pct": 79.4
     },
     "attemptsBreakdown": {
-      "dunks": 1.5,
+      "dunks": 1.4,
       "layups": 34.4,
-      "tipIns": 3.3,
+      "tipIns": 3.2,
       "twoPointJumpers": 23.6,
-      "threePointJumpers": 37.4
+      "threePointJumpers": 37.5
     }
   }
 ]

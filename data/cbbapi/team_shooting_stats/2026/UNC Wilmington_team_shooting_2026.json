@@ -4,22 +4,22 @@
     "teamId": 321,
     "team": "UNC Wilmington",
     "conference": "CAA",
-    "trackedShots": 1688,
-    "freeThrowRate": 43.5,
+    "trackedShots": 1750,
+    "freeThrowRate": 42.9,
     "assistedPct": 22.2,
     "dunks": {
-      "attempted": 29,
-      "made": 26,
-      "pct": 89.7,
-      "assisted": 22,
-      "assistedPct": 84.6
+      "attempted": 30,
+      "made": 27,
+      "pct": 90,
+      "assisted": 23,
+      "assistedPct": 85.2
     },
     "layups": {
-      "attempted": 559,
-      "made": 319,
-      "pct": 57.1,
-      "assisted": 119,
-      "assistedPct": 37.3
+      "attempted": 572,
+      "made": 326,
+      "pct": 57,
+      "assisted": 120,
+      "assistedPct": 36.8
     },
     "tipIns": {
       "attempted": 33,
@@ -27,30 +27,30 @@
       "pct": 87.9
     },
     "twoPointJumpers": {
-      "attempted": 433,
-      "made": 152,
-      "pct": 35.1,
-      "assisted": 41,
-      "assistedPct": 27
+      "attempted": 449,
+      "made": 157,
+      "pct": 35,
+      "assisted": 43,
+      "assistedPct": 27.4
     },
     "threePointJumpers": {
-      "attempted": 634,
-      "made": 228,
-      "pct": 36,
-      "assisted": 192,
-      "assistedPct": 84.2
+      "attempted": 666,
+      "made": 241,
+      "pct": 36.2,
+      "assisted": 202,
+      "assistedPct": 83.8
     },
     "freeThrows": {
-      "attempted": 735,
-      "made": 507,
+      "attempted": 751,
+      "made": 518,
       "pct": 69
     },
     "attemptsBreakdown": {
       "dunks": 1.7,
-      "layups": 33.1,
-      "tipIns": 2,
+      "layups": 32.7,
+      "tipIns": 1.9,
       "twoPointJumpers": 25.7,
-      "threePointJumpers": 37.6
+      "threePointJumpers": 38.1
     }
   }
 ]

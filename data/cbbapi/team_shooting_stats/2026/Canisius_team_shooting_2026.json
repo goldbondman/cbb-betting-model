@@ -4,53 +4,53 @@
     "teamId": 42,
     "team": "Canisius",
     "conference": "MAAC",
-    "trackedShots": 1626,
-    "freeThrowRate": 31.3,
+    "trackedShots": 1686,
+    "freeThrowRate": 31.1,
     "assistedPct": 21.8,
     "dunks": {
-      "attempted": 47,
-      "made": 38,
-      "pct": 80.9,
+      "attempted": 49,
+      "made": 40,
+      "pct": 81.6,
       "assisted": 30,
-      "assistedPct": 78.9
+      "assistedPct": 75
     },
     "layups": {
-      "attempted": 523,
-      "made": 237,
-      "pct": 45.3,
-      "assisted": 98,
-      "assistedPct": 41.4
+      "attempted": 542,
+      "made": 248,
+      "pct": 45.8,
+      "assisted": 104,
+      "assistedPct": 41.9
     },
     "tipIns": {
-      "attempted": 40,
+      "attempted": 41,
       "made": 16,
-      "pct": 40
+      "pct": 39
     },
     "twoPointJumpers": {
-      "attempted": 373,
-      "made": 146,
-      "pct": 39.1,
+      "attempted": 385,
+      "made": 150,
+      "pct": 39,
       "assisted": 50,
-      "assistedPct": 34.2
+      "assistedPct": 33.3
     },
     "threePointJumpers": {
-      "attempted": 643,
-      "made": 216,
-      "pct": 33.6,
-      "assisted": 177,
-      "assistedPct": 81.9
+      "attempted": 669,
+      "made": 222,
+      "pct": 33.2,
+      "assisted": 183,
+      "assistedPct": 82.4
     },
     "freeThrows": {
-      "attempted": 509,
-      "made": 366,
-      "pct": 71.9
+      "attempted": 525,
+      "made": 377,
+      "pct": 71.8
     },
     "attemptsBreakdown": {
       "dunks": 2.9,
-      "layups": 32.2,
-      "tipIns": 2.5,
-      "twoPointJumpers": 22.9,
-      "threePointJumpers": 39.5
+      "layups": 32.1,
+      "tipIns": 2.4,
+      "twoPointJumpers": 22.8,
+      "threePointJumpers": 39.7
     }
   }
 ]
