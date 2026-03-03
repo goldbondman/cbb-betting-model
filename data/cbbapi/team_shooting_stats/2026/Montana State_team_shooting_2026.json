@@ -4,22 +4,22 @@
     "teamId": 180,
     "team": "Montana State",
     "conference": "Big Sky",
-    "trackedShots": 1762,
-    "freeThrowRate": 30.8,
-    "assistedPct": 19,
+    "trackedShots": 1817,
+    "freeThrowRate": 30.5,
+    "assistedPct": 18.9,
     "dunks": {
-      "attempted": 44,
-      "made": 43,
-      "pct": 97.7,
-      "assisted": 33,
-      "assistedPct": 76.7
+      "attempted": 46,
+      "made": 45,
+      "pct": 97.8,
+      "assisted": 34,
+      "assistedPct": 75.6
     },
     "layups": {
-      "attempted": 504,
-      "made": 293,
-      "pct": 58.1,
-      "assisted": 70,
-      "assistedPct": 23.9
+      "attempted": 517,
+      "made": 302,
+      "pct": 58.4,
+      "assisted": 71,
+      "assistedPct": 23.5
     },
     "tipIns": {
       "attempted": 14,
@@ -27,30 +27,30 @@
       "pct": 78.6
     },
     "twoPointJumpers": {
-      "attempted": 401,
-      "made": 180,
-      "pct": 44.9,
+      "attempted": 410,
+      "made": 185,
+      "pct": 45.1,
       "assisted": 18,
-      "assistedPct": 10
+      "assistedPct": 9.7
     },
     "threePointJumpers": {
-      "attempted": 799,
-      "made": 294,
-      "pct": 36.8,
-      "assisted": 213,
-      "assistedPct": 72.4
+      "attempted": 830,
+      "made": 306,
+      "pct": 36.9,
+      "assisted": 221,
+      "assistedPct": 72.2
     },
     "freeThrows": {
-      "attempted": 542,
-      "made": 407,
-      "pct": 75.1
+      "attempted": 555,
+      "made": 415,
+      "pct": 74.8
     },
     "attemptsBreakdown": {
       "dunks": 2.5,
-      "layups": 28.6,
+      "layups": 28.5,
       "tipIns": 0.8,
-      "twoPointJumpers": 22.8,
-      "threePointJumpers": 45.3
+      "twoPointJumpers": 22.6,
+      "threePointJumpers": 45.7
     }
   }
 ]

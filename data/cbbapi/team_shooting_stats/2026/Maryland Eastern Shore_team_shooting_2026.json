@@ -4,53 +4,53 @@
     "teamId": 159,
     "team": "Maryland Eastern Shore",
     "conference": "MEAC",
-    "trackedShots": 1551,
-    "freeThrowRate": 29.3,
-    "assistedPct": 24.9,
+    "trackedShots": 1611,
+    "freeThrowRate": 28.7,
+    "assistedPct": 25.3,
     "dunks": {
-      "attempted": 42,
-      "made": 33,
-      "pct": 78.6,
-      "assisted": 25,
-      "assistedPct": 75.8
+      "attempted": 44,
+      "made": 35,
+      "pct": 79.5,
+      "assisted": 27,
+      "assistedPct": 77.1
     },
     "layups": {
-      "attempted": 523,
-      "made": 301,
+      "attempted": 542,
+      "made": 312,
       "pct": 57.6,
-      "assisted": 145,
-      "assistedPct": 48.2
+      "assisted": 153,
+      "assistedPct": 49
     },
     "tipIns": {
-      "attempted": 55,
-      "made": 31,
-      "pct": 56.4
+      "attempted": 62,
+      "made": 34,
+      "pct": 54.8
     },
     "twoPointJumpers": {
-      "attempted": 409,
-      "made": 166,
-      "pct": 40.6,
-      "assisted": 68,
-      "assistedPct": 41
+      "attempted": 424,
+      "made": 173,
+      "pct": 40.8,
+      "assisted": 72,
+      "assistedPct": 41.6
     },
     "threePointJumpers": {
-      "attempted": 522,
-      "made": 157,
-      "pct": 30.1,
-      "assisted": 148,
-      "assistedPct": 94.3
+      "attempted": 539,
+      "made": 164,
+      "pct": 30.4,
+      "assisted": 155,
+      "assistedPct": 94.5
     },
     "freeThrows": {
-      "attempted": 454,
-      "made": 322,
-      "pct": 70.9
+      "attempted": 462,
+      "made": 328,
+      "pct": 71
     },
     "attemptsBreakdown": {
       "dunks": 2.7,
-      "layups": 33.7,
-      "tipIns": 3.5,
-      "twoPointJumpers": 26.4,
-      "threePointJumpers": 33.7
+      "layups": 33.6,
+      "tipIns": 3.8,
+      "twoPointJumpers": 26.3,
+      "threePointJumpers": 33.5
     }
   }
 ]

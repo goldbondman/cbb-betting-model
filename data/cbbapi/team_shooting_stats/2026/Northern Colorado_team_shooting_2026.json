@@ -4,52 +4,52 @@
     "teamId": 207,
     "team": "Northern Colorado",
     "conference": "Big Sky",
-    "trackedShots": 1834,
-    "freeThrowRate": 26.9,
-    "assistedPct": 26.9,
+    "trackedShots": 1901,
+    "freeThrowRate": 26.5,
+    "assistedPct": 26.7,
     "dunks": {
-      "attempted": 66,
-      "made": 58,
-      "pct": 87.9,
-      "assisted": 50,
-      "assistedPct": 86.2
+      "attempted": 69,
+      "made": 60,
+      "pct": 87,
+      "assisted": 52,
+      "assistedPct": 86.7
     },
     "layups": {
-      "attempted": 602,
-      "made": 370,
+      "attempted": 626,
+      "made": 385,
       "pct": 61.5,
-      "assisted": 159,
-      "assistedPct": 43
+      "assisted": 164,
+      "assistedPct": 42.6
     },
     "tipIns": {
-      "attempted": 62,
-      "made": 42,
-      "pct": 67.7
+      "attempted": 63,
+      "made": 43,
+      "pct": 68.3
     },
     "twoPointJumpers": {
-      "attempted": 314,
-      "made": 145,
-      "pct": 46.2,
+      "attempted": 323,
+      "made": 149,
+      "pct": 46.1,
       "assisted": 20,
-      "assistedPct": 13.8
+      "assistedPct": 13.4
     },
     "threePointJumpers": {
-      "attempted": 790,
-      "made": 287,
+      "attempted": 820,
+      "made": 298,
       "pct": 36.3,
-      "assisted": 264,
-      "assistedPct": 92
+      "assisted": 272,
+      "assistedPct": 91.3
     },
     "freeThrows": {
-      "attempted": 494,
-      "made": 375,
-      "pct": 75.9
+      "attempted": 504,
+      "made": 383,
+      "pct": 76
     },
     "attemptsBreakdown": {
       "dunks": 3.6,
-      "layups": 32.8,
-      "tipIns": 3.4,
-      "twoPointJumpers": 17.1,
+      "layups": 32.9,
+      "tipIns": 3.3,
+      "twoPointJumpers": 17,
       "threePointJumpers": 43.1
     }
   }

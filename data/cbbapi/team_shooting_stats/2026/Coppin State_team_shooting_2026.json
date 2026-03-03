@@ -4,53 +4,53 @@
     "teamId": 59,
     "team": "Coppin State",
     "conference": "MEAC",
-    "trackedShots": 1607,
-    "freeThrowRate": 38.2,
+    "trackedShots": 1663,
+    "freeThrowRate": 37.9,
     "assistedPct": 21.4,
     "dunks": {
-      "attempted": 46,
-      "made": 40,
-      "pct": 87,
-      "assisted": 26,
-      "assistedPct": 65
+      "attempted": 49,
+      "made": 43,
+      "pct": 87.8,
+      "assisted": 29,
+      "assistedPct": 67.4
     },
     "layups": {
-      "attempted": 562,
-      "made": 285,
-      "pct": 50.7,
-      "assisted": 127,
-      "assistedPct": 44.6
+      "attempted": 588,
+      "made": 300,
+      "pct": 51,
+      "assisted": 132,
+      "assistedPct": 44
     },
     "tipIns": {
-      "attempted": 38,
-      "made": 30,
-      "pct": 78.9
+      "attempted": 40,
+      "made": 32,
+      "pct": 80
     },
     "twoPointJumpers": {
-      "attempted": 382,
-      "made": 122,
-      "pct": 31.9,
-      "assisted": 44,
-      "assistedPct": 36.1
+      "attempted": 398,
+      "made": 128,
+      "pct": 32.2,
+      "assisted": 45,
+      "assistedPct": 35.2
     },
     "threePointJumpers": {
-      "attempted": 579,
-      "made": 176,
+      "attempted": 588,
+      "made": 179,
       "pct": 30.4,
-      "assisted": 147,
-      "assistedPct": 83.5
+      "assisted": 150,
+      "assistedPct": 83.8
     },
     "freeThrows": {
-      "attempted": 614,
-      "made": 414,
-      "pct": 67.4
+      "attempted": 630,
+      "made": 423,
+      "pct": 67.1
     },
     "attemptsBreakdown": {
       "dunks": 2.9,
-      "layups": 35,
+      "layups": 35.4,
       "tipIns": 2.4,
-      "twoPointJumpers": 23.8,
-      "threePointJumpers": 36
+      "twoPointJumpers": 23.9,
+      "threePointJumpers": 35.4
     }
   }
 ]

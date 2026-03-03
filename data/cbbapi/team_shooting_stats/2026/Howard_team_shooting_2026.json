@@ -4,53 +4,53 @@
     "teamId": 114,
     "team": "Howard",
     "conference": "MEAC",
-    "trackedShots": 1665,
-    "freeThrowRate": 43.3,
-    "assistedPct": 27.9,
+    "trackedShots": 1722,
+    "freeThrowRate": 43.2,
+    "assistedPct": 28.5,
     "dunks": {
-      "attempted": 82,
-      "made": 76,
-      "pct": 92.7,
-      "assisted": 67,
-      "assistedPct": 88.2
+      "attempted": 87,
+      "made": 81,
+      "pct": 93.1,
+      "assisted": 72,
+      "assistedPct": 88.9
     },
     "layups": {
-      "attempted": 695,
-      "made": 353,
-      "pct": 50.8,
-      "assisted": 187,
-      "assistedPct": 53
+      "attempted": 714,
+      "made": 364,
+      "pct": 51,
+      "assisted": 195,
+      "assistedPct": 53.6
     },
     "tipIns": {
-      "attempted": 52,
-      "made": 38,
-      "pct": 73.1
+      "attempted": 54,
+      "made": 39,
+      "pct": 72.2
     },
     "twoPointJumpers": {
-      "attempted": 281,
-      "made": 107,
-      "pct": 38.1,
-      "assisted": 42,
-      "assistedPct": 39.3
+      "attempted": 287,
+      "made": 110,
+      "pct": 38.3,
+      "assisted": 44,
+      "assistedPct": 40
     },
     "threePointJumpers": {
-      "attempted": 555,
-      "made": 188,
-      "pct": 33.9,
-      "assisted": 168,
-      "assistedPct": 89.4
+      "attempted": 580,
+      "made": 199,
+      "pct": 34.3,
+      "assisted": 179,
+      "assistedPct": 89.9
     },
     "freeThrows": {
-      "attempted": 721,
-      "made": 524,
+      "attempted": 744,
+      "made": 541,
       "pct": 72.7
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 41.7,
+      "dunks": 5.1,
+      "layups": 41.5,
       "tipIns": 3.1,
-      "twoPointJumpers": 16.9,
-      "threePointJumpers": 33.3
+      "twoPointJumpers": 16.7,
+      "threePointJumpers": 33.7
     }
   }
 ]

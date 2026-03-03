@@ -1205,117 +1205,117 @@
     "teamId": 11,
     "team": "Arizona",
     "conference": "Big 12",
-    "games": 29,
-    "wins": 27,
+    "games": 30,
+    "wins": 28,
     "losses": 2,
-    "totalMinutes": 1175,
-    "pace": 71.2,
+    "totalMinutes": 1215,
+    "pace": 71,
     "teamStats": {
-      "assists": 502,
-      "blocks": 121,
-      "steals": 233,
-      "possessions": 2088,
+      "assists": 516,
+      "blocks": 127,
+      "steals": 241,
+      "possessions": 2155,
       "trueShooting": 59.4,
-      "rating": 120.9,
+      "rating": 120.6,
       "fieldGoals": {
-        "made": 898,
-        "attempted": 1791,
-        "pct": 50.1
+        "made": 920,
+        "attempted": 1839,
+        "pct": 50
       },
       "twoPointFieldGoals": {
-        "made": 728,
-        "attempted": 1309,
+        "made": 744,
+        "attempted": 1339,
         "pct": 55.6
       },
       "threePointFieldGoals": {
-        "made": 170,
-        "attempted": 482,
-        "pct": 35.3
+        "made": 176,
+        "attempted": 500,
+        "pct": 35.2
       },
       "freeThrows": {
-        "made": 559,
-        "attempted": 761,
-        "pct": 73.5
+        "made": 582,
+        "attempted": 787,
+        "pct": 74
       },
       "rebounds": {
-        "offensive": 383,
-        "defensive": 874,
-        "total": 1257
+        "offensive": 392,
+        "defensive": 905,
+        "total": 1297
       },
       "turnovers": {
-        "total": 316,
-        "teamTotal": 9
+        "total": 331,
+        "teamTotal": 10
       },
       "fouls": {
-        "total": 471,
+        "total": 485,
         "technical": 7,
         "flagrant": 5
       },
       "points": {
-        "total": 2525,
-        "inPaint": 1254,
-        "offTurnovers": 463,
-        "fastBreak": 480
+        "total": 2598,
+        "inPaint": 1278,
+        "offTurnovers": 477,
+        "fastBreak": 497
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.9,
+        "effectiveFieldGoalPct": 54.8,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 30.5,
-        "freeThrowRate": 42.5
+        "offensiveReboundPct": 30.2,
+        "freeThrowRate": 42.8
       }
     },
     "opponentStats": {
-      "assists": 345,
-      "blocks": 113,
-      "steals": 172,
-      "possessions": 2093,
-      "trueShooting": 48.9,
-      "rating": 95.1,
+      "assists": 355,
+      "blocks": 115,
+      "steals": 180,
+      "possessions": 2160,
+      "trueShooting": 48.6,
+      "rating": 94.8,
       "fieldGoals": {
-        "made": 707,
-        "attempted": 1807,
-        "pct": 39.1
+        "made": 726,
+        "attempted": 1872,
+        "pct": 38.8
       },
       "twoPointFieldGoals": {
-        "made": 497,
-        "attempted": 1140,
-        "pct": 43.6
+        "made": 509,
+        "attempted": 1175,
+        "pct": 43.3
       },
       "threePointFieldGoals": {
-        "made": 210,
-        "attempted": 667,
-        "pct": 31.5
+        "made": 217,
+        "attempted": 697,
+        "pct": 31.1
       },
       "freeThrows": {
-        "made": 366,
-        "attempted": 519,
-        "pct": 70.5
+        "made": 378,
+        "attempted": 532,
+        "pct": 71.1
       },
       "rebounds": {
-        "offensive": 306,
-        "defensive": 603,
-        "total": 909
+        "offensive": 321,
+        "defensive": 621,
+        "total": 942
       },
       "turnovers": {
-        "total": 357,
+        "total": 368,
         "teamTotal": 4
       },
       "fouls": {
-        "total": 571,
+        "total": 591,
         "technical": 4,
         "flagrant": 3
       },
       "points": {
-        "total": 1990,
-        "inPaint": 766,
-        "offTurnovers": 324,
-        "fastBreak": 247
+        "total": 2047,
+        "inPaint": 782,
+        "offTurnovers": 340,
+        "fastBreak": 256
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 44.9,
+        "effectiveFieldGoalPct": 44.6,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 33.7,
-        "freeThrowRate": 28.7
+        "offensiveReboundPct": 34.1,
+        "freeThrowRate": 28.4
       }
     }
   },
@@ -6245,117 +6245,117 @@
     "teamId": 53,
     "team": "Cleveland State",
     "conference": "Horizon",
-    "games": 31,
-    "wins": 10,
+    "games": 32,
+    "wins": 11,
     "losses": 21,
-    "totalMinutes": 1240,
-    "pace": 70.3,
+    "totalMinutes": 1280,
+    "pace": 70.7,
     "teamStats": {
-      "assists": 487,
-      "blocks": 84,
-      "steals": 170,
-      "possessions": 2179,
-      "trueShooting": 58.9,
-      "rating": 113.3,
+      "assists": 504,
+      "blocks": 88,
+      "steals": 179,
+      "possessions": 2260,
+      "trueShooting": 59.3,
+      "rating": 113.7,
       "fieldGoals": {
-        "made": 815,
-        "attempted": 1804,
-        "pct": 45.2
+        "made": 852,
+        "attempted": 1863,
+        "pct": 45.7
       },
       "twoPointFieldGoals": {
-        "made": 476,
-        "attempted": 898,
-        "pct": 53
+        "made": 502,
+        "attempted": 937,
+        "pct": 53.6
       },
       "threePointFieldGoals": {
-        "made": 339,
-        "attempted": 906,
-        "pct": 37.4
+        "made": 350,
+        "attempted": 926,
+        "pct": 37.8
       },
       "freeThrows": {
-        "made": 500,
-        "attempted": 665,
-        "pct": 75.2
+        "made": 516,
+        "attempted": 688,
+        "pct": 75
       },
       "rebounds": {
-        "offensive": 313,
-        "defensive": 700,
-        "total": 1013
+        "offensive": 318,
+        "defensive": 732,
+        "total": 1050
       },
       "turnovers": {
-        "total": 398,
+        "total": 415,
         "teamTotal": 24
       },
       "fouls": {
-        "total": 595,
+        "total": 611,
         "technical": 4,
         "flagrant": 1
       },
       "points": {
-        "total": 2469,
-        "inPaint": 866,
-        "offTurnovers": 433,
-        "fastBreak": 444
+        "total": 2570,
+        "inPaint": 914,
+        "offTurnovers": 446,
+        "fastBreak": 479
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.6,
+        "effectiveFieldGoalPct": 55.1,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 30.9,
+        "offensiveReboundPct": 30.3,
         "freeThrowRate": 36.9
       }
     },
     "opponentStats": {
-      "assists": 534,
-      "blocks": 124,
-      "steals": 212,
-      "possessions": 2180,
-      "trueShooting": 59.7,
-      "rating": 121.7,
+      "assists": 554,
+      "blocks": 126,
+      "steals": 220,
+      "possessions": 2262,
+      "trueShooting": 59.6,
+      "rating": 121.4,
       "fieldGoals": {
-        "made": 916,
-        "attempted": 1922,
+        "made": 951,
+        "attempted": 1995,
         "pct": 47.7
       },
       "twoPointFieldGoals": {
-        "made": 608,
-        "attempted": 1055,
-        "pct": 57.6
+        "made": 634,
+        "attempted": 1104,
+        "pct": 57.4
       },
       "threePointFieldGoals": {
-        "made": 308,
-        "attempted": 867,
-        "pct": 35.5
+        "made": 317,
+        "attempted": 891,
+        "pct": 35.6
       },
       "freeThrows": {
-        "made": 513,
-        "attempted": 680,
+        "made": 527,
+        "attempted": 699,
         "pct": 75.4
       },
       "rebounds": {
-        "offensive": 383,
-        "defensive": 736,
-        "total": 1119
+        "offensive": 393,
+        "defensive": 756,
+        "total": 1149
       },
       "turnovers": {
-        "total": 347,
+        "total": 359,
         "teamTotal": 10
       },
       "fouls": {
-        "total": 589,
+        "total": 608,
         "technical": 2,
         "flagrant": 2
       },
       "points": {
-        "total": 2653,
-        "inPaint": 1102,
-        "offTurnovers": 530,
-        "fastBreak": 416
+        "total": 2746,
+        "inPaint": 1148,
+        "offTurnovers": 548,
+        "fastBreak": 429
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 55.7,
+        "effectiveFieldGoalPct": 55.6,
         "turnoverRatio": 0.16,
         "offensiveReboundPct": 34.2,
-        "freeThrowRate": 35.4
+        "freeThrowRate": 35
       }
     }
   },
@@ -6965,117 +6965,117 @@
     "teamId": 59,
     "team": "Coppin State",
     "conference": "MEAC",
-    "games": 29,
+    "games": 30,
     "wins": 7,
-    "losses": 22,
-    "totalMinutes": 1175,
+    "losses": 23,
+    "totalMinutes": 1215,
     "pace": 68.4,
     "teamStats": {
-      "assists": 344,
-      "blocks": 93,
-      "steals": 188,
-      "possessions": 2004,
-      "trueShooting": 50.5,
-      "rating": 94.6,
+      "assists": 356,
+      "blocks": 96,
+      "steals": 195,
+      "possessions": 2071,
+      "trueShooting": 50.7,
+      "rating": 94.9,
       "fieldGoals": {
-        "made": 653,
-        "attempted": 1607,
-        "pct": 40.6
+        "made": 682,
+        "attempted": 1663,
+        "pct": 41
       },
       "twoPointFieldGoals": {
-        "made": 477,
-        "attempted": 1028,
-        "pct": 46.4
+        "made": 503,
+        "attempted": 1075,
+        "pct": 46.8
       },
       "threePointFieldGoals": {
-        "made": 176,
-        "attempted": 579,
+        "made": 179,
+        "attempted": 588,
         "pct": 30.4
       },
       "freeThrows": {
-        "made": 414,
-        "attempted": 614,
-        "pct": 67.4
+        "made": 423,
+        "attempted": 630,
+        "pct": 67.1
       },
       "rebounds": {
-        "offensive": 326,
-        "defensive": 619,
-        "total": 945
+        "offensive": 335,
+        "defensive": 632,
+        "total": 967
       },
       "turnovers": {
-        "total": 448,
-        "teamTotal": 21
+        "total": 465,
+        "teamTotal": 23
       },
       "fouls": {
-        "total": 540,
+        "total": 558,
         "technical": 10,
         "flagrant": 0
       },
       "points": {
-        "total": 1896,
-        "inPaint": 816,
-        "offTurnovers": 344,
-        "fastBreak": 287
+        "total": 1966,
+        "inPaint": 862,
+        "offTurnovers": 357,
+        "fastBreak": 288
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 46.1,
+        "effectiveFieldGoalPct": 46.4,
         "turnoverRatio": 0.22,
-        "offensiveReboundPct": 34.5,
-        "freeThrowRate": 38.2
+        "offensiveReboundPct": 34.6,
+        "freeThrowRate": 37.9
       }
     },
     "opponentStats": {
-      "assists": 477,
-      "blocks": 119,
-      "steals": 258,
-      "possessions": 2017,
-      "trueShooting": 59.6,
-      "rating": 115.7,
+      "assists": 503,
+      "blocks": 126,
+      "steals": 271,
+      "possessions": 2085,
+      "trueShooting": 59.9,
+      "rating": 116.2,
       "fieldGoals": {
-        "made": 768,
-        "attempted": 1646,
-        "pct": 46.7
+        "made": 799,
+        "attempted": 1703,
+        "pct": 46.9
       },
       "twoPointFieldGoals": {
-        "made": 497,
-        "attempted": 928,
-        "pct": 53.6
+        "made": 517,
+        "attempted": 960,
+        "pct": 53.9
       },
       "threePointFieldGoals": {
-        "made": 271,
-        "attempted": 718,
-        "pct": 37.7
+        "made": 282,
+        "attempted": 743,
+        "pct": 38
       },
       "freeThrows": {
-        "made": 526,
-        "attempted": 707,
+        "made": 543,
+        "attempted": 730,
         "pct": 74.4
       },
       "rebounds": {
-        "offensive": 321,
-        "defensive": 712,
-        "total": 1033
+        "offensive": 334,
+        "defensive": 734,
+        "total": 1068
       },
       "turnovers": {
-        "total": 361,
-        "teamTotal": 20
+        "total": 376,
+        "teamTotal": 21
       },
       "fouls": {
-        "total": 522,
+        "total": 537,
         "technical": 8,
         "flagrant": 0
       },
       "points": {
-        "total": 2333,
-        "inPaint": 878,
-        "offTurnovers": 568,
-        "fastBreak": 430
+        "total": 2423,
+        "inPaint": 912,
+        "offTurnovers": 591,
+        "fastBreak": 451
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.9,
+        "effectiveFieldGoalPct": 55.2,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 31.1,
-        "freeThrowRate": 43
+        "offensiveReboundPct": 31.3,
+        "freeThrowRate": 42.9
       }
     }
   },
@@ -7925,117 +7925,117 @@
     "teamId": 67,
     "team": "Delaware State",
     "conference": "MEAC",
-    "games": 27,
+    "games": 28,
     "wins": 6,
-    "losses": 21,
-    "totalMinutes": 1095,
-    "pace": 63.5,
+    "losses": 22,
+    "totalMinutes": 1135,
+    "pace": 63.3,
     "teamStats": {
-      "assists": 293,
-      "blocks": 47,
-      "steals": 215,
-      "possessions": 1735,
+      "assists": 296,
+      "blocks": 48,
+      "steals": 223,
+      "possessions": 1795,
       "trueShooting": 48,
-      "rating": 95.2,
+      "rating": 95.3,
       "fieldGoals": {
-        "made": 597,
-        "attempted": 1510,
-        "pct": 39.5
+        "made": 615,
+        "attempted": 1560,
+        "pct": 39.4
       },
       "twoPointFieldGoals": {
-        "made": 466,
-        "attempted": 1077,
+        "made": 481,
+        "attempted": 1112,
         "pct": 43.3
       },
       "threePointFieldGoals": {
-        "made": 131,
-        "attempted": 433,
-        "pct": 30.3
+        "made": 134,
+        "attempted": 448,
+        "pct": 29.9
       },
       "freeThrows": {
-        "made": 327,
-        "attempted": 478,
-        "pct": 68.4
+        "made": 347,
+        "attempted": 502,
+        "pct": 69.1
       },
       "rebounds": {
-        "offensive": 256,
-        "defensive": 569,
-        "total": 825
+        "offensive": 267,
+        "defensive": 591,
+        "total": 858
       },
       "turnovers": {
-        "total": 357,
-        "teamTotal": 30
+        "total": 368,
+        "teamTotal": 33
       },
       "fouls": {
-        "total": 458,
+        "total": 481,
         "technical": 1,
         "flagrant": 0
       },
       "points": {
-        "total": 1652,
-        "inPaint": 708,
-        "offTurnovers": 351,
-        "fastBreak": 317
+        "total": 1711,
+        "inPaint": 734,
+        "offTurnovers": 370,
+        "fastBreak": 338
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 43.9,
+        "effectiveFieldGoalPct": 43.7,
         "turnoverRatio": 0.21,
-        "offensiveReboundPct": 31,
-        "freeThrowRate": 31.7
+        "offensiveReboundPct": 31.1,
+        "freeThrowRate": 32.2
       }
     },
     "opponentStats": {
-      "assists": 383,
-      "blocks": 105,
-      "steals": 181,
-      "possessions": 1739,
-      "trueShooting": 58,
-      "rating": 111.5,
+      "assists": 392,
+      "blocks": 109,
+      "steals": 186,
+      "possessions": 1799,
+      "trueShooting": 57.9,
+      "rating": 111.2,
       "fieldGoals": {
-        "made": 685,
-        "attempted": 1434,
-        "pct": 47.8
+        "made": 701,
+        "attempted": 1476,
+        "pct": 47.5
       },
       "twoPointFieldGoals": {
-        "made": 500,
-        "attempted": 918,
-        "pct": 54.5
+        "made": 512,
+        "attempted": 949,
+        "pct": 54
       },
       "threePointFieldGoals": {
-        "made": 185,
-        "attempted": 516,
+        "made": 189,
+        "attempted": 527,
         "pct": 35.9
       },
       "freeThrows": {
-        "made": 384,
-        "attempted": 542,
-        "pct": 70.8
+        "made": 409,
+        "attempted": 571,
+        "pct": 71.6
       },
       "rebounds": {
-        "offensive": 239,
-        "defensive": 697,
-        "total": 936
+        "offensive": 246,
+        "defensive": 718,
+        "total": 964
       },
       "turnovers": {
-        "total": 367,
-        "teamTotal": 11
+        "total": 379,
+        "teamTotal": 12
       },
       "fouls": {
-        "total": 432,
+        "total": 448,
         "technical": 0,
         "flagrant": 0
       },
       "points": {
-        "total": 1939,
-        "inPaint": 860,
-        "offTurnovers": 404,
-        "fastBreak": 276
+        "total": 2000,
+        "inPaint": 884,
+        "offTurnovers": 417,
+        "fastBreak": 288
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.2,
+        "effectiveFieldGoalPct": 53.9,
         "turnoverRatio": 0.21,
         "offensiveReboundPct": 25.5,
-        "freeThrowRate": 37.8
+        "freeThrowRate": 38.7
       }
     }
   },
@@ -8525,117 +8525,117 @@
     "teamId": 72,
     "team": "Duke",
     "conference": "ACC",
-    "games": 29,
-    "wins": 27,
+    "games": 30,
+    "wins": 28,
     "losses": 2,
-    "totalMinutes": 1160,
-    "pace": 67.2,
+    "totalMinutes": 1200,
+    "pace": 67.1,
     "teamStats": {
-      "assists": 490,
-      "blocks": 97,
-      "steals": 231,
-      "possessions": 1947,
-      "trueShooting": 61.2,
-      "rating": 123.4,
+      "assists": 511,
+      "blocks": 100,
+      "steals": 233,
+      "possessions": 2011,
+      "trueShooting": 61.4,
+      "rating": 124.1,
       "fieldGoals": {
-        "made": 836,
-        "attempted": 1679,
-        "pct": 49.8
+        "made": 868,
+        "attempted": 1737,
+        "pct": 50
       },
       "twoPointFieldGoals": {
-        "made": 575,
-        "attempted": 941,
-        "pct": 61.1
+        "made": 596,
+        "attempted": 971,
+        "pct": 61.4
       },
       "threePointFieldGoals": {
-        "made": 261,
-        "attempted": 738,
-        "pct": 35.4
+        "made": 272,
+        "attempted": 766,
+        "pct": 35.5
       },
       "freeThrows": {
-        "made": 469,
-        "attempted": 643,
-        "pct": 72.9
+        "made": 487,
+        "attempted": 670,
+        "pct": 72.7
       },
       "rebounds": {
-        "offensive": 341,
-        "defensive": 815,
-        "total": 1156
+        "offensive": 354,
+        "defensive": 845,
+        "total": 1199
       },
       "turnovers": {
-        "total": 308,
+        "total": 315,
         "teamTotal": 9
       },
       "fouls": {
-        "total": 456,
+        "total": 472,
         "technical": 2,
         "flagrant": 2
       },
       "points": {
-        "total": 2402,
-        "inPaint": 1094,
-        "offTurnovers": 420,
-        "fastBreak": 302
+        "total": 2495,
+        "inPaint": 1136,
+        "offTurnovers": 427,
+        "fastBreak": 312
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 57.6,
+        "effectiveFieldGoalPct": 57.8,
         "turnoverRatio": 0.16,
         "offensiveReboundPct": 29.5,
-        "freeThrowRate": 38.3
+        "freeThrowRate": 38.6
       }
     },
     "opponentStats": {
-      "assists": 341,
-      "blocks": 73,
-      "steals": 184,
-      "possessions": 1950,
-      "trueShooting": 48.9,
-      "rating": 92.9,
+      "assists": 353,
+      "blocks": 77,
+      "steals": 190,
+      "possessions": 2015,
+      "trueShooting": 48.7,
+      "rating": 93.1,
       "fieldGoals": {
-        "made": 653,
-        "attempted": 1682,
-        "pct": 38.8
+        "made": 676,
+        "attempted": 1747,
+        "pct": 38.7
       },
       "twoPointFieldGoals": {
-        "made": 422,
-        "attempted": 915,
+        "made": 438,
+        "attempted": 951,
         "pct": 46.1
       },
       "threePointFieldGoals": {
-        "made": 231,
-        "attempted": 767,
-        "pct": 30.1
+        "made": 238,
+        "attempted": 796,
+        "pct": 29.9
       },
       "freeThrows": {
-        "made": 275,
-        "attempted": 388,
-        "pct": 70.9
+        "made": 286,
+        "attempted": 405,
+        "pct": 70.6
       },
       "rebounds": {
-        "offensive": 268,
-        "defensive": 589,
-        "total": 857
+        "offensive": 283,
+        "defensive": 606,
+        "total": 889
       },
       "turnovers": {
-        "total": 366,
+        "total": 372,
         "teamTotal": 22
       },
       "fouls": {
-        "total": 527,
+        "total": 549,
         "technical": 3,
         "flagrant": 2
       },
       "points": {
-        "total": 1812,
-        "inPaint": 690,
-        "offTurnovers": 302,
-        "fastBreak": 221
+        "total": 1876,
+        "inPaint": 718,
+        "offTurnovers": 313,
+        "fastBreak": 223
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 45.7,
-        "turnoverRatio": 0.19,
-        "offensiveReboundPct": 31.3,
-        "freeThrowRate": 23.1
+        "effectiveFieldGoalPct": 45.5,
+        "turnoverRatio": 0.18,
+        "offensiveReboundPct": 31.8,
+        "freeThrowRate": 23.2
       }
     }
   },
@@ -9005,116 +9005,116 @@
     "teamId": 76,
     "team": "East Texas A&M",
     "conference": "Southland",
-    "games": 31,
+    "games": 32,
     "wins": 11,
-    "losses": 20,
-    "totalMinutes": 1240,
-    "pace": 69,
+    "losses": 21,
+    "totalMinutes": 1280,
+    "pace": 68.9,
     "teamStats": {
-      "assists": 501,
+      "assists": 515,
       "blocks": 102,
-      "steals": 223,
-      "possessions": 2134,
-      "trueShooting": 53.8,
-      "rating": 101.9,
+      "steals": 233,
+      "possessions": 2200,
+      "trueShooting": 53.9,
+      "rating": 102.1,
       "fieldGoals": {
-        "made": 767,
-        "attempted": 1781,
-        "pct": 43.1
+        "made": 793,
+        "attempted": 1831,
+        "pct": 43.3
       },
       "twoPointFieldGoals": {
-        "made": 502,
-        "attempted": 955,
-        "pct": 52.6
+        "made": 519,
+        "attempted": 982,
+        "pct": 52.9
       },
       "threePointFieldGoals": {
-        "made": 265,
-        "attempted": 826,
-        "pct": 32.1
+        "made": 274,
+        "attempted": 849,
+        "pct": 32.3
       },
       "freeThrows": {
-        "made": 376,
-        "attempted": 549,
-        "pct": 68.5
+        "made": 386,
+        "attempted": 570,
+        "pct": 67.7
       },
       "rebounds": {
-        "offensive": 294,
-        "defensive": 745,
-        "total": 1039
+        "offensive": 300,
+        "defensive": 759,
+        "total": 1059
       },
       "turnovers": {
-        "total": 401,
+        "total": 414,
         "teamTotal": 20
       },
       "fouls": {
-        "total": 526,
+        "total": 543,
         "technical": 3,
         "flagrant": 0
       },
       "points": {
-        "total": 2175,
-        "inPaint": 924,
-        "offTurnovers": 415,
-        "fastBreak": 328
+        "total": 2246,
+        "inPaint": 954,
+        "offTurnovers": 435,
+        "fastBreak": 342
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 50.5,
+        "effectiveFieldGoalPct": 50.8,
         "turnoverRatio": 0.19,
         "offensiveReboundPct": 28.3,
-        "freeThrowRate": 30.8
+        "freeThrowRate": 31.1
       }
     },
     "opponentStats": {
-      "assists": 451,
-      "blocks": 100,
-      "steals": 220,
-      "possessions": 2143,
-      "trueShooting": 55,
-      "rating": 107.4,
+      "assists": 465,
+      "blocks": 104,
+      "steals": 230,
+      "possessions": 2210,
+      "trueShooting": 55.2,
+      "rating": 107.9,
       "fieldGoals": {
-        "made": 809,
-        "attempted": 1816,
-        "pct": 44.5
+        "made": 839,
+        "attempted": 1874,
+        "pct": 44.8
       },
       "twoPointFieldGoals": {
-        "made": 562,
-        "attempted": 1136,
-        "pct": 49.5
+        "made": 584,
+        "attempted": 1172,
+        "pct": 49.8
       },
       "threePointFieldGoals": {
-        "made": 247,
-        "attempted": 680,
+        "made": 255,
+        "attempted": 702,
         "pct": 36.3
       },
       "freeThrows": {
-        "made": 436,
-        "attempted": 629,
-        "pct": 69.3
+        "made": 452,
+        "attempted": 649,
+        "pct": 69.6
       },
       "rebounds": {
-        "offensive": 344,
-        "defensive": 803,
-        "total": 1147
+        "offensive": 357,
+        "defensive": 826,
+        "total": 1183
       },
       "turnovers": {
-        "total": 383,
+        "total": 396,
         "teamTotal": 19
       },
       "fouls": {
-        "total": 462,
+        "total": 479,
         "technical": 4,
         "flagrant": 1
       },
       "points": {
-        "total": 2301,
-        "inPaint": 1006,
-        "offTurnovers": 469,
-        "fastBreak": 295
+        "total": 2385,
+        "inPaint": 1050,
+        "offTurnovers": 491,
+        "fastBreak": 309
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 51.3,
+        "effectiveFieldGoalPct": 51.6,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 30,
+        "offensiveReboundPct": 30.2,
         "freeThrowRate": 34.6
       }
     }
@@ -9485,117 +9485,117 @@
     "teamId": 80,
     "team": "Eastern Washington",
     "conference": "Big Sky",
-    "games": 30,
+    "games": 31,
     "wins": 13,
-    "losses": 17,
-    "totalMinutes": 1230,
+    "losses": 18,
+    "totalMinutes": 1270,
     "pace": 67.4,
     "teamStats": {
-      "assists": 408,
-      "blocks": 96,
-      "steals": 186,
-      "possessions": 2078,
-      "trueShooting": 58.1,
-      "rating": 112.8,
+      "assists": 420,
+      "blocks": 107,
+      "steals": 192,
+      "possessions": 2146,
+      "trueShooting": 58.3,
+      "rating": 113,
       "fieldGoals": {
-        "made": 836,
-        "attempted": 1752,
-        "pct": 47.7
+        "made": 863,
+        "attempted": 1802,
+        "pct": 47.9
       },
       "twoPointFieldGoals": {
-        "made": 615,
-        "attempted": 1145,
-        "pct": 53.7
+        "made": 636,
+        "attempted": 1177,
+        "pct": 54
       },
       "threePointFieldGoals": {
-        "made": 221,
-        "attempted": 607,
-        "pct": 36.4
+        "made": 227,
+        "attempted": 625,
+        "pct": 36.3
       },
       "freeThrows": {
-        "made": 450,
-        "attempted": 600,
-        "pct": 75
+        "made": 471,
+        "attempted": 629,
+        "pct": 74.9
       },
       "rebounds": {
-        "offensive": 308,
-        "defensive": 662,
-        "total": 970
+        "offensive": 317,
+        "defensive": 681,
+        "total": 998
       },
       "turnovers": {
-        "total": 371,
-        "teamTotal": 16
+        "total": 384,
+        "teamTotal": 17
       },
       "fouls": {
-        "total": 536,
+        "total": 555,
         "technical": 5,
         "flagrant": 1
       },
       "points": {
-        "total": 2343,
-        "inPaint": 1042,
-        "offTurnovers": 397,
-        "fastBreak": 241
+        "total": 2424,
+        "inPaint": 1076,
+        "offTurnovers": 408,
+        "fastBreak": 246
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54,
+        "effectiveFieldGoalPct": 54.2,
         "turnoverRatio": 0.18,
         "offensiveReboundPct": 31.8,
-        "freeThrowRate": 34.2
+        "freeThrowRate": 34.9
       }
     },
     "opponentStats": {
-      "assists": 416,
-      "blocks": 91,
-      "steals": 225,
-      "possessions": 2068,
-      "trueShooting": 58.9,
-      "rating": 114.2,
+      "assists": 431,
+      "blocks": 94,
+      "steals": 234,
+      "possessions": 2134,
+      "trueShooting": 59,
+      "rating": 114.6,
       "fieldGoals": {
-        "made": 828,
-        "attempted": 1731,
+        "made": 858,
+        "attempted": 1794,
         "pct": 47.8
       },
       "twoPointFieldGoals": {
-        "made": 594,
-        "attempted": 1063,
-        "pct": 55.9
+        "made": 610,
+        "attempted": 1097,
+        "pct": 55.6
       },
       "threePointFieldGoals": {
-        "made": 234,
-        "attempted": 668,
-        "pct": 35
+        "made": 248,
+        "attempted": 697,
+        "pct": 35.6
       },
       "freeThrows": {
-        "made": 471,
-        "attempted": 618,
-        "pct": 76.2
+        "made": 482,
+        "attempted": 635,
+        "pct": 75.9
       },
       "rebounds": {
-        "offensive": 294,
-        "defensive": 665,
-        "total": 959
+        "offensive": 309,
+        "defensive": 680,
+        "total": 989
       },
       "turnovers": {
-        "total": 347,
+        "total": 357,
         "teamTotal": 22
       },
       "fouls": {
-        "total": 555,
+        "total": 578,
         "technical": 4,
         "flagrant": 1
       },
       "points": {
-        "total": 2361,
-        "inPaint": 1056,
-        "offTurnovers": 458,
-        "fastBreak": 326
+        "total": 2446,
+        "inPaint": 1084,
+        "offTurnovers": 468,
+        "fastBreak": 330
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.6,
+        "effectiveFieldGoalPct": 54.7,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 30.7,
-        "freeThrowRate": 35.7
+        "offensiveReboundPct": 31.2,
+        "freeThrowRate": 35.4
       }
     }
   },
@@ -13325,117 +13325,117 @@
     "teamId": 112,
     "team": "Houston Christian",
     "conference": "Southland",
-    "games": 30,
+    "games": 31,
     "wins": 11,
     "losses": 19,
-    "totalMinutes": 1215,
-    "pace": 64.2,
+    "totalMinutes": 1255,
+    "pace": 64.3,
     "teamStats": {
-      "assists": 418,
-      "blocks": 118,
-      "steals": 193,
-      "possessions": 1950,
-      "trueShooting": 53.6,
-      "rating": 103.2,
+      "assists": 434,
+      "blocks": 123,
+      "steals": 204,
+      "possessions": 2017,
+      "trueShooting": 53.9,
+      "rating": 103.5,
       "fieldGoals": {
-        "made": 711,
-        "attempted": 1620,
-        "pct": 43.9
+        "made": 737,
+        "attempted": 1669,
+        "pct": 44.2
       },
       "twoPointFieldGoals": {
-        "made": 529,
-        "attempted": 1033,
-        "pct": 51.2
+        "made": 550,
+        "attempted": 1066,
+        "pct": 51.6
       },
       "threePointFieldGoals": {
-        "made": 182,
-        "attempted": 587,
+        "made": 187,
+        "attempted": 603,
         "pct": 31
       },
       "freeThrows": {
-        "made": 408,
-        "attempted": 583,
-        "pct": 70
+        "made": 426,
+        "attempted": 607,
+        "pct": 70.2
       },
       "rebounds": {
-        "offensive": 316,
-        "defensive": 642,
-        "total": 958
+        "offensive": 324,
+        "defensive": 670,
+        "total": 994
       },
       "turnovers": {
-        "total": 372,
-        "teamTotal": 20
+        "total": 386,
+        "teamTotal": 21
       },
       "fouls": {
-        "total": 456,
+        "total": 469,
         "technical": 2,
         "flagrant": 0
       },
       "points": {
-        "total": 2012,
-        "inPaint": 952,
-        "offTurnovers": 387,
-        "fastBreak": 260
+        "total": 2087,
+        "inPaint": 992,
+        "offTurnovers": 402,
+        "fastBreak": 271
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 49.5,
+        "effectiveFieldGoalPct": 49.8,
         "turnoverRatio": 0.19,
-        "offensiveReboundPct": 33,
-        "freeThrowRate": 36
+        "offensiveReboundPct": 32.6,
+        "freeThrowRate": 36.4
       }
     },
     "opponentStats": {
-      "assists": 426,
-      "blocks": 96,
-      "steals": 210,
-      "possessions": 1952,
-      "trueShooting": 57.7,
-      "rating": 111.8,
+      "assists": 435,
+      "blocks": 100,
+      "steals": 219,
+      "possessions": 2019,
+      "trueShooting": 57,
+      "rating": 110.7,
       "fieldGoals": {
-        "made": 801,
-        "attempted": 1673,
-        "pct": 47.9
+        "made": 822,
+        "attempted": 1737,
+        "pct": 47.3
       },
       "twoPointFieldGoals": {
-        "made": 576,
-        "attempted": 1035,
-        "pct": 55.7
+        "made": 593,
+        "attempted": 1077,
+        "pct": 55.1
       },
       "threePointFieldGoals": {
-        "made": 225,
-        "attempted": 638,
-        "pct": 35.3
+        "made": 229,
+        "attempted": 660,
+        "pct": 34.7
       },
       "freeThrows": {
-        "made": 356,
-        "attempted": 496,
-        "pct": 71.8
+        "made": 363,
+        "attempted": 509,
+        "pct": 71.3
       },
       "rebounds": {
-        "offensive": 300,
-        "defensive": 695,
-        "total": 995
+        "offensive": 317,
+        "defensive": 713,
+        "total": 1030
       },
       "turnovers": {
-        "total": 351,
+        "total": 365,
         "teamTotal": 27
       },
       "fouls": {
-        "total": 474,
+        "total": 491,
         "technical": 2,
         "flagrant": 0
       },
       "points": {
-        "total": 2183,
-        "inPaint": 1016,
-        "offTurnovers": 455,
-        "fastBreak": 291
+        "total": 2236,
+        "inPaint": 1048,
+        "offTurnovers": 465,
+        "fastBreak": 293
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.6,
+        "effectiveFieldGoalPct": 53.9,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 30.2,
-        "freeThrowRate": 29.6
+        "offensiveReboundPct": 30.8,
+        "freeThrowRate": 29.3
       }
     }
   },
@@ -13565,117 +13565,117 @@
     "teamId": 114,
     "team": "Howard",
     "conference": "MEAC",
-    "games": 29,
-    "wins": 19,
+    "games": 30,
+    "wins": 20,
     "losses": 10,
-    "totalMinutes": 1175,
+    "totalMinutes": 1215,
     "pace": 68.9,
     "teamStats": {
-      "assists": 470,
-      "blocks": 103,
-      "steals": 249,
-      "possessions": 2026,
-      "trueShooting": 56.4,
-      "rating": 110.3,
+      "assists": 496,
+      "blocks": 110,
+      "steals": 262,
+      "possessions": 2094,
+      "trueShooting": 56.7,
+      "rating": 111,
       "fieldGoals": {
-        "made": 762,
-        "attempted": 1665,
-        "pct": 45.8
+        "made": 793,
+        "attempted": 1722,
+        "pct": 46.1
       },
       "twoPointFieldGoals": {
-        "made": 574,
-        "attempted": 1110,
-        "pct": 51.7
+        "made": 594,
+        "attempted": 1142,
+        "pct": 52
       },
       "threePointFieldGoals": {
-        "made": 188,
-        "attempted": 555,
-        "pct": 33.9
+        "made": 199,
+        "attempted": 580,
+        "pct": 34.3
       },
       "freeThrows": {
-        "made": 522,
-        "attempted": 721,
+        "made": 539,
+        "attempted": 744,
         "pct": 72.4
       },
       "rebounds": {
-        "offensive": 362,
-        "defensive": 704,
-        "total": 1066
+        "offensive": 375,
+        "defensive": 726,
+        "total": 1101
       },
       "turnovers": {
-        "total": 393,
-        "teamTotal": 27
+        "total": 408,
+        "teamTotal": 28
       },
       "fouls": {
-        "total": 570,
+        "total": 585,
         "technical": 3,
         "flagrant": 0
       },
       "points": {
-        "total": 2234,
-        "inPaint": 1006,
-        "offTurnovers": 514,
-        "fastBreak": 398
+        "total": 2324,
+        "inPaint": 1040,
+        "offTurnovers": 537,
+        "fastBreak": 419
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 51.4,
+        "effectiveFieldGoalPct": 51.8,
         "turnoverRatio": 0.19,
-        "offensiveReboundPct": 34,
-        "freeThrowRate": 43.3
+        "offensiveReboundPct": 34.1,
+        "freeThrowRate": 43.2
       }
     },
     "opponentStats": {
-      "assists": 303,
-      "blocks": 118,
-      "steals": 171,
-      "possessions": 2024,
-      "trueShooting": 52,
-      "rating": 97.1,
+      "assists": 315,
+      "blocks": 121,
+      "steals": 178,
+      "possessions": 2091,
+      "trueShooting": 52.1,
+      "rating": 97.4,
       "fieldGoals": {
-        "made": 661,
-        "attempted": 1594,
-        "pct": 41.5
+        "made": 690,
+        "attempted": 1650,
+        "pct": 41.8
       },
       "twoPointFieldGoals": {
-        "made": 492,
-        "attempted": 1030,
-        "pct": 47.8
+        "made": 518,
+        "attempted": 1077,
+        "pct": 48.1
       },
       "threePointFieldGoals": {
-        "made": 169,
-        "attempted": 564,
+        "made": 172,
+        "attempted": 573,
         "pct": 30
       },
       "freeThrows": {
-        "made": 475,
-        "attempted": 675,
-        "pct": 70.4
+        "made": 484,
+        "attempted": 691,
+        "pct": 70
       },
       "rebounds": {
-        "offensive": 311,
-        "defensive": 619,
-        "total": 930
+        "offensive": 320,
+        "defensive": 632,
+        "total": 952
       },
       "turnovers": {
-        "total": 439,
-        "teamTotal": 18
+        "total": 456,
+        "teamTotal": 20
       },
       "fouls": {
-        "total": 569,
+        "total": 587,
         "technical": 1,
         "flagrant": 2
       },
       "points": {
-        "total": 1966,
-        "inPaint": 822,
-        "offTurnovers": 399,
-        "fastBreak": 334
+        "total": 2036,
+        "inPaint": 868,
+        "offTurnovers": 412,
+        "fastBreak": 335
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 46.8,
+        "effectiveFieldGoalPct": 47,
         "turnoverRatio": 0.22,
-        "offensiveReboundPct": 33.4,
-        "freeThrowRate": 42.3
+        "offensiveReboundPct": 33.6,
+        "freeThrowRate": 41.9
       }
     }
   },
@@ -13685,117 +13685,117 @@
     "teamId": 115,
     "team": "IU Indianapolis",
     "conference": "Horizon",
-    "games": 31,
+    "games": 32,
     "wins": 7,
-    "losses": 24,
-    "totalMinutes": 1255,
-    "pace": 74.6,
+    "losses": 25,
+    "totalMinutes": 1295,
+    "pace": 74.8,
     "teamStats": {
-      "assists": 628,
-      "blocks": 100,
-      "steals": 276,
-      "possessions": 2346,
-      "trueShooting": 55.4,
-      "rating": 110,
+      "assists": 648,
+      "blocks": 102,
+      "steals": 284,
+      "possessions": 2428,
+      "trueShooting": 55.5,
+      "rating": 110.1,
       "fieldGoals": {
-        "made": 978,
-        "attempted": 2131,
-        "pct": 45.9
+        "made": 1013,
+        "attempted": 2204,
+        "pct": 46
       },
       "twoPointFieldGoals": {
-        "made": 679,
-        "attempted": 1209,
-        "pct": 56.2
+        "made": 705,
+        "attempted": 1258,
+        "pct": 56
       },
       "threePointFieldGoals": {
-        "made": 299,
-        "attempted": 922,
-        "pct": 32.4
+        "made": 308,
+        "attempted": 946,
+        "pct": 32.6
       },
       "freeThrows": {
-        "made": 325,
-        "attempted": 447,
+        "made": 339,
+        "attempted": 466,
         "pct": 72.7
       },
       "rebounds": {
-        "offensive": 350,
-        "defensive": 657,
-        "total": 1007
+        "offensive": 360,
+        "defensive": 677,
+        "total": 1037
       },
       "turnovers": {
-        "total": 372,
+        "total": 384,
         "teamTotal": 9
       },
       "fouls": {
-        "total": 689,
+        "total": 708,
         "technical": 4,
         "flagrant": 2
       },
       "points": {
-        "total": 2580,
-        "inPaint": 1232,
-        "offTurnovers": 593,
-        "fastBreak": 432
+        "total": 2673,
+        "inPaint": 1278,
+        "offTurnovers": 611,
+        "fastBreak": 445
       },
       "fourFactors": {
         "effectiveFieldGoalPct": 52.9,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 34.8,
-        "freeThrowRate": 21
+        "offensiveReboundPct": 34.7,
+        "freeThrowRate": 21.1
       }
     },
     "opponentStats": {
-      "assists": 489,
-      "blocks": 94,
-      "steals": 235,
-      "possessions": 2336,
-      "trueShooting": 61.8,
-      "rating": 116.6,
+      "assists": 506,
+      "blocks": 98,
+      "steals": 244,
+      "possessions": 2417,
+      "trueShooting": 62.2,
+      "rating": 116.9,
       "fieldGoals": {
-        "made": 923,
-        "attempted": 1828,
-        "pct": 50.5
+        "made": 960,
+        "attempted": 1887,
+        "pct": 50.9
       },
       "twoPointFieldGoals": {
-        "made": 677,
-        "attempted": 1182,
-        "pct": 57.3
+        "made": 703,
+        "attempted": 1221,
+        "pct": 57.6
       },
       "threePointFieldGoals": {
-        "made": 246,
-        "attempted": 646,
-        "pct": 38.1
+        "made": 257,
+        "attempted": 666,
+        "pct": 38.6
       },
       "freeThrows": {
-        "made": 632,
-        "attempted": 853,
-        "pct": 74.1
+        "made": 648,
+        "attempted": 876,
+        "pct": 74
       },
       "rebounds": {
-        "offensive": 354,
-        "defensive": 832,
-        "total": 1186
+        "offensive": 359,
+        "defensive": 864,
+        "total": 1223
       },
       "turnovers": {
-        "total": 480,
+        "total": 497,
         "teamTotal": 31
       },
       "fouls": {
-        "total": 452,
+        "total": 468,
         "technical": 4,
         "flagrant": 1
       },
       "points": {
-        "total": 2724,
-        "inPaint": 1292,
-        "offTurnovers": 462,
-        "fastBreak": 538
+        "total": 2825,
+        "inPaint": 1340,
+        "offTurnovers": 475,
+        "fastBreak": 573
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 57.2,
+        "effectiveFieldGoalPct": 57.7,
         "turnoverRatio": 0.21,
-        "offensiveReboundPct": 29.8,
-        "freeThrowRate": 46.7
+        "offensiveReboundPct": 29.4,
+        "freeThrowRate": 46.4
       }
     }
   },
@@ -13805,117 +13805,117 @@
     "teamId": 116,
     "team": "Idaho State",
     "conference": "Big Sky",
-    "games": 30,
+    "games": 31,
     "wins": 12,
-    "losses": 18,
-    "totalMinutes": 1215,
-    "pace": 64.8,
+    "losses": 19,
+    "totalMinutes": 1255,
+    "pace": 65,
     "teamStats": {
-      "assists": 357,
-      "blocks": 129,
-      "steals": 161,
-      "possessions": 1980,
-      "trueShooting": 57.1,
-      "rating": 113.3,
+      "assists": 371,
+      "blocks": 133,
+      "steals": 166,
+      "possessions": 2050,
+      "trueShooting": 56.8,
+      "rating": 112.6,
       "fieldGoals": {
-        "made": 767,
-        "attempted": 1684,
-        "pct": 45.5
+        "made": 789,
+        "attempted": 1742,
+        "pct": 45.3
       },
       "twoPointFieldGoals": {
-        "made": 534,
-        "attempted": 987,
+        "made": 550,
+        "attempted": 1016,
         "pct": 54.1
       },
       "threePointFieldGoals": {
-        "made": 233,
-        "attempted": 697,
-        "pct": 33.4
+        "made": 239,
+        "attempted": 726,
+        "pct": 32.9
       },
       "freeThrows": {
-        "made": 476,
-        "attempted": 634,
-        "pct": 75.1
+        "made": 491,
+        "attempted": 655,
+        "pct": 75
       },
       "rebounds": {
-        "offensive": 324,
-        "defensive": 660,
-        "total": 984
+        "offensive": 334,
+        "defensive": 682,
+        "total": 1016
       },
       "turnovers": {
-        "total": 331,
+        "total": 343,
         "teamTotal": 17
       },
       "fouls": {
-        "total": 518,
+        "total": 535,
         "technical": 6,
         "flagrant": 5
       },
       "points": {
-        "total": 2243,
-        "inPaint": 942,
-        "offTurnovers": 369,
-        "fastBreak": 218
+        "total": 2308,
+        "inPaint": 972,
+        "offTurnovers": 376,
+        "fastBreak": 225
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52.5,
+        "effectiveFieldGoalPct": 52.2,
         "turnoverRatio": 0.17,
         "offensiveReboundPct": 32.9,
         "freeThrowRate": 37.6
       }
     },
     "opponentStats": {
-      "assists": 378,
-      "blocks": 86,
-      "steals": 195,
-      "possessions": 1959,
-      "trueShooting": 58.5,
-      "rating": 116.4,
+      "assists": 399,
+      "blocks": 90,
+      "steals": 202,
+      "possessions": 2029,
+      "trueShooting": 58.7,
+      "rating": 116.5,
       "fieldGoals": {
-        "made": 803,
-        "attempted": 1694,
-        "pct": 47.4
+        "made": 832,
+        "attempted": 1748,
+        "pct": 47.6
       },
       "twoPointFieldGoals": {
-        "made": 574,
-        "attempted": 1053,
-        "pct": 54.5
+        "made": 596,
+        "attempted": 1089,
+        "pct": 54.7
       },
       "threePointFieldGoals": {
-        "made": 229,
-        "attempted": 641,
-        "pct": 35.7
+        "made": 236,
+        "attempted": 659,
+        "pct": 35.8
       },
       "freeThrows": {
-        "made": 445,
-        "attempted": 579,
+        "made": 463,
+        "attempted": 602,
         "pct": 76.9
       },
       "rebounds": {
-        "offensive": 257,
-        "defensive": 621,
-        "total": 878
+        "offensive": 261,
+        "defensive": 650,
+        "total": 911
       },
       "turnovers": {
-        "total": 308,
+        "total": 317,
         "teamTotal": 11
       },
       "fouls": {
-        "total": 573,
+        "total": 592,
         "technical": 10,
         "flagrant": 2
       },
       "points": {
-        "total": 2280,
-        "inPaint": 988,
-        "offTurnovers": 455,
-        "fastBreak": 302
+        "total": 2363,
+        "inPaint": 1024,
+        "offTurnovers": 473,
+        "fastBreak": 315
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.2,
+        "effectiveFieldGoalPct": 54.3,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 29.3,
-        "freeThrowRate": 34.2
+        "offensiveReboundPct": 28.6,
+        "freeThrowRate": 34.4
       }
     }
   },
@@ -13925,117 +13925,117 @@
     "teamId": 117,
     "team": "Idaho",
     "conference": "Big Sky",
-    "games": 30,
-    "wins": 16,
+    "games": 31,
+    "wins": 17,
     "losses": 14,
-    "totalMinutes": 1215,
+    "totalMinutes": 1255,
     "pace": 68.4,
     "teamStats": {
-      "assists": 390,
-      "blocks": 67,
-      "steals": 178,
-      "possessions": 2075,
-      "trueShooting": 57.2,
-      "rating": 113.9,
+      "assists": 405,
+      "blocks": 70,
+      "steals": 187,
+      "possessions": 2141,
+      "trueShooting": 57.3,
+      "rating": 114.4,
       "fieldGoals": {
-        "made": 805,
-        "attempted": 1802,
-        "pct": 44.7
+        "made": 835,
+        "attempted": 1865,
+        "pct": 44.8
       },
       "twoPointFieldGoals": {
-        "made": 493,
-        "attempted": 941,
-        "pct": 52.4
+        "made": 509,
+        "attempted": 975,
+        "pct": 52.2
       },
       "threePointFieldGoals": {
-        "made": 312,
-        "attempted": 861,
-        "pct": 36.2
+        "made": 326,
+        "attempted": 890,
+        "pct": 36.6
       },
       "freeThrows": {
-        "made": 442,
-        "attempted": 597,
-        "pct": 74
+        "made": 453,
+        "attempted": 614,
+        "pct": 73.8
       },
       "rebounds": {
-        "offensive": 322,
-        "defensive": 795,
-        "total": 1117
+        "offensive": 337,
+        "defensive": 810,
+        "total": 1147
       },
       "turnovers": {
-        "total": 325,
+        "total": 335,
         "teamTotal": 10
       },
       "fouls": {
-        "total": 553,
+        "total": 576,
         "technical": 3,
         "flagrant": 3
       },
       "points": {
-        "total": 2364,
-        "inPaint": 914,
-        "offTurnovers": 402,
-        "fastBreak": 246
+        "total": 2449,
+        "inPaint": 942,
+        "offTurnovers": 412,
+        "fastBreak": 250
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 53.3,
+        "effectiveFieldGoalPct": 53.5,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 28.8,
-        "freeThrowRate": 33.1
+        "offensiveReboundPct": 29.4,
+        "freeThrowRate": 32.9
       }
     },
     "opponentStats": {
-      "assists": 354,
-      "blocks": 74,
-      "steals": 194,
-      "possessions": 2082,
-      "trueShooting": 55,
-      "rating": 106,
+      "assists": 366,
+      "blocks": 85,
+      "steals": 200,
+      "possessions": 2150,
+      "trueShooting": 55.3,
+      "rating": 106.4,
       "fieldGoals": {
-        "made": 748,
-        "attempted": 1717,
-        "pct": 43.6
+        "made": 775,
+        "attempted": 1767,
+        "pct": 43.9
       },
       "twoPointFieldGoals": {
-        "made": 523,
-        "attempted": 1081,
-        "pct": 48.4
+        "made": 544,
+        "attempted": 1113,
+        "pct": 48.9
       },
       "threePointFieldGoals": {
-        "made": 225,
-        "attempted": 636,
-        "pct": 35.4
+        "made": 231,
+        "attempted": 654,
+        "pct": 35.3
       },
       "freeThrows": {
-        "made": 485,
-        "attempted": 653,
-        "pct": 74.3
+        "made": 506,
+        "attempted": 682,
+        "pct": 74.2
       },
       "rebounds": {
-        "offensive": 251,
-        "defensive": 750,
-        "total": 1001
+        "offensive": 260,
+        "defensive": 769,
+        "total": 1029
       },
       "turnovers": {
-        "total": 328,
-        "teamTotal": 13
+        "total": 341,
+        "teamTotal": 14
       },
       "fouls": {
-        "total": 551,
+        "total": 570,
         "technical": 9,
         "flagrant": 2
       },
       "points": {
-        "total": 2206,
-        "inPaint": 864,
-        "offTurnovers": 341,
-        "fastBreak": 297
+        "total": 2287,
+        "inPaint": 898,
+        "offTurnovers": 352,
+        "fastBreak": 302
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 50.1,
+        "effectiveFieldGoalPct": 50.4,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 25.1,
-        "freeThrowRate": 38
+        "offensiveReboundPct": 25.3,
+        "freeThrowRate": 38.6
       }
     }
   },
@@ -14285,117 +14285,117 @@
     "teamId": 120,
     "team": "Incarnate Word",
     "conference": "Southland",
-    "games": 30,
+    "games": 31,
     "wins": 12,
-    "losses": 18,
-    "totalMinutes": 1200,
-    "pace": 66.1,
+    "losses": 19,
+    "totalMinutes": 1240,
+    "pace": 65.9,
     "teamStats": {
-      "assists": 349,
-      "blocks": 75,
-      "steals": 164,
-      "possessions": 1989,
-      "trueShooting": 55.9,
+      "assists": 362,
+      "blocks": 77,
+      "steals": 167,
+      "possessions": 2050,
+      "trueShooting": 55.8,
       "rating": 112.3,
       "fieldGoals": {
-        "made": 776,
-        "attempted": 1742,
-        "pct": 44.5
+        "made": 805,
+        "attempted": 1801,
+        "pct": 44.7
       },
       "twoPointFieldGoals": {
-        "made": 517,
-        "attempted": 1061,
-        "pct": 48.7
+        "made": 539,
+        "attempted": 1095,
+        "pct": 49.2
       },
       "threePointFieldGoals": {
-        "made": 259,
-        "attempted": 681,
-        "pct": 38
+        "made": 266,
+        "attempted": 706,
+        "pct": 37.7
       },
       "freeThrows": {
-        "made": 423,
-        "attempted": 586,
-        "pct": 72.2
+        "made": 426,
+        "attempted": 595,
+        "pct": 71.6
       },
       "rebounds": {
-        "offensive": 358,
-        "defensive": 676,
-        "total": 1034
+        "offensive": 365,
+        "defensive": 697,
+        "total": 1062
       },
       "turnovers": {
-        "total": 342,
+        "total": 346,
         "teamTotal": 24
       },
       "fouls": {
-        "total": 539,
+        "total": 551,
         "technical": 2,
         "flagrant": 2
       },
       "points": {
-        "total": 2234,
-        "inPaint": 880,
-        "offTurnovers": 373,
-        "fastBreak": 263
+        "total": 2302,
+        "inPaint": 914,
+        "offTurnovers": 389,
+        "fastBreak": 275
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52,
+        "effectiveFieldGoalPct": 52.1,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 34.6,
-        "freeThrowRate": 33.6
+        "offensiveReboundPct": 34.4,
+        "freeThrowRate": 33
       }
     },
     "opponentStats": {
-      "assists": 394,
-      "blocks": 97,
-      "steals": 182,
-      "possessions": 1975,
-      "trueShooting": 57.1,
-      "rating": 111.8,
+      "assists": 407,
+      "blocks": 101,
+      "steals": 185,
+      "possessions": 2036,
+      "trueShooting": 57.2,
+      "rating": 112.2,
       "fieldGoals": {
-        "made": 770,
-        "attempted": 1642,
+        "made": 797,
+        "attempted": 1698,
         "pct": 46.9
       },
       "twoPointFieldGoals": {
-        "made": 576,
-        "attempted": 1065,
-        "pct": 54.1
+        "made": 591,
+        "attempted": 1097,
+        "pct": 53.9
       },
       "threePointFieldGoals": {
-        "made": 194,
-        "attempted": 577,
-        "pct": 33.6
+        "made": 206,
+        "attempted": 601,
+        "pct": 34.3
       },
       "freeThrows": {
-        "made": 475,
-        "attempted": 662,
-        "pct": 71.8
+        "made": 485,
+        "attempted": 677,
+        "pct": 71.6
       },
       "rebounds": {
-        "offensive": 292,
-        "defensive": 678,
-        "total": 970
+        "offensive": 303,
+        "defensive": 706,
+        "total": 1009
       },
       "turnovers": {
-        "total": 322,
-        "teamTotal": 25
+        "total": 330,
+        "teamTotal": 26
       },
       "fouls": {
-        "total": 499,
+        "total": 514,
         "technical": 4,
         "flagrant": 1
       },
       "points": {
-        "total": 2209,
-        "inPaint": 1014,
-        "offTurnovers": 406,
-        "fastBreak": 360
+        "total": 2285,
+        "inPaint": 1034,
+        "offTurnovers": 414,
+        "fastBreak": 375
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52.8,
+        "effectiveFieldGoalPct": 53,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 30.1,
-        "freeThrowRate": 40.3
+        "offensiveReboundPct": 30,
+        "freeThrowRate": 39.9
       }
     }
   },
@@ -14885,117 +14885,117 @@
     "teamId": 125,
     "team": "Iowa State",
     "conference": "Big 12",
-    "games": 29,
+    "games": 30,
     "wins": 24,
-    "losses": 5,
-    "totalMinutes": 1160,
+    "losses": 6,
+    "totalMinutes": 1200,
     "pace": 67.9,
     "teamStats": {
-      "assists": 512,
-      "blocks": 84,
-      "steals": 255,
-      "possessions": 1973,
-      "trueShooting": 59.8,
-      "rating": 121.2,
+      "assists": 522,
+      "blocks": 86,
+      "steals": 263,
+      "possessions": 2040,
+      "trueShooting": 59.2,
+      "rating": 120,
       "fieldGoals": {
-        "made": 861,
-        "attempted": 1729,
-        "pct": 49.8
+        "made": 880,
+        "attempted": 1794,
+        "pct": 49.1
       },
       "twoPointFieldGoals": {
-        "made": 603,
-        "attempted": 1067,
-        "pct": 56.5
+        "made": 615,
+        "attempted": 1102,
+        "pct": 55.8
       },
       "threePointFieldGoals": {
-        "made": 258,
-        "attempted": 662,
-        "pct": 39
+        "made": 265,
+        "attempted": 692,
+        "pct": 38.3
       },
       "freeThrows": {
-        "made": 412,
-        "attempted": 614,
-        "pct": 67.1
+        "made": 424,
+        "attempted": 627,
+        "pct": 67.6
       },
       "rebounds": {
-        "offensive": 339,
-        "defensive": 695,
-        "total": 1034
+        "offensive": 354,
+        "defensive": 713,
+        "total": 1067
       },
       "turnovers": {
-        "total": 300,
+        "total": 311,
         "teamTotal": 11
       },
       "fouls": {
-        "total": 460,
+        "total": 480,
         "technical": 1,
         "flagrant": 0
       },
       "points": {
-        "total": 2392,
-        "inPaint": 1098,
-        "offTurnovers": 557,
-        "fastBreak": 313
+        "total": 2449,
+        "inPaint": 1114,
+        "offTurnovers": 573,
+        "fastBreak": 322
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 57.3,
+        "effectiveFieldGoalPct": 56.4,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 32.8,
-        "freeThrowRate": 35.5
+        "offensiveReboundPct": 33.2,
+        "freeThrowRate": 34.9
       }
     },
     "opponentStats": {
-      "assists": 370,
-      "blocks": 100,
-      "steals": 194,
-      "possessions": 1968,
-      "trueShooting": 52.8,
-      "rating": 96.5,
+      "assists": 384,
+      "blocks": 106,
+      "steals": 202,
+      "possessions": 2035,
+      "trueShooting": 53,
+      "rating": 97,
       "fieldGoals": {
-        "made": 686,
-        "attempted": 1610,
-        "pct": 42.6
+        "made": 708,
+        "attempted": 1658,
+        "pct": 42.7
       },
       "twoPointFieldGoals": {
-        "made": 461,
-        "attempted": 918,
-        "pct": 50.2
+        "made": 477,
+        "attempted": 948,
+        "pct": 50.3
       },
       "threePointFieldGoals": {
-        "made": 225,
-        "attempted": 692,
+        "made": 231,
+        "attempted": 710,
         "pct": 32.5
       },
       "freeThrows": {
-        "made": 303,
-        "attempted": 433,
-        "pct": 70
+        "made": 326,
+        "attempted": 459,
+        "pct": 71
       },
       "rebounds": {
-        "offensive": 276,
-        "defensive": 615,
-        "total": 891
+        "offensive": 285,
+        "defensive": 646,
+        "total": 931
       },
       "turnovers": {
-        "total": 436,
-        "teamTotal": 25
+        "total": 451,
+        "teamTotal": 26
       },
       "fouls": {
-        "total": 493,
+        "total": 507,
         "technical": 2,
         "flagrant": 0
       },
       "points": {
-        "total": 1900,
-        "inPaint": 772,
-        "offTurnovers": 316,
-        "fastBreak": 221
+        "total": 1973,
+        "inPaint": 796,
+        "offTurnovers": 330,
+        "fastBreak": 238
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 49.6,
+        "effectiveFieldGoalPct": 49.7,
         "turnoverRatio": 0.22,
-        "offensiveReboundPct": 31,
-        "freeThrowRate": 26.9
+        "offensiveReboundPct": 30.6,
+        "freeThrowRate": 27.7
       }
     }
   },
@@ -16565,117 +16565,117 @@
     "teamId": 139,
     "team": "Lamar",
     "conference": "Southland",
-    "games": 30,
+    "games": 31,
     "wins": 12,
     "losses": 18,
-    "totalMinutes": 1215,
+    "totalMinutes": 1255,
     "pace": 65.7,
     "teamStats": {
-      "assists": 440,
-      "blocks": 132,
-      "steals": 192,
-      "possessions": 1998,
-      "trueShooting": 52.5,
-      "rating": 105.8,
+      "assists": 449,
+      "blocks": 136,
+      "steals": 201,
+      "possessions": 2065,
+      "trueShooting": 52,
+      "rating": 104.9,
       "fieldGoals": {
-        "made": 776,
-        "attempted": 1792,
-        "pct": 43.3
+        "made": 797,
+        "attempted": 1856,
+        "pct": 42.9
       },
       "twoPointFieldGoals": {
-        "made": 569,
-        "attempted": 1173,
-        "pct": 48.5
+        "made": 586,
+        "attempted": 1215,
+        "pct": 48.2
       },
       "threePointFieldGoals": {
-        "made": 207,
-        "attempted": 619,
-        "pct": 33.4
+        "made": 211,
+        "attempted": 641,
+        "pct": 32.9
       },
       "freeThrows": {
-        "made": 355,
-        "attempted": 503,
-        "pct": 70.6
+        "made": 362,
+        "attempted": 516,
+        "pct": 70.2
       },
       "rebounds": {
-        "offensive": 391,
-        "defensive": 729,
-        "total": 1120
+        "offensive": 408,
+        "defensive": 747,
+        "total": 1155
       },
       "turnovers": {
-        "total": 358,
+        "total": 372,
         "teamTotal": 16
       },
       "fouls": {
-        "total": 518,
+        "total": 535,
         "technical": 1,
         "flagrant": 1
       },
       "points": {
-        "total": 2114,
-        "inPaint": 856,
-        "offTurnovers": 389,
-        "fastBreak": 317
+        "total": 2167,
+        "inPaint": 888,
+        "offTurnovers": 399,
+        "fastBreak": 319
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 49.1,
+        "effectiveFieldGoalPct": 48.6,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 34.9,
-        "freeThrowRate": 28.1
+        "offensiveReboundPct": 35.3,
+        "freeThrowRate": 27.8
       }
     },
     "opponentStats": {
-      "assists": 397,
-      "blocks": 96,
-      "steals": 223,
-      "possessions": 1993,
-      "trueShooting": 54.1,
-      "rating": 103.8,
+      "assists": 413,
+      "blocks": 101,
+      "steals": 234,
+      "possessions": 2060,
+      "trueShooting": 54.3,
+      "rating": 104,
       "fieldGoals": {
-        "made": 695,
-        "attempted": 1612,
-        "pct": 43.1
+        "made": 721,
+        "attempted": 1661,
+        "pct": 43.4
       },
       "twoPointFieldGoals": {
-        "made": 485,
-        "attempted": 1012,
-        "pct": 47.9
+        "made": 506,
+        "attempted": 1045,
+        "pct": 48.4
       },
       "threePointFieldGoals": {
-        "made": 210,
-        "attempted": 600,
-        "pct": 35
+        "made": 215,
+        "attempted": 616,
+        "pct": 34.9
       },
       "freeThrows": {
-        "made": 468,
-        "attempted": 684,
-        "pct": 68.4
+        "made": 486,
+        "attempted": 708,
+        "pct": 68.6
       },
       "rebounds": {
-        "offensive": 295,
-        "defensive": 697,
-        "total": 992
+        "offensive": 303,
+        "defensive": 725,
+        "total": 1028
       },
       "turnovers": {
-        "total": 355,
-        "teamTotal": 21
+        "total": 369,
+        "teamTotal": 22
       },
       "fouls": {
-        "total": 465,
+        "total": 478,
         "technical": 0,
         "flagrant": 3
       },
       "points": {
-        "total": 2068,
-        "inPaint": 838,
-        "offTurnovers": 391,
-        "fastBreak": 321
+        "total": 2143,
+        "inPaint": 878,
+        "offTurnovers": 406,
+        "fastBreak": 332
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 49.6,
+        "effectiveFieldGoalPct": 49.9,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 29.7,
-        "freeThrowRate": 42.4
+        "offensiveReboundPct": 29.5,
+        "freeThrowRate": 42.6
       }
     }
   },
@@ -18965,117 +18965,117 @@
     "teamId": 159,
     "team": "Maryland Eastern Shore",
     "conference": "MEAC",
-    "games": 29,
+    "games": 30,
     "wins": 9,
-    "losses": 20,
-    "totalMinutes": 1210,
-    "pace": 63.1,
+    "losses": 21,
+    "totalMinutes": 1250,
+    "pace": 63.2,
     "teamStats": {
-      "assists": 388,
-      "blocks": 67,
-      "steals": 163,
-      "possessions": 1906,
-      "trueShooting": 53,
-      "rating": 97.3,
+      "assists": 409,
+      "blocks": 71,
+      "steals": 170,
+      "possessions": 1973,
+      "trueShooting": 53.1,
+      "rating": 97.7,
       "fieldGoals": {
-        "made": 688,
-        "attempted": 1551,
-        "pct": 44.4
+        "made": 718,
+        "attempted": 1611,
+        "pct": 44.6
       },
       "twoPointFieldGoals": {
-        "made": 531,
-        "attempted": 1029,
-        "pct": 51.6
+        "made": 554,
+        "attempted": 1072,
+        "pct": 51.7
       },
       "threePointFieldGoals": {
-        "made": 157,
-        "attempted": 522,
-        "pct": 30.1
+        "made": 164,
+        "attempted": 539,
+        "pct": 30.4
       },
       "freeThrows": {
-        "made": 322,
-        "attempted": 454,
-        "pct": 70.9
+        "made": 328,
+        "attempted": 462,
+        "pct": 71
       },
       "rebounds": {
-        "offensive": 288,
-        "defensive": 643,
-        "total": 931
+        "offensive": 307,
+        "defensive": 668,
+        "total": 975
       },
       "turnovers": {
-        "total": 450,
+        "total": 473,
         "teamTotal": 33
       },
       "fouls": {
-        "total": 529,
-        "technical": 7,
+        "total": 550,
+        "technical": 9,
         "flagrant": 2
       },
       "points": {
-        "total": 1855,
-        "inPaint": 878,
-        "offTurnovers": 352,
-        "fastBreak": 180
+        "total": 1928,
+        "inPaint": 912,
+        "offTurnovers": 370,
+        "fastBreak": 190
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 49.4,
+        "effectiveFieldGoalPct": 49.7,
         "turnoverRatio": 0.24,
-        "offensiveReboundPct": 30.9,
-        "freeThrowRate": 29.3
+        "offensiveReboundPct": 31.5,
+        "freeThrowRate": 28.7
       }
     },
     "opponentStats": {
-      "assists": 378,
-      "blocks": 88,
-      "steals": 256,
-      "possessions": 1910,
-      "trueShooting": 55.1,
-      "rating": 107.2,
+      "assists": 393,
+      "blocks": 89,
+      "steals": 271,
+      "possessions": 1976,
+      "trueShooting": 55.3,
+      "rating": 107.5,
       "fieldGoals": {
-        "made": 683,
-        "attempted": 1571,
-        "pct": 43.5
+        "made": 706,
+        "attempted": 1621,
+        "pct": 43.6
       },
       "twoPointFieldGoals": {
-        "made": 480,
-        "attempted": 942,
-        "pct": 51
+        "made": 494,
+        "attempted": 972,
+        "pct": 50.8
       },
       "threePointFieldGoals": {
-        "made": 203,
-        "attempted": 629,
-        "pct": 32.3
+        "made": 212,
+        "attempted": 649,
+        "pct": 32.7
       },
       "freeThrows": {
-        "made": 479,
-        "attempted": 653,
-        "pct": 73.4
+        "made": 501,
+        "attempted": 682,
+        "pct": 73.5
       },
       "rebounds": {
-        "offensive": 316,
-        "defensive": 632,
-        "total": 948
+        "offensive": 323,
+        "defensive": 645,
+        "total": 968
       },
       "turnovers": {
-        "total": 346,
-        "teamTotal": 19
+        "total": 358,
+        "teamTotal": 21
       },
       "fouls": {
-        "total": 485,
-        "technical": 7,
+        "total": 499,
+        "technical": 8,
         "flagrant": 1
       },
       "points": {
-        "total": 2048,
-        "inPaint": 836,
-        "offTurnovers": 452,
-        "fastBreak": 305
+        "total": 2125,
+        "inPaint": 856,
+        "offTurnovers": 481,
+        "fastBreak": 323
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 49.9,
+        "effectiveFieldGoalPct": 50.1,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 33.3,
-        "freeThrowRate": 41.6
+        "offensiveReboundPct": 33.4,
+        "freeThrowRate": 42.1
       }
     }
   },
@@ -19325,117 +19325,117 @@
     "teamId": 162,
     "team": "McNeese",
     "conference": "Southland",
-    "games": 30,
-    "wins": 25,
+    "games": 31,
+    "wins": 26,
     "losses": 5,
-    "totalMinutes": 1200,
-    "pace": 64.4,
+    "totalMinutes": 1240,
+    "pace": 64.5,
     "teamStats": {
-      "assists": 424,
-      "blocks": 130,
-      "steals": 311,
-      "possessions": 1936,
+      "assists": 437,
+      "blocks": 132,
+      "steals": 323,
+      "possessions": 2004,
       "trueShooting": 57.3,
-      "rating": 124.3,
+      "rating": 123.8,
       "fieldGoals": {
-        "made": 847,
-        "attempted": 1797,
-        "pct": 47.1
+        "made": 870,
+        "attempted": 1851,
+        "pct": 47
       },
       "twoPointFieldGoals": {
-        "made": 649,
-        "attempted": 1175,
-        "pct": 55.2
+        "made": 667,
+        "attempted": 1205,
+        "pct": 55.4
       },
       "threePointFieldGoals": {
-        "made": 198,
-        "attempted": 622,
-        "pct": 31.8
+        "made": 203,
+        "attempted": 646,
+        "pct": 31.4
       },
       "freeThrows": {
-        "made": 514,
-        "attempted": 685,
-        "pct": 75
+        "made": 538,
+        "attempted": 713,
+        "pct": 75.5
       },
       "rebounds": {
-        "offensive": 380,
-        "defensive": 668,
-        "total": 1048
+        "offensive": 388,
+        "defensive": 689,
+        "total": 1077
       },
       "turnovers": {
-        "total": 285,
-        "teamTotal": 11
+        "total": 294,
+        "teamTotal": 15
       },
       "fouls": {
-        "total": 566,
-        "technical": 6,
+        "total": 587,
+        "technical": 8,
         "flagrant": 2
       },
       "points": {
-        "total": 2406,
-        "inPaint": 1162,
-        "offTurnovers": 664,
-        "fastBreak": 476
+        "total": 2481,
+        "inPaint": 1196,
+        "offTurnovers": 690,
+        "fastBreak": 501
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52.6,
+        "effectiveFieldGoalPct": 52.5,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 36.3,
-        "freeThrowRate": 38.1
+        "offensiveReboundPct": 36,
+        "freeThrowRate": 38.5
       }
     },
     "opponentStats": {
-      "assists": 368,
+      "assists": 376,
       "blocks": 76,
       "steals": 136,
-      "possessions": 1929,
-      "trueShooting": 53.7,
-      "rating": 103.1,
+      "possessions": 1996,
+      "trueShooting": 53.5,
+      "rating": 102.9,
       "fieldGoals": {
-        "made": 645,
-        "attempted": 1576,
-        "pct": 40.9
+        "made": 663,
+        "attempted": 1631,
+        "pct": 40.6
       },
       "twoPointFieldGoals": {
-        "made": 400,
-        "attempted": 827,
-        "pct": 48.4
+        "made": 409,
+        "attempted": 851,
+        "pct": 48.1
       },
       "threePointFieldGoals": {
-        "made": 245,
-        "attempted": 749,
-        "pct": 32.7
+        "made": 254,
+        "attempted": 780,
+        "pct": 32.6
       },
       "freeThrows": {
-        "made": 454,
-        "attempted": 629,
-        "pct": 72.2
+        "made": 474,
+        "attempted": 659,
+        "pct": 71.9
       },
       "rebounds": {
-        "offensive": 349,
-        "defensive": 649,
-        "total": 998
+        "offensive": 370,
+        "defensive": 673,
+        "total": 1043
       },
       "turnovers": {
-        "total": 505,
-        "teamTotal": 39
+        "total": 523,
+        "teamTotal": 42
       },
       "fouls": {
-        "total": 534,
-        "technical": 6,
+        "total": 553,
+        "technical": 8,
         "flagrant": 0
       },
       "points": {
-        "total": 1989,
-        "inPaint": 660,
-        "offTurnovers": 313,
-        "fastBreak": 198
+        "total": 2054,
+        "inPaint": 676,
+        "offTurnovers": 323,
+        "fastBreak": 201
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 48.7,
+        "effectiveFieldGoalPct": 48.4,
         "turnoverRatio": 0.26,
-        "offensiveReboundPct": 35,
-        "freeThrowRate": 39.9
+        "offensiveReboundPct": 35.5,
+        "freeThrowRate": 40.4
       }
     }
   },
@@ -21365,117 +21365,117 @@
     "teamId": 179,
     "team": "Montana",
     "conference": "Big Sky",
-    "games": 30,
+    "games": 31,
     "wins": 16,
-    "losses": 14,
-    "totalMinutes": 1200,
-    "pace": 67.8,
+    "losses": 15,
+    "totalMinutes": 1240,
+    "pace": 68,
     "teamStats": {
-      "assists": 464,
-      "blocks": 72,
-      "steals": 176,
-      "possessions": 2034,
-      "trueShooting": 61.3,
-      "rating": 114.7,
+      "assists": 475,
+      "blocks": 76,
+      "steals": 179,
+      "possessions": 2109,
+      "trueShooting": 60.7,
+      "rating": 113.4,
       "fieldGoals": {
-        "made": 809,
-        "attempted": 1638,
-        "pct": 49.4
+        "made": 832,
+        "attempted": 1698,
+        "pct": 49
       },
       "twoPointFieldGoals": {
-        "made": 561,
-        "attempted": 954,
-        "pct": 58.8
+        "made": 579,
+        "attempted": 992,
+        "pct": 58.4
       },
       "threePointFieldGoals": {
-        "made": 248,
-        "attempted": 684,
-        "pct": 36.3
+        "made": 253,
+        "attempted": 706,
+        "pct": 35.8
       },
       "freeThrows": {
-        "made": 468,
-        "attempted": 607,
-        "pct": 77.1
+        "made": 474,
+        "attempted": 617,
+        "pct": 76.8
       },
       "rebounds": {
-        "offensive": 208,
-        "defensive": 830,
-        "total": 1038
+        "offensive": 212,
+        "defensive": 859,
+        "total": 1071
       },
       "turnovers": {
-        "total": 411,
+        "total": 424,
         "teamTotal": 7
       },
       "fouls": {
-        "total": 534,
+        "total": 543,
         "technical": 7,
         "flagrant": 1
       },
       "points": {
-        "total": 2334,
-        "inPaint": 1024,
-        "offTurnovers": 404,
+        "total": 2391,
+        "inPaint": 1054,
+        "offTurnovers": 408,
         "fastBreak": 297
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 57,
+        "effectiveFieldGoalPct": 56.4,
         "turnoverRatio": 0.2,
-        "offensiveReboundPct": 20,
-        "freeThrowRate": 37.1
+        "offensiveReboundPct": 19.8,
+        "freeThrowRate": 36.3
       }
     },
     "opponentStats": {
-      "assists": 391,
-      "blocks": 84,
-      "steals": 236,
-      "possessions": 2036,
-      "trueShooting": 53,
-      "rating": 108.6,
+      "assists": 406,
+      "blocks": 88,
+      "steals": 246,
+      "possessions": 2110,
+      "trueShooting": 53.2,
+      "rating": 108.9,
       "fieldGoals": {
-        "made": 793,
-        "attempted": 1834,
-        "pct": 43.2
+        "made": 826,
+        "attempted": 1901,
+        "pct": 43.5
       },
       "twoPointFieldGoals": {
-        "made": 565,
-        "attempted": 1131,
-        "pct": 50
+        "made": 587,
+        "attempted": 1168,
+        "pct": 50.3
       },
       "threePointFieldGoals": {
-        "made": 228,
-        "attempted": 703,
-        "pct": 32.4
+        "made": 239,
+        "attempted": 733,
+        "pct": 32.6
       },
       "freeThrows": {
-        "made": 398,
-        "attempted": 573,
-        "pct": 69.5
+        "made": 406,
+        "attempted": 583,
+        "pct": 69.6
       },
       "rebounds": {
-        "offensive": 310,
-        "defensive": 687,
-        "total": 997
+        "offensive": 316,
+        "defensive": 722,
+        "total": 1038
       },
       "turnovers": {
-        "total": 326,
+        "total": 333,
         "teamTotal": 5
       },
       "fouls": {
-        "total": 517,
+        "total": 529,
         "technical": 5,
         "flagrant": 1
       },
       "points": {
-        "total": 2212,
-        "inPaint": 1010,
-        "offTurnovers": 467,
-        "fastBreak": 291
+        "total": 2297,
+        "inPaint": 1050,
+        "offTurnovers": 486,
+        "fastBreak": 301
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 49.5,
+        "effectiveFieldGoalPct": 49.7,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 31.1,
-        "freeThrowRate": 31.2
+        "offensiveReboundPct": 30.4,
+        "freeThrowRate": 30.7
       }
     }
   },
@@ -21485,117 +21485,117 @@
     "teamId": 180,
     "team": "Montana State",
     "conference": "Big Sky",
-    "games": 30,
-    "wins": 17,
+    "games": 31,
+    "wins": 18,
     "losses": 13,
-    "totalMinutes": 1230,
-    "pace": 65.9,
+    "totalMinutes": 1270,
+    "pace": 65.7,
     "teamStats": {
-      "assists": 344,
-      "blocks": 86,
-      "steals": 210,
-      "possessions": 2023,
-      "trueShooting": 58.6,
-      "rating": 115.8,
+      "assists": 354,
+      "blocks": 89,
+      "steals": 215,
+      "possessions": 2084,
+      "trueShooting": 58.7,
+      "rating": 116.1,
       "fieldGoals": {
-        "made": 821,
-        "attempted": 1762,
-        "pct": 46.6
+        "made": 849,
+        "attempted": 1817,
+        "pct": 46.7
       },
       "twoPointFieldGoals": {
-        "made": 527,
-        "attempted": 963,
-        "pct": 54.7
+        "made": 543,
+        "attempted": 987,
+        "pct": 55
       },
       "threePointFieldGoals": {
-        "made": 294,
-        "attempted": 799,
-        "pct": 36.8
+        "made": 306,
+        "attempted": 830,
+        "pct": 36.9
       },
       "freeThrows": {
-        "made": 407,
-        "attempted": 542,
-        "pct": 75.1
+        "made": 415,
+        "attempted": 555,
+        "pct": 74.8
       },
       "rebounds": {
-        "offensive": 282,
-        "defensive": 713,
-        "total": 995
+        "offensive": 290,
+        "defensive": 738,
+        "total": 1028
       },
       "turnovers": {
-        "total": 307,
+        "total": 314,
         "teamTotal": 15
       },
       "fouls": {
-        "total": 471,
-        "technical": 6,
+        "total": 485,
+        "technical": 7,
         "flagrant": 0
       },
       "points": {
-        "total": 2343,
-        "inPaint": 884,
-        "offTurnovers": 434,
-        "fastBreak": 291
+        "total": 2419,
+        "inPaint": 910,
+        "offTurnovers": 437,
+        "fastBreak": 305
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.9,
+        "effectiveFieldGoalPct": 55.1,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 28.3,
-        "freeThrowRate": 30.8
+        "offensiveReboundPct": 28.2,
+        "freeThrowRate": 30.5
       }
     },
     "opponentStats": {
-      "assists": 340,
-      "blocks": 69,
-      "steals": 165,
-      "possessions": 2029,
-      "trueShooting": 54.4,
+      "assists": 353,
+      "blocks": 72,
+      "steals": 170,
+      "possessions": 2090,
+      "trueShooting": 54.3,
       "rating": 105.6,
       "fieldGoals": {
-        "made": 783,
-        "attempted": 1754,
+        "made": 809,
+        "attempted": 1812,
         "pct": 44.6
       },
       "twoPointFieldGoals": {
-        "made": 583,
-        "attempted": 1157,
+        "made": 602,
+        "attempted": 1194,
         "pct": 50.4
       },
       "threePointFieldGoals": {
-        "made": 200,
-        "attempted": 597,
+        "made": 207,
+        "attempted": 618,
         "pct": 33.5
       },
       "freeThrows": {
-        "made": 376,
-        "attempted": 491,
+        "made": 382,
+        "attempted": 499,
         "pct": 76.6
       },
       "rebounds": {
-        "offensive": 272,
-        "defensive": 708,
-        "total": 980
+        "offensive": 281,
+        "defensive": 730,
+        "total": 1011
       },
       "turnovers": {
-        "total": 342,
+        "total": 351,
         "teamTotal": 8
       },
       "fouls": {
-        "total": 501,
+        "total": 513,
         "technical": 5,
         "flagrant": 1
       },
       "points": {
-        "total": 2142,
-        "inPaint": 1024,
-        "offTurnovers": 328,
-        "fastBreak": 243
+        "total": 2207,
+        "inPaint": 1050,
+        "offTurnovers": 338,
+        "fastBreak": 247
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 50.3,
+        "effectiveFieldGoalPct": 50.4,
         "turnoverRatio": 0.17,
         "offensiveReboundPct": 27.8,
-        "freeThrowRate": 28
+        "freeThrowRate": 27.5
       }
     }
   },
@@ -21725,117 +21725,117 @@
     "teamId": 182,
     "team": "Morgan State",
     "conference": "MEAC",
-    "games": 27,
-    "wins": 12,
+    "games": 28,
+    "wins": 13,
     "losses": 15,
-    "totalMinutes": 1080,
-    "pace": 70.6,
+    "totalMinutes": 1120,
+    "pace": 70.8,
     "teamStats": {
-      "assists": 356,
-      "blocks": 95,
-      "steals": 141,
-      "possessions": 1906,
-      "trueShooting": 53.9,
-      "rating": 106.4,
+      "assists": 376,
+      "blocks": 99,
+      "steals": 142,
+      "possessions": 1981,
+      "trueShooting": 54.4,
+      "rating": 106.9,
       "fieldGoals": {
-        "made": 676,
-        "attempted": 1586,
-        "pct": 42.6
+        "made": 704,
+        "attempted": 1643,
+        "pct": 42.8
       },
       "twoPointFieldGoals": {
-        "made": 493,
-        "attempted": 1029,
+        "made": 507,
+        "attempted": 1058,
         "pct": 47.9
       },
       "threePointFieldGoals": {
-        "made": 183,
-        "attempted": 557,
-        "pct": 32.9
+        "made": 197,
+        "attempted": 585,
+        "pct": 33.7
       },
       "freeThrows": {
-        "made": 493,
-        "attempted": 668,
-        "pct": 73.8
+        "made": 513,
+        "attempted": 692,
+        "pct": 74.1
       },
       "rebounds": {
-        "offensive": 316,
-        "defensive": 624,
-        "total": 940
+        "offensive": 319,
+        "defensive": 656,
+        "total": 975
       },
       "turnovers": {
-        "total": 348,
+        "total": 357,
         "teamTotal": 14
       },
       "fouls": {
-        "total": 588,
+        "total": 606,
         "technical": 5,
         "flagrant": 3
       },
       "points": {
-        "total": 2028,
-        "inPaint": 778,
-        "offTurnovers": 397,
-        "fastBreak": 373
+        "total": 2118,
+        "inPaint": 802,
+        "offTurnovers": 411,
+        "fastBreak": 403
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 48.4,
+        "effectiveFieldGoalPct": 48.8,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 33.6,
+        "offensiveReboundPct": 32.7,
         "freeThrowRate": 42.1
       }
     },
     "opponentStats": {
-      "assists": 409,
-      "blocks": 91,
-      "steals": 185,
-      "possessions": 1906,
-      "trueShooting": 56.8,
+      "assists": 426,
+      "blocks": 93,
+      "steals": 190,
+      "possessions": 1982,
+      "trueShooting": 56.3,
       "rating": 111.3,
       "fieldGoals": {
-        "made": 712,
-        "attempted": 1523,
-        "pct": 46.7
+        "made": 743,
+        "attempted": 1602,
+        "pct": 46.4
       },
       "twoPointFieldGoals": {
-        "made": 551,
-        "attempted": 1020,
-        "pct": 54
+        "made": 577,
+        "attempted": 1080,
+        "pct": 53.4
       },
       "threePointFieldGoals": {
-        "made": 161,
-        "attempted": 503,
-        "pct": 32
+        "made": 166,
+        "attempted": 522,
+        "pct": 31.8
       },
       "freeThrows": {
-        "made": 537,
-        "attempted": 784,
-        "pct": 68.5
+        "made": 554,
+        "attempted": 810,
+        "pct": 68.4
       },
       "rebounds": {
-        "offensive": 306,
-        "defensive": 664,
-        "total": 970
+        "offensive": 328,
+        "defensive": 692,
+        "total": 1020
       },
       "turnovers": {
-        "total": 331,
+        "total": 338,
         "teamTotal": 13
       },
       "fouls": {
-        "total": 521,
+        "total": 541,
         "technical": 8,
         "flagrant": 1
       },
       "points": {
-        "total": 2122,
-        "inPaint": 944,
-        "offTurnovers": 389,
-        "fastBreak": 374
+        "total": 2206,
+        "inPaint": 992,
+        "offTurnovers": 402,
+        "fastBreak": 401
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52,
+        "effectiveFieldGoalPct": 51.6,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 31.5,
-        "freeThrowRate": 51.5
+        "offensiveReboundPct": 32.2,
+        "freeThrowRate": 50.6
       }
     }
   },
@@ -22085,117 +22085,117 @@
     "teamId": 185,
     "team": "NC State",
     "conference": "ACC",
-    "games": 29,
+    "games": 30,
     "wins": 19,
-    "losses": 10,
-    "totalMinutes": 1205,
+    "losses": 11,
+    "totalMinutes": 1245,
     "pace": 65,
     "teamStats": {
-      "assists": 465,
-      "blocks": 96,
-      "steals": 243,
-      "possessions": 1961,
-      "trueShooting": 59.7,
-      "rating": 124.5,
+      "assists": 477,
+      "blocks": 100,
+      "steals": 249,
+      "possessions": 2026,
+      "trueShooting": 59.2,
+      "rating": 123.7,
       "fieldGoals": {
-        "made": 838,
-        "attempted": 1779,
-        "pct": 47.1
+        "made": 861,
+        "attempted": 1844,
+        "pct": 46.7
       },
       "twoPointFieldGoals": {
-        "made": 534,
-        "attempted": 992,
-        "pct": 53.8
+        "made": 550,
+        "attempted": 1028,
+        "pct": 53.5
       },
       "threePointFieldGoals": {
-        "made": 304,
-        "attempted": 787,
-        "pct": 38.6
+        "made": 311,
+        "attempted": 816,
+        "pct": 38.1
       },
       "freeThrows": {
-        "made": 462,
-        "attempted": 604,
-        "pct": 76.5
+        "made": 473,
+        "attempted": 621,
+        "pct": 76.2
       },
       "rebounds": {
-        "offensive": 285,
-        "defensive": 734,
-        "total": 1019
+        "offensive": 300,
+        "defensive": 751,
+        "total": 1051
       },
       "turnovers": {
-        "total": 271,
+        "total": 277,
         "teamTotal": 7
       },
       "fouls": {
-        "total": 532,
+        "total": 554,
         "technical": 10,
         "flagrant": 0
       },
       "points": {
-        "total": 2442,
-        "inPaint": 980,
-        "offTurnovers": 477,
-        "fastBreak": 327
+        "total": 2506,
+        "inPaint": 1008,
+        "offTurnovers": 488,
+        "fastBreak": 329
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 55.6,
+        "effectiveFieldGoalPct": 55.1,
         "turnoverRatio": 0.14,
-        "offensiveReboundPct": 28,
-        "freeThrowRate": 34
+        "offensiveReboundPct": 28.5,
+        "freeThrowRate": 33.7
       }
     },
     "opponentStats": {
-      "assists": 361,
-      "blocks": 88,
-      "steals": 148,
-      "possessions": 1957,
-      "trueShooting": 55.7,
-      "rating": 111.3,
+      "assists": 382,
+      "blocks": 91,
+      "steals": 150,
+      "possessions": 2021,
+      "trueShooting": 56,
+      "rating": 112.4,
       "fieldGoals": {
-        "made": 741,
-        "attempted": 1682,
-        "pct": 44.1
+        "made": 773,
+        "attempted": 1740,
+        "pct": 44.4
       },
       "twoPointFieldGoals": {
-        "made": 477,
-        "attempted": 921,
-        "pct": 51.8
+        "made": 498,
+        "attempted": 951,
+        "pct": 52.4
       },
       "threePointFieldGoals": {
-        "made": 264,
-        "attempted": 761,
-        "pct": 34.7
+        "made": 275,
+        "attempted": 789,
+        "pct": 34.9
       },
       "freeThrows": {
-        "made": 432,
-        "attempted": 624,
-        "pct": 69.2
+        "made": 450,
+        "attempted": 651,
+        "pct": 69.1
       },
       "rebounds": {
-        "offensive": 310,
-        "defensive": 724,
-        "total": 1034
+        "offensive": 323,
+        "defensive": 754,
+        "total": 1077
       },
       "turnovers": {
-        "total": 386,
+        "total": 393,
         "teamTotal": 23
       },
       "fouls": {
-        "total": 492,
+        "total": 508,
         "technical": 3,
         "flagrant": 1
       },
       "points": {
-        "total": 2178,
-        "inPaint": 856,
-        "offTurnovers": 277,
-        "fastBreak": 324
+        "total": 2271,
+        "inPaint": 898,
+        "offTurnovers": 284,
+        "fastBreak": 334
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 51.9,
-        "turnoverRatio": 0.2,
+        "effectiveFieldGoalPct": 52.3,
+        "turnoverRatio": 0.19,
         "offensiveReboundPct": 30,
-        "freeThrowRate": 37.1
+        "freeThrowRate": 37.4
       }
     }
   },
@@ -23045,116 +23045,116 @@
     "teamId": 193,
     "team": "New Orleans",
     "conference": "Southland",
-    "games": 31,
+    "games": 32,
     "wins": 15,
-    "losses": 16,
-    "totalMinutes": 1270,
-    "pace": 68.6,
+    "losses": 17,
+    "totalMinutes": 1310,
+    "pace": 68.8,
     "teamStats": {
-      "assists": 411,
-      "blocks": 120,
-      "steals": 184,
-      "possessions": 2175,
+      "assists": 432,
+      "blocks": 125,
+      "steals": 190,
+      "possessions": 2249,
       "trueShooting": 56.4,
-      "rating": 108.6,
+      "rating": 108.5,
       "fieldGoals": {
-        "made": 781,
-        "attempted": 1738,
-        "pct": 44.9
+        "made": 810,
+        "attempted": 1799,
+        "pct": 45
       },
       "twoPointFieldGoals": {
-        "made": 583,
-        "attempted": 1137,
-        "pct": 51.3
+        "made": 607,
+        "attempted": 1181,
+        "pct": 51.4
       },
       "threePointFieldGoals": {
-        "made": 198,
-        "attempted": 601,
-        "pct": 32.9
+        "made": 203,
+        "attempted": 618,
+        "pct": 32.8
       },
       "freeThrows": {
-        "made": 602,
-        "attempted": 807,
-        "pct": 74.6
+        "made": 617,
+        "attempted": 830,
+        "pct": 74.3
       },
       "rebounds": {
-        "offensive": 373,
-        "defensive": 797,
-        "total": 1170
+        "offensive": 384,
+        "defensive": 826,
+        "total": 1210
       },
       "turnovers": {
-        "total": 451,
-        "teamTotal": 28
+        "total": 465,
+        "teamTotal": 29
       },
       "fouls": {
-        "total": 610,
+        "total": 628,
         "technical": 6,
         "flagrant": 4
       },
       "points": {
-        "total": 2362,
-        "inPaint": 1008,
-        "offTurnovers": 398,
-        "fastBreak": 302
+        "total": 2440,
+        "inPaint": 1044,
+        "offTurnovers": 406,
+        "fastBreak": 317
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 50.6,
+        "effectiveFieldGoalPct": 50.7,
         "turnoverRatio": 0.21,
-        "offensiveReboundPct": 31.9,
-        "freeThrowRate": 46.4
+        "offensiveReboundPct": 31.7,
+        "freeThrowRate": 46.1
       }
     },
     "opponentStats": {
-      "assists": 488,
-      "blocks": 111,
-      "steals": 241,
-      "possessions": 2182,
+      "assists": 507,
+      "blocks": 112,
+      "steals": 250,
+      "possessions": 2256,
       "trueShooting": 53.5,
       "rating": 110.9,
       "fieldGoals": {
-        "made": 812,
-        "attempted": 1930,
+        "made": 840,
+        "attempted": 1994,
         "pct": 42.1
       },
       "twoPointFieldGoals": {
-        "made": 562,
-        "attempted": 1157,
+        "made": 581,
+        "attempted": 1196,
         "pct": 48.6
       },
       "threePointFieldGoals": {
-        "made": 250,
-        "attempted": 773,
-        "pct": 32.3
+        "made": 259,
+        "attempted": 798,
+        "pct": 32.5
       },
       "freeThrows": {
-        "made": 546,
-        "attempted": 754,
-        "pct": 72.4
+        "made": 563,
+        "attempted": 779,
+        "pct": 72.3
       },
       "rebounds": {
-        "offensive": 425,
-        "defensive": 672,
-        "total": 1097
+        "offensive": 434,
+        "defensive": 694,
+        "total": 1128
       },
       "turnovers": {
-        "total": 329,
+        "total": 336,
         "teamTotal": 17
       },
       "fouls": {
-        "total": 647,
+        "total": 664,
         "technical": 2,
         "flagrant": 2
       },
       "points": {
-        "total": 2420,
-        "inPaint": 954,
-        "offTurnovers": 509,
-        "fastBreak": 345
+        "total": 2502,
+        "inPaint": 990,
+        "offTurnovers": 523,
+        "fastBreak": 357
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 48.5,
+        "effectiveFieldGoalPct": 48.6,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 38.7,
+        "offensiveReboundPct": 38.5,
         "freeThrowRate": 39.1
       }
     }
@@ -23285,117 +23285,117 @@
     "teamId": 195,
     "team": "Nicholls",
     "conference": "Southland",
-    "games": 30,
+    "games": 31,
     "wins": 13,
-    "losses": 17,
-    "totalMinutes": 1200,
+    "losses": 18,
+    "totalMinutes": 1240,
     "pace": 69,
     "teamStats": {
-      "assists": 401,
+      "assists": 409,
       "blocks": 82,
       "steals": 277,
-      "possessions": 2068,
-      "trueShooting": 54.5,
-      "rating": 106.1,
+      "possessions": 2135,
+      "trueShooting": 54.3,
+      "rating": 105.8,
       "fieldGoals": {
-        "made": 767,
-        "attempted": 1748,
-        "pct": 43.9
+        "made": 785,
+        "attempted": 1803,
+        "pct": 43.5
       },
       "twoPointFieldGoals": {
-        "made": 504,
-        "attempted": 973,
-        "pct": 51.8
+        "made": 513,
+        "attempted": 997,
+        "pct": 51.5
       },
       "threePointFieldGoals": {
-        "made": 263,
-        "attempted": 775,
-        "pct": 33.9
+        "made": 272,
+        "attempted": 806,
+        "pct": 33.7
       },
       "freeThrows": {
-        "made": 397,
-        "attempted": 600,
+        "made": 417,
+        "attempted": 630,
         "pct": 66.2
       },
       "rebounds": {
-        "offensive": 304,
-        "defensive": 617,
-        "total": 921
+        "offensive": 325,
+        "defensive": 641,
+        "total": 966
       },
       "turnovers": {
-        "total": 348,
-        "teamTotal": 15
+        "total": 366,
+        "teamTotal": 18
       },
       "fouls": {
-        "total": 539,
-        "technical": 8,
+        "total": 558,
+        "technical": 10,
         "flagrant": 1
       },
       "points": {
-        "total": 2194,
-        "inPaint": 902,
-        "offTurnovers": 521,
-        "fastBreak": 377
+        "total": 2259,
+        "inPaint": 918,
+        "offTurnovers": 531,
+        "fastBreak": 380
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 51.4,
+        "effectiveFieldGoalPct": 51.1,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 33,
-        "freeThrowRate": 34.3
+        "offensiveReboundPct": 33.6,
+        "freeThrowRate": 34.9
       }
     },
     "opponentStats": {
-      "assists": 438,
-      "blocks": 98,
-      "steals": 181,
-      "possessions": 2072,
-      "trueShooting": 58.9,
-      "rating": 109.2,
+      "assists": 451,
+      "blocks": 100,
+      "steals": 193,
+      "possessions": 2140,
+      "trueShooting": 58.8,
+      "rating": 109.3,
       "fieldGoals": {
-        "made": 787,
-        "attempted": 1652,
-        "pct": 47.6
+        "made": 810,
+        "attempted": 1706,
+        "pct": 47.5
       },
       "twoPointFieldGoals": {
-        "made": 571,
-        "attempted": 1027,
-        "pct": 55.6
+        "made": 589,
+        "attempted": 1057,
+        "pct": 55.7
       },
       "threePointFieldGoals": {
-        "made": 216,
-        "attempted": 625,
-        "pct": 34.6
+        "made": 221,
+        "attempted": 649,
+        "pct": 34.1
       },
       "freeThrows": {
-        "made": 473,
-        "attempted": 611,
-        "pct": 77.4
+        "made": 497,
+        "attempted": 639,
+        "pct": 77.8
       },
       "rebounds": {
-        "offensive": 311,
-        "defensive": 779,
-        "total": 1090
+        "offensive": 319,
+        "defensive": 800,
+        "total": 1119
       },
       "turnovers": {
-        "total": 441,
-        "teamTotal": 21
+        "total": 450,
+        "teamTotal": 25
       },
       "fouls": {
-        "total": 507,
-        "technical": 12,
+        "total": 528,
+        "technical": 14,
         "flagrant": 1
       },
       "points": {
-        "total": 2263,
-        "inPaint": 1044,
-        "offTurnovers": 392,
-        "fastBreak": 311
+        "total": 2338,
+        "inPaint": 1078,
+        "offTurnovers": 418,
+        "fastBreak": 336
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.2,
+        "effectiveFieldGoalPct": 54,
         "turnoverRatio": 0.21,
         "offensiveReboundPct": 28.5,
-        "freeThrowRate": 37
+        "freeThrowRate": 37.5
       }
     }
   },
@@ -23405,116 +23405,116 @@
     "teamId": 196,
     "team": "Norfolk State",
     "conference": "MEAC",
-    "games": 29,
+    "games": 30,
     "wins": 15,
-    "losses": 14,
-    "totalMinutes": 1160,
-    "pace": 68.8,
+    "losses": 15,
+    "totalMinutes": 1200,
+    "pace": 69,
     "teamStats": {
-      "assists": 343,
-      "blocks": 89,
-      "steals": 209,
-      "possessions": 1995,
-      "trueShooting": 56.2,
+      "assists": 360,
+      "blocks": 91,
+      "steals": 214,
+      "possessions": 2071,
+      "trueShooting": 55.7,
       "rating": 110.4,
       "fieldGoals": {
-        "made": 770,
-        "attempted": 1647,
-        "pct": 46.8
+        "made": 801,
+        "attempted": 1726,
+        "pct": 46.4
       },
       "twoPointFieldGoals": {
-        "made": 595,
-        "attempted": 1141,
-        "pct": 52.1
+        "made": 621,
+        "attempted": 1201,
+        "pct": 51.7
       },
       "threePointFieldGoals": {
-        "made": 175,
-        "attempted": 506,
-        "pct": 34.6
+        "made": 180,
+        "attempted": 525,
+        "pct": 34.3
       },
       "freeThrows": {
-        "made": 488,
-        "attempted": 714,
-        "pct": 68.3
+        "made": 505,
+        "attempted": 740,
+        "pct": 68.2
       },
       "rebounds": {
-        "offensive": 324,
-        "defensive": 674,
-        "total": 998
+        "offensive": 346,
+        "defensive": 702,
+        "total": 1048
       },
       "turnovers": {
-        "total": 361,
+        "total": 368,
         "teamTotal": 16
       },
       "fouls": {
-        "total": 566,
+        "total": 586,
         "technical": 8,
         "flagrant": 2
       },
       "points": {
-        "total": 2203,
-        "inPaint": 1036,
-        "offTurnovers": 464,
-        "fastBreak": 435
+        "total": 2287,
+        "inPaint": 1084,
+        "offTurnovers": 477,
+        "fastBreak": 462
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52.1,
+        "effectiveFieldGoalPct": 51.6,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 32.5,
-        "freeThrowRate": 43.4
+        "offensiveReboundPct": 33,
+        "freeThrowRate": 42.9
       }
     },
     "opponentStats": {
-      "assists": 405,
-      "blocks": 109,
-      "steals": 211,
-      "possessions": 1995,
-      "trueShooting": 55.1,
-      "rating": 105.3,
+      "assists": 425,
+      "blocks": 113,
+      "steals": 212,
+      "possessions": 2070,
+      "trueShooting": 55.5,
+      "rating": 105.8,
       "fieldGoals": {
-        "made": 698,
-        "attempted": 1603,
-        "pct": 43.5
+        "made": 726,
+        "attempted": 1660,
+        "pct": 43.7
       },
       "twoPointFieldGoals": {
-        "made": 485,
-        "attempted": 920,
-        "pct": 52.7
+        "made": 499,
+        "attempted": 949,
+        "pct": 52.6
       },
       "threePointFieldGoals": {
-        "made": 213,
-        "attempted": 683,
-        "pct": 31.2
+        "made": 227,
+        "attempted": 711,
+        "pct": 31.9
       },
       "freeThrows": {
-        "made": 491,
-        "attempted": 686,
-        "pct": 71.6
+        "made": 511,
+        "attempted": 710,
+        "pct": 72
       },
       "rebounds": {
-        "offensive": 302,
-        "defensive": 650,
-        "total": 952
+        "offensive": 305,
+        "defensive": 682,
+        "total": 987
       },
       "turnovers": {
-        "total": 399,
+        "total": 408,
         "teamTotal": 29
       },
       "fouls": {
-        "total": 546,
+        "total": 564,
         "technical": 7,
         "flagrant": 0
       },
       "points": {
-        "total": 2100,
-        "inPaint": 838,
-        "offTurnovers": 397,
-        "fastBreak": 353
+        "total": 2190,
+        "inPaint": 862,
+        "offTurnovers": 411,
+        "fastBreak": 383
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 50.2,
+        "effectiveFieldGoalPct": 50.6,
         "turnoverRatio": 0.2,
-        "offensiveReboundPct": 31.7,
+        "offensiveReboundPct": 30.9,
         "freeThrowRate": 42.8
       }
     }
@@ -23765,117 +23765,117 @@
     "teamId": 199,
     "team": "North Carolina Central",
     "conference": "MEAC",
-    "games": 27,
-    "wins": 11,
+    "games": 28,
+    "wins": 12,
     "losses": 16,
-    "totalMinutes": 1080,
+    "totalMinutes": 1120,
     "pace": 68.7,
     "teamStats": {
-      "assists": 383,
-      "blocks": 96,
-      "steals": 234,
-      "possessions": 1853,
-      "trueShooting": 54.4,
-      "rating": 105.4,
+      "assists": 398,
+      "blocks": 97,
+      "steals": 249,
+      "possessions": 1919,
+      "trueShooting": 54.6,
+      "rating": 105.8,
       "fieldGoals": {
-        "made": 682,
-        "attempted": 1540,
+        "made": 705,
+        "attempted": 1590,
         "pct": 44.3
       },
       "twoPointFieldGoals": {
-        "made": 513,
-        "attempted": 1029,
-        "pct": 49.9
+        "made": 527,
+        "attempted": 1059,
+        "pct": 49.8
       },
       "threePointFieldGoals": {
-        "made": 169,
-        "attempted": 511,
-        "pct": 33.1
+        "made": 178,
+        "attempted": 531,
+        "pct": 33.5
       },
       "freeThrows": {
-        "made": 420,
-        "attempted": 582,
-        "pct": 72.2
+        "made": 442,
+        "attempted": 611,
+        "pct": 72.3
       },
       "rebounds": {
-        "offensive": 289,
-        "defensive": 568,
-        "total": 857
+        "offensive": 296,
+        "defensive": 581,
+        "total": 877
       },
       "turnovers": {
-        "total": 332,
-        "teamTotal": 14
-      },
-      "fouls": {
-        "total": 479,
-        "technical": 7,
-        "flagrant": 2
-      },
-      "points": {
-        "total": 1953,
-        "inPaint": 872,
-        "offTurnovers": 511,
-        "fastBreak": 380
-      },
-      "fourFactors": {
-        "effectiveFieldGoalPct": 49.8,
-        "turnoverRatio": 0.18,
-        "offensiveReboundPct": 33.7,
-        "freeThrowRate": 37.8
-      }
-    },
-    "opponentStats": {
-      "assists": 409,
-      "blocks": 110,
-      "steals": 172,
-      "possessions": 1859,
-      "trueShooting": 57.6,
-      "rating": 111,
-      "fieldGoals": {
-        "made": 711,
-        "attempted": 1536,
-        "pct": 46.3
-      },
-      "twoPointFieldGoals": {
-        "made": 482,
-        "attempted": 895,
-        "pct": 53.9
-      },
-      "threePointFieldGoals": {
-        "made": 229,
-        "attempted": 641,
-        "pct": 35.7
-      },
-      "freeThrows": {
-        "made": 412,
-        "attempted": 580,
-        "pct": 71
-      },
-      "rebounds": {
-        "offensive": 340,
-        "defensive": 651,
-        "total": 991
-      },
-      "turnovers": {
-        "total": 400,
+        "total": 344,
         "teamTotal": 16
       },
       "fouls": {
-        "total": 476,
-        "technical": 5,
+        "total": 493,
+        "technical": 8,
+        "flagrant": 2
+      },
+      "points": {
+        "total": 2030,
+        "inPaint": 892,
+        "offTurnovers": 540,
+        "fastBreak": 398
+      },
+      "fourFactors": {
+        "effectiveFieldGoalPct": 49.9,
+        "turnoverRatio": 0.18,
+        "offensiveReboundPct": 33.8,
+        "freeThrowRate": 38.4
+      }
+    },
+    "opponentStats": {
+      "assists": 430,
+      "blocks": 114,
+      "steals": 179,
+      "possessions": 1926,
+      "trueShooting": 57.6,
+      "rating": 110.9,
+      "fieldGoals": {
+        "made": 741,
+        "attempted": 1596,
+        "pct": 46.4
+      },
+      "twoPointFieldGoals": {
+        "made": 505,
+        "attempted": 938,
+        "pct": 53.8
+      },
+      "threePointFieldGoals": {
+        "made": 236,
+        "attempted": 658,
+        "pct": 35.9
+      },
+      "freeThrows": {
+        "made": 418,
+        "attempted": 588,
+        "pct": 71.1
+      },
+      "rebounds": {
+        "offensive": 359,
+        "defensive": 676,
+        "total": 1035
+      },
+      "turnovers": {
+        "total": 423,
+        "teamTotal": 16
+      },
+      "fouls": {
+        "total": 497,
+        "technical": 7,
         "flagrant": 1
       },
       "points": {
-        "total": 2063,
-        "inPaint": 846,
-        "offTurnovers": 431,
-        "fastBreak": 388
+        "total": 2136,
+        "inPaint": 880,
+        "offTurnovers": 449,
+        "fastBreak": 398
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 53.7,
+        "effectiveFieldGoalPct": 53.8,
         "turnoverRatio": 0.22,
-        "offensiveReboundPct": 34.3,
-        "freeThrowRate": 37.8
+        "offensiveReboundPct": 34.7,
+        "freeThrowRate": 36.8
       }
     }
   },
@@ -24605,117 +24605,117 @@
     "teamId": 206,
     "team": "Northern Arizona",
     "conference": "Big Sky",
-    "games": 30,
+    "games": 31,
     "wins": 10,
-    "losses": 20,
-    "totalMinutes": 1200,
-    "pace": 66.5,
+    "losses": 21,
+    "totalMinutes": 1240,
+    "pace": 66.3,
     "teamStats": {
-      "assists": 395,
-      "blocks": 79,
-      "steals": 208,
-      "possessions": 1994,
-      "trueShooting": 56.6,
+      "assists": 408,
+      "blocks": 82,
+      "steals": 213,
+      "possessions": 2055,
+      "trueShooting": 56.5,
       "rating": 107.9,
       "fieldGoals": {
-        "made": 773,
-        "attempted": 1657,
-        "pct": 46.7
+        "made": 799,
+        "attempted": 1715,
+        "pct": 46.6
       },
       "twoPointFieldGoals": {
-        "made": 545,
-        "attempted": 1047,
-        "pct": 52.1
+        "made": 564,
+        "attempted": 1084,
+        "pct": 52
       },
       "threePointFieldGoals": {
-        "made": 228,
-        "attempted": 610,
-        "pct": 37.4
+        "made": 235,
+        "attempted": 631,
+        "pct": 37.2
       },
       "freeThrows": {
-        "made": 378,
-        "attempted": 557,
-        "pct": 67.9
+        "made": 384,
+        "attempted": 565,
+        "pct": 68
       },
       "rebounds": {
-        "offensive": 240,
-        "defensive": 655,
-        "total": 895
+        "offensive": 249,
+        "defensive": 677,
+        "total": 926
       },
       "turnovers": {
-        "total": 318,
+        "total": 327,
         "teamTotal": 14
       },
       "fouls": {
-        "total": 526,
+        "total": 538,
         "technical": 5,
         "flagrant": 1
       },
       "points": {
-        "total": 2152,
-        "inPaint": 950,
-        "offTurnovers": 382,
-        "fastBreak": 228
+        "total": 2217,
+        "inPaint": 976,
+        "offTurnovers": 392,
+        "fastBreak": 232
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 53.5,
+        "effectiveFieldGoalPct": 53.4,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 26.8,
-        "freeThrowRate": 33.6
+        "offensiveReboundPct": 26.9,
+        "freeThrowRate": 32.9
       }
     },
     "opponentStats": {
-      "assists": 414,
-      "blocks": 89,
-      "steals": 172,
-      "possessions": 1996,
-      "trueShooting": 59.3,
-      "rating": 115,
+      "assists": 424,
+      "blocks": 92,
+      "steals": 177,
+      "possessions": 2057,
+      "trueShooting": 59.4,
+      "rating": 115.3,
       "fieldGoals": {
-        "made": 823,
-        "attempted": 1702,
+        "made": 851,
+        "attempted": 1757,
         "pct": 48.4
       },
       "twoPointFieldGoals": {
-        "made": 567,
-        "attempted": 1031,
-        "pct": 55
+        "made": 583,
+        "attempted": 1055,
+        "pct": 55.3
       },
       "threePointFieldGoals": {
-        "made": 256,
-        "attempted": 671,
+        "made": 268,
+        "attempted": 702,
         "pct": 38.2
       },
       "freeThrows": {
-        "made": 394,
-        "attempted": 533,
-        "pct": 73.9
+        "made": 402,
+        "attempted": 546,
+        "pct": 73.6
       },
       "rebounds": {
-        "offensive": 304,
-        "defensive": 743,
-        "total": 1047
+        "offensive": 312,
+        "defensive": 768,
+        "total": 1080
       },
       "turnovers": {
-        "total": 355,
+        "total": 362,
         "teamTotal": 6
       },
       "fouls": {
-        "total": 497,
-        "technical": 2,
+        "total": 511,
+        "technical": 3,
         "flagrant": 0
       },
       "points": {
-        "total": 2296,
-        "inPaint": 1034,
-        "offTurnovers": 388,
-        "fastBreak": 249
+        "total": 2372,
+        "inPaint": 1060,
+        "offTurnovers": 391,
+        "fastBreak": 263
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 55.9,
+        "effectiveFieldGoalPct": 56.1,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 29,
-        "freeThrowRate": 31.3
+        "offensiveReboundPct": 28.9,
+        "freeThrowRate": 31.1
       }
     }
   },
@@ -24725,117 +24725,117 @@
     "teamId": 207,
     "team": "Northern Colorado",
     "conference": "Big Sky",
-    "games": 30,
-    "wins": 19,
+    "games": 31,
+    "wins": 20,
     "losses": 11,
-    "totalMinutes": 1260,
-    "pace": 66.9,
+    "totalMinutes": 1300,
+    "pace": 67.1,
     "teamStats": {
-      "assists": 499,
-      "blocks": 80,
-      "steals": 126,
-      "possessions": 2100,
+      "assists": 514,
+      "blocks": 84,
+      "steals": 136,
+      "possessions": 2174,
       "trueShooting": 60.1,
-      "rating": 117.4,
+      "rating": 117.3,
       "fieldGoals": {
-        "made": 902,
-        "attempted": 1834,
+        "made": 935,
+        "attempted": 1901,
         "pct": 49.2
       },
       "twoPointFieldGoals": {
-        "made": 615,
-        "attempted": 1044,
+        "made": 637,
+        "attempted": 1081,
         "pct": 58.9
       },
       "threePointFieldGoals": {
-        "made": 287,
-        "attempted": 790,
+        "made": 298,
+        "attempted": 820,
         "pct": 36.3
       },
       "freeThrows": {
-        "made": 375,
-        "attempted": 494,
-        "pct": 75.9
+        "made": 383,
+        "attempted": 504,
+        "pct": 76
       },
       "rebounds": {
-        "offensive": 284,
-        "defensive": 812,
-        "total": 1096
+        "offensive": 290,
+        "defensive": 847,
+        "total": 1137
       },
       "turnovers": {
-        "total": 337,
+        "total": 344,
         "teamTotal": 9
       },
       "fouls": {
-        "total": 542,
+        "total": 554,
         "technical": 2,
         "flagrant": 0
       },
       "points": {
-        "total": 2466,
-        "inPaint": 1148,
-        "offTurnovers": 335,
-        "fastBreak": 205
+        "total": 2551,
+        "inPaint": 1188,
+        "offTurnovers": 354,
+        "fastBreak": 215
       },
       "fourFactors": {
         "effectiveFieldGoalPct": 57,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 25.9,
-        "freeThrowRate": 26.9
+        "offensiveReboundPct": 25.5,
+        "freeThrowRate": 26.5
       }
     },
     "opponentStats": {
-      "assists": 296,
-      "blocks": 74,
-      "steals": 189,
-      "possessions": 2112,
-      "trueShooting": 54.8,
-      "rating": 108.8,
+      "assists": 307,
+      "blocks": 78,
+      "steals": 192,
+      "possessions": 2187,
+      "trueShooting": 54.5,
+      "rating": 107.6,
       "fieldGoals": {
-        "made": 802,
-        "attempted": 1804,
-        "pct": 44.5
+        "made": 825,
+        "attempted": 1864,
+        "pct": 44.3
       },
       "twoPointFieldGoals": {
-        "made": 612,
-        "attempted": 1174,
-        "pct": 52.1
+        "made": 630,
+        "attempted": 1212,
+        "pct": 52
       },
       "threePointFieldGoals": {
-        "made": 190,
-        "attempted": 630,
-        "pct": 30.2
+        "made": 195,
+        "attempted": 652,
+        "pct": 29.9
       },
       "freeThrows": {
-        "made": 503,
-        "attempted": 664,
-        "pct": 75.8
+        "made": 509,
+        "attempted": 674,
+        "pct": 75.5
       },
       "rebounds": {
-        "offensive": 261,
-        "defensive": 694,
-        "total": 955
+        "offensive": 265,
+        "defensive": 723,
+        "total": 988
       },
       "turnovers": {
-        "total": 276,
+        "total": 289,
         "teamTotal": 18
       },
       "fouls": {
-        "total": 467,
+        "total": 476,
         "technical": 5,
         "flagrant": 1
       },
       "points": {
-        "total": 2297,
-        "inPaint": 1080,
-        "offTurnovers": 365,
+        "total": 2354,
+        "inPaint": 1110,
+        "offTurnovers": 369,
         "fastBreak": 213
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 49.7,
+        "effectiveFieldGoalPct": 49.5,
         "turnoverRatio": 0.13,
-        "offensiveReboundPct": 27.3,
-        "freeThrowRate": 36.8
+        "offensiveReboundPct": 26.8,
+        "freeThrowRate": 36.2
       }
     }
   },
@@ -25205,117 +25205,117 @@
     "teamId": 211,
     "team": "Northwestern State",
     "conference": "Southland",
-    "games": 30,
+    "games": 31,
     "wins": 10,
-    "losses": 20,
-    "totalMinutes": 1215,
-    "pace": 62.7,
+    "losses": 21,
+    "totalMinutes": 1255,
+    "pace": 62.8,
     "teamStats": {
-      "assists": 359,
-      "blocks": 71,
-      "steals": 194,
-      "possessions": 1906,
-      "trueShooting": 55.1,
-      "rating": 108.9,
+      "assists": 373,
+      "blocks": 73,
+      "steals": 198,
+      "possessions": 1970,
+      "trueShooting": 55,
+      "rating": 108.5,
       "fieldGoals": {
-        "made": 706,
-        "attempted": 1601,
-        "pct": 44.1
+        "made": 729,
+        "attempted": 1649,
+        "pct": 44.2
       },
       "twoPointFieldGoals": {
-        "made": 525,
-        "attempted": 1059,
-        "pct": 49.6
+        "made": 545,
+        "attempted": 1097,
+        "pct": 49.7
       },
       "threePointFieldGoals": {
-        "made": 181,
-        "attempted": 542,
-        "pct": 33.4
+        "made": 184,
+        "attempted": 552,
+        "pct": 33.3
       },
       "freeThrows": {
-        "made": 483,
-        "attempted": 646,
-        "pct": 74.8
+        "made": 496,
+        "attempted": 668,
+        "pct": 74.3
       },
       "rebounds": {
-        "offensive": 261,
-        "defensive": 675,
-        "total": 936
+        "offensive": 269,
+        "defensive": 701,
+        "total": 970
       },
       "turnovers": {
-        "total": 347,
-        "teamTotal": 25
+        "total": 360,
+        "teamTotal": 26
       },
       "fouls": {
-        "total": 506,
+        "total": 521,
         "technical": 2,
         "flagrant": 0
       },
       "points": {
-        "total": 2076,
-        "inPaint": 860,
-        "offTurnovers": 389,
-        "fastBreak": 287
+        "total": 2138,
+        "inPaint": 894,
+        "offTurnovers": 402,
+        "fastBreak": 298
       },
       "fourFactors": {
         "effectiveFieldGoalPct": 49.8,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 27.9,
-        "freeThrowRate": 40.3
+        "offensiveReboundPct": 27.7,
+        "freeThrowRate": 40.5
       }
     },
     "opponentStats": {
-      "assists": 394,
-      "blocks": 98,
-      "steals": 202,
-      "possessions": 1905,
+      "assists": 410,
+      "blocks": 100,
+      "steals": 209,
+      "possessions": 1969,
       "trueShooting": 56.3,
-      "rating": 114.5,
+      "rating": 114.6,
       "fieldGoals": {
-        "made": 764,
-        "attempted": 1668,
-        "pct": 45.8
+        "made": 793,
+        "attempted": 1727,
+        "pct": 45.9
       },
       "twoPointFieldGoals": {
-        "made": 539,
-        "attempted": 1037,
-        "pct": 52
+        "made": 559,
+        "attempted": 1073,
+        "pct": 52.1
       },
       "threePointFieldGoals": {
-        "made": 225,
-        "attempted": 631,
-        "pct": 35.7
+        "made": 234,
+        "attempted": 654,
+        "pct": 35.8
       },
       "freeThrows": {
-        "made": 429,
-        "attempted": 615,
+        "made": 436,
+        "attempted": 625,
         "pct": 69.8
       },
       "rebounds": {
-        "offensive": 321,
-        "defensive": 713,
-        "total": 1034
+        "offensive": 328,
+        "defensive": 737,
+        "total": 1065
       },
       "turnovers": {
-        "total": 341,
-        "teamTotal": 17
+        "total": 350,
+        "teamTotal": 18
       },
       "fouls": {
-        "total": 565,
+        "total": 584,
         "technical": 4,
         "flagrant": 0
       },
       "points": {
-        "total": 2182,
-        "inPaint": 920,
-        "offTurnovers": 408,
-        "fastBreak": 257
+        "total": 2256,
+        "inPaint": 958,
+        "offTurnovers": 424,
+        "fastBreak": 264
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52.5,
+        "effectiveFieldGoalPct": 52.7,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 31,
-        "freeThrowRate": 36.9
+        "offensiveReboundPct": 30.8,
+        "freeThrowRate": 36.2
       }
     }
   },
@@ -27605,117 +27605,117 @@
     "teamId": 231,
     "team": "Portland State",
     "conference": "Big Sky",
-    "games": 28,
-    "wins": 18,
+    "games": 29,
+    "wins": 19,
     "losses": 10,
-    "totalMinutes": 1150,
+    "totalMinutes": 1190,
     "pace": 67.7,
     "teamStats": {
-      "assists": 407,
-      "blocks": 109,
-      "steals": 210,
-      "possessions": 1942,
-      "trueShooting": 55.8,
-      "rating": 109.9,
+      "assists": 432,
+      "blocks": 114,
+      "steals": 221,
+      "possessions": 2010,
+      "trueShooting": 56,
+      "rating": 110.4,
       "fieldGoals": {
-        "made": 771,
-        "attempted": 1663,
-        "pct": 46.4
+        "made": 805,
+        "attempted": 1724,
+        "pct": 46.7
       },
       "twoPointFieldGoals": {
-        "made": 580,
-        "attempted": 1090,
-        "pct": 53.2
+        "made": 607,
+        "attempted": 1129,
+        "pct": 53.8
       },
       "threePointFieldGoals": {
-        "made": 191,
-        "attempted": 573,
+        "made": 198,
+        "attempted": 595,
         "pct": 33.3
       },
       "freeThrows": {
-        "made": 402,
-        "attempted": 571,
-        "pct": 70.4
+        "made": 411,
+        "attempted": 585,
+        "pct": 70.3
       },
       "rebounds": {
-        "offensive": 318,
-        "defensive": 719,
-        "total": 1037
+        "offensive": 325,
+        "defensive": 748,
+        "total": 1073
       },
       "turnovers": {
-        "total": 343,
+        "total": 350,
         "teamTotal": 10
       },
       "fouls": {
-        "total": 558,
+        "total": 568,
         "technical": 16,
         "flagrant": 2
       },
       "points": {
-        "total": 2135,
-        "inPaint": 1064,
-        "offTurnovers": 403,
-        "fastBreak": 289
+        "total": 2219,
+        "inPaint": 1114,
+        "offTurnovers": 422,
+        "fastBreak": 305
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52.1,
-        "turnoverRatio": 0.18,
-        "offensiveReboundPct": 30.7,
-        "freeThrowRate": 34.3
+        "effectiveFieldGoalPct": 52.4,
+        "turnoverRatio": 0.17,
+        "offensiveReboundPct": 30.3,
+        "freeThrowRate": 33.9
       }
     },
     "opponentStats": {
-      "assists": 346,
+      "assists": 354,
       "blocks": 77,
-      "steals": 186,
-      "possessions": 1948,
-      "trueShooting": 53.6,
-      "rating": 100.9,
+      "steals": 191,
+      "possessions": 2016,
+      "trueShooting": 53.3,
+      "rating": 100.5,
       "fieldGoals": {
-        "made": 639,
-        "attempted": 1543,
-        "pct": 41.4
+        "made": 663,
+        "attempted": 1605,
+        "pct": 41.3
       },
       "twoPointFieldGoals": {
-        "made": 442,
-        "attempted": 929,
-        "pct": 47.6
+        "made": 461,
+        "attempted": 970,
+        "pct": 47.5
       },
       "threePointFieldGoals": {
-        "made": 197,
-        "attempted": 614,
-        "pct": 32.1
+        "made": 202,
+        "attempted": 635,
+        "pct": 31.8
       },
       "freeThrows": {
-        "made": 491,
-        "attempted": 659,
-        "pct": 74.5
+        "made": 498,
+        "attempted": 670,
+        "pct": 74.3
       },
       "rebounds": {
-        "offensive": 252,
-        "defensive": 659,
-        "total": 911
+        "offensive": 263,
+        "defensive": 681,
+        "total": 944
       },
       "turnovers": {
-        "total": 353,
-        "teamTotal": 15
+        "total": 367,
+        "teamTotal": 16
       },
       "fouls": {
-        "total": 491,
+        "total": 505,
         "technical": 5,
         "flagrant": 2
       },
       "points": {
-        "total": 1966,
-        "inPaint": 756,
-        "offTurnovers": 350,
+        "total": 2026,
+        "inPaint": 790,
+        "offTurnovers": 354,
         "fastBreak": 272
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 47.8,
+        "effectiveFieldGoalPct": 47.6,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 27.7,
-        "freeThrowRate": 42.7
+        "offensiveReboundPct": 27.9,
+        "freeThrowRate": 41.7
       }
     }
   },
@@ -29405,117 +29405,117 @@
     "teamId": 246,
     "team": "SE Louisiana",
     "conference": "Southland",
-    "games": 30,
-    "wins": 8,
+    "games": 31,
+    "wins": 9,
     "losses": 22,
-    "totalMinutes": 1215,
-    "pace": 64.9,
+    "totalMinutes": 1255,
+    "pace": 65.2,
     "teamStats": {
-      "assists": 342,
-      "blocks": 86,
-      "steals": 206,
-      "possessions": 1972,
-      "trueShooting": 51.4,
-      "rating": 98.1,
+      "assists": 361,
+      "blocks": 87,
+      "steals": 215,
+      "possessions": 2046,
+      "trueShooting": 51.6,
+      "rating": 98.5,
       "fieldGoals": {
-        "made": 661,
-        "attempted": 1601,
-        "pct": 41.3
+        "made": 689,
+        "attempted": 1665,
+        "pct": 41.4
       },
       "twoPointFieldGoals": {
-        "made": 483,
-        "attempted": 965,
-        "pct": 50.1
+        "made": 502,
+        "attempted": 1004,
+        "pct": 50
       },
       "threePointFieldGoals": {
-        "made": 178,
-        "attempted": 636,
-        "pct": 28
+        "made": 187,
+        "attempted": 661,
+        "pct": 28.3
       },
       "freeThrows": {
-        "made": 434,
-        "attempted": 634,
-        "pct": 68.5
+        "made": 451,
+        "attempted": 659,
+        "pct": 68.4
       },
       "rebounds": {
-        "offensive": 306,
-        "defensive": 655,
-        "total": 961
+        "offensive": 315,
+        "defensive": 677,
+        "total": 992
       },
       "turnovers": {
-        "total": 378,
+        "total": 385,
         "teamTotal": 22
       },
       "fouls": {
-        "total": 533,
+        "total": 550,
         "technical": 9,
         "flagrant": 0
       },
       "points": {
-        "total": 1934,
-        "inPaint": 858,
-        "offTurnovers": 363,
-        "fastBreak": 237
+        "total": 2016,
+        "inPaint": 894,
+        "offTurnovers": 377,
+        "fastBreak": 249
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 46.8,
+        "effectiveFieldGoalPct": 47,
         "turnoverRatio": 0.19,
         "offensiveReboundPct": 31.8,
         "freeThrowRate": 39.6
       }
     },
     "opponentStats": {
-      "assists": 374,
-      "blocks": 90,
-      "steals": 205,
-      "possessions": 1971,
-      "trueShooting": 56.6,
+      "assists": 395,
+      "blocks": 95,
+      "steals": 211,
+      "possessions": 2045,
+      "trueShooting": 56.5,
       "rating": 106.8,
       "fieldGoals": {
-        "made": 712,
-        "attempted": 1582,
-        "pct": 45
+        "made": 741,
+        "attempted": 1643,
+        "pct": 45.1
       },
       "twoPointFieldGoals": {
-        "made": 497,
-        "attempted": 974,
-        "pct": 51
+        "made": 521,
+        "attempted": 1018,
+        "pct": 51.2
       },
       "threePointFieldGoals": {
-        "made": 215,
-        "attempted": 608,
-        "pct": 35.4
+        "made": 220,
+        "attempted": 625,
+        "pct": 35.2
       },
       "freeThrows": {
-        "made": 467,
-        "attempted": 634,
-        "pct": 73.7
+        "made": 482,
+        "attempted": 657,
+        "pct": 73.4
       },
       "rebounds": {
-        "offensive": 293,
-        "defensive": 739,
-        "total": 1032
+        "offensive": 304,
+        "defensive": 768,
+        "total": 1072
       },
       "turnovers": {
-        "total": 383,
-        "teamTotal": 30
+        "total": 397,
+        "teamTotal": 31
       },
       "fouls": {
-        "total": 543,
+        "total": 561,
         "technical": 4,
         "flagrant": 1
       },
       "points": {
-        "total": 2106,
-        "inPaint": 848,
-        "offTurnovers": 400,
-        "fastBreak": 331
+        "total": 2184,
+        "inPaint": 884,
+        "offTurnovers": 408,
+        "fastBreak": 346
       },
       "fourFactors": {
         "effectiveFieldGoalPct": 51.8,
         "turnoverRatio": 0.19,
         "offensiveReboundPct": 28.4,
-        "freeThrowRate": 40.1
+        "freeThrowRate": 40
       }
     }
   },
@@ -29765,114 +29765,114 @@
     "teamId": 249,
     "team": "Sacramento State",
     "conference": "Big Sky",
-    "games": 29,
-    "wins": 9,
+    "games": 30,
+    "wins": 10,
     "losses": 20,
-    "totalMinutes": 1175,
+    "totalMinutes": 1215,
     "pace": 72.1,
     "teamStats": {
-      "assists": 374,
-      "blocks": 92,
-      "steals": 219,
-      "possessions": 2119,
-      "trueShooting": 54.6,
-      "rating": 107.6,
+      "assists": 395,
+      "blocks": 96,
+      "steals": 226,
+      "possessions": 2189,
+      "trueShooting": 54.9,
+      "rating": 107.9,
       "fieldGoals": {
-        "made": 748,
-        "attempted": 1771,
-        "pct": 42.2
+        "made": 777,
+        "attempted": 1825,
+        "pct": 42.6
       },
       "twoPointFieldGoals": {
-        "made": 527,
-        "attempted": 1113,
-        "pct": 47.3
+        "made": 549,
+        "attempted": 1149,
+        "pct": 47.8
       },
       "threePointFieldGoals": {
-        "made": 221,
-        "attempted": 658,
-        "pct": 33.6
+        "made": 228,
+        "attempted": 676,
+        "pct": 33.7
       },
       "freeThrows": {
-        "made": 563,
-        "attempted": 724,
+        "made": 581,
+        "attempted": 747,
         "pct": 77.8
       },
       "rebounds": {
-        "offensive": 287,
-        "defensive": 709,
-        "total": 996
+        "offensive": 291,
+        "defensive": 738,
+        "total": 1029
       },
       "turnovers": {
-        "total": 305,
+        "total": 314,
         "teamTotal": 8
       },
       "fouls": {
-        "total": 539,
+        "total": 558,
         "technical": 10,
         "flagrant": 4
       },
       "points": {
-        "total": 2280,
-        "inPaint": 902,
-        "offTurnovers": 432,
-        "fastBreak": 380
+        "total": 2363,
+        "inPaint": 938,
+        "offTurnovers": 450,
+        "fastBreak": 393
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 48.5,
+        "effectiveFieldGoalPct": 48.8,
         "turnoverRatio": 0.14,
-        "offensiveReboundPct": 28.8,
+        "offensiveReboundPct": 28.3,
         "freeThrowRate": 40.9
       }
     },
     "opponentStats": {
-      "assists": 492,
-      "blocks": 88,
-      "steals": 200,
-      "possessions": 2119,
-      "trueShooting": 57.8,
-      "rating": 113.7,
+      "assists": 506,
+      "blocks": 92,
+      "steals": 205,
+      "possessions": 2189,
+      "trueShooting": 57.5,
+      "rating": 113,
       "fieldGoals": {
-        "made": 840,
-        "attempted": 1805,
-        "pct": 46.5
+        "made": 862,
+        "attempted": 1863,
+        "pct": 46.3
       },
       "twoPointFieldGoals": {
-        "made": 568,
-        "attempted": 1029,
+        "made": 584,
+        "attempted": 1058,
         "pct": 55.2
       },
       "threePointFieldGoals": {
-        "made": 272,
-        "attempted": 776,
-        "pct": 35.1
+        "made": 278,
+        "attempted": 805,
+        "pct": 34.5
       },
       "freeThrows": {
-        "made": 457,
-        "attempted": 630,
+        "made": 472,
+        "attempted": 651,
         "pct": 72.5
       },
       "rebounds": {
-        "offensive": 336,
-        "defensive": 815,
-        "total": 1151
+        "offensive": 346,
+        "defensive": 837,
+        "total": 1183
       },
       "turnovers": {
-        "total": 358,
+        "total": 370,
         "teamTotal": 9
       },
       "fouls": {
-        "total": 564,
+        "total": 581,
         "technical": 14,
         "flagrant": 2
       },
       "points": {
-        "total": 2409,
-        "inPaint": 1048,
-        "offTurnovers": 349,
-        "fastBreak": 295
+        "total": 2474,
+        "inPaint": 1078,
+        "offTurnovers": 356,
+        "fastBreak": 302
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.1,
+        "effectiveFieldGoalPct": 53.7,
         "turnoverRatio": 0.17,
         "offensiveReboundPct": 29.2,
         "freeThrowRate": 34.9
@@ -31925,117 +31925,117 @@
     "teamId": 267,
     "team": "South Carolina State",
     "conference": "MEAC",
-    "games": 28,
-    "wins": 7,
+    "games": 29,
+    "wins": 8,
     "losses": 21,
-    "totalMinutes": 1120,
-    "pace": 68.9,
+    "totalMinutes": 1160,
+    "pace": 68.6,
     "teamStats": {
-      "assists": 336,
-      "blocks": 100,
-      "steals": 200,
-      "possessions": 1932,
-      "trueShooting": 50.7,
-      "rating": 96.1,
+      "assists": 345,
+      "blocks": 104,
+      "steals": 205,
+      "possessions": 1992,
+      "trueShooting": 50.8,
+      "rating": 96.3,
       "fieldGoals": {
-        "made": 638,
-        "attempted": 1558,
+        "made": 654,
+        "attempted": 1600,
         "pct": 40.9
       },
       "twoPointFieldGoals": {
-        "made": 468,
-        "attempted": 1046,
-        "pct": 44.7
+        "made": 480,
+        "attempted": 1077,
+        "pct": 44.6
       },
       "threePointFieldGoals": {
-        "made": 170,
-        "attempted": 512,
-        "pct": 33.2
+        "made": 174,
+        "attempted": 523,
+        "pct": 33.3
       },
       "freeThrows": {
-        "made": 411,
-        "attempted": 625,
-        "pct": 65.8
+        "made": 436,
+        "attempted": 654,
+        "pct": 66.7
       },
       "rebounds": {
-        "offensive": 310,
-        "defensive": 549,
-        "total": 859
+        "offensive": 317,
+        "defensive": 570,
+        "total": 887
       },
       "turnovers": {
-        "total": 413,
-        "teamTotal": 19
+        "total": 425,
+        "teamTotal": 20
       },
       "fouls": {
-        "total": 600,
+        "total": 616,
         "technical": 9,
         "flagrant": 0
       },
       "points": {
-        "total": 1857,
-        "inPaint": 690,
-        "offTurnovers": 384,
-        "fastBreak": 235
+        "total": 1918,
+        "inPaint": 714,
+        "offTurnovers": 397,
+        "fastBreak": 247
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 46.4,
+        "effectiveFieldGoalPct": 46.3,
         "turnoverRatio": 0.21,
-        "offensiveReboundPct": 36.1,
-        "freeThrowRate": 40.1
+        "offensiveReboundPct": 35.7,
+        "freeThrowRate": 40.9
       }
     },
     "opponentStats": {
-      "assists": 443,
-      "blocks": 94,
-      "steals": 210,
-      "possessions": 1926,
-      "trueShooting": 59.4,
-      "rating": 116.3,
+      "assists": 446,
+      "blocks": 95,
+      "steals": 218,
+      "possessions": 1986,
+      "trueShooting": 59.1,
+      "rating": 115.7,
       "fieldGoals": {
-        "made": 738,
-        "attempted": 1546,
-        "pct": 47.7
+        "made": 756,
+        "attempted": 1596,
+        "pct": 47.4
       },
       "twoPointFieldGoals": {
-        "made": 531,
-        "attempted": 954,
-        "pct": 55.7
+        "made": 546,
+        "attempted": 989,
+        "pct": 55.2
       },
       "threePointFieldGoals": {
-        "made": 207,
-        "attempted": 592,
-        "pct": 35
+        "made": 210,
+        "attempted": 607,
+        "pct": 34.6
       },
       "freeThrows": {
-        "made": 556,
-        "attempted": 768,
-        "pct": 72.4
+        "made": 576,
+        "attempted": 792,
+        "pct": 72.7
       },
       "rebounds": {
-        "offensive": 312,
-        "defensive": 663,
-        "total": 975
+        "offensive": 323,
+        "defensive": 685,
+        "total": 1008
       },
       "turnovers": {
-        "total": 374,
-        "teamTotal": 23
+        "total": 385,
+        "teamTotal": 26
       },
       "fouls": {
-        "total": 541,
+        "total": 564,
         "technical": 9,
         "flagrant": 0
       },
       "points": {
-        "total": 2239,
-        "inPaint": 976,
-        "offTurnovers": 466,
-        "fastBreak": 386
+        "total": 2298,
+        "inPaint": 1002,
+        "offTurnovers": 485,
+        "fastBreak": 407
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.4,
+        "effectiveFieldGoalPct": 53.9,
         "turnoverRatio": 0.19,
         "offensiveReboundPct": 32,
-        "freeThrowRate": 49.7
+        "freeThrowRate": 49.6
       }
     }
   },
@@ -33725,117 +33725,117 @@
     "teamId": 282,
     "team": "Stephen F. Austin",
     "conference": "Southland",
-    "games": 30,
-    "wins": 26,
+    "games": 31,
+    "wins": 27,
     "losses": 4,
-    "totalMinutes": 1200,
-    "pace": 66.7,
+    "totalMinutes": 1240,
+    "pace": 66.5,
     "teamStats": {
-      "assists": 419,
-      "blocks": 109,
-      "steals": 210,
-      "possessions": 1999,
-      "trueShooting": 55.2,
-      "rating": 116.3,
+      "assists": 432,
+      "blocks": 113,
+      "steals": 213,
+      "possessions": 2060,
+      "trueShooting": 55.3,
+      "rating": 116.6,
       "fieldGoals": {
-        "made": 840,
-        "attempted": 1864,
-        "pct": 45.1
+        "made": 867,
+        "attempted": 1920,
+        "pct": 45.2
       },
       "twoPointFieldGoals": {
-        "made": 570,
-        "attempted": 1121,
-        "pct": 50.8
+        "made": 585,
+        "attempted": 1153,
+        "pct": 50.7
       },
       "threePointFieldGoals": {
-        "made": 270,
-        "attempted": 743,
-        "pct": 36.3
+        "made": 282,
+        "attempted": 767,
+        "pct": 36.8
       },
       "freeThrows": {
-        "made": 375,
-        "attempted": 552,
+        "made": 385,
+        "attempted": 567,
         "pct": 67.9
       },
       "rebounds": {
-        "offensive": 388,
-        "defensive": 753,
-        "total": 1141
+        "offensive": 399,
+        "defensive": 781,
+        "total": 1180
       },
       "turnovers": {
-        "total": 277,
-        "teamTotal": 15
+        "total": 285,
+        "teamTotal": 16
       },
       "fouls": {
-        "total": 483,
+        "total": 498,
         "technical": 0,
         "flagrant": 0
       },
       "points": {
-        "total": 2325,
-        "inPaint": 974,
-        "offTurnovers": 438,
-        "fastBreak": 229
+        "total": 2401,
+        "inPaint": 994,
+        "offTurnovers": 446,
+        "fastBreak": 244
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52.3,
+        "effectiveFieldGoalPct": 52.5,
         "turnoverRatio": 0.14,
-        "offensiveReboundPct": 34,
-        "freeThrowRate": 29.6
+        "offensiveReboundPct": 33.8,
+        "freeThrowRate": 29.5
       }
     },
     "opponentStats": {
-      "assists": 325,
-      "blocks": 106,
-      "steals": 154,
-      "possessions": 2002,
-      "trueShooting": 51,
-      "rating": 98.6,
+      "assists": 338,
+      "blocks": 108,
+      "steals": 157,
+      "possessions": 2063,
+      "trueShooting": 51.1,
+      "rating": 99,
       "fieldGoals": {
-        "made": 712,
-        "attempted": 1706,
-        "pct": 41.7
+        "made": 741,
+        "attempted": 1765,
+        "pct": 42
       },
       "twoPointFieldGoals": {
-        "made": 540,
-        "attempted": 1115,
-        "pct": 48.4
+        "made": 562,
+        "attempted": 1149,
+        "pct": 48.9
       },
       "threePointFieldGoals": {
-        "made": 172,
-        "attempted": 591,
+        "made": 179,
+        "attempted": 616,
         "pct": 29.1
       },
       "freeThrows": {
-        "made": 378,
-        "attempted": 522,
-        "pct": 72.4
+        "made": 381,
+        "attempted": 531,
+        "pct": 71.8
       },
       "rebounds": {
-        "offensive": 295,
-        "defensive": 694,
-        "total": 989
+        "offensive": 302,
+        "defensive": 715,
+        "total": 1017
       },
       "turnovers": {
-        "total": 356,
+        "total": 360,
         "teamTotal": 18
       },
       "fouls": {
-        "total": 466,
+        "total": 478,
         "technical": 3,
         "flagrant": 0
       },
       "points": {
-        "total": 1974,
-        "inPaint": 912,
-        "offTurnovers": 313,
-        "fastBreak": 214
+        "total": 2042,
+        "inPaint": 946,
+        "offTurnovers": 329,
+        "fastBreak": 226
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 46.8,
-        "turnoverRatio": 0.18,
-        "offensiveReboundPct": 29.8,
-        "freeThrowRate": 30.6
+        "effectiveFieldGoalPct": 47.1,
+        "turnoverRatio": 0.17,
+        "offensiveReboundPct": 29.7,
+        "freeThrowRate": 30.1
       }
     }
   },
@@ -35165,117 +35165,117 @@
     "teamId": 294,
     "team": "Texas A&M-Corpus Christi",
     "conference": "Southland",
-    "games": 30,
-    "wins": 16,
+    "games": 31,
+    "wins": 17,
     "losses": 14,
-    "totalMinutes": 1215,
-    "pace": 68.2,
+    "totalMinutes": 1255,
+    "pace": 68.1,
     "teamStats": {
-      "assists": 397,
-      "blocks": 90,
-      "steals": 232,
-      "possessions": 2069,
-      "trueShooting": 54.5,
-      "rating": 105.2,
+      "assists": 411,
+      "blocks": 94,
+      "steals": 242,
+      "possessions": 2136,
+      "trueShooting": 54.8,
+      "rating": 105.9,
       "fieldGoals": {
-        "made": 768,
-        "attempted": 1699,
-        "pct": 45.2
+        "made": 798,
+        "attempted": 1757,
+        "pct": 45.4
       },
       "twoPointFieldGoals": {
-        "made": 582,
-        "attempted": 1163,
-        "pct": 50
+        "made": 604,
+        "attempted": 1199,
+        "pct": 50.4
       },
       "threePointFieldGoals": {
-        "made": 186,
-        "attempted": 536,
-        "pct": 34.7
+        "made": 194,
+        "attempted": 558,
+        "pct": 34.8
       },
       "freeThrows": {
-        "made": 455,
-        "attempted": 675,
-        "pct": 67.4
+        "made": 471,
+        "attempted": 695,
+        "pct": 67.8
       },
       "rebounds": {
-        "offensive": 341,
-        "defensive": 737,
-        "total": 1078
+        "offensive": 354,
+        "defensive": 760,
+        "total": 1114
       },
       "turnovers": {
-        "total": 389,
+        "total": 402,
         "teamTotal": 21
       },
       "fouls": {
-        "total": 617,
+        "total": 634,
         "technical": 4,
         "flagrant": 3
       },
       "points": {
-        "total": 2177,
-        "inPaint": 1064,
-        "offTurnovers": 502,
-        "fastBreak": 396
+        "total": 2261,
+        "inPaint": 1108,
+        "offTurnovers": 524,
+        "fastBreak": 410
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 50.7,
+        "effectiveFieldGoalPct": 50.9,
         "turnoverRatio": 0.19,
-        "offensiveReboundPct": 31.6,
-        "freeThrowRate": 39.7
+        "offensiveReboundPct": 31.8,
+        "freeThrowRate": 39.6
       }
     },
     "opponentStats": {
-      "assists": 326,
+      "assists": 340,
       "blocks": 123,
-      "steals": 211,
-      "possessions": 2072,
-      "trueShooting": 53.7,
-      "rating": 98.6,
+      "steals": 221,
+      "possessions": 2138,
+      "trueShooting": 53.9,
+      "rating": 98.8,
       "fieldGoals": {
-        "made": 675,
-        "attempted": 1579,
-        "pct": 42.7
+        "made": 701,
+        "attempted": 1629,
+        "pct": 43
       },
       "twoPointFieldGoals": {
-        "made": 506,
-        "attempted": 1019,
-        "pct": 49.7
+        "made": 523,
+        "attempted": 1046,
+        "pct": 50
       },
       "threePointFieldGoals": {
-        "made": 169,
-        "attempted": 560,
-        "pct": 30.2
+        "made": 178,
+        "attempted": 583,
+        "pct": 30.5
       },
       "freeThrows": {
-        "made": 523,
-        "attempted": 731,
-        "pct": 71.5
+        "made": 533,
+        "attempted": 752,
+        "pct": 70.9
       },
       "rebounds": {
-        "offensive": 273,
-        "defensive": 708,
-        "total": 981
+        "offensive": 279,
+        "defensive": 722,
+        "total": 1001
       },
       "turnovers": {
-        "total": 423,
+        "total": 436,
         "teamTotal": 19
       },
       "fouls": {
-        "total": 562,
+        "total": 579,
         "technical": 4,
         "flagrant": 1
       },
       "points": {
-        "total": 2042,
-        "inPaint": 906,
-        "offTurnovers": 417,
-        "fastBreak": 295
+        "total": 2113,
+        "inPaint": 936,
+        "offTurnovers": 437,
+        "fastBreak": 309
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 48.1,
+        "effectiveFieldGoalPct": 48.5,
         "turnoverRatio": 0.2,
-        "offensiveReboundPct": 27.8,
-        "freeThrowRate": 46.3
+        "offensiveReboundPct": 27.9,
+        "freeThrowRate": 46.2
       }
     }
   },
@@ -39005,117 +39005,117 @@
     "teamId": 326,
     "team": "UT Rio Grande Valley",
     "conference": "Southland",
-    "games": 30,
-    "wins": 17,
+    "games": 31,
+    "wins": 18,
     "losses": 13,
-    "totalMinutes": 1200,
-    "pace": 67.3,
+    "totalMinutes": 1240,
+    "pace": 67.2,
     "teamStats": {
-      "assists": 497,
-      "blocks": 86,
-      "steals": 179,
-      "possessions": 2019,
+      "assists": 513,
+      "blocks": 88,
+      "steals": 186,
+      "possessions": 2083,
       "trueShooting": 58.8,
-      "rating": 112.2,
+      "rating": 112.3,
       "fieldGoals": {
-        "made": 803,
-        "attempted": 1706,
+        "made": 832,
+        "attempted": 1765,
         "pct": 47.1
       },
       "twoPointFieldGoals": {
-        "made": 524,
-        "attempted": 955,
+        "made": 544,
+        "attempted": 991,
         "pct": 54.9
       },
       "threePointFieldGoals": {
-        "made": 279,
-        "attempted": 751,
+        "made": 288,
+        "attempted": 774,
         "pct": 37.2
       },
       "freeThrows": {
-        "made": 380,
-        "attempted": 502,
-        "pct": 75.7
+        "made": 387,
+        "attempted": 512,
+        "pct": 75.6
       },
       "rebounds": {
-        "offensive": 295,
-        "defensive": 752,
-        "total": 1047
+        "offensive": 302,
+        "defensive": 776,
+        "total": 1078
       },
       "turnovers": {
-        "total": 353,
-        "teamTotal": 31
+        "total": 362,
+        "teamTotal": 32
       },
       "fouls": {
-        "total": 537,
+        "total": 556,
         "technical": 7,
         "flagrant": 1
       },
       "points": {
-        "total": 2265,
-        "inPaint": 928,
-        "offTurnovers": 385,
-        "fastBreak": 272
+        "total": 2339,
+        "inPaint": 966,
+        "offTurnovers": 401,
+        "fastBreak": 279
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 55.2,
+        "effectiveFieldGoalPct": 55.3,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 28.2,
-        "freeThrowRate": 29.4
+        "offensiveReboundPct": 28,
+        "freeThrowRate": 29
       }
     },
     "opponentStats": {
-      "assists": 413,
-      "blocks": 95,
-      "steals": 184,
-      "possessions": 2019,
-      "trueShooting": 51.9,
-      "rating": 103,
+      "assists": 427,
+      "blocks": 97,
+      "steals": 188,
+      "possessions": 2083,
+      "trueShooting": 52,
+      "rating": 102.8,
       "fieldGoals": {
-        "made": 709,
-        "attempted": 1716,
-        "pct": 41.3
+        "made": 732,
+        "attempted": 1764,
+        "pct": 41.5
       },
       "twoPointFieldGoals": {
-        "made": 503,
-        "attempted": 1038,
-        "pct": 48.5
+        "made": 523,
+        "attempted": 1076,
+        "pct": 48.6
       },
       "threePointFieldGoals": {
-        "made": 206,
-        "attempted": 678,
+        "made": 209,
+        "attempted": 688,
         "pct": 30.4
       },
       "freeThrows": {
-        "made": 455,
-        "attempted": 650,
-        "pct": 70
+        "made": 468,
+        "attempted": 672,
+        "pct": 69.6
       },
       "rebounds": {
-        "offensive": 340,
-        "defensive": 674,
-        "total": 1014
+        "offensive": 348,
+        "defensive": 700,
+        "total": 1048
       },
       "turnovers": {
-        "total": 329,
-        "teamTotal": 10
+        "total": 342,
+        "teamTotal": 11
       },
       "fouls": {
-        "total": 469,
+        "total": 484,
         "technical": 3,
         "flagrant": 1
       },
       "points": {
-        "total": 2079,
-        "inPaint": 850,
-        "offTurnovers": 364,
-        "fastBreak": 281
+        "total": 2141,
+        "inPaint": 884,
+        "offTurnovers": 377,
+        "fastBreak": 292
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 47.3,
+        "effectiveFieldGoalPct": 47.4,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 33.5,
-        "freeThrowRate": 37.9
+        "offensiveReboundPct": 33.2,
+        "freeThrowRate": 38.1
       }
     }
   },
@@ -41285,117 +41285,117 @@
     "teamId": 345,
     "team": "Weber State",
     "conference": "Big Sky",
-    "games": 30,
+    "games": 31,
     "wins": 16,
-    "losses": 14,
-    "totalMinutes": 1245,
+    "losses": 15,
+    "totalMinutes": 1285,
     "pace": 68.5,
     "teamStats": {
-      "assists": 415,
+      "assists": 423,
       "blocks": 48,
-      "steals": 219,
-      "possessions": 2132,
-      "trueShooting": 57.3,
-      "rating": 115.3,
+      "steals": 224,
+      "possessions": 2200,
+      "trueShooting": 56.9,
+      "rating": 114.5,
       "fieldGoals": {
-        "made": 867,
-        "attempted": 1841,
-        "pct": 47.1
+        "made": 891,
+        "attempted": 1903,
+        "pct": 46.8
       },
       "twoPointFieldGoals": {
-        "made": 649,
-        "attempted": 1228,
-        "pct": 52.9
+        "made": 668,
+        "attempted": 1269,
+        "pct": 52.6
       },
       "threePointFieldGoals": {
-        "made": 218,
-        "attempted": 613,
-        "pct": 35.6
+        "made": 223,
+        "attempted": 634,
+        "pct": 35.2
       },
       "freeThrows": {
-        "made": 507,
-        "attempted": 693,
-        "pct": 73.2
+        "made": 514,
+        "attempted": 704,
+        "pct": 73
       },
       "rebounds": {
-        "offensive": 353,
-        "defensive": 769,
-        "total": 1122
+        "offensive": 364,
+        "defensive": 791,
+        "total": 1155
       },
       "turnovers": {
-        "total": 331,
-        "teamTotal": 9
+        "total": 345,
+        "teamTotal": 10
       },
       "fouls": {
-        "total": 548,
+        "total": 562,
         "technical": 7,
         "flagrant": 0
       },
       "points": {
-        "total": 2459,
-        "inPaint": 1194,
-        "offTurnovers": 428,
+        "total": 2519,
+        "inPaint": 1228,
+        "offTurnovers": 432,
         "fastBreak": 429
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 53,
+        "effectiveFieldGoalPct": 52.7,
         "turnoverRatio": 0.16,
         "offensiveReboundPct": 31.5,
-        "freeThrowRate": 37.6
+        "freeThrowRate": 37
       }
     },
     "opponentStats": {
-      "assists": 397,
-      "blocks": 128,
-      "steals": 187,
-      "possessions": 2135,
-      "trueShooting": 56.6,
-      "rating": 108,
+      "assists": 422,
+      "blocks": 133,
+      "steals": 198,
+      "possessions": 2203,
+      "trueShooting": 56.8,
+      "rating": 108.5,
       "fieldGoals": {
-        "made": 816,
-        "attempted": 1765,
-        "pct": 46.2
+        "made": 850,
+        "attempted": 1826,
+        "pct": 46.5
       },
       "twoPointFieldGoals": {
-        "made": 593,
-        "attempted": 1060,
-        "pct": 55.9
+        "made": 620,
+        "attempted": 1099,
+        "pct": 56.4
       },
       "threePointFieldGoals": {
-        "made": 223,
-        "attempted": 705,
+        "made": 230,
+        "attempted": 727,
         "pct": 31.6
       },
       "freeThrows": {
-        "made": 451,
-        "attempted": 619,
-        "pct": 72.9
+        "made": 460,
+        "attempted": 633,
+        "pct": 72.7
       },
       "rebounds": {
-        "offensive": 269,
-        "defensive": 713,
-        "total": 982
+        "offensive": 276,
+        "defensive": 742,
+        "total": 1018
       },
       "turnovers": {
-        "total": 360,
+        "total": 367,
         "teamTotal": 5
       },
       "fouls": {
-        "total": 556,
+        "total": 566,
         "technical": 5,
         "flagrant": 2
       },
       "points": {
-        "total": 2306,
-        "inPaint": 1064,
-        "offTurnovers": 379,
-        "fastBreak": 284
+        "total": 2390,
+        "inPaint": 1114,
+        "offTurnovers": 398,
+        "fastBreak": 300
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 52.5,
+        "effectiveFieldGoalPct": 52.8,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 27.4,
-        "freeThrowRate": 35.1
+        "offensiveReboundPct": 27.1,
+        "freeThrowRate": 34.7
       }
     }
   },
