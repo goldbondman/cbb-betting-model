@@ -4,53 +4,53 @@
     "teamId": 89,
     "team": "Florida International",
     "conference": "CUSA",
-    "trackedShots": 1794,
-    "freeThrowRate": 40.1,
-    "assistedPct": 23.4,
+    "trackedShots": 1984,
+    "freeThrowRate": 39.2,
+    "assistedPct": 22.9,
     "dunks": {
-      "attempted": 79,
-      "made": 72,
+      "attempted": 90,
+      "made": 82,
       "pct": 91.1,
-      "assisted": 58,
-      "assistedPct": 80.6
+      "assisted": 65,
+      "assistedPct": 79.3
     },
     "layups": {
-      "attempted": 668,
-      "made": 352,
-      "pct": 52.7,
-      "assisted": 134,
-      "assistedPct": 38.1
+      "attempted": 755,
+      "made": 399,
+      "pct": 52.8,
+      "assisted": 148,
+      "assistedPct": 37.1
     },
     "tipIns": {
-      "attempted": 56,
-      "made": 39,
-      "pct": 69.6
+      "attempted": 63,
+      "made": 43,
+      "pct": 68.3
     },
     "twoPointJumpers": {
-      "attempted": 378,
-      "made": 135,
-      "pct": 35.7,
-      "assisted": 40,
-      "assistedPct": 29.6
+      "attempted": 414,
+      "made": 150,
+      "pct": 36.2,
+      "assisted": 42,
+      "assistedPct": 28
     },
     "threePointJumpers": {
-      "attempted": 613,
-      "made": 219,
-      "pct": 35.7,
-      "assisted": 187,
+      "attempted": 662,
+      "made": 233,
+      "pct": 35.2,
+      "assisted": 199,
       "assistedPct": 85.4
     },
     "freeThrows": {
-      "attempted": 720,
-      "made": 498,
-      "pct": 69.2
+      "attempted": 777,
+      "made": 535,
+      "pct": 68.9
     },
     "attemptsBreakdown": {
-      "dunks": 4.4,
-      "layups": 37.2,
-      "tipIns": 3.1,
-      "twoPointJumpers": 21.1,
-      "threePointJumpers": 34.2
+      "dunks": 4.5,
+      "layups": 38.1,
+      "tipIns": 3.2,
+      "twoPointJumpers": 20.9,
+      "threePointJumpers": 33.4
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 76,
     "team": "East Texas A&M",
     "conference": "Southland",
-    "trackedShots": 1782,
-    "freeThrowRate": 30.8,
+    "trackedShots": 1832,
+    "freeThrowRate": 31.1,
     "assistedPct": 27.6,
     "dunks": {
-      "attempted": 84,
-      "made": 73,
-      "pct": 86.9,
+      "attempted": 85,
+      "made": 74,
+      "pct": 87.1,
       "assisted": 54,
-      "assistedPct": 74
+      "assistedPct": 73
     },
     "layups": {
-      "attempted": 527,
-      "made": 288,
-      "pct": 54.6,
-      "assisted": 160,
-      "assistedPct": 55.6
+      "attempted": 546,
+      "made": 301,
+      "pct": 55.1,
+      "assisted": 165,
+      "assistedPct": 54.8
     },
     "tipIns": {
-      "attempted": 52,
+      "attempted": 53,
       "made": 37,
-      "pct": 71.2
+      "pct": 69.8
     },
     "twoPointJumpers": {
-      "attempted": 293,
-      "made": 104,
-      "pct": 35.5,
+      "attempted": 299,
+      "made": 107,
+      "pct": 35.8,
       "assisted": 51,
-      "assistedPct": 49
+      "assistedPct": 47.7
     },
     "threePointJumpers": {
-      "attempted": 826,
-      "made": 265,
-      "pct": 32.1,
-      "assisted": 226,
-      "assistedPct": 85.3
+      "attempted": 849,
+      "made": 274,
+      "pct": 32.3,
+      "assisted": 235,
+      "assistedPct": 85.8
     },
     "freeThrows": {
-      "attempted": 549,
-      "made": 376,
-      "pct": 68.5
+      "attempted": 570,
+      "made": 386,
+      "pct": 67.7
     },
     "attemptsBreakdown": {
-      "dunks": 4.7,
-      "layups": 29.6,
+      "dunks": 4.6,
+      "layups": 29.8,
       "tipIns": 2.9,
-      "twoPointJumpers": 16.4,
-      "threePointJumpers": 46.4
+      "twoPointJumpers": 16.3,
+      "threePointJumpers": 46.3
     }
   }
 ]

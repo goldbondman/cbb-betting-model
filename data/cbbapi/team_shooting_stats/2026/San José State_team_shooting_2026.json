@@ -4,53 +4,53 @@
     "teamId": 260,
     "team": "San José State",
     "conference": "Mountain West",
-    "trackedShots": 1652,
-    "freeThrowRate": 32.8,
-    "assistedPct": 18.9,
+    "trackedShots": 1888,
+    "freeThrowRate": 33.5,
+    "assistedPct": 18.6,
     "dunks": {
-      "attempted": 30,
-      "made": 27,
-      "pct": 90,
-      "assisted": 22,
-      "assistedPct": 81.5
+      "attempted": 36,
+      "made": 32,
+      "pct": 88.9,
+      "assisted": 27,
+      "assistedPct": 84.4
     },
     "layups": {
-      "attempted": 430,
-      "made": 233,
-      "pct": 54.2,
-      "assisted": 80,
-      "assistedPct": 34.3
+      "attempted": 511,
+      "made": 284,
+      "pct": 55.6,
+      "assisted": 89,
+      "assistedPct": 31.3
     },
     "tipIns": {
-      "attempted": 44,
-      "made": 26,
-      "pct": 59.1
+      "attempted": 45,
+      "made": 27,
+      "pct": 60
     },
     "twoPointJumpers": {
-      "attempted": 510,
-      "made": 195,
-      "pct": 38.2,
-      "assisted": 33,
-      "assistedPct": 16.9
+      "attempted": 574,
+      "made": 223,
+      "pct": 38.9,
+      "assisted": 38,
+      "assistedPct": 17
     },
     "threePointJumpers": {
-      "attempted": 638,
-      "made": 233,
-      "pct": 36.5,
-      "assisted": 177,
-      "assistedPct": 76
+      "attempted": 722,
+      "made": 259,
+      "pct": 35.9,
+      "assisted": 197,
+      "assistedPct": 76.1
     },
     "freeThrows": {
-      "attempted": 542,
-      "made": 404,
-      "pct": 74.5
+      "attempted": 633,
+      "made": 463,
+      "pct": 73.1
     },
     "attemptsBreakdown": {
-      "dunks": 1.8,
-      "layups": 26,
-      "tipIns": 2.7,
-      "twoPointJumpers": 30.9,
-      "threePointJumpers": 38.6
+      "dunks": 1.9,
+      "layups": 27.1,
+      "tipIns": 2.4,
+      "twoPointJumpers": 30.4,
+      "threePointJumpers": 38.2
     }
   }
 ]

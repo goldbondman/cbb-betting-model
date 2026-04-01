@@ -4,53 +4,53 @@
     "teamId": 292,
     "team": "Tennessee",
     "conference": "SEC",
-    "trackedShots": 1771,
-    "freeThrowRate": 39,
+    "trackedShots": 2266,
+    "freeThrowRate": 37.4,
     "assistedPct": 27.2,
     "dunks": {
-      "attempted": 113,
-      "made": 100,
-      "pct": 88.5,
-      "assisted": 92,
-      "assistedPct": 92
+      "attempted": 163,
+      "made": 146,
+      "pct": 89.6,
+      "assisted": 132,
+      "assistedPct": 90.4
     },
     "layups": {
-      "attempted": 571,
-      "made": 309,
-      "pct": 54.1,
-      "assisted": 163,
-      "assistedPct": 52.8
+      "attempted": 692,
+      "made": 372,
+      "pct": 53.8,
+      "assisted": 193,
+      "assistedPct": 51.9
     },
     "tipIns": {
-      "attempted": 93,
-      "made": 59,
-      "pct": 63.4
+      "attempted": 123,
+      "made": 75,
+      "pct": 61
     },
     "twoPointJumpers": {
-      "attempted": 422,
-      "made": 159,
-      "pct": 37.7,
-      "assisted": 62,
-      "assistedPct": 39
+      "attempted": 561,
+      "made": 208,
+      "pct": 37.1,
+      "assisted": 92,
+      "assistedPct": 44.2
     },
     "threePointJumpers": {
-      "attempted": 572,
-      "made": 196,
-      "pct": 34.3,
-      "assisted": 164,
-      "assistedPct": 83.7
+      "attempted": 727,
+      "made": 243,
+      "pct": 33.4,
+      "assisted": 200,
+      "assistedPct": 82.3
     },
     "freeThrows": {
-      "attempted": 690,
-      "made": 480,
-      "pct": 69.6
+      "attempted": 848,
+      "made": 586,
+      "pct": 69.1
     },
     "attemptsBreakdown": {
-      "dunks": 6.4,
-      "layups": 32.2,
-      "tipIns": 5.3,
-      "twoPointJumpers": 23.8,
-      "threePointJumpers": 32.3
+      "dunks": 7.2,
+      "layups": 30.5,
+      "tipIns": 5.4,
+      "twoPointJumpers": 24.8,
+      "threePointJumpers": 32.1
     }
   }
 ]

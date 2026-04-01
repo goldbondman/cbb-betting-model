@@ -4,53 +4,53 @@
     "teamId": 233,
     "team": "Presbyterian",
     "conference": "Big South",
-    "trackedShots": 1691,
-    "freeThrowRate": 40.8,
-    "assistedPct": 23.1,
+    "trackedShots": 1814,
+    "freeThrowRate": 39.9,
+    "assistedPct": 23.3,
     "dunks": {
-      "attempted": 109,
-      "made": 96,
-      "pct": 88.1,
-      "assisted": 74,
-      "assistedPct": 77.1
+      "attempted": 119,
+      "made": 106,
+      "pct": 89.1,
+      "assisted": 82,
+      "assistedPct": 77.4
     },
     "layups": {
-      "attempted": 548,
-      "made": 300,
-      "pct": 54.7,
-      "assisted": 130,
-      "assistedPct": 43.3
+      "attempted": 572,
+      "made": 314,
+      "pct": 54.9,
+      "assisted": 139,
+      "assistedPct": 44.3
     },
     "tipIns": {
-      "attempted": 65,
-      "made": 51,
-      "pct": 78.5
+      "attempted": 73,
+      "made": 55,
+      "pct": 75.3
     },
     "twoPointJumpers": {
-      "attempted": 479,
-      "made": 198,
-      "pct": 41.3,
-      "assisted": 56,
-      "assistedPct": 28.3
+      "attempted": 521,
+      "made": 216,
+      "pct": 41.5,
+      "assisted": 58,
+      "assistedPct": 26.9
     },
     "threePointJumpers": {
-      "attempted": 490,
-      "made": 155,
-      "pct": 31.6,
-      "assisted": 130,
-      "assistedPct": 83.9
+      "attempted": 529,
+      "made": 170,
+      "pct": 32.1,
+      "assisted": 144,
+      "assistedPct": 84.7
     },
     "freeThrows": {
-      "attempted": 690,
-      "made": 471,
-      "pct": 68.3
+      "attempted": 724,
+      "made": 496,
+      "pct": 68.5
     },
     "attemptsBreakdown": {
-      "dunks": 6.4,
-      "layups": 32.4,
-      "tipIns": 3.8,
-      "twoPointJumpers": 28.3,
-      "threePointJumpers": 29
+      "dunks": 6.6,
+      "layups": 31.5,
+      "tipIns": 4,
+      "twoPointJumpers": 28.7,
+      "threePointJumpers": 29.2
     }
   }
 ]

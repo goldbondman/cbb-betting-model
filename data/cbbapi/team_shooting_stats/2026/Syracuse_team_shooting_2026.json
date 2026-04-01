@@ -4,53 +4,53 @@
     "teamId": 286,
     "team": "Syracuse",
     "conference": "ACC",
-    "trackedShots": 1698,
-    "freeThrowRate": 36.4,
-    "assistedPct": 21.8,
+    "trackedShots": 1878,
+    "freeThrowRate": 35.1,
+    "assistedPct": 21.5,
     "dunks": {
-      "attempted": 118,
-      "made": 107,
-      "pct": 90.7,
-      "assisted": 86,
-      "assistedPct": 80.4
+      "attempted": 132,
+      "made": 119,
+      "pct": 90.2,
+      "assisted": 97,
+      "assistedPct": 81.5
     },
     "layups": {
-      "attempted": 523,
-      "made": 292,
+      "attempted": 554,
+      "made": 309,
       "pct": 55.8,
-      "assisted": 85,
-      "assistedPct": 29.1
+      "assisted": 89,
+      "assistedPct": 28.8
     },
     "tipIns": {
-      "attempted": 51,
-      "made": 40,
-      "pct": 78.4
+      "attempted": 62,
+      "made": 49,
+      "pct": 79
     },
     "twoPointJumpers": {
-      "attempted": 385,
-      "made": 151,
-      "pct": 39.2,
-      "assisted": 32,
-      "assistedPct": 21.2
+      "attempted": 432,
+      "made": 167,
+      "pct": 38.7,
+      "assisted": 34,
+      "assistedPct": 20.4
     },
     "threePointJumpers": {
-      "attempted": 621,
-      "made": 209,
-      "pct": 33.7,
-      "assisted": 168,
-      "assistedPct": 80.4
+      "attempted": 698,
+      "made": 229,
+      "pct": 32.8,
+      "assisted": 184,
+      "assistedPct": 80.3
     },
     "freeThrows": {
-      "attempted": 618,
-      "made": 395,
-      "pct": 63.9
+      "attempted": 659,
+      "made": 427,
+      "pct": 64.8
     },
     "attemptsBreakdown": {
-      "dunks": 6.9,
-      "layups": 30.8,
-      "tipIns": 3,
-      "twoPointJumpers": 22.7,
-      "threePointJumpers": 36.6
+      "dunks": 7,
+      "layups": 29.5,
+      "tipIns": 3.3,
+      "twoPointJumpers": 23,
+      "threePointJumpers": 37.2
     }
   }
 ]

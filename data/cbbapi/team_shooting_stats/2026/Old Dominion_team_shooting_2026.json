@@ -4,53 +4,53 @@
     "teamId": 219,
     "team": "Old Dominion",
     "conference": "Sun Belt",
-    "trackedShots": 1862,
-    "freeThrowRate": 34.4,
-    "assistedPct": 20.5,
+    "trackedShots": 1978,
+    "freeThrowRate": 34.7,
+    "assistedPct": 20.9,
     "dunks": {
-      "attempted": 79,
-      "made": 69,
-      "pct": 87.3,
-      "assisted": 53,
-      "assistedPct": 76.8
+      "attempted": 80,
+      "made": 70,
+      "pct": 87.5,
+      "assisted": 54,
+      "assistedPct": 77.1
     },
     "layups": {
-      "attempted": 566,
-      "made": 319,
-      "pct": 56.4,
-      "assisted": 87,
-      "assistedPct": 27.3
+      "attempted": 600,
+      "made": 338,
+      "pct": 56.3,
+      "assisted": 94,
+      "assistedPct": 27.8
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 23,
-      "pct": 85.2
+      "attempted": 31,
+      "made": 25,
+      "pct": 80.6
     },
     "twoPointJumpers": {
-      "attempted": 518,
-      "made": 184,
-      "pct": 35.5,
-      "assisted": 44,
-      "assistedPct": 23.9
+      "attempted": 549,
+      "made": 191,
+      "pct": 34.8,
+      "assisted": 46,
+      "assistedPct": 24.1
     },
     "threePointJumpers": {
-      "attempted": 672,
-      "made": 228,
-      "pct": 33.9,
-      "assisted": 197,
-      "assistedPct": 86.4
+      "attempted": 718,
+      "made": 254,
+      "pct": 35.4,
+      "assisted": 220,
+      "assistedPct": 86.6
     },
     "freeThrows": {
-      "attempted": 640,
-      "made": 469,
-      "pct": 73.3
+      "attempted": 687,
+      "made": 504,
+      "pct": 73.4
     },
     "attemptsBreakdown": {
-      "dunks": 4.2,
-      "layups": 30.4,
-      "tipIns": 1.5,
+      "dunks": 4,
+      "layups": 30.3,
+      "tipIns": 1.6,
       "twoPointJumpers": 27.8,
-      "threePointJumpers": 36.1
+      "threePointJumpers": 36.3
     }
   }
 ]

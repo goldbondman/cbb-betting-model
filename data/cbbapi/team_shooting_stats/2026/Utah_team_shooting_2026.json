@@ -4,53 +4,53 @@
     "teamId": 331,
     "team": "Utah",
     "conference": "Big 12",
-    "trackedShots": 1652,
+    "trackedShots": 1814,
     "freeThrowRate": 31.3,
-    "assistedPct": 22.7,
+    "assistedPct": 22.9,
     "dunks": {
-      "attempted": 89,
-      "made": 82,
-      "pct": 92.1,
-      "assisted": 59,
-      "assistedPct": 72
+      "attempted": 98,
+      "made": 88,
+      "pct": 89.8,
+      "assisted": 63,
+      "assistedPct": 71.6
     },
     "layups": {
-      "attempted": 536,
-      "made": 276,
+      "attempted": 575,
+      "made": 296,
       "pct": 51.5,
-      "assisted": 95,
-      "assistedPct": 34.4
+      "assisted": 106,
+      "assistedPct": 35.8
     },
     "tipIns": {
-      "attempted": 53,
-      "made": 36,
-      "pct": 67.9
+      "attempted": 56,
+      "made": 37,
+      "pct": 66.1
     },
     "twoPointJumpers": {
-      "attempted": 346,
-      "made": 130,
-      "pct": 37.6,
-      "assisted": 30,
-      "assistedPct": 23.1
+      "attempted": 409,
+      "made": 164,
+      "pct": 40.1,
+      "assisted": 39,
+      "assistedPct": 23.8
     },
     "threePointJumpers": {
-      "attempted": 628,
-      "made": 221,
-      "pct": 35.2,
-      "assisted": 191,
-      "assistedPct": 86.4
+      "attempted": 676,
+      "made": 239,
+      "pct": 35.4,
+      "assisted": 207,
+      "assistedPct": 86.6
     },
     "freeThrows": {
-      "attempted": 517,
-      "made": 375,
-      "pct": 72.5
+      "attempted": 567,
+      "made": 418,
+      "pct": 73.7
     },
     "attemptsBreakdown": {
       "dunks": 5.4,
-      "layups": 32.4,
-      "tipIns": 3.2,
-      "twoPointJumpers": 20.9,
-      "threePointJumpers": 38
+      "layups": 31.7,
+      "tipIns": 3.1,
+      "twoPointJumpers": 22.5,
+      "threePointJumpers": 37.3
     }
   }
 ]

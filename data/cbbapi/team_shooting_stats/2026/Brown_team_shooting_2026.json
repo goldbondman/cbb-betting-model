@@ -4,9 +4,9 @@
     "teamId": 30,
     "team": "Brown",
     "conference": "Ivy",
-    "trackedShots": 1537,
+    "trackedShots": 1590,
     "freeThrowRate": 27.7,
-    "assistedPct": 25.7,
+    "assistedPct": 25.9,
     "dunks": {
       "attempted": 55,
       "made": 48,
@@ -15,11 +15,11 @@
       "assistedPct": 83.3
     },
     "layups": {
-      "attempted": 615,
-      "made": 331,
-      "pct": 53.8,
-      "assisted": 166,
-      "assistedPct": 50.2
+      "attempted": 647,
+      "made": 349,
+      "pct": 53.9,
+      "assisted": 177,
+      "assistedPct": 50.7
     },
     "tipIns": {
       "attempted": 17,
@@ -27,29 +27,29 @@
       "pct": 82.4
     },
     "twoPointJumpers": {
-      "attempted": 281,
-      "made": 107,
-      "pct": 38.1,
-      "assisted": 32,
-      "assistedPct": 29.9
+      "attempted": 283,
+      "made": 108,
+      "pct": 38.2,
+      "assisted": 33,
+      "assistedPct": 30.6
     },
     "threePointJumpers": {
-      "attempted": 569,
-      "made": 182,
-      "pct": 32,
-      "assisted": 157,
-      "assistedPct": 86.3
+      "attempted": 588,
+      "made": 187,
+      "pct": 31.8,
+      "assisted": 162,
+      "assistedPct": 86.6
     },
     "freeThrows": {
-      "attempted": 425,
-      "made": 293,
-      "pct": 68.9
+      "attempted": 441,
+      "made": 301,
+      "pct": 68.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 40,
+      "dunks": 3.5,
+      "layups": 40.7,
       "tipIns": 1.1,
-      "twoPointJumpers": 18.3,
+      "twoPointJumpers": 17.8,
       "threePointJumpers": 37
     }
   }

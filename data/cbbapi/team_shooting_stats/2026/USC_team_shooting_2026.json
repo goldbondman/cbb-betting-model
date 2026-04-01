@@ -4,53 +4,53 @@
     "teamId": 323,
     "team": "USC",
     "conference": "Big Ten",
-    "trackedShots": 1700,
-    "freeThrowRate": 45.5,
-    "assistedPct": 24.8,
+    "trackedShots": 1889,
+    "freeThrowRate": 44,
+    "assistedPct": 25,
     "dunks": {
-      "attempted": 122,
-      "made": 107,
-      "pct": 87.7,
-      "assisted": 86,
-      "assistedPct": 80.4
+      "attempted": 134,
+      "made": 117,
+      "pct": 87.3,
+      "assisted": 95,
+      "assistedPct": 81.2
     },
     "layups": {
-      "attempted": 498,
-      "made": 279,
-      "pct": 56,
-      "assisted": 144,
-      "assistedPct": 51.6
+      "attempted": 541,
+      "made": 300,
+      "pct": 55.5,
+      "assisted": 157,
+      "assistedPct": 52.3
     },
     "tipIns": {
-      "attempted": 74,
-      "made": 46,
-      "pct": 62.2
+      "attempted": 80,
+      "made": 47,
+      "pct": 58.8
     },
     "twoPointJumpers": {
-      "attempted": 436,
-      "made": 165,
-      "pct": 37.8,
-      "assisted": 56,
-      "assistedPct": 33.9
+      "attempted": 500,
+      "made": 194,
+      "pct": 38.8,
+      "assisted": 70,
+      "assistedPct": 36.1
     },
     "threePointJumpers": {
-      "attempted": 570,
-      "made": 181,
-      "pct": 31.8,
-      "assisted": 136,
-      "assistedPct": 75.1
+      "attempted": 634,
+      "made": 199,
+      "pct": 31.4,
+      "assisted": 150,
+      "assistedPct": 75.4
     },
     "freeThrows": {
-      "attempted": 773,
-      "made": 559,
-      "pct": 72.3
+      "attempted": 832,
+      "made": 602,
+      "pct": 72.4
     },
     "attemptsBreakdown": {
-      "dunks": 7.2,
-      "layups": 29.3,
-      "tipIns": 4.4,
-      "twoPointJumpers": 25.6,
-      "threePointJumpers": 33.5
+      "dunks": 7.1,
+      "layups": 28.6,
+      "tipIns": 4.2,
+      "twoPointJumpers": 26.5,
+      "threePointJumpers": 33.6
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 165,
     "team": "Mercyhurst",
     "conference": "NEC",
-    "trackedShots": 1819,
+    "trackedShots": 1984,
     "freeThrowRate": 24.9,
-    "assistedPct": 23.2,
+    "assistedPct": 23.4,
     "dunks": {
-      "attempted": 14,
-      "made": 13,
-      "pct": 92.9,
-      "assisted": 10,
-      "assistedPct": 76.9
+      "attempted": 16,
+      "made": 15,
+      "pct": 93.8,
+      "assisted": 12,
+      "assistedPct": 80
     },
     "layups": {
-      "attempted": 599,
-      "made": 338,
-      "pct": 56.4,
-      "assisted": 166,
-      "assistedPct": 49.1
+      "attempted": 650,
+      "made": 363,
+      "pct": 55.8,
+      "assisted": 178,
+      "assistedPct": 49
     },
     "tipIns": {
-      "attempted": 32,
+      "attempted": 34,
       "made": 24,
-      "pct": 75
+      "pct": 70.6
     },
     "twoPointJumpers": {
-      "attempted": 596,
-      "made": 262,
-      "pct": 44,
-      "assisted": 97,
-      "assistedPct": 37
+      "attempted": 660,
+      "made": 291,
+      "pct": 44.1,
+      "assisted": 111,
+      "assistedPct": 38.1
     },
     "threePointJumpers": {
-      "attempted": 578,
-      "made": 187,
-      "pct": 32.4,
-      "assisted": 149,
-      "assistedPct": 79.7
+      "attempted": 624,
+      "made": 204,
+      "pct": 32.7,
+      "assisted": 163,
+      "assistedPct": 79.9
     },
     "freeThrows": {
-      "attempted": 453,
-      "made": 326,
-      "pct": 72
+      "attempted": 494,
+      "made": 359,
+      "pct": 72.7
     },
     "attemptsBreakdown": {
       "dunks": 0.8,
-      "layups": 32.9,
-      "tipIns": 1.8,
-      "twoPointJumpers": 32.8,
-      "threePointJumpers": 31.8
+      "layups": 32.8,
+      "tipIns": 1.7,
+      "twoPointJumpers": 33.3,
+      "threePointJumpers": 31.5
     }
   }
 ]

@@ -4,52 +4,52 @@
     "teamId": 136,
     "team": "LSU",
     "conference": "SEC",
-    "trackedShots": 1605,
-    "freeThrowRate": 40.9,
-    "assistedPct": 24.2,
+    "trackedShots": 1783,
+    "freeThrowRate": 41.1,
+    "assistedPct": 24.1,
     "dunks": {
-      "attempted": 84,
-      "made": 78,
-      "pct": 92.9,
-      "assisted": 69,
-      "assistedPct": 88.5
+      "attempted": 89,
+      "made": 82,
+      "pct": 92.1,
+      "assisted": 73,
+      "assistedPct": 89
     },
     "layups": {
-      "attempted": 519,
-      "made": 290,
-      "pct": 55.9,
-      "assisted": 115,
-      "assistedPct": 39.7
+      "attempted": 573,
+      "made": 322,
+      "pct": 56.2,
+      "assisted": 128,
+      "assistedPct": 39.8
     },
     "tipIns": {
-      "attempted": 53,
-      "made": 44,
-      "pct": 83
+      "attempted": 60,
+      "made": 50,
+      "pct": 83.3
     },
     "twoPointJumpers": {
-      "attempted": 388,
-      "made": 145,
-      "pct": 37.4,
-      "assisted": 38,
-      "assistedPct": 26.2
+      "attempted": 437,
+      "made": 170,
+      "pct": 38.9,
+      "assisted": 44,
+      "assistedPct": 25.9
     },
     "threePointJumpers": {
-      "attempted": 561,
-      "made": 189,
-      "pct": 33.7,
-      "assisted": 167,
-      "assistedPct": 88.4
+      "attempted": 624,
+      "made": 209,
+      "pct": 33.5,
+      "assisted": 185,
+      "assistedPct": 88.5
     },
     "freeThrows": {
-      "attempted": 657,
-      "made": 504,
-      "pct": 76.7
+      "attempted": 733,
+      "made": 557,
+      "pct": 76
     },
     "attemptsBreakdown": {
-      "dunks": 5.2,
-      "layups": 32.3,
-      "tipIns": 3.3,
-      "twoPointJumpers": 24.2,
+      "dunks": 5,
+      "layups": 32.1,
+      "tipIns": 3.4,
+      "twoPointJumpers": 24.5,
       "threePointJumpers": 35
     }
   }

@@ -4,53 +4,53 @@
     "teamId": 255,
     "team": "Sam Houston",
     "conference": "CUSA",
-    "trackedShots": 1813,
-    "freeThrowRate": 34.6,
-    "assistedPct": 24.4,
+    "trackedShots": 2141,
+    "freeThrowRate": 34,
+    "assistedPct": 24.1,
     "dunks": {
-      "attempted": 56,
-      "made": 46,
-      "pct": 82.1,
-      "assisted": 34,
-      "assistedPct": 73.9
+      "attempted": 66,
+      "made": 55,
+      "pct": 83.3,
+      "assisted": 43,
+      "assistedPct": 78.2
     },
     "layups": {
-      "attempted": 645,
-      "made": 373,
-      "pct": 57.8,
-      "assisted": 168,
+      "attempted": 772,
+      "made": 427,
+      "pct": 55.3,
+      "assisted": 192,
       "assistedPct": 45
     },
     "tipIns": {
-      "attempted": 61,
-      "made": 42,
-      "pct": 68.9
+      "attempted": 76,
+      "made": 53,
+      "pct": 69.7
     },
     "twoPointJumpers": {
-      "attempted": 386,
-      "made": 148,
-      "pct": 38.3,
-      "assisted": 46,
-      "assistedPct": 31.1
+      "attempted": 450,
+      "made": 176,
+      "pct": 39.1,
+      "assisted": 54,
+      "assistedPct": 30.7
     },
     "threePointJumpers": {
-      "attempted": 665,
-      "made": 247,
-      "pct": 37.1,
-      "assisted": 195,
-      "assistedPct": 78.9
+      "attempted": 777,
+      "made": 284,
+      "pct": 36.6,
+      "assisted": 228,
+      "assistedPct": 80.3
     },
     "freeThrows": {
-      "attempted": 627,
-      "made": 461,
-      "pct": 73.5
+      "attempted": 729,
+      "made": 523,
+      "pct": 71.7
     },
     "attemptsBreakdown": {
       "dunks": 3.1,
-      "layups": 35.6,
-      "tipIns": 3.4,
-      "twoPointJumpers": 21.3,
-      "threePointJumpers": 36.7
+      "layups": 36.1,
+      "tipIns": 3.5,
+      "twoPointJumpers": 21,
+      "threePointJumpers": 36.3
     }
   }
 ]

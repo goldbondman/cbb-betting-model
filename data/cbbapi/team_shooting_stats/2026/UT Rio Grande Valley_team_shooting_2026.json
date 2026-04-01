@@ -4,8 +4,8 @@
     "teamId": 326,
     "team": "UT Rio Grande Valley",
     "conference": "Southland",
-    "trackedShots": 1798,
-    "freeThrowRate": 28.8,
+    "trackedShots": 1910,
+    "freeThrowRate": 29,
     "assistedPct": 28.8,
     "dunks": {
       "attempted": 42,
@@ -15,42 +15,42 @@
       "assistedPct": 80.6
     },
     "layups": {
-      "attempted": 609,
-      "made": 371,
-      "pct": 60.9,
-      "assisted": 184,
+      "attempted": 646,
+      "made": 397,
+      "pct": 61.5,
+      "assisted": 197,
       "assistedPct": 49.6
     },
     "tipIns": {
-      "attempted": 20,
+      "attempted": 22,
       "made": 12,
-      "pct": 60
+      "pct": 54.5
     },
     "twoPointJumpers": {
-      "attempted": 337,
-      "made": 131,
-      "pct": 38.9,
-      "assisted": 48,
-      "assistedPct": 36.6
+      "attempted": 356,
+      "made": 140,
+      "pct": 39.3,
+      "assisted": 51,
+      "assistedPct": 36.4
     },
     "threePointJumpers": {
-      "attempted": 790,
-      "made": 291,
-      "pct": 36.8,
-      "assisted": 256,
-      "assistedPct": 88
+      "attempted": 844,
+      "made": 313,
+      "pct": 37.1,
+      "assisted": 273,
+      "assistedPct": 87.2
     },
     "freeThrows": {
-      "attempted": 518,
-      "made": 391,
-      "pct": 75.5
+      "attempted": 553,
+      "made": 421,
+      "pct": 76.1
     },
     "attemptsBreakdown": {
-      "dunks": 2.3,
-      "layups": 33.9,
-      "tipIns": 1.1,
-      "twoPointJumpers": 18.7,
-      "threePointJumpers": 43.9
+      "dunks": 2.2,
+      "layups": 33.8,
+      "tipIns": 1.2,
+      "twoPointJumpers": 18.6,
+      "threePointJumpers": 44.2
     }
   }
 ]

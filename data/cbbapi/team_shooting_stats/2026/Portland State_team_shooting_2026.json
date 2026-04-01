@@ -4,22 +4,22 @@
     "teamId": 231,
     "team": "Portland State",
     "conference": "Big Sky",
-    "trackedShots": 1663,
-    "freeThrowRate": 34.3,
-    "assistedPct": 24,
+    "trackedShots": 1848,
+    "freeThrowRate": 35.7,
+    "assistedPct": 23.9,
     "dunks": {
-      "attempted": 126,
-      "made": 109,
-      "pct": 86.5,
-      "assisted": 82,
+      "attempted": 142,
+      "made": 125,
+      "pct": 88,
+      "assisted": 94,
       "assistedPct": 75.2
     },
     "layups": {
-      "attempted": 580,
-      "made": 308,
+      "attempted": 633,
+      "made": 336,
       "pct": 53.1,
-      "assisted": 115,
-      "assistedPct": 37.3
+      "assisted": 125,
+      "assistedPct": 37.2
     },
     "tipIns": {
       "attempted": 66,
@@ -27,29 +27,29 @@
       "pct": 60.6
     },
     "twoPointJumpers": {
-      "attempted": 318,
-      "made": 123,
-      "pct": 38.7,
-      "assisted": 35,
-      "assistedPct": 28.5
+      "attempted": 369,
+      "made": 143,
+      "pct": 38.8,
+      "assisted": 43,
+      "assistedPct": 30.1
     },
     "threePointJumpers": {
-      "attempted": 573,
-      "made": 191,
-      "pct": 33.3,
-      "assisted": 167,
-      "assistedPct": 87.4
+      "attempted": 638,
+      "made": 207,
+      "pct": 32.4,
+      "assisted": 179,
+      "assistedPct": 86.5
     },
     "freeThrows": {
-      "attempted": 571,
-      "made": 402,
-      "pct": 70.4
+      "attempted": 660,
+      "made": 467,
+      "pct": 70.8
     },
     "attemptsBreakdown": {
-      "dunks": 7.6,
-      "layups": 34.9,
-      "tipIns": 4,
-      "twoPointJumpers": 19.1,
+      "dunks": 7.7,
+      "layups": 34.3,
+      "tipIns": 3.6,
+      "twoPointJumpers": 20,
       "threePointJumpers": 34.5
     }
   }

@@ -4,53 +4,53 @@
     "teamId": 184,
     "team": "Murray State",
     "conference": "MVC",
-    "trackedShots": 1814,
-    "freeThrowRate": 38.8,
-    "assistedPct": 22.4,
+    "trackedShots": 1937,
+    "freeThrowRate": 39.1,
+    "assistedPct": 22.3,
     "dunks": {
-      "attempted": 96,
-      "made": 91,
-      "pct": 94.8,
-      "assisted": 74,
-      "assistedPct": 81.3
+      "attempted": 98,
+      "made": 93,
+      "pct": 94.9,
+      "assisted": 75,
+      "assistedPct": 80.6
     },
     "layups": {
-      "attempted": 550,
-      "made": 306,
-      "pct": 55.6,
-      "assisted": 86,
-      "assistedPct": 28.1
+      "attempted": 576,
+      "made": 318,
+      "pct": 55.2,
+      "assisted": 93,
+      "assistedPct": 29.2
     },
     "tipIns": {
-      "attempted": 34,
-      "made": 27,
-      "pct": 79.4
+      "attempted": 43,
+      "made": 32,
+      "pct": 74.4
     },
     "twoPointJumpers": {
-      "attempted": 309,
-      "made": 124,
-      "pct": 40.1,
-      "assisted": 16,
-      "assistedPct": 12.9
+      "attempted": 346,
+      "made": 139,
+      "pct": 40.2,
+      "assisted": 21,
+      "assistedPct": 15.1
     },
     "threePointJumpers": {
-      "attempted": 825,
-      "made": 287,
+      "attempted": 874,
+      "made": 304,
       "pct": 34.8,
-      "assisted": 231,
-      "assistedPct": 80.5
+      "assisted": 243,
+      "assistedPct": 79.9
     },
     "freeThrows": {
-      "attempted": 703,
-      "made": 535,
-      "pct": 76.1
+      "attempted": 757,
+      "made": 571,
+      "pct": 75.4
     },
     "attemptsBreakdown": {
-      "dunks": 5.3,
-      "layups": 30.3,
-      "tipIns": 1.9,
-      "twoPointJumpers": 17,
-      "threePointJumpers": 45.5
+      "dunks": 5.1,
+      "layups": 29.7,
+      "tipIns": 2.2,
+      "twoPointJumpers": 17.9,
+      "threePointJumpers": 45.1
     }
   }
 ]

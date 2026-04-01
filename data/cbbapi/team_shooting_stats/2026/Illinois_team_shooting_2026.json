@@ -4,53 +4,53 @@
     "teamId": 118,
     "team": "Illinois",
     "conference": "Big Ten",
-    "trackedShots": 1728,
-    "freeThrowRate": 33.6,
-    "assistedPct": 23.4,
+    "trackedShots": 2160,
+    "freeThrowRate": 33.1,
+    "assistedPct": 23.1,
     "dunks": {
-      "attempted": 63,
-      "made": 54,
-      "pct": 85.7,
-      "assisted": 44,
-      "assistedPct": 81.5
+      "attempted": 81,
+      "made": 70,
+      "pct": 86.4,
+      "assisted": 59,
+      "assistedPct": 84.3
     },
     "layups": {
-      "attempted": 438,
-      "made": 292,
-      "pct": 66.7,
-      "assisted": 91,
-      "assistedPct": 31.2
+      "attempted": 589,
+      "made": 383,
+      "pct": 65,
+      "assisted": 118,
+      "assistedPct": 30.8
     },
     "tipIns": {
-      "attempted": 44,
-      "made": 28,
-      "pct": 63.6
+      "attempted": 56,
+      "made": 36,
+      "pct": 64.3
     },
     "twoPointJumpers": {
-      "attempted": 297,
-      "made": 116,
-      "pct": 39.1,
-      "assisted": 23,
-      "assistedPct": 19.8
+      "attempted": 357,
+      "made": 143,
+      "pct": 40.1,
+      "assisted": 30,
+      "assistedPct": 21
     },
     "threePointJumpers": {
-      "attempted": 886,
-      "made": 319,
-      "pct": 36,
-      "assisted": 246,
-      "assistedPct": 77.1
+      "attempted": 1077,
+      "made": 379,
+      "pct": 35.2,
+      "assisted": 291,
+      "assistedPct": 76.8
     },
     "freeThrows": {
-      "attempted": 580,
-      "made": 456,
-      "pct": 78.6
+      "attempted": 715,
+      "made": 555,
+      "pct": 77.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 25.3,
-      "tipIns": 2.5,
-      "twoPointJumpers": 17.2,
-      "threePointJumpers": 51.3
+      "dunks": 3.8,
+      "layups": 27.3,
+      "tipIns": 2.6,
+      "twoPointJumpers": 16.5,
+      "threePointJumpers": 49.9
     }
   }
 ]

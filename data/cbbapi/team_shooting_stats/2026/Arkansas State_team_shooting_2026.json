@@ -4,53 +4,53 @@
     "teamId": 13,
     "team": "Arkansas State",
     "conference": "Sun Belt",
-    "trackedShots": 1920,
-    "freeThrowRate": 38.9,
-    "assistedPct": 25.1,
+    "trackedShots": 1988,
+    "freeThrowRate": 38.6,
+    "assistedPct": 25.2,
     "dunks": {
-      "attempted": 82,
+      "attempted": 83,
       "made": 67,
-      "pct": 81.7,
+      "pct": 80.7,
       "assisted": 55,
       "assistedPct": 82.1
     },
     "layups": {
-      "attempted": 632,
-      "made": 370,
-      "pct": 58.5,
-      "assisted": 146,
-      "assistedPct": 39.5
+      "attempted": 652,
+      "made": 383,
+      "pct": 58.7,
+      "assisted": 152,
+      "assistedPct": 39.7
     },
     "tipIns": {
-      "attempted": 74,
-      "made": 49,
-      "pct": 66.2
+      "attempted": 79,
+      "made": 51,
+      "pct": 64.6
     },
     "twoPointJumpers": {
-      "attempted": 269,
-      "made": 95,
+      "attempted": 278,
+      "made": 98,
       "pct": 35.3,
-      "assisted": 18,
-      "assistedPct": 18.9
+      "assisted": 20,
+      "assistedPct": 20.4
     },
     "threePointJumpers": {
-      "attempted": 863,
-      "made": 288,
-      "pct": 33.4,
-      "assisted": 263,
-      "assistedPct": 91.3
+      "attempted": 896,
+      "made": 298,
+      "pct": 33.3,
+      "assisted": 273,
+      "assistedPct": 91.6
     },
     "freeThrows": {
-      "attempted": 747,
-      "made": 552,
-      "pct": 73.9
+      "attempted": 768,
+      "made": 563,
+      "pct": 73.3
     },
     "attemptsBreakdown": {
-      "dunks": 4.3,
-      "layups": 32.9,
-      "tipIns": 3.9,
+      "dunks": 4.2,
+      "layups": 32.8,
+      "tipIns": 4,
       "twoPointJumpers": 14,
-      "threePointJumpers": 44.9
+      "threePointJumpers": 45.1
     }
   }
 ]

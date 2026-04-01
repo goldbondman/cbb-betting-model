@@ -4,22 +4,22 @@
     "teamId": 309,
     "team": "UC Riverside",
     "conference": "Big West",
-    "trackedShots": 1809,
+    "trackedShots": 1872,
     "freeThrowRate": 34.5,
-    "assistedPct": 21.8,
+    "assistedPct": 21.6,
     "dunks": {
-      "attempted": 48,
-      "made": 43,
-      "pct": 89.6,
-      "assisted": 35,
-      "assistedPct": 81.4
+      "attempted": 53,
+      "made": 48,
+      "pct": 90.6,
+      "assisted": 39,
+      "assistedPct": 81.3
     },
     "layups": {
-      "attempted": 662,
-      "made": 359,
-      "pct": 54.2,
-      "assisted": 147,
-      "assistedPct": 40.9
+      "attempted": 686,
+      "made": 368,
+      "pct": 53.6,
+      "assisted": 149,
+      "assistedPct": 40.5
     },
     "tipIns": {
       "attempted": 50,
@@ -27,30 +27,30 @@
       "pct": 50
     },
     "twoPointJumpers": {
-      "attempted": 345,
-      "made": 133,
-      "pct": 38.6,
+      "attempted": 356,
+      "made": 134,
+      "pct": 37.6,
       "assisted": 40,
-      "assistedPct": 30.1
+      "assistedPct": 29.9
     },
     "threePointJumpers": {
-      "attempted": 704,
-      "made": 226,
-      "pct": 32.1,
-      "assisted": 173,
-      "assistedPct": 76.5
+      "attempted": 727,
+      "made": 235,
+      "pct": 32.3,
+      "assisted": 176,
+      "assistedPct": 74.9
     },
     "freeThrows": {
-      "attempted": 624,
-      "made": 462,
-      "pct": 74
+      "attempted": 645,
+      "made": 479,
+      "pct": 74.3
     },
     "attemptsBreakdown": {
-      "dunks": 2.7,
+      "dunks": 2.8,
       "layups": 36.6,
-      "tipIns": 2.8,
-      "twoPointJumpers": 19.1,
-      "threePointJumpers": 38.9
+      "tipIns": 2.7,
+      "twoPointJumpers": 19,
+      "threePointJumpers": 38.8
     }
   }
 ]

@@ -4,22 +4,22 @@
     "teamId": 276,
     "team": "Southern Utah",
     "conference": "WAC",
-    "trackedShots": 1726,
-    "freeThrowRate": 33,
+    "trackedShots": 1897,
+    "freeThrowRate": 33.4,
     "assistedPct": 23.1,
     "dunks": {
-      "attempted": 63,
-      "made": 48,
-      "pct": 76.2,
-      "assisted": 40,
+      "attempted": 70,
+      "made": 54,
+      "pct": 77.1,
+      "assisted": 45,
       "assistedPct": 83.3
     },
     "layups": {
-      "attempted": 601,
-      "made": 352,
-      "pct": 58.6,
-      "assisted": 143,
-      "assistedPct": 40.6
+      "attempted": 666,
+      "made": 393,
+      "pct": 59,
+      "assisted": 159,
+      "assistedPct": 40.5
     },
     "tipIns": {
       "attempted": 51,
@@ -27,30 +27,30 @@
       "pct": 68.6
     },
     "twoPointJumpers": {
-      "attempted": 386,
-      "made": 138,
-      "pct": 35.8,
-      "assisted": 28,
-      "assistedPct": 20.3
+      "attempted": 418,
+      "made": 155,
+      "pct": 37.1,
+      "assisted": 34,
+      "assistedPct": 21.9
     },
     "threePointJumpers": {
-      "attempted": 625,
-      "made": 219,
-      "pct": 35,
-      "assisted": 187,
-      "assistedPct": 85.4
+      "attempted": 692,
+      "made": 237,
+      "pct": 34.2,
+      "assisted": 201,
+      "assistedPct": 84.8
     },
     "freeThrows": {
-      "attempted": 570,
-      "made": 413,
-      "pct": 72.5
+      "attempted": 633,
+      "made": 457,
+      "pct": 72.2
     },
     "attemptsBreakdown": {
       "dunks": 3.7,
-      "layups": 34.8,
-      "tipIns": 3,
-      "twoPointJumpers": 22.4,
-      "threePointJumpers": 36.2
+      "layups": 35.1,
+      "tipIns": 2.7,
+      "twoPointJumpers": 22,
+      "threePointJumpers": 36.5
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 312,
     "team": "UCF",
     "conference": "Big 12",
-    "trackedShots": 1747,
-    "freeThrowRate": 29.8,
-    "assistedPct": 26.3,
+    "trackedShots": 2089,
+    "freeThrowRate": 30.5,
+    "assistedPct": 24.7,
     "dunks": {
-      "attempted": 77,
-      "made": 72,
-      "pct": 93.5,
-      "assisted": 63,
-      "assistedPct": 87.5
+      "attempted": 87,
+      "made": 81,
+      "pct": 93.1,
+      "assisted": 70,
+      "assistedPct": 86.4
     },
     "layups": {
-      "attempted": 577,
-      "made": 326,
-      "pct": 56.5,
-      "assisted": 140,
-      "assistedPct": 42.9
+      "attempted": 686,
+      "made": 380,
+      "pct": 55.4,
+      "assisted": 152,
+      "assistedPct": 40
     },
     "tipIns": {
-      "attempted": 29,
-      "made": 24,
-      "pct": 82.8
+      "attempted": 42,
+      "made": 30,
+      "pct": 71.4
     },
     "twoPointJumpers": {
-      "attempted": 453,
-      "made": 179,
-      "pct": 39.5,
-      "assisted": 63,
+      "attempted": 548,
+      "made": 213,
+      "pct": 38.9,
+      "assisted": 75,
       "assistedPct": 35.2
     },
     "threePointJumpers": {
-      "attempted": 611,
-      "made": 235,
-      "pct": 38.5,
-      "assisted": 193,
-      "assistedPct": 82.1
+      "attempted": 726,
+      "made": 263,
+      "pct": 36.2,
+      "assisted": 218,
+      "assistedPct": 82.9
     },
     "freeThrows": {
-      "attempted": 521,
-      "made": 393,
-      "pct": 75.4
+      "attempted": 638,
+      "made": 465,
+      "pct": 72.9
     },
     "attemptsBreakdown": {
-      "dunks": 4.4,
-      "layups": 33,
-      "tipIns": 1.7,
-      "twoPointJumpers": 25.9,
-      "threePointJumpers": 35
+      "dunks": 4.2,
+      "layups": 32.8,
+      "tipIns": 2,
+      "twoPointJumpers": 26.2,
+      "threePointJumpers": 34.8
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 284,
     "team": "Stonehill",
     "conference": "NEC",
-    "trackedShots": 1722,
-    "freeThrowRate": 28.3,
-    "assistedPct": 21.9,
+    "trackedShots": 1836,
+    "freeThrowRate": 28.6,
+    "assistedPct": 21.6,
     "dunks": {
-      "attempted": 36,
-      "made": 34,
-      "pct": 94.4,
-      "assisted": 27,
-      "assistedPct": 79.4
+      "attempted": 39,
+      "made": 37,
+      "pct": 94.9,
+      "assisted": 28,
+      "assistedPct": 75.7
     },
     "layups": {
-      "attempted": 666,
-      "made": 331,
+      "attempted": 700,
+      "made": 348,
       "pct": 49.7,
-      "assisted": 125,
-      "assistedPct": 37.8
+      "assisted": 129,
+      "assistedPct": 37.1
     },
     "tipIns": {
-      "attempted": 51,
-      "made": 29,
-      "pct": 56.9
+      "attempted": 52,
+      "made": 30,
+      "pct": 57.7
     },
     "twoPointJumpers": {
-      "attempted": 275,
-      "made": 93,
-      "pct": 33.8,
-      "assisted": 20,
-      "assistedPct": 21.5
+      "attempted": 293,
+      "made": 100,
+      "pct": 34.1,
+      "assisted": 21,
+      "assistedPct": 21
     },
     "threePointJumpers": {
-      "attempted": 694,
-      "made": 225,
-      "pct": 32.4,
-      "assisted": 205,
-      "assistedPct": 91.1
+      "attempted": 752,
+      "made": 242,
+      "pct": 32.2,
+      "assisted": 219,
+      "assistedPct": 90.5
     },
     "freeThrows": {
-      "attempted": 488,
-      "made": 337,
-      "pct": 69.1
+      "attempted": 525,
+      "made": 362,
+      "pct": 69
     },
     "attemptsBreakdown": {
       "dunks": 2.1,
-      "layups": 38.7,
-      "tipIns": 3,
+      "layups": 38.1,
+      "tipIns": 2.8,
       "twoPointJumpers": 16,
-      "threePointJumpers": 40.3
+      "threePointJumpers": 41
     }
   }
 ]

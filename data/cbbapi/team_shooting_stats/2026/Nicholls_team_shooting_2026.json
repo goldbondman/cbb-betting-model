@@ -4,53 +4,53 @@
     "teamId": 195,
     "team": "Nicholls",
     "conference": "Southland",
-    "trackedShots": 1803,
-    "freeThrowRate": 35.1,
-    "assistedPct": 22.5,
+    "trackedShots": 1913,
+    "freeThrowRate": 34.4,
+    "assistedPct": 22.6,
     "dunks": {
-      "attempted": 96,
-      "made": 80,
-      "pct": 83.3,
-      "assisted": 54,
-      "assistedPct": 67.5
+      "attempted": 104,
+      "made": 87,
+      "pct": 83.7,
+      "assisted": 58,
+      "assistedPct": 66.7
     },
     "layups": {
-      "attempted": 587,
-      "made": 312,
-      "pct": 53.2,
-      "assisted": 112,
-      "assistedPct": 35.9
+      "attempted": 623,
+      "made": 335,
+      "pct": 53.8,
+      "assisted": 123,
+      "assistedPct": 36.7
     },
     "tipIns": {
-      "attempted": 36,
-      "made": 25,
-      "pct": 69.4
+      "attempted": 37,
+      "made": 26,
+      "pct": 70.3
     },
     "twoPointJumpers": {
-      "attempted": 278,
-      "made": 96,
-      "pct": 34.5,
-      "assisted": 15,
-      "assistedPct": 15.6
+      "attempted": 304,
+      "made": 104,
+      "pct": 34.2,
+      "assisted": 17,
+      "assistedPct": 16.3
     },
     "threePointJumpers": {
-      "attempted": 806,
-      "made": 272,
-      "pct": 33.7,
-      "assisted": 225,
-      "assistedPct": 82.7
+      "attempted": 845,
+      "made": 282,
+      "pct": 33.4,
+      "assisted": 234,
+      "assistedPct": 83
     },
     "freeThrows": {
-      "attempted": 632,
-      "made": 418,
-      "pct": 66.1
+      "attempted": 659,
+      "made": 439,
+      "pct": 66.6
     },
     "attemptsBreakdown": {
-      "dunks": 5.3,
+      "dunks": 5.4,
       "layups": 32.6,
-      "tipIns": 2,
-      "twoPointJumpers": 15.4,
-      "threePointJumpers": 44.7
+      "tipIns": 1.9,
+      "twoPointJumpers": 15.9,
+      "threePointJumpers": 44.2
     }
   }
 ]

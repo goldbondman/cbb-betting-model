@@ -4,53 +4,53 @@
     "teamId": 333,
     "team": "VCU",
     "conference": "A-10",
-    "trackedShots": 1698,
-    "freeThrowRate": 45.6,
-    "assistedPct": 24.7,
+    "trackedShots": 2106,
+    "freeThrowRate": 42.1,
+    "assistedPct": 23.6,
     "dunks": {
-      "attempted": 90,
-      "made": 77,
-      "pct": 85.6,
-      "assisted": 61,
-      "assistedPct": 79.2
+      "attempted": 105,
+      "made": 88,
+      "pct": 83.8,
+      "assisted": 70,
+      "assistedPct": 79.5
     },
     "layups": {
-      "attempted": 535,
-      "made": 291,
-      "pct": 54.4,
-      "assisted": 97,
-      "assistedPct": 33.3
+      "attempted": 671,
+      "made": 358,
+      "pct": 53.4,
+      "assisted": 114,
+      "assistedPct": 31.8
     },
     "tipIns": {
-      "attempted": 52,
-      "made": 29,
-      "pct": 55.8
+      "attempted": 61,
+      "made": 33,
+      "pct": 54.1
     },
     "twoPointJumpers": {
-      "attempted": 262,
-      "made": 112,
+      "attempted": 347,
+      "made": 148,
       "pct": 42.7,
-      "assisted": 24,
-      "assistedPct": 21.4
+      "assisted": 30,
+      "assistedPct": 20.3
     },
     "threePointJumpers": {
-      "attempted": 759,
-      "made": 276,
-      "pct": 36.4,
-      "assisted": 238,
-      "assistedPct": 86.2
+      "attempted": 922,
+      "made": 335,
+      "pct": 36.3,
+      "assisted": 282,
+      "assistedPct": 84.2
     },
     "freeThrows": {
-      "attempted": 774,
-      "made": 573,
-      "pct": 74
+      "attempted": 887,
+      "made": 653,
+      "pct": 73.6
     },
     "attemptsBreakdown": {
-      "dunks": 5.3,
-      "layups": 31.5,
-      "tipIns": 3.1,
-      "twoPointJumpers": 15.4,
-      "threePointJumpers": 44.7
+      "dunks": 5,
+      "layups": 31.9,
+      "tipIns": 2.9,
+      "twoPointJumpers": 16.5,
+      "threePointJumpers": 43.8
     }
   }
 ]

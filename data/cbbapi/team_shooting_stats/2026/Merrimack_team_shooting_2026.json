@@ -4,9 +4,9 @@
     "teamId": 166,
     "team": "Merrimack",
     "conference": "MAAC",
-    "trackedShots": 1642,
-    "freeThrowRate": 40,
-    "assistedPct": 23,
+    "trackedShots": 1816,
+    "freeThrowRate": 38.2,
+    "assistedPct": 22.6,
     "dunks": {
       "attempted": 44,
       "made": 37,
@@ -15,42 +15,42 @@
       "assistedPct": 75.7
     },
     "layups": {
-      "attempted": 609,
-      "made": 322,
-      "pct": 52.9,
-      "assisted": 111,
-      "assistedPct": 34.5
+      "attempted": 682,
+      "made": 353,
+      "pct": 51.8,
+      "assisted": 124,
+      "assistedPct": 35.1
     },
     "tipIns": {
-      "attempted": 29,
-      "made": 14,
-      "pct": 48.3
+      "attempted": 32,
+      "made": 17,
+      "pct": 53.1
     },
     "twoPointJumpers": {
-      "attempted": 200,
-      "made": 70,
-      "pct": 35,
-      "assisted": 18,
-      "assistedPct": 25.7
+      "attempted": 221,
+      "made": 74,
+      "pct": 33.5,
+      "assisted": 20,
+      "assistedPct": 27
     },
     "threePointJumpers": {
-      "attempted": 760,
-      "made": 248,
-      "pct": 32.6,
-      "assisted": 221,
-      "assistedPct": 89.1
+      "attempted": 837,
+      "made": 274,
+      "pct": 32.7,
+      "assisted": 238,
+      "assistedPct": 86.9
     },
     "freeThrows": {
-      "attempted": 657,
-      "made": 518,
-      "pct": 78.8
+      "attempted": 694,
+      "made": 546,
+      "pct": 78.7
     },
     "attemptsBreakdown": {
-      "dunks": 2.7,
-      "layups": 37.1,
+      "dunks": 2.4,
+      "layups": 37.6,
       "tipIns": 1.8,
       "twoPointJumpers": 12.2,
-      "threePointJumpers": 46.3
+      "threePointJumpers": 46.1
     }
   }
 ]

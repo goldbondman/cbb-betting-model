@@ -4,22 +4,22 @@
     "teamId": 22,
     "team": "Belmont",
     "conference": "MVC",
-    "trackedShots": 1809,
-    "freeThrowRate": 32.1,
-    "assistedPct": 31.1,
+    "trackedShots": 1895,
+    "freeThrowRate": 31.8,
+    "assistedPct": 31.3,
     "dunks": {
-      "attempted": 106,
-      "made": 96,
-      "pct": 90.6,
-      "assisted": 74,
-      "assistedPct": 77.1
+      "attempted": 107,
+      "made": 97,
+      "pct": 90.7,
+      "assisted": 75,
+      "assistedPct": 77.3
     },
     "layups": {
-      "attempted": 587,
-      "made": 365,
-      "pct": 62.2,
-      "assisted": 166,
-      "assistedPct": 45.5
+      "attempted": 612,
+      "made": 380,
+      "pct": 62.1,
+      "assisted": 175,
+      "assistedPct": 46.1
     },
     "tipIns": {
       "attempted": 44,
@@ -27,30 +27,30 @@
       "pct": 81.8
     },
     "twoPointJumpers": {
-      "attempted": 245,
-      "made": 104,
-      "pct": 42.4,
-      "assisted": 27,
-      "assistedPct": 26
+      "attempted": 256,
+      "made": 107,
+      "pct": 41.8,
+      "assisted": 30,
+      "assistedPct": 28
     },
     "threePointJumpers": {
-      "attempted": 827,
-      "made": 335,
+      "attempted": 876,
+      "made": 355,
       "pct": 40.5,
-      "assisted": 296,
-      "assistedPct": 88.4
+      "assisted": 314,
+      "assistedPct": 88.5
     },
     "freeThrows": {
-      "attempted": 581,
-      "made": 398,
-      "pct": 68.5
+      "attempted": 602,
+      "made": 411,
+      "pct": 68.3
     },
     "attemptsBreakdown": {
-      "dunks": 5.9,
-      "layups": 32.4,
-      "tipIns": 2.4,
+      "dunks": 5.6,
+      "layups": 32.3,
+      "tipIns": 2.3,
       "twoPointJumpers": 13.5,
-      "threePointJumpers": 45.7
+      "threePointJumpers": 46.2
     }
   }
 ]

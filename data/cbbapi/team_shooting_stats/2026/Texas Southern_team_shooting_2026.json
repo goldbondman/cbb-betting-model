@@ -4,53 +4,53 @@
     "teamId": 296,
     "team": "Texas Southern",
     "conference": "SWAC",
-    "trackedShots": 1623,
+    "trackedShots": 1754,
     "freeThrowRate": 39.1,
-    "assistedPct": 19,
+    "assistedPct": 18.9,
     "dunks": {
-      "attempted": 53,
-      "made": 49,
-      "pct": 92.5,
-      "assisted": 33,
+      "attempted": 56,
+      "made": 52,
+      "pct": 92.9,
+      "assisted": 35,
       "assistedPct": 67.3
     },
     "layups": {
-      "attempted": 598,
-      "made": 337,
-      "pct": 56.4,
-      "assisted": 115,
-      "assistedPct": 34.1
+      "attempted": 636,
+      "made": 353,
+      "pct": 55.5,
+      "assisted": 124,
+      "assistedPct": 35.1
     },
     "tipIns": {
-      "attempted": 54,
-      "made": 35,
-      "pct": 64.8
+      "attempted": 62,
+      "made": 40,
+      "pct": 64.5
     },
     "twoPointJumpers": {
-      "attempted": 387,
-      "made": 145,
-      "pct": 37.5,
-      "assisted": 34,
-      "assistedPct": 23.4
+      "attempted": 437,
+      "made": 159,
+      "pct": 36.4,
+      "assisted": 40,
+      "assistedPct": 25.2
     },
     "threePointJumpers": {
-      "attempted": 531,
-      "made": 178,
-      "pct": 33.5,
-      "assisted": 126,
-      "assistedPct": 70.8
+      "attempted": 563,
+      "made": 185,
+      "pct": 32.9,
+      "assisted": 132,
+      "assistedPct": 71.4
     },
     "freeThrows": {
-      "attempted": 634,
-      "made": 455,
-      "pct": 71.8
+      "attempted": 685,
+      "made": 491,
+      "pct": 71.7
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
-      "layups": 36.8,
-      "tipIns": 3.3,
-      "twoPointJumpers": 23.8,
-      "threePointJumpers": 32.7
+      "dunks": 3.2,
+      "layups": 36.3,
+      "tipIns": 3.5,
+      "twoPointJumpers": 24.9,
+      "threePointJumpers": 32.1
     }
   }
 ]

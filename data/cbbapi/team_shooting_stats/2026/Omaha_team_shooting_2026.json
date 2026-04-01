@@ -4,53 +4,53 @@
     "teamId": 221,
     "team": "Omaha",
     "conference": "Summit",
-    "trackedShots": 1794,
-    "freeThrowRate": 33.1,
-    "assistedPct": 22.9,
+    "trackedShots": 1903,
+    "freeThrowRate": 33.2,
+    "assistedPct": 22.4,
     "dunks": {
-      "attempted": 75,
-      "made": 67,
-      "pct": 89.3,
+      "attempted": 76,
+      "made": 68,
+      "pct": 89.5,
       "assisted": 58,
-      "assistedPct": 86.6
+      "assistedPct": 85.3
     },
     "layups": {
-      "attempted": 578,
-      "made": 326,
-      "pct": 56.4,
-      "assisted": 94,
-      "assistedPct": 28.8
+      "attempted": 609,
+      "made": 344,
+      "pct": 56.5,
+      "assisted": 98,
+      "assistedPct": 28.5
     },
     "tipIns": {
-      "attempted": 49,
-      "made": 33,
-      "pct": 67.3
+      "attempted": 50,
+      "made": 34,
+      "pct": 68
     },
     "twoPointJumpers": {
-      "attempted": 353,
-      "made": 146,
-      "pct": 41.4,
-      "assisted": 26,
-      "assistedPct": 17.8
+      "attempted": 377,
+      "made": 157,
+      "pct": 41.6,
+      "assisted": 30,
+      "assistedPct": 19.1
     },
     "threePointJumpers": {
-      "attempted": 739,
-      "made": 268,
-      "pct": 36.3,
-      "assisted": 232,
-      "assistedPct": 86.6
+      "attempted": 791,
+      "made": 279,
+      "pct": 35.3,
+      "assisted": 241,
+      "assistedPct": 86.4
     },
     "freeThrows": {
-      "attempted": 594,
-      "made": 433,
-      "pct": 72.9
+      "attempted": 631,
+      "made": 464,
+      "pct": 73.5
     },
     "attemptsBreakdown": {
-      "dunks": 4.2,
-      "layups": 32.2,
-      "tipIns": 2.7,
-      "twoPointJumpers": 19.7,
-      "threePointJumpers": 41.2
+      "dunks": 4,
+      "layups": 32,
+      "tipIns": 2.6,
+      "twoPointJumpers": 19.8,
+      "threePointJumpers": 41.6
     }
   }
 ]

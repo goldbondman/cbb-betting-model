@@ -4,53 +4,53 @@
     "teamId": 36,
     "team": "Cal State Bakersfield",
     "conference": "Big West",
-    "trackedShots": 1754,
-    "freeThrowRate": 43.4,
-    "assistedPct": 18.1,
+    "trackedShots": 1893,
+    "freeThrowRate": 42.5,
+    "assistedPct": 18.2,
     "dunks": {
-      "attempted": 61,
-      "made": 55,
-      "pct": 90.2,
-      "assisted": 38,
-      "assistedPct": 69.1
+      "attempted": 67,
+      "made": 60,
+      "pct": 89.6,
+      "assisted": 41,
+      "assistedPct": 68.3
     },
     "layups": {
-      "attempted": 597,
-      "made": 314,
-      "pct": 52.6,
-      "assisted": 100,
-      "assistedPct": 31.8
+      "attempted": 649,
+      "made": 341,
+      "pct": 52.5,
+      "assisted": 109,
+      "assistedPct": 32
     },
     "tipIns": {
-      "attempted": 35,
-      "made": 21,
-      "pct": 60
+      "attempted": 37,
+      "made": 23,
+      "pct": 62.2
     },
     "twoPointJumpers": {
-      "attempted": 562,
-      "made": 203,
-      "pct": 36.1,
-      "assisted": 61,
-      "assistedPct": 30
+      "attempted": 594,
+      "made": 214,
+      "pct": 36,
+      "assisted": 63,
+      "assistedPct": 29.4
     },
     "threePointJumpers": {
-      "attempted": 499,
-      "made": 143,
-      "pct": 28.7,
-      "assisted": 119,
-      "assistedPct": 83.2
+      "attempted": 546,
+      "made": 158,
+      "pct": 28.9,
+      "assisted": 132,
+      "assistedPct": 83.5
     },
     "freeThrows": {
-      "attempted": 762,
-      "made": 564,
-      "pct": 74
+      "attempted": 804,
+      "made": 591,
+      "pct": 73.5
     },
     "attemptsBreakdown": {
       "dunks": 3.5,
-      "layups": 34,
+      "layups": 34.3,
       "tipIns": 2,
-      "twoPointJumpers": 32,
-      "threePointJumpers": 28.4
+      "twoPointJumpers": 31.4,
+      "threePointJumpers": 28.8
     }
   }
 ]

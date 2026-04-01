@@ -4,53 +4,53 @@
     "teamId": 70,
     "team": "Drake",
     "conference": "MVC",
-    "trackedShots": 1827,
-    "freeThrowRate": 33.3,
-    "assistedPct": 22.3,
+    "trackedShots": 2005,
+    "freeThrowRate": 33.5,
+    "assistedPct": 22.6,
     "dunks": {
-      "attempted": 51,
-      "made": 42,
-      "pct": 82.4,
-      "assisted": 38,
-      "assistedPct": 90.5
+      "attempted": 56,
+      "made": 46,
+      "pct": 82.1,
+      "assisted": 40,
+      "assistedPct": 87
     },
     "layups": {
-      "attempted": 502,
-      "made": 289,
-      "pct": 57.6,
-      "assisted": 97,
-      "assistedPct": 33.6
+      "attempted": 549,
+      "made": 322,
+      "pct": 58.7,
+      "assisted": 115,
+      "assistedPct": 35.7
     },
     "tipIns": {
-      "attempted": 48,
-      "made": 27,
-      "pct": 56.3
+      "attempted": 50,
+      "made": 28,
+      "pct": 56
     },
     "twoPointJumpers": {
-      "attempted": 400,
-      "made": 166,
-      "pct": 41.5,
-      "assisted": 25,
-      "assistedPct": 15.1
+      "attempted": 433,
+      "made": 180,
+      "pct": 41.6,
+      "assisted": 29,
+      "assistedPct": 16.1
     },
     "threePointJumpers": {
-      "attempted": 826,
-      "made": 284,
+      "attempted": 917,
+      "made": 315,
       "pct": 34.4,
-      "assisted": 248,
-      "assistedPct": 87.3
+      "assisted": 270,
+      "assistedPct": 85.7
     },
     "freeThrows": {
-      "attempted": 608,
-      "made": 434,
-      "pct": 71.4
+      "attempted": 672,
+      "made": 484,
+      "pct": 72
     },
     "attemptsBreakdown": {
       "dunks": 2.8,
-      "layups": 27.5,
-      "tipIns": 2.6,
-      "twoPointJumpers": 21.9,
-      "threePointJumpers": 45.2
+      "layups": 27.4,
+      "tipIns": 2.5,
+      "twoPointJumpers": 21.6,
+      "threePointJumpers": 45.7
     }
   }
 ]

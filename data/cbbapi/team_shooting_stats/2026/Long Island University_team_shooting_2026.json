@@ -4,52 +4,52 @@
     "teamId": 146,
     "team": "Long Island University",
     "conference": "NEC",
-    "trackedShots": 1787,
-    "freeThrowRate": 33.4,
-    "assistedPct": 23.3,
+    "trackedShots": 2009,
+    "freeThrowRate": 34,
+    "assistedPct": 23.1,
     "dunks": {
-      "attempted": 147,
-      "made": 126,
-      "pct": 85.7,
-      "assisted": 91,
-      "assistedPct": 72.2
+      "attempted": 162,
+      "made": 141,
+      "pct": 87,
+      "assisted": 101,
+      "assistedPct": 71.6
     },
     "layups": {
-      "attempted": 609,
-      "made": 318,
-      "pct": 52.2,
-      "assisted": 140,
-      "assistedPct": 44
+      "attempted": 674,
+      "made": 348,
+      "pct": 51.6,
+      "assisted": 154,
+      "assistedPct": 44.3
     },
     "tipIns": {
-      "attempted": 77,
-      "made": 53,
-      "pct": 68.8
+      "attempted": 87,
+      "made": 61,
+      "pct": 70.1
     },
     "twoPointJumpers": {
-      "attempted": 430,
-      "made": 170,
-      "pct": 39.5,
-      "assisted": 32,
-      "assistedPct": 18.8
+      "attempted": 497,
+      "made": 194,
+      "pct": 39,
+      "assisted": 36,
+      "assistedPct": 18.6
     },
     "threePointJumpers": {
-      "attempted": 524,
-      "made": 189,
-      "pct": 36.1,
-      "assisted": 154,
-      "assistedPct": 81.5
+      "attempted": 589,
+      "made": 211,
+      "pct": 35.8,
+      "assisted": 173,
+      "assistedPct": 82
     },
     "freeThrows": {
-      "attempted": 596,
-      "made": 396,
-      "pct": 66.4
+      "attempted": 684,
+      "made": 456,
+      "pct": 66.7
     },
     "attemptsBreakdown": {
-      "dunks": 8.2,
-      "layups": 34.1,
+      "dunks": 8.1,
+      "layups": 33.5,
       "tipIns": 4.3,
-      "twoPointJumpers": 24.1,
+      "twoPointJumpers": 24.7,
       "threePointJumpers": 29.3
     }
   }

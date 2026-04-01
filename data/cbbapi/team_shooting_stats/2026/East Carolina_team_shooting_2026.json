@@ -4,53 +4,53 @@
     "teamId": 74,
     "team": "East Carolina",
     "conference": "American",
-    "trackedShots": 1712,
-    "freeThrowRate": 39.4,
-    "assistedPct": 19.5,
+    "trackedShots": 1840,
+    "freeThrowRate": 39.3,
+    "assistedPct": 19.3,
     "dunks": {
-      "attempted": 101,
-      "made": 94,
-      "pct": 93.1,
-      "assisted": 62,
-      "assistedPct": 66
+      "attempted": 111,
+      "made": 100,
+      "pct": 90.1,
+      "assisted": 65,
+      "assistedPct": 65
     },
     "layups": {
-      "attempted": 541,
-      "made": 259,
-      "pct": 47.9,
-      "assisted": 99,
-      "assistedPct": 38.2
+      "attempted": 570,
+      "made": 268,
+      "pct": 47,
+      "assisted": 104,
+      "assistedPct": 38.8
     },
     "tipIns": {
-      "attempted": 41,
-      "made": 28,
-      "pct": 68.3
+      "attempted": 50,
+      "made": 33,
+      "pct": 66
     },
     "twoPointJumpers": {
-      "attempted": 496,
-      "made": 188,
-      "pct": 37.9,
-      "assisted": 47,
-      "assistedPct": 25
+      "attempted": 532,
+      "made": 204,
+      "pct": 38.3,
+      "assisted": 50,
+      "assistedPct": 24.5
     },
     "threePointJumpers": {
-      "attempted": 533,
-      "made": 152,
-      "pct": 28.5,
-      "assisted": 125,
-      "assistedPct": 82.2
+      "attempted": 577,
+      "made": 166,
+      "pct": 28.8,
+      "assisted": 137,
+      "assistedPct": 82.5
     },
     "freeThrows": {
-      "attempted": 675,
-      "made": 474,
-      "pct": 70.2
+      "attempted": 723,
+      "made": 509,
+      "pct": 70.4
     },
     "attemptsBreakdown": {
-      "dunks": 5.9,
-      "layups": 31.6,
-      "tipIns": 2.4,
-      "twoPointJumpers": 29,
-      "threePointJumpers": 31.1
+      "dunks": 6,
+      "layups": 31,
+      "tipIns": 2.7,
+      "twoPointJumpers": 28.9,
+      "threePointJumpers": 31.4
     }
   }
 ]

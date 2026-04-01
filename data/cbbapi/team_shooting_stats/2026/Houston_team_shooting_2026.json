@@ -4,53 +4,53 @@
     "teamId": 113,
     "team": "Houston",
     "conference": "Big 12",
-    "trackedShots": 1799,
-    "freeThrowRate": 27,
-    "assistedPct": 23.7,
+    "trackedShots": 2292,
+    "freeThrowRate": 26.3,
+    "assistedPct": 23,
     "dunks": {
-      "attempted": 89,
-      "made": 85,
-      "pct": 95.5,
-      "assisted": 67,
-      "assistedPct": 78.8
+      "attempted": 106,
+      "made": 101,
+      "pct": 95.3,
+      "assisted": 78,
+      "assistedPct": 77.2
     },
     "layups": {
-      "attempted": 326,
-      "made": 198,
-      "pct": 60.7,
-      "assisted": 68,
-      "assistedPct": 34.3
+      "attempted": 410,
+      "made": 243,
+      "pct": 59.3,
+      "assisted": 85,
+      "assistedPct": 35
     },
     "tipIns": {
-      "attempted": 32,
-      "made": 23,
-      "pct": 71.9
+      "attempted": 47,
+      "made": 33,
+      "pct": 70.2
     },
     "twoPointJumpers": {
-      "attempted": 605,
-      "made": 247,
-      "pct": 40.8,
-      "assisted": 79,
-      "assistedPct": 32
+      "attempted": 795,
+      "made": 326,
+      "pct": 41,
+      "assisted": 100,
+      "assistedPct": 30.7
     },
     "threePointJumpers": {
-      "attempted": 747,
-      "made": 255,
-      "pct": 34.1,
-      "assisted": 212,
-      "assistedPct": 83.1
+      "attempted": 934,
+      "made": 324,
+      "pct": 34.7,
+      "assisted": 264,
+      "assistedPct": 81.5
     },
     "freeThrows": {
-      "attempted": 486,
-      "made": 377,
-      "pct": 77.6
+      "attempted": 603,
+      "made": 466,
+      "pct": 77.3
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 18.1,
-      "tipIns": 1.8,
-      "twoPointJumpers": 33.6,
-      "threePointJumpers": 41.5
+      "dunks": 4.6,
+      "layups": 17.9,
+      "tipIns": 2.1,
+      "twoPointJumpers": 34.7,
+      "threePointJumpers": 40.8
     }
   }
 ]

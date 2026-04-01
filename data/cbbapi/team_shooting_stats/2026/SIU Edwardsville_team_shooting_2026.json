@@ -4,22 +4,22 @@
     "teamId": 247,
     "team": "SIU Edwardsville",
     "conference": "OVC",
-    "trackedShots": 1795,
-    "freeThrowRate": 30.6,
+    "trackedShots": 1857,
+    "freeThrowRate": 30.7,
     "assistedPct": 22.5,
     "dunks": {
-      "attempted": 91,
-      "made": 72,
-      "pct": 79.1,
+      "attempted": 93,
+      "made": 74,
+      "pct": 79.6,
       "assisted": 65,
-      "assistedPct": 90.3
+      "assistedPct": 87.8
     },
     "layups": {
-      "attempted": 535,
-      "made": 293,
-      "pct": 54.8,
-      "assisted": 113,
-      "assistedPct": 38.6
+      "attempted": 552,
+      "made": 300,
+      "pct": 54.3,
+      "assisted": 115,
+      "assistedPct": 38.3
     },
     "tipIns": {
       "attempted": 85,
@@ -27,30 +27,30 @@
       "pct": 69.4
     },
     "twoPointJumpers": {
-      "attempted": 439,
-      "made": 157,
-      "pct": 35.8,
+      "attempted": 452,
+      "made": 159,
+      "pct": 35.2,
       "assisted": 47,
-      "assistedPct": 29.9
+      "assistedPct": 29.6
     },
     "threePointJumpers": {
-      "attempted": 645,
-      "made": 222,
-      "pct": 34.4,
-      "assisted": 179,
-      "assistedPct": 80.6
+      "attempted": 675,
+      "made": 234,
+      "pct": 34.7,
+      "assisted": 190,
+      "assistedPct": 81.2
     },
     "freeThrows": {
-      "attempted": 550,
-      "made": 372,
-      "pct": 67.6
+      "attempted": 570,
+      "made": 385,
+      "pct": 67.5
     },
     "attemptsBreakdown": {
-      "dunks": 5.1,
-      "layups": 29.8,
-      "tipIns": 4.7,
-      "twoPointJumpers": 24.5,
-      "threePointJumpers": 35.9
+      "dunks": 5,
+      "layups": 29.7,
+      "tipIns": 4.6,
+      "twoPointJumpers": 24.3,
+      "threePointJumpers": 36.3
     }
   }
 ]

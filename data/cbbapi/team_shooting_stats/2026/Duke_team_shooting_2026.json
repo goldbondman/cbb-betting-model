@@ -4,53 +4,53 @@
     "teamId": 72,
     "team": "Duke",
     "conference": "ACC",
-    "trackedShots": 1738,
-    "freeThrowRate": 38.6,
-    "assistedPct": 28.9,
+    "trackedShots": 2198,
+    "freeThrowRate": 38.2,
+    "assistedPct": 27.8,
     "dunks": {
-      "attempted": 150,
-      "made": 137,
-      "pct": 91.3,
-      "assisted": 107,
-      "assistedPct": 78.1
+      "attempted": 177,
+      "made": 162,
+      "pct": 91.5,
+      "assisted": 125,
+      "assistedPct": 77.2
     },
     "layups": {
-      "attempted": 590,
-      "made": 350,
-      "pct": 59.3,
-      "assisted": 136,
+      "attempted": 748,
+      "made": 437,
+      "pct": 58.4,
+      "assisted": 170,
       "assistedPct": 38.9
     },
     "tipIns": {
-      "attempted": 48,
-      "made": 31,
-      "pct": 64.6
+      "attempted": 62,
+      "made": 40,
+      "pct": 64.5
     },
     "twoPointJumpers": {
-      "attempted": 184,
-      "made": 79,
+      "attempted": 254,
+      "made": 109,
       "pct": 42.9,
-      "assisted": 18,
-      "assistedPct": 22.8
+      "assisted": 23,
+      "assistedPct": 21.1
     },
     "threePointJumpers": {
-      "attempted": 766,
-      "made": 272,
-      "pct": 35.5,
-      "assisted": 242,
-      "assistedPct": 89
+      "attempted": 957,
+      "made": 332,
+      "pct": 34.7,
+      "assisted": 293,
+      "assistedPct": 88.3
     },
     "freeThrows": {
-      "attempted": 670,
-      "made": 487,
-      "pct": 72.7
+      "attempted": 840,
+      "made": 612,
+      "pct": 72.9
     },
     "attemptsBreakdown": {
-      "dunks": 8.6,
-      "layups": 33.9,
+      "dunks": 8.1,
+      "layups": 34,
       "tipIns": 2.8,
-      "twoPointJumpers": 10.6,
-      "threePointJumpers": 44.1
+      "twoPointJumpers": 11.6,
+      "threePointJumpers": 43.5
     }
   }
 ]

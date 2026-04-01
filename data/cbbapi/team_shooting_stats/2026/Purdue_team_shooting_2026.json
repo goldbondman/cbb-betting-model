@@ -4,53 +4,53 @@
     "teamId": 236,
     "team": "Purdue",
     "conference": "Big Ten",
-    "trackedShots": 1748,
-    "freeThrowRate": 28.4,
-    "assistedPct": 31.3,
+    "trackedShots": 2331,
+    "freeThrowRate": 28.6,
+    "assistedPct": 31.7,
     "dunks": {
-      "attempted": 89,
-      "made": 84,
-      "pct": 94.4,
-      "assisted": 77,
-      "assistedPct": 91.7
+      "attempted": 99,
+      "made": 94,
+      "pct": 94.9,
+      "assisted": 85,
+      "assistedPct": 90.4
     },
     "layups": {
-      "attempted": 398,
-      "made": 270,
-      "pct": 67.8,
-      "assisted": 146,
-      "assistedPct": 54.1
+      "attempted": 532,
+      "made": 360,
+      "pct": 67.7,
+      "assisted": 209,
+      "assistedPct": 58.1
     },
     "tipIns": {
-      "attempted": 14,
-      "made": 8,
-      "pct": 57.1
+      "attempted": 25,
+      "made": 15,
+      "pct": 60
     },
     "twoPointJumpers": {
-      "attempted": 535,
-      "made": 238,
-      "pct": 44.5,
-      "assisted": 90,
-      "assistedPct": 37.8
+      "attempted": 738,
+      "made": 336,
+      "pct": 45.5,
+      "assisted": 135,
+      "assistedPct": 40.2
     },
     "threePointJumpers": {
-      "attempted": 712,
-      "made": 273,
+      "attempted": 937,
+      "made": 359,
       "pct": 38.3,
-      "assisted": 234,
-      "assistedPct": 85.7
+      "assisted": 310,
+      "assistedPct": 86.4
     },
     "freeThrows": {
-      "attempted": 497,
-      "made": 368,
-      "pct": 74
+      "attempted": 666,
+      "made": 497,
+      "pct": 74.6
     },
     "attemptsBreakdown": {
-      "dunks": 5.1,
+      "dunks": 4.2,
       "layups": 22.8,
-      "tipIns": 0.8,
-      "twoPointJumpers": 30.6,
-      "threePointJumpers": 40.7
+      "tipIns": 1.1,
+      "twoPointJumpers": 31.7,
+      "threePointJumpers": 40.2
     }
   }
 ]

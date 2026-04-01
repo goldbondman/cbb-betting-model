@@ -4,52 +4,52 @@
     "teamId": 104,
     "team": "Grand Canyon",
     "conference": "Mountain West",
-    "trackedShots": 1658,
-    "freeThrowRate": 40.4,
-    "assistedPct": 21.4,
+    "trackedShots": 1826,
+    "freeThrowRate": 40.7,
+    "assistedPct": 22.1,
     "dunks": {
-      "attempted": 96,
-      "made": 78,
-      "pct": 81.3,
-      "assisted": 51,
-      "assistedPct": 65.4
+      "attempted": 111,
+      "made": 91,
+      "pct": 82,
+      "assisted": 61,
+      "assistedPct": 67
     },
     "layups": {
-      "attempted": 561,
-      "made": 330,
+      "attempted": 605,
+      "made": 356,
       "pct": 58.8,
-      "assisted": 108,
-      "assistedPct": 32.7
+      "assisted": 117,
+      "assistedPct": 32.9
     },
     "tipIns": {
-      "attempted": 34,
-      "made": 24,
-      "pct": 70.6
+      "attempted": 37,
+      "made": 26,
+      "pct": 70.3
     },
     "twoPointJumpers": {
-      "attempted": 321,
-      "made": 111,
-      "pct": 34.6,
-      "assisted": 29,
-      "assistedPct": 26.1
+      "attempted": 361,
+      "made": 129,
+      "pct": 35.7,
+      "assisted": 37,
+      "assistedPct": 28.7
     },
     "threePointJumpers": {
-      "attempted": 646,
-      "made": 206,
-      "pct": 31.9,
-      "assisted": 167,
+      "attempted": 712,
+      "made": 233,
+      "pct": 32.7,
+      "assisted": 189,
       "assistedPct": 81.1
     },
     "freeThrows": {
-      "attempted": 670,
-      "made": 511,
-      "pct": 76.3
+      "attempted": 743,
+      "made": 563,
+      "pct": 75.8
     },
     "attemptsBreakdown": {
-      "dunks": 5.8,
-      "layups": 33.8,
-      "tipIns": 2.1,
-      "twoPointJumpers": 19.4,
+      "dunks": 6.1,
+      "layups": 33.1,
+      "tipIns": 2,
+      "twoPointJumpers": 19.8,
       "threePointJumpers": 39
     }
   }

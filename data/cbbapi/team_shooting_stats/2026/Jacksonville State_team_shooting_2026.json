@@ -4,53 +4,53 @@
     "teamId": 128,
     "team": "Jacksonville State",
     "conference": "CUSA",
-    "trackedShots": 1603,
-    "freeThrowRate": 42.4,
-    "assistedPct": 22.3,
+    "trackedShots": 1774,
+    "freeThrowRate": 42.6,
+    "assistedPct": 21.7,
     "dunks": {
-      "attempted": 29,
-      "made": 26,
-      "pct": 89.7,
-      "assisted": 18,
-      "assistedPct": 69.2
+      "attempted": 31,
+      "made": 28,
+      "pct": 90.3,
+      "assisted": 20,
+      "assistedPct": 71.4
     },
     "layups": {
-      "attempted": 675,
-      "made": 346,
+      "attempted": 731,
+      "made": 375,
       "pct": 51.3,
-      "assisted": 122,
-      "assistedPct": 35.3
+      "assisted": 130,
+      "assistedPct": 34.7
     },
     "tipIns": {
-      "attempted": 37,
-      "made": 26,
-      "pct": 70.3
+      "attempted": 47,
+      "made": 33,
+      "pct": 70.2
     },
     "twoPointJumpers": {
-      "attempted": 220,
-      "made": 80,
-      "pct": 36.4,
-      "assisted": 19,
-      "assistedPct": 23.8
+      "attempted": 270,
+      "made": 94,
+      "pct": 34.8,
+      "assisted": 22,
+      "assistedPct": 23.4
     },
     "threePointJumpers": {
-      "attempted": 642,
-      "made": 232,
-      "pct": 36.1,
-      "assisted": 199,
-      "assistedPct": 85.8
+      "attempted": 695,
+      "made": 249,
+      "pct": 35.8,
+      "assisted": 213,
+      "assistedPct": 85.5
     },
     "freeThrows": {
-      "attempted": 680,
-      "made": 471,
-      "pct": 69.3
+      "attempted": 756,
+      "made": 518,
+      "pct": 68.5
     },
     "attemptsBreakdown": {
-      "dunks": 1.8,
-      "layups": 42.1,
-      "tipIns": 2.3,
-      "twoPointJumpers": 13.7,
-      "threePointJumpers": 40
+      "dunks": 1.7,
+      "layups": 41.2,
+      "tipIns": 2.6,
+      "twoPointJumpers": 15.2,
+      "threePointJumpers": 39.2
     }
   }
 ]

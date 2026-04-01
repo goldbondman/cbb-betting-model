@@ -4,53 +4,53 @@
     "teamId": 279,
     "team": "St. John's",
     "conference": "Big East",
-    "trackedShots": 1794,
-    "freeThrowRate": 43,
-    "assistedPct": 25.5,
+    "trackedShots": 2283,
+    "freeThrowRate": 40.2,
+    "assistedPct": 25.4,
     "dunks": {
-      "attempted": 100,
-      "made": 92,
-      "pct": 92,
-      "assisted": 65,
-      "assistedPct": 70.7
+      "attempted": 126,
+      "made": 117,
+      "pct": 92.9,
+      "assisted": 80,
+      "assistedPct": 68.4
     },
     "layups": {
-      "attempted": 637,
-      "made": 331,
-      "pct": 52,
-      "assisted": 149,
-      "assistedPct": 45
+      "attempted": 790,
+      "made": 417,
+      "pct": 52.8,
+      "assisted": 188,
+      "assistedPct": 45.1
     },
     "tipIns": {
-      "attempted": 55,
-      "made": 38,
-      "pct": 69.1
+      "attempted": 63,
+      "made": 43,
+      "pct": 68.3
     },
     "twoPointJumpers": {
-      "attempted": 402,
-      "made": 146,
-      "pct": 36.3,
-      "assisted": 73,
-      "assistedPct": 50
+      "attempted": 501,
+      "made": 185,
+      "pct": 36.9,
+      "assisted": 89,
+      "assistedPct": 48.1
     },
     "threePointJumpers": {
-      "attempted": 600,
-      "made": 206,
-      "pct": 34.3,
-      "assisted": 170,
-      "assistedPct": 82.5
+      "attempted": 803,
+      "made": 269,
+      "pct": 33.5,
+      "assisted": 224,
+      "assistedPct": 83.3
     },
     "freeThrows": {
-      "attempted": 772,
-      "made": 562,
-      "pct": 72.8
+      "attempted": 918,
+      "made": 663,
+      "pct": 72.2
     },
     "attemptsBreakdown": {
-      "dunks": 5.6,
-      "layups": 35.5,
-      "tipIns": 3.1,
-      "twoPointJumpers": 22.4,
-      "threePointJumpers": 33.4
+      "dunks": 5.5,
+      "layups": 34.6,
+      "tipIns": 2.8,
+      "twoPointJumpers": 21.9,
+      "threePointJumpers": 35.2
     }
   }
 ]

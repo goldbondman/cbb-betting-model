@@ -4,53 +4,53 @@
     "teamId": 25,
     "team": "Boise State",
     "conference": "Mountain West",
-    "trackedShots": 1655,
-    "freeThrowRate": 40.4,
-    "assistedPct": 22.8,
+    "trackedShots": 1810,
+    "freeThrowRate": 41.8,
+    "assistedPct": 22,
     "dunks": {
-      "attempted": 62,
-      "made": 57,
-      "pct": 91.9,
-      "assisted": 41,
-      "assistedPct": 71.9
+      "attempted": 66,
+      "made": 60,
+      "pct": 90.9,
+      "assisted": 43,
+      "assistedPct": 71.7
     },
     "layups": {
-      "attempted": 540,
-      "made": 302,
-      "pct": 55.9,
-      "assisted": 122,
-      "assistedPct": 40.4
+      "attempted": 599,
+      "made": 332,
+      "pct": 55.4,
+      "assisted": 126,
+      "assistedPct": 38
     },
     "tipIns": {
-      "attempted": 30,
-      "made": 17,
-      "pct": 56.7
+      "attempted": 34,
+      "made": 21,
+      "pct": 61.8
     },
     "twoPointJumpers": {
-      "attempted": 316,
-      "made": 129,
-      "pct": 40.8,
+      "attempted": 337,
+      "made": 141,
+      "pct": 41.8,
       "assisted": 19,
-      "assistedPct": 14.7
+      "assistedPct": 13.5
     },
     "threePointJumpers": {
-      "attempted": 707,
-      "made": 243,
+      "attempted": 774,
+      "made": 266,
       "pct": 34.4,
-      "assisted": 195,
-      "assistedPct": 80.2
+      "assisted": 211,
+      "assistedPct": 79.3
     },
     "freeThrows": {
-      "attempted": 668,
-      "made": 523,
-      "pct": 78.3
+      "attempted": 756,
+      "made": 594,
+      "pct": 78.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.7,
-      "layups": 32.6,
-      "tipIns": 1.8,
-      "twoPointJumpers": 19.1,
-      "threePointJumpers": 42.7
+      "dunks": 3.6,
+      "layups": 33.1,
+      "tipIns": 1.9,
+      "twoPointJumpers": 18.6,
+      "threePointJumpers": 42.8
     }
   }
 ]

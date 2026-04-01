@@ -4,53 +4,53 @@
     "teamId": 253,
     "team": "Saint Mary's",
     "conference": "WCC",
-    "trackedShots": 1679,
-    "freeThrowRate": 35.9,
-    "assistedPct": 27.5,
+    "trackedShots": 1780,
+    "freeThrowRate": 35.6,
+    "assistedPct": 27.1,
     "dunks": {
-      "attempted": 55,
-      "made": 44,
-      "pct": 80,
+      "attempted": 56,
+      "made": 45,
+      "pct": 80.4,
       "assisted": 37,
-      "assistedPct": 84.1
+      "assistedPct": 82.2
     },
     "layups": {
-      "attempted": 560,
-      "made": 323,
-      "pct": 57.7,
-      "assisted": 143,
+      "attempted": 590,
+      "made": 336,
+      "pct": 56.9,
+      "assisted": 149,
       "assistedPct": 44.3
     },
     "tipIns": {
-      "attempted": 45,
-      "made": 21,
-      "pct": 46.7
+      "attempted": 49,
+      "made": 22,
+      "pct": 44.9
     },
     "twoPointJumpers": {
-      "attempted": 407,
-      "made": 149,
-      "pct": 36.6,
-      "assisted": 61,
-      "assistedPct": 40.9
+      "attempted": 430,
+      "made": 160,
+      "pct": 37.2,
+      "assisted": 64,
+      "assistedPct": 40
     },
     "threePointJumpers": {
-      "attempted": 612,
-      "made": 245,
-      "pct": 40,
-      "assisted": 220,
-      "assistedPct": 89.8
+      "attempted": 655,
+      "made": 261,
+      "pct": 39.8,
+      "assisted": 232,
+      "assistedPct": 88.9
     },
     "freeThrows": {
-      "attempted": 603,
-      "made": 481,
-      "pct": 79.8
+      "attempted": 633,
+      "made": 502,
+      "pct": 79.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
-      "layups": 33.4,
-      "tipIns": 2.7,
+      "dunks": 3.1,
+      "layups": 33.1,
+      "tipIns": 2.8,
       "twoPointJumpers": 24.2,
-      "threePointJumpers": 36.5
+      "threePointJumpers": 36.8
     }
   }
 ]

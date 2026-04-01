@@ -4,53 +4,53 @@
     "teamId": 315,
     "team": "UIC",
     "conference": "MVC",
-    "trackedShots": 1825,
-    "freeThrowRate": 36.9,
-    "assistedPct": 24.4,
+    "trackedShots": 2063,
+    "freeThrowRate": 36.3,
+    "assistedPct": 24.2,
     "dunks": {
-      "attempted": 90,
-      "made": 73,
-      "pct": 81.1,
-      "assisted": 60,
-      "assistedPct": 82.2
+      "attempted": 104,
+      "made": 86,
+      "pct": 82.7,
+      "assisted": 67,
+      "assistedPct": 77.9
     },
     "layups": {
-      "attempted": 604,
-      "made": 330,
-      "pct": 54.6,
-      "assisted": 165,
+      "attempted": 672,
+      "made": 374,
+      "pct": 55.7,
+      "assisted": 187,
       "assistedPct": 50
     },
     "tipIns": {
-      "attempted": 70,
-      "made": 45,
-      "pct": 64.3
+      "attempted": 75,
+      "made": 49,
+      "pct": 65.3
     },
     "twoPointJumpers": {
-      "attempted": 459,
-      "made": 180,
-      "pct": 39.2,
-      "assisted": 55,
-      "assistedPct": 30.6
+      "attempted": 543,
+      "made": 217,
+      "pct": 40,
+      "assisted": 63,
+      "assistedPct": 29
     },
     "threePointJumpers": {
-      "attempted": 602,
-      "made": 196,
-      "pct": 32.6,
-      "assisted": 166,
-      "assistedPct": 84.7
+      "attempted": 669,
+      "made": 215,
+      "pct": 32.1,
+      "assisted": 183,
+      "assistedPct": 85.1
     },
     "freeThrows": {
-      "attempted": 673,
-      "made": 492,
-      "pct": 73.1
+      "attempted": 749,
+      "made": 547,
+      "pct": 73
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 33.1,
-      "tipIns": 3.8,
-      "twoPointJumpers": 25.2,
-      "threePointJumpers": 33
+      "dunks": 5,
+      "layups": 32.6,
+      "tipIns": 3.6,
+      "twoPointJumpers": 26.3,
+      "threePointJumpers": 32.4
     }
   }
 ]

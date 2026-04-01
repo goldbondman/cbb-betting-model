@@ -4,53 +4,53 @@
     "teamId": 91,
     "team": "Fordham",
     "conference": "A-10",
-    "trackedShots": 1739,
-    "freeThrowRate": 25.6,
+    "trackedShots": 1909,
+    "freeThrowRate": 25.7,
     "assistedPct": 23.4,
     "dunks": {
-      "attempted": 48,
-      "made": 43,
-      "pct": 89.6,
-      "assisted": 38,
-      "assistedPct": 88.4
+      "attempted": 50,
+      "made": 45,
+      "pct": 90,
+      "assisted": 39,
+      "assistedPct": 86.7
     },
     "layups": {
-      "attempted": 606,
-      "made": 338,
-      "pct": 55.8,
-      "assisted": 158,
-      "assistedPct": 46.7
+      "attempted": 651,
+      "made": 368,
+      "pct": 56.5,
+      "assisted": 173,
+      "assistedPct": 47
     },
     "tipIns": {
-      "attempted": 36,
-      "made": 22,
-      "pct": 61.1
+      "attempted": 42,
+      "made": 25,
+      "pct": 59.5
     },
     "twoPointJumpers": {
-      "attempted": 391,
-      "made": 168,
-      "pct": 43,
-      "assisted": 50,
-      "assistedPct": 29.8
+      "attempted": 437,
+      "made": 186,
+      "pct": 42.6,
+      "assisted": 54,
+      "assistedPct": 29
     },
     "threePointJumpers": {
-      "attempted": 658,
-      "made": 193,
-      "pct": 29.3,
-      "assisted": 161,
-      "assistedPct": 83.4
+      "attempted": 729,
+      "made": 215,
+      "pct": 29.5,
+      "assisted": 181,
+      "assistedPct": 84.2
     },
     "freeThrows": {
-      "attempted": 445,
-      "made": 307,
-      "pct": 69
+      "attempted": 491,
+      "made": 342,
+      "pct": 69.7
     },
     "attemptsBreakdown": {
-      "dunks": 2.8,
-      "layups": 34.8,
-      "tipIns": 2.1,
-      "twoPointJumpers": 22.5,
-      "threePointJumpers": 37.8
+      "dunks": 2.6,
+      "layups": 34.1,
+      "tipIns": 2.2,
+      "twoPointJumpers": 22.9,
+      "threePointJumpers": 38.2
     }
   }
 ]

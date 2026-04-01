@@ -4,52 +4,52 @@
     "teamId": 224,
     "team": "Oregon State",
     "conference": "WCC",
-    "trackedShots": 1638,
-    "freeThrowRate": 44.1,
+    "trackedShots": 1749,
+    "freeThrowRate": 43.1,
     "assistedPct": 24.5,
     "dunks": {
-      "attempted": 59,
-      "made": 49,
-      "pct": 83.1,
-      "assisted": 39,
-      "assistedPct": 79.6
+      "attempted": 60,
+      "made": 50,
+      "pct": 83.3,
+      "assisted": 40,
+      "assistedPct": 80
     },
     "layups": {
-      "attempted": 474,
-      "made": 242,
-      "pct": 51.1,
-      "assisted": 109,
-      "assistedPct": 45
+      "attempted": 502,
+      "made": 259,
+      "pct": 51.6,
+      "assisted": 117,
+      "assistedPct": 45.2
     },
     "tipIns": {
-      "attempted": 33,
+      "attempted": 34,
       "made": 28,
-      "pct": 84.8
+      "pct": 82.4
     },
     "twoPointJumpers": {
-      "attempted": 347,
-      "made": 129,
-      "pct": 37.2,
-      "assisted": 42,
-      "assistedPct": 32.6
+      "attempted": 379,
+      "made": 139,
+      "pct": 36.7,
+      "assisted": 44,
+      "assistedPct": 31.7
     },
     "threePointJumpers": {
-      "attempted": 725,
-      "made": 254,
+      "attempted": 774,
+      "made": 271,
       "pct": 35,
-      "assisted": 211,
-      "assistedPct": 83.1
+      "assisted": 228,
+      "assistedPct": 84.1
     },
     "freeThrows": {
-      "attempted": 722,
-      "made": 555,
-      "pct": 76.9
+      "attempted": 754,
+      "made": 582,
+      "pct": 77.2
     },
     "attemptsBreakdown": {
-      "dunks": 3.6,
-      "layups": 28.9,
-      "tipIns": 2,
-      "twoPointJumpers": 21.2,
+      "dunks": 3.4,
+      "layups": 28.7,
+      "tipIns": 1.9,
+      "twoPointJumpers": 21.7,
       "threePointJumpers": 44.3
     }
   }

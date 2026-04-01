@@ -4,53 +4,53 @@
     "teamId": 145,
     "team": "Long Beach State",
     "conference": "Big West",
-    "trackedShots": 1803,
-    "freeThrowRate": 29.7,
-    "assistedPct": 22.1,
+    "trackedShots": 1922,
+    "freeThrowRate": 30.2,
+    "assistedPct": 21.4,
     "dunks": {
-      "attempted": 59,
-      "made": 52,
-      "pct": 88.1,
-      "assisted": 33,
-      "assistedPct": 63.5
+      "attempted": 61,
+      "made": 54,
+      "pct": 88.5,
+      "assisted": 34,
+      "assistedPct": 63
     },
     "layups": {
-      "attempted": 544,
-      "made": 334,
-      "pct": 61.4,
-      "assisted": 140,
-      "assistedPct": 41.9
+      "attempted": 580,
+      "made": 355,
+      "pct": 61.2,
+      "assisted": 144,
+      "assistedPct": 40.6
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 23,
-      "pct": 85.2
+      "attempted": 32,
+      "made": 27,
+      "pct": 84.4
     },
     "twoPointJumpers": {
-      "attempted": 553,
-      "made": 210,
-      "pct": 38,
-      "assisted": 63,
-      "assistedPct": 30
+      "attempted": 591,
+      "made": 224,
+      "pct": 37.9,
+      "assisted": 65,
+      "assistedPct": 29
     },
     "threePointJumpers": {
-      "attempted": 620,
-      "made": 203,
-      "pct": 32.7,
-      "assisted": 163,
-      "assistedPct": 80.3
+      "attempted": 658,
+      "made": 218,
+      "pct": 33.1,
+      "assisted": 168,
+      "assistedPct": 77.1
     },
     "freeThrows": {
-      "attempted": 535,
-      "made": 395,
-      "pct": 73.8
+      "attempted": 581,
+      "made": 422,
+      "pct": 72.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
+      "dunks": 3.2,
       "layups": 30.2,
-      "tipIns": 1.5,
+      "tipIns": 1.7,
       "twoPointJumpers": 30.7,
-      "threePointJumpers": 34.4
+      "threePointJumpers": 34.2
     }
   }
 ]

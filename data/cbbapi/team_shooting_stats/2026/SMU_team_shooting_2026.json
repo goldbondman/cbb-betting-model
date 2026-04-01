@@ -4,53 +4,53 @@
     "teamId": 248,
     "team": "SMU",
     "conference": "ACC",
-    "trackedShots": 1813,
-    "freeThrowRate": 32.8,
-    "assistedPct": 26.8,
+    "trackedShots": 2136,
+    "freeThrowRate": 30.4,
+    "assistedPct": 25.7,
     "dunks": {
-      "attempted": 109,
-      "made": 89,
-      "pct": 81.7,
-      "assisted": 67,
-      "assistedPct": 75.3
+      "attempted": 120,
+      "made": 97,
+      "pct": 80.8,
+      "assisted": 74,
+      "assistedPct": 76.3
     },
     "layups": {
-      "attempted": 465,
-      "made": 288,
-      "pct": 61.9,
-      "assisted": 131,
-      "assistedPct": 45.5
+      "attempted": 540,
+      "made": 335,
+      "pct": 62,
+      "assisted": 147,
+      "assistedPct": 43.9
     },
     "tipIns": {
-      "attempted": 68,
-      "made": 43,
-      "pct": 63.2
+      "attempted": 83,
+      "made": 51,
+      "pct": 61.4
     },
     "twoPointJumpers": {
-      "attempted": 541,
-      "made": 244,
-      "pct": 45.1,
-      "assisted": 91,
-      "assistedPct": 37.3
+      "attempted": 627,
+      "made": 279,
+      "pct": 44.5,
+      "assisted": 101,
+      "assistedPct": 36.2
     },
     "threePointJumpers": {
-      "attempted": 630,
-      "made": 239,
-      "pct": 37.9,
-      "assisted": 196,
-      "assistedPct": 82
+      "attempted": 766,
+      "made": 284,
+      "pct": 37.1,
+      "assisted": 228,
+      "assistedPct": 80.3
     },
     "freeThrows": {
-      "attempted": 595,
-      "made": 443,
-      "pct": 74.5
+      "attempted": 649,
+      "made": 482,
+      "pct": 74.3
     },
     "attemptsBreakdown": {
-      "dunks": 6,
-      "layups": 25.6,
-      "tipIns": 3.8,
-      "twoPointJumpers": 29.8,
-      "threePointJumpers": 34.7
+      "dunks": 5.6,
+      "layups": 25.3,
+      "tipIns": 3.9,
+      "twoPointJumpers": 29.4,
+      "threePointJumpers": 35.9
     }
   }
 ]

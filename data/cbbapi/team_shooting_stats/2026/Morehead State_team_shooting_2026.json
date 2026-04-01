@@ -4,53 +4,53 @@
     "teamId": 181,
     "team": "Morehead State",
     "conference": "OVC",
-    "trackedShots": 1800,
-    "freeThrowRate": 36.7,
-    "assistedPct": 23.8,
+    "trackedShots": 1913,
+    "freeThrowRate": 37.3,
+    "assistedPct": 23.2,
     "dunks": {
-      "attempted": 47,
-      "made": 41,
-      "pct": 87.2,
-      "assisted": 33,
-      "assistedPct": 80.5
+      "attempted": 52,
+      "made": 46,
+      "pct": 88.5,
+      "assisted": 36,
+      "assistedPct": 78.3
     },
     "layups": {
-      "attempted": 656,
-      "made": 378,
-      "pct": 57.6,
-      "assisted": 183,
-      "assistedPct": 48.4
+      "attempted": 681,
+      "made": 387,
+      "pct": 56.8,
+      "assisted": 184,
+      "assistedPct": 47.5
     },
     "tipIns": {
-      "attempted": 57,
-      "made": 33,
-      "pct": 57.9
+      "attempted": 61,
+      "made": 36,
+      "pct": 59
     },
     "twoPointJumpers": {
-      "attempted": 486,
-      "made": 203,
-      "pct": 41.8,
-      "assisted": 45,
-      "assistedPct": 22.2
+      "attempted": 533,
+      "made": 219,
+      "pct": 41.1,
+      "assisted": 48,
+      "assistedPct": 21.9
     },
     "threePointJumpers": {
-      "attempted": 554,
-      "made": 186,
-      "pct": 33.6,
-      "assisted": 167,
-      "assistedPct": 89.8
+      "attempted": 586,
+      "made": 195,
+      "pct": 33.3,
+      "assisted": 175,
+      "assistedPct": 89.7
     },
     "freeThrows": {
-      "attempted": 660,
-      "made": 483,
-      "pct": 73.2
+      "attempted": 713,
+      "made": 523,
+      "pct": 73.4
     },
     "attemptsBreakdown": {
-      "dunks": 2.6,
-      "layups": 36.4,
+      "dunks": 2.7,
+      "layups": 35.6,
       "tipIns": 3.2,
-      "twoPointJumpers": 27,
-      "threePointJumpers": 30.8
+      "twoPointJumpers": 27.9,
+      "threePointJumpers": 30.6
     }
   }
 ]

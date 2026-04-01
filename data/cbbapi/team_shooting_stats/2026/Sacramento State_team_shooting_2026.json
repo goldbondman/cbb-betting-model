@@ -4,22 +4,22 @@
     "teamId": 249,
     "team": "Sacramento State",
     "conference": "Big Sky",
-    "trackedShots": 1771,
-    "freeThrowRate": 40.9,
-    "assistedPct": 20.9,
+    "trackedShots": 1880,
+    "freeThrowRate": 40.7,
+    "assistedPct": 21.2,
     "dunks": {
-      "attempted": 49,
-      "made": 40,
-      "pct": 81.6,
-      "assisted": 33,
-      "assistedPct": 82.5
+      "attempted": 50,
+      "made": 41,
+      "pct": 82,
+      "assisted": 34,
+      "assistedPct": 82.9
     },
     "layups": {
-      "attempted": 579,
-      "made": 305,
-      "pct": 52.7,
-      "assisted": 116,
-      "assistedPct": 38
+      "attempted": 623,
+      "made": 329,
+      "pct": 52.8,
+      "assisted": 132,
+      "assistedPct": 40.1
     },
     "tipIns": {
       "attempted": 36,
@@ -27,30 +27,30 @@
       "pct": 69.4
     },
     "twoPointJumpers": {
-      "attempted": 449,
-      "made": 157,
-      "pct": 35,
-      "assisted": 46,
-      "assistedPct": 29.3
+      "attempted": 478,
+      "made": 165,
+      "pct": 34.5,
+      "assisted": 47,
+      "assistedPct": 28.5
     },
     "threePointJumpers": {
-      "attempted": 658,
-      "made": 221,
-      "pct": 33.6,
-      "assisted": 176,
-      "assistedPct": 79.6
+      "attempted": 693,
+      "made": 231,
+      "pct": 33.3,
+      "assisted": 186,
+      "assistedPct": 80.5
     },
     "freeThrows": {
-      "attempted": 724,
-      "made": 563,
-      "pct": 77.8
+      "attempted": 766,
+      "made": 595,
+      "pct": 77.7
     },
     "attemptsBreakdown": {
-      "dunks": 2.8,
-      "layups": 32.7,
-      "tipIns": 2,
+      "dunks": 2.7,
+      "layups": 33.1,
+      "tipIns": 1.9,
       "twoPointJumpers": 25.4,
-      "threePointJumpers": 37.2
+      "threePointJumpers": 36.9
     }
   }
 ]

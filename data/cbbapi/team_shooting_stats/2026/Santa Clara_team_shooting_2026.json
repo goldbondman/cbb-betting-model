@@ -4,22 +4,22 @@
     "teamId": 261,
     "team": "Santa Clara",
     "conference": "WCC",
-    "trackedShots": 2014,
-    "freeThrowRate": 26,
-    "assistedPct": 25.1,
+    "trackedShots": 2279,
+    "freeThrowRate": 25,
+    "assistedPct": 24.7,
     "dunks": {
-      "attempted": 87,
-      "made": 77,
-      "pct": 88.5,
-      "assisted": 65,
-      "assistedPct": 84.4
+      "attempted": 94,
+      "made": 82,
+      "pct": 87.2,
+      "assisted": 69,
+      "assistedPct": 84.1
     },
     "layups": {
-      "attempted": 607,
-      "made": 351,
-      "pct": 57.8,
-      "assisted": 152,
-      "assistedPct": 43.3
+      "attempted": 665,
+      "made": 381,
+      "pct": 57.3,
+      "assisted": 168,
+      "assistedPct": 44.1
     },
     "tipIns": {
       "attempted": 40,
@@ -27,30 +27,30 @@
       "pct": 80
     },
     "twoPointJumpers": {
-      "attempted": 381,
-      "made": 181,
-      "pct": 47.5,
-      "assisted": 40,
-      "assistedPct": 22.1
+      "attempted": 453,
+      "made": 212,
+      "pct": 46.8,
+      "assisted": 45,
+      "assistedPct": 21.2
     },
     "threePointJumpers": {
-      "attempted": 899,
-      "made": 309,
-      "pct": 34.4,
-      "assisted": 248,
-      "assistedPct": 80.3
+      "attempted": 1027,
+      "made": 356,
+      "pct": 34.7,
+      "assisted": 281,
+      "assistedPct": 78.9
     },
     "freeThrows": {
-      "attempted": 524,
-      "made": 390,
-      "pct": 74.4
+      "attempted": 569,
+      "made": 421,
+      "pct": 74
     },
     "attemptsBreakdown": {
-      "dunks": 4.3,
-      "layups": 30.1,
-      "tipIns": 2,
-      "twoPointJumpers": 18.9,
-      "threePointJumpers": 44.6
+      "dunks": 4.1,
+      "layups": 29.2,
+      "tipIns": 1.8,
+      "twoPointJumpers": 19.9,
+      "threePointJumpers": 45.1
     }
   }
 ]

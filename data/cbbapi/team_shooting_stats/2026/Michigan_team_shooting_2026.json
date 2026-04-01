@@ -4,53 +4,53 @@
     "teamId": 170,
     "team": "Michigan",
     "conference": "Big Ten",
-    "trackedShots": 1772,
-    "freeThrowRate": 38.3,
+    "trackedShots": 2286,
+    "freeThrowRate": 38.1,
     "assistedPct": 30.5,
     "dunks": {
-      "attempted": 151,
-      "made": 136,
-      "pct": 90.1,
-      "assisted": 111,
-      "assistedPct": 81.6
+      "attempted": 203,
+      "made": 185,
+      "pct": 91.1,
+      "assisted": 152,
+      "assistedPct": 82.2
     },
     "layups": {
-      "attempted": 591,
-      "made": 377,
-      "pct": 63.8,
-      "assisted": 161,
-      "assistedPct": 42.7
+      "attempted": 732,
+      "made": 454,
+      "pct": 62,
+      "assisted": 193,
+      "assistedPct": 42.5
     },
     "tipIns": {
-      "attempted": 26,
-      "made": 19,
-      "pct": 73.1
+      "attempted": 48,
+      "made": 33,
+      "pct": 68.8
     },
     "twoPointJumpers": {
-      "attempted": 248,
-      "made": 100,
-      "pct": 40.3,
-      "assisted": 29,
-      "assistedPct": 29
+      "attempted": 346,
+      "made": 142,
+      "pct": 41,
+      "assisted": 40,
+      "assistedPct": 28.2
     },
     "threePointJumpers": {
-      "attempted": 756,
-      "made": 272,
-      "pct": 36,
-      "assisted": 240,
-      "assistedPct": 88.2
+      "attempted": 957,
+      "made": 353,
+      "pct": 36.9,
+      "assisted": 312,
+      "assistedPct": 88.4
     },
     "freeThrows": {
-      "attempted": 678,
-      "made": 500,
-      "pct": 73.7
+      "attempted": 871,
+      "made": 646,
+      "pct": 74.2
     },
     "attemptsBreakdown": {
-      "dunks": 8.5,
-      "layups": 33.4,
-      "tipIns": 1.5,
-      "twoPointJumpers": 14,
-      "threePointJumpers": 42.7
+      "dunks": 8.9,
+      "layups": 32,
+      "tipIns": 2.1,
+      "twoPointJumpers": 15.1,
+      "threePointJumpers": 41.9
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 45,
     "team": "Central Michigan",
     "conference": "MAC",
-    "trackedShots": 1614,
-    "freeThrowRate": 33.5,
+    "trackedShots": 1728,
+    "freeThrowRate": 32.5,
     "assistedPct": 25.5,
     "dunks": {
-      "attempted": 44,
-      "made": 42,
-      "pct": 95.5,
-      "assisted": 31,
-      "assistedPct": 73.8
+      "attempted": 48,
+      "made": 46,
+      "pct": 95.8,
+      "assisted": 35,
+      "assistedPct": 76.1
     },
     "layups": {
-      "attempted": 520,
-      "made": 296,
-      "pct": 56.9,
-      "assisted": 158,
-      "assistedPct": 53.4
+      "attempted": 559,
+      "made": 317,
+      "pct": 56.7,
+      "assisted": 169,
+      "assistedPct": 53.3
     },
     "tipIns": {
-      "attempted": 64,
-      "made": 47,
-      "pct": 73.4
+      "attempted": 68,
+      "made": 50,
+      "pct": 73.5
     },
     "twoPointJumpers": {
-      "attempted": 458,
-      "made": 202,
-      "pct": 44.1,
-      "assisted": 79,
-      "assistedPct": 39.1
+      "attempted": 490,
+      "made": 215,
+      "pct": 43.9,
+      "assisted": 81,
+      "assistedPct": 37.7
     },
     "threePointJumpers": {
-      "attempted": 528,
-      "made": 174,
-      "pct": 33,
-      "assisted": 144,
-      "assistedPct": 82.8
+      "attempted": 563,
+      "made": 187,
+      "pct": 33.2,
+      "assisted": 156,
+      "assistedPct": 83.4
     },
     "freeThrows": {
-      "attempted": 541,
-      "made": 382,
-      "pct": 70.6
+      "attempted": 562,
+      "made": 394,
+      "pct": 70.1
     },
     "attemptsBreakdown": {
-      "dunks": 2.7,
-      "layups": 32.2,
-      "tipIns": 4,
+      "dunks": 2.8,
+      "layups": 32.3,
+      "tipIns": 3.9,
       "twoPointJumpers": 28.4,
-      "threePointJumpers": 32.7
+      "threePointJumpers": 32.6
     }
   }
 ]

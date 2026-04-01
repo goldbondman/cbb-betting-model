@@ -4,53 +4,53 @@
     "teamId": 357,
     "team": "Wright State",
     "conference": "Horizon",
-    "trackedShots": 1819,
-    "freeThrowRate": 36.8,
+    "trackedShots": 2057,
+    "freeThrowRate": 37.1,
     "assistedPct": 22.9,
     "dunks": {
-      "attempted": 78,
-      "made": 72,
-      "pct": 92.3,
-      "assisted": 57,
-      "assistedPct": 79.2
+      "attempted": 81,
+      "made": 75,
+      "pct": 92.6,
+      "assisted": 59,
+      "assistedPct": 78.7
     },
     "layups": {
-      "attempted": 705,
-      "made": 413,
-      "pct": 58.6,
-      "assisted": 155,
-      "assistedPct": 37.5
+      "attempted": 801,
+      "made": 470,
+      "pct": 58.7,
+      "assisted": 180,
+      "assistedPct": 38.3
     },
     "tipIns": {
-      "attempted": 55,
-      "made": 36,
-      "pct": 65.5
+      "attempted": 57,
+      "made": 37,
+      "pct": 64.9
     },
     "twoPointJumpers": {
-      "attempted": 367,
-      "made": 141,
-      "pct": 38.4,
-      "assisted": 28,
-      "assistedPct": 19.9
+      "attempted": 420,
+      "made": 164,
+      "pct": 39,
+      "assisted": 34,
+      "assistedPct": 20.7
     },
     "threePointJumpers": {
-      "attempted": 614,
-      "made": 224,
-      "pct": 36.5,
-      "assisted": 177,
-      "assistedPct": 79
+      "attempted": 698,
+      "made": 254,
+      "pct": 36.4,
+      "assisted": 199,
+      "assistedPct": 78.3
     },
     "freeThrows": {
-      "attempted": 669,
-      "made": 490,
-      "pct": 73.2
+      "attempted": 764,
+      "made": 564,
+      "pct": 73.8
     },
     "attemptsBreakdown": {
-      "dunks": 4.3,
-      "layups": 38.8,
-      "tipIns": 3,
-      "twoPointJumpers": 20.2,
-      "threePointJumpers": 33.8
+      "dunks": 3.9,
+      "layups": 38.9,
+      "tipIns": 2.8,
+      "twoPointJumpers": 20.4,
+      "threePointJumpers": 33.9
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 164,
     "team": "Mercer",
     "conference": "SoCon",
-    "trackedShots": 1914,
-    "freeThrowRate": 37.8,
-    "assistedPct": 22.1,
+    "trackedShots": 1978,
+    "freeThrowRate": 37.6,
+    "assistedPct": 21.8,
     "dunks": {
-      "attempted": 98,
-      "made": 84,
-      "pct": 85.7,
-      "assisted": 62,
-      "assistedPct": 73.8
+      "attempted": 99,
+      "made": 85,
+      "pct": 85.9,
+      "assisted": 63,
+      "assistedPct": 74.1
     },
     "layups": {
-      "attempted": 547,
-      "made": 309,
+      "attempted": 565,
+      "made": 319,
       "pct": 56.5,
-      "assisted": 119,
-      "assistedPct": 38.5
+      "assisted": 120,
+      "assistedPct": 37.6
     },
     "tipIns": {
-      "attempted": 80,
-      "made": 62,
-      "pct": 77.5
+      "attempted": 82,
+      "made": 63,
+      "pct": 76.8
     },
     "twoPointJumpers": {
-      "attempted": 407,
-      "made": 161,
-      "pct": 39.6,
+      "attempted": 429,
+      "made": 168,
+      "pct": 39.2,
       "assisted": 22,
-      "assistedPct": 13.7
+      "assistedPct": 13.1
     },
     "threePointJumpers": {
-      "attempted": 782,
-      "made": 272,
-      "pct": 34.8,
-      "assisted": 220,
-      "assistedPct": 80.9
+      "attempted": 803,
+      "made": 280,
+      "pct": 34.9,
+      "assisted": 227,
+      "assistedPct": 81.1
     },
     "freeThrows": {
-      "attempted": 724,
-      "made": 526,
-      "pct": 72.7
+      "attempted": 743,
+      "made": 537,
+      "pct": 72.3
     },
     "attemptsBreakdown": {
-      "dunks": 5.1,
+      "dunks": 5,
       "layups": 28.6,
-      "tipIns": 4.2,
-      "twoPointJumpers": 21.3,
-      "threePointJumpers": 40.9
+      "tipIns": 4.1,
+      "twoPointJumpers": 21.7,
+      "threePointJumpers": 40.6
     }
   }
 ]

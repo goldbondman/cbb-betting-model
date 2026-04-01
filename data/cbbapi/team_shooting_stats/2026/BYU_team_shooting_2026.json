@@ -4,53 +4,53 @@
     "teamId": 18,
     "team": "BYU",
     "conference": "Big 12",
-    "trackedShots": 1803,
-    "freeThrowRate": 35.3,
-    "assistedPct": 22.1,
+    "trackedShots": 2172,
+    "freeThrowRate": 34.3,
+    "assistedPct": 20.9,
     "dunks": {
-      "attempted": 100,
-      "made": 85,
-      "pct": 85,
-      "assisted": 54,
-      "assistedPct": 63.5
+      "attempted": 116,
+      "made": 99,
+      "pct": 85.3,
+      "assisted": 61,
+      "assistedPct": 61.6
     },
     "layups": {
-      "attempted": 434,
-      "made": 276,
-      "pct": 63.6,
-      "assisted": 81,
-      "assistedPct": 29.3
+      "attempted": 515,
+      "made": 322,
+      "pct": 62.5,
+      "assisted": 88,
+      "assistedPct": 27.3
     },
     "tipIns": {
-      "attempted": 65,
-      "made": 43,
-      "pct": 66.2
+      "attempted": 82,
+      "made": 56,
+      "pct": 68.3
     },
     "twoPointJumpers": {
-      "attempted": 478,
-      "made": 205,
-      "pct": 42.9,
-      "assisted": 44,
-      "assistedPct": 21.5
+      "attempted": 594,
+      "made": 258,
+      "pct": 43.4,
+      "assisted": 51,
+      "assistedPct": 19.8
     },
     "threePointJumpers": {
-      "attempted": 726,
-      "made": 257,
-      "pct": 35.4,
-      "assisted": 220,
-      "assistedPct": 85.6
+      "attempted": 865,
+      "made": 299,
+      "pct": 34.6,
+      "assisted": 254,
+      "assistedPct": 84.9
     },
     "freeThrows": {
-      "attempted": 637,
-      "made": 475,
-      "pct": 74.6
+      "attempted": 746,
+      "made": 557,
+      "pct": 74.7
     },
     "attemptsBreakdown": {
-      "dunks": 5.5,
-      "layups": 24.1,
-      "tipIns": 3.6,
-      "twoPointJumpers": 26.5,
-      "threePointJumpers": 40.3
+      "dunks": 5.3,
+      "layups": 23.7,
+      "tipIns": 3.8,
+      "twoPointJumpers": 27.3,
+      "threePointJumpers": 39.8
     }
   }
 ]

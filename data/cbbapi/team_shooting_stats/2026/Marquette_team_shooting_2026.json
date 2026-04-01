@@ -4,53 +4,53 @@
     "teamId": 157,
     "team": "Marquette",
     "conference": "Big East",
-    "trackedShots": 1776,
-    "freeThrowRate": 32.5,
-    "assistedPct": 24.3,
+    "trackedShots": 1955,
+    "freeThrowRate": 32.7,
+    "assistedPct": 24.7,
     "dunks": {
-      "attempted": 108,
-      "made": 92,
-      "pct": 85.2,
-      "assisted": 56,
-      "assistedPct": 60.9
+      "attempted": 118,
+      "made": 101,
+      "pct": 85.6,
+      "assisted": 65,
+      "assistedPct": 64.4
     },
     "layups": {
-      "attempted": 635,
-      "made": 336,
-      "pct": 52.9,
-      "assisted": 151,
-      "assistedPct": 44.9
+      "attempted": 695,
+      "made": 369,
+      "pct": 53.1,
+      "assisted": 162,
+      "assistedPct": 43.9
     },
     "tipIns": {
-      "attempted": 91,
-      "made": 43,
-      "pct": 47.3
+      "attempted": 94,
+      "made": 45,
+      "pct": 47.9
     },
     "twoPointJumpers": {
-      "attempted": 209,
-      "made": 72,
-      "pct": 34.4,
-      "assisted": 24,
-      "assistedPct": 33.3
+      "attempted": 226,
+      "made": 80,
+      "pct": 35.4,
+      "assisted": 29,
+      "assistedPct": 36.3
     },
     "threePointJumpers": {
-      "attempted": 733,
-      "made": 233,
+      "attempted": 822,
+      "made": 261,
       "pct": 31.8,
-      "assisted": 200,
-      "assistedPct": 85.8
+      "assisted": 227,
+      "assistedPct": 87
     },
     "freeThrows": {
-      "attempted": 577,
-      "made": 387,
-      "pct": 67.1
+      "attempted": 640,
+      "made": 432,
+      "pct": 67.5
     },
     "attemptsBreakdown": {
-      "dunks": 6.1,
-      "layups": 35.8,
-      "tipIns": 5.1,
-      "twoPointJumpers": 11.8,
-      "threePointJumpers": 41.3
+      "dunks": 6,
+      "layups": 35.5,
+      "tipIns": 4.8,
+      "twoPointJumpers": 11.6,
+      "threePointJumpers": 42
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 209,
     "team": "Northern Iowa",
     "conference": "MVC",
-    "trackedShots": 1714,
-    "freeThrowRate": 25.1,
-    "assistedPct": 25.7,
+    "trackedShots": 1978,
+    "freeThrowRate": 25.4,
+    "assistedPct": 26.2,
     "dunks": {
-      "attempted": 89,
-      "made": 78,
-      "pct": 87.6,
-      "assisted": 69,
-      "assistedPct": 88.5
+      "attempted": 102,
+      "made": 90,
+      "pct": 88.2,
+      "assisted": 76,
+      "assistedPct": 84.4
     },
     "layups": {
-      "attempted": 594,
-      "made": 337,
-      "pct": 56.7,
-      "assisted": 124,
-      "assistedPct": 36.8
+      "attempted": 670,
+      "made": 383,
+      "pct": 57.2,
+      "assisted": 147,
+      "assistedPct": 38.4
     },
     "tipIns": {
-      "attempted": 16,
-      "made": 12,
-      "pct": 75
+      "attempted": 17,
+      "made": 13,
+      "pct": 76.5
     },
     "twoPointJumpers": {
-      "attempted": 327,
-      "made": 137,
-      "pct": 41.9,
-      "assisted": 42,
-      "assistedPct": 30.7
+      "attempted": 408,
+      "made": 177,
+      "pct": 43.4,
+      "assisted": 59,
+      "assistedPct": 33.3
     },
     "threePointJumpers": {
-      "attempted": 688,
-      "made": 240,
-      "pct": 34.9,
-      "assisted": 205,
-      "assistedPct": 85.4
+      "attempted": 781,
+      "made": 275,
+      "pct": 35.2,
+      "assisted": 236,
+      "assistedPct": 85.8
     },
     "freeThrows": {
-      "attempted": 430,
-      "made": 300,
-      "pct": 69.8
+      "attempted": 503,
+      "made": 349,
+      "pct": 69.4
     },
     "attemptsBreakdown": {
       "dunks": 5.2,
-      "layups": 34.7,
+      "layups": 33.9,
       "tipIns": 0.9,
-      "twoPointJumpers": 19.1,
-      "threePointJumpers": 40.1
+      "twoPointJumpers": 20.6,
+      "threePointJumpers": 39.5
     }
   }
 ]

@@ -4,52 +4,52 @@
     "teamId": 73,
     "team": "Duquesne",
     "conference": "A-10",
-    "trackedShots": 1708,
-    "freeThrowRate": 38.3,
-    "assistedPct": 26.1,
+    "trackedShots": 1936,
+    "freeThrowRate": 37.8,
+    "assistedPct": 25.3,
     "dunks": {
-      "attempted": 81,
-      "made": 64,
-      "pct": 79,
-      "assisted": 53,
-      "assistedPct": 82.8
+      "attempted": 94,
+      "made": 73,
+      "pct": 77.7,
+      "assisted": 59,
+      "assistedPct": 80.8
     },
     "layups": {
-      "attempted": 617,
-      "made": 358,
-      "pct": 58,
-      "assisted": 143,
-      "assistedPct": 39.9
+      "attempted": 697,
+      "made": 402,
+      "pct": 57.7,
+      "assisted": 158,
+      "assistedPct": 39.3
     },
     "tipIns": {
-      "attempted": 38,
-      "made": 24,
-      "pct": 63.2
+      "attempted": 42,
+      "made": 27,
+      "pct": 64.3
     },
     "twoPointJumpers": {
-      "attempted": 224,
-      "made": 92,
-      "pct": 41.1,
-      "assisted": 28,
-      "assistedPct": 30.4
+      "attempted": 256,
+      "made": 101,
+      "pct": 39.5,
+      "assisted": 31,
+      "assistedPct": 30.7
     },
     "threePointJumpers": {
-      "attempted": 748,
-      "made": 259,
-      "pct": 34.6,
-      "assisted": 221,
-      "assistedPct": 85.3
+      "attempted": 847,
+      "made": 285,
+      "pct": 33.6,
+      "assisted": 242,
+      "assistedPct": 84.9
     },
     "freeThrows": {
-      "attempted": 655,
-      "made": 467,
-      "pct": 71.3
+      "attempted": 732,
+      "made": 523,
+      "pct": 71.4
     },
     "attemptsBreakdown": {
-      "dunks": 4.7,
-      "layups": 36.1,
+      "dunks": 4.9,
+      "layups": 36,
       "tipIns": 2.2,
-      "twoPointJumpers": 13.1,
+      "twoPointJumpers": 13.2,
       "threePointJumpers": 43.8
     }
   }

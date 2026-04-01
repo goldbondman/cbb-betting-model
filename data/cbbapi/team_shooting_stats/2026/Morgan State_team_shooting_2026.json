@@ -4,9 +4,9 @@
     "teamId": 182,
     "team": "Morgan State",
     "conference": "MEAC",
-    "trackedShots": 1643,
-    "freeThrowRate": 42.1,
-    "assistedPct": 22.6,
+    "trackedShots": 1769,
+    "freeThrowRate": 41.8,
+    "assistedPct": 22.1,
     "dunks": {
       "attempted": 47,
       "made": 38,
@@ -15,42 +15,42 @@
       "assistedPct": 84.2
     },
     "layups": {
-      "attempted": 580,
-      "made": 313,
-      "pct": 54,
-      "assisted": 126,
-      "assistedPct": 40.3
+      "attempted": 632,
+      "made": 339,
+      "pct": 53.6,
+      "assisted": 132,
+      "assistedPct": 38.9
     },
     "tipIns": {
-      "attempted": 16,
-      "made": 9,
-      "pct": 56.3
+      "attempted": 18,
+      "made": 10,
+      "pct": 55.6
     },
     "twoPointJumpers": {
-      "attempted": 415,
-      "made": 147,
-      "pct": 35.4,
-      "assisted": 52,
-      "assistedPct": 35.4
+      "attempted": 440,
+      "made": 154,
+      "pct": 35,
+      "assisted": 53,
+      "assistedPct": 34.4
     },
     "threePointJumpers": {
-      "attempted": 585,
-      "made": 197,
-      "pct": 33.7,
-      "assisted": 162,
-      "assistedPct": 82.2
+      "attempted": 632,
+      "made": 209,
+      "pct": 33.1,
+      "assisted": 174,
+      "assistedPct": 83.3
     },
     "freeThrows": {
-      "attempted": 692,
-      "made": 513,
-      "pct": 74.1
+      "attempted": 740,
+      "made": 549,
+      "pct": 74.2
     },
     "attemptsBreakdown": {
-      "dunks": 2.9,
-      "layups": 35.3,
+      "dunks": 2.7,
+      "layups": 35.7,
       "tipIns": 1,
-      "twoPointJumpers": 25.3,
-      "threePointJumpers": 35.6
+      "twoPointJumpers": 24.9,
+      "threePointJumpers": 35.7
     }
   }
 ]

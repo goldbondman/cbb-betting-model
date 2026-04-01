@@ -4,53 +4,53 @@
     "teamId": 337,
     "team": "Vermont",
     "conference": "Am. East",
-    "trackedShots": 1702,
-    "freeThrowRate": 31.3,
-    "assistedPct": 22.6,
+    "trackedShots": 1915,
+    "freeThrowRate": 31.6,
+    "assistedPct": 22.1,
     "dunks": {
-      "attempted": 33,
-      "made": 32,
-      "pct": 97,
-      "assisted": 24,
-      "assistedPct": 75
+      "attempted": 39,
+      "made": 38,
+      "pct": 97.4,
+      "assisted": 27,
+      "assistedPct": 71.1
     },
     "layups": {
-      "attempted": 564,
-      "made": 338,
-      "pct": 59.9,
-      "assisted": 113,
+      "attempted": 633,
+      "made": 380,
+      "pct": 60,
+      "assisted": 127,
       "assistedPct": 33.4
     },
     "tipIns": {
-      "attempted": 36,
-      "made": 27,
-      "pct": 75
+      "attempted": 39,
+      "made": 28,
+      "pct": 71.8
     },
     "twoPointJumpers": {
-      "attempted": 306,
-      "made": 130,
-      "pct": 42.5,
-      "assisted": 19,
-      "assistedPct": 14.6
+      "attempted": 345,
+      "made": 148,
+      "pct": 42.9,
+      "assisted": 23,
+      "assistedPct": 15.5
     },
     "threePointJumpers": {
-      "attempted": 763,
-      "made": 262,
-      "pct": 34.3,
-      "assisted": 229,
-      "assistedPct": 87.4
+      "attempted": 859,
+      "made": 292,
+      "pct": 34,
+      "assisted": 247,
+      "assistedPct": 84.6
     },
     "freeThrows": {
-      "attempted": 533,
-      "made": 388,
-      "pct": 72.8
+      "attempted": 605,
+      "made": 432,
+      "pct": 71.4
     },
     "attemptsBreakdown": {
-      "dunks": 1.9,
+      "dunks": 2,
       "layups": 33.1,
-      "tipIns": 2.1,
+      "tipIns": 2,
       "twoPointJumpers": 18,
-      "threePointJumpers": 44.8
+      "threePointJumpers": 44.9
     }
   }
 ]

@@ -4,53 +4,53 @@
     "teamId": 21,
     "team": "Bellarmine",
     "conference": "ASUN",
-    "trackedShots": 1635,
-    "freeThrowRate": 34.9,
-    "assistedPct": 27.4,
+    "trackedShots": 1741,
+    "freeThrowRate": 34.7,
+    "assistedPct": 27.5,
     "dunks": {
-      "attempted": 38,
-      "made": 35,
-      "pct": 92.1,
-      "assisted": 20,
-      "assistedPct": 57.1
+      "attempted": 40,
+      "made": 37,
+      "pct": 92.5,
+      "assisted": 22,
+      "assistedPct": 59.5
     },
     "layups": {
-      "attempted": 716,
-      "made": 464,
-      "pct": 64.8,
-      "assisted": 173,
-      "assistedPct": 37.3
+      "attempted": 763,
+      "made": 492,
+      "pct": 64.5,
+      "assisted": 184,
+      "assistedPct": 37.4
     },
     "tipIns": {
-      "attempted": 40,
-      "made": 30,
-      "pct": 75
+      "attempted": 43,
+      "made": 33,
+      "pct": 76.7
     },
     "twoPointJumpers": {
-      "attempted": 181,
-      "made": 71,
-      "pct": 39.2,
-      "assisted": 14,
-      "assistedPct": 19.7
+      "attempted": 189,
+      "made": 75,
+      "pct": 39.7,
+      "assisted": 15,
+      "assistedPct": 20
     },
     "threePointJumpers": {
-      "attempted": 660,
-      "made": 252,
+      "attempted": 706,
+      "made": 270,
       "pct": 38.2,
-      "assisted": 241,
-      "assistedPct": 95.6
+      "assisted": 257,
+      "assistedPct": 95.2
     },
     "freeThrows": {
-      "attempted": 570,
-      "made": 452,
+      "attempted": 604,
+      "made": 479,
       "pct": 79.3
     },
     "attemptsBreakdown": {
       "dunks": 2.3,
       "layups": 43.8,
-      "tipIns": 2.4,
-      "twoPointJumpers": 11.1,
-      "threePointJumpers": 40.4
+      "tipIns": 2.5,
+      "twoPointJumpers": 10.9,
+      "threePointJumpers": 40.6
     }
   }
 ]

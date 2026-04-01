@@ -4,53 +4,53 @@
     "teamId": 103,
     "team": "Grambling",
     "conference": "SWAC",
-    "trackedShots": 1463,
-    "freeThrowRate": 41.4,
-    "assistedPct": 22.2,
+    "trackedShots": 1691,
+    "freeThrowRate": 40.5,
+    "assistedPct": 22,
     "dunks": {
-      "attempted": 94,
-      "made": 70,
-      "pct": 74.5,
-      "assisted": 50,
-      "assistedPct": 71.4
+      "attempted": 104,
+      "made": 78,
+      "pct": 75,
+      "assisted": 57,
+      "assistedPct": 73.1
     },
     "layups": {
-      "attempted": 480,
-      "made": 261,
-      "pct": 54.4,
-      "assisted": 114,
-      "assistedPct": 43.7
+      "attempted": 548,
+      "made": 288,
+      "pct": 52.6,
+      "assisted": 126,
+      "assistedPct": 43.8
     },
     "tipIns": {
-      "attempted": 40,
-      "made": 25,
-      "pct": 62.5
+      "attempted": 58,
+      "made": 37,
+      "pct": 63.8
     },
     "twoPointJumpers": {
-      "attempted": 291,
-      "made": 96,
-      "pct": 33,
-      "assisted": 25,
-      "assistedPct": 26
+      "attempted": 333,
+      "made": 109,
+      "pct": 32.7,
+      "assisted": 33,
+      "assistedPct": 30.3
     },
     "threePointJumpers": {
-      "attempted": 558,
-      "made": 178,
-      "pct": 31.9,
-      "assisted": 136,
-      "assistedPct": 76.4
+      "attempted": 648,
+      "made": 208,
+      "pct": 32.1,
+      "assisted": 156,
+      "assistedPct": 75
     },
     "freeThrows": {
-      "attempted": 605,
-      "made": 438,
-      "pct": 72.4
+      "attempted": 685,
+      "made": 498,
+      "pct": 72.7
     },
     "attemptsBreakdown": {
-      "dunks": 6.4,
-      "layups": 32.8,
-      "tipIns": 2.7,
-      "twoPointJumpers": 19.9,
-      "threePointJumpers": 38.1
+      "dunks": 6.2,
+      "layups": 32.4,
+      "tipIns": 3.4,
+      "twoPointJumpers": 19.7,
+      "threePointJumpers": 38.3
     }
   }
 ]

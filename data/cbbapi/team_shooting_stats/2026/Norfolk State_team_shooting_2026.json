@@ -4,53 +4,53 @@
     "teamId": 196,
     "team": "Norfolk State",
     "conference": "MEAC",
-    "trackedShots": 1727,
-    "freeThrowRate": 42.9,
-    "assistedPct": 20.4,
+    "trackedShots": 1849,
+    "freeThrowRate": 42.5,
+    "assistedPct": 20.2,
     "dunks": {
-      "attempted": 43,
-      "made": 35,
-      "pct": 81.4,
-      "assisted": 22,
-      "assistedPct": 62.9
+      "attempted": 44,
+      "made": 36,
+      "pct": 81.8,
+      "assisted": 23,
+      "assistedPct": 63.9
     },
     "layups": {
-      "attempted": 644,
-      "made": 365,
-      "pct": 56.7,
-      "assisted": 134,
-      "assistedPct": 36.7
+      "attempted": 694,
+      "made": 396,
+      "pct": 57.1,
+      "assisted": 147,
+      "assistedPct": 37.1
     },
     "tipIns": {
-      "attempted": 91,
-      "made": 58,
-      "pct": 63.7
+      "attempted": 98,
+      "made": 61,
+      "pct": 62.2
     },
     "twoPointJumpers": {
-      "attempted": 424,
-      "made": 164,
-      "pct": 38.7,
-      "assisted": 37,
-      "assistedPct": 22.6
+      "attempted": 454,
+      "made": 177,
+      "pct": 39,
+      "assisted": 38,
+      "assistedPct": 21.5
     },
     "threePointJumpers": {
-      "attempted": 525,
-      "made": 180,
-      "pct": 34.3,
-      "assisted": 159,
+      "attempted": 559,
+      "made": 188,
+      "pct": 33.6,
+      "assisted": 166,
       "assistedPct": 88.3
     },
     "freeThrows": {
-      "attempted": 741,
-      "made": 506,
-      "pct": 68.3
+      "attempted": 785,
+      "made": 544,
+      "pct": 69.3
     },
     "attemptsBreakdown": {
-      "dunks": 2.5,
-      "layups": 37.3,
+      "dunks": 2.4,
+      "layups": 37.5,
       "tipIns": 5.3,
       "twoPointJumpers": 24.6,
-      "threePointJumpers": 30.4
+      "threePointJumpers": 30.2
     }
   }
 ]

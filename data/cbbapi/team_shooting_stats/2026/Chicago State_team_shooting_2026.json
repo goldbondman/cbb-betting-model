@@ -4,9 +4,9 @@
     "teamId": 50,
     "team": "Chicago State",
     "conference": "NEC",
-    "trackedShots": 1733,
-    "freeThrowRate": 29.4,
-    "assistedPct": 20,
+    "trackedShots": 1786,
+    "freeThrowRate": 30,
+    "assistedPct": 20.2,
     "dunks": {
       "attempted": 12,
       "made": 11,
@@ -15,41 +15,41 @@
       "assistedPct": 81.8
     },
     "layups": {
-      "attempted": 535,
-      "made": 263,
-      "pct": 49.2,
-      "assisted": 118,
-      "assistedPct": 44.9
+      "attempted": 554,
+      "made": 271,
+      "pct": 48.9,
+      "assisted": 125,
+      "assistedPct": 46.1
     },
     "tipIns": {
-      "attempted": 35,
-      "made": 22,
-      "pct": 62.9
+      "attempted": 38,
+      "made": 25,
+      "pct": 65.8
     },
     "twoPointJumpers": {
-      "attempted": 615,
-      "made": 227,
-      "pct": 36.9,
-      "assisted": 79,
-      "assistedPct": 34.8
+      "attempted": 631,
+      "made": 237,
+      "pct": 37.6,
+      "assisted": 81,
+      "assistedPct": 34.2
     },
     "threePointJumpers": {
-      "attempted": 536,
-      "made": 172,
+      "attempted": 551,
+      "made": 177,
       "pct": 32.1,
-      "assisted": 140,
-      "assistedPct": 81.4
+      "assisted": 145,
+      "assistedPct": 81.9
     },
     "freeThrows": {
-      "attempted": 510,
-      "made": 383,
-      "pct": 75.1
+      "attempted": 535,
+      "made": 401,
+      "pct": 75
     },
     "attemptsBreakdown": {
       "dunks": 0.7,
-      "layups": 30.9,
-      "tipIns": 2,
-      "twoPointJumpers": 35.5,
+      "layups": 31,
+      "tipIns": 2.1,
+      "twoPointJumpers": 35.3,
       "threePointJumpers": 30.9
     }
   }

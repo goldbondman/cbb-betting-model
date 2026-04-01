@@ -4,9 +4,9 @@
     "teamId": 239,
     "team": "Radford",
     "conference": "Big South",
-    "trackedShots": 1879,
-    "freeThrowRate": 39.8,
-    "assistedPct": 21.2,
+    "trackedShots": 1951,
+    "freeThrowRate": 40.1,
+    "assistedPct": 20.9,
     "dunks": {
       "attempted": 54,
       "made": 46,
@@ -15,42 +15,42 @@
       "assistedPct": 69.6
     },
     "layups": {
-      "attempted": 628,
-      "made": 349,
-      "pct": 55.6,
-      "assisted": 113,
-      "assistedPct": 32.4
+      "attempted": 653,
+      "made": 362,
+      "pct": 55.4,
+      "assisted": 116,
+      "assistedPct": 32
     },
     "tipIns": {
-      "attempted": 46,
-      "made": 35,
-      "pct": 76.1
+      "attempted": 52,
+      "made": 39,
+      "pct": 75
     },
     "twoPointJumpers": {
-      "attempted": 293,
-      "made": 120,
-      "pct": 41,
+      "attempted": 305,
+      "made": 124,
+      "pct": 40.7,
       "assisted": 13,
-      "assistedPct": 10.8
+      "assistedPct": 10.5
     },
     "threePointJumpers": {
-      "attempted": 858,
-      "made": 296,
-      "pct": 34.5,
-      "assisted": 240,
-      "assistedPct": 81.1
+      "attempted": 887,
+      "made": 303,
+      "pct": 34.2,
+      "assisted": 246,
+      "assistedPct": 81.2
     },
     "freeThrows": {
-      "attempted": 747,
-      "made": 531,
-      "pct": 71.1
+      "attempted": 783,
+      "made": 553,
+      "pct": 70.6
     },
     "attemptsBreakdown": {
-      "dunks": 2.9,
-      "layups": 33.4,
-      "tipIns": 2.4,
+      "dunks": 2.8,
+      "layups": 33.5,
+      "tipIns": 2.7,
       "twoPointJumpers": 15.6,
-      "threePointJumpers": 45.7
+      "threePointJumpers": 45.5
     }
   }
 ]

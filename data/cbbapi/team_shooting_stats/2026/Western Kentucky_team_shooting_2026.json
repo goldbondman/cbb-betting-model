@@ -4,53 +4,53 @@
     "teamId": 350,
     "team": "Western Kentucky",
     "conference": "CUSA",
-    "trackedShots": 1752,
-    "freeThrowRate": 39.9,
-    "assistedPct": 21.5,
+    "trackedShots": 1922,
+    "freeThrowRate": 41.4,
+    "assistedPct": 21.2,
     "dunks": {
-      "attempted": 55,
-      "made": 39,
-      "pct": 70.9,
-      "assisted": 34,
-      "assistedPct": 87.2
+      "attempted": 62,
+      "made": 43,
+      "pct": 69.4,
+      "assisted": 37,
+      "assistedPct": 86
     },
     "layups": {
-      "attempted": 573,
-      "made": 272,
-      "pct": 47.5,
-      "assisted": 98,
-      "assistedPct": 36
+      "attempted": 635,
+      "made": 300,
+      "pct": 47.2,
+      "assisted": 106,
+      "assistedPct": 35.3
     },
     "tipIns": {
-      "attempted": 74,
-      "made": 56,
-      "pct": 75.7
+      "attempted": 78,
+      "made": 59,
+      "pct": 75.6
     },
     "twoPointJumpers": {
-      "attempted": 342,
-      "made": 117,
-      "pct": 34.2,
-      "assisted": 31,
-      "assistedPct": 26.5
+      "attempted": 381,
+      "made": 132,
+      "pct": 34.6,
+      "assisted": 33,
+      "assistedPct": 25
     },
     "threePointJumpers": {
-      "attempted": 708,
-      "made": 242,
+      "attempted": 766,
+      "made": 262,
       "pct": 34.2,
-      "assisted": 214,
-      "assistedPct": 88.4
+      "assisted": 232,
+      "assistedPct": 88.5
     },
     "freeThrows": {
-      "attempted": 699,
-      "made": 537,
-      "pct": 76.8
+      "attempted": 796,
+      "made": 605,
+      "pct": 76
     },
     "attemptsBreakdown": {
-      "dunks": 3.1,
-      "layups": 32.7,
-      "tipIns": 4.2,
-      "twoPointJumpers": 19.5,
-      "threePointJumpers": 40.4
+      "dunks": 3.2,
+      "layups": 33,
+      "tipIns": 4.1,
+      "twoPointJumpers": 19.8,
+      "threePointJumpers": 39.9
     }
   }
 ]

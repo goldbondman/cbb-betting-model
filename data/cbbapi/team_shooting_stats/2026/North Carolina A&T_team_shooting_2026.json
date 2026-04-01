@@ -4,53 +4,53 @@
     "teamId": 198,
     "team": "North Carolina A&T",
     "conference": "CAA",
-    "trackedShots": 1556,
-    "freeThrowRate": 45.3,
-    "assistedPct": 21.4,
+    "trackedShots": 1672,
+    "freeThrowRate": 45.1,
+    "assistedPct": 21.2,
     "dunks": {
-      "attempted": 51,
-      "made": 47,
-      "pct": 92.2,
-      "assisted": 37,
-      "assistedPct": 78.7
+      "attempted": 53,
+      "made": 49,
+      "pct": 92.5,
+      "assisted": 38,
+      "assistedPct": 77.6
     },
     "layups": {
-      "attempted": 510,
-      "made": 301,
-      "pct": 59,
-      "assisted": 125,
-      "assistedPct": 41.5
+      "attempted": 550,
+      "made": 327,
+      "pct": 59.5,
+      "assisted": 136,
+      "assistedPct": 41.6
     },
     "tipIns": {
-      "attempted": 26,
-      "made": 21,
-      "pct": 80.8
+      "attempted": 30,
+      "made": 24,
+      "pct": 80
     },
     "twoPointJumpers": {
-      "attempted": 453,
-      "made": 186,
-      "pct": 41.1,
-      "assisted": 44,
+      "attempted": 496,
+      "made": 198,
+      "pct": 39.9,
+      "assisted": 47,
       "assistedPct": 23.7
     },
     "threePointJumpers": {
-      "attempted": 516,
-      "made": 164,
-      "pct": 31.8,
-      "assisted": 127,
-      "assistedPct": 77.4
+      "attempted": 543,
+      "made": 172,
+      "pct": 31.7,
+      "assisted": 134,
+      "assistedPct": 77.9
     },
     "freeThrows": {
-      "attempted": 705,
-      "made": 506,
-      "pct": 71.8
+      "attempted": 754,
+      "made": 540,
+      "pct": 71.6
     },
     "attemptsBreakdown": {
-      "dunks": 3.3,
-      "layups": 32.8,
-      "tipIns": 1.7,
-      "twoPointJumpers": 29.1,
-      "threePointJumpers": 33.2
+      "dunks": 3.2,
+      "layups": 32.9,
+      "tipIns": 1.8,
+      "twoPointJumpers": 29.7,
+      "threePointJumpers": 32.5
     }
   }
 ]

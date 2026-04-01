@@ -4,52 +4,52 @@
     "teamId": 90,
     "team": "Florida State",
     "conference": "ACC",
-    "trackedShots": 1819,
-    "freeThrowRate": 35,
-    "assistedPct": 22,
+    "trackedShots": 2050,
+    "freeThrowRate": 34.7,
+    "assistedPct": 22.6,
     "dunks": {
-      "attempted": 111,
-      "made": 93,
+      "attempted": 130,
+      "made": 109,
       "pct": 83.8,
-      "assisted": 52,
-      "assistedPct": 55.9
+      "assisted": 63,
+      "assistedPct": 57.8
     },
     "layups": {
-      "attempted": 497,
-      "made": 268,
-      "pct": 53.9,
-      "assisted": 98,
-      "assistedPct": 36.6
+      "attempted": 551,
+      "made": 298,
+      "pct": 54.1,
+      "assisted": 104,
+      "assistedPct": 34.9
     },
     "tipIns": {
-      "attempted": 47,
-      "made": 33,
-      "pct": 70.2
+      "attempted": 50,
+      "made": 36,
+      "pct": 72
     },
     "twoPointJumpers": {
-      "attempted": 244,
-      "made": 94,
-      "pct": 38.5,
-      "assisted": 12,
-      "assistedPct": 12.8
+      "attempted": 282,
+      "made": 115,
+      "pct": 40.8,
+      "assisted": 16,
+      "assistedPct": 13.9
     },
     "threePointJumpers": {
-      "attempted": 920,
-      "made": 292,
-      "pct": 31.7,
-      "assisted": 239,
-      "assistedPct": 81.8
+      "attempted": 1037,
+      "made": 343,
+      "pct": 33.1,
+      "assisted": 281,
+      "assistedPct": 81.9
     },
     "freeThrows": {
-      "attempted": 637,
-      "made": 460,
-      "pct": 72.2
+      "attempted": 711,
+      "made": 507,
+      "pct": 71.3
     },
     "attemptsBreakdown": {
-      "dunks": 6.1,
-      "layups": 27.3,
-      "tipIns": 2.6,
-      "twoPointJumpers": 13.4,
+      "dunks": 6.3,
+      "layups": 26.9,
+      "tipIns": 2.4,
+      "twoPointJumpers": 13.8,
       "threePointJumpers": 50.6
     }
   }

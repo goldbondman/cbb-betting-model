@@ -4,52 +4,52 @@
     "teamId": 4,
     "team": "Alabama A&M",
     "conference": "SWAC",
-    "trackedShots": 1575,
-    "freeThrowRate": 44.3,
-    "assistedPct": 20.6,
+    "trackedShots": 1798,
+    "freeThrowRate": 44.9,
+    "assistedPct": 21.4,
     "dunks": {
-      "attempted": 60,
-      "made": 56,
-      "pct": 93.3,
-      "assisted": 47,
-      "assistedPct": 83.9
+      "attempted": 73,
+      "made": 68,
+      "pct": 93.2,
+      "assisted": 57,
+      "assistedPct": 83.8
     },
     "layups": {
-      "attempted": 510,
-      "made": 256,
-      "pct": 50.2,
-      "assisted": 96,
-      "assistedPct": 37.5
+      "attempted": 568,
+      "made": 287,
+      "pct": 50.5,
+      "assisted": 107,
+      "assistedPct": 37.3
     },
     "tipIns": {
-      "attempted": 66,
-      "made": 49,
-      "pct": 74.2
+      "attempted": 78,
+      "made": 53,
+      "pct": 67.9
     },
     "twoPointJumpers": {
-      "attempted": 399,
-      "made": 145,
-      "pct": 36.3,
-      "assisted": 37,
-      "assistedPct": 25.5
+      "attempted": 463,
+      "made": 162,
+      "pct": 35,
+      "assisted": 48,
+      "assistedPct": 29.6
     },
     "threePointJumpers": {
-      "attempted": 540,
-      "made": 182,
-      "pct": 33.7,
-      "assisted": 144,
-      "assistedPct": 79.1
+      "attempted": 616,
+      "made": 214,
+      "pct": 34.7,
+      "assisted": 172,
+      "assistedPct": 80.4
     },
     "freeThrows": {
-      "attempted": 697,
-      "made": 518,
-      "pct": 74.3
+      "attempted": 808,
+      "made": 596,
+      "pct": 73.8
     },
     "attemptsBreakdown": {
-      "dunks": 3.8,
-      "layups": 32.4,
-      "tipIns": 4.2,
-      "twoPointJumpers": 25.3,
+      "dunks": 4.1,
+      "layups": 31.6,
+      "tipIns": 4.3,
+      "twoPointJumpers": 25.8,
       "threePointJumpers": 34.3
     }
   }

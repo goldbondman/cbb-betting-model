@@ -4,22 +4,22 @@
     "teamId": 27,
     "team": "Boston University",
     "conference": "Patriot",
-    "trackedShots": 1690,
-    "freeThrowRate": 32.1,
-    "assistedPct": 26.4,
+    "trackedShots": 1843,
+    "freeThrowRate": 31.5,
+    "assistedPct": 25.8,
     "dunks": {
-      "attempted": 58,
-      "made": 55,
-      "pct": 94.8,
-      "assisted": 43,
-      "assistedPct": 78.2
+      "attempted": 60,
+      "made": 57,
+      "pct": 95,
+      "assisted": 45,
+      "assistedPct": 78.9
     },
     "layups": {
-      "attempted": 529,
-      "made": 304,
-      "pct": 57.5,
-      "assisted": 126,
-      "assistedPct": 41.4
+      "attempted": 588,
+      "made": 341,
+      "pct": 58,
+      "assisted": 139,
+      "assistedPct": 40.8
     },
     "tipIns": {
       "attempted": 43,
@@ -27,30 +27,30 @@
       "pct": 76.7
     },
     "twoPointJumpers": {
-      "attempted": 308,
-      "made": 145,
-      "pct": 47.1,
+      "attempted": 341,
+      "made": 162,
+      "pct": 47.5,
       "assisted": 44,
-      "assistedPct": 30.3
+      "assistedPct": 27.2
     },
     "threePointJumpers": {
-      "attempted": 752,
-      "made": 297,
-      "pct": 39.5,
-      "assisted": 233,
-      "assistedPct": 78.5
+      "attempted": 811,
+      "made": 319,
+      "pct": 39.3,
+      "assisted": 248,
+      "assistedPct": 77.7
     },
     "freeThrows": {
-      "attempted": 543,
-      "made": 393,
-      "pct": 72.4
+      "attempted": 580,
+      "made": 423,
+      "pct": 72.9
     },
     "attemptsBreakdown": {
-      "dunks": 3.4,
-      "layups": 31.3,
-      "tipIns": 2.5,
-      "twoPointJumpers": 18.2,
-      "threePointJumpers": 44.5
+      "dunks": 3.3,
+      "layups": 31.9,
+      "tipIns": 2.3,
+      "twoPointJumpers": 18.5,
+      "threePointJumpers": 44
     }
   }
 ]

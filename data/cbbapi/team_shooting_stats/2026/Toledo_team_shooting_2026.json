@@ -4,53 +4,53 @@
     "teamId": 300,
     "team": "Toledo",
     "conference": "MAC",
-    "trackedShots": 1782,
-    "freeThrowRate": 31.5,
-    "assistedPct": 24.8,
+    "trackedShots": 2083,
+    "freeThrowRate": 29.7,
+    "assistedPct": 25.5,
     "dunks": {
-      "attempted": 53,
-      "made": 48,
-      "pct": 90.6,
-      "assisted": 38,
-      "assistedPct": 79.2
+      "attempted": 62,
+      "made": 57,
+      "pct": 91.9,
+      "assisted": 45,
+      "assistedPct": 78.9
     },
     "layups": {
-      "attempted": 643,
-      "made": 359,
-      "pct": 55.8,
-      "assisted": 141,
-      "assistedPct": 39.3
+      "attempted": 742,
+      "made": 415,
+      "pct": 55.9,
+      "assisted": 170,
+      "assistedPct": 41
     },
     "tipIns": {
-      "attempted": 27,
-      "made": 19,
-      "pct": 70.4
+      "attempted": 31,
+      "made": 23,
+      "pct": 74.2
     },
     "twoPointJumpers": {
-      "attempted": 492,
-      "made": 231,
-      "pct": 47,
-      "assisted": 82,
-      "assistedPct": 35.5
+      "attempted": 576,
+      "made": 279,
+      "pct": 48.4,
+      "assisted": 100,
+      "assistedPct": 35.8
     },
     "threePointJumpers": {
-      "attempted": 567,
-      "made": 203,
-      "pct": 35.8,
-      "assisted": 181,
-      "assistedPct": 89.2
+      "attempted": 672,
+      "made": 246,
+      "pct": 36.6,
+      "assisted": 216,
+      "assistedPct": 87.8
     },
     "freeThrows": {
-      "attempted": 561,
-      "made": 431,
-      "pct": 76.8
+      "attempted": 618,
+      "made": 469,
+      "pct": 75.9
     },
     "attemptsBreakdown": {
       "dunks": 3,
-      "layups": 36.1,
+      "layups": 35.6,
       "tipIns": 1.5,
-      "twoPointJumpers": 27.6,
-      "threePointJumpers": 31.8
+      "twoPointJumpers": 27.7,
+      "threePointJumpers": 32.3
     }
   }
 ]

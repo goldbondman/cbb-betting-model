@@ -4,53 +4,53 @@
     "teamId": 96,
     "team": "George Washington",
     "conference": "A-10",
-    "trackedShots": 1693,
-    "freeThrowRate": 34.7,
-    "assistedPct": 26,
+    "trackedShots": 2062,
+    "freeThrowRate": 33.9,
+    "assistedPct": 25.6,
     "dunks": {
-      "attempted": 83,
-      "made": 72,
-      "pct": 86.7,
-      "assisted": 57,
-      "assistedPct": 79.2
+      "attempted": 105,
+      "made": 89,
+      "pct": 84.8,
+      "assisted": 72,
+      "assistedPct": 80.9
     },
     "layups": {
-      "attempted": 615,
-      "made": 354,
-      "pct": 57.6,
-      "assisted": 151,
-      "assistedPct": 42.7
+      "attempted": 718,
+      "made": 404,
+      "pct": 56.3,
+      "assisted": 168,
+      "assistedPct": 41.6
     },
     "tipIns": {
-      "attempted": 53,
-      "made": 32,
-      "pct": 60.4
+      "attempted": 64,
+      "made": 39,
+      "pct": 60.9
     },
     "twoPointJumpers": {
-      "attempted": 148,
-      "made": 60,
-      "pct": 40.5,
-      "assisted": 15,
-      "assistedPct": 25
+      "attempted": 199,
+      "made": 77,
+      "pct": 38.7,
+      "assisted": 22,
+      "assistedPct": 28.6
     },
     "threePointJumpers": {
-      "attempted": 794,
-      "made": 284,
-      "pct": 35.8,
-      "assisted": 218,
-      "assistedPct": 76.8
+      "attempted": 976,
+      "made": 344,
+      "pct": 35.2,
+      "assisted": 265,
+      "assistedPct": 77
     },
     "freeThrows": {
-      "attempted": 587,
-      "made": 425,
-      "pct": 72.4
+      "attempted": 698,
+      "made": 503,
+      "pct": 72.1
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
-      "layups": 36.3,
+      "dunks": 5.1,
+      "layups": 34.8,
       "tipIns": 3.1,
-      "twoPointJumpers": 8.7,
-      "threePointJumpers": 46.9
+      "twoPointJumpers": 9.7,
+      "threePointJumpers": 47.3
     }
   }
 ]

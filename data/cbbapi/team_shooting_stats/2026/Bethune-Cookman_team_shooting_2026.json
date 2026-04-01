@@ -4,53 +4,53 @@
     "teamId": 23,
     "team": "Bethune-Cookman",
     "conference": "SWAC",
-    "trackedShots": 1747,
-    "freeThrowRate": 40.3,
-    "assistedPct": 23.9,
+    "trackedShots": 1855,
+    "freeThrowRate": 40.8,
+    "assistedPct": 23.6,
     "dunks": {
-      "attempted": 98,
-      "made": 81,
-      "pct": 82.7,
-      "assisted": 61,
-      "assistedPct": 75.3
+      "attempted": 106,
+      "made": 89,
+      "pct": 84,
+      "assisted": 66,
+      "assistedPct": 74.2
     },
     "layups": {
-      "attempted": 651,
-      "made": 370,
-      "pct": 56.8,
-      "assisted": 159,
-      "assistedPct": 43
+      "attempted": 698,
+      "made": 396,
+      "pct": 56.7,
+      "assisted": 168,
+      "assistedPct": 42.4
     },
     "tipIns": {
-      "attempted": 82,
-      "made": 58,
-      "pct": 70.7
+      "attempted": 90,
+      "made": 64,
+      "pct": 71.1
     },
     "twoPointJumpers": {
-      "attempted": 382,
-      "made": 122,
-      "pct": 31.9,
-      "assisted": 48,
-      "assistedPct": 39.3
+      "attempted": 408,
+      "made": 129,
+      "pct": 31.6,
+      "assisted": 52,
+      "assistedPct": 40.3
     },
     "threePointJumpers": {
-      "attempted": 534,
-      "made": 182,
-      "pct": 34.1,
-      "assisted": 149,
-      "assistedPct": 81.9
+      "attempted": 553,
+      "made": 186,
+      "pct": 33.6,
+      "assisted": 151,
+      "assistedPct": 81.2
     },
     "freeThrows": {
-      "attempted": 704,
-      "made": 484,
-      "pct": 68.8
+      "attempted": 756,
+      "made": 522,
+      "pct": 69
     },
     "attemptsBreakdown": {
-      "dunks": 5.6,
-      "layups": 37.3,
-      "tipIns": 4.7,
-      "twoPointJumpers": 21.9,
-      "threePointJumpers": 30.6
+      "dunks": 5.7,
+      "layups": 37.6,
+      "tipIns": 4.9,
+      "twoPointJumpers": 22,
+      "threePointJumpers": 29.8
     }
   }
 ]

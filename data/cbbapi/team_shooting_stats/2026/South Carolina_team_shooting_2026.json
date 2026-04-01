@@ -4,53 +4,53 @@
     "teamId": 266,
     "team": "South Carolina",
     "conference": "SEC",
-    "trackedShots": 1691,
-    "freeThrowRate": 37.1,
+    "trackedShots": 1855,
+    "freeThrowRate": 36.8,
     "assistedPct": 22.5,
     "dunks": {
-      "attempted": 58,
-      "made": 53,
-      "pct": 91.4,
-      "assisted": 39,
-      "assistedPct": 73.6
+      "attempted": 63,
+      "made": 58,
+      "pct": 92.1,
+      "assisted": 43,
+      "assistedPct": 74.1
     },
     "layups": {
-      "attempted": 484,
-      "made": 276,
-      "pct": 57,
-      "assisted": 94,
-      "assistedPct": 34.1
+      "attempted": 514,
+      "made": 289,
+      "pct": 56.2,
+      "assisted": 97,
+      "assistedPct": 33.6
     },
     "tipIns": {
-      "attempted": 34,
-      "made": 20,
-      "pct": 58.8
+      "attempted": 38,
+      "made": 23,
+      "pct": 60.5
     },
     "twoPointJumpers": {
-      "attempted": 375,
-      "made": 164,
-      "pct": 43.7,
-      "assisted": 46,
-      "assistedPct": 28
+      "attempted": 415,
+      "made": 179,
+      "pct": 43.1,
+      "assisted": 51,
+      "assistedPct": 28.5
     },
     "threePointJumpers": {
-      "attempted": 740,
-      "made": 227,
-      "pct": 30.7,
-      "assisted": 202,
-      "assistedPct": 89
+      "attempted": 825,
+      "made": 256,
+      "pct": 31,
+      "assisted": 226,
+      "assistedPct": 88.3
     },
     "freeThrows": {
-      "attempted": 627,
-      "made": 494,
-      "pct": 78.8
+      "attempted": 682,
+      "made": 532,
+      "pct": 78
     },
     "attemptsBreakdown": {
       "dunks": 3.4,
-      "layups": 28.6,
+      "layups": 27.7,
       "tipIns": 2,
-      "twoPointJumpers": 22.2,
-      "threePointJumpers": 43.8
+      "twoPointJumpers": 22.4,
+      "threePointJumpers": 44.5
     }
   }
 ]

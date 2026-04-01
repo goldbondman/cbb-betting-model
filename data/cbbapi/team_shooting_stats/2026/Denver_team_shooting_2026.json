@@ -4,9 +4,9 @@
     "teamId": 68,
     "team": "Denver",
     "conference": "Summit",
-    "trackedShots": 1885,
-    "freeThrowRate": 33.5,
-    "assistedPct": 18.9,
+    "trackedShots": 1931,
+    "freeThrowRate": 34.4,
+    "assistedPct": 18.8,
     "dunks": {
       "attempted": 74,
       "made": 63,
@@ -15,11 +15,11 @@
       "assistedPct": 68.3
     },
     "layups": {
-      "attempted": 551,
-      "made": 301,
-      "pct": 54.6,
-      "assisted": 96,
-      "assistedPct": 31.9
+      "attempted": 564,
+      "made": 309,
+      "pct": 54.8,
+      "assisted": 100,
+      "assistedPct": 32.4
     },
     "tipIns": {
       "attempted": 63,
@@ -27,30 +27,30 @@
       "pct": 81
     },
     "twoPointJumpers": {
-      "attempted": 473,
-      "made": 215,
-      "pct": 45.5,
+      "attempted": 485,
+      "made": 221,
+      "pct": 45.6,
       "assisted": 15,
-      "assistedPct": 7
+      "assistedPct": 6.8
     },
     "threePointJumpers": {
-      "attempted": 724,
-      "made": 277,
-      "pct": 38.3,
-      "assisted": 202,
-      "assistedPct": 72.9
+      "attempted": 745,
+      "made": 283,
+      "pct": 38,
+      "assisted": 205,
+      "assistedPct": 72.4
     },
     "freeThrows": {
-      "attempted": 632,
-      "made": 492,
-      "pct": 77.8
+      "attempted": 664,
+      "made": 513,
+      "pct": 77.3
     },
     "attemptsBreakdown": {
-      "dunks": 3.9,
+      "dunks": 3.8,
       "layups": 29.2,
       "tipIns": 3.3,
       "twoPointJumpers": 25.1,
-      "threePointJumpers": 38.4
+      "threePointJumpers": 38.6
     }
   }
 ]

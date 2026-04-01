@@ -4,53 +4,53 @@
     "teamId": 347,
     "team": "West Virginia",
     "conference": "Big 12",
-    "trackedShots": 1579,
-    "freeThrowRate": 35.1,
-    "assistedPct": 22.8,
+    "trackedShots": 1735,
+    "freeThrowRate": 35.3,
+    "assistedPct": 22.9,
     "dunks": {
-      "attempted": 73,
-      "made": 57,
-      "pct": 78.1,
-      "assisted": 44,
-      "assistedPct": 77.2
+      "attempted": 78,
+      "made": 62,
+      "pct": 79.5,
+      "assisted": 48,
+      "assistedPct": 77.4
     },
     "layups": {
-      "attempted": 539,
-      "made": 303,
-      "pct": 56.2,
-      "assisted": 123,
-      "assistedPct": 40.6
+      "attempted": 585,
+      "made": 328,
+      "pct": 56.1,
+      "assisted": 136,
+      "assistedPct": 41.5
     },
     "tipIns": {
-      "attempted": 23,
-      "made": 19,
-      "pct": 82.6
+      "attempted": 28,
+      "made": 23,
+      "pct": 82.1
     },
     "twoPointJumpers": {
-      "attempted": 263,
-      "made": 102,
-      "pct": 38.8,
-      "assisted": 21,
-      "assistedPct": 20.6
+      "attempted": 295,
+      "made": 113,
+      "pct": 38.3,
+      "assisted": 26,
+      "assistedPct": 23
     },
     "threePointJumpers": {
-      "attempted": 681,
-      "made": 222,
-      "pct": 32.6,
-      "assisted": 172,
-      "assistedPct": 77.5
+      "attempted": 749,
+      "made": 241,
+      "pct": 32.2,
+      "assisted": 187,
+      "assistedPct": 77.6
     },
     "freeThrows": {
-      "attempted": 554,
-      "made": 372,
-      "pct": 67.1
+      "attempted": 613,
+      "made": 413,
+      "pct": 67.4
     },
     "attemptsBreakdown": {
-      "dunks": 4.6,
-      "layups": 34.1,
-      "tipIns": 1.5,
-      "twoPointJumpers": 16.7,
-      "threePointJumpers": 43.1
+      "dunks": 4.5,
+      "layups": 33.7,
+      "tipIns": 1.6,
+      "twoPointJumpers": 17,
+      "threePointJumpers": 43.2
     }
   }
 ]

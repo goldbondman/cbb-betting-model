@@ -4,53 +4,53 @@
     "teamId": 20,
     "team": "Baylor",
     "conference": "Big 12",
-    "trackedShots": 1771,
-    "freeThrowRate": 36.1,
-    "assistedPct": 24.7,
+    "trackedShots": 1959,
+    "freeThrowRate": 34.9,
+    "assistedPct": 24.9,
     "dunks": {
-      "attempted": 110,
-      "made": 96,
-      "pct": 87.3,
-      "assisted": 70,
-      "assistedPct": 72.9
+      "attempted": 121,
+      "made": 106,
+      "pct": 87.6,
+      "assisted": 79,
+      "assistedPct": 74.5
     },
     "layups": {
-      "attempted": 351,
-      "made": 206,
-      "pct": 58.7,
-      "assisted": 86,
+      "attempted": 389,
+      "made": 235,
+      "pct": 60.4,
+      "assisted": 98,
       "assistedPct": 41.7
     },
     "tipIns": {
-      "attempted": 38,
-      "made": 20,
-      "pct": 52.6
+      "attempted": 42,
+      "made": 24,
+      "pct": 57.1
     },
     "twoPointJumpers": {
-      "attempted": 586,
-      "made": 286,
-      "pct": 48.8,
-      "assisted": 83,
-      "assistedPct": 29
+      "attempted": 645,
+      "made": 311,
+      "pct": 48.2,
+      "assisted": 93,
+      "assistedPct": 29.9
     },
     "threePointJumpers": {
-      "attempted": 686,
-      "made": 239,
-      "pct": 34.8,
-      "assisted": 198,
-      "assistedPct": 82.8
+      "attempted": 762,
+      "made": 263,
+      "pct": 34.5,
+      "assisted": 217,
+      "assistedPct": 82.5
     },
     "freeThrows": {
-      "attempted": 640,
-      "made": 465,
-      "pct": 72.7
+      "attempted": 684,
+      "made": 501,
+      "pct": 73.2
     },
     "attemptsBreakdown": {
       "dunks": 6.2,
-      "layups": 19.8,
+      "layups": 19.9,
       "tipIns": 2.1,
-      "twoPointJumpers": 33.1,
-      "threePointJumpers": 38.7
+      "twoPointJumpers": 32.9,
+      "threePointJumpers": 38.9
     }
   }
 ]

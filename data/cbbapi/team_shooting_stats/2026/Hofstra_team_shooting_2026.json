@@ -4,53 +4,53 @@
     "teamId": 110,
     "team": "Hofstra",
     "conference": "CAA",
-    "trackedShots": 1768,
-    "freeThrowRate": 31.6,
-    "assistedPct": 21.4,
+    "trackedShots": 2075,
+    "freeThrowRate": 31.1,
+    "assistedPct": 20.6,
     "dunks": {
-      "attempted": 87,
-      "made": 74,
-      "pct": 85.1,
-      "assisted": 52,
-      "assistedPct": 70.3
+      "attempted": 97,
+      "made": 83,
+      "pct": 85.6,
+      "assisted": 59,
+      "assistedPct": 71.1
     },
     "layups": {
-      "attempted": 438,
-      "made": 241,
-      "pct": 55,
-      "assisted": 85,
-      "assistedPct": 35.3
+      "attempted": 515,
+      "made": 274,
+      "pct": 53.2,
+      "assisted": 98,
+      "assistedPct": 35.8
     },
     "tipIns": {
-      "attempted": 38,
-      "made": 23,
-      "pct": 60.5
+      "attempted": 42,
+      "made": 26,
+      "pct": 61.9
     },
     "twoPointJumpers": {
-      "attempted": 436,
-      "made": 163,
-      "pct": 37.4,
-      "assisted": 43,
-      "assistedPct": 26.4
+      "attempted": 520,
+      "made": 198,
+      "pct": 38.1,
+      "assisted": 46,
+      "assistedPct": 23.2
     },
     "threePointJumpers": {
-      "attempted": 769,
-      "made": 286,
-      "pct": 37.2,
-      "assisted": 198,
-      "assistedPct": 69.2
+      "attempted": 901,
+      "made": 333,
+      "pct": 37,
+      "assisted": 225,
+      "assistedPct": 67.6
     },
     "freeThrows": {
-      "attempted": 558,
-      "made": 416,
+      "attempted": 646,
+      "made": 482,
       "pct": 74.6
     },
     "attemptsBreakdown": {
-      "dunks": 4.9,
+      "dunks": 4.7,
       "layups": 24.8,
-      "tipIns": 2.1,
-      "twoPointJumpers": 24.7,
-      "threePointJumpers": 43.5
+      "tipIns": 2,
+      "twoPointJumpers": 25.1,
+      "threePointJumpers": 43.4
     }
   }
 ]

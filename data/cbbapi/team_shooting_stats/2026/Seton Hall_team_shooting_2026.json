@@ -4,53 +4,53 @@
     "teamId": 263,
     "team": "Seton Hall",
     "conference": "Big East",
-    "trackedShots": 1620,
-    "freeThrowRate": 35.5,
-    "assistedPct": 21.6,
+    "trackedShots": 1862,
+    "freeThrowRate": 35.1,
+    "assistedPct": 21.5,
     "dunks": {
-      "attempted": 71,
-      "made": 62,
-      "pct": 87.3,
-      "assisted": 52,
-      "assistedPct": 83.9
+      "attempted": 81,
+      "made": 71,
+      "pct": 87.7,
+      "assisted": 58,
+      "assistedPct": 81.7
     },
     "layups": {
-      "attempted": 628,
-      "made": 317,
-      "pct": 50.5,
-      "assisted": 154,
-      "assistedPct": 48.6
+      "attempted": 722,
+      "made": 367,
+      "pct": 50.8,
+      "assisted": 178,
+      "assistedPct": 48.5
     },
     "tipIns": {
-      "attempted": 71,
-      "made": 37,
-      "pct": 52.1
+      "attempted": 78,
+      "made": 41,
+      "pct": 52.6
     },
     "twoPointJumpers": {
-      "attempted": 416,
-      "made": 158,
-      "pct": 38,
-      "assisted": 24,
-      "assistedPct": 15.2
+      "attempted": 485,
+      "made": 182,
+      "pct": 37.5,
+      "assisted": 30,
+      "assistedPct": 16.5
     },
     "threePointJumpers": {
-      "attempted": 434,
-      "made": 135,
-      "pct": 31.1,
-      "assisted": 120,
-      "assistedPct": 88.9
+      "attempted": 496,
+      "made": 151,
+      "pct": 30.4,
+      "assisted": 135,
+      "assistedPct": 89.4
     },
     "freeThrows": {
-      "attempted": 575,
-      "made": 418,
-      "pct": 72.7
+      "attempted": 654,
+      "made": 478,
+      "pct": 73.1
     },
     "attemptsBreakdown": {
       "dunks": 4.4,
       "layups": 38.8,
-      "tipIns": 4.4,
-      "twoPointJumpers": 25.7,
-      "threePointJumpers": 26.8
+      "tipIns": 4.2,
+      "twoPointJumpers": 26,
+      "threePointJumpers": 26.6
     }
   }
 ]
