@@ -4,22 +4,22 @@
     "teamId": 217,
     "team": "Oklahoma",
     "conference": "SEC",
-    "trackedShots": 1990,
-    "freeThrowRate": 36.1,
-    "assistedPct": 23.3,
+    "trackedShots": 2061,
+    "freeThrowRate": 36.4,
+    "assistedPct": 23.2,
     "dunks": {
-      "attempted": 86,
-      "made": 75,
-      "pct": 87.2,
-      "assisted": 64,
-      "assistedPct": 85.3
+      "attempted": 89,
+      "made": 78,
+      "pct": 87.6,
+      "assisted": 67,
+      "assistedPct": 85.9
     },
     "layups": {
-      "attempted": 573,
-      "made": 323,
-      "pct": 56.4,
-      "assisted": 113,
-      "assistedPct": 35
+      "attempted": 590,
+      "made": 330,
+      "pct": 55.9,
+      "assisted": 115,
+      "assistedPct": 34.8
     },
     "tipIns": {
       "attempted": 63,
@@ -27,30 +27,30 @@
       "pct": 76.2
     },
     "twoPointJumpers": {
-      "attempted": 401,
-      "made": 174,
+      "attempted": 415,
+      "made": 180,
       "pct": 43.4,
-      "assisted": 26,
-      "assistedPct": 14.9
+      "assisted": 27,
+      "assistedPct": 15
     },
     "threePointJumpers": {
-      "attempted": 867,
-      "made": 318,
-      "pct": 36.7,
-      "assisted": 260,
-      "assistedPct": 81.8
+      "attempted": 904,
+      "made": 328,
+      "pct": 36.3,
+      "assisted": 269,
+      "assistedPct": 82
     },
     "freeThrows": {
-      "attempted": 718,
-      "made": 534,
-      "pct": 74.4
+      "attempted": 750,
+      "made": 562,
+      "pct": 74.9
     },
     "attemptsBreakdown": {
       "dunks": 4.3,
-      "layups": 28.8,
-      "tipIns": 3.2,
-      "twoPointJumpers": 20.2,
-      "threePointJumpers": 43.6
+      "layups": 28.6,
+      "tipIns": 3.1,
+      "twoPointJumpers": 20.1,
+      "threePointJumpers": 43.9
     }
   }
 ]

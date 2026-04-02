@@ -4,9 +4,9 @@
     "teamId": 173,
     "team": "Minnesota",
     "conference": "Big Ten",
-    "trackedShots": 1677,
-    "freeThrowRate": 36,
-    "assistedPct": 32.7,
+    "trackedShots": 1726,
+    "freeThrowRate": 35.8,
+    "assistedPct": 32.2,
     "dunks": {
       "attempted": 38,
       "made": 34,
@@ -15,11 +15,11 @@
       "assistedPct": 82.4
     },
     "layups": {
-      "attempted": 536,
-      "made": 342,
+      "attempted": 555,
+      "made": 354,
       "pct": 63.8,
-      "assisted": 218,
-      "assistedPct": 63.7
+      "assisted": 220,
+      "assistedPct": 62.1
     },
     "tipIns": {
       "attempted": 23,
@@ -27,29 +27,29 @@
       "pct": 47.8
     },
     "twoPointJumpers": {
-      "attempted": 288,
-      "made": 110,
-      "pct": 38.2,
-      "assisted": 48,
-      "assistedPct": 43.6
+      "attempted": 295,
+      "made": 114,
+      "pct": 38.6,
+      "assisted": 49,
+      "assistedPct": 43
     },
     "threePointJumpers": {
-      "attempted": 792,
-      "made": 275,
-      "pct": 34.7,
-      "assisted": 255,
-      "assistedPct": 92.7
+      "attempted": 815,
+      "made": 278,
+      "pct": 34.1,
+      "assisted": 258,
+      "assistedPct": 92.8
     },
     "freeThrows": {
-      "attempted": 603,
-      "made": 422,
-      "pct": 70
+      "attempted": 618,
+      "made": 429,
+      "pct": 69.4
     },
     "attemptsBreakdown": {
-      "dunks": 2.3,
-      "layups": 32,
-      "tipIns": 1.4,
-      "twoPointJumpers": 17.2,
+      "dunks": 2.2,
+      "layups": 32.2,
+      "tipIns": 1.3,
+      "twoPointJumpers": 17.1,
       "threePointJumpers": 47.2
     }
   }
