@@ -4,52 +4,52 @@
     "teamId": 16,
     "team": "Auburn",
     "conference": "SEC",
-    "trackedShots": 2180,
-    "freeThrowRate": 44.2,
-    "assistedPct": 20.6,
+    "trackedShots": 2303,
+    "freeThrowRate": 43.6,
+    "assistedPct": 21.2,
     "dunks": {
-      "attempted": 126,
-      "made": 118,
-      "pct": 93.7,
-      "assisted": 87,
-      "assistedPct": 73.7
+      "attempted": 134,
+      "made": 126,
+      "pct": 94,
+      "assisted": 93,
+      "assistedPct": 73.8
     },
     "layups": {
-      "attempted": 670,
-      "made": 352,
-      "pct": 52.5,
-      "assisted": 121,
-      "assistedPct": 34.4
+      "attempted": 709,
+      "made": 371,
+      "pct": 52.3,
+      "assisted": 132,
+      "assistedPct": 35.6
     },
     "tipIns": {
-      "attempted": 115,
-      "made": 74,
-      "pct": 64.3
+      "attempted": 119,
+      "made": 77,
+      "pct": 64.7
     },
     "twoPointJumpers": {
-      "attempted": 392,
-      "made": 158,
-      "pct": 40.3,
-      "assisted": 35,
-      "assistedPct": 22.2
+      "attempted": 416,
+      "made": 169,
+      "pct": 40.6,
+      "assisted": 37,
+      "assistedPct": 21.9
     },
     "threePointJumpers": {
-      "attempted": 877,
-      "made": 295,
-      "pct": 33.6,
-      "assisted": 207,
-      "assistedPct": 70.2
+      "attempted": 925,
+      "made": 318,
+      "pct": 34.4,
+      "assisted": 226,
+      "assistedPct": 71.1
     },
     "freeThrows": {
-      "attempted": 964,
-      "made": 712,
+      "attempted": 1003,
+      "made": 741,
       "pct": 73.9
     },
     "attemptsBreakdown": {
       "dunks": 5.8,
-      "layups": 30.7,
-      "tipIns": 5.3,
-      "twoPointJumpers": 18,
+      "layups": 30.8,
+      "tipIns": 5.2,
+      "twoPointJumpers": 18.1,
       "threePointJumpers": 40.2
     }
   }

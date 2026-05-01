@@ -4,53 +4,53 @@
     "teamId": 304,
     "team": "Tulsa",
     "conference": "American",
-    "trackedShots": 2105,
-    "freeThrowRate": 40,
-    "assistedPct": 25.6,
+    "trackedShots": 2167,
+    "freeThrowRate": 40.3,
+    "assistedPct": 25.4,
     "dunks": {
-      "attempted": 97,
-      "made": 84,
-      "pct": 86.6,
+      "attempted": 98,
+      "made": 85,
+      "pct": 86.7,
       "assisted": 60,
-      "assistedPct": 71.4
+      "assistedPct": 70.6
     },
     "layups": {
-      "attempted": 756,
-      "made": 420,
-      "pct": 55.6,
-      "assisted": 144,
-      "assistedPct": 34.3
+      "attempted": 778,
+      "made": 433,
+      "pct": 55.7,
+      "assisted": 150,
+      "assistedPct": 34.6
     },
     "tipIns": {
-      "attempted": 34,
-      "made": 26,
-      "pct": 76.5
+      "attempted": 36,
+      "made": 27,
+      "pct": 75
     },
     "twoPointJumpers": {
-      "attempted": 250,
-      "made": 89,
-      "pct": 35.6,
+      "attempted": 261,
+      "made": 95,
+      "pct": 36.4,
       "assisted": 14,
-      "assistedPct": 15.7
+      "assistedPct": 14.7
     },
     "threePointJumpers": {
-      "attempted": 968,
-      "made": 370,
-      "pct": 38.2,
-      "assisted": 320,
-      "assistedPct": 86.5
+      "attempted": 994,
+      "made": 376,
+      "pct": 37.8,
+      "assisted": 326,
+      "assistedPct": 86.7
     },
     "freeThrows": {
-      "attempted": 841,
-      "made": 653,
-      "pct": 77.6
+      "attempted": 873,
+      "made": 679,
+      "pct": 77.8
     },
     "attemptsBreakdown": {
-      "dunks": 4.6,
+      "dunks": 4.5,
       "layups": 35.9,
-      "tipIns": 1.6,
-      "twoPointJumpers": 11.9,
-      "threePointJumpers": 46
+      "tipIns": 1.7,
+      "twoPointJumpers": 12,
+      "threePointJumpers": 45.9
     }
   }
 ]

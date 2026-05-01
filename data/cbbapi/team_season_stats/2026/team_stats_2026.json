@@ -8,8 +8,8 @@
     "games": 33,
     "wins": 14,
     "losses": 19,
-    "totalMinutes": 1335,
-    "pace": 68.5,
+    "totalMinutes": 1325,
+    "pace": 69,
     "teamStats": {
       "assists": 432,
       "blocks": 91,
@@ -368,8 +368,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1335,
-    "pace": 67,
+    "totalMinutes": 1325,
+    "pace": 67.5,
     "teamStats": {
       "assists": 387,
       "blocks": 93,
@@ -488,8 +488,8 @@
     "games": 35,
     "wins": 25,
     "losses": 10,
-    "totalMinutes": 1420,
-    "pace": 73.3,
+    "totalMinutes": 1410,
+    "pace": 73.8,
     "teamStats": {
       "assists": 571,
       "blocks": 173,
@@ -728,8 +728,8 @@
     "games": 32,
     "wins": 9,
     "losses": 23,
-    "totalMinutes": 1295,
-    "pace": 65.8,
+    "totalMinutes": 1285,
+    "pace": 66.3,
     "teamStats": {
       "assists": 356,
       "blocks": 109,
@@ -968,8 +968,8 @@
     "games": 32,
     "wins": 19,
     "losses": 13,
-    "totalMinutes": 1295,
-    "pace": 63.8,
+    "totalMinutes": 1285,
+    "pace": 64.3,
     "teamStats": {
       "assists": 388,
       "blocks": 118,
@@ -1205,117 +1205,117 @@
     "teamId": 11,
     "team": "Arizona",
     "conference": "Big 12",
-    "games": 38,
+    "games": 39,
     "wins": 36,
-    "losses": 2,
-    "totalMinutes": 1535,
-    "pace": 70.6,
+    "losses": 3,
+    "totalMinutes": 1565,
+    "pace": 71.2,
     "teamStats": {
-      "assists": 633,
-      "blocks": 162,
-      "steals": 277,
-      "possessions": 2707,
-      "trueShooting": 59.7,
-      "rating": 121.4,
+      "assists": 638,
+      "blocks": 164,
+      "steals": 286,
+      "possessions": 2784,
+      "trueShooting": 59.3,
+      "rating": 120.7,
       "fieldGoals": {
-        "made": 1157,
-        "attempted": 2302,
-        "pct": 50.3
+        "made": 1183,
+        "attempted": 2373,
+        "pct": 49.9
       },
       "twoPointFieldGoals": {
-        "made": 934,
-        "attempted": 1693,
-        "pct": 55.2
+        "made": 954,
+        "attempted": 1747,
+        "pct": 54.6
       },
       "threePointFieldGoals": {
-        "made": 223,
-        "attempted": 609,
+        "made": 229,
+        "attempted": 626,
         "pct": 36.6
       },
       "freeThrows": {
-        "made": 750,
-        "attempted": 1020,
-        "pct": 73.5
+        "made": 765,
+        "attempted": 1042,
+        "pct": 73.4
       },
       "rebounds": {
-        "offensive": 488,
-        "defensive": 1131,
-        "total": 1619
+        "offensive": 506,
+        "defensive": 1157,
+        "total": 1663
       },
       "turnovers": {
-        "total": 407,
-        "teamTotal": 11
+        "total": 421,
+        "teamTotal": 12
       },
       "fouls": {
-        "total": 602,
+        "total": 621,
         "technical": 7,
         "flagrant": 5
       },
       "points": {
-        "total": 3287,
-        "inPaint": 1610,
-        "offTurnovers": 568,
-        "fastBreak": 567
+        "total": 3360,
+        "inPaint": 1646,
+        "offTurnovers": 580,
+        "fastBreak": 569
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 55.1,
+        "effectiveFieldGoalPct": 54.7,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 30.1,
-        "freeThrowRate": 44.3
+        "offensiveReboundPct": 30.4,
+        "freeThrowRate": 43.9
       }
     },
     "opponentStats": {
-      "assists": 462,
-      "blocks": 144,
-      "steals": 232,
-      "possessions": 2709,
-      "trueShooting": 48.9,
-      "rating": 96.5,
+      "assists": 484,
+      "blocks": 147,
+      "steals": 239,
+      "possessions": 2786,
+      "trueShooting": 49.2,
+      "rating": 97.1,
       "fieldGoals": {
-        "made": 936,
-        "attempted": 2389,
-        "pct": 39.2
+        "made": 969,
+        "attempted": 2458,
+        "pct": 39.4
       },
       "twoPointFieldGoals": {
-        "made": 658,
-        "attempted": 1493,
-        "pct": 44.1
+        "made": 679,
+        "attempted": 1535,
+        "pct": 44.2
       },
       "threePointFieldGoals": {
-        "made": 278,
-        "attempted": 896,
-        "pct": 31
+        "made": 290,
+        "attempted": 923,
+        "pct": 31.4
       },
       "freeThrows": {
-        "made": 465,
-        "attempted": 650,
-        "pct": 71.5
+        "made": 478,
+        "attempted": 666,
+        "pct": 71.8
       },
       "rebounds": {
-        "offensive": 415,
-        "defensive": 784,
-        "total": 1199
+        "offensive": 426,
+        "defensive": 813,
+        "total": 1239
       },
       "turnovers": {
-        "total": 442,
+        "total": 455,
         "teamTotal": 7
       },
       "fouls": {
-        "total": 760,
+        "total": 779,
         "technical": 5,
         "flagrant": 7
       },
       "points": {
-        "total": 2615,
-        "inPaint": 1020,
-        "offTurnovers": 419,
-        "fastBreak": 326
+        "total": 2706,
+        "inPaint": 1056,
+        "offTurnovers": 445,
+        "fastBreak": 328
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 45,
+        "effectiveFieldGoalPct": 45.3,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 34.6,
-        "freeThrowRate": 27.2
+        "offensiveReboundPct": 34.4,
+        "freeThrowRate": 27.1
       }
     }
   },
@@ -1328,8 +1328,8 @@
     "games": 37,
     "wins": 28,
     "losses": 9,
-    "totalMinutes": 1530,
-    "pace": 70.6,
+    "totalMinutes": 1500,
+    "pace": 72,
     "teamStats": {
       "assists": 633,
       "blocks": 190,
@@ -1448,8 +1448,8 @@
     "games": 32,
     "wins": 20,
     "losses": 12,
-    "totalMinutes": 1325,
-    "pace": 70.7,
+    "totalMinutes": 1295,
+    "pace": 72.3,
     "teamStats": {
       "assists": 504,
       "blocks": 83,
@@ -1568,8 +1568,8 @@
     "games": 32,
     "wins": 13,
     "losses": 19,
-    "totalMinutes": 1295,
-    "pace": 71.3,
+    "totalMinutes": 1285,
+    "pace": 71.8,
     "teamStats": {
       "assists": 486,
       "blocks": 93,
@@ -1688,8 +1688,8 @@
     "games": 32,
     "wins": 11,
     "losses": 21,
-    "totalMinutes": 1355,
-    "pace": 64.5,
+    "totalMinutes": 1305,
+    "pace": 67,
     "teamStats": {
       "assists": 481,
       "blocks": 51,
@@ -1805,117 +1805,117 @@
     "teamId": 16,
     "team": "Auburn",
     "conference": "SEC",
-    "games": 37,
-    "wins": 21,
+    "games": 38,
+    "wins": 22,
     "losses": 16,
-    "totalMinutes": 1510,
-    "pace": 67.3,
+    "totalMinutes": 1535,
+    "pace": 68.2,
     "teamStats": {
-      "assists": 478,
-      "blocks": 154,
-      "steals": 275,
-      "possessions": 2534,
+      "assists": 497,
+      "blocks": 156,
+      "steals": 283,
+      "possessions": 2614,
       "trueShooting": 58.1,
-      "rating": 120.8,
+      "rating": 120.7,
       "fieldGoals": {
-        "made": 1022,
-        "attempted": 2214,
-        "pct": 46.2
+        "made": 1052,
+        "attempted": 2281,
+        "pct": 46.1
       },
       "twoPointFieldGoals": {
-        "made": 717,
-        "attempted": 1323,
-        "pct": 54.2
+        "made": 736,
+        "attempted": 1363,
+        "pct": 54
       },
       "threePointFieldGoals": {
-        "made": 305,
-        "attempted": 891,
-        "pct": 34.2
+        "made": 316,
+        "attempted": 918,
+        "pct": 34.4
       },
       "freeThrows": {
-        "made": 713,
-        "attempted": 959,
-        "pct": 74.3
+        "made": 734,
+        "attempted": 987,
+        "pct": 74.4
       },
       "rebounds": {
-        "offensive": 480,
-        "defensive": 857,
-        "total": 1337
+        "offensive": 493,
+        "defensive": 883,
+        "total": 1376
       },
       "turnovers": {
-        "total": 373,
+        "total": 386,
         "teamTotal": 9
       },
       "fouls": {
-        "total": 626,
+        "total": 647,
         "technical": 6,
-        "flagrant": 3
+        "flagrant": 4
       },
       "points": {
-        "total": 3062,
-        "inPaint": 1278,
-        "offTurnovers": 529,
-        "fastBreak": 447
+        "total": 3154,
+        "inPaint": 1310,
+        "offTurnovers": 546,
+        "fastBreak": 452
       },
       "fourFactors": {
         "effectiveFieldGoalPct": 53,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 35.9,
+        "offensiveReboundPct": 35.8,
         "freeThrowRate": 43.3
       }
     },
     "opponentStats": {
-      "assists": 527,
-      "blocks": 163,
-      "steals": 238,
-      "possessions": 2544,
+      "assists": 539,
+      "blocks": 167,
+      "steals": 244,
+      "possessions": 2624,
       "trueShooting": 57.8,
-      "rating": 114.3,
+      "rating": 114.1,
       "fieldGoals": {
-        "made": 1016,
-        "attempted": 2189,
-        "pct": 46.4
+        "made": 1043,
+        "attempted": 2251,
+        "pct": 46.3
       },
       "twoPointFieldGoals": {
-        "made": 691,
-        "attempted": 1313,
-        "pct": 52.6
+        "made": 712,
+        "attempted": 1349,
+        "pct": 52.8
       },
       "threePointFieldGoals": {
-        "made": 325,
-        "attempted": 876,
-        "pct": 37.1
+        "made": 331,
+        "attempted": 902,
+        "pct": 36.7
       },
       "freeThrows": {
-        "made": 550,
-        "attempted": 741,
-        "pct": 74.2
+        "made": 576,
+        "attempted": 773,
+        "pct": 74.5
       },
       "rebounds": {
-        "offensive": 387,
-        "defensive": 817,
-        "total": 1204
+        "offensive": 395,
+        "defensive": 843,
+        "total": 1238
       },
       "turnovers": {
-        "total": 418,
-        "teamTotal": 16
+        "total": 432,
+        "teamTotal": 17
       },
       "fouls": {
-        "total": 717,
+        "total": 737,
         "technical": 4,
         "flagrant": 2
       },
       "points": {
-        "total": 2907,
-        "inPaint": 1224,
-        "offTurnovers": 467,
-        "fastBreak": 394
+        "total": 2993,
+        "inPaint": 1262,
+        "offTurnovers": 480,
+        "fastBreak": 410
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 53.8,
+        "effectiveFieldGoalPct": 53.7,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 32.1,
-        "freeThrowRate": 33.9
+        "offensiveReboundPct": 31.9,
+        "freeThrowRate": 34.3
       }
     }
   },
@@ -2048,8 +2048,8 @@
     "games": 35,
     "wins": 23,
     "losses": 12,
-    "totalMinutes": 1415,
-    "pace": 67.5,
+    "totalMinutes": 1405,
+    "pace": 68,
     "teamStats": {
       "assists": 464,
       "blocks": 155,
@@ -2168,8 +2168,8 @@
     "games": 31,
     "wins": 12,
     "losses": 19,
-    "totalMinutes": 1270,
-    "pace": 62.2,
+    "totalMinutes": 1250,
+    "pace": 63.2,
     "teamStats": {
       "assists": 393,
       "blocks": 83,
@@ -2285,117 +2285,117 @@
     "teamId": 20,
     "team": "Baylor",
     "conference": "Big 12",
-    "games": 33,
+    "games": 34,
     "wins": 17,
-    "losses": 16,
-    "totalMinutes": 1320,
+    "losses": 17,
+    "totalMinutes": 1360,
     "pace": 69.1,
     "teamStats": {
-      "assists": 513,
-      "blocks": 132,
-      "steals": 215,
-      "possessions": 2280,
-      "trueShooting": 58.4,
-      "rating": 118.8,
+      "assists": 521,
+      "blocks": 137,
+      "steals": 220,
+      "possessions": 2349,
+      "trueShooting": 58.1,
+      "rating": 118.3,
       "fieldGoals": {
-        "made": 965,
-        "attempted": 2016,
-        "pct": 47.9
+        "made": 989,
+        "attempted": 2078,
+        "pct": 47.6
       },
       "twoPointFieldGoals": {
-        "made": 696,
-        "attempted": 1235,
+        "made": 714,
+        "attempted": 1267,
         "pct": 56.4
       },
       "threePointFieldGoals": {
-        "made": 269,
-        "attempted": 781,
-        "pct": 34.4
+        "made": 275,
+        "attempted": 811,
+        "pct": 33.9
       },
       "freeThrows": {
-        "made": 508,
-        "attempted": 692,
-        "pct": 73.4
+        "made": 523,
+        "attempted": 712,
+        "pct": 73.5
       },
       "rebounds": {
-        "offensive": 415,
-        "defensive": 799,
-        "total": 1214
+        "offensive": 428,
+        "defensive": 824,
+        "total": 1252
       },
       "turnovers": {
-        "total": 374,
-        "teamTotal": 13
+        "total": 386,
+        "teamTotal": 14
       },
       "fouls": {
-        "total": 536,
+        "total": 552,
         "technical": 2,
-        "flagrant": 0
+        "flagrant": 1
       },
       "points": {
-        "total": 2709,
-        "inPaint": 1246,
-        "offTurnovers": 445,
-        "fastBreak": 379
+        "total": 2778,
+        "inPaint": 1276,
+        "offTurnovers": 447,
+        "fastBreak": 386
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.5,
+        "effectiveFieldGoalPct": 54.2,
         "turnoverRatio": 0.16,
         "offensiveReboundPct": 34.2,
         "freeThrowRate": 34.3
       }
     },
     "opponentStats": {
-      "assists": 442,
-      "blocks": 105,
-      "steals": 225,
-      "possessions": 2280,
-      "trueShooting": 55.5,
-      "rating": 110.4,
+      "assists": 461,
+      "blocks": 108,
+      "steals": 232,
+      "possessions": 2350,
+      "trueShooting": 55.7,
+      "rating": 110.6,
       "fieldGoals": {
-        "made": 915,
-        "attempted": 2003,
-        "pct": 45.7
+        "made": 945,
+        "attempted": 2063,
+        "pct": 45.8
       },
       "twoPointFieldGoals": {
-        "made": 673,
-        "attempted": 1302,
-        "pct": 51.7
+        "made": 695,
+        "attempted": 1340,
+        "pct": 51.9
       },
       "threePointFieldGoals": {
-        "made": 242,
-        "attempted": 701,
-        "pct": 34.5
+        "made": 250,
+        "attempted": 723,
+        "pct": 34.6
       },
       "freeThrows": {
-        "made": 445,
-        "attempted": 597,
-        "pct": 74.5
+        "made": 459,
+        "attempted": 613,
+        "pct": 74.9
       },
       "rebounds": {
-        "offensive": 359,
-        "defensive": 697,
-        "total": 1056
+        "offensive": 365,
+        "defensive": 724,
+        "total": 1089
       },
       "turnovers": {
-        "total": 370,
-        "teamTotal": 16
+        "total": 378,
+        "teamTotal": 17
       },
       "fouls": {
-        "total": 585,
+        "total": 601,
         "technical": 6,
         "flagrant": 2
       },
       "points": {
-        "total": 2517,
-        "inPaint": 1156,
-        "offTurnovers": 465,
-        "fastBreak": 378
+        "total": 2599,
+        "inPaint": 1192,
+        "offTurnovers": 486,
+        "fastBreak": 388
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 51.7,
+        "effectiveFieldGoalPct": 51.9,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 34,
-        "freeThrowRate": 29.8
+        "offensiveReboundPct": 33.5,
+        "freeThrowRate": 29.7
       }
     }
   },
@@ -2408,8 +2408,8 @@
     "games": 32,
     "wins": 13,
     "losses": 19,
-    "totalMinutes": 1310,
-    "pace": 64.9,
+    "totalMinutes": 1290,
+    "pace": 65.9,
     "teamStats": {
       "assists": 484,
       "blocks": 55,
@@ -2528,8 +2528,8 @@
     "games": 32,
     "wins": 26,
     "losses": 6,
-    "totalMinutes": 1310,
-    "pace": 68.9,
+    "totalMinutes": 1290,
+    "pace": 70,
     "teamStats": {
       "assists": 595,
       "blocks": 110,
@@ -2648,8 +2648,8 @@
     "games": 32,
     "wins": 17,
     "losses": 15,
-    "totalMinutes": 1325,
-    "pace": 68.8,
+    "totalMinutes": 1295,
+    "pace": 70.4,
     "teamStats": {
       "assists": 436,
       "blocks": 145,
@@ -2768,8 +2768,8 @@
     "games": 31,
     "wins": 8,
     "losses": 23,
-    "totalMinutes": 1295,
-    "pace": 63.2,
+    "totalMinutes": 1265,
+    "pace": 64.6,
     "teamStats": {
       "assists": 361,
       "blocks": 92,
@@ -2888,8 +2888,8 @@
     "games": 32,
     "wins": 20,
     "losses": 12,
-    "totalMinutes": 1350,
-    "pace": 63.9,
+    "totalMinutes": 1310,
+    "pace": 65.8,
     "teamStats": {
       "assists": 414,
       "blocks": 69,
@@ -3008,8 +3008,8 @@
     "games": 31,
     "wins": 11,
     "losses": 20,
-    "totalMinutes": 1300,
-    "pace": 62.1,
+    "totalMinutes": 1260,
+    "pace": 64.1,
     "teamStats": {
       "assists": 351,
       "blocks": 128,
@@ -3128,8 +3128,8 @@
     "games": 34,
     "wins": 17,
     "losses": 17,
-    "totalMinutes": 1455,
-    "pace": 60.6,
+    "totalMinutes": 1395,
+    "pace": 63.3,
     "teamStats": {
       "assists": 485,
       "blocks": 111,
@@ -3248,8 +3248,8 @@
     "games": 32,
     "wins": 18,
     "losses": 14,
-    "totalMinutes": 1295,
-    "pace": 71.1,
+    "totalMinutes": 1285,
+    "pace": 71.7,
     "teamStats": {
       "assists": 452,
       "blocks": 113,
@@ -3368,8 +3368,8 @@
     "games": 34,
     "wins": 21,
     "losses": 13,
-    "totalMinutes": 1455,
-    "pace": 65.2,
+    "totalMinutes": 1405,
+    "pace": 67.5,
     "teamStats": {
       "assists": 454,
       "blocks": 106,
@@ -3488,8 +3488,8 @@
     "games": 27,
     "wins": 9,
     "losses": 18,
-    "totalMinutes": 1130,
-    "pace": 65.2,
+    "totalMinutes": 1100,
+    "pace": 67,
     "teamStats": {
       "assists": 420,
       "blocks": 103,
@@ -3608,8 +3608,8 @@
     "games": 31,
     "wins": 9,
     "losses": 22,
-    "totalMinutes": 1275,
-    "pace": 63.6,
+    "totalMinutes": 1255,
+    "pace": 64.6,
     "teamStats": {
       "assists": 376,
       "blocks": 130,
@@ -3728,8 +3728,8 @@
     "games": 33,
     "wins": 10,
     "losses": 23,
-    "totalMinutes": 1355,
-    "pace": 65.5,
+    "totalMinutes": 1335,
+    "pace": 66.5,
     "teamStats": {
       "assists": 420,
       "blocks": 59,
@@ -3848,8 +3848,8 @@
     "games": 32,
     "wins": 17,
     "losses": 15,
-    "totalMinutes": 1310,
-    "pace": 65.8,
+    "totalMinutes": 1290,
+    "pace": 66.8,
     "teamStats": {
       "assists": 456,
       "blocks": 86,
@@ -3968,8 +3968,8 @@
     "games": 32,
     "wins": 16,
     "losses": 16,
-    "totalMinutes": 1320,
-    "pace": 68.3,
+    "totalMinutes": 1300,
+    "pace": 69.4,
     "teamStats": {
       "assists": 497,
       "blocks": 103,
@@ -4088,8 +4088,8 @@
     "games": 33,
     "wins": 14,
     "losses": 19,
-    "totalMinutes": 1335,
-    "pace": 75,
+    "totalMinutes": 1325,
+    "pace": 75.6,
     "teamStats": {
       "assists": 450,
       "blocks": 73,
@@ -4448,8 +4448,8 @@
     "games": 34,
     "wins": 20,
     "losses": 14,
-    "totalMinutes": 1375,
-    "pace": 74.3,
+    "totalMinutes": 1365,
+    "pace": 74.9,
     "teamStats": {
       "assists": 574,
       "blocks": 97,
@@ -4568,8 +4568,8 @@
     "games": 34,
     "wins": 25,
     "losses": 9,
-    "totalMinutes": 1405,
-    "pace": 63.9,
+    "totalMinutes": 1375,
+    "pace": 65.3,
     "teamStats": {
       "assists": 347,
       "blocks": 97,
@@ -4688,8 +4688,8 @@
     "games": 34,
     "wins": 22,
     "losses": 12,
-    "totalMinutes": 1380,
-    "pace": 68.6,
+    "totalMinutes": 1370,
+    "pace": 69.1,
     "teamStats": {
       "assists": 473,
       "blocks": 103,
@@ -4928,8 +4928,8 @@
     "games": 31,
     "wins": 10,
     "losses": 21,
-    "totalMinutes": 1255,
-    "pace": 63.8,
+    "totalMinutes": 1245,
+    "pace": 64.3,
     "teamStats": {
       "assists": 371,
       "blocks": 78,
@@ -5048,8 +5048,8 @@
     "games": 34,
     "wins": 22,
     "losses": 12,
-    "totalMinutes": 1435,
-    "pace": 67.2,
+    "totalMinutes": 1385,
+    "pace": 69.7,
     "teamStats": {
       "assists": 553,
       "blocks": 63,
@@ -5168,8 +5168,8 @@
     "games": 30,
     "wins": 18,
     "losses": 12,
-    "totalMinutes": 1215,
-    "pace": 65.1,
+    "totalMinutes": 1205,
+    "pace": 65.6,
     "teamStats": {
       "assists": 414,
       "blocks": 121,
@@ -5408,8 +5408,8 @@
     "games": 32,
     "wins": 21,
     "losses": 11,
-    "totalMinutes": 1300,
-    "pace": 67.6,
+    "totalMinutes": 1290,
+    "pace": 68.1,
     "teamStats": {
       "assists": 432,
       "blocks": 144,
@@ -5528,8 +5528,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1360,
-    "pace": 70.9,
+    "totalMinutes": 1310,
+    "pace": 73.6,
     "teamStats": {
       "assists": 536,
       "blocks": 156,
@@ -5648,8 +5648,8 @@
     "games": 34,
     "wins": 17,
     "losses": 17,
-    "totalMinutes": 1425,
-    "pace": 62.3,
+    "totalMinutes": 1385,
+    "pace": 64.1,
     "teamStats": {
       "assists": 432,
       "blocks": 114,
@@ -5888,8 +5888,8 @@
     "games": 31,
     "wins": 6,
     "losses": 25,
-    "totalMinutes": 1255,
-    "pace": 64.9,
+    "totalMinutes": 1245,
+    "pace": 65.4,
     "teamStats": {
       "assists": 363,
       "blocks": 40,
@@ -6008,8 +6008,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1335,
-    "pace": 67.9,
+    "totalMinutes": 1325,
+    "pace": 68.4,
     "teamStats": {
       "assists": 547,
       "blocks": 140,
@@ -6128,8 +6128,8 @@
     "games": 35,
     "wins": 24,
     "losses": 11,
-    "totalMinutes": 1430,
-    "pace": 63.8,
+    "totalMinutes": 1410,
+    "pace": 64.7,
     "teamStats": {
       "assists": 446,
       "blocks": 98,
@@ -6368,8 +6368,8 @@
     "games": 32,
     "wins": 19,
     "losses": 13,
-    "totalMinutes": 1350,
-    "pace": 66,
+    "totalMinutes": 1310,
+    "pace": 68,
     "teamStats": {
       "assists": 328,
       "blocks": 99,
@@ -6488,8 +6488,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1400,
-    "pace": 64.4,
+    "totalMinutes": 1350,
+    "pace": 66.8,
     "teamStats": {
       "assists": 482,
       "blocks": 100,
@@ -6608,8 +6608,8 @@
     "games": 33,
     "wins": 17,
     "losses": 16,
-    "totalMinutes": 1365,
-    "pace": 68.1,
+    "totalMinutes": 1335,
+    "pace": 69.7,
     "teamStats": {
       "assists": 510,
       "blocks": 110,
@@ -6848,8 +6848,8 @@
     "games": 28,
     "wins": 16,
     "losses": 12,
-    "totalMinutes": 1150,
-    "pace": 66,
+    "totalMinutes": 1130,
+    "pace": 67.2,
     "teamStats": {
       "assists": 437,
       "blocks": 82,
@@ -6968,8 +6968,8 @@
     "games": 31,
     "wins": 7,
     "losses": 24,
-    "totalMinutes": 1255,
-    "pace": 68.4,
+    "totalMinutes": 1245,
+    "pace": 69,
     "teamStats": {
       "assists": 362,
       "blocks": 107,
@@ -7088,8 +7088,8 @@
     "games": 28,
     "wins": 15,
     "losses": 13,
-    "totalMinutes": 1140,
-    "pace": 71.1,
+    "totalMinutes": 1130,
+    "pace": 71.7,
     "teamStats": {
       "assists": 596,
       "blocks": 79,
@@ -7205,117 +7205,117 @@
     "teamId": 61,
     "team": "Creighton",
     "conference": "Big East",
-    "games": 33,
-    "wins": 15,
-    "losses": 17,
-    "totalMinutes": 1335,
-    "pace": 67.7,
+    "games": 34,
+    "wins": 16,
+    "losses": 18,
+    "totalMinutes": 1365,
+    "pace": 68.2,
     "teamStats": {
-      "assists": 511,
-      "blocks": 93,
-      "steals": 190,
-      "possessions": 2258,
-      "trueShooting": 56.8,
-      "rating": 110.1,
+      "assists": 524,
+      "blocks": 96,
+      "steals": 192,
+      "possessions": 2325,
+      "trueShooting": 56.7,
+      "rating": 109.9,
       "fieldGoals": {
-        "made": 874,
-        "attempted": 1950,
+        "made": 897,
+        "attempted": 2003,
         "pct": 44.8
       },
       "twoPointFieldGoals": {
-        "made": 551,
-        "attempted": 1010,
-        "pct": 54.6
+        "made": 568,
+        "attempted": 1038,
+        "pct": 54.7
       },
       "threePointFieldGoals": {
-        "made": 323,
-        "attempted": 940,
-        "pct": 34.4
+        "made": 329,
+        "attempted": 965,
+        "pct": 34.1
       },
       "freeThrows": {
-        "made": 415,
-        "attempted": 544,
-        "pct": 76.3
+        "made": 433,
+        "attempted": 567,
+        "pct": 76.4
       },
       "rebounds": {
-        "offensive": 311,
-        "defensive": 855,
-        "total": 1166
+        "offensive": 314,
+        "defensive": 881,
+        "total": 1195
       },
       "turnovers": {
-        "total": 377,
+        "total": 384,
         "teamTotal": 33
       },
       "fouls": {
-        "total": 478,
+        "total": 490,
         "technical": 1,
         "flagrant": 1
       },
       "points": {
-        "total": 2486,
-        "inPaint": 972,
-        "offTurnovers": 380,
-        "fastBreak": 379
+        "total": 2556,
+        "inPaint": 1004,
+        "offTurnovers": 385,
+        "fastBreak": 387
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 53.1,
+        "effectiveFieldGoalPct": 53,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 26.7,
-        "freeThrowRate": 27.9
+        "offensiveReboundPct": 26.3,
+        "freeThrowRate": 28.3
       }
     },
     "opponentStats": {
-      "assists": 473,
-      "blocks": 106,
-      "steals": 230,
-      "possessions": 2263,
-      "trueShooting": 53.7,
-      "rating": 109.1,
+      "assists": 488,
+      "blocks": 108,
+      "steals": 234,
+      "possessions": 2329,
+      "trueShooting": 53.9,
+      "rating": 109.8,
       "fieldGoals": {
-        "made": 937,
-        "attempted": 2073,
-        "pct": 45.2
+        "made": 972,
+        "attempted": 2139,
+        "pct": 45.4
       },
       "twoPointFieldGoals": {
-        "made": 708,
-        "attempted": 1416,
-        "pct": 50
+        "made": 731,
+        "attempted": 1452,
+        "pct": 50.3
       },
       "threePointFieldGoals": {
-        "made": 229,
-        "attempted": 657,
-        "pct": 34.9
+        "made": 241,
+        "attempted": 687,
+        "pct": 35.1
       },
       "freeThrows": {
-        "made": 367,
-        "attempted": 519,
-        "pct": 70.7
+        "made": 372,
+        "attempted": 530,
+        "pct": 70.2
       },
       "rebounds": {
-        "offensive": 360,
-        "defensive": 824,
-        "total": 1184
+        "offensive": 368,
+        "defensive": 855,
+        "total": 1223
       },
       "turnovers": {
-        "total": 318,
+        "total": 322,
         "teamTotal": 10
       },
       "fouls": {
-        "total": 537,
+        "total": 557,
         "technical": 2,
         "flagrant": 0
       },
       "points": {
-        "total": 2470,
-        "inPaint": 1246,
-        "offTurnovers": 453,
-        "fastBreak": 279
+        "total": 2557,
+        "inPaint": 1290,
+        "offTurnovers": 465,
+        "fastBreak": 284
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 50.7,
+        "effectiveFieldGoalPct": 51.1,
         "turnoverRatio": 0.14,
-        "offensiveReboundPct": 30.4,
-        "freeThrowRate": 25
+        "offensiveReboundPct": 30.1,
+        "freeThrowRate": 24.8
       }
     }
   },
@@ -7328,8 +7328,8 @@
     "games": 27,
     "wins": 11,
     "losses": 16,
-    "totalMinutes": 1095,
-    "pace": 68.2,
+    "totalMinutes": 1085,
+    "pace": 68.9,
     "teamStats": {
       "assists": 360,
       "blocks": 96,
@@ -7448,8 +7448,8 @@
     "games": 34,
     "wins": 20,
     "losses": 14,
-    "totalMinutes": 1395,
-    "pace": 63.7,
+    "totalMinutes": 1375,
+    "pace": 64.6,
     "teamStats": {
       "assists": 472,
       "blocks": 146,
@@ -7568,8 +7568,8 @@
     "games": 37,
     "wins": 25,
     "losses": 12,
-    "totalMinutes": 1525,
-    "pace": 66.2,
+    "totalMinutes": 1495,
+    "pace": 67.5,
     "teamStats": {
       "assists": 524,
       "blocks": 143,
@@ -7808,8 +7808,8 @@
     "games": 31,
     "wins": 10,
     "losses": 21,
-    "totalMinutes": 1315,
-    "pace": 61.3,
+    "totalMinutes": 1265,
+    "pace": 63.7,
     "teamStats": {
       "assists": 376,
       "blocks": 95,
@@ -7928,8 +7928,8 @@
     "games": 31,
     "wins": 8,
     "losses": 23,
-    "totalMinutes": 1270,
-    "pace": 62.6,
+    "totalMinutes": 1250,
+    "pace": 63.6,
     "teamStats": {
       "assists": 328,
       "blocks": 58,
@@ -8288,8 +8288,8 @@
     "games": 34,
     "wins": 14,
     "losses": 20,
-    "totalMinutes": 1390,
-    "pace": 66.8,
+    "totalMinutes": 1370,
+    "pace": 67.8,
     "teamStats": {
       "assists": 458,
       "blocks": 105,
@@ -8648,8 +8648,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1370,
-    "pace": 67.7,
+    "totalMinutes": 1340,
+    "pace": 69.2,
     "teamStats": {
       "assists": 499,
       "blocks": 98,
@@ -8768,8 +8768,8 @@
     "games": 31,
     "wins": 11,
     "losses": 20,
-    "totalMinutes": 1275,
-    "pace": 67.6,
+    "totalMinutes": 1255,
+    "pace": 68.7,
     "teamStats": {
       "assists": 363,
       "blocks": 122,
@@ -8888,8 +8888,8 @@
     "games": 34,
     "wins": 23,
     "losses": 11,
-    "totalMinutes": 1390,
-    "pace": 65.6,
+    "totalMinutes": 1370,
+    "pace": 66.6,
     "teamStats": {
       "assists": 481,
       "blocks": 108,
@@ -9128,8 +9128,8 @@
     "games": 33,
     "wins": 13,
     "losses": 20,
-    "totalMinutes": 1365,
-    "pace": 65.1,
+    "totalMinutes": 1335,
+    "pace": 66.6,
     "teamStats": {
       "assists": 404,
       "blocks": 101,
@@ -9248,8 +9248,8 @@
     "games": 32,
     "wins": 11,
     "losses": 21,
-    "totalMinutes": 1340,
-    "pace": 67.5,
+    "totalMinutes": 1300,
+    "pace": 69.6,
     "teamStats": {
       "assists": 468,
       "blocks": 98,
@@ -9368,8 +9368,8 @@
     "games": 31,
     "wins": 10,
     "losses": 21,
-    "totalMinutes": 1260,
-    "pace": 67.3,
+    "totalMinutes": 1250,
+    "pace": 67.8,
     "teamStats": {
       "assists": 390,
       "blocks": 129,
@@ -9488,8 +9488,8 @@
     "games": 33,
     "wins": 14,
     "losses": 19,
-    "totalMinutes": 1350,
-    "pace": 67.4,
+    "totalMinutes": 1330,
+    "pace": 68.5,
     "teamStats": {
       "assists": 448,
       "blocks": 112,
@@ -9608,8 +9608,8 @@
     "games": 32,
     "wins": 14,
     "losses": 18,
-    "totalMinutes": 1330,
-    "pace": 66.1,
+    "totalMinutes": 1300,
+    "pace": 67.7,
     "teamStats": {
       "assists": 475,
       "blocks": 95,
@@ -9728,8 +9728,8 @@
     "games": 32,
     "wins": 7,
     "losses": 25,
-    "totalMinutes": 1310,
-    "pace": 66.1,
+    "totalMinutes": 1290,
+    "pace": 67.1,
     "teamStats": {
       "assists": 420,
       "blocks": 105,
@@ -9848,8 +9848,8 @@
     "games": 34,
     "wins": 21,
     "losses": 13,
-    "totalMinutes": 1375,
-    "pace": 66.9,
+    "totalMinutes": 1365,
+    "pace": 67.3,
     "teamStats": {
       "assists": 413,
       "blocks": 121,
@@ -9968,8 +9968,8 @@
     "games": 32,
     "wins": 11,
     "losses": 21,
-    "totalMinutes": 1295,
-    "pace": 63.7,
+    "totalMinutes": 1285,
+    "pace": 64.2,
     "teamStats": {
       "assists": 381,
       "blocks": 49,
@@ -10088,8 +10088,8 @@
     "games": 30,
     "wins": 14,
     "losses": 16,
-    "totalMinutes": 1215,
-    "pace": 66.9,
+    "totalMinutes": 1205,
+    "pace": 67.5,
     "teamStats": {
       "assists": 380,
       "blocks": 90,
@@ -10208,8 +10208,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1365,
-    "pace": 68.7,
+    "totalMinutes": 1335,
+    "pace": 70.2,
     "teamStats": {
       "assists": 436,
       "blocks": 175,
@@ -10448,8 +10448,8 @@
     "games": 34,
     "wins": 16,
     "losses": 18,
-    "totalMinutes": 1405,
-    "pace": 64.9,
+    "totalMinutes": 1375,
+    "pace": 66.3,
     "teamStats": {
       "assists": 500,
       "blocks": 123,
@@ -10568,8 +10568,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1325,
-    "pace": 70.8,
+    "totalMinutes": 1295,
+    "pace": 72.4,
     "teamStats": {
       "assists": 459,
       "blocks": 144,
@@ -10808,8 +10808,8 @@
     "games": 32,
     "wins": 17,
     "losses": 15,
-    "totalMinutes": 1295,
-    "pace": 65.3,
+    "totalMinutes": 1285,
+    "pace": 65.8,
     "teamStats": {
       "assists": 456,
       "blocks": 68,
@@ -11048,8 +11048,8 @@
     "games": 35,
     "wins": 22,
     "losses": 13,
-    "totalMinutes": 1445,
-    "pace": 65.1,
+    "totalMinutes": 1415,
+    "pace": 66.5,
     "teamStats": {
       "assists": 546,
       "blocks": 115,
@@ -11408,8 +11408,8 @@
     "games": 35,
     "wins": 19,
     "losses": 16,
-    "totalMinutes": 1415,
-    "pace": 67.4,
+    "totalMinutes": 1405,
+    "pace": 67.9,
     "teamStats": {
       "assists": 548,
       "blocks": 125,
@@ -11528,8 +11528,8 @@
     "games": 34,
     "wins": 16,
     "losses": 18,
-    "totalMinutes": 1405,
-    "pace": 65,
+    "totalMinutes": 1375,
+    "pace": 66.4,
     "teamStats": {
       "assists": 502,
       "blocks": 121,
@@ -11648,8 +11648,8 @@
     "games": 33,
     "wins": 22,
     "losses": 11,
-    "totalMinutes": 1380,
-    "pace": 70.6,
+    "totalMinutes": 1340,
+    "pace": 72.7,
     "teamStats": {
       "assists": 485,
       "blocks": 196,
@@ -11768,8 +11768,8 @@
     "games": 37,
     "wins": 21,
     "losses": 16,
-    "totalMinutes": 1525,
-    "pace": 69.5,
+    "totalMinutes": 1495,
+    "pace": 70.9,
     "teamStats": {
       "assists": 414,
       "blocks": 134,
@@ -11888,8 +11888,8 @@
     "games": 32,
     "wins": 10,
     "losses": 22,
-    "totalMinutes": 1295,
-    "pace": 68.3,
+    "totalMinutes": 1285,
+    "pace": 68.9,
     "teamStats": {
       "assists": 371,
       "blocks": 101,
@@ -12008,8 +12008,8 @@
     "games": 31,
     "wins": 11,
     "losses": 20,
-    "totalMinutes": 1255,
-    "pace": 68.3,
+    "totalMinutes": 1245,
+    "pace": 68.8,
     "teamStats": {
       "assists": 489,
       "blocks": 122,
@@ -12128,8 +12128,8 @@
     "games": 35,
     "wins": 31,
     "losses": 4,
-    "totalMinutes": 1415,
-    "pace": 69.3,
+    "totalMinutes": 1405,
+    "pace": 69.8,
     "teamStats": {
       "assists": 643,
       "blocks": 127,
@@ -12368,8 +12368,8 @@
     "games": 32,
     "wins": 20,
     "losses": 12,
-    "totalMinutes": 1295,
-    "pace": 65.9,
+    "totalMinutes": 1285,
+    "pace": 66.4,
     "teamStats": {
       "assists": 410,
       "blocks": 115,
@@ -12488,8 +12488,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1350,
-    "pace": 63.8,
+    "totalMinutes": 1330,
+    "pace": 64.8,
     "teamStats": {
       "assists": 460,
       "blocks": 90,
@@ -12608,8 +12608,8 @@
     "games": 32,
     "wins": 13,
     "losses": 19,
-    "totalMinutes": 1300,
-    "pace": 65.7,
+    "totalMinutes": 1290,
+    "pace": 66.2,
     "teamStats": {
       "assists": 386,
       "blocks": 104,
@@ -12728,8 +12728,8 @@
     "games": 29,
     "wins": 17,
     "losses": 12,
-    "totalMinutes": 1205,
-    "pace": 62.2,
+    "totalMinutes": 1175,
+    "pace": 63.8,
     "teamStats": {
       "assists": 397,
       "blocks": 105,
@@ -12848,8 +12848,8 @@
     "games": 33,
     "wins": 24,
     "losses": 9,
-    "totalMinutes": 1350,
-    "pace": 70.3,
+    "totalMinutes": 1330,
+    "pace": 71.4,
     "teamStats": {
       "assists": 453,
       "blocks": 130,
@@ -12968,8 +12968,8 @@
     "games": 36,
     "wins": 31,
     "losses": 5,
-    "totalMinutes": 1470,
-    "pace": 70.3,
+    "totalMinutes": 1450,
+    "pace": 71.3,
     "teamStats": {
       "assists": 589,
       "blocks": 136,
@@ -13088,8 +13088,8 @@
     "games": 35,
     "wins": 24,
     "losses": 11,
-    "totalMinutes": 1430,
-    "pace": 64.4,
+    "totalMinutes": 1410,
+    "pace": 65.4,
     "teamStats": {
       "assists": 446,
       "blocks": 128,
@@ -13328,8 +13328,8 @@
     "games": 32,
     "wins": 12,
     "losses": 20,
-    "totalMinutes": 1295,
-    "pace": 64.5,
+    "totalMinutes": 1285,
+    "pace": 65,
     "teamStats": {
       "assists": 446,
       "blocks": 126,
@@ -13448,8 +13448,8 @@
     "games": 37,
     "wins": 30,
     "losses": 7,
-    "totalMinutes": 1495,
-    "pace": 64.3,
+    "totalMinutes": 1485,
+    "pace": 64.7,
     "teamStats": {
       "assists": 539,
       "blocks": 139,
@@ -13568,8 +13568,8 @@
     "games": 35,
     "wins": 24,
     "losses": 11,
-    "totalMinutes": 1415,
-    "pace": 68.9,
+    "totalMinutes": 1405,
+    "pace": 69.4,
     "teamStats": {
       "assists": 563,
       "blocks": 122,
@@ -13688,8 +13688,8 @@
     "games": 32,
     "wins": 7,
     "losses": 25,
-    "totalMinutes": 1295,
-    "pace": 74.8,
+    "totalMinutes": 1285,
+    "pace": 75.4,
     "teamStats": {
       "assists": 648,
       "blocks": 102,
@@ -13808,8 +13808,8 @@
     "games": 33,
     "wins": 13,
     "losses": 20,
-    "totalMinutes": 1335,
-    "pace": 65.3,
+    "totalMinutes": 1325,
+    "pace": 65.8,
     "teamStats": {
       "assists": 393,
       "blocks": 138,
@@ -13928,8 +13928,8 @@
     "games": 36,
     "wins": 21,
     "losses": 15,
-    "totalMinutes": 1455,
-    "pace": 68.2,
+    "totalMinutes": 1445,
+    "pace": 68.7,
     "teamStats": {
       "assists": 446,
       "blocks": 86,
@@ -14045,117 +14045,117 @@
     "teamId": 118,
     "team": "Illinois",
     "conference": "Big Ten",
-    "games": 36,
+    "games": 37,
     "wins": 28,
-    "losses": 8,
+    "losses": 9,
     "totalMinutes": 1500,
-    "pace": 61.2,
+    "pace": 62.9,
     "teamStats": {
-      "assists": 521,
-      "blocks": 162,
-      "steals": 135,
-      "possessions": 2296,
-      "trueShooting": 59.3,
-      "rating": 131.4,
+      "assists": 524,
+      "blocks": 168,
+      "steals": 137,
+      "possessions": 2359,
+      "trueShooting": 59,
+      "rating": 130.5,
       "fieldGoals": {
-        "made": 1030,
-        "attempted": 2220,
-        "pct": 46.4
+        "made": 1049,
+        "attempted": 2276,
+        "pct": 46.1
       },
       "twoPointFieldGoals": {
-        "made": 645,
-        "attempted": 1114,
-        "pct": 57.9
+        "made": 658,
+        "attempted": 1144,
+        "pct": 57.5
       },
       "threePointFieldGoals": {
-        "made": 385,
-        "attempted": 1106,
-        "pct": 34.8
+        "made": 391,
+        "attempted": 1132,
+        "pct": 34.5
       },
       "freeThrows": {
-        "made": 572,
-        "attempted": 733,
+        "made": 590,
+        "attempted": 756,
         "pct": 78
       },
       "rebounds": {
-        "offensive": 483,
-        "defensive": 993,
-        "total": 1476
+        "offensive": 495,
+        "defensive": 1025,
+        "total": 1520
       },
       "turnovers": {
-        "total": 317,
+        "total": 325,
         "teamTotal": 12
       },
       "fouls": {
-        "total": 480,
+        "total": 497,
         "technical": 4,
         "flagrant": 3
       },
       "points": {
-        "total": 3017,
-        "inPaint": 1200,
-        "offTurnovers": 362,
+        "total": 3079,
+        "inPaint": 1222,
+        "offTurnovers": 366,
         "fastBreak": 209
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 55.1,
+        "effectiveFieldGoalPct": 54.7,
         "turnoverRatio": 0.14,
-        "offensiveReboundPct": 32.7,
-        "freeThrowRate": 33
+        "offensiveReboundPct": 32.6,
+        "freeThrowRate": 33.2
       }
     },
     "opponentStats": {
-      "assists": 477,
-      "blocks": 93,
-      "steals": 195,
-      "possessions": 2295,
+      "assists": 491,
+      "blocks": 94,
+      "steals": 201,
+      "possessions": 2360,
       "trueShooting": 50.2,
       "rating": 107.8,
       "fieldGoals": {
-        "made": 923,
-        "attempted": 2268,
-        "pct": 40.7
+        "made": 945,
+        "attempted": 2330,
+        "pct": 40.6
       },
       "twoPointFieldGoals": {
-        "made": 619,
-        "attempted": 1290,
-        "pct": 48
+        "made": 629,
+        "attempted": 1319,
+        "pct": 47.7
       },
       "threePointFieldGoals": {
-        "made": 304,
-        "attempted": 978,
-        "pct": 31.1
+        "made": 316,
+        "attempted": 1011,
+        "pct": 31.3
       },
       "freeThrows": {
-        "made": 323,
-        "attempted": 441,
-        "pct": 73.2
+        "made": 338,
+        "attempted": 458,
+        "pct": 73.8
       },
       "rebounds": {
-        "offensive": 363,
-        "defensive": 739,
-        "total": 1102
+        "offensive": 373,
+        "defensive": 766,
+        "total": 1139
       },
       "turnovers": {
-        "total": 282,
+        "total": 286,
         "teamTotal": 20
       },
       "fouls": {
-        "total": 677,
+        "total": 698,
         "technical": 3,
         "flagrant": 7
       },
       "points": {
-        "total": 2473,
-        "inPaint": 1026,
-        "offTurnovers": 374,
-        "fastBreak": 288
+        "total": 2544,
+        "inPaint": 1046,
+        "offTurnovers": 382,
+        "fastBreak": 293
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 47.4,
+        "effectiveFieldGoalPct": 47.3,
         "turnoverRatio": 0.12,
-        "offensiveReboundPct": 32.9,
-        "freeThrowRate": 19.4
+        "offensiveReboundPct": 32.7,
+        "freeThrowRate": 19.7
       }
     }
   },
@@ -14168,8 +14168,8 @@
     "games": 36,
     "wins": 23,
     "losses": 13,
-    "totalMinutes": 1455,
-    "pace": 66.4,
+    "totalMinutes": 1445,
+    "pace": 66.8,
     "teamStats": {
       "assists": 488,
       "blocks": 84,
@@ -14408,8 +14408,8 @@
     "games": 32,
     "wins": 18,
     "losses": 14,
-    "totalMinutes": 1315,
-    "pace": 64.9,
+    "totalMinutes": 1295,
+    "pace": 65.9,
     "teamStats": {
       "assists": 531,
       "blocks": 86,
@@ -14528,8 +14528,8 @@
     "games": 32,
     "wins": 11,
     "losses": 21,
-    "totalMinutes": 1335,
-    "pace": 64.8,
+    "totalMinutes": 1305,
+    "pace": 66.3,
     "teamStats": {
       "assists": 559,
       "blocks": 103,
@@ -14648,8 +14648,8 @@
     "games": 32,
     "wins": 18,
     "losses": 14,
-    "totalMinutes": 1335,
-    "pace": 66.6,
+    "totalMinutes": 1305,
+    "pace": 68.1,
     "teamStats": {
       "assists": 447,
       "blocks": 95,
@@ -14768,8 +14768,8 @@
     "games": 37,
     "wins": 24,
     "losses": 13,
-    "totalMinutes": 1495,
-    "pace": 60.4,
+    "totalMinutes": 1485,
+    "pace": 60.8,
     "teamStats": {
       "assists": 555,
       "blocks": 71,
@@ -15008,8 +15008,8 @@
     "games": 33,
     "wins": 12,
     "losses": 21,
-    "totalMinutes": 1350,
-    "pace": 69.6,
+    "totalMinutes": 1330,
+    "pace": 70.6,
     "teamStats": {
       "assists": 345,
       "blocks": 98,
@@ -15128,8 +15128,8 @@
     "games": 32,
     "wins": 12,
     "losses": 20,
-    "totalMinutes": 1310,
-    "pace": 64.1,
+    "totalMinutes": 1290,
+    "pace": 65.1,
     "teamStats": {
       "assists": 385,
       "blocks": 94,
@@ -15248,8 +15248,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1310,
-    "pace": 65.3,
+    "totalMinutes": 1290,
+    "pace": 66.3,
     "teamStats": {
       "assists": 386,
       "blocks": 98,
@@ -15368,8 +15368,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1350,
-    "pace": 65.6,
+    "totalMinutes": 1330,
+    "pace": 66.6,
     "teamStats": {
       "assists": 412,
       "blocks": 135,
@@ -15488,8 +15488,8 @@
     "games": 31,
     "wins": 4,
     "losses": 27,
-    "totalMinutes": 1255,
-    "pace": 68.4,
+    "totalMinutes": 1245,
+    "pace": 68.9,
     "teamStats": {
       "assists": 368,
       "blocks": 98,
@@ -15608,8 +15608,8 @@
     "games": 35,
     "wins": 24,
     "losses": 11,
-    "totalMinutes": 1430,
-    "pace": 67.1,
+    "totalMinutes": 1410,
+    "pace": 68.1,
     "teamStats": {
       "assists": 488,
       "blocks": 202,
@@ -15848,8 +15848,8 @@
     "games": 35,
     "wins": 21,
     "losses": 14,
-    "totalMinutes": 1430,
-    "pace": 67.8,
+    "totalMinutes": 1410,
+    "pace": 68.8,
     "teamStats": {
       "assists": 486,
       "blocks": 177,
@@ -15968,8 +15968,8 @@
     "games": 34,
     "wins": 24,
     "losses": 10,
-    "totalMinutes": 1440,
-    "pace": 69.2,
+    "totalMinutes": 1390,
+    "pace": 71.7,
     "teamStats": {
       "assists": 545,
       "blocks": 115,
@@ -16088,8 +16088,8 @@
     "games": 36,
     "wins": 22,
     "losses": 14,
-    "totalMinutes": 1455,
-    "pace": 68.7,
+    "totalMinutes": 1445,
+    "pace": 69.2,
     "teamStats": {
       "assists": 573,
       "blocks": 164,
@@ -16208,8 +16208,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1355,
-    "pace": 64.1,
+    "totalMinutes": 1315,
+    "pace": 66.1,
     "teamStats": {
       "assists": 470,
       "blocks": 125,
@@ -16448,8 +16448,8 @@
     "games": 32,
     "wins": 11,
     "losses": 21,
-    "totalMinutes": 1295,
-    "pace": 64.1,
+    "totalMinutes": 1285,
+    "pace": 64.6,
     "teamStats": {
       "assists": 435,
       "blocks": 75,
@@ -16568,8 +16568,8 @@
     "games": 31,
     "wins": 12,
     "losses": 19,
-    "totalMinutes": 1255,
-    "pace": 65.7,
+    "totalMinutes": 1245,
+    "pace": 66.3,
     "teamStats": {
       "assists": 449,
       "blocks": 136,
@@ -16808,8 +16808,8 @@
     "games": 35,
     "wins": 18,
     "losses": 17,
-    "totalMinutes": 1515,
-    "pace": 63.6,
+    "totalMinutes": 1445,
+    "pace": 66.7,
     "teamStats": {
       "assists": 498,
       "blocks": 114,
@@ -16928,8 +16928,8 @@
     "games": 34,
     "wins": 26,
     "losses": 8,
-    "totalMinutes": 1390,
-    "pace": 63.7,
+    "totalMinutes": 1370,
+    "pace": 64.6,
     "teamStats": {
       "assists": 581,
       "blocks": 116,
@@ -17048,8 +17048,8 @@
     "games": 32,
     "wins": 19,
     "losses": 13,
-    "totalMinutes": 1295,
-    "pace": 70.2,
+    "totalMinutes": 1285,
+    "pace": 70.8,
     "teamStats": {
       "assists": 571,
       "blocks": 89,
@@ -17288,8 +17288,8 @@
     "games": 32,
     "wins": 10,
     "losses": 22,
-    "totalMinutes": 1325,
-    "pace": 69,
+    "totalMinutes": 1295,
+    "pace": 70.6,
     "teamStats": {
       "assists": 418,
       "blocks": 95,
@@ -17408,8 +17408,8 @@
     "games": 35,
     "wins": 24,
     "losses": 11,
-    "totalMinutes": 1415,
-    "pace": 67.6,
+    "totalMinutes": 1405,
+    "pace": 68,
     "teamStats": {
       "assists": 479,
       "blocks": 188,
@@ -17528,8 +17528,8 @@
     "games": 32,
     "wins": 16,
     "losses": 16,
-    "totalMinutes": 1365,
-    "pace": 65.3,
+    "totalMinutes": 1315,
+    "pace": 67.8,
     "teamStats": {
       "assists": 405,
       "blocks": 75,
@@ -17768,8 +17768,8 @@
     "games": 34,
     "wins": 20,
     "losses": 14,
-    "totalMinutes": 1395,
-    "pace": 64.2,
+    "totalMinutes": 1375,
+    "pace": 65.1,
     "teamStats": {
       "assists": 429,
       "blocks": 156,
@@ -18008,8 +18008,8 @@
     "games": 33,
     "wins": 9,
     "losses": 24,
-    "totalMinutes": 1335,
-    "pace": 64.7,
+    "totalMinutes": 1325,
+    "pace": 65.2,
     "teamStats": {
       "assists": 460,
       "blocks": 121,
@@ -18128,8 +18128,8 @@
     "games": 32,
     "wins": 12,
     "losses": 20,
-    "totalMinutes": 1330,
-    "pace": 67.1,
+    "totalMinutes": 1300,
+    "pace": 68.6,
     "teamStats": {
       "assists": 423,
       "blocks": 114,
@@ -18248,8 +18248,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1315,
-    "pace": 67.1,
+    "totalMinutes": 1295,
+    "pace": 68.2,
     "teamStats": {
       "assists": 421,
       "blocks": 129,
@@ -18488,8 +18488,8 @@
     "games": 32,
     "wins": 12,
     "losses": 20,
-    "totalMinutes": 1325,
-    "pace": 66.5,
+    "totalMinutes": 1295,
+    "pace": 68,
     "teamStats": {
       "assists": 411,
       "blocks": 75,
@@ -18608,8 +18608,8 @@
     "games": 31,
     "wins": 19,
     "losses": 12,
-    "totalMinutes": 1255,
-    "pace": 65.7,
+    "totalMinutes": 1245,
+    "pace": 66.3,
     "teamStats": {
       "assists": 472,
       "blocks": 96,
@@ -18728,8 +18728,8 @@
     "games": 32,
     "wins": 12,
     "losses": 20,
-    "totalMinutes": 1325,
-    "pace": 68.3,
+    "totalMinutes": 1295,
+    "pace": 69.9,
     "teamStats": {
       "assists": 495,
       "blocks": 97,
@@ -18968,8 +18968,8 @@
     "games": 32,
     "wins": 9,
     "losses": 23,
-    "totalMinutes": 1345,
-    "pace": 62.5,
+    "totalMinutes": 1305,
+    "pace": 64.5,
     "teamStats": {
       "assists": 431,
       "blocks": 84,
@@ -19088,8 +19088,8 @@
     "games": 33,
     "wins": 12,
     "losses": 21,
-    "totalMinutes": 1335,
-    "pace": 65.6,
+    "totalMinutes": 1325,
+    "pace": 66.1,
     "teamStats": {
       "assists": 345,
       "blocks": 97,
@@ -19208,8 +19208,8 @@
     "games": 33,
     "wins": 17,
     "losses": 16,
-    "totalMinutes": 1390,
-    "pace": 68.3,
+    "totalMinutes": 1350,
+    "pace": 70.3,
     "teamStats": {
       "assists": 562,
       "blocks": 72,
@@ -19328,8 +19328,8 @@
     "games": 34,
     "wins": 28,
     "losses": 6,
-    "totalMinutes": 1385,
-    "pace": 63.9,
+    "totalMinutes": 1375,
+    "pace": 64.4,
     "teamStats": {
       "assists": 478,
       "blocks": 148,
@@ -19448,8 +19448,8 @@
     "games": 32,
     "wins": 13,
     "losses": 19,
-    "totalMinutes": 1310,
-    "pace": 69.6,
+    "totalMinutes": 1290,
+    "pace": 70.7,
     "teamStats": {
       "assists": 425,
       "blocks": 138,
@@ -19688,8 +19688,8 @@
     "games": 34,
     "wins": 17,
     "losses": 17,
-    "totalMinutes": 1420,
-    "pace": 62.9,
+    "totalMinutes": 1380,
+    "pace": 64.7,
     "teamStats": {
       "assists": 468,
       "blocks": 129,
@@ -19808,8 +19808,8 @@
     "games": 34,
     "wins": 23,
     "losses": 11,
-    "totalMinutes": 1395,
-    "pace": 62.2,
+    "totalMinutes": 1375,
+    "pace": 63.1,
     "teamStats": {
       "assists": 423,
       "blocks": 175,
@@ -19925,116 +19925,116 @@
     "teamId": 167,
     "team": "Miami (OH)",
     "conference": "MAC",
-    "games": 35,
+    "games": 34,
     "wins": 32,
-    "losses": 3,
-    "totalMinutes": 1460,
-    "pace": 65.1,
+    "losses": 2,
+    "totalMinutes": 1380,
+    "pace": 66.9,
     "teamStats": {
-      "assists": 556,
+      "assists": 543,
       "blocks": 112,
-      "steals": 258,
-      "possessions": 2375,
-      "trueShooting": 63.6,
-      "rating": 131.2,
+      "steals": 250,
+      "possessions": 2304,
+      "trueShooting": 64.1,
+      "rating": 132.2,
       "fieldGoals": {
-        "made": 1073,
-        "attempted": 2095,
-        "pct": 51.2
+        "made": 1049,
+        "attempted": 2027,
+        "pct": 51.8
       },
       "twoPointFieldGoals": {
-        "made": 709,
-        "attempted": 1139,
-        "pct": 62.2
+        "made": 692,
+        "attempted": 1104,
+        "pct": 62.7
       },
       "threePointFieldGoals": {
-        "made": 364,
-        "attempted": 956,
-        "pct": 38.1
+        "made": 357,
+        "attempted": 923,
+        "pct": 38.7
       },
       "freeThrows": {
-        "made": 606,
-        "attempted": 809,
-        "pct": 74.9
+        "made": 592,
+        "attempted": 791,
+        "pct": 74.8
       },
       "rebounds": {
-        "offensive": 300,
-        "defensive": 933,
-        "total": 1233
+        "offensive": 286,
+        "defensive": 910,
+        "total": 1196
       },
       "turnovers": {
-        "total": 361,
+        "total": 351,
         "teamTotal": 17
       },
       "fouls": {
-        "total": 565,
+        "total": 548,
         "technical": 8,
         "flagrant": 3
       },
       "points": {
-        "total": 3116,
-        "inPaint": 1276,
-        "offTurnovers": 567,
-        "fastBreak": 364
+        "total": 3047,
+        "inPaint": 1248,
+        "offTurnovers": 557,
+        "fastBreak": 352
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 59.9,
+        "effectiveFieldGoalPct": 60.6,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 24.3,
-        "freeThrowRate": 38.6
+        "offensiveReboundPct": 23.9,
+        "freeThrowRate": 39
       }
     },
     "opponentStats": {
-      "assists": 458,
-      "blocks": 86,
-      "steals": 215,
-      "possessions": 2380,
-      "trueShooting": 53.9,
-      "rating": 110.9,
+      "assists": 441,
+      "blocks": 79,
+      "steals": 208,
+      "possessions": 2310,
+      "trueShooting": 53.8,
+      "rating": 111.1,
       "fieldGoals": {
-        "made": 955,
-        "attempted": 2176,
-        "pct": 43.9
+        "made": 931,
+        "attempted": 2118,
+        "pct": 44
       },
       "twoPointFieldGoals": {
-        "made": 686,
-        "attempted": 1355,
-        "pct": 50.6
+        "made": 674,
+        "attempted": 1329,
+        "pct": 50.7
       },
       "threePointFieldGoals": {
-        "made": 269,
-        "attempted": 821,
-        "pct": 32.8
+        "made": 257,
+        "attempted": 789,
+        "pct": 32.6
       },
       "freeThrows": {
-        "made": 461,
-        "attempted": 623,
-        "pct": 74
+        "made": 447,
+        "attempted": 605,
+        "pct": 73.9
       },
       "rebounds": {
-        "offensive": 370,
-        "defensive": 818,
-        "total": 1188
+        "offensive": 359,
+        "defensive": 790,
+        "total": 1149
       },
       "turnovers": {
-        "total": 448,
-        "teamTotal": 14
+        "total": 434,
+        "teamTotal": 13
       },
       "fouls": {
-        "total": 674,
+        "total": 658,
         "technical": 4,
         "flagrant": 2
       },
       "points": {
-        "total": 2640,
-        "inPaint": 1198,
-        "offTurnovers": 361,
-        "fastBreak": 262
+        "total": 2566,
+        "inPaint": 1176,
+        "offTurnovers": 349,
+        "fastBreak": 251
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 50.1,
+        "effectiveFieldGoalPct": 50,
         "turnoverRatio": 0.19,
-        "offensiveReboundPct": 31.1,
+        "offensiveReboundPct": 31.2,
         "freeThrowRate": 28.6
       }
     }
@@ -20168,8 +20168,8 @@
     "games": 35,
     "wins": 27,
     "losses": 8,
-    "totalMinutes": 1430,
-    "pace": 65.4,
+    "totalMinutes": 1410,
+    "pace": 66.4,
     "teamStats": {
       "assists": 652,
       "blocks": 145,
@@ -20285,117 +20285,117 @@
     "teamId": 170,
     "team": "Michigan",
     "conference": "Big Ten",
-    "games": 38,
-    "wins": 35,
+    "games": 40,
+    "wins": 37,
     "losses": 3,
-    "totalMinutes": 1535,
-    "pace": 69.9,
+    "totalMinutes": 1605,
+    "pace": 70.4,
     "teamStats": {
-      "assists": 714,
-      "blocks": 231,
-      "steals": 210,
-      "possessions": 2685,
-      "trueShooting": 62.5,
-      "rating": 124.1,
+      "assists": 743,
+      "blocks": 240,
+      "steals": 223,
+      "possessions": 2827,
+      "trueShooting": 62.1,
+      "rating": 123.6,
       "fieldGoals": {
-        "made": 1167,
-        "attempted": 2285,
-        "pct": 51.1
+        "made": 1221,
+        "attempted": 2409,
+        "pct": 50.7
       },
       "twoPointFieldGoals": {
-        "made": 814,
-        "attempted": 1328,
-        "pct": 61.3
+        "made": 854,
+        "attempted": 1410,
+        "pct": 60.6
       },
       "threePointFieldGoals": {
-        "made": 353,
-        "attempted": 957,
-        "pct": 36.9
+        "made": 367,
+        "attempted": 999,
+        "pct": 36.7
       },
       "freeThrows": {
-        "made": 646,
-        "attempted": 871,
-        "pct": 74.2
+        "made": 684,
+        "attempted": 915,
+        "pct": 74.8
       },
       "rebounds": {
-        "offensive": 411,
-        "defensive": 1114,
-        "total": 1525
+        "offensive": 434,
+        "defensive": 1170,
+        "total": 1604
       },
       "turnovers": {
-        "total": 445,
+        "total": 468,
         "teamTotal": 11
       },
       "fouls": {
-        "total": 588,
+        "total": 620,
         "technical": 6,
         "flagrant": 3
       },
       "points": {
-        "total": 3333,
-        "inPaint": 1486,
-        "offTurnovers": 520,
-        "fastBreak": 481
+        "total": 3493,
+        "inPaint": 1558,
+        "offTurnovers": 550,
+        "fastBreak": 485
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 58.8,
+        "effectiveFieldGoalPct": 58.3,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 27,
-        "freeThrowRate": 38.1
+        "offensiveReboundPct": 27.1,
+        "freeThrowRate": 38
       }
     },
     "opponentStats": {
-      "assists": 441,
-      "blocks": 116,
-      "steals": 241,
-      "possessions": 2681,
-      "trueShooting": 48.9,
-      "rating": 98.6,
+      "assists": 455,
+      "blocks": 120,
+      "steals": 254,
+      "possessions": 2824,
+      "trueShooting": 48.7,
+      "rating": 98.4,
       "fieldGoals": {
-        "made": 931,
-        "attempted": 2424,
-        "pct": 38.4
+        "made": 978,
+        "attempted": 2563,
+        "pct": 38.2
       },
       "twoPointFieldGoals": {
-        "made": 616,
-        "attempted": 1389,
-        "pct": 44.3
+        "made": 648,
+        "attempted": 1478,
+        "pct": 43.8
       },
       "threePointFieldGoals": {
-        "made": 315,
-        "attempted": 1035,
+        "made": 330,
+        "attempted": 1085,
         "pct": 30.4
       },
       "freeThrows": {
-        "made": 467,
-        "attempted": 629,
-        "pct": 74.2
+        "made": 494,
+        "attempted": 667,
+        "pct": 74.1
       },
       "rebounds": {
-        "offensive": 419,
-        "defensive": 765,
-        "total": 1184
+        "offensive": 459,
+        "defensive": 815,
+        "total": 1274
       },
       "turnovers": {
-        "total": 409,
-        "teamTotal": 22
+        "total": 434,
+        "teamTotal": 24
       },
       "fouls": {
-        "total": 741,
+        "total": 782,
         "technical": 11,
-        "flagrant": 6
+        "flagrant": 7
       },
       "points": {
-        "total": 2644,
-        "inPaint": 1008,
-        "offTurnovers": 460,
-        "fastBreak": 235
+        "total": 2780,
+        "inPaint": 1066,
+        "offTurnovers": 480,
+        "fastBreak": 241
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 44.9,
+        "effectiveFieldGoalPct": 44.6,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 35.4,
-        "freeThrowRate": 25.9
+        "offensiveReboundPct": 36,
+        "freeThrowRate": 26
       }
     }
   },
@@ -20408,8 +20408,8 @@
     "games": 32,
     "wins": 17,
     "losses": 15,
-    "totalMinutes": 1360,
-    "pace": 64.4,
+    "totalMinutes": 1310,
+    "pace": 66.9,
     "teamStats": {
       "assists": 455,
       "blocks": 136,
@@ -20648,8 +20648,8 @@
     "games": 33,
     "wins": 15,
     "losses": 18,
-    "totalMinutes": 1365,
-    "pace": 61.3,
+    "totalMinutes": 1335,
+    "pace": 62.7,
     "teamStats": {
       "assists": 562,
       "blocks": 88,
@@ -20768,8 +20768,8 @@
     "games": 32,
     "wins": 13,
     "losses": 19,
-    "totalMinutes": 1325,
-    "pace": 67.4,
+    "totalMinutes": 1295,
+    "pace": 69,
     "teamStats": {
       "assists": 408,
       "blocks": 140,
@@ -20888,8 +20888,8 @@
     "games": 33,
     "wins": 3,
     "losses": 30,
-    "totalMinutes": 1340,
-    "pace": 68.6,
+    "totalMinutes": 1330,
+    "pace": 69.1,
     "teamStats": {
       "assists": 403,
       "blocks": 85,
@@ -21008,8 +21008,8 @@
     "games": 34,
     "wins": 16,
     "losses": 18,
-    "totalMinutes": 1400,
-    "pace": 65.6,
+    "totalMinutes": 1380,
+    "pace": 66.5,
     "teamStats": {
       "assists": 492,
       "blocks": 105,
@@ -21128,8 +21128,8 @@
     "games": 33,
     "wins": 20,
     "losses": 13,
-    "totalMinutes": 1350,
-    "pace": 66.5,
+    "totalMinutes": 1330,
+    "pace": 67.5,
     "teamStats": {
       "assists": 468,
       "blocks": 116,
@@ -21248,8 +21248,8 @@
     "games": 34,
     "wins": 19,
     "losses": 15,
-    "totalMinutes": 1405,
-    "pace": 63.8,
+    "totalMinutes": 1375,
+    "pace": 65.2,
     "teamStats": {
       "assists": 469,
       "blocks": 147,
@@ -21488,8 +21488,8 @@
     "games": 32,
     "wins": 18,
     "losses": 14,
-    "totalMinutes": 1310,
-    "pace": 65.8,
+    "totalMinutes": 1290,
+    "pace": 66.8,
     "teamStats": {
       "assists": 366,
       "blocks": 91,
@@ -21608,8 +21608,8 @@
     "games": 33,
     "wins": 20,
     "losses": 13,
-    "totalMinutes": 1350,
-    "pace": 66.2,
+    "totalMinutes": 1330,
+    "pace": 67.2,
     "teamStats": {
       "assists": 443,
       "blocks": 101,
@@ -21728,8 +21728,8 @@
     "games": 30,
     "wins": 14,
     "losses": 16,
-    "totalMinutes": 1215,
-    "pace": 69.9,
+    "totalMinutes": 1205,
+    "pace": 70.5,
     "teamStats": {
       "assists": 395,
       "blocks": 108,
@@ -21848,8 +21848,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1295,
-    "pace": 67,
+    "totalMinutes": 1285,
+    "pace": 67.5,
     "teamStats": {
       "assists": 435,
       "blocks": 96,
@@ -22088,8 +22088,8 @@
     "games": 34,
     "wins": 20,
     "losses": 14,
-    "totalMinutes": 1405,
-    "pace": 65.2,
+    "totalMinutes": 1375,
+    "pace": 66.6,
     "teamStats": {
       "assists": 524,
       "blocks": 116,
@@ -22328,8 +22328,8 @@
     "games": 34,
     "wins": 26,
     "losses": 8,
-    "totalMinutes": 1395,
-    "pace": 62.3,
+    "totalMinutes": 1375,
+    "pace": 63.2,
     "teamStats": {
       "assists": 549,
       "blocks": 107,
@@ -22448,8 +22448,8 @@
     "games": 35,
     "wins": 28,
     "losses": 7,
-    "totalMinutes": 1430,
-    "pace": 65.3,
+    "totalMinutes": 1410,
+    "pace": 66.2,
     "teamStats": {
       "assists": 629,
       "blocks": 88,
@@ -22568,8 +22568,8 @@
     "games": 37,
     "wins": 24,
     "losses": 13,
-    "totalMinutes": 1540,
-    "pace": 63.2,
+    "totalMinutes": 1500,
+    "pace": 64.8,
     "teamStats": {
       "assists": 535,
       "blocks": 139,
@@ -22688,8 +22688,8 @@
     "games": 30,
     "wins": 9,
     "losses": 21,
-    "totalMinutes": 1260,
-    "pace": 65.9,
+    "totalMinutes": 1230,
+    "pace": 67.5,
     "teamStats": {
       "assists": 335,
       "blocks": 64,
@@ -22805,117 +22805,117 @@
     "teamId": 191,
     "team": "New Mexico",
     "conference": "Mountain West",
-    "games": 36,
+    "games": 37,
     "wins": 26,
-    "losses": 10,
-    "totalMinutes": 1440,
+    "losses": 11,
+    "totalMinutes": 1480,
     "pace": 70.2,
     "teamStats": {
-      "assists": 544,
+      "assists": 557,
       "blocks": 106,
-      "steals": 289,
-      "possessions": 2522,
-      "trueShooting": 58,
-      "rating": 116.4,
+      "steals": 297,
+      "possessions": 2593,
+      "trueShooting": 57.6,
+      "rating": 115.9,
       "fieldGoals": {
-        "made": 1011,
-        "attempted": 2183,
-        "pct": 46.3
+        "made": 1035,
+        "attempted": 2251,
+        "pct": 46
       },
       "twoPointFieldGoals": {
-        "made": 673,
-        "attempted": 1251,
-        "pct": 53.8
+        "made": 690,
+        "attempted": 1286,
+        "pct": 53.7
       },
       "threePointFieldGoals": {
-        "made": 338,
-        "attempted": 932,
-        "pct": 36.3
+        "made": 345,
+        "attempted": 965,
+        "pct": 35.8
       },
       "freeThrows": {
-        "made": 575,
-        "attempted": 791,
-        "pct": 72.7
+        "made": 589,
+        "attempted": 809,
+        "pct": 72.8
       },
       "rebounds": {
-        "offensive": 391,
-        "defensive": 938,
-        "total": 1329
+        "offensive": 405,
+        "defensive": 961,
+        "total": 1366
       },
       "turnovers": {
-        "total": 378,
+        "total": 388,
         "teamTotal": 28
       },
       "fouls": {
-        "total": 620,
+        "total": 637,
         "technical": 2,
         "flagrant": 1
       },
       "points": {
-        "total": 2935,
-        "inPaint": 1234,
-        "offTurnovers": 587,
-        "fastBreak": 460
+        "total": 3004,
+        "inPaint": 1262,
+        "offTurnovers": 597,
+        "fastBreak": 472
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.1,
+        "effectiveFieldGoalPct": 53.6,
         "turnoverRatio": 0.15,
-        "offensiveReboundPct": 29.4,
-        "freeThrowRate": 36.2
+        "offensiveReboundPct": 29.6,
+        "freeThrowRate": 35.9
       }
     },
     "opponentStats": {
-      "assists": 475,
-      "blocks": 111,
-      "steals": 219,
-      "possessions": 2529,
-      "trueShooting": 53.4,
-      "rating": 100.8,
+      "assists": 492,
+      "blocks": 118,
+      "steals": 226,
+      "possessions": 2599,
+      "trueShooting": 53.5,
+      "rating": 101,
       "fieldGoals": {
-        "made": 872,
-        "attempted": 2080,
+        "made": 896,
+        "attempted": 2138,
         "pct": 41.9
       },
       "twoPointFieldGoals": {
-        "made": 575,
-        "attempted": 1089,
-        "pct": 52.8
+        "made": 587,
+        "attempted": 1115,
+        "pct": 52.6
       },
       "threePointFieldGoals": {
-        "made": 297,
-        "attempted": 991,
-        "pct": 30
+        "made": 309,
+        "attempted": 1023,
+        "pct": 30.2
       },
       "freeThrows": {
-        "made": 509,
-        "attempted": 697,
-        "pct": 73
+        "made": 523,
+        "attempted": 715,
+        "pct": 73.1
       },
       "rebounds": {
-        "offensive": 352,
-        "defensive": 882,
-        "total": 1234
+        "offensive": 363,
+        "defensive": 910,
+        "total": 1273
       },
       "turnovers": {
-        "total": 488,
-        "teamTotal": 30
+        "total": 502,
+        "teamTotal": 31
       },
       "fouls": {
-        "total": 687,
+        "total": 703,
         "technical": 4,
         "flagrant": 0
       },
       "points": {
-        "total": 2550,
-        "inPaint": 956,
-        "offTurnovers": 384,
-        "fastBreak": 341
+        "total": 2624,
+        "inPaint": 978,
+        "offTurnovers": 396,
+        "fastBreak": 352
       },
       "fourFactors": {
         "effectiveFieldGoalPct": 49.1,
         "turnoverRatio": 0.19,
         "offensiveReboundPct": 28.5,
-        "freeThrowRate": 33.5
+        "freeThrowRate": 33.4
       }
     }
   },
@@ -22928,8 +22928,8 @@
     "games": 32,
     "wins": 16,
     "losses": 16,
-    "totalMinutes": 1325,
-    "pace": 64,
+    "totalMinutes": 1295,
+    "pace": 65.5,
     "teamStats": {
       "assists": 413,
       "blocks": 101,
@@ -23048,8 +23048,8 @@
     "games": 34,
     "wins": 16,
     "losses": 18,
-    "totalMinutes": 1390,
-    "pace": 68.6,
+    "totalMinutes": 1370,
+    "pace": 69.6,
     "teamStats": {
       "assists": 455,
       "blocks": 130,
@@ -23168,8 +23168,8 @@
     "games": 30,
     "wins": 8,
     "losses": 22,
-    "totalMinutes": 1215,
-    "pace": 62.4,
+    "totalMinutes": 1205,
+    "pace": 62.9,
     "teamStats": {
       "assists": 420,
       "blocks": 87,
@@ -23528,8 +23528,8 @@
     "games": 30,
     "wins": 9,
     "losses": 21,
-    "totalMinutes": 1230,
-    "pace": 64.5,
+    "totalMinutes": 1210,
+    "pace": 65.6,
     "teamStats": {
       "assists": 302,
       "blocks": 113,
@@ -23648,8 +23648,8 @@
     "games": 30,
     "wins": 11,
     "losses": 19,
-    "totalMinutes": 1215,
-    "pace": 68.6,
+    "totalMinutes": 1205,
+    "pace": 69.2,
     "teamStats": {
       "assists": 358,
       "blocks": 117,
@@ -23768,8 +23768,8 @@
     "games": 32,
     "wins": 14,
     "losses": 18,
-    "totalMinutes": 1295,
-    "pace": 67.3,
+    "totalMinutes": 1285,
+    "pace": 67.8,
     "teamStats": {
       "assists": 435,
       "blocks": 113,
@@ -23888,8 +23888,8 @@
     "games": 33,
     "wins": 24,
     "losses": 9,
-    "totalMinutes": 1335,
-    "pace": 67.7,
+    "totalMinutes": 1325,
+    "pace": 68.3,
     "teamStats": {
       "assists": 528,
       "blocks": 111,
@@ -24008,8 +24008,8 @@
     "games": 35,
     "wins": 18,
     "losses": 17,
-    "totalMinutes": 1430,
-    "pace": 68,
+    "totalMinutes": 1410,
+    "pace": 68.9,
     "teamStats": {
       "assists": 398,
       "blocks": 89,
@@ -24125,116 +24125,116 @@
     "teamId": 202,
     "team": "North Dakota State",
     "conference": "Summit",
-    "games": 36,
-    "wins": 28,
+    "games": 35,
+    "wins": 27,
     "losses": 8,
-    "totalMinutes": 1490,
-    "pace": 67,
+    "totalMinutes": 1420,
+    "pace": 68.3,
     "teamStats": {
-      "assists": 558,
-      "blocks": 105,
-      "steals": 296,
-      "possessions": 2503,
-      "trueShooting": 57.6,
-      "rating": 115.3,
+      "assists": 541,
+      "blocks": 98,
+      "steals": 289,
+      "possessions": 2433,
+      "trueShooting": 57.7,
+      "rating": 115.6,
       "fieldGoals": {
-        "made": 1028,
-        "attempted": 2206,
-        "pct": 46.6
+        "made": 1004,
+        "attempted": 2148,
+        "pct": 46.7
       },
       "twoPointFieldGoals": {
-        "made": 690,
-        "attempted": 1273,
-        "pct": 54.2
+        "made": 678,
+        "attempted": 1247,
+        "pct": 54.4
       },
       "threePointFieldGoals": {
-        "made": 338,
-        "attempted": 933,
+        "made": 326,
+        "attempted": 901,
         "pct": 36.2
       },
       "freeThrows": {
-        "made": 492,
-        "attempted": 679,
-        "pct": 72.5
+        "made": 478,
+        "attempted": 661,
+        "pct": 72.3
       },
       "rebounds": {
-        "offensive": 410,
-        "defensive": 891,
-        "total": 1301
+        "offensive": 399,
+        "defensive": 863,
+        "total": 1262
       },
       "turnovers": {
-        "total": 392,
-        "teamTotal": 14
+        "total": 378,
+        "teamTotal": 13
       },
       "fouls": {
-        "total": 532,
+        "total": 516,
         "technical": 4,
         "flagrant": 1
       },
       "points": {
-        "total": 2886,
-        "inPaint": 1258,
-        "offTurnovers": 596,
-        "fastBreak": 372
+        "total": 2812,
+        "inPaint": 1236,
+        "offTurnovers": 584,
+        "fastBreak": 361
       },
       "fourFactors": {
         "effectiveFieldGoalPct": 54.3,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 31.5,
+        "offensiveReboundPct": 31.6,
         "freeThrowRate": 30.8
       }
     },
     "opponentStats": {
-      "assists": 495,
+      "assists": 482,
       "blocks": 109,
-      "steals": 233,
-      "possessions": 2490,
-      "trueShooting": 54.9,
-      "rating": 101.5,
+      "steals": 225,
+      "possessions": 2419,
+      "trueShooting": 55.3,
+      "rating": 101.6,
       "fieldGoals": {
-        "made": 899,
-        "attempted": 2048,
-        "pct": 43.9
+        "made": 875,
+        "attempted": 1980,
+        "pct": 44.2
       },
       "twoPointFieldGoals": {
-        "made": 598,
-        "attempted": 1145,
-        "pct": 52.2
+        "made": 581,
+        "attempted": 1110,
+        "pct": 52.3
       },
       "threePointFieldGoals": {
-        "made": 301,
-        "attempted": 903,
-        "pct": 33.3
+        "made": 294,
+        "attempted": 870,
+        "pct": 33.8
       },
       "freeThrows": {
-        "made": 428,
-        "attempted": 573,
-        "pct": 74.7
+        "made": 414,
+        "attempted": 555,
+        "pct": 74.6
       },
       "rebounds": {
-        "offensive": 302,
-        "defensive": 846,
-        "total": 1148
+        "offensive": 288,
+        "defensive": 823,
+        "total": 1111
       },
       "turnovers": {
-        "total": 488,
+        "total": 478,
         "teamTotal": 19
       },
       "fouls": {
-        "total": 576,
+        "total": 559,
         "technical": 1,
         "flagrant": 0
       },
       "points": {
-        "total": 2527,
-        "inPaint": 1046,
-        "offTurnovers": 391,
-        "fastBreak": 251
+        "total": 2458,
+        "inPaint": 1018,
+        "offTurnovers": 381,
+        "fastBreak": 239
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 51.2,
+        "effectiveFieldGoalPct": 51.6,
         "turnoverRatio": 0.2,
-        "offensiveReboundPct": 26.3,
+        "offensiveReboundPct": 25.9,
         "freeThrowRate": 28
       }
     }
@@ -24248,8 +24248,8 @@
     "games": 32,
     "wins": 7,
     "losses": 25,
-    "totalMinutes": 1295,
-    "pace": 71.3,
+    "totalMinutes": 1285,
+    "pace": 71.8,
     "teamStats": {
       "assists": 444,
       "blocks": 44,
@@ -24368,8 +24368,8 @@
     "games": 33,
     "wins": 19,
     "losses": 14,
-    "totalMinutes": 1380,
-    "pace": 64.9,
+    "totalMinutes": 1350,
+    "pace": 66.3,
     "teamStats": {
       "assists": 406,
       "blocks": 144,
@@ -24488,8 +24488,8 @@
     "games": 31,
     "wins": 7,
     "losses": 24,
-    "totalMinutes": 1255,
-    "pace": 68.5,
+    "totalMinutes": 1245,
+    "pace": 69,
     "teamStats": {
       "assists": 476,
       "blocks": 92,
@@ -24728,8 +24728,8 @@
     "games": 32,
     "wins": 20,
     "losses": 12,
-    "totalMinutes": 1340,
-    "pace": 67.3,
+    "totalMinutes": 1300,
+    "pace": 69.4,
     "teamStats": {
       "assists": 529,
       "blocks": 85,
@@ -24968,8 +24968,8 @@
     "games": 36,
     "wins": 23,
     "losses": 13,
-    "totalMinutes": 1470,
-    "pace": 62.7,
+    "totalMinutes": 1450,
+    "pace": 63.6,
     "teamStats": {
       "assists": 534,
       "blocks": 111,
@@ -25088,8 +25088,8 @@
     "games": 34,
     "wins": 20,
     "losses": 14,
-    "totalMinutes": 1390,
-    "pace": 70,
+    "totalMinutes": 1370,
+    "pace": 71,
     "teamStats": {
       "assists": 536,
       "blocks": 120,
@@ -25208,8 +25208,8 @@
     "games": 32,
     "wins": 10,
     "losses": 22,
-    "totalMinutes": 1295,
-    "pace": 62.6,
+    "totalMinutes": 1285,
+    "pace": 63.1,
     "teamStats": {
       "assists": 382,
       "blocks": 76,
@@ -25328,8 +25328,8 @@
     "games": 34,
     "wins": 15,
     "losses": 19,
-    "totalMinutes": 1375,
-    "pace": 64,
+    "totalMinutes": 1365,
+    "pace": 64.5,
     "teamStats": {
       "assists": 586,
       "blocks": 121,
@@ -25448,8 +25448,8 @@
     "games": 31,
     "wins": 13,
     "losses": 18,
-    "totalMinutes": 1290,
-    "pace": 65,
+    "totalMinutes": 1260,
+    "pace": 66.6,
     "teamStats": {
       "assists": 380,
       "blocks": 69,
@@ -25688,8 +25688,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1310,
-    "pace": 68,
+    "totalMinutes": 1290,
+    "pace": 69,
     "teamStats": {
       "assists": 429,
       "blocks": 113,
@@ -25808,8 +25808,8 @@
     "games": 34,
     "wins": 21,
     "losses": 13,
-    "totalMinutes": 1395,
-    "pace": 64.7,
+    "totalMinutes": 1375,
+    "pace": 65.6,
     "teamStats": {
       "assists": 481,
       "blocks": 76,
@@ -25925,111 +25925,111 @@
     "teamId": 217,
     "team": "Oklahoma",
     "conference": "SEC",
-    "games": 35,
-    "wins": 20,
-    "losses": 15,
-    "totalMinutes": 1445,
-    "pace": 66.8,
+    "games": 37,
+    "wins": 21,
+    "losses": 16,
+    "totalMinutes": 1500,
+    "pace": 68.1,
     "teamStats": {
-      "assists": 500,
-      "blocks": 137,
-      "steals": 222,
-      "possessions": 2415,
-      "trueShooting": 58.9,
-      "rating": 120.2,
+      "assists": 536,
+      "blocks": 143,
+      "steals": 235,
+      "possessions": 2556,
+      "trueShooting": 59.1,
+      "rating": 120,
       "fieldGoals": {
-        "made": 992,
-        "attempted": 2124,
-        "pct": 46.7
+        "made": 1054,
+        "attempted": 2244,
+        "pct": 47
       },
       "twoPointFieldGoals": {
-        "made": 651,
-        "attempted": 1187,
-        "pct": 54.8
+        "made": 697,
+        "attempted": 1265,
+        "pct": 55.1
       },
       "threePointFieldGoals": {
-        "made": 341,
-        "attempted": 937,
-        "pct": 36.4
+        "made": 357,
+        "attempted": 979,
+        "pct": 36.5
       },
       "freeThrows": {
-        "made": 578,
-        "attempted": 770,
-        "pct": 75.1
+        "made": 602,
+        "attempted": 798,
+        "pct": 75.4
       },
       "rebounds": {
-        "offensive": 404,
-        "defensive": 849,
-        "total": 1253
+        "offensive": 417,
+        "defensive": 900,
+        "total": 1317
       },
       "turnovers": {
-        "total": 347,
-        "teamTotal": 13
+        "total": 369,
+        "teamTotal": 15
       },
       "fouls": {
-        "total": 619,
+        "total": 653,
         "technical": 3,
         "flagrant": 4
       },
       "points": {
-        "total": 2903,
-        "inPaint": 1060,
-        "offTurnovers": 440,
-        "fastBreak": 297
+        "total": 3067,
+        "inPaint": 1138,
+        "offTurnovers": 472,
+        "fastBreak": 311
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 54.7,
+        "effectiveFieldGoalPct": 54.9,
         "turnoverRatio": 0.14,
-        "offensiveReboundPct": 32.2,
-        "freeThrowRate": 36.3
+        "offensiveReboundPct": 31.7,
+        "freeThrowRate": 35.6
       }
     },
     "opponentStats": {
-      "assists": 469,
-      "blocks": 115,
-      "steals": 199,
-      "possessions": 2412,
+      "assists": 494,
+      "blocks": 127,
+      "steals": 211,
+      "possessions": 2553,
       "trueShooting": 55.6,
       "rating": 112.2,
       "fieldGoals": {
-        "made": 934,
-        "attempted": 2111,
+        "made": 986,
+        "attempted": 2233,
         "pct": 44.2
       },
       "twoPointFieldGoals": {
-        "made": 648,
-        "attempted": 1273,
-        "pct": 50.9
+        "made": 679,
+        "attempted": 1332,
+        "pct": 51
       },
       "threePointFieldGoals": {
-        "made": 286,
-        "attempted": 838,
+        "made": 307,
+        "attempted": 901,
         "pct": 34.1
       },
       "freeThrows": {
-        "made": 553,
-        "attempted": 737,
-        "pct": 75
+        "made": 586,
+        "attempted": 780,
+        "pct": 75.1
       },
       "rebounds": {
-        "offensive": 417,
-        "defensive": 810,
-        "total": 1227
+        "offensive": 441,
+        "defensive": 856,
+        "total": 1297
       },
       "turnovers": {
-        "total": 374,
-        "teamTotal": 15
+        "total": 397,
+        "teamTotal": 17
       },
       "fouls": {
-        "total": 624,
+        "total": 653,
         "technical": 4,
-        "flagrant": 6
+        "flagrant": 7
       },
       "points": {
-        "total": 2707,
-        "inPaint": 1106,
-        "offTurnovers": 406,
-        "fastBreak": 244
+        "total": 2865,
+        "inPaint": 1162,
+        "offTurnovers": 434,
+        "fastBreak": 253
       },
       "fourFactors": {
         "effectiveFieldGoalPct": 51,
@@ -26048,8 +26048,8 @@
     "games": 35,
     "wins": 20,
     "losses": 15,
-    "totalMinutes": 1445,
-    "pace": 71.9,
+    "totalMinutes": 1415,
+    "pace": 73.4,
     "teamStats": {
       "assists": 509,
       "blocks": 93,
@@ -26168,8 +26168,8 @@
     "games": 33,
     "wins": 12,
     "losses": 21,
-    "totalMinutes": 1340,
-    "pace": 69.7,
+    "totalMinutes": 1330,
+    "pace": 70.2,
     "teamStats": {
       "assists": 432,
       "blocks": 101,
@@ -26288,8 +26288,8 @@
     "games": 35,
     "wins": 15,
     "losses": 20,
-    "totalMinutes": 1465,
-    "pace": 65.8,
+    "totalMinutes": 1425,
+    "pace": 67.7,
     "teamStats": {
       "assists": 471,
       "blocks": 150,
@@ -26408,8 +26408,8 @@
     "games": 33,
     "wins": 16,
     "losses": 17,
-    "totalMinutes": 1335,
-    "pace": 67.7,
+    "totalMinutes": 1325,
+    "pace": 68.2,
     "teamStats": {
       "assists": 431,
       "blocks": 93,
@@ -26528,8 +26528,8 @@
     "games": 33,
     "wins": 10,
     "losses": 23,
-    "totalMinutes": 1340,
-    "pace": 69.1,
+    "totalMinutes": 1330,
+    "pace": 69.6,
     "teamStats": {
       "assists": 391,
       "blocks": 110,
@@ -26648,8 +26648,8 @@
     "games": 32,
     "wins": 12,
     "losses": 20,
-    "totalMinutes": 1295,
-    "pace": 65.5,
+    "totalMinutes": 1285,
+    "pace": 66.1,
     "teamStats": {
       "assists": 458,
       "blocks": 126,
@@ -26768,8 +26768,8 @@
     "games": 33,
     "wins": 17,
     "losses": 16,
-    "totalMinutes": 1370,
-    "pace": 64.5,
+    "totalMinutes": 1340,
+    "pace": 65.9,
     "teamStats": {
       "assists": 457,
       "blocks": 121,
@@ -26888,8 +26888,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1335,
-    "pace": 65,
+    "totalMinutes": 1325,
+    "pace": 65.5,
     "teamStats": {
       "assists": 505,
       "blocks": 75,
@@ -27128,8 +27128,8 @@
     "games": 30,
     "wins": 18,
     "losses": 12,
-    "totalMinutes": 1230,
-    "pace": 68,
+    "totalMinutes": 1210,
+    "pace": 69.2,
     "teamStats": {
       "assists": 418,
       "blocks": 94,
@@ -27248,8 +27248,8 @@
     "games": 32,
     "wins": 9,
     "losses": 23,
-    "totalMinutes": 1310,
-    "pace": 67.2,
+    "totalMinutes": 1290,
+    "pace": 68.2,
     "teamStats": {
       "assists": 451,
       "blocks": 90,
@@ -27368,8 +27368,8 @@
     "games": 33,
     "wins": 13,
     "losses": 20,
-    "totalMinutes": 1350,
-    "pace": 63.2,
+    "totalMinutes": 1330,
+    "pace": 64.1,
     "teamStats": {
       "assists": 435,
       "blocks": 102,
@@ -27488,8 +27488,8 @@
     "games": 34,
     "wins": 15,
     "losses": 19,
-    "totalMinutes": 1390,
-    "pace": 68.7,
+    "totalMinutes": 1370,
+    "pace": 69.7,
     "teamStats": {
       "assists": 563,
       "blocks": 99,
@@ -27608,8 +27608,8 @@
     "games": 31,
     "wins": 20,
     "losses": 11,
-    "totalMinutes": 1270,
-    "pace": 68,
+    "totalMinutes": 1250,
+    "pace": 69.1,
     "teamStats": {
       "assists": 449,
       "blocks": 118,
@@ -27728,8 +27728,8 @@
     "games": 37,
     "wins": 19,
     "losses": 18,
-    "totalMinutes": 1495,
-    "pace": 72,
+    "totalMinutes": 1485,
+    "pace": 72.5,
     "teamStats": {
       "assists": 428,
       "blocks": 172,
@@ -27848,8 +27848,8 @@
     "games": 33,
     "wins": 15,
     "losses": 18,
-    "totalMinutes": 1355,
-    "pace": 65.2,
+    "totalMinutes": 1335,
+    "pace": 66.2,
     "teamStats": {
       "assists": 433,
       "blocks": 147,
@@ -27968,8 +27968,8 @@
     "games": 29,
     "wins": 9,
     "losses": 20,
-    "totalMinutes": 1190,
-    "pace": 63,
+    "totalMinutes": 1170,
+    "pace": 64.1,
     "teamStats": {
       "assists": 366,
       "blocks": 63,
@@ -28088,8 +28088,8 @@
     "games": 33,
     "wins": 15,
     "losses": 18,
-    "totalMinutes": 1405,
-    "pace": 69.3,
+    "totalMinutes": 1355,
+    "pace": 71.9,
     "teamStats": {
       "assists": 462,
       "blocks": 129,
@@ -28208,8 +28208,8 @@
     "games": 39,
     "wins": 30,
     "losses": 9,
-    "totalMinutes": 1575,
-    "pace": 63.9,
+    "totalMinutes": 1565,
+    "pace": 64.3,
     "teamStats": {
       "assists": 764,
       "blocks": 110,
@@ -28448,8 +28448,8 @@
     "games": 32,
     "wins": 19,
     "losses": 13,
-    "totalMinutes": 1310,
-    "pace": 67.9,
+    "totalMinutes": 1290,
+    "pace": 69,
     "teamStats": {
       "assists": 433,
       "blocks": 142,
@@ -28568,8 +28568,8 @@
     "games": 32,
     "wins": 16,
     "losses": 16,
-    "totalMinutes": 1330,
-    "pace": 70.1,
+    "totalMinutes": 1300,
+    "pace": 71.7,
     "teamStats": {
       "assists": 416,
       "blocks": 112,
@@ -28688,8 +28688,8 @@
     "games": 32,
     "wins": 16,
     "losses": 16,
-    "totalMinutes": 1310,
-    "pace": 64.9,
+    "totalMinutes": 1290,
+    "pace": 66,
     "teamStats": {
       "assists": 363,
       "blocks": 117,
@@ -28808,8 +28808,8 @@
     "games": 31,
     "wins": 13,
     "losses": 18,
-    "totalMinutes": 1290,
-    "pace": 65.6,
+    "totalMinutes": 1260,
+    "pace": 67.1,
     "teamStats": {
       "assists": 376,
       "blocks": 121,
@@ -28928,8 +28928,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1295,
-    "pace": 67.7,
+    "totalMinutes": 1285,
+    "pace": 68.3,
     "teamStats": {
       "assists": 448,
       "blocks": 73,
@@ -29168,8 +29168,8 @@
     "games": 33,
     "wins": 22,
     "losses": 11,
-    "totalMinutes": 1395,
-    "pace": 61.8,
+    "totalMinutes": 1345,
+    "pace": 64.1,
     "teamStats": {
       "assists": 563,
       "blocks": 82,
@@ -29287,9 +29287,9 @@
     "conference": "Big Ten",
     "games": 34,
     "wins": 14,
-    "losses": 19,
-    "totalMinutes": 1405,
-    "pace": 64.8,
+    "losses": 20,
+    "totalMinutes": 1375,
+    "pace": 66.2,
     "teamStats": {
       "assists": 413,
       "blocks": 115,
@@ -29408,8 +29408,8 @@
     "games": 31,
     "wins": 9,
     "losses": 22,
-    "totalMinutes": 1255,
-    "pace": 65.2,
+    "totalMinutes": 1245,
+    "pace": 65.7,
     "teamStats": {
       "assists": 361,
       "blocks": 87,
@@ -29528,8 +29528,8 @@
     "games": 32,
     "wins": 19,
     "losses": 13,
-    "totalMinutes": 1310,
-    "pace": 65.1,
+    "totalMinutes": 1290,
+    "pace": 66.1,
     "teamStats": {
       "assists": 422,
       "blocks": 122,
@@ -29648,8 +29648,8 @@
     "games": 34,
     "wins": 20,
     "losses": 14,
-    "totalMinutes": 1390,
-    "pace": 69.2,
+    "totalMinutes": 1370,
+    "pace": 70.2,
     "teamStats": {
       "assists": 574,
       "blocks": 120,
@@ -29768,8 +29768,8 @@
     "games": 31,
     "wins": 10,
     "losses": 21,
-    "totalMinutes": 1255,
-    "pace": 71.9,
+    "totalMinutes": 1245,
+    "pace": 72.5,
     "teamStats": {
       "assists": 402,
       "blocks": 99,
@@ -29888,8 +29888,8 @@
     "games": 33,
     "wins": 14,
     "losses": 19,
-    "totalMinutes": 1335,
-    "pace": 67.4,
+    "totalMinutes": 1325,
+    "pace": 67.9,
     "teamStats": {
       "assists": 492,
       "blocks": 97,
@@ -30008,8 +30008,8 @@
     "games": 36,
     "wins": 24,
     "losses": 12,
-    "totalMinutes": 1455,
-    "pace": 67.5,
+    "totalMinutes": 1445,
+    "pace": 68,
     "teamStats": {
       "assists": 556,
       "blocks": 167,
@@ -30368,8 +30368,8 @@
     "games": 29,
     "wins": 17,
     "losses": 12,
-    "totalMinutes": 1190,
-    "pace": 63.9,
+    "totalMinutes": 1170,
+    "pace": 65,
     "teamStats": {
       "assists": 374,
       "blocks": 112,
@@ -30608,8 +30608,8 @@
     "games": 32,
     "wins": 18,
     "losses": 14,
-    "totalMinutes": 1325,
-    "pace": 66.9,
+    "totalMinutes": 1295,
+    "pace": 68.5,
     "teamStats": {
       "assists": 473,
       "blocks": 89,
@@ -30728,8 +30728,8 @@
     "games": 33,
     "wins": 22,
     "losses": 11,
-    "totalMinutes": 1365,
-    "pace": 68.3,
+    "totalMinutes": 1345,
+    "pace": 69.4,
     "teamStats": {
       "assists": 494,
       "blocks": 151,
@@ -30848,8 +30848,8 @@
     "games": 33,
     "wins": 12,
     "losses": 21,
-    "totalMinutes": 1365,
-    "pace": 67.2,
+    "totalMinutes": 1335,
+    "pace": 68.7,
     "teamStats": {
       "assists": 530,
       "blocks": 91,
@@ -30968,8 +30968,8 @@
     "games": 33,
     "wins": 17,
     "losses": 16,
-    "totalMinutes": 1340,
-    "pace": 64,
+    "totalMinutes": 1330,
+    "pace": 64.5,
     "teamStats": {
       "assists": 460,
       "blocks": 98,
@@ -31088,8 +31088,8 @@
     "games": 33,
     "wins": 9,
     "losses": 24,
-    "totalMinutes": 1335,
-    "pace": 64.6,
+    "totalMinutes": 1325,
+    "pace": 65.1,
     "teamStats": {
       "assists": 354,
       "blocks": 74,
@@ -31208,8 +31208,8 @@
     "games": 35,
     "wins": 26,
     "losses": 9,
-    "totalMinutes": 1415,
-    "pace": 68.6,
+    "totalMinutes": 1405,
+    "pace": 69,
     "teamStats": {
       "assists": 586,
       "blocks": 127,
@@ -31328,8 +31328,8 @@
     "games": 35,
     "wins": 21,
     "losses": 14,
-    "totalMinutes": 1415,
-    "pace": 68.1,
+    "totalMinutes": 1405,
+    "pace": 68.6,
     "teamStats": {
       "assists": 474,
       "blocks": 168,
@@ -31568,8 +31568,8 @@
     "games": 35,
     "wins": 23,
     "losses": 12,
-    "totalMinutes": 1415,
-    "pace": 61.4,
+    "totalMinutes": 1405,
+    "pace": 61.8,
     "teamStats": {
       "assists": 471,
       "blocks": 108,
@@ -31688,8 +31688,8 @@
     "games": 33,
     "wins": 21,
     "losses": 12,
-    "totalMinutes": 1385,
-    "pace": 62.4,
+    "totalMinutes": 1345,
+    "pace": 64.3,
     "teamStats": {
       "assists": 394,
       "blocks": 74,
@@ -31808,8 +31808,8 @@
     "games": 32,
     "wins": 13,
     "losses": 19,
-    "totalMinutes": 1325,
-    "pace": 65.9,
+    "totalMinutes": 1295,
+    "pace": 67.5,
     "teamStats": {
       "assists": 423,
       "blocks": 76,
@@ -32048,8 +32048,8 @@
     "games": 32,
     "wins": 13,
     "losses": 19,
-    "totalMinutes": 1340,
-    "pace": 67.7,
+    "totalMinutes": 1300,
+    "pace": 69.7,
     "teamStats": {
       "assists": 409,
       "blocks": 150,
@@ -32168,8 +32168,8 @@
     "games": 32,
     "wins": 16,
     "losses": 16,
-    "totalMinutes": 1340,
-    "pace": 68.4,
+    "totalMinutes": 1300,
+    "pace": 70.5,
     "teamStats": {
       "assists": 394,
       "blocks": 79,
@@ -32288,8 +32288,8 @@
     "games": 32,
     "wins": 14,
     "losses": 18,
-    "totalMinutes": 1295,
-    "pace": 67.2,
+    "totalMinutes": 1285,
+    "pace": 67.7,
     "teamStats": {
       "assists": 457,
       "blocks": 73,
@@ -32408,8 +32408,8 @@
     "games": 34,
     "wins": 25,
     "losses": 9,
-    "totalMinutes": 1425,
-    "pace": 69.2,
+    "totalMinutes": 1385,
+    "pace": 71.2,
     "teamStats": {
       "assists": 579,
       "blocks": 138,
@@ -32528,8 +32528,8 @@
     "games": 33,
     "wins": 20,
     "losses": 13,
-    "totalMinutes": 1335,
-    "pace": 68.8,
+    "totalMinutes": 1325,
+    "pace": 69.3,
     "teamStats": {
       "assists": 411,
       "blocks": 121,
@@ -32648,8 +32648,8 @@
     "games": 32,
     "wins": 16,
     "losses": 16,
-    "totalMinutes": 1325,
-    "pace": 68,
+    "totalMinutes": 1295,
+    "pace": 69.6,
     "teamStats": {
       "assists": 433,
       "blocks": 114,
@@ -32768,8 +32768,8 @@
     "games": 34,
     "wins": 17,
     "losses": 17,
-    "totalMinutes": 1395,
-    "pace": 70.6,
+    "totalMinutes": 1375,
+    "pace": 71.6,
     "teamStats": {
       "assists": 511,
       "blocks": 130,
@@ -32888,8 +32888,8 @@
     "games": 35,
     "wins": 19,
     "losses": 16,
-    "totalMinutes": 1430,
-    "pace": 66.3,
+    "totalMinutes": 1410,
+    "pace": 67.2,
     "teamStats": {
       "assists": 403,
       "blocks": 132,
@@ -33008,8 +33008,8 @@
     "games": 32,
     "wins": 10,
     "losses": 22,
-    "totalMinutes": 1295,
-    "pace": 71.2,
+    "totalMinutes": 1285,
+    "pace": 71.8,
     "teamStats": {
       "assists": 449,
       "blocks": 135,
@@ -33128,8 +33128,8 @@
     "games": 34,
     "wins": 17,
     "losses": 17,
-    "totalMinutes": 1390,
-    "pace": 65.8,
+    "totalMinutes": 1370,
+    "pace": 66.8,
     "teamStats": {
       "assists": 529,
       "blocks": 156,
@@ -33248,8 +33248,8 @@
     "games": 31,
     "wins": 7,
     "losses": 24,
-    "totalMinutes": 1255,
-    "pace": 69.4,
+    "totalMinutes": 1245,
+    "pace": 70,
     "teamStats": {
       "assists": 416,
       "blocks": 64,
@@ -33368,8 +33368,8 @@
     "games": 37,
     "wins": 30,
     "losses": 7,
-    "totalMinutes": 1495,
-    "pace": 69.3,
+    "totalMinutes": 1485,
+    "pace": 69.8,
     "teamStats": {
       "assists": 597,
       "blocks": 178,
@@ -33608,8 +33608,8 @@
     "games": 33,
     "wins": 20,
     "losses": 13,
-    "totalMinutes": 1335,
-    "pace": 66.8,
+    "totalMinutes": 1325,
+    "pace": 67.3,
     "teamStats": {
       "assists": 388,
       "blocks": 126,
@@ -33728,8 +33728,8 @@
     "games": 34,
     "wins": 28,
     "losses": 6,
-    "totalMinutes": 1375,
-    "pace": 65.8,
+    "totalMinutes": 1365,
+    "pace": 66.3,
     "teamStats": {
       "assists": 464,
       "blocks": 126,
@@ -33848,8 +33848,8 @@
     "games": 33,
     "wins": 12,
     "losses": 21,
-    "totalMinutes": 1335,
-    "pace": 67.6,
+    "totalMinutes": 1325,
+    "pace": 68.1,
     "teamStats": {
       "assists": 506,
       "blocks": 68,
@@ -33968,8 +33968,8 @@
     "games": 33,
     "wins": 12,
     "losses": 21,
-    "totalMinutes": 1380,
-    "pace": 62.3,
+    "totalMinutes": 1340,
+    "pace": 64.2,
     "teamStats": {
       "assists": 411,
       "blocks": 130,
@@ -34088,8 +34088,8 @@
     "games": 32,
     "wins": 17,
     "losses": 15,
-    "totalMinutes": 1315,
-    "pace": 65.8,
+    "totalMinutes": 1295,
+    "pace": 66.8,
     "teamStats": {
       "assists": 424,
       "blocks": 119,
@@ -34208,8 +34208,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1345,
-    "pace": 65.7,
+    "totalMinutes": 1305,
+    "pace": 67.7,
     "teamStats": {
       "assists": 408,
       "blocks": 187,
@@ -34328,8 +34328,8 @@
     "games": 35,
     "wins": 23,
     "losses": 12,
-    "totalMinutes": 1445,
-    "pace": 65.1,
+    "totalMinutes": 1415,
+    "pace": 66.5,
     "teamStats": {
       "assists": 540,
       "blocks": 157,
@@ -34448,8 +34448,8 @@
     "games": 32,
     "wins": 14,
     "losses": 18,
-    "totalMinutes": 1325,
-    "pace": 69.3,
+    "totalMinutes": 1295,
+    "pace": 70.9,
     "teamStats": {
       "assists": 352,
       "blocks": 100,
@@ -34568,8 +34568,8 @@
     "games": 32,
     "wins": 16,
     "losses": 16,
-    "totalMinutes": 1295,
-    "pace": 64.7,
+    "totalMinutes": 1285,
+    "pace": 65.2,
     "teamStats": {
       "assists": 394,
       "blocks": 125,
@@ -34688,8 +34688,8 @@
     "games": 33,
     "wins": 23,
     "losses": 10,
-    "totalMinutes": 1335,
-    "pace": 71.1,
+    "totalMinutes": 1325,
+    "pace": 71.7,
     "teamStats": {
       "assists": 435,
       "blocks": 125,
@@ -34928,8 +34928,8 @@
     "games": 37,
     "wins": 25,
     "losses": 12,
-    "totalMinutes": 1515,
-    "pace": 66,
+    "totalMinutes": 1495,
+    "pace": 66.9,
     "teamStats": {
       "assists": 630,
       "blocks": 135,
@@ -35048,8 +35048,8 @@
     "games": 34,
     "wins": 22,
     "losses": 12,
-    "totalMinutes": 1420,
-    "pace": 68,
+    "totalMinutes": 1390,
+    "pace": 69.4,
     "teamStats": {
       "assists": 604,
       "blocks": 104,
@@ -35168,8 +35168,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1335,
-    "pace": 67.7,
+    "totalMinutes": 1325,
+    "pace": 68.2,
     "teamStats": {
       "assists": 441,
       "blocks": 99,
@@ -35288,8 +35288,8 @@
     "games": 36,
     "wins": 21,
     "losses": 15,
-    "totalMinutes": 1470,
-    "pace": 66.9,
+    "totalMinutes": 1450,
+    "pace": 67.9,
     "teamStats": {
       "assists": 448,
       "blocks": 106,
@@ -35408,8 +35408,8 @@
     "games": 30,
     "wins": 12,
     "losses": 18,
-    "totalMinutes": 1260,
-    "pace": 68,
+    "totalMinutes": 1220,
+    "pace": 70.2,
     "teamStats": {
       "assists": 334,
       "blocks": 102,
@@ -35528,8 +35528,8 @@
     "games": 32,
     "wins": 19,
     "losses": 13,
-    "totalMinutes": 1325,
-    "pace": 66.2,
+    "totalMinutes": 1295,
+    "pace": 67.7,
     "teamStats": {
       "assists": 419,
       "blocks": 112,
@@ -35648,8 +35648,8 @@
     "games": 34,
     "wins": 23,
     "losses": 11,
-    "totalMinutes": 1375,
-    "pace": 67.1,
+    "totalMinutes": 1365,
+    "pace": 67.6,
     "teamStats": {
       "assists": 523,
       "blocks": 128,
@@ -35768,8 +35768,8 @@
     "games": 33,
     "wins": 11,
     "losses": 22,
-    "totalMinutes": 1395,
-    "pace": 62.6,
+    "totalMinutes": 1345,
+    "pace": 64.9,
     "teamStats": {
       "assists": 422,
       "blocks": 80,
@@ -36008,8 +36008,8 @@
     "games": 34,
     "wins": 19,
     "losses": 15,
-    "totalMinutes": 1375,
-    "pace": 64.2,
+    "totalMinutes": 1365,
+    "pace": 64.7,
     "teamStats": {
       "assists": 346,
       "blocks": 113,
@@ -36128,8 +36128,8 @@
     "games": 34,
     "wins": 22,
     "losses": 12,
-    "totalMinutes": 1460,
-    "pace": 65.6,
+    "totalMinutes": 1410,
+    "pace": 67.9,
     "teamStats": {
       "assists": 538,
       "blocks": 114,
@@ -36248,8 +36248,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1350,
-    "pace": 66.9,
+    "totalMinutes": 1330,
+    "pace": 67.9,
     "teamStats": {
       "assists": 423,
       "blocks": 148,
@@ -36365,117 +36365,117 @@
     "teamId": 304,
     "team": "Tulsa",
     "conference": "American",
-    "games": 36,
-    "wins": 29,
-    "losses": 7,
-    "totalMinutes": 1480,
-    "pace": 65.8,
+    "games": 38,
+    "wins": 30,
+    "losses": 8,
+    "totalMinutes": 1545,
+    "pace": 66.9,
     "teamStats": {
-      "assists": 553,
-      "blocks": 87,
-      "steals": 232,
-      "possessions": 2434,
-      "trueShooting": 60.8,
-      "rating": 126.3,
+      "assists": 582,
+      "blocks": 98,
+      "steals": 245,
+      "possessions": 2584,
+      "trueShooting": 60.6,
+      "rating": 125.1,
       "fieldGoals": {
-        "made": 1005,
-        "attempted": 2143,
-        "pct": 46.9
+        "made": 1056,
+        "attempted": 2263,
+        "pct": 46.7
       },
       "twoPointFieldGoals": {
-        "made": 624,
-        "attempted": 1150,
-        "pct": 54.3
+        "made": 657,
+        "attempted": 1212,
+        "pct": 54.2
       },
       "threePointFieldGoals": {
-        "made": 381,
-        "attempted": 993,
-        "pct": 38.4
+        "made": 399,
+        "attempted": 1051,
+        "pct": 38
       },
       "freeThrows": {
-        "made": 682,
-        "attempted": 874,
-        "pct": 78
+        "made": 722,
+        "attempted": 924,
+        "pct": 78.1
       },
       "rebounds": {
-        "offensive": 423,
-        "defensive": 970,
-        "total": 1393
+        "offensive": 442,
+        "defensive": 1024,
+        "total": 1466
       },
       "turnovers": {
-        "total": 383,
-        "teamTotal": 20
+        "total": 411,
+        "teamTotal": 22
       },
       "fouls": {
-        "total": 579,
+        "total": 615,
         "technical": 4,
         "flagrant": 2
       },
       "points": {
-        "total": 3073,
-        "inPaint": 1200,
-        "offTurnovers": 502,
-        "fastBreak": 437
+        "total": 3233,
+        "inPaint": 1260,
+        "offTurnovers": 527,
+        "fastBreak": 464
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 55.8,
+        "effectiveFieldGoalPct": 55.5,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 30.4,
+        "offensiveReboundPct": 30.2,
         "freeThrowRate": 40.8
       }
     },
     "opponentStats": {
-      "assists": 447,
-      "blocks": 109,
-      "steals": 231,
-      "possessions": 2432,
+      "assists": 479,
+      "blocks": 111,
+      "steals": 247,
+      "possessions": 2583,
       "trueShooting": 53,
-      "rating": 108.5,
+      "rating": 108.4,
       "fieldGoals": {
-        "made": 933,
-        "attempted": 2192,
-        "pct": 42.6
+        "made": 987,
+        "attempted": 2327,
+        "pct": 42.4
       },
       "twoPointFieldGoals": {
-        "made": 649,
-        "attempted": 1305,
-        "pct": 49.7
+        "made": 685,
+        "attempted": 1380,
+        "pct": 49.6
       },
       "threePointFieldGoals": {
-        "made": 284,
-        "attempted": 887,
-        "pct": 32
+        "made": 302,
+        "attempted": 947,
+        "pct": 31.9
       },
       "freeThrows": {
-        "made": 486,
-        "attempted": 672,
-        "pct": 72.3
+        "made": 521,
+        "attempted": 718,
+        "pct": 72.6
       },
       "rebounds": {
-        "offensive": 378,
-        "defensive": 804,
-        "total": 1182
+        "offensive": 405,
+        "defensive": 853,
+        "total": 1258
       },
       "turnovers": {
-        "total": 384,
+        "total": 407,
         "teamTotal": 19
       },
       "fouls": {
-        "total": 674,
+        "total": 712,
         "technical": 8,
-        "flagrant": 0
+        "flagrant": 1
       },
       "points": {
-        "total": 2638,
-        "inPaint": 1174,
-        "offTurnovers": 435,
-        "fastBreak": 322
+        "total": 2799,
+        "inPaint": 1234,
+        "offTurnovers": 462,
+        "fastBreak": 339
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 49,
+        "effectiveFieldGoalPct": 48.9,
         "turnoverRatio": 0.16,
-        "offensiveReboundPct": 32,
-        "freeThrowRate": 30.7
+        "offensiveReboundPct": 32.2,
+        "freeThrowRate": 30.9
       }
     }
   },
@@ -36488,8 +36488,8 @@
     "games": 32,
     "wins": 20,
     "losses": 12,
-    "totalMinutes": 1315,
-    "pace": 67.3,
+    "totalMinutes": 1295,
+    "pace": 68.3,
     "teamStats": {
       "assists": 459,
       "blocks": 113,
@@ -36728,8 +36728,8 @@
     "games": 33,
     "wins": 19,
     "losses": 14,
-    "totalMinutes": 1350,
-    "pace": 70.3,
+    "totalMinutes": 1330,
+    "pace": 71.3,
     "teamStats": {
       "assists": 511,
       "blocks": 89,
@@ -36848,8 +36848,8 @@
     "games": 35,
     "wins": 23,
     "losses": 12,
-    "totalMinutes": 1445,
-    "pace": 69.7,
+    "totalMinutes": 1415,
+    "pace": 71.2,
     "teamStats": {
       "assists": 561,
       "blocks": 203,
@@ -37208,8 +37208,8 @@
     "games": 32,
     "wins": 18,
     "losses": 14,
-    "totalMinutes": 1340,
-    "pace": 65.2,
+    "totalMinutes": 1300,
+    "pace": 67.2,
     "teamStats": {
       "assists": 455,
       "blocks": 76,
@@ -37328,8 +37328,8 @@
     "games": 33,
     "wins": 21,
     "losses": 12,
-    "totalMinutes": 1350,
-    "pace": 68.9,
+    "totalMinutes": 1330,
+    "pace": 69.9,
     "teamStats": {
       "assists": 519,
       "blocks": 98,
@@ -37448,8 +37448,8 @@
     "games": 36,
     "wins": 24,
     "losses": 12,
-    "totalMinutes": 1475,
-    "pace": 64,
+    "totalMinutes": 1455,
+    "pace": 64.9,
     "teamStats": {
       "assists": 579,
       "blocks": 107,
@@ -37565,117 +37565,117 @@
     "teamId": 314,
     "team": "UConn",
     "conference": "Big East",
-    "games": 38,
-    "wins": 33,
-    "losses": 5,
-    "totalMinutes": 1550,
-    "pace": 62.7,
+    "games": 40,
+    "wins": 34,
+    "losses": 6,
+    "totalMinutes": 1610,
+    "pace": 63.5,
     "teamStats": {
-      "assists": 699,
-      "blocks": 199,
-      "steals": 263,
-      "possessions": 2426,
-      "trueShooting": 58.2,
-      "rating": 120.8,
+      "assists": 722,
+      "blocks": 202,
+      "steals": 273,
+      "possessions": 2557,
+      "trueShooting": 57.5,
+      "rating": 119.8,
       "fieldGoals": {
-        "made": 1069,
-        "attempted": 2224,
-        "pct": 48.1
+        "made": 1112,
+        "attempted": 2354,
+        "pct": 47.2
       },
       "twoPointFieldGoals": {
-        "made": 759,
-        "attempted": 1327,
-        "pct": 57.2
+        "made": 781,
+        "attempted": 1391,
+        "pct": 56.1
       },
       "threePointFieldGoals": {
-        "made": 310,
-        "attempted": 897,
-        "pct": 34.6
+        "made": 331,
+        "attempted": 963,
+        "pct": 34.4
       },
       "freeThrows": {
-        "made": 482,
-        "attempted": 670,
-        "pct": 71.9
+        "made": 509,
+        "attempted": 703,
+        "pct": 72.4
       },
       "rebounds": {
-        "offensive": 443,
-        "defensive": 938,
-        "total": 1381
+        "offensive": 475,
+        "defensive": 989,
+        "total": 1464
       },
       "turnovers": {
-        "total": 420,
-        "teamTotal": 33
+        "total": 435,
+        "teamTotal": 34
       },
       "fouls": {
-        "total": 689,
+        "total": 732,
         "technical": 5,
-        "flagrant": 0
+        "flagrant": 1
       },
       "points": {
-        "total": 2930,
-        "inPaint": 1360,
-        "offTurnovers": 506,
-        "fastBreak": 349
+        "total": 3064,
+        "inPaint": 1402,
+        "offTurnovers": 522,
+        "fastBreak": 358
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 55,
+        "effectiveFieldGoalPct": 54.3,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 32.1,
-        "freeThrowRate": 30.1
+        "offensiveReboundPct": 32.4,
+        "freeThrowRate": 29.9
       }
     },
     "opponentStats": {
-      "assists": 417,
-      "blocks": 128,
-      "steals": 217,
-      "possessions": 2430,
-      "trueShooting": 51.4,
-      "rating": 101.9,
+      "assists": 427,
+      "blocks": 140,
+      "steals": 225,
+      "possessions": 2558,
+      "trueShooting": 51.3,
+      "rating": 102,
       "fieldGoals": {
-        "made": 828,
-        "attempted": 2044,
-        "pct": 40.5
+        "made": 868,
+        "attempted": 2155,
+        "pct": 40.3
       },
       "twoPointFieldGoals": {
-        "made": 602,
-        "attempted": 1309,
+        "made": 634,
+        "attempted": 1379,
         "pct": 46
       },
       "threePointFieldGoals": {
-        "made": 226,
-        "attempted": 735,
-        "pct": 30.7
+        "made": 234,
+        "attempted": 776,
+        "pct": 30.2
       },
       "freeThrows": {
-        "made": 595,
-        "attempted": 827,
-        "pct": 71.9
+        "made": 638,
+        "attempted": 878,
+        "pct": 72.7
       },
       "rebounds": {
-        "offensive": 376,
-        "defensive": 796,
-        "total": 1172
+        "offensive": 400,
+        "defensive": 855,
+        "total": 1255
       },
       "turnovers": {
-        "total": 453,
+        "total": 471,
         "teamTotal": 20
       },
       "fouls": {
-        "total": 647,
+        "total": 677,
         "technical": 3,
         "flagrant": 4
       },
       "points": {
-        "total": 2477,
-        "inPaint": 1040,
-        "offTurnovers": 446,
-        "fastBreak": 283
+        "total": 2608,
+        "inPaint": 1098,
+        "offTurnovers": 454,
+        "fastBreak": 285
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 46,
-        "turnoverRatio": 0.19,
-        "offensiveReboundPct": 32.1,
-        "freeThrowRate": 40.5
+        "effectiveFieldGoalPct": 45.7,
+        "turnoverRatio": 0.18,
+        "offensiveReboundPct": 31.9,
+        "freeThrowRate": 40.7
       }
     }
   },
@@ -37688,8 +37688,8 @@
     "games": 35,
     "wins": 19,
     "losses": 16,
-    "totalMinutes": 1450,
-    "pace": 63.5,
+    "totalMinutes": 1420,
+    "pace": 64.8,
     "teamStats": {
       "assists": 514,
       "blocks": 126,
@@ -37808,8 +37808,8 @@
     "games": 32,
     "wins": 4,
     "losses": 28,
-    "totalMinutes": 1300,
-    "pace": 70.1,
+    "totalMinutes": 1290,
+    "pace": 70.7,
     "teamStats": {
       "assists": 390,
       "blocks": 109,
@@ -37928,8 +37928,8 @@
     "games": 33,
     "wins": 24,
     "losses": 9,
-    "totalMinutes": 1350,
-    "pace": 65.6,
+    "totalMinutes": 1330,
+    "pace": 66.6,
     "teamStats": {
       "assists": 400,
       "blocks": 84,
@@ -38168,8 +38168,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1325,
-    "pace": 65,
+    "totalMinutes": 1295,
+    "pace": 66.5,
     "teamStats": {
       "assists": 351,
       "blocks": 114,
@@ -38288,8 +38288,8 @@
     "games": 34,
     "wins": 15,
     "losses": 19,
-    "totalMinutes": 1405,
-    "pace": 65.3,
+    "totalMinutes": 1375,
+    "pace": 66.7,
     "teamStats": {
       "assists": 436,
       "blocks": 63,
@@ -38528,8 +38528,8 @@
     "games": 35,
     "wins": 18,
     "losses": 17,
-    "totalMinutes": 1445,
-    "pace": 68.6,
+    "totalMinutes": 1415,
+    "pace": 70.1,
     "teamStats": {
       "assists": 497,
       "blocks": 167,
@@ -38648,8 +38648,8 @@
     "games": 32,
     "wins": 18,
     "losses": 14,
-    "totalMinutes": 1335,
-    "pace": 68.5,
+    "totalMinutes": 1305,
+    "pace": 70.1,
     "teamStats": {
       "assists": 490,
       "blocks": 181,
@@ -38768,8 +38768,8 @@
     "games": 32,
     "wins": 18,
     "losses": 14,
-    "totalMinutes": 1315,
-    "pace": 66.4,
+    "totalMinutes": 1295,
+    "pace": 67.4,
     "teamStats": {
       "assists": 373,
       "blocks": 119,
@@ -38888,8 +38888,8 @@
     "games": 33,
     "wins": 22,
     "losses": 11,
-    "totalMinutes": 1335,
-    "pace": 64.6,
+    "totalMinutes": 1325,
+    "pace": 65,
     "teamStats": {
       "assists": 448,
       "blocks": 143,
@@ -39008,8 +39008,8 @@
     "games": 33,
     "wins": 19,
     "losses": 14,
-    "totalMinutes": 1345,
-    "pace": 66.5,
+    "totalMinutes": 1335,
+    "pace": 67,
     "teamStats": {
       "assists": 546,
       "blocks": 93,
@@ -39128,8 +39128,8 @@
     "games": 31,
     "wins": 11,
     "losses": 20,
-    "totalMinutes": 1285,
-    "pace": 64.8,
+    "totalMinutes": 1255,
+    "pace": 66.3,
     "teamStats": {
       "assists": 364,
       "blocks": 111,
@@ -39368,8 +39368,8 @@
     "games": 36,
     "wins": 29,
     "losses": 7,
-    "totalMinutes": 1455,
-    "pace": 67.5,
+    "totalMinutes": 1445,
+    "pace": 67.9,
     "teamStats": {
       "assists": 632,
       "blocks": 104,
@@ -39488,8 +39488,8 @@
     "games": 34,
     "wins": 19,
     "losses": 15,
-    "totalMinutes": 1435,
-    "pace": 66.5,
+    "totalMinutes": 1395,
+    "pace": 68.4,
     "teamStats": {
       "assists": 498,
       "blocks": 107,
@@ -39608,8 +39608,8 @@
     "games": 32,
     "wins": 10,
     "losses": 22,
-    "totalMinutes": 1295,
-    "pace": 65.1,
+    "totalMinutes": 1285,
+    "pace": 65.6,
     "teamStats": {
       "assists": 438,
       "blocks": 109,
@@ -39728,8 +39728,8 @@
     "games": 34,
     "wins": 25,
     "losses": 9,
-    "totalMinutes": 1395,
-    "pace": 66.2,
+    "totalMinutes": 1375,
+    "pace": 67.1,
     "teamStats": {
       "assists": 630,
       "blocks": 183,
@@ -39848,8 +39848,8 @@
     "games": 36,
     "wins": 28,
     "losses": 8,
-    "totalMinutes": 1455,
-    "pace": 68.4,
+    "totalMinutes": 1445,
+    "pace": 68.8,
     "teamStats": {
       "assists": 499,
       "blocks": 155,
@@ -40088,8 +40088,8 @@
     "games": 33,
     "wins": 18,
     "losses": 15,
-    "totalMinutes": 1385,
-    "pace": 64.2,
+    "totalMinutes": 1345,
+    "pace": 66.1,
     "teamStats": {
       "assists": 399,
       "blocks": 115,
@@ -40208,8 +40208,8 @@
     "games": 36,
     "wins": 27,
     "losses": 9,
-    "totalMinutes": 1470,
-    "pace": 64.8,
+    "totalMinutes": 1450,
+    "pace": 65.7,
     "teamStats": {
       "assists": 586,
       "blocks": 163,
@@ -40328,8 +40328,8 @@
     "games": 34,
     "wins": 22,
     "losses": 12,
-    "totalMinutes": 1395,
-    "pace": 63.3,
+    "totalMinutes": 1375,
+    "pace": 64.3,
     "teamStats": {
       "assists": 432,
       "blocks": 100,
@@ -40448,8 +40448,8 @@
     "games": 33,
     "wins": 24,
     "losses": 9,
-    "totalMinutes": 1365,
-    "pace": 64.8,
+    "totalMinutes": 1335,
+    "pace": 66.3,
     "teamStats": {
       "assists": 512,
       "blocks": 70,
@@ -40568,8 +40568,8 @@
     "games": 36,
     "wins": 30,
     "losses": 6,
-    "totalMinutes": 1485,
-    "pace": 65.3,
+    "totalMinutes": 1465,
+    "pace": 66.2,
     "teamStats": {
       "assists": 587,
       "blocks": 229,
@@ -40688,8 +40688,8 @@
     "games": 32,
     "wins": 19,
     "losses": 13,
-    "totalMinutes": 1365,
-    "pace": 64.8,
+    "totalMinutes": 1315,
+    "pace": 67.2,
     "teamStats": {
       "assists": 459,
       "blocks": 102,
@@ -40808,8 +40808,8 @@
     "games": 31,
     "wins": 14,
     "losses": 17,
-    "totalMinutes": 1315,
-    "pace": 61.5,
+    "totalMinutes": 1265,
+    "pace": 64,
     "teamStats": {
       "assists": 389,
       "blocks": 78,
@@ -40928,8 +40928,8 @@
     "games": 35,
     "wins": 18,
     "losses": 17,
-    "totalMinutes": 1445,
-    "pace": 67.7,
+    "totalMinutes": 1415,
+    "pace": 69.1,
     "teamStats": {
       "assists": 503,
       "blocks": 124,
@@ -41048,8 +41048,8 @@
     "games": 33,
     "wins": 16,
     "losses": 17,
-    "totalMinutes": 1355,
-    "pace": 66.1,
+    "totalMinutes": 1335,
+    "pace": 67.1,
     "teamStats": {
       "assists": 459,
       "blocks": 137,
@@ -41288,8 +41288,8 @@
     "games": 32,
     "wins": 16,
     "losses": 16,
-    "totalMinutes": 1325,
-    "pace": 68.5,
+    "totalMinutes": 1295,
+    "pace": 70.1,
     "teamStats": {
       "assists": 430,
       "blocks": 50,
@@ -41408,8 +41408,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1315,
-    "pace": 69.2,
+    "totalMinutes": 1295,
+    "pace": 70.3,
     "teamStats": {
       "assists": 408,
       "blocks": 159,
@@ -41525,117 +41525,117 @@
     "teamId": 347,
     "team": "West Virginia",
     "conference": "Big 12",
-    "games": 33,
-    "wins": 19,
+    "games": 35,
+    "wins": 21,
     "losses": 14,
-    "totalMinutes": 1370,
-    "pace": 62.4,
+    "totalMinutes": 1425,
+    "pace": 63.8,
     "teamStats": {
-      "assists": 412,
-      "blocks": 95,
-      "steals": 211,
-      "possessions": 2138,
-      "trueShooting": 54.6,
-      "rating": 107.4,
+      "assists": 444,
+      "blocks": 104,
+      "steals": 222,
+      "possessions": 2276,
+      "trueShooting": 55.1,
+      "rating": 108.6,
       "fieldGoals": {
-        "made": 802,
-        "attempted": 1818,
-        "pct": 44.1
+        "made": 865,
+        "attempted": 1944,
+        "pct": 44.5
       },
       "twoPointFieldGoals": {
-        "made": 553,
-        "attempted": 1046,
-        "pct": 52.9
+        "made": 589,
+        "attempted": 1109,
+        "pct": 53.1
       },
       "threePointFieldGoals": {
-        "made": 249,
-        "attempted": 772,
-        "pct": 32.3
+        "made": 276,
+        "attempted": 835,
+        "pct": 33.1
       },
       "freeThrows": {
-        "made": 443,
-        "attempted": 648,
-        "pct": 68.4
+        "made": 466,
+        "attempted": 682,
+        "pct": 68.3
       },
       "rebounds": {
-        "offensive": 342,
-        "defensive": 793,
-        "total": 1135
+        "offensive": 361,
+        "defensive": 845,
+        "total": 1206
       },
       "turnovers": {
-        "total": 367,
-        "teamTotal": 19
+        "total": 382,
+        "teamTotal": 20
       },
       "fouls": {
-        "total": 505,
+        "total": 538,
         "technical": 0,
         "flagrant": 2
       },
       "points": {
-        "total": 2296,
-        "inPaint": 998,
-        "offTurnovers": 426,
-        "fastBreak": 248
+        "total": 2472,
+        "inPaint": 1068,
+        "offTurnovers": 464,
+        "fastBreak": 255
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 51,
+        "effectiveFieldGoalPct": 51.6,
         "turnoverRatio": 0.17,
-        "offensiveReboundPct": 30.1,
-        "freeThrowRate": 35.6
+        "offensiveReboundPct": 29.9,
+        "freeThrowRate": 35.1
       }
     },
     "opponentStats": {
-      "assists": 411,
-      "blocks": 119,
-      "steals": 209,
-      "possessions": 2134,
-      "trueShooting": 52,
-      "rating": 100.7,
+      "assists": 441,
+      "blocks": 125,
+      "steals": 217,
+      "possessions": 2272,
+      "trueShooting": 52.4,
+      "rating": 101.3,
       "fieldGoals": {
-        "made": 761,
-        "attempted": 1832,
-        "pct": 41.5
+        "made": 816,
+        "attempted": 1945,
+        "pct": 42
       },
       "twoPointFieldGoals": {
-        "made": 520,
-        "attempted": 1133,
-        "pct": 45.9
+        "made": 561,
+        "attempted": 1201,
+        "pct": 46.7
       },
       "threePointFieldGoals": {
-        "made": 241,
-        "attempted": 699,
-        "pct": 34.5
+        "made": 255,
+        "attempted": 744,
+        "pct": 34.3
       },
       "freeThrows": {
-        "made": 386,
-        "attempted": 533,
-        "pct": 72.4
+        "made": 414,
+        "attempted": 568,
+        "pct": 72.9
       },
       "rebounds": {
-        "offensive": 328,
-        "defensive": 776,
-        "total": 1104
+        "offensive": 338,
+        "defensive": 826,
+        "total": 1164
       },
       "turnovers": {
-        "total": 383,
-        "teamTotal": 18
+        "total": 404,
+        "teamTotal": 19
       },
       "fouls": {
-        "total": 537,
+        "total": 567,
         "technical": 5,
         "flagrant": 0
       },
       "points": {
-        "total": 2149,
-        "inPaint": 902,
-        "offTurnovers": 417,
-        "fastBreak": 267
+        "total": 2301,
+        "inPaint": 976,
+        "offTurnovers": 433,
+        "fastBreak": 279
       },
       "fourFactors": {
-        "effectiveFieldGoalPct": 48.1,
+        "effectiveFieldGoalPct": 48.5,
         "turnoverRatio": 0.18,
-        "offensiveReboundPct": 29.7,
-        "freeThrowRate": 29.1
+        "offensiveReboundPct": 29,
+        "freeThrowRate": 29.2
       }
     }
   },
@@ -41648,8 +41648,8 @@
     "games": 31,
     "wins": 15,
     "losses": 16,
-    "totalMinutes": 1270,
-    "pace": 67.4,
+    "totalMinutes": 1250,
+    "pace": 68.5,
     "teamStats": {
       "assists": 397,
       "blocks": 85,
@@ -41768,8 +41768,8 @@
     "games": 31,
     "wins": 5,
     "losses": 26,
-    "totalMinutes": 1255,
-    "pace": 65.6,
+    "totalMinutes": 1245,
+    "pace": 66.1,
     "teamStats": {
       "assists": 260,
       "blocks": 61,
@@ -41888,8 +41888,8 @@
     "games": 32,
     "wins": 18,
     "losses": 14,
-    "totalMinutes": 1310,
-    "pace": 67.3,
+    "totalMinutes": 1290,
+    "pace": 68.4,
     "teamStats": {
       "assists": 426,
       "blocks": 74,
@@ -42008,8 +42008,8 @@
     "games": 31,
     "wins": 10,
     "losses": 21,
-    "totalMinutes": 1255,
-    "pace": 68.5,
+    "totalMinutes": 1245,
+    "pace": 69.1,
     "teamStats": {
       "assists": 392,
       "blocks": 80,
@@ -42128,8 +42128,8 @@
     "games": 36,
     "wins": 24,
     "losses": 12,
-    "totalMinutes": 1510,
-    "pace": 64,
+    "totalMinutes": 1470,
+    "pace": 65.7,
     "teamStats": {
       "assists": 412,
       "blocks": 134,
@@ -42368,8 +42368,8 @@
     "games": 34,
     "wins": 23,
     "losses": 11,
-    "totalMinutes": 1375,
-    "pace": 71.5,
+    "totalMinutes": 1365,
+    "pace": 72,
     "teamStats": {
       "assists": 481,
       "blocks": 99,
@@ -42488,8 +42488,8 @@
     "games": 35,
     "wins": 24,
     "losses": 11,
-    "totalMinutes": 1460,
-    "pace": 64.3,
+    "totalMinutes": 1420,
+    "pace": 66.1,
     "teamStats": {
       "assists": 560,
       "blocks": 109,
@@ -42608,8 +42608,8 @@
     "games": 32,
     "wins": 19,
     "losses": 13,
-    "totalMinutes": 1295,
-    "pace": 67.2,
+    "totalMinutes": 1285,
+    "pace": 67.7,
     "teamStats": {
       "assists": 450,
       "blocks": 98,
@@ -42728,8 +42728,8 @@
     "games": 35,
     "wins": 23,
     "losses": 12,
-    "totalMinutes": 1415,
-    "pace": 68,
+    "totalMinutes": 1405,
+    "pace": 68.5,
     "teamStats": {
       "assists": 480,
       "blocks": 152,
@@ -42968,8 +42968,8 @@
     "games": 33,
     "wins": 15,
     "losses": 18,
-    "totalMinutes": 1350,
-    "pace": 69.7,
+    "totalMinutes": 1330,
+    "pace": 70.8,
     "teamStats": {
       "assists": 575,
       "blocks": 132,
@@ -43088,8 +43088,8 @@
     "games": 31,
     "wins": 24,
     "losses": 7,
-    "totalMinutes": 1285,
-    "pace": 64,
+    "totalMinutes": 1255,
+    "pace": 65.6,
     "teamStats": {
       "assists": 509,
       "blocks": 99,
@@ -43208,8 +43208,8 @@
     "games": 32,
     "wins": 15,
     "losses": 17,
-    "totalMinutes": 1295,
-    "pace": 68,
+    "totalMinutes": 1285,
+    "pace": 68.5,
     "teamStats": {
       "assists": 447,
       "blocks": 110,
@@ -43328,8 +43328,8 @@
     "games": 35,
     "wins": 21,
     "losses": 14,
-    "totalMinutes": 1430,
-    "pace": 69.2,
+    "totalMinutes": 1410,
+    "pace": 70.2,
     "teamStats": {
       "assists": 561,
       "blocks": 103,
@@ -43448,8 +43448,8 @@
     "games": 30,
     "wins": 7,
     "losses": 23,
-    "totalMinutes": 1230,
-    "pace": 63.1,
+    "totalMinutes": 1210,
+    "pace": 64.2,
     "teamStats": {
       "assists": 310,
       "blocks": 127,
@@ -63488,8 +63488,8 @@
     "games": 4,
     "wins": 0,
     "losses": 4,
-    "totalMinutes": 175,
-    "pace": 74.7,
+    "totalMinutes": 165,
+    "pace": 79.3,
     "teamStats": {
       "assists": 26,
       "blocks": 5,
@@ -66128,8 +66128,8 @@
     "games": 1,
     "wins": 0,
     "losses": 1,
-    "totalMinutes": 55,
-    "pace": 57.5,
+    "totalMinutes": 45,
+    "pace": 70.2,
     "teamStats": {
       "assists": 15,
       "blocks": 3,
@@ -86528,8 +86528,8 @@
     "games": 1,
     "wins": 0,
     "losses": 1,
-    "totalMinutes": 55,
-    "pace": 60,
+    "totalMinutes": 45,
+    "pace": 73.3,
     "teamStats": {
       "assists": 20,
       "blocks": 2,
