@@ -19,11 +19,13 @@ jobs:
           mkdir -p out
           python - <<'PY'
           import pandas as pd
-          base="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/mbb/team_box/parquet/ncaa_mbb_team_box_{}.parquet"
+          raw="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
           for y in range(2021,2026):
-              df=pd.read_parquet(base.format(y))
-              print(y, len(df), list(df.columns))
+              df=pd.read_parquet(raw+f"mbb/team_box/parquet/ncaa_mbb_team_box_{y}.parquet")
               df.to_csv(f"out/ncaa_mbb_team_box_{y}.csv",index=False)
+          sched=pd.read_parquet(raw+"mbb/ncaa_mbb_schedule_master.parquet")
+          print("schedule",sched.shape,list(sched.columns))
+          sched.to_csv("out/ncaa_mbb_schedule_master.csv",index=False)
           PY
       - uses: actions/upload-artifact@v7
         with:
