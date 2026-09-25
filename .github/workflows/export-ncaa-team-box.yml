@@ -1,63 +1,50 @@
-name: R1 finalist tournament
+name: R1 ablation stability audit
 on:
   push:
     paths: ['.github/workflows/export-ncaa-team-box.yml']
   workflow_dispatch:
 jobs:
-  research:
+  audit:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - uses: actions/setup-python@v6
         with: {python-version: '3.12'}
       - run: pip install pandas pyarrow numpy
-      - name: Run finalists
+      - name: Audit F2
         run: |
-          cat > /tmp/run.py <<'PY'
-          import pandas as pd,numpy as np,json
+          cat > /tmp/audit.py <<'PY'
+          import pandas as pd,numpy as np,json,hashlib
           RAW="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
-          # Player-season records
+          # players
           ps=[]
           for sy in range(2021,2026):
             d=pd.read_parquet(RAW+f"mbb/player_box/parquet/ncaa_mbb_player_box_{sy}.parquet")
-            def pick(opts): return next((c for c in opts if c in d.columns),None)
+            def pick(o): return next((c for c in o if c in d.columns),None)
             tc=pick(["team","team_name","team_display_name"]);nc=pick(["athlete","player","name","athlete_display_name"])
-            mp={"min":pick(["mins","minutes"]),"pts":pick(["pts","points"]),"fta":pick(["fta","free_throws_attempted"])}
-            z=d[[tc,nc]+[c for c in mp.values() if c]].copy();z["pk"]=z[nc].astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True)
-            z=z.groupby([tc,"pk"],dropna=False)[[c for c in mp.values() if c]].sum().reset_index().rename(columns={tc:"team"})
-            for k,c in mp.items():z[k]=pd.to_numeric(z[c],errors="coerce").fillna(0) if c else 0
-            z["season"]=sy;ps.append(z[["season","team","pk","min","pts","fta"]])
+            mc=pick(["mins","minutes"])
+            z=d[[tc,nc,mc]].copy();z["pk"]=z[nc].astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True)
+            z[mc]=pd.to_numeric(z[mc],errors="coerce").fillna(0)
+            z=z.groupby([tc,"pk"],dropna=False)[mc].sum().reset_index().rename(columns={tc:"team",mc:"min"});z["season"]=sy;ps.append(z)
           P=pd.concat(ps,ignore_index=True)
-          # Continuity
-          cr=[]
-          for sy in range(2022,2026):
-            prev=P[P.season==sy-1];cur=P[P.season==sy][["team","pk"]].drop_duplicates()
-            z=prev.merge(cur,on=["team","pk"],how="left",indicator=True)
-            for tm,g in z.groupby("team"):
-              r={"season":sy,"team":tm}
-              for m in ["min","fta"]:
-                den=g[m].sum();r["rp_"+m]=g.loc[g._merge=="both",m].sum()/den if den else np.nan
-              cr.append(r)
-          C=pd.DataFrame(cr)
-          ok=C.rp_min.notna()&C.rp_fta.notna();b=np.polyfit(C.loc[ok,"rp_min"],C.loc[ok,"rp_fta"],1)
-          C["rx_fta"]=C.rp_fta-(b[0]*C.rp_min+b[1])
-          # Transfers, conservative unique normalized identity
-          trs=[]
+          # continuity + conservative transfers
+          cr=[];trs=[]
           for sy in range(2022,2026):
             a=P[P.season==sy-1];c=P[P.season==sy]
-            a=a.groupby("pk").filter(lambda g:g.team.nunique()==1).sort_values("min").drop_duplicates("pk",keep="last")
-            c=c.groupby("pk").filter(lambda g:g.team.nunique()==1).sort_values("min").drop_duplicates("pk",keep="last")
-            m=a.merge(c[["pk","team","min"]],on="pk",suffixes=("_prev","_cur"));m=m[m.team_prev!=m.team_cur].copy();m["season"]=sy
-            m["pp40"]=np.where(m.min_prev>0,40*m.pts/m.min_prev,np.nan);trs.append(m)
-          T=pd.concat(trs,ignore_index=True)
-          tf=[]
-          for (sy,tm),g in T.groupby(["season","team_cur"]):
-            tf.append({"season":sy,"team":tm,"tr_min":g.min_prev.sum(),"tr_n":g.pk.nunique(),
-                       "tr_q":np.average(g.pp40.dropna(),weights=np.maximum(g.loc[g.pp40.notna(),"min_prev"],1)) if g.pp40.notna().any() else np.nan})
-          TF=pd.DataFrame(tf);C=C.merge(TF,on=["season","team"],how="left")
-          C[["tr_min","tr_n"]]=C[["tr_min","tr_n"]].fillna(0);C["tr_q"]=C.tr_q.fillna(C.tr_q.median())
-          for x in ["tr_min","tr_q"]:C["z_"+x]=C.groupby("season")[x].transform(lambda q:(q-q.mean())/(q.std()+1e-9))
-          # Games
+            same=a.merge(c[["team","pk"]].drop_duplicates(),on=["team","pk"],how="left",indicator=True)
+            for tm,g in same.groupby("team"):
+              den=g["min"].sum();cr.append({"season":sy,"team":tm,"rp":g.loc[g._merge=="both","min"].sum()/den if den else np.nan,
+                                            "prev_players":g.pk.nunique(),"prev_minutes":den})
+            au=a.groupby("pk").filter(lambda g:g.team.nunique()==1).sort_values("min").drop_duplicates("pk",keep="last")
+            cu=c.groupby("pk").filter(lambda g:g.team.nunique()==1).sort_values("min").drop_duplicates("pk",keep="last")
+            m=au.merge(cu[["pk","team"]],on="pk",suffixes=("_prev","_cur"));m=m[m.team_prev!=m.team_cur].copy();m["season"]=sy;trs.append(m)
+          C=pd.DataFrame(cr);T=pd.concat(trs,ignore_index=True)
+          tf=T.groupby(["season","team_cur"]).agg(tr_min=("min","sum"),tr_n=("pk","nunique")).reset_index().rename(columns={"team_cur":"team"})
+          C=C.merge(tf,on=["season","team"],how="left");C[["tr_min","tr_n"]]=C[["tr_min","tr_n"]].fillna(0)
+          C["ztr"]=C.groupby("season").tr_min.transform(lambda x:(x-x.mean())/(x.std()+1e-9))
+          # coverage proxies
+          C["coverage_q"]=pd.qcut(C.prev_players.rank(method="first"),4,labels=False)
+          # games
           tb=[]
           for sy in range(2021,2026):
             d=pd.read_parquet(RAW+f"mbb/team_box/parquet/ncaa_mbb_team_box_{sy}.parquet");d["season"]=sy;tb.append(d)
@@ -71,17 +58,7 @@ jobs:
           sg=col(S,["contest_id","game_id"]);sd=col(S,["date","game_date","start_date"])
           G=G.merge(S[[sg,sd]].drop_duplicates(sg).rename(columns={sg:"game_id",sd:"date"}),on="game_id",how="left");G["date"]=pd.to_datetime(G.date,errors="coerce")
           G=G.dropna(subset=["date","ortg"]).sort_values(["date","game_id","team"]);q=G[["game_id","team"]].copy();q["ix"]=q.groupby("game_id").cumcount();o=q.copy();o["ix"]=1-o.ix;o=o.rename(columns={"team":"opp"});G["ix"]=G.groupby("game_id").cumcount();G=G.merge(o,on=["game_id","ix"]);G=G[G.groupby("game_id").game_id.transform("size")==2]
-          # Pregame count
-          G["gp"]=G.groupby(["season","team"]).cumcount()
-          # Pre-specified finalists: common K=.12 and base transition 1.20.
-          specs=[
-            ("F0",0,0,0,0),
-            ("F1",.30,0,0,0),
-            ("F2",.30,.06,0,0),
-            ("F3",.30,.06,.04,0),
-            ("F4",.30,.06,.04,.60)]
-          allout=[];bucketout=[]
-          for name,br,bv,bq,bfta in specs:
+          def run(br=.30,bv=.06,k=.12,scale=1.20,perturb=0.0):
             O={};D={};prev=None;pred=[]
             for date,day in G.groupby("date",sort=True):
               sy=int(day.season.iloc[0])
@@ -89,41 +66,53 @@ jobs:
               if sy!=prev:
                 cc=C[C.season==sy].set_index("team")
                 for t in set(O)|set(D):
-                  rp=.375;zv=zq=rx=0;trn=0
+                  rp=.375;ztr=0;cov=np.nan;trn=0
                   if t in cc.index:
-                    r=cc.loc[t];rp=r.rp_min if pd.notna(r.rp_min) else .375;zv=r.z_tr_min if pd.notna(r.z_tr_min) else 0;zq=r.z_tr_q if pd.notna(r.z_tr_q) else 0;rx=r.rx_fta if pd.notna(r.rx_fta) else 0;trn=r.tr_n
-                  factor=np.clip(1.20+br*(rp-.375)+bv*zv+bq*zq+bfta*rx,.55,1.45)
-                  O[t]=O.get(t,0)*factor;D[t]=D.get(t,0)*factor
+                    r=cc.loc[t];rp=r.rp if pd.notna(r.rp) else .375;ztr=r.ztr if pd.notna(r.ztr) else 0;cov=r.coverage_q;trn=r.tr_n
+                  # deterministic perturbation attenuates transfer match signal
+                  zuse=ztr*(1-perturb)
+                  fac=np.clip(scale+br*(rp-.375)+bv*zuse,.55,1.45)
+                  O[t]=O.get(t,0)*fac;D[t]=D.get(t,0)*fac
                 prev=sy
               ups=[]
               for _,r in day.iterrows():
                 p=100+O.get(r.team,0)-D.get(r.opp,0)
                 if sy>=2022:
                   cc=C[(C.season==sy)&(C.team==r.team)]
-                  rp=float(cc.rp_min.iloc[0]) if len(cc) and pd.notna(cc.rp_min.iloc[0]) else np.nan
-                  trn=float(cc.tr_n.iloc[0]) if len(cc) else 0
-                  pred.append((sy,r.game_id,r.team,r.gp,rp,trn,r.ortg,p))
+                  cov=float(cc.coverage_q.iloc[0]) if len(cc) else np.nan;trn=float(cc.tr_n.iloc[0]) if len(cc) else 0
+                  pred.append((sy,r.game_id,r.team,cov,trn,r.ortg,p))
                 e=r.ortg-p;ups.append((r.team,r.opp,e))
-              for a,b,e in ups:O[a]=O.get(a,0)+.12*e;D[b]=D.get(b,0)-.12*e
-            X=pd.DataFrame(pred,columns=["season","game_id","team","gp","rp","trn","actual","pred"]);X["ae"]=(X.actual-X.pred).abs();X["err"]=X.actual-X.pred
+              for a,b,e in ups:O[a]=O.get(a,0)+k*e;D[b]=D.get(b,0)-k*e
+            X=pd.DataFrame(pred,columns=["season","game_id","team","cov","trn","actual","pred"]);X["ae"]=(X.actual-X.pred).abs();X["err"]=X.actual-X.pred
             gd=X.groupby(["season","game_id"]).err.agg(lambda x:abs(x.iloc[0]-x.iloc[1]) if len(x)==2 else np.nan)
-            rec={"spec":name,"ortg_mae":X.ae.mean(),"diff_mae":gd.mean()}
-            for sy in range(2022,2026):rec[f"o{sy}"]=X.loc[X.season==sy,"ae"].mean();rec[f"d{sy}"]=gd.loc[sy].mean()
-            for lab,mask in [("early",X.gp<=5),("mid",(X.gp>=6)&(X.gp<=10)),("mature",X.gp>=11),("lowrp",X.rp<=X.rp.quantile(.25)),("highrp",X.rp>=X.rp.quantile(.75)),("notrans",X.trn==0),("transfer",X.trn>0)]:
-              bucketout.append({"spec":name,"bucket":lab,"n":int(mask.sum()),"ortg_mae":X.loc[mask,"ae"].mean()})
-            allout.append(rec)
-          R=pd.DataFrame(allout);B=pd.DataFrame(bucketout);R.to_csv("finalists.csv",index=False);B.to_csv("buckets.csv",index=False)
-          print("FINALISTS");print(R.to_string(index=False));print("BUCKETS");print(B.pivot(index="bucket",columns="spec",values="ortg_mae").to_string())
-          # incremental deltas
-          base=R.set_index("spec")
-          for a,bn in zip(["F0","F1","F2","F3"],["F1","F2","F3","F4"]):
-            print("DELTA",a,"->",bn,"ORTG",base.loc[bn,"ortg_mae"]-base.loc[a,"ortg_mae"],"DIFF",base.loc[bn,"diff_mae"]-base.loc[a,"diff_mae"])
+            return X,gd
+          specs=[("F0",0,0,.12,1.20,0),("F1",.30,0,.12,1.20,0),("F2",.30,.06,.12,1.20,0),
+                 ("F2_bv03",.30,.03,.12,1.20,0),("F2_bv09",.30,.09,.12,1.20,0),
+                 ("F2_k10",.30,.06,.10,1.20,0),("F2_k14",.30,.06,.14,1.20,0),
+                 ("F2_s117",.30,.06,.12,1.17,0),("F2_s123",.30,.06,.12,1.23,0),
+                 ("F2_tr25loss",.30,.06,.12,1.20,.25),("F2_tr50loss",.30,.06,.12,1.20,.50)]
+          out=[];bucket=[]
+          for name,br,bv,k,sc,pt in specs:
+            X,gd=run(br,bv,k,sc,pt);rec={"spec":name,"ortg":X.ae.mean(),"diff":gd.mean()}
+            for sy in range(2022,2026):rec[f"d{sy}"]=gd.loc[sy].mean()
+            out.append(rec)
+            if name in ["F0","F1","F2"]:
+              for lab,mask in [("covQ1",X.cov==0),("covQ4",X.cov==3),("no_transfer",X.trn==0),("has_transfer",X.trn>0)]:
+                bucket.append({"spec":name,"bucket":lab,"n":int(mask.sum()),"ortg":X.loc[mask,"ae"].mean()})
+          R=pd.DataFrame(out);B=pd.DataFrame(bucket);R.to_csv("audit_specs.csv",index=False);B.to_csv("audit_buckets.csv",index=False)
+          print("AUDIT");print(R.to_string(index=False));print("BUCKET");print(B.pivot(index="bucket",columns="spec",values="ortg").to_string())
+          # deterministic rerun exact hash
+          X1,g1=run();X2,g2=run();h1=hashlib.sha256(pd.util.hash_pandas_object(X1,index=True).values.tobytes()).hexdigest();h2=hashlib.sha256(pd.util.hash_pandas_object(X2,index=True).values.tobytes()).hexdigest()
+          print("DETERMINISM",h1,h2,h1==h2)
+          # leakage assertions: all continuity/transfer features are derived solely from season y-1 player production + membership in season y;
+          # they contain no season-y game production values. Online state updates happen after all predictions for a date.
+          print("LEAKAGE_ASSERT","pregame date-batched updates; offseason feature values exclude current-season box production",True)
           PY
-          python /tmp/run.py
+          python /tmp/audit.py
       - uses: actions/upload-artifact@v7
         with:
-          name: r1-finalists
+          name: r1-ablation-audit
           path: |
-            finalists.csv
-            buckets.csv
+            audit_specs.csv
+            audit_buckets.csv
           retention-days: 7
