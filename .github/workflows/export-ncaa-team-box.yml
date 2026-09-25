@@ -1,4 +1,4 @@
-name: Export NCAA team box CSV
+name: Export NCAA research data
 on:
   push:
     paths:
@@ -7,28 +7,40 @@ on:
 jobs:
   export:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - run: pip install pandas pyarrow
-      - name: Fetch and convert
+      - name: Build research exports
         run: |
           mkdir -p out
           python - <<'PY'
-          import pandas as pd
+          import pandas as pd, json
           raw="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
-          for y in range(2021,2026):
-              df=pd.read_parquet(raw+f"mbb/team_box/parquet/ncaa_mbb_team_box_{y}.parquet")
-              df.to_csv(f"out/ncaa_mbb_team_box_{y}.csv",index=False)
-          sched=pd.read_parquet(raw+"mbb/ncaa_mbb_schedule_master.parquet")
-          print("schedule",sched.shape,list(sched.columns))
-          sched.to_csv("out/ncaa_mbb_schedule_master.csv",index=False)
+          schema={}
+          for typ in ["player_box","team_rosters"]:
+            for y in range(2021,2026):
+              url=raw+f"mbb/{typ}/parquet/ncaa_mbb_{typ}_{y}.parquet"
+              df=pd.read_parquet(url)
+              schema[f"{typ}_{y}"]={"rows":len(df),"columns":list(df.columns)}
+              if typ=="team_rosters":
+                df.to_csv(f"out/ncaa_mbb_team_rosters_{y}.csv",index=False)
+              else:
+                # compact player-season aggregate, preserving identity/team and additive production fields
+                idcols=[c for c in ["team","athlete_id","player_id","athlete","player","name","season"] if c in df.columns]
+                nums=[c for c in ["mins","pts","fga","fgm","tpa","tpm","fta","ftm","orb","drb","to","ast","o_poss","d_poss"] if c in df.columns]
+                keys=[c for c in idcols if c!="season"]
+                if "team" in keys and len(keys)>=2:
+                  agg=df.groupby(keys,dropna=False)[nums].sum().reset_index()
+                  agg["season"]=y
+                  agg.to_csv(f"out/player_season_{y}.csv",index=False)
+          open("out/schema.json","w").write(json.dumps(schema,indent=2))
+          print(json.dumps(schema,indent=2))
           PY
       - uses: actions/upload-artifact@v7
         with:
-          name: ncaa-team-box-2021-2025-csv
-          path: out/*.csv
+          name: ncaa-roster-production-2021-2025
+          path: out/*
           retention-days: 7
