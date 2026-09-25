@@ -1,46 +1,78 @@
-name: Export NCAA research data
+name: R1 continuity decomposition
 on:
   push:
     paths:
       - '.github/workflows/export-ncaa-team-box.yml'
   workflow_dispatch:
 jobs:
-  export:
+  research:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-      - run: pip install pandas pyarrow
-      - name: Build research exports
+        with: {python-version: '3.12'}
+      - run: pip install pandas pyarrow numpy
+      - name: Run R1 continuity research
         run: |
-          mkdir -p out
-          python - <<'PY'
-          import pandas as pd, json
+          cat > /tmp/r1.py <<'PY'
+          import pandas as pd, numpy as np, json, re
           raw="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
-          schema={}
-          for typ in ["player_box","team_rosters"]:
-            for y in range(2021,2026):
-              url=raw+f"mbb/{typ}/parquet/ncaa_mbb_{typ}_{y}.parquet"
-              df=pd.read_parquet(url)
-              schema[f"{typ}_{y}"]={"rows":len(df),"columns":list(df.columns)}
-              if typ=="team_rosters":
-                df.to_csv(f"out/ncaa_mbb_team_rosters_{y}.csv",index=False)
-              else:
-                # compact player-season aggregate, preserving identity/team and additive production fields
-                idcols=[c for c in ["team","athlete_id","player_id","athlete","player","name","season"] if c in df.columns]
-                nums=[c for c in ["mins","pts","fga","fgm","tpa","tpm","fta","ftm","orb","drb","to","ast","o_poss","d_poss"] if c in df.columns]
-                keys=[c for c in idcols if c!="season"]
-                if "team" in keys and len(keys)>=2:
-                  agg=df.groupby(keys,dropna=False)[nums].sum().reset_index()
-                  agg["season"]=y
-                  agg.to_csv(f"out/player_season_{y}.csv",index=False)
-          open("out/schema.json","w").write(json.dumps(schema,indent=2))
-          print(json.dumps(schema,indent=2))
+          # load player boxes and derive player-season production directly
+          ps=[]
+          for y in range(2021,2026):
+            d=pd.read_parquet(raw+f"mbb/player_box/parquet/ncaa_mbb_player_box_{y}.parquet")
+            if y==2021: print("PLAYER_COLS",list(d.columns))
+            # canonical columns discovered defensively
+            team=next(c for c in ["team","team_name","team_display_name"] if c in d.columns)
+            name=next(c for c in ["athlete","player","name","athlete_display_name"] if c in d.columns)
+            def pick(opts):
+              return next((c for c in opts if c in d.columns),None)
+            cols={"min":pick(["mins","minutes"]),"pts":pick(["pts","points"]),"fga":pick(["fga","field_goals_attempted"]),
+                  "tpa":pick(["tpa","three_point_field_goals_attempted"]),"fta":pick(["fta","free_throws_attempted"]),
+                  "ast":pick(["ast","assists"]),"orb":pick(["orb","offensive_rebounds"]),"drb":pick(["drb","defensive_rebounds"])}
+            use=[team,name]+[c for c in cols.values() if c]
+            x=d[use].copy(); x["player_key"]=x[name].astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True)
+            ag={c:"sum" for c in cols.values() if c}
+            x=x.groupby([team,"player_key"],dropna=False).agg(ag).reset_index()
+            x["season"]=y; x=x.rename(columns={team:"team"})
+            for k,c in cols.items():
+              if c and c in x: x=x.rename(columns={c:k})
+              elif k not in x: x[k]=0.
+            ps.append(x[["season","team","player_key","min","pts","fga","tpa","fta","ast","orb","drb"]])
+          ps=pd.concat(ps,ignore_index=True)
+          # continuity: fraction of prior team's production from players on same team next season
+          metrics=["min","pts","fga","tpa","fta","ast","orb","drb"]
+          rows=[]
+          for y in range(2022,2026):
+            prev=ps[ps.season==y-1]; cur=ps[ps.season==y][["team","player_key"]].drop_duplicates()
+            z=prev.merge(cur,on=["team","player_key"],how="left",indicator=True)
+            for team,g in z.groupby("team"):
+              r={"season":y,"team":team}
+              for m in metrics:
+                den=g[m].sum(); ret=g.loc[g["_merge"]=="both",m].sum()
+                r["rp_"+m]=ret/den if den>0 else np.nan
+              rows.append(r)
+          cont=pd.DataFrame(rows)
+          cont.to_csv("continuity.csv",index=False)
+          print("CONT",cont[["rp_"+m for m in metrics]].describe().to_string())
+          # correlations and incremental orthogonality to minutes
+          corr=cont[["rp_"+m for m in metrics]].corr()
+          corr.to_csv("continuity_corr.csv")
+          out=[]
+          x=cont.rp_min
+          for m in metrics[1:]:
+            y=cont["rp_"+m]; ok=x.notna()&y.notna()
+            b=np.polyfit(x[ok],y[ok],1); resid=y[ok]-(b[0]*x[ok]+b[1])
+            out.append({"metric":m,"corr_minutes":float(np.corrcoef(x[ok],y[ok])[0,1]),"resid_sd":float(resid.std()),"n":int(ok.sum())})
+          pd.DataFrame(out).to_csv("incremental_capacity.csv",index=False)
+          print("INCREMENTAL",pd.DataFrame(out).to_string(index=False))
           PY
+          python /tmp/r1.py
       - uses: actions/upload-artifact@v7
         with:
-          name: ncaa-roster-production-2021-2025
-          path: out/*
+          name: r1-continuity-decomposition
+          path: |
+            continuity.csv
+            continuity_corr.csv
+            incremental_capacity.csv
           retention-days: 7
