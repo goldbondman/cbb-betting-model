@@ -1,8 +1,7 @@
-name: R1 continuity decomposition
+name: R1 component OOS tournament
 on:
   push:
-    paths:
-      - '.github/workflows/export-ncaa-team-box.yml'
+    paths: ['.github/workflows/export-ncaa-team-box.yml']
   workflow_dispatch:
 jobs:
   research:
@@ -12,67 +11,119 @@ jobs:
       - uses: actions/setup-python@v6
         with: {python-version: '3.12'}
       - run: pip install pandas pyarrow numpy
-      - name: Run R1 continuity research
+      - name: Run component tournament
         run: |
-          cat > /tmp/r1.py <<'PY'
-          import pandas as pd, numpy as np, json, re
-          raw="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
-          # load player boxes and derive player-season production directly
+          cat > /tmp/run.py <<'PY'
+          import pandas as pd, numpy as np, json
+          RAW="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
+          # ---------- returning production ----------
           ps=[]
-          for y in range(2021,2026):
-            d=pd.read_parquet(raw+f"mbb/player_box/parquet/ncaa_mbb_player_box_{y}.parquet")
-            if y==2021: print("PLAYER_COLS",list(d.columns))
-            # canonical columns discovered defensively
-            team=next(c for c in ["team","team_name","team_display_name"] if c in d.columns)
-            name=next(c for c in ["athlete","player","name","athlete_display_name"] if c in d.columns)
-            def pick(opts):
-              return next((c for c in opts if c in d.columns),None)
-            cols={"min":pick(["mins","minutes"]),"pts":pick(["pts","points"]),"fga":pick(["fga","field_goals_attempted"]),
-                  "tpa":pick(["tpa","three_point_field_goals_attempted"]),"fta":pick(["fta","free_throws_attempted"]),
-                  "ast":pick(["ast","assists"]),"orb":pick(["orb","offensive_rebounds"]),"drb":pick(["drb","defensive_rebounds"])}
-            use=[team,name]+[c for c in cols.values() if c]
-            x=d[use].copy(); x["player_key"]=x[name].astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True)
-            ag={c:"sum" for c in cols.values() if c}
-            x=x.groupby([team,"player_key"],dropna=False).agg(ag).reset_index()
-            x["season"]=y; x=x.rename(columns={team:"team"})
-            for k,c in cols.items():
-              if c and c in x: x=x.rename(columns={c:k})
-              elif k not in x: x[k]=0.
-            ps.append(x[["season","team","player_key","min","pts","fga","tpa","fta","ast","orb","drb"]])
+          for sy in range(2021,2026):
+            d=pd.read_parquet(RAW+f"mbb/player_box/parquet/ncaa_mbb_player_box_{sy}.parquet")
+            def pick(opts): return next((c for c in opts if c in d.columns),None)
+            tc=pick(["team","team_name","team_display_name"]); nc=pick(["athlete","player","name","athlete_display_name"])
+            mp={"min":pick(["mins","minutes"]),"pts":pick(["pts","points"]),"fga":pick(["fga","field_goals_attempted"]),
+                "tpa":pick(["tpa","three_point_field_goals_attempted"]),"fta":pick(["fta","free_throws_attempted"]),
+                "ast":pick(["ast","assists"]),"orb":pick(["orb","offensive_rebounds"]),"drb":pick(["drb","defensive_rebounds"])}
+            z=d[[tc,nc]+[c for c in mp.values() if c]].copy()
+            z["pk"]=z[nc].astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True)
+            z=z.groupby([tc,"pk"],dropna=False)[[c for c in mp.values() if c]].sum().reset_index().rename(columns={tc:"team"})
+            for k,c in mp.items(): z[k]=z[c] if c else 0
+            z["season"]=sy; ps.append(z[["season","team","pk"]+list(mp)])
           ps=pd.concat(ps,ignore_index=True)
-          # continuity: fraction of prior team's production from players on same team next season
-          metrics=["min","pts","fga","tpa","fta","ast","orb","drb"]
-          rows=[]
-          for y in range(2022,2026):
-            prev=ps[ps.season==y-1]; cur=ps[ps.season==y][["team","player_key"]].drop_duplicates()
-            z=prev.merge(cur,on=["team","player_key"],how="left",indicator=True)
-            for team,g in z.groupby("team"):
-              r={"season":y,"team":team}
-              for m in metrics:
-                den=g[m].sum(); ret=g.loc[g["_merge"]=="both",m].sum()
-                r["rp_"+m]=ret/den if den>0 else np.nan
-              rows.append(r)
-          cont=pd.DataFrame(rows)
-          cont.to_csv("continuity.csv",index=False)
-          print("CONT",cont[["rp_"+m for m in metrics]].describe().to_string())
-          # correlations and incremental orthogonality to minutes
-          corr=cont[["rp_"+m for m in metrics]].corr()
-          corr.to_csv("continuity_corr.csv")
-          out=[]
-          x=cont.rp_min
-          for m in metrics[1:]:
-            y=cont["rp_"+m]; ok=x.notna()&y.notna()
-            b=np.polyfit(x[ok],y[ok],1); resid=y[ok]-(b[0]*x[ok]+b[1])
-            out.append({"metric":m,"corr_minutes":float(np.corrcoef(x[ok],y[ok])[0,1]),"resid_sd":float(resid.std()),"n":int(ok.sum())})
-          pd.DataFrame(out).to_csv("incremental_capacity.csv",index=False)
-          print("INCREMENTAL",pd.DataFrame(out).to_string(index=False))
+          cr=[]
+          mets=["min","pts","fga","tpa","fta","ast","orb","drb"]
+          for sy in range(2022,2026):
+            p=ps[ps.season==sy-1]; c=ps[ps.season==sy][["team","pk"]].drop_duplicates()
+            z=p.merge(c,on=["team","pk"],how="left",indicator=True)
+            for tm,g in z.groupby("team"):
+              r={"season":sy,"team":tm}
+              for m in mets:
+                den=g[m].sum(); r["rp_"+m]=g.loc[g._merge=="both",m].sum()/den if den else np.nan
+              cr.append(r)
+          C=pd.DataFrame(cr)
+          # residualize candidate components against minutes using only global historical continuity relation
+          # coefficients are descriptive transformations, not target-fitted.
+          for m in ["orb","fta","ast","tpa"]:
+            ok=C.rp_min.notna()&C["rp_"+m].notna()
+            b=np.polyfit(C.loc[ok,"rp_min"],C.loc[ok,"rp_"+m],1)
+            C["rx_"+m]=C["rp_"+m]-(b[0]*C.rp_min+b[1])
+          # ---------- team games ----------
+          tb=[]
+          for sy in range(2021,2026):
+            d=pd.read_parquet(RAW+f"mbb/team_box/parquet/ncaa_mbb_team_box_{sy}.parquet")
+            if sy==2021: print("TEAMBOX_COLS",list(d.columns))
+            d["season"]=sy; tb.append(d)
+          G=pd.concat(tb,ignore_index=True)
+          S=pd.read_parquet(RAW+"mbb/ncaa_mbb_schedule_master.parquet")
+          print("SCHED_COLS",list(S.columns))
+          def col(df,opts):
+            x=next((c for c in opts if c in df.columns),None)
+            if x is None: raise Exception("missing "+str(opts))
+            return x
+          gid=col(G,["contest_id","game_id"]); team=col(G,["team","team_name","team_display_name"])
+          pts=col(G,["pts","points"]); op=col(G,["o_poss","offensive_possessions"])
+          # ratings from actual offensive efficiency. Defensive observation is opponent offense via pairing.
+          G=G.rename(columns={gid:"game_id",team:"team",pts:"pts",op:"poss"})
+          G["ortg"]=100*pd.to_numeric(G.pts,errors="coerce")/pd.to_numeric(G.poss,errors="coerce")
+          sg=col(S,["contest_id","game_id"]); sd=col(S,["date","game_date","start_date"])
+          SS=S[[sg,sd]].drop_duplicates(sg).rename(columns={sg:"game_id",sd:"date"})
+          G=G.merge(SS,on="game_id",how="left"); G["date"]=pd.to_datetime(G.date,errors="coerce")
+          G=G.dropna(subset=["date","ortg"]).sort_values(["date","game_id","team"])
+          # pair opponent
+          q=G[["game_id","team","ortg"]].copy(); q["ix"]=q.groupby("game_id").cumcount()
+          opp=q.copy(); opp["ix"]=1-opp.ix; opp=opp.rename(columns={"team":"opp","ortg":"opp_ortg"})
+          G["ix"]=G.groupby("game_id").cumcount(); G=G.merge(opp[["game_id","ix","opp","opp_ortg"]],on=["game_id","ix"],how="left")
+          G=G[G.groupby("game_id").game_id.transform("size")==2].copy()
+          # ---------- online O/D backtest ----------
+          # carry = base + beta_min*(rp_min-.5) + beta_component*residual component, clipped
+          specs=[("fixed",0,0,None),("min",.30,0,None)]
+          for m in ["orb","fta","ast","tpa"]:
+            for b in [-.6,-.3,.3,.6]:
+              specs.append((f"min+{m}_{b:+.1f}",.30,b,m))
+          results=[]
+          for name,bmin,bcomp,cm in specs:
+            O={};D={}; prevsy=None
+            preds=[]
+            for date,day in G.groupby("date",sort=True):
+              sy=int(day.season.iloc[0])
+              if prevsy is None: prevsy=sy
+              if sy!=prevsy:
+                # offseason transition per team using new-season continuity
+                cc=C[C.season==sy].set_index("team")
+                for tm in set(O)|set(D):
+                  rp=cc.rp_min.get(tm,np.nan) if tm in cc.index else np.nan
+                  rx=cc["rx_"+cm].get(tm,0) if (cm and tm in cc.index) else 0
+                  if pd.isna(rp): rp=.375
+                  if pd.isna(rx): rx=0
+                  carry=np.clip(1.05+bmin*(rp-.375)+bcomp*rx,.45,1.35)
+                  O[tm]=O.get(tm,0)*carry; D[tm]=D.get(tm,0)*carry
+                prevsy=sy
+              updates=[]
+              for _,r in day.iterrows():
+                a,b=r.team,r.opp; pred=100+O.get(a,0)-D.get(b,0)
+                if sy>=2022:
+                  preds.append((sy,a,b,r.ortg,pred))
+                e=r.ortg-pred; updates.append((a,b,e))
+              for a,b,e in updates:
+                O[a]=O.get(a,0)+.10*e; D[b]=D.get(b,0)-.10*e
+            P=pd.DataFrame(preds,columns=["season","team","opp","actual","pred"])
+            P["ae"]=(P.actual-P.pred).abs()
+            # differential MAE pair by season/team-game unavailable after preds; ORtg MAE primary here
+            results.append({"spec":name,"mae":P.ae.mean(),**{f"mae_{s}":P.loc[P.season==s,"ae"].mean() for s in range(2022,2026)}})
+          R=pd.DataFrame(results).sort_values("mae"); R.to_csv("r1_component_results.csv",index=False)
+          print("RESULTS"); print(R.to_string(index=False))
+          # separate O/D continuity: use same component but only carry offense or defense state
+          # test top candidate from first stage plus minutes; fixed baseline on opposite side
+          top=R[~R.spec.eq("fixed")].iloc[0].spec
+          print("TOP",top)
+          open("r1_summary.json","w").write(json.dumps({"top":top,"rows":len(G),"transitions":len(C)},indent=2))
           PY
-          python /tmp/r1.py
+          python /tmp/run.py
       - uses: actions/upload-artifact@v7
         with:
-          name: r1-continuity-decomposition
+          name: r1-component-oos
           path: |
-            continuity.csv
-            continuity_corr.csv
-            incremental_capacity.csv
+            r1_component_results.csv
+            r1_summary.json
           retention-days: 7
