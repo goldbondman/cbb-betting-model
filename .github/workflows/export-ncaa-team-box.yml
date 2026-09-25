@@ -1,4 +1,4 @@
-name: R1 transfer-aware roster prior
+name: R1 state dispersion and finalist
 on:
   push:
     paths: ['.github/workflows/export-ncaa-team-box.yml']
@@ -11,130 +11,68 @@ jobs:
       - uses: actions/setup-python@v6
         with: {python-version: '3.12'}
       - run: pip install pandas pyarrow numpy
-      - name: Run transfer-aware prior tests
+      - name: Run dispersion calibration
         run: |
           cat > /tmp/run.py <<'PY'
-          import pandas as pd, numpy as np, json
+          import pandas as pd,numpy as np,json
           RAW="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
-          ps=[]
-          for sy in range(2021,2026):
-            d=pd.read_parquet(RAW+f"mbb/player_box/parquet/ncaa_mbb_player_box_{sy}.parquet")
-            def pick(opts): return next((c for c in opts if c in d.columns),None)
-            tc=pick(["team","team_name","team_display_name"]); nc=pick(["athlete","player","name","athlete_display_name"])
-            mp={"min":pick(["mins","minutes"]),"pts":pick(["pts","points"]),"fga":pick(["fga","field_goals_attempted"]),
-                "fta":pick(["fta","free_throws_attempted"]),"ast":pick(["ast","assists"]),"orb":pick(["orb","offensive_rebounds"]),"drb":pick(["drb","defensive_rebounds"])}
-            use=[tc,nc]+[c for c in mp.values() if c]
-            z=d[use].copy(); z["pk"]=z[nc].astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True)
-            z=z.groupby([tc,"pk"],dropna=False)[[c for c in mp.values() if c]].sum().reset_index().rename(columns={tc:"team"})
-            for k,c in mp.items(): z[k]=pd.to_numeric(z[c],errors="coerce").fillna(0) if c else 0.
-            z["season"]=sy; ps.append(z[["season","team","pk"]+list(mp)])
-          P=pd.concat(ps,ignore_index=True)
-          # transfer map: player appears next season on a different team.
-          tr=[]
-          for sy in range(2022,2026):
-            prev=P[P.season==sy-1].copy(); cur=P[P.season==sy].copy()
-            # resolve duplicate normalized names conservatively: only unique player-key in each season
-            pu=prev.groupby("pk").filter(lambda g:g.team.nunique()==1)
-            cu=cur.groupby("pk").filter(lambda g:g.team.nunique()==1)
-            pu=pu.sort_values("min").drop_duplicates("pk",keep="last")
-            cu=cu.sort_values("min").drop_duplicates("pk",keep="last")
-            m=pu.merge(cu[["pk","team","min"]],on="pk",suffixes=("_prev","_cur"))
-            m=m[m.team_prev!=m.team_cur].copy()
-            m["season"]=sy
-            # prior production quality: previous individual efficiency proxy pts per 40 and production volume
-            m["ppm40"]=np.where(m.min_prev>0,40*m.pts/m.min_prev,np.nan)
-            tr.append(m)
-          T=pd.concat(tr,ignore_index=True)
-          print("TRANSFERS",T.groupby("season").size().to_dict())
-          print("TRANSFER_MIN",T.min_prev.describe().to_dict())
-          # destination team transfer features: prior minutes/points and weighted prior scoring productivity
-          TF=T.groupby(["season","team_cur"]).agg(
-              transfer_players=("pk","nunique"), transfer_prev_min=("min_prev","sum"),
-              transfer_prev_pts=("pts","sum"), transfer_cur_min=("min_cur","sum")).reset_index().rename(columns={"team_cur":"team"})
-          q=T.dropna(subset=["ppm40"]).groupby(["season","team_cur"]).apply(
-              lambda g: np.average(g.ppm40,weights=np.maximum(g.min_prev,1)),include_groups=False).rename("transfer_pp40").reset_index().rename(columns={"team_cur":"team"})
-          TF=TF.merge(q,on=["season","team"],how="left")
-          TF.to_csv("transfer_features.csv",index=False)
-          print("TF_DESC",TF.describe(include="all").to_string())
-          # same-team returning minutes
-          cr=[]
-          for sy in range(2022,2026):
-            prev=P[P.season==sy-1]; cur=P[P.season==sy][["team","pk"]].drop_duplicates()
-            z=prev.merge(cur,on=["team","pk"],how="left",indicator=True)
-            for tm,g in z.groupby("team"):
-              den=g["min"].sum(); ret=g.loc[g._merge=="both","min"].sum()
-              cr.append({"season":sy,"team":tm,"rp_min":ret/den if den else np.nan})
-          C=pd.DataFrame(cr).merge(TF,on=["season","team"],how="left")
-          for c in ["transfer_players","transfer_prev_min","transfer_prev_pts","transfer_cur_min"]: C[c]=C[c].fillna(0)
-          C["transfer_pp40"]=C.transfer_pp40.fillna(C.transfer_pp40.median())
-          # standardize transfer volume/quality within season using only cross-section, no outcomes
-          for c in ["transfer_prev_min","transfer_prev_pts","transfer_pp40"]:
-            C["z_"+c]=C.groupby("season")[c].transform(lambda x:(x-x.mean())/(x.std()+1e-9))
-          # team games
+          # games
           tb=[]
           for sy in range(2021,2026):
-            d=pd.read_parquet(RAW+f"mbb/team_box/parquet/ncaa_mbb_team_box_{sy}.parquet"); d["season"]=sy; tb.append(d)
-          G=pd.concat(tb,ignore_index=True)
-          S=pd.read_parquet(RAW+"mbb/ncaa_mbb_schedule_master.parquet")
-          def col(df,opts):
-            x=next((c for c in opts if c in df.columns),None)
-            if x is None: raise Exception("missing "+str(opts))
-            return x
-          gid=col(G,["contest_id","game_id"]); team=col(G,["team","team_name","team_display_name"]); pts=col(G,["pts","points"]); poss=col(G,["o_poss","offensive_possessions"])
-          G=G.rename(columns={gid:"game_id",team:"team",pts:"pts",poss:"poss"}); G["ortg"]=100*pd.to_numeric(G.pts,errors="coerce")/pd.to_numeric(G.poss,errors="coerce")
-          sg=col(S,["contest_id","game_id"]); sd=col(S,["date","game_date","start_date"])
-          G=G.merge(S[[sg,sd]].drop_duplicates(sg).rename(columns={sg:"game_id",sd:"date"}),on="game_id",how="left")
-          G["date"]=pd.to_datetime(G.date,errors="coerce"); G=G.dropna(subset=["date","ortg"]).sort_values(["date","game_id","team"])
-          qg=G[["game_id","team","ortg"]].copy(); qg["ix"]=qg.groupby("game_id").cumcount()
-          og=qg.copy(); og["ix"]=1-og.ix; og=og.rename(columns={"team":"opp","ortg":"opp_ortg"})
-          G["ix"]=G.groupby("game_id").cumcount(); G=G.merge(og[["game_id","ix","opp"]],on=["game_id","ix"],how="left")
-          G=G[G.groupby("game_id").game_id.transform("size")==2]
-          # grid: baseline continuity plus transfer prior-volume and quality effects on offseason carry.
-          specs=[("fixed",0,0,0),("rpmin",.30,0,0)]
-          for bv in [-.06,0,.03,.06,.10]:
-            for bq in [0,.02,.04,-.02]:
-              if bv==0 and bq==0: continue
-              specs.append((f"rp+v{bv:+.2f}+q{bq:+.2f}",.30,bv,bq))
+            d=pd.read_parquet(RAW+f"mbb/team_box/parquet/ncaa_mbb_team_box_{sy}.parquet");d["season"]=sy;tb.append(d)
+          G=pd.concat(tb,ignore_index=True);S=pd.read_parquet(RAW+"mbb/ncaa_mbb_schedule_master.parquet")
+          def col(df,o):
+            z=next((c for c in o if c in df.columns),None)
+            if z is None: raise Exception(o)
+            return z
+          gid=col(G,["contest_id","game_id"]);tm=col(G,["team","team_name","team_display_name"]);pts=col(G,["pts","points"]);poss=col(G,["o_poss","offensive_possessions"])
+          G=G.rename(columns={gid:"game_id",tm:"team",pts:"pts",poss:"poss"});G["ortg"]=100*pd.to_numeric(G.pts,errors="coerce")/pd.to_numeric(G.poss,errors="coerce")
+          sg=col(S,["contest_id","game_id"]);sd=col(S,["date","game_date","start_date"])
+          G=G.merge(S[[sg,sd]].drop_duplicates(sg).rename(columns={sg:"game_id",sd:"date"}),on="game_id",how="left");G["date"]=pd.to_datetime(G.date,errors="coerce")
+          G=G.dropna(subset=["date","ortg"]).sort_values(["date","game_id","team"]);q=G[["game_id","team"]].copy();q["ix"]=q.groupby("game_id").cumcount();o=q.copy();o["ix"]=1-o.ix;o=o.rename(columns={"team":"opp"});G["ix"]=G.groupby("game_id").cumcount();G=G.merge(o,on=["game_id","ix"]);G=G[G.groupby("game_id").game_id.transform("size")==2]
+          # Evaluate learning rate K, state stretch gamma applied only at season transition, and carry <=1.
+          specs=[]
+          for k in [.06,.08,.10,.12,.14,.16]:
+            for gamma in [.85,1.0,1.10,1.20,1.30,1.40]:
+              for carry in [.70,.80,.90,1.0]:
+                specs.append((k,gamma,carry))
           out=[]
-          for name,br,bv,bq in specs:
-            O={};D={}; prevsy=None; pred=[]
+          for k,gamma,carry in specs:
+            O={};D={};prev=None;pred=[]
             for date,day in G.groupby("date",sort=True):
               sy=int(day.season.iloc[0])
-              if prevsy is None: prevsy=sy
-              if sy!=prevsy:
-                cc=C[C.season==sy].set_index("team")
-                for tm in set(O)|set(D):
-                  if tm in cc.index:
-                    r=cc.loc[tm]; rp=r.rp_min if pd.notna(r.rp_min) else .375
-                    zv=r.z_transfer_prev_min if pd.notna(r.z_transfer_prev_min) else 0
-                    zq=r.z_transfer_pp40 if pd.notna(r.z_transfer_pp40) else 0
-                  else: rp=.375; zv=zq=0
-                  carry=np.clip(1.05+br*(rp-.375)+bv*zv+bq*zq,.45,1.35)
-                  O[tm]=O.get(tm,0)*carry; D[tm]=D.get(tm,0)*carry
-                prevsy=sy
+              if prev is None:prev=sy
+              if sy!=prev:
+                factor=gamma*carry
+                O={t:v*factor for t,v in O.items()};D={t:v*factor for t,v in D.items()};prev=sy
               ups=[]
               for _,r in day.iterrows():
                 p=100+O.get(r.team,0)-D.get(r.opp,0)
-                if sy>=2022: pred.append((sy,r.game_id,r.team,r.ortg,p))
-                e=r.ortg-p; ups.append((r.team,r.opp,e))
-              for a,b,e in ups: O[a]=O.get(a,0)+.10*e; D[b]=D.get(b,0)-.10*e
-            X=pd.DataFrame(pred,columns=["season","game_id","team","actual","pred"]); X["ae"]=(X.actual-X.pred).abs(); X["err"]=X.actual-X.pred
+                if sy>=2022:pred.append((sy,r.game_id,r.ortg,p))
+                e=r.ortg-p;ups.append((r.team,r.opp,e))
+              for a,b,e in ups:O[a]=O.get(a,0)+k*e;D[b]=D.get(b,0)-k*e
+            X=pd.DataFrame(pred,columns=["season","game_id","actual","pred"]);X["ae"]=(X.actual-X.pred).abs();X["err"]=X.actual-X.pred
             gd=X.groupby(["season","game_id"]).err.agg(lambda x:abs(x.iloc[0]-x.iloc[1]) if len(x)==2 else np.nan)
-            rec={"spec":name,"ortg_mae":X.ae.mean(),"diff_mae":gd.mean()}
-            for sy in range(2022,2026):
-              rec[f"ortg_{sy}"]=X.loc[X.season==sy,"ae"].mean(); rec[f"diff_{sy}"]=gd.loc[sy].mean()
+            rec={"k":k,"gamma":gamma,"carry":carry,"net_transition":gamma*carry,"ortg_mae":X.ae.mean(),"diff_mae":gd.mean()}
+            for sy in range(2022,2026):rec[f"o{sy}"]=X.loc[X.season==sy,"ae"].mean();rec[f"d{sy}"]=gd.loc[sy].mean()
             out.append(rec)
-          R=pd.DataFrame(out).sort_values("ortg_mae"); R.to_csv("transfer_prior_results.csv",index=False)
-          print("RESULTS"); print(R.head(15).to_string(index=False))
-          print("DIFF_TOP"); print(R.sort_values("diff_mae").head(10).to_string(index=False))
-          open("summary.json","w").write(json.dumps({"transfer_counts":T.groupby("season").size().to_dict(),"top_ortg":R.iloc[0].to_dict(),"top_diff":R.sort_values("diff_mae").iloc[0].to_dict()},default=float,indent=2))
+          R=pd.DataFrame(out);R.to_csv("dispersion_grid.csv",index=False)
+          print("ORTG_TOP");print(R.sort_values("ortg_mae").head(15).to_string(index=False))
+          print("DIFF_TOP");print(R.sort_values("diff_mae").head(15).to_string(index=False))
+          # identify equivalence by net transition to expose non-identifiability
+          E=R.groupby(["k","net_transition"],as_index=False).agg(ortg_mae=("ortg_mae","mean"),diff_mae=("diff_mae","mean"),n=("gamma","size"))
+          E.to_csv("transition_equivalence.csv",index=False)
+          # within-season terminal state dispersion by K, no offseason transition, relative to next-season first-game residual predictive slope
+          # Diagnostic: state scale is not separately identifiable from transition multiplier in this architecture.
+          summ={"best_ortg":R.sort_values("ortg_mae").iloc[0].to_dict(),"best_diff":R.sort_values("diff_mae").iloc[0].to_dict()}
+          open("summary.json","w").write(json.dumps(summ,default=float,indent=2))
           PY
           python /tmp/run.py
       - uses: actions/upload-artifact@v7
         with:
-          name: r1-transfer-aware
+          name: r1-dispersion
           path: |
-            transfer_features.csv
-            transfer_prior_results.csv
+            dispersion_grid.csv
+            transition_equivalence.csv
             summary.json
           retention-days: 7
