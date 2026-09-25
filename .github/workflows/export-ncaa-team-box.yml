@@ -113,11 +113,54 @@ jobs:
             results.append({"spec":name,"mae":P.ae.mean(),**{f"mae_{s}":P.loc[P.season==s,"ae"].mean() for s in range(2022,2026)}})
           R=pd.DataFrame(results).sort_values("mae"); R.to_csv("r1_component_results.csv",index=False)
           print("RESULTS"); print(R.to_string(index=False))
-          # separate O/D continuity: use same component but only carry offense or defense state
-          # test top candidate from first stage plus minutes; fixed baseline on opposite side
+          # ---------- separate offensive vs defensive continuity ----------
+          side_specs=[
+            ("fixed",0,0,0,0),
+            ("min_both",.30,0,.30,0),
+            ("min_off_only",.30,0,0,0),
+            ("min_def_only",0,0,.30,0),
+            ("fta_both",.30,.60,.30,.60),
+            ("fta_off_only",.30,.60,.30,0),
+            ("fta_def_only",.30,0,.30,.60)]
+          sideout=[]
+          for name,omin,ofta,dmin,dfta in side_specs:
+            O={};D={};prevsy=None; preds=[]
+            for date,day in G.groupby("date",sort=True):
+              sy=int(day.season.iloc[0])
+              if prevsy is None: prevsy=sy
+              if sy!=prevsy:
+                cc=C[C.season==sy].set_index("team")
+                for tm in set(O)|set(D):
+                  rp=cc.rp_min.get(tm,np.nan) if tm in cc.index else np.nan
+                  rx=cc.rx_fta.get(tm,0) if tm in cc.index else 0
+                  if pd.isna(rp): rp=.375
+                  if pd.isna(rx): rx=0
+                  co=np.clip(1.05+omin*(rp-.375)+ofta*rx,.45,1.35)
+                  cd=np.clip(1.05+dmin*(rp-.375)+dfta*rx,.45,1.35)
+                  O[tm]=O.get(tm,0)*co; D[tm]=D.get(tm,0)*cd
+                prevsy=sy
+              ups=[]
+              for _,r in day.iterrows():
+                pred=100+O.get(r.team,0)-D.get(r.opp,0)
+                if sy>=2022: preds.append((sy,r.team,r.game_id,r.ortg,pred))
+                e=r.ortg-pred; ups.append((r.team,r.opp,e))
+              for a,b,e in ups:
+                O[a]=O.get(a,0)+.10*e; D[b]=D.get(b,0)-.10*e
+            P=pd.DataFrame(preds,columns=["season","team","game_id","actual","pred"])
+            P["ae"]=(P.actual-P.pred).abs()
+            # game differential error from paired team residuals
+            P["err"]=P.actual-P.pred
+            gd=P.groupby(["season","game_id"]).err.agg(lambda x: abs(x.iloc[0]-x.iloc[1]) if len(x)==2 else np.nan)
+            rec={"spec":name,"ortg_mae":P.ae.mean(),"diff_mae":gd.mean()}
+            for sy in range(2022,2026):
+              rec[f"ortg_{sy}"]=P.loc[P.season==sy,"ae"].mean()
+              rec[f"diff_{sy}"]=gd.loc[sy].mean() if sy in gd.index.get_level_values(0) else np.nan
+            sideout.append(rec)
+          SR=pd.DataFrame(sideout).sort_values("ortg_mae")
+          SR.to_csv("r1_side_results.csv",index=False)
+          print("SIDE_RESULTS"); print(SR.to_string(index=False))
           top=R[~R.spec.eq("fixed")].iloc[0].spec
-          print("TOP",top)
-          open("r1_summary.json","w").write(json.dumps({"top":top,"rows":len(G),"transitions":len(C)},indent=2))
+          open("r1_summary.json","w").write(json.dumps({"top_component":top,"top_side_ortg":SR.iloc[0].spec,"top_side_diff":SR.sort_values("diff_mae").iloc[0].spec,"rows":len(G),"transitions":len(C)},indent=2))
           PY
           python /tmp/run.py
       - uses: actions/upload-artifact@v7
