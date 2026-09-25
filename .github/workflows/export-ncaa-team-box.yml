@@ -97,7 +97,7 @@ jobs:
             for sy in range(2022,2026):rec[f"d{sy}"]=gd.loc[sy].mean()
             out.append(rec)
             if name in ["F0","F1","F2"]:
-              for lab,mask in [("covQ1",X.cov==0),("covQ4",X.cov==3),("no_transfer",X.trn==0),("has_transfer",X.trn>0)]:
+              for lab,mask in [("covQ1",X["cov"]==0),("covQ4",X["cov"]==3),("no_transfer",X.trn==0),("has_transfer",X.trn>0)]:
                 bucket.append({"spec":name,"bucket":lab,"n":int(mask.sum()),"ortg":X.loc[mask,"ae"].mean()})
           R=pd.DataFrame(out);B=pd.DataFrame(bucket);R.to_csv("audit_specs.csv",index=False);B.to_csv("audit_buckets.csv",index=False)
           print("AUDIT");print(R.to_string(index=False));print("BUCKET");print(B.pivot(index="bucket",columns="spec",values="ortg").to_string())
