@@ -1,0 +1,32 @@
+name: Export NCAA team box CSV
+on:
+  push:
+    paths:
+      - '.github/workflows/export-ncaa-team-box.yml'
+  workflow_dispatch:
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install pandas pyarrow
+      - name: Fetch and convert
+        run: |
+          mkdir -p out
+          python - <<'PY'
+          import pandas as pd
+          base="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/mbb/team_box/parquet/ncaa_mbb_team_box_{}.parquet"
+          for y in range(2021,2026):
+              df=pd.read_parquet(base.format(y))
+              print(y, len(df), list(df.columns))
+              df.to_csv(f"out/ncaa_mbb_team_box_{y}.csv",index=False)
+          PY
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ncaa-team-box-2021-2025-csv
+          path: out/*.csv
+          retention-days: 7
