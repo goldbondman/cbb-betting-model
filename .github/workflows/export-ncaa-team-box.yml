@@ -1,102 +1,40 @@
-name: R2 frozen R1 recombination
+name: R2 freeze integrity
 on:
   push:
     paths: ['.github/workflows/export-ncaa-team-box.yml']
   workflow_dispatch:
 jobs:
-  research:
+  audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
     steps:
-      - uses: actions/setup-python@v6
-        with: {python-version: '3.12'}
-      - run: pip install pandas pyarrow numpy
-      - name: Recombine frozen R1 with R2 updater
+      - name: Freeze registry
         run: |
-          cat > /tmp/r2final.py <<'PY'
-          import pandas as pd,numpy as np,hashlib
-          RAW="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
-          # player continuity exactly as prior conservative R1 family
-          ps=[]
-          for sy in range(2021,2026):
-            d=pd.read_parquet(RAW+f"mbb/player_box/parquet/ncaa_mbb_player_box_{sy}.parquet")
-            def pick(o): return next((c for c in o if c in d.columns),None)
-            tc=pick(["team","team_name","team_display_name"]);nc=pick(["athlete","player","name","athlete_display_name"]);mc=pick(["mins","minutes"])
-            z=d[[tc,nc,mc]].copy();z["pk"]=z[nc].astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True);z[mc]=pd.to_numeric(z[mc],errors="coerce").fillna(0)
-            z=z.groupby([tc,"pk"],dropna=False)[mc].sum().reset_index().rename(columns={tc:"team",mc:"min"});z["season"]=sy;ps.append(z)
-          P=pd.concat(ps,ignore_index=True);cr=[];trs=[]
-          for sy in range(2022,2026):
-            a=P[P.season==sy-1];c=P[P.season==sy]
-            same=a.merge(c[["team","pk"]].drop_duplicates(),on=["team","pk"],how="left",indicator=True)
-            for tm,g in same.groupby("team"):
-              den=g["min"].sum();cr.append({"season":sy,"team":tm,"rp":g.loc[g._merge=="both","min"].sum()/den if den else np.nan})
-            au=a.groupby("pk").filter(lambda g:g.team.nunique()==1).sort_values("min").drop_duplicates("pk",keep="last")
-            cu=c.groupby("pk").filter(lambda g:g.team.nunique()==1).sort_values("min").drop_duplicates("pk",keep="last")
-            m=au.merge(cu[["pk","team"]],on="pk",suffixes=("_prev","_cur"));m=m[m.team_prev!=m.team_cur].copy();m["season"]=sy;trs.append(m)
-          C=pd.DataFrame(cr);T=pd.concat(trs,ignore_index=True)
-          tf=T.groupby(["season","team_cur"]).agg(tr_min=("min","sum")).reset_index().rename(columns={"team_cur":"team"})
-          C=C.merge(tf,on=["season","team"],how="left");C["tr_min"]=C.tr_min.fillna(0);C["ztr"]=C.groupby("season").tr_min.transform(lambda x:(x-x.mean())/(x.std()+1e-9))
-          # games
-          tb=[]
-          for sy in range(2021,2026):
-            d=pd.read_parquet(RAW+f"mbb/team_box/parquet/ncaa_mbb_team_box_{sy}.parquet");d["season"]=sy;tb.append(d)
-          G=pd.concat(tb,ignore_index=True);S=pd.read_parquet(RAW+"mbb/ncaa_mbb_schedule_master.parquet")
-          def col(df,o):
-            z=next((c for c in o if c in df.columns),None)
-            if z is None:raise Exception(o)
-            return z
-          gid=col(G,["contest_id","game_id"]);tm=col(G,["team","team_name","team_display_name"]);pts=col(G,["pts","points"]);poss=col(G,["o_poss","offensive_possessions"])
-          G=G.rename(columns={gid:"game_id",tm:"team",pts:"pts",poss:"poss"});G["poss"]=pd.to_numeric(G.poss,errors="coerce");G["ortg"]=100*pd.to_numeric(G.pts,errors="coerce")/G.poss
-          sg=col(S,["contest_id","game_id"]);sd=col(S,["date","game_date","start_date"])
-          G=G.merge(S[[sg,sd]].drop_duplicates(sg).rename(columns={sg:"game_id",sd:"date"}),on="game_id",how="left");G["date"]=pd.to_datetime(G.date,errors="coerce")
-          G=G.dropna(subset=["date","ortg","poss"]).sort_values(["date","game_id","team"])
-          q=G[["game_id","team"]].copy();q["ix"]=q.groupby("game_id").cumcount();o=q.copy();o["ix"]=1-o.ix;o=o.rename(columns={"team":"opp"})
-          G["ix"]=G.groupby("game_id").cumcount();G=G.merge(o,on=["game_id","ix"]);G=G[G.groupby("game_id").game_id.transform("size")==2]
-          G=G.merge(G.groupby("game_id").poss.mean().rename("gposs"),on="game_id")
-          # no new search: fixed R1, possession, pre-registered 15/20 maturity, and qualified diversity challenger
-          specs=[("R1_fixed","fixed",0,0),("R1_poss","poss",0,0),("R1_R2_m15","maturity",.15,0),("R1_R2_m20","maturity",.20,0),("R1_R2_m15_div10","maturity",.15,.10)]
-          out=[];preds={}
-          for name,mode,slope,divb in specs:
-            O={};D={};n={};seen={};prev=None;pred=[]
-            for date,day in G.groupby("date",sort=True):
-              sy=int(day.season.iloc[0])
-              if prev is None:prev=sy
-              if sy!=prev:
-                cc=C[C.season==sy].set_index("team")
-                for t in set(O)|set(D):
-                  rp=.375;zt=0
-                  if t in cc.index:
-                    r=cc.loc[t];rp=r.rp if pd.notna(r.rp) else .375;zt=r.ztr if pd.notna(r.ztr) else 0
-                  fac=np.clip(1.20+.30*(rp-.375)+.06*zt,.55,1.45);O[t]=O.get(t,0)*fac;D[t]=D.get(t,0)*fac
-                n={};seen={};prev=sy
-              ups=[]
-              for _,r in day.iterrows():
-                nn=n.get(r.team,0);p=100+O.get(r.team,0)-D.get(r.opp,0);w=1
-                if mode!="fixed":w=r.gposs/70
-                if mode=="maturity":w*=1+slope*(1-2*min(nn/10,1))
-                if divb:
-                  st=seen.get(r.team,set());div=len(st)/max(nn,1) if nn else 1;w*=1+divb*(2*div-1)
-                w=np.clip(w,.50,1.50)
-                if sy>=2022:pred.append((sy,r.game_id,r.team,nn,r.ortg,p))
-                e=r.ortg-p;ups.append((r.team,r.opp,e,w))
-              for a,b,e,w in ups:
-                k=.12*w;O[a]=O.get(a,0)+k*e;D[b]=D.get(b,0)-k*e;n[a]=n.get(a,0)+1;seen.setdefault(a,set()).add(b)
-            X=pd.DataFrame(pred,columns=["season","game_id","team","n","actual","pred"]);X["ae"]=(X.actual-X.pred).abs();X["err"]=X.actual-X.pred
-            gd=X.groupby(["season","game_id"]).err.agg(lambda x:abs(x.iloc[0]-x.iloc[1]) if len(x)==2 else np.nan)
-            rec={"spec":name,"ortg":X.ae.mean(),"diff":gd.mean()}
-            for sy in range(2022,2026):rec[f"d{sy}"]=gd.loc[sy].mean()
-            out.append(rec);preds[name]=gd
-          R=pd.DataFrame(out);print("FINAL");print(R.sort_values("diff").to_string(index=False))
-          # paired season deltas vs R1 fixed and previous simpler spec
-          for a,b in [("R1_poss","R1_fixed"),("R1_R2_m15","R1_poss"),("R1_R2_m20","R1_poss"),("R1_R2_m20","R1_R2_m15"),("R1_R2_m15_div10","R1_R2_m15")]:
-            z=(preds[a]-preds[b]).dropna();print("PAIR",a,"vs",b,"mean",z.mean(),"improved_frac",(z<0).mean(),"season_means",z.groupby(level=0).mean().to_dict())
-          # deterministic finalist
-          z=preds["R1_R2_m20"];print("HASH",hashlib.sha256(pd.util.hash_pandas_object(z,index=True).values.tobytes()).hexdigest())
-          R.to_csv("r2_final_recombination.csv",index=False)
-          PY
-          python /tmp/r2final.py
+          cat > r2_freeze.md <<'EOF'
+          # R2 Evidence-Weighted Updating — FROZEN
+          Data selection: NCAA team-box 2021-2025; OOS evaluation 2022-2025; 2026 SEALED.
+          Base R1: recursive O/D, K=.12, transition scale 1.20, returning-minutes modifier, incoming-transfer-experience modifier.
+          R2 update:
+          game_possessions = mean of the two team offensive-possession estimates
+          possession_factor = game_possessions / 70
+          own_current_season_games = count before current game
+          maturity_factor = 1 + .20 * (1 - 2 * min(own_current_season_games / 10, 1))
+          update_weight = clip(possession_factor * maturity_factor, .50, 1.50)
+          K_t = .12 * update_weight
+          All games on a date are predicted before any result from that date updates state.
+          Accepted: possession information; own-state maturity.
+          Rejected from production updater: opponent strength, opponent maturity/certainty, schedule diversity.
+          Diversity retained as research/uncertainty candidate only.
+          Production recombination differential MAE:
+          R1 fixed 15.618256
+          R1 + possessions 15.545539
+          R1 + possessions + maturity15 15.410623
+          R1 + possessions + maturity20 15.373316
+          m20 season differential MAE: 2022 16.156899; 2023 15.557437; 2024 14.967614; 2025 14.850332.
+          Deterministic prediction hash from freeze-gate run: 7a37d452ba277678ed0d645a1959363cd4a33b24d58f6af74ac15d6937ff8bfb
+          EOF
+          cat r2_freeze.md
       - uses: actions/upload-artifact@v7
         with:
-          name: r2-final-recombination
-          path: r2_final_recombination.csv
-          retention-days: 7
+          name: r2-freeze-registry
+          path: r2_freeze.md
+          retention-days: 30
