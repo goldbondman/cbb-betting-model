@@ -1,4 +1,4 @@
-name: R2 functional form audit
+name: R2 frozen R1 recombination
 on:
   push:
     paths: ['.github/workflows/export-ncaa-team-box.yml']
@@ -11,18 +11,39 @@ jobs:
       - uses: actions/setup-python@v6
         with: {python-version: '3.12'}
       - run: pip install pandas pyarrow numpy
-      - name: R2 functional form audit
+      - name: Recombine frozen R1 with R2 updater
         run: |
-          cat > /tmp/r2audit.py <<'PY'
-          import pandas as pd,numpy as np
+          cat > /tmp/r2final.py <<'PY'
+          import pandas as pd,numpy as np,hashlib
           RAW="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
+          # player continuity exactly as prior conservative R1 family
+          ps=[]
+          for sy in range(2021,2026):
+            d=pd.read_parquet(RAW+f"mbb/player_box/parquet/ncaa_mbb_player_box_{sy}.parquet")
+            def pick(o): return next((c for c in o if c in d.columns),None)
+            tc=pick(["team","team_name","team_display_name"]);nc=pick(["athlete","player","name","athlete_display_name"]);mc=pick(["mins","minutes"])
+            z=d[[tc,nc,mc]].copy();z["pk"]=z[nc].astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True);z[mc]=pd.to_numeric(z[mc],errors="coerce").fillna(0)
+            z=z.groupby([tc,"pk"],dropna=False)[mc].sum().reset_index().rename(columns={tc:"team",mc:"min"});z["season"]=sy;ps.append(z)
+          P=pd.concat(ps,ignore_index=True);cr=[];trs=[]
+          for sy in range(2022,2026):
+            a=P[P.season==sy-1];c=P[P.season==sy]
+            same=a.merge(c[["team","pk"]].drop_duplicates(),on=["team","pk"],how="left",indicator=True)
+            for tm,g in same.groupby("team"):
+              den=g["min"].sum();cr.append({"season":sy,"team":tm,"rp":g.loc[g._merge=="both","min"].sum()/den if den else np.nan})
+            au=a.groupby("pk").filter(lambda g:g.team.nunique()==1).sort_values("min").drop_duplicates("pk",keep="last")
+            cu=c.groupby("pk").filter(lambda g:g.team.nunique()==1).sort_values("min").drop_duplicates("pk",keep="last")
+            m=au.merge(cu[["pk","team"]],on="pk",suffixes=("_prev","_cur"));m=m[m.team_prev!=m.team_cur].copy();m["season"]=sy;trs.append(m)
+          C=pd.DataFrame(cr);T=pd.concat(trs,ignore_index=True)
+          tf=T.groupby(["season","team_cur"]).agg(tr_min=("min","sum")).reset_index().rename(columns={"team_cur":"team"})
+          C=C.merge(tf,on=["season","team"],how="left");C["tr_min"]=C.tr_min.fillna(0);C["ztr"]=C.groupby("season").tr_min.transform(lambda x:(x-x.mean())/(x.std()+1e-9))
+          # games
           tb=[]
           for sy in range(2021,2026):
             d=pd.read_parquet(RAW+f"mbb/team_box/parquet/ncaa_mbb_team_box_{sy}.parquet");d["season"]=sy;tb.append(d)
           G=pd.concat(tb,ignore_index=True);S=pd.read_parquet(RAW+"mbb/ncaa_mbb_schedule_master.parquet")
           def col(df,o):
             z=next((c for c in o if c in df.columns),None)
-            if z is None: raise Exception(o)
+            if z is None:raise Exception(o)
             return z
           gid=col(G,["contest_id","game_id"]);tm=col(G,["team","team_name","team_display_name"]);pts=col(G,["pts","points"]);poss=col(G,["o_poss","offensive_possessions"])
           G=G.rename(columns={gid:"game_id",tm:"team",pts:"pts",poss:"poss"});G["poss"]=pd.to_numeric(G.poss,errors="coerce");G["ortg"]=100*pd.to_numeric(G.pts,errors="coerce")/G.poss
@@ -32,27 +53,30 @@ jobs:
           q=G[["game_id","team"]].copy();q["ix"]=q.groupby("game_id").cumcount();o=q.copy();o["ix"]=1-o.ix;o=o.rename(columns={"team":"opp"})
           G["ix"]=G.groupby("game_id").cumcount();G=G.merge(o,on=["game_id","ix"]);G=G[G.groupby("game_id").game_id.transform("size")==2]
           G=G.merge(G.groupby("game_id").poss.mean().rename("gposs"),on="game_id")
-          # Confirmatory family only. Linear factor = 1+slope*(1-2*min(n/horizon,1)).
-          # Hyperbolic chosen a priori to start ~1.15 and approach ~0.85 smoothly.
-          specs=[("poss",0,10,"linear",0),("lin10_h10",.10,10,"linear",0),("lin15_h10",.15,10,"linear",0),("lin20_h10",.20,10,"linear",0),
-                 ("lin15_h5",.15,5,"linear",0),("lin15_h15",.15,15,"linear",0),("hyperbolic",.15,10,"hyper",0),
-                 ("lin15_div05",.15,10,"linear",.05),("lin15_div10",.15,10,"linear",.10)]
-          out=[]
-          for name,slope,horizon,form,divb in specs:
+          # no new search: fixed R1, possession, pre-registered 15/20 maturity, and qualified diversity challenger
+          specs=[("R1_fixed","fixed",0,0),("R1_poss","poss",0,0),("R1_R2_m15","maturity",.15,0),("R1_R2_m20","maturity",.20,0),("R1_R2_m15_div10","maturity",.15,.10)]
+          out=[];preds={}
+          for name,mode,slope,divb in specs:
             O={};D={};n={};seen={};prev=None;pred=[]
             for date,day in G.groupby("date",sort=True):
               sy=int(day.season.iloc[0])
               if prev is None:prev=sy
               if sy!=prev:
-                O={t:v*1.20 for t,v in O.items()};D={t:v*1.20 for t,v in D.items()};n={};seen={};prev=sy
+                cc=C[C.season==sy].set_index("team")
+                for t in set(O)|set(D):
+                  rp=.375;zt=0
+                  if t in cc.index:
+                    r=cc.loc[t];rp=r.rp if pd.notna(r.rp) else .375;zt=r.ztr if pd.notna(r.ztr) else 0
+                  fac=np.clip(1.20+.30*(rp-.375)+.06*zt,.55,1.45);O[t]=O.get(t,0)*fac;D[t]=D.get(t,0)*fac
+                n={};seen={};prev=sy
               ups=[]
               for _,r in day.iterrows():
-                nn=n.get(r.team,0);p=100+O.get(r.team,0)-D.get(r.opp,0)
-                if form=="linear": mf=1+slope*(1-2*min(nn/horizon,1)) if slope else 1
-                else: mf=.85+.30/(1+nn/5)
-                st=seen.get(r.team,set());div=len(st)/max(nn,1) if nn else 1
-                df=1+divb*(2*div-1) if divb else 1
-                w=np.clip((r.gposs/70)*mf*df,.50,1.50)
+                nn=n.get(r.team,0);p=100+O.get(r.team,0)-D.get(r.opp,0);w=1
+                if mode!="fixed":w=r.gposs/70
+                if mode=="maturity":w*=1+slope*(1-2*min(nn/10,1))
+                if divb:
+                  st=seen.get(r.team,set());div=len(st)/max(nn,1) if nn else 1;w*=1+divb*(2*div-1)
+                w=np.clip(w,.50,1.50)
                 if sy>=2022:pred.append((sy,r.game_id,r.team,nn,r.ortg,p))
                 e=r.ortg-p;ups.append((r.team,r.opp,e,w))
               for a,b,e,w in ups:
@@ -61,13 +85,18 @@ jobs:
             gd=X.groupby(["season","game_id"]).err.agg(lambda x:abs(x.iloc[0]-x.iloc[1]) if len(x)==2 else np.nan)
             rec={"spec":name,"ortg":X.ae.mean(),"diff":gd.mean()}
             for sy in range(2022,2026):rec[f"d{sy}"]=gd.loc[sy].mean()
-            for lab,mask in [("0_2",X.n<=2),("3_5",(X.n>=3)&(X.n<=5)),("6_10",(X.n>=6)&(X.n<=10)),("11p",X.n>=11)]:rec["o_"+lab]=X.loc[mask,"ae"].mean()
-            out.append(rec)
-          R=pd.DataFrame(out);print("AUDIT");print(R.sort_values("diff").to_string(index=False));R.to_csv("r2_form_audit.csv",index=False)
+            out.append(rec);preds[name]=gd
+          R=pd.DataFrame(out);print("FINAL");print(R.sort_values("diff").to_string(index=False))
+          # paired season deltas vs R1 fixed and previous simpler spec
+          for a,b in [("R1_poss","R1_fixed"),("R1_R2_m15","R1_poss"),("R1_R2_m20","R1_poss"),("R1_R2_m20","R1_R2_m15"),("R1_R2_m15_div10","R1_R2_m15")]:
+            z=(preds[a]-preds[b]).dropna();print("PAIR",a,"vs",b,"mean",z.mean(),"improved_frac",(z<0).mean(),"season_means",z.groupby(level=0).mean().to_dict())
+          # deterministic finalist
+          z=preds["R1_R2_m20"];print("HASH",hashlib.sha256(pd.util.hash_pandas_object(z,index=True).values.tobytes()).hexdigest())
+          R.to_csv("r2_final_recombination.csv",index=False)
           PY
-          python /tmp/r2audit.py
+          python /tmp/r2final.py
       - uses: actions/upload-artifact@v7
         with:
-          name: r2-functional-audit
-          path: r2_form_audit.csv
+          name: r2-final-recombination
+          path: r2_final_recombination.csv
           retention-days: 7
