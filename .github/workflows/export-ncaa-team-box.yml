@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-python@v6
         with: {python-version: '3.12'}
       - run: pip install pandas pyarrow numpy
-      - name: Audit maturity functional form
+      - name: R2 functional form audit
         run: |
           cat > /tmp/r2audit.py <<'PY'
           import pandas as pd,numpy as np
@@ -22,7 +22,7 @@ jobs:
           G=pd.concat(tb,ignore_index=True);S=pd.read_parquet(RAW+"mbb/ncaa_mbb_schedule_master.parquet")
           def col(df,o):
             z=next((c for c in o if c in df.columns),None)
-            if z is None:raise Exception(o)
+            if z is None: raise Exception(o)
             return z
           gid=col(G,["contest_id","game_id"]);tm=col(G,["team","team_name","team_display_name"]);pts=col(G,["pts","points"]);poss=col(G,["o_poss","offensive_possessions"])
           G=G.rename(columns={gid:"game_id",tm:"team",pts:"pts",poss:"poss"});G["poss"]=pd.to_numeric(G.poss,errors="coerce");G["ortg"]=100*pd.to_numeric(G.pts,errors="coerce")/G.poss
@@ -32,43 +32,42 @@ jobs:
           q=G[["game_id","team"]].copy();q["ix"]=q.groupby("game_id").cumcount();o=q.copy();o["ix"]=1-o.ix;o=o.rename(columns={"team":"opp"})
           G["ix"]=G.groupby("game_id").cumcount();G=G.merge(o,on=["game_id","ix"]);G=G[G.groupby("game_id").game_id.transform("size")==2]
           G=G.merge(G.groupby("game_id").poss.mean().rename("gposs"),on="game_id")
-          specs=[
-            ("poss",0,10,"linear",0),
-            ("lin10_h10",.10,10,"linear",0),("lin15_h10",.15,10,"linear",0),("lin20_h10",.20,10,"linear",0),
-            ("lin15_h5",.15,5,"linear",0),("lin15_h15",.15,15,"linear",0),
-            ("hyper15",.15,10,"hyper",0),
-            ("lin15_div04",.15,10,"linear",.04),("lin15_div08",.15,10,"linear",.08)]
+          # Confirmatory family only. Linear factor = 1+slope*(1-2*min(n/horizon,1)).
+          # Hyperbolic chosen a priori to start ~1.15 and approach ~0.85 smoothly.
+          specs=[("poss",0,10,"linear",0),("lin10_h10",.10,10,"linear",0),("lin15_h10",.15,10,"linear",0),("lin20_h10",.20,10,"linear",0),
+                 ("lin15_h5",.15,5,"linear",0),("lin15_h15",.15,15,"linear",0),("hyperbolic",.15,10,"hyper",0),
+                 ("lin15_div05",.15,10,"linear",.05),("lin15_div10",.15,10,"linear",.10)]
           out=[]
-          for name,b,h,shape,bd in specs:
+          for name,slope,horizon,form,divb in specs:
             O={};D={};n={};seen={};prev=None;pred=[]
             for date,day in G.groupby("date",sort=True):
               sy=int(day.season.iloc[0])
               if prev is None:prev=sy
-              if sy!=prev:O={t:v*1.20 for t,v in O.items()};D={t:v*1.20 for t,v in D.items()};n={};seen={};prev=sy
+              if sy!=prev:
+                O={t:v*1.20 for t,v in O.items()};D={t:v*1.20 for t,v in D.items()};n={};seen={};prev=sy
               ups=[]
               for _,r in day.iterrows():
-                p=100+O.get(r.team,0)-D.get(r.opp,0);nn=n.get(r.team,0)
-                if shape=="linear":m=np.clip(nn/h,0,1);mf=1+b*(1-2*m)
-                elif shape=="hyper":mf=(1+b)/(1+(2*b)*nn/(nn+h))
-                else:mf=1
+                nn=n.get(r.team,0);p=100+O.get(r.team,0)-D.get(r.opp,0)
+                if form=="linear": mf=1+slope*(1-2*min(nn/horizon,1)) if slope else 1
+                else: mf=.85+.30/(1+nn/5)
                 st=seen.get(r.team,set());div=len(st)/max(nn,1) if nn else 1
-                df=1+bd*(2*div-1)
+                df=1+divb*(2*div-1) if divb else 1
                 w=np.clip((r.gposs/70)*mf*df,.50,1.50)
                 if sy>=2022:pred.append((sy,r.game_id,r.team,nn,r.ortg,p))
                 e=r.ortg-p;ups.append((r.team,r.opp,e,w))
-              for a,bop,e,w in ups:
-                k=.12*w;O[a]=O.get(a,0)+k*e;D[bop]=D.get(bop,0)-k*e;n[a]=n.get(a,0)+1;seen.setdefault(a,set()).add(bop)
+              for a,b,e,w in ups:
+                k=.12*w;O[a]=O.get(a,0)+k*e;D[b]=D.get(b,0)-k*e;n[a]=n.get(a,0)+1;seen.setdefault(a,set()).add(b)
             X=pd.DataFrame(pred,columns=["season","game_id","team","n","actual","pred"]);X["ae"]=(X.actual-X.pred).abs();X["err"]=X.actual-X.pred
             gd=X.groupby(["season","game_id"]).err.agg(lambda x:abs(x.iloc[0]-x.iloc[1]) if len(x)==2 else np.nan)
             rec={"spec":name,"ortg":X.ae.mean(),"diff":gd.mean()}
             for sy in range(2022,2026):rec[f"d{sy}"]=gd.loc[sy].mean()
-            for lab,mask in [("early",X.n<=5),("mid",(X.n>=6)&(X.n<=10)),("mature",X.n>=11)]:rec["o_"+lab]=X.loc[mask,"ae"].mean()
+            for lab,mask in [("0_2",X.n<=2),("3_5",(X.n>=3)&(X.n<=5)),("6_10",(X.n>=6)&(X.n<=10)),("11p",X.n>=11)]:rec["o_"+lab]=X.loc[mask,"ae"].mean()
             out.append(rec)
-          R=pd.DataFrame(out);print("RESULTS");print(R.sort_values("diff").to_string(index=False));R.to_csv("r2_functional_audit.csv",index=False)
+          R=pd.DataFrame(out);print("AUDIT");print(R.sort_values("diff").to_string(index=False));R.to_csv("r2_form_audit.csv",index=False)
           PY
           python /tmp/r2audit.py
       - uses: actions/upload-artifact@v7
         with:
           name: r2-functional-audit
-          path: r2_functional_audit.csv
+          path: r2_form_audit.csv
           retention-days: 7
