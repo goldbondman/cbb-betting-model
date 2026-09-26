@@ -1,4 +1,4 @@
-name: R2 freeze integrity
+name: Preseason reconstruction source audit
 on:
   push:
     paths: ['.github/workflows/export-ncaa-team-box.yml']
@@ -6,35 +6,46 @@ on:
 jobs:
   audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - name: Freeze registry
+      - uses: actions/setup-python@v6
+        with: {python-version: '3.12'}
+      - run: pip install pandas pyarrow requests
+      - name: Audit available player and roster fields
         run: |
-          cat > r2_freeze.md <<'EOF'
-          # R2 Evidence-Weighted Updating — FROZEN
-          Data selection: NCAA team-box 2021-2025; OOS evaluation 2022-2025; 2026 SEALED.
-          Base R1: recursive O/D, K=.12, transition scale 1.20, returning-minutes modifier, incoming-transfer-experience modifier.
-          R2 update:
-          game_possessions = mean of the two team offensive-possession estimates
-          possession_factor = game_possessions / 70
-          own_current_season_games = count before current game
-          maturity_factor = 1 + .20 * (1 - 2 * min(own_current_season_games / 10, 1))
-          update_weight = clip(possession_factor * maturity_factor, .50, 1.50)
-          K_t = .12 * update_weight
-          All games on a date are predicted before any result from that date updates state.
-          Accepted: possession information; own-state maturity.
-          Rejected from production updater: opponent strength, opponent maturity/certainty, schedule diversity.
-          Diversity retained as research/uncertainty candidate only.
-          Production recombination differential MAE:
-          R1 fixed 15.618256
-          R1 + possessions 15.545539
-          R1 + possessions + maturity15 15.410623
-          R1 + possessions + maturity20 15.373316
-          m20 season differential MAE: 2022 16.156899; 2023 15.557437; 2024 14.967614; 2025 14.850332.
-          Deterministic prediction hash from freeze-gate run: 7a37d452ba277678ed0d645a1959363cd4a33b24d58f6af74ac15d6937ff8bfb
+          python - <<'PY'
+          import pandas as pd,requests
+          R="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
+          for sy in [2021,2022,2023,2024,2025]:
+            p=pd.read_parquet(R+f"mbb/player_box/parquet/ncaa_mbb_player_box_{sy}.parquet")
+            ro=pd.read_parquet(R+f"mbb/team_rosters/parquet/ncaa_mbb_team_rosters_{sy}.parquet")
+            print("SEASON",sy,"PLAYER_ROWS",len(p),"ROSTER_ROWS",len(ro))
+            if sy==2025:
+              print("PLAYER_COLS",list(p.columns))
+              print("ROSTER_COLS",list(ro.columns))
+          PY
+      - name: Write preseason gate registry
+        run: |
+          cat > preseason_reconstruction_registry.md <<'EOF'
+          # P1 Preseason Team Reconstruction
+          Objective: reduce Game 1-5 prediction error without contaminating 2026 sealed holdout.
+          Evaluation: historical expanding/OOS 2022-2025; primary matchup differential MAE, secondary ORtg MAE; report games 1-2, 3-5, 6-10, 11+ separately.
+          Baseline: frozen R1 roster prior + frozen R2 evidence-weighted updater.
+          P1A returning-player value: replace returning-minutes-only representation with minutes-weighted prior player production/value. Required ablation.
+          P1B departing-value decomposition: quantify quality/role actually lost, beyond minutes lost.
+          P1C incoming transfers: prior NCAA opponent-adjusted production, experience, role, portability. Compare to frozen transfer-experience term.
+          P1D freshmen/new entrants: historical recruiting/entry priors only if legitimate pregame historical source can be obtained with season-correct provenance.
+          P1E projected rotation: infer expected role/minute shares using only information available before season/game.
+          P1F coaching changes: historical coach/team transition panel; separate level effect from style/component fingerprint; require incremental OOS value after roster reconstruction.
+          P1G development: returning-player age/class/role growth, then coach/program residual development only if repeatable OOS.
+          P1H roster capability map: creation, shooting, rim pressure, turnover protection, rebounding, rim defense etc.; hand off to R4 mechanism model.
+          P1I preseason uncertainty: roster novelty, unproven minutes, coach/system change, transfer/freshman uncertainty; hand off to R3 distributions.
+          Leakage rules: no current-season box performance in preseason priors; no end-of-season roster knowledge if unavailable at prediction date; transfers use prior-season production only; coach/recruiting records must be timestamp-valid.
+          Complexity rule: each added layer must beat immediately simpler model across pooled OOS and show non-fragile season/bucket behavior. Failed features remain research metadata, not production.
+          Stop rule: do not launch player RAPM, lineup optimization, recruiting scrape, or coach reputation model unless simpler historical ablation demonstrates enough residual value to justify it.
           EOF
-          cat r2_freeze.md
       - uses: actions/upload-artifact@v7
         with:
-          name: r2-freeze-registry
-          path: r2_freeze.md
+          name: preseason-reconstruction-source-audit
+          path: preseason_reconstruction_registry.md
           retention-days: 30
