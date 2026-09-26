@@ -1,51 +1,56 @@
-name: Preseason reconstruction source audit
+name: P1A player value feasibility
 on:
   push:
     paths: ['.github/workflows/export-ncaa-team-box.yml']
   workflow_dispatch:
 jobs:
-  audit:
+  research:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/setup-python@v6
         with: {python-version: '3.12'}
-      - run: pip install pandas pyarrow requests
-      - name: Audit available player and roster fields
+      - run: pip install pandas pyarrow numpy
+      - name: Build preseason player role/value panel
         run: |
-          python - <<'PY'
-          import pandas as pd,requests
+          cat > /tmp/p1a.py <<'PY'
+          import pandas as pd,numpy as np
           R="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
-          for sy in [2021,2022,2023,2024,2025]:
+          rows=[]
+          for sy in range(2021,2026):
             p=pd.read_parquet(R+f"mbb/player_box/parquet/ncaa_mbb_player_box_{sy}.parquet")
-            ro=pd.read_parquet(R+f"mbb/team_rosters/parquet/ncaa_mbb_team_rosters_{sy}.parquet")
-            print("SEASON",sy,"PLAYER_ROWS",len(p),"ROSTER_ROWS",len(ro))
-            if sy==2025:
-              print("PLAYER_COLS",list(p.columns))
-              print("ROSTER_COLS",list(ro.columns))
+            num=["mins","o_poss","pts","orb","drb","ast","stl","blk","tov","pf","fga","tpa","fta","rima","mida","pts_trans","pts_half","fga_unast"]
+            for c in num:
+              if c in p:p[c]=pd.to_numeric(p[c],errors="coerce").fillna(0)
+            p["pk"]=p.clean_name.fillna(p.player).astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True)
+            agg={c:"sum" for c in num if c in p};z=p.groupby(["team","pk"],as_index=False).agg(agg);z["season"]=sy
+            z["ppm40"]=40*z.pts/z.mins.replace(0,np.nan);z["ast40"]=40*z.ast/z.mins.replace(0,np.nan);z["tov40"]=40*z.tov/z.mins.replace(0,np.nan)
+            z["orb40"]=40*z.orb/z.mins.replace(0,np.nan);z["blk40"]=40*z.blk/z.mins.replace(0,np.nan);z["tpa40"]=40*z.tpa/z.mins.replace(0,np.nan)
+            z["rim40"]=40*z.rima/z.mins.replace(0,np.nan);z["unast40"]=40*z.fga_unast/z.mins.replace(0,np.nan)
+            rows.append(z)
+          A=pd.concat(rows,ignore_index=True)
+          out=[]
+          for sy in range(2022,2026):
+            prev=A[A.season==sy-1];cur=A[A.season==sy]
+            # unique normalized identity only
+            pu=prev.groupby("pk").filter(lambda g:g.team.nunique()==1);cu=cur.groupby("pk").filter(lambda g:g.team.nunique()==1)
+            m=pu.merge(cu[["pk","team","mins"]],on="pk",suffixes=("_prev","_cur"))
+            m["status"]=np.where(m.team_prev==m.team_cur,"returner","transfer")
+            for (team,status),g in m.groupby(["team_cur","status"]):
+              w=g.mins_prev.clip(lower=0);den=w.sum()
+              rec={"season":sy,"team":team,"status":status,"players":len(g),"prior_minutes":den,"current_minutes":g.mins_cur.sum()}
+              for c in ["ppm40","ast40","tov40","orb40","blk40","tpa40","rim40","unast40"]:
+                rec[c]=(g[c]*w).sum()/den if den else np.nan
+              out.append(rec)
+          X=pd.DataFrame(out)
+          print("PANEL_ROWS",len(X));print("STATUS",X.groupby("status").agg(rows=("team","size"),mean_players=("players","mean"),mean_prior_min=("prior_minutes","mean"),mean_current_min=("current_minutes","mean")).to_string())
+          print("FEATURE_COMPLETENESS");print(X[["ppm40","ast40","tov40","orb40","blk40","tpa40","rim40","unast40"]].notna().mean().to_string())
+          print("CORRELATIONS_WITH_CURRENT_MINUTES");print(X.select_dtypes("number").corr()["current_minutes"].sort_values(ascending=False).to_string())
+          X.to_csv("p1a_player_value_panel.csv",index=False)
           PY
-      - name: Write preseason gate registry
-        run: |
-          cat > preseason_reconstruction_registry.md <<'EOF'
-          # P1 Preseason Team Reconstruction
-          Objective: reduce Game 1-5 prediction error without contaminating 2026 sealed holdout.
-          Evaluation: historical expanding/OOS 2022-2025; primary matchup differential MAE, secondary ORtg MAE; report games 1-2, 3-5, 6-10, 11+ separately.
-          Baseline: frozen R1 roster prior + frozen R2 evidence-weighted updater.
-          P1A returning-player value: replace returning-minutes-only representation with minutes-weighted prior player production/value. Required ablation.
-          P1B departing-value decomposition: quantify quality/role actually lost, beyond minutes lost.
-          P1C incoming transfers: prior NCAA opponent-adjusted production, experience, role, portability. Compare to frozen transfer-experience term.
-          P1D freshmen/new entrants: historical recruiting/entry priors only if legitimate pregame historical source can be obtained with season-correct provenance.
-          P1E projected rotation: infer expected role/minute shares using only information available before season/game.
-          P1F coaching changes: historical coach/team transition panel; separate level effect from style/component fingerprint; require incremental OOS value after roster reconstruction.
-          P1G development: returning-player age/class/role growth, then coach/program residual development only if repeatable OOS.
-          P1H roster capability map: creation, shooting, rim pressure, turnover protection, rebounding, rim defense etc.; hand off to R4 mechanism model.
-          P1I preseason uncertainty: roster novelty, unproven minutes, coach/system change, transfer/freshman uncertainty; hand off to R3 distributions.
-          Leakage rules: no current-season box performance in preseason priors; no end-of-season roster knowledge if unavailable at prediction date; transfers use prior-season production only; coach/recruiting records must be timestamp-valid.
-          Complexity rule: each added layer must beat immediately simpler model across pooled OOS and show non-fragile season/bucket behavior. Failed features remain research metadata, not production.
-          Stop rule: do not launch player RAPM, lineup optimization, recruiting scrape, or coach reputation model unless simpler historical ablation demonstrates enough residual value to justify it.
-          EOF
+          python /tmp/p1a.py
       - uses: actions/upload-artifact@v7
         with:
-          name: preseason-reconstruction-source-audit
-          path: preseason_reconstruction_registry.md
-          retention-days: 30
+          name: p1a-player-value-feasibility
+          path: p1a_player_value_panel.csv
+          retention-days: 14
