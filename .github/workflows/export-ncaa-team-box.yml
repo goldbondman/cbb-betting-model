@@ -1,4 +1,4 @@
-name: R2 maturity diversity gate
+name: R2 functional form audit
 on:
   push:
     paths: ['.github/workflows/export-ncaa-team-box.yml']
@@ -11,9 +11,9 @@ jobs:
       - uses: actions/setup-python@v6
         with: {python-version: '3.12'}
       - run: pip install pandas pyarrow numpy
-      - name: Test own maturity and schedule diversity
+      - name: Audit maturity functional form
         run: |
-          cat > /tmp/r2m.py <<'PY'
+          cat > /tmp/r2audit.py <<'PY'
           import pandas as pd,numpy as np
           RAW="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
           tb=[]
@@ -31,51 +31,44 @@ jobs:
           G=G.dropna(subset=["date","ortg","poss"]).sort_values(["date","game_id","team"])
           q=G[["game_id","team"]].copy();q["ix"]=q.groupby("game_id").cumcount();o=q.copy();o["ix"]=1-o.ix;o=o.rename(columns={"team":"opp"})
           G["ix"]=G.groupby("game_id").cumcount();G=G.merge(o,on=["game_id","ix"]);G=G[G.groupby("game_id").game_id.transform("size")==2]
-          gp=G.groupby("game_id").poss.mean().rename("gposs");G=G.merge(gp,on="game_id")
+          G=G.merge(G.groupby("game_id").poss.mean().rename("gposs"),on="game_id")
           specs=[
-            ("poss_only","none",0),
-            ("own_decay_mild","decay",.08),("own_decay_med","decay",.15),
-            ("own_grow_mild","grow",.08),("own_grow_med","grow",.15),
-            ("diversity_mild","div",.08),("diversity_med","div",.15)]
-          out=[];diag=[]
-          for name,mode,b in specs:
+            ("poss",0,10,"linear",0),
+            ("lin10_h10",.10,10,"linear",0),("lin15_h10",.15,10,"linear",0),("lin20_h10",.20,10,"linear",0),
+            ("lin15_h5",.15,5,"linear",0),("lin15_h15",.15,15,"linear",0),
+            ("hyper15",.15,10,"hyper",0),
+            ("lin15_div04",.15,10,"linear",.04),("lin15_div08",.15,10,"linear",.08)]
+          out=[]
+          for name,b,h,shape,bd in specs:
             O={};D={};n={};seen={};prev=None;pred=[]
             for date,day in G.groupby("date",sort=True):
               sy=int(day.season.iloc[0])
               if prev is None:prev=sy
-              if sy!=prev:
-                O={t:v*1.20 for t,v in O.items()};D={t:v*1.20 for t,v in D.items()};n={};seen={};prev=sy
+              if sy!=prev:O={t:v*1.20 for t,v in O.items()};D={t:v*1.20 for t,v in D.items()};n={};seen={};prev=sy
               ups=[]
               for _,r in day.iterrows():
-                p=100+O.get(r.team,0)-D.get(r.opp,0);ownn=n.get(r.team,0)
-                maturity=np.clip(ownn/10,0,1)
-                # diversity: unique opponents / games, with repeat opponents lowering information modestly
-                st=seen.get(r.team,set());div=len(st)/max(ownn,1) if ownn else 1.0
-                extra=1.0
-                if mode=="decay": extra=1+b*(1-2*maturity) # early faster, mature slower
-                elif mode=="grow": extra=1+b*(2*maturity-1) # early slower, mature faster
-                elif mode=="div": extra=1+b*(2*div-1)
-                w=np.clip((r.gposs/70)*extra,.50,1.50)
-                if sy>=2022:pred.append((sy,r.game_id,r.team,ownn,div,r.ortg,p,w))
+                p=100+O.get(r.team,0)-D.get(r.opp,0);nn=n.get(r.team,0)
+                if shape=="linear":m=np.clip(nn/h,0,1);mf=1+b*(1-2*m)
+                elif shape=="hyper":mf=(1+b)/(1+(2*b)*nn/(nn+h))
+                else:mf=1
+                st=seen.get(r.team,set());div=len(st)/max(nn,1) if nn else 1
+                df=1+bd*(2*div-1)
+                w=np.clip((r.gposs/70)*mf*df,.50,1.50)
+                if sy>=2022:pred.append((sy,r.game_id,r.team,nn,r.ortg,p))
                 e=r.ortg-p;ups.append((r.team,r.opp,e,w))
               for a,bop,e,w in ups:
                 k=.12*w;O[a]=O.get(a,0)+k*e;D[bop]=D.get(bop,0)-k*e;n[a]=n.get(a,0)+1;seen.setdefault(a,set()).add(bop)
-            X=pd.DataFrame(pred,columns=["season","game_id","team","ownn","diversity","actual","pred","w"]);X["ae"]=(X.actual-X.pred).abs();X["err"]=X.actual-X.pred
+            X=pd.DataFrame(pred,columns=["season","game_id","team","n","actual","pred"]);X["ae"]=(X.actual-X.pred).abs();X["err"]=X.actual-X.pred
             gd=X.groupby(["season","game_id"]).err.agg(lambda x:abs(x.iloc[0]-x.iloc[1]) if len(x)==2 else np.nan)
             rec={"spec":name,"ortg":X.ae.mean(),"diff":gd.mean()}
             for sy in range(2022,2026):rec[f"d{sy}"]=gd.loc[sy].mean()
+            for lab,mask in [("early",X.n<=5),("mid",(X.n>=6)&(X.n<=10)),("mature",X.n>=11)]:rec["o_"+lab]=X.loc[mask,"ae"].mean()
             out.append(rec)
-            if name=="poss_only":
-              X["maturity"]=pd.cut(X.ownn,[-1,2,5,10,999],labels=["0-2","3-5","6-10","11+"])
-              for z,g in X.groupby("maturity",observed=True):diag.append({"bucket":str(z),"n":len(g),"mae":g.ae.mean()})
-          R=pd.DataFrame(out);Q=pd.DataFrame(diag);print("RESULTS");print(R.sort_values("diff").to_string(index=False));print("MATURITY_DIAG");print(Q.to_string(index=False))
-          R.to_csv("r2_maturity_diversity.csv",index=False);Q.to_csv("r2_maturity_diag.csv",index=False)
+          R=pd.DataFrame(out);print("RESULTS");print(R.sort_values("diff").to_string(index=False));R.to_csv("r2_functional_audit.csv",index=False)
           PY
-          python /tmp/r2m.py
+          python /tmp/r2audit.py
       - uses: actions/upload-artifact@v7
         with:
-          name: r2-maturity-diversity
-          path: |
-            r2_maturity_diversity.csv
-            r2_maturity_diag.csv
+          name: r2-functional-audit
+          path: r2_functional_audit.csv
           retention-days: 7
