@@ -1,4 +1,4 @@
-name: P1A player value feasibility
+name: P1 ABC preseason ablations
 on:
   push:
     paths: ['.github/workflows/export-ncaa-team-box.yml']
@@ -6,51 +6,96 @@ on:
 jobs:
   research:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 50
     steps:
       - uses: actions/setup-python@v6
         with: {python-version: '3.12'}
       - run: pip install pandas pyarrow numpy
-      - name: Build preseason player role/value panel
+      - name: P1A B C team-season predictive ablations
         run: |
-          cat > /tmp/p1a.py <<'PY'
+          cat > /tmp/p1abc.py <<'PY'
           import pandas as pd,numpy as np
+          from sklearn.linear_model import Ridge
+          from sklearn.preprocessing import StandardScaler
+          from sklearn.pipeline import make_pipeline
           R="https://raw.githubusercontent.com/sportsdataverse/ncaa-mbb-hoops-data/main/"
-          rows=[]
+          # Build player-season
+          ps=[]
+          feats=["mins","pts","orb","drb","ast","stl","blk","tov","fga","tpa","fta","rima","mida","fga_unast"]
           for sy in range(2021,2026):
             p=pd.read_parquet(R+f"mbb/player_box/parquet/ncaa_mbb_player_box_{sy}.parquet")
-            num=["mins","o_poss","pts","orb","drb","ast","stl","blk","tov","pf","fga","tpa","fta","rima","mida","pts_trans","pts_half","fga_unast"]
-            for c in num:
-              if c in p:p[c]=pd.to_numeric(p[c],errors="coerce").fillna(0)
+            for c in feats:p[c]=pd.to_numeric(p[c],errors="coerce").fillna(0)
             p["pk"]=p.clean_name.fillna(p.player).astype(str).str.lower().str.replace(r"[^a-z0-9]","",regex=True)
-            agg={c:"sum" for c in num if c in p};z=p.groupby(["team","pk"],as_index=False).agg(agg);z["season"]=sy
-            z["ppm40"]=40*z.pts/z.mins.replace(0,np.nan);z["ast40"]=40*z.ast/z.mins.replace(0,np.nan);z["tov40"]=40*z.tov/z.mins.replace(0,np.nan)
-            z["orb40"]=40*z.orb/z.mins.replace(0,np.nan);z["blk40"]=40*z.blk/z.mins.replace(0,np.nan);z["tpa40"]=40*z.tpa/z.mins.replace(0,np.nan)
-            z["rim40"]=40*z.rima/z.mins.replace(0,np.nan);z["unast40"]=40*z.fga_unast/z.mins.replace(0,np.nan)
-            rows.append(z)
-          A=pd.concat(rows,ignore_index=True)
-          out=[]
+            a=p.groupby(["team","pk"],as_index=False)[feats].sum();a["season"]=sy
+            for c in ["pts","ast","tov","orb","drb","blk","tpa","fta","rima","fga_unast"]:a[c+"40"]=40*a[c]/a.mins.replace(0,np.nan)
+            ps.append(a)
+          P=pd.concat(ps,ignore_index=True)
+          # team season actual strength = season aggregate ORtg/DRtg, used only as target for preseason panel
+          tb=[]
+          for sy in range(2021,2026):
+            d=pd.read_parquet(R+f"mbb/team_box/parquet/ncaa_mbb_team_box_{sy}.parquet");d["season"]=sy;tb.append(d)
+          G=pd.concat(tb,ignore_index=True)
+          def pick(df,o):return next(c for c in o if c in df.columns)
+          tc=pick(G,["team","team_name","team_display_name"]);pts=pick(G,["pts","points"]);op=pick(G,["o_poss","offensive_possessions"]);dp=pick(G,["d_poss","defensive_possessions"])
+          G[pts]=pd.to_numeric(G[pts],errors="coerce");G[op]=pd.to_numeric(G[op],errors="coerce");G[dp]=pd.to_numeric(G[dp],errors="coerce")
+          # derive opponent points via 2-row games
+          gid=pick(G,["contest_id","game_id"]);z=G[[gid,tc,pts]].copy();z["ix"]=z.groupby(gid).cumcount();oz=z.copy();oz["ix"]=1-oz.ix;oz=oz.rename(columns={pts:"opp_pts",tc:"opp"})
+          G["ix"]=G.groupby(gid).cumcount();G=G.merge(oz[[gid,"ix","opp_pts"]],on=[gid,"ix"])
+          TS=G.groupby(["season",tc]).agg(pts=(pts,"sum"),opp_pts=("opp_pts","sum"),op=(op,"sum"),dp=(dp,"sum")).reset_index().rename(columns={tc:"team"})
+          TS["ortg"]=100*TS.pts/TS.op;TS["drtg"]=100*TS.opp_pts/TS.dp;TS["net"]=TS.ortg-TS.drtg
+          # construct preseason transition panel using unique normalized identities
+          rows=[]
+          rolecols=["pts40","ast40","tov40","orb40","drb40","blk40","tpa40","fta40","rima40","fga_unast40"]
           for sy in range(2022,2026):
-            prev=A[A.season==sy-1];cur=A[A.season==sy]
-            # unique normalized identity only
+            prev=P[P.season==sy-1];cur=P[P.season==sy]
             pu=prev.groupby("pk").filter(lambda g:g.team.nunique()==1);cu=cur.groupby("pk").filter(lambda g:g.team.nunique()==1)
-            m=pu.merge(cu[["pk","team","mins"]],on="pk",suffixes=("_prev","_cur"))
-            m["status"]=np.where(m.team_prev==m.team_cur,"returner","transfer")
-            for (team,status),g in m.groupby(["team_cur","status"]):
-              w=g.mins_prev.clip(lower=0);den=w.sum()
-              rec={"season":sy,"team":team,"status":status,"players":len(g),"prior_minutes":den,"current_minutes":g.mins_cur.sum()}
-              for c in ["ppm40","ast40","tov40","orb40","blk40","tpa40","rim40","unast40"]:
-                rec[c]=(g[c]*w).sum()/den if den else np.nan
-              out.append(rec)
-          X=pd.DataFrame(out)
-          print("PANEL_ROWS",len(X));print("STATUS",X.groupby("status").agg(rows=("team","size"),mean_players=("players","mean"),mean_prior_min=("prior_minutes","mean"),mean_current_min=("current_minutes","mean")).to_string())
-          print("FEATURE_COMPLETENESS");print(X[["ppm40","ast40","tov40","orb40","blk40","tpa40","rim40","unast40"]].notna().mean().to_string())
-          print("CORRELATIONS_WITH_CURRENT_MINUTES");print(X.select_dtypes("number").corr()["current_minutes"].sort_values(ascending=False).to_string())
-          X.to_csv("p1a_player_value_panel.csv",index=False)
+            prevteam={t:g for t,g in pu.groupby("team")}
+            for team,cg in cu.groupby("team"):
+              pg=prevteam.get(team,pd.DataFrame(columns=pu.columns));ret=pg[pg.pk.isin(set(cg.pk))]
+              incoming=pu[(pu.pk.isin(set(cg.pk)))&(pu.team!=team)]
+              depart=pg[~pg.pk.isin(set(cg.pk))]
+              den=pg.mins.sum()
+              rec={"season":sy,"team":team,"rp_min":ret.mins.sum()/den if den else np.nan,"dep_min":depart.mins.sum()/den if den else np.nan,
+                   "tr_min":incoming.mins.sum(),"tr_n":incoming.pk.nunique()}
+              for pref,g in [("ret",ret),("dep",depart),("tr",incoming)]:
+                w=g.mins.clip(lower=0);wd=w.sum()
+                for c in rolecols:rec[pref+"_"+c]=(g[c]*w).sum()/wd if wd else np.nan
+              rows.append(rec)
+          X=pd.DataFrame(rows).merge(TS[["season","team","ortg","drtg","net"]],on=["season","team"],how="inner")
+          prevTS=TS.copy();prevTS["season"]+=1;prevTS=prevTS.rename(columns={"ortg":"prev_ortg","drtg":"prev_drtg","net":"prev_net"})
+          X=X.merge(prevTS[["season","team","prev_ortg","prev_drtg","prev_net"]],on=["season","team"],how="inner")
+          # standardize transfer minutes by season, matching prior spirit
+          X["tr_min_z"]=X.groupby("season").tr_min.transform(lambda s:(s-s.mean())/(s.std()+1e-9))
+          # OOS expanding: train earlier transition seasons, evaluate next; 2022 uses 2022 cross-section LOO-ish baseline impossible, so eval 2023-25 strictly
+          base=["prev_ortg","prev_drtg","rp_min","tr_min_z"]
+          ret=["ret_pts40","ret_ast40","ret_tov40","ret_orb40","ret_drb40","ret_blk40","ret_tpa40","ret_fta40","ret_rima40","ret_fga_unast40"]
+          dep=["dep_pts40","dep_ast40","dep_tov40","dep_orb40","dep_drb40","dep_blk40","dep_tpa40","dep_fta40","dep_rima40","dep_fga_unast40"]
+          tr=["tr_pts40","tr_ast40","tr_tov40","tr_orb40","tr_drb40","tr_blk40","tr_tpa40","tr_fta40","tr_rima40","tr_fga_unast40"]
+          specs={"BASE":base,"A_RETURNER":base+ret,"AB_DEPART":base+ret+dep,"ABC_TRANSFER":base+ret+dep+tr}
+          outs=[]
+          for target in ["ortg","drtg","net"]:
+            for name,cols in specs.items():
+              pred=[]
+              for sy in [2023,2024,2025]:
+                train=X[X.season<sy].copy();test=X[X.season==sy].copy()
+                med=train[cols].median();A=train[cols].fillna(med);B=test[cols].fillna(med)
+                model=make_pipeline(StandardScaler(),Ridge(alpha=20)).fit(A,train[target]);pp=model.predict(B)
+                for a,p in zip(test[target],pp):pred.append((sy,a,p))
+              Q=pd.DataFrame(pred,columns=["season","actual","pred"]);Q["ae"]=(Q.actual-Q.pred).abs()
+              rec={"target":target,"spec":name,"mae":Q.ae.mean(),"n":len(Q)}
+              for sy in [2023,2024,2025]:rec[str(sy)]=Q.loc[Q.season==sy,"ae"].mean()
+              outs.append(rec)
+          O=pd.DataFrame(outs);print("RESULTS");print(O.to_string(index=False))
+          print("PANEL",len(X),"BYSEASON",X.groupby("season").size().to_dict())
+          # coverage and role residual correlations after minutes for prioritization
+          print("COVERAGE",X[ret+dep+tr].notna().mean().groupby(lambda c:c.split("_")[0]).mean().to_dict())
+          O.to_csv("p1abc_results.csv",index=False);X.to_parquet("p1abc_panel.parquet",index=False)
           PY
-          python /tmp/p1a.py
+          python /tmp/p1abc.py
       - uses: actions/upload-artifact@v7
         with:
-          name: p1a-player-value-feasibility
-          path: p1a_player_value_panel.csv
+          name: p1abc-ablations
+          path: |
+            p1abc_results.csv
+            p1abc_panel.parquet
           retention-days: 14
