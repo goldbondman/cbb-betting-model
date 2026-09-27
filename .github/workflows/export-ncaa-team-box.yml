@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v6
         with: {python-version: '3.12'}
-      - run: pip install pandas pyarrow numpy
+      - run: pip install pandas pyarrow numpy scikit-learn
       - name: P1A B C team-season predictive ablations
         run: |
           cat > /tmp/p1abc.py <<'PY'
