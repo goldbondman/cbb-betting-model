@@ -1,14 +1,14 @@
 """Fail-closed Stage A feature extraction for College Basketball forecasts.
 
 This module enforces CBB-STAGEA-FTR-v1.0 at the handoff between mixed
-analytics tables and blind forecasting.  It is intentionally additive: it
+analytics tables and blind forecasting. It is intentionally additive: it
 neither changes the existing ESPN matchup builder nor infers a model feature
 set from dataframe dtypes or column names.
 
-The consuming model must provide an explicit predictor allowlist.  Outcome,
-current-game blowout, market, eligibility, and lineage fields never enter X.
-Market-like columns are treated more strictly than ordinary mixed-table labels:
-their presence means the Stage A source boundary was contaminated.
+The consuming model must provide an explicit predictor allowlist. Outcome,
+current-game blowout, market, eligibility, identity, and lineage fields never
+enter X. Market-like columns are treated more strictly than ordinary mixed-table
+labels: their presence means the Stage A source boundary was contaminated.
 """
 
 from __future__ import annotations
@@ -16,7 +16,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
-import math
 import re
 from typing import Any, Mapping, Sequence
 
@@ -39,6 +38,19 @@ REQUIRED_LINEAGE_FIELDS = (
 # These fields may coexist in mixed training/research tables, but they cannot be
 # selected as predictors for the same target game.
 _FORBIDDEN_PREDICTOR_BASES = {
+    # identity / metadata
+    "event_id",
+    "game_id",
+    "team_id",
+    "team",
+    "home_away",
+    "home_team",
+    "away_team",
+    "venue",
+    "game_datetime_utc",
+    "game_date",
+    "game_date_utc",
+    # realized outcomes / postgame derivatives
     "points_for",
     "points_against",
     "margin",
@@ -50,6 +62,7 @@ _FORBIDDEN_PREDICTOR_BASES = {
     "away_score",
     "winner",
     "blowout",
+    # row lifecycle / eligibility
     "completed",
     "state",
     "status",
@@ -57,13 +70,18 @@ _FORBIDDEN_PREDICTOR_BASES = {
     "status_detail",
     "data_ok",
     "opp_join_ok",
+    # lineage / audit
     "source",
     "parse_version",
     "pulled_at_utc",
     "row_hash",
 }
 
-_MARKET_BASES = {
+# Exact ambiguous names are denied. Broader detection below uses explicit
+# market-context tokens/suffixes instead of treating every occurrence of words
+# such as "total" or "price" as market data (e.g. total_rebounds is basketball
+# data, not necessarily a betting market).
+_MARKET_EXACT_BASES = {
     "market",
     "spread",
     "total",
@@ -71,18 +89,37 @@ _MARKET_BASES = {
     "odds",
     "price",
     "edge",
-    "implied_probability",
-    "book",
-    "bookmaker",
-    "sportsbook",
-    "wager",
-    "bet",
-    "bet_decision",
+    "line",
+    "consensus",
     "market_home_ml",
     "market_away_ml",
     "market_spread",
     "market_total",
+    "opening_spread",
+    "closing_spread",
+    "opening_total",
+    "closing_total",
+    "opening_line",
+    "closing_line",
 }
+_MARKET_CONTEXT_TOKENS = {
+    "market",
+    "moneyline",
+    "odds",
+    "bookmaker",
+    "sportsbook",
+    "wager",
+    "bet_decision",
+    "implied_probability",
+}
+_MARKET_SUFFIXES = (
+    "_spread",
+    "_moneyline",
+    "_odds",
+    "_price",
+    "_market_edge",
+    "_bet_edge",
+)
 
 
 class StageAExtractionError(RuntimeError):
@@ -127,11 +164,9 @@ class StageASnapshot:
 
 
 def _base_name(column: str) -> str:
-    """Normalize home/away prefixes without guessing arbitrary schema roles."""
+    """Normalize known home/away prefixes without guessing arbitrary roles."""
 
     name = str(column).strip().lower()
-    # Matchup rows prefix side-specific fields with h_ / a_.  Strip only these
-    # known side prefixes; do not recursively infer roles from arbitrary names.
     if name.startswith("h_") or name.startswith("a_"):
         name = name[2:]
     return name
@@ -152,28 +187,31 @@ def _contains_token(name: str, token: str) -> bool:
 
 def _is_market_column(column: str) -> bool:
     base = _base_name(column)
-    if base in _MARKET_BASES:
+    if base in _MARKET_EXACT_BASES:
         return True
-    return any(_contains_token(base, token) for token in _MARKET_BASES)
+    if any(_contains_token(base, token) for token in _MARKET_CONTEXT_TOKENS):
+        return True
+    return any(base.endswith(suffix) for suffix in _MARKET_SUFFIXES)
 
 
 def _is_forbidden_predictor(column: str) -> bool:
-    base = _base_name(column)
-    return base in _FORBIDDEN_PREDICTOR_BASES
+    return _base_name(column) in _FORBIDDEN_PREDICTOR_BASES
 
 
 def _truthy(value: Any) -> bool:
-    if value is True:
-        return True
-    if value is False or value is None:
-        return False
-    if isinstance(value, (int, float)) and not isinstance(value, bool):
-        if isinstance(value, float) and math.isnan(value):
+    try:
+        if pd.isna(value):
             return False
-        return value == 1
+    except (TypeError, ValueError):
+        return False
     if isinstance(value, str):
         return value.strip().lower() in {"true", "1", "1.0", "yes", "y"}
-    return False
+    if isinstance(value, bool):
+        return value
+    try:
+        return float(value) == 1.0
+    except (TypeError, ValueError):
+        return False
 
 
 def _canonical_value(value: Any) -> Any:
@@ -256,25 +294,10 @@ def extract_stage_a_snapshot(
 ) -> StageASnapshot:
     """Return a deterministic, fail-closed Stage A predictor snapshot.
 
-    Parameters
-    ----------
-    source:
-        Mixed analytics table.  Outcome labels may coexist here and are ignored
-        unless a caller tries to request them as predictors.  Market-like source
-        columns are never allowed because their presence indicates that Stage B
-        information crossed the Stage A boundary.
-    predictor_columns:
-        Explicit, consuming-model-approved predictor columns.  No dtype- or
-        name-based automatic feature discovery occurs.
-    eligibility_columns:
-        Explicit hard gates such as h_data_ok/a_data_ok/h_opp_join_ok/
-        a_opp_join_ok.  Every value must evaluate true for every target row.
-    lineage:
-        Required immutable source/version/snapshot/model/timestamp metadata.
-    event_id_column:
-        Stable target-event identifier used for uniqueness and deterministic
-        ordering.  It is returned for joining/audit but never counted as a
-        predictor.
+    `predictor_columns` is the explicit consuming-model allowlist. No automatic
+    dtype/name feature discovery occurs. Mixed outcome fields may coexist in the
+    source and are ignored unless requested. Market-like columns are different:
+    their presence invalidates the Stage A source boundary.
     """
 
     if not isinstance(source, pd.DataFrame):
@@ -288,10 +311,13 @@ def extract_stage_a_snapshot(
         raise StageAModelBlocked("Predictor allowlist must be explicit and non-empty")
     if len(set(predictors)) != len(predictors):
         raise StageAModelBlocked("Predictor allowlist contains duplicate columns")
+    if not eligibility:
+        raise StageAModelBlocked("Eligibility gate list must be explicit and non-empty")
+    if len(set(eligibility)) != len(eligibility):
+        raise StageAModelBlocked("Eligibility gate list contains duplicate columns")
 
-    # Market isolation is stricter than ordinary label separation.  Market-like
-    # fields anywhere in the source mean Stage A was contaminated before feature
-    # extraction, even if the caller did not request those columns.
+    # Market isolation is stricter than ordinary label separation. Market-like
+    # fields anywhere in source mean Stage A was contaminated before extraction.
     market_columns = [c for c in source.columns if _is_market_column(str(c))]
     if market_columns:
         raise StageAMarketContamination(
@@ -306,7 +332,7 @@ def extract_stage_a_snapshot(
     forbidden = [c for c in predictors if _is_forbidden_predictor(c)]
     if forbidden:
         raise StageAModelBlocked(
-            f"Outcome/eligibility/lineage fields are forbidden as Stage A predictors: {forbidden}"
+            f"Outcome/identity/eligibility/lineage fields are forbidden as Stage A predictors: {forbidden}"
         )
 
     required_columns = [event_id_column, *predictors, *eligibility]
@@ -316,10 +342,9 @@ def extract_stage_a_snapshot(
 
     if source[event_id_column].isna().any():
         raise StageADataBlocked("Stage A event identifier contains null values")
-    if source[event_id_column].astype(str).duplicated().any():
-        dupes = source.loc[
-            source[event_id_column].astype(str).duplicated(keep=False), event_id_column
-        ].astype(str).unique().tolist()
+    event_ids = source[event_id_column].astype(str)
+    if event_ids.duplicated().any():
+        dupes = event_ids[event_ids.duplicated(keep=False)].unique().tolist()
         raise StageADataBlocked(f"Duplicate Stage A event identifiers: {dupes[:10]}")
 
     for column in eligibility:
@@ -339,9 +364,9 @@ def extract_stage_a_snapshot(
 
     normalized_lineage = _normalize_lineage(lineage)
 
-    # Deterministic output: sort target rows by stable event id and emit only id
-    # plus the caller's explicit predictor order.  Eligibility/lineage/outcomes
-    # never enter the model matrix.
+    # Deterministic output: stable event ordering and only the explicit model
+    # allowlist. Eligibility, lineage, outcomes and unrequested numeric fields
+    # never enter the predictor matrix.
     out = source[[event_id_column, *predictors]].copy()
     out[event_id_column] = out[event_id_column].astype(str)
     out = out.sort_values(event_id_column, kind="mergesort").reset_index(drop=True)
