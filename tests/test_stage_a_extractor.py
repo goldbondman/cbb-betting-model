@@ -1,7 +1,7 @@
 """Confirmatory RT-0022 tests for CBB-STAGEA-EXTRACTOR-v1.0.
 
 The acceptance criteria for these tests were preregistered in CBB-EXP-0004
-before implementation results were examined.  Do not weaken/remove failures to
+before implementation results were examined. Do not weaken/remove failures to
 make the extractor pass; fix implementation while preserving the criteria.
 """
 
@@ -117,6 +117,11 @@ def test_realized_outcome_request_is_model_blocked():
     assert exc.value.decision_state == "MODEL_BLOCKED"
 
 
+def test_identifier_request_is_model_blocked():
+    with pytest.raises(StageAModelBlocked):
+        _extract(predictors=("event_id", "h_ortg_l7_pre"))
+
+
 def test_market_like_requested_predictor_is_market_contamination_even_if_absent():
     with pytest.raises(StageAMarketContamination) as exc:
         _extract(predictors=("h_ortg_l7_pre", "market_home_ml"))
@@ -129,6 +134,14 @@ def test_market_like_column_anywhere_in_source_invalidates_stage_a():
     with pytest.raises(StageAMarketContamination) as exc:
         _extract(df=df)
     assert exc.value.reason_code == "MARKET_CONTAMINATION"
+
+
+def test_basketball_total_rebounds_field_is_not_misclassified_as_market():
+    df = _mixed_fixture()
+    df["h_total_rebounds"] = [33, 31]
+    snapshot = _extract(df=df)
+    assert snapshot.snapshot_hash
+    assert "h_total_rebounds" not in snapshot.predictors.columns
 
 
 def test_missing_requested_predictor_is_data_blocked():
@@ -150,6 +163,11 @@ def test_missing_required_eligibility_column_is_data_blocked():
     df = _mixed_fixture().drop(columns=["a_opp_join_ok"])
     with pytest.raises(StageADataBlocked):
         _extract(df=df)
+
+
+def test_empty_eligibility_contract_is_model_blocked():
+    with pytest.raises(StageAModelBlocked):
+        _extract(eligibility=())
 
 
 def test_null_predictor_value_is_data_blocked():
