@@ -97,7 +97,7 @@ def validate(payload: dict[str, Any], now: datetime | None = None) -> dict[str, 
             raise SnapshotRejected(f"input_records[{i}]: invalid content SHA256")
         first = timestamp(record["published_at"], f"input_records[{i}].published_at")
         if first > cut:
-            raise SnapshotRejected("source published after feature cutoff")
+            raise SnapshotRejected("declared source publication after feature cutoff")
         if record["source_id"] in seen:
             raise SnapshotRejected("duplicate source_id")
         seen.add(record["source_id"])
@@ -121,7 +121,7 @@ def validate(payload: dict[str, Any], now: datetime | None = None) -> dict[str, 
 
     safe = {key: payload[key] for key in REQUIRED}
     safe["stage"] = "A_MARKET_BLIND"
-    safe["source_vintage_status"] = "VERIFIED_FROM_SOURCE_PUBLISHED_AT"
+    safe["source_vintage_status"] = "DECLARED_SOURCE_TIMESTAMP_NOT_EXTERNALLY_AUTHENTICATED"
     safe["input_snapshot_sha256"] = digest(inputs)
     safe["frozen_record_sha256"] = digest(safe)
     return safe
