@@ -66,6 +66,9 @@ def check_no_forbidden(value: Any, prefix: str = "input") -> None:
 def validate(payload: dict[str, Any], now: datetime | None = None) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise SnapshotRejected("JSON object required")
+    extras = set(payload) - set(REQUIRED)
+    if extras:
+        raise SnapshotRejected("unexpected Stage A payload fields: " + ", ".join(sorted(extras)))
     missing = [key for key in REQUIRED if key not in payload]
     if missing:
         raise SnapshotRejected("missing: " + ", ".join(missing))
